@@ -19,6 +19,8 @@
     document.documentElement.setAttribute("data-theme", t);
     state.theme = t;
     localStorage.setItem("jh-theme", t);
+    const meta = document.getElementById("themeColor");
+    if (meta) meta.setAttribute("content", t === "light" ? "#FAFAF9" : "#0B0B0C");
   }
 
   /* ----------------------------- i18n ----------------------------------- */

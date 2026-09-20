@@ -17,12 +17,14 @@ Zero dependencies, zero build step. Plain HTML + CSS + vanilla JS, self-hosted w
 
 ```
 index.html                 # single-page site
+site.webmanifest           # PWA manifest
 assets/
   css/fonts.css            # self-hosted @font-face (latin subset)
   css/style.css            # design system + components
   js/data.js               # catalog, playbooks, timeline, i18n strings
   js/main.js               # rendering + interactions
   fonts/*.woff2            # Inter / JetBrains Mono / Space Grotesk
+  icons/                   # favicon / PWA / social card (see below)
 ```
 
 ## Run locally
@@ -52,6 +54,27 @@ Derived from the official Jev / TypeSafe AI aesthetic, pushed further for readab
 - **Dual theme** (dark / light) and **bilingual EN / 中文** toggle, both persisted to `localStorage`.
 - All text meets **WCAG AA** contrast in both themes (audited).
 - Respects `prefers-reduced-motion`; no horizontal overflow from 390px up.
+
+## Icons & social card
+
+All icons live in `assets/icons/` and are referenced with **relative paths** — no root-level
+`favicon.ico`. This matters because the site is served from a sub-path
+(`/jevhunt/`), where the browser's implicit `/favicon.ico` request would miss.
+
+| File | Use |
+| --- | --- |
+| `favicon.svg` | Primary icon (modern browsers, any size) |
+| `favicon-32.png` | PNG fallback |
+| `favicon.ico` | Legacy / shortcuts (16, 32, 48, 64) |
+| `apple-touch-icon.png` | iOS home screen (180×180) |
+| `icon-192.png`, `icon-512.png` | PWA (512 also maskable) |
+| `og.png` | Social share card (1200×630) |
+
+The brand mark is a rounded dark square with a pink `J` and magenta dot, derived from the
+inline logo. `theme-color` is synced to the active theme at runtime.
+
+> ⚠️ `og:image`, `og:url` and `canonical` in `index.html` use the absolute GitHub Pages URL,
+> because social crawlers require absolute image URLs. Update these three if you add a custom domain.
 
 ## Adding an app to the catalog
 
