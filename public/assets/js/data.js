@@ -338,6 +338,17 @@ JH.i18n = {
     "auth.err.state": "登录会话已过期，请重试",
     "auth.err.config": "Google 登录尚未配置",
     "auth.err.generic": "登录失败",
+
+    "sub.needAuth": "使用 Google 登录后即可提交应用到目录。",
+    "sub.name": "应用名称",
+    "sub.desc": "它做什么决策？",
+    "sub.mine": "你的提交",
+    "sub.thanks": "已收到 ✓ 我们会审核并收录。",
+    "sub.failed": "出错了，请重试。",
+    "sub.sending": "提交中…",
+    "sub.errUrl": "请输入有效的 http(s) 链接。",
+    "sub.errName": "请填写应用名称（至少 2 个字符）。",
+    "sub.rateLimited": "本小时提交次数过多，请稍后再试。",
   },
 };
 

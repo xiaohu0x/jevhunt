@@ -333,19 +333,117 @@
     }));
   }
 
+  /* ----------------------------- submissions ---------------------------- */
+  function fillCategories() {
+    const sel = $("#subCat");
+    if (!sel || sel.dataset.filled) return;
+    const label = state.lang === "zh" ? "选择分类" : "Category";
+    const opts = (window.JH.categories || []).map(c =>
+      `<option value="${escAttr(c.name)}">${escAttr(state.lang === "zh" ? c.zh : c.name)}</option>`
+    ).join("");
+    sel.innerHTML = `<option value="" disabled selected>${label}</option>${opts}`;
+    sel.dataset.filled = "1";
+  }
+
+  async function loadSubmissions() {
+    const host = $("#mySubs");
+    if (!host || !authState.user) return;
+    try {
+      const res = await fetch("/api/submissions", { headers: { accept: "application/json" } });
+      if (!res.ok) throw new Error("status " + res.status);
+      const list = (await res.json()).submissions || [];
+      if (!list.length) { host.hidden = true; return; }
+      host.hidden = false;
+      host.innerHTML = `<h4>${t("sub.mine", "Your submissions")}</h4>` + list.map(s =>
+        `<div class="sub__item">
+           <span class="sub__item-name">${escAttr(s.name)}</span>
+           <span class="sub__item-url">${escAttr(s.url)}</span>
+           <span class="badge badge--${escAttr(s.status)}">${escAttr(s.status)}</span>
+         </div>`
+      ).join("");
+    } catch (_) {
+      host.hidden = true;
+    }
+  }
+
+  function renderSubmit() {
+    const signin = $("#subSignin"), form = $("#submitForm");
+    if (!signin || !form) return;
+    const signedIn = !!authState.user;
+    signin.hidden = signedIn;
+    form.hidden = !signedIn;
+    if (signedIn) { fillCategories(); loadSubmissions(); }
+    else { const list = $("#mySubs"); if (list) list.hidden = true; }
+  }
+
   function initSubmit() {
     const form = $("#submitForm");
     if (!form) return;
-    form.addEventListener("submit", e => {
+
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const url = $("#repoUrl").value.trim();
-      const note = $("#formNote");
-      const ok = /^https?:\/\/.+/.test(url);
-      note.textContent = ok
-        ? (state.lang === "zh" ? "已收到 ✓ 我们会尽快审核并收录。" : "Received ✓ We'll review it and add it to the catalog.")
-        : (state.lang === "zh" ? "请输入以 http(s):// 开头的有效链接。" : "Please enter a valid URL starting with http(s)://");
-      note.classList.toggle("is-ok", ok);
-      if (ok) form.reset();
+      const note = $("#formNote"), btn = $("#subBtn");
+
+      const setNote = (msg, kind) => {
+        note.textContent = msg;
+        note.classList.remove("is-ok", "is-err");
+        if (kind) note.classList.add(kind);
+      };
+
+      if (!authState.user) {
+        toast(t("sub.needAuth", "Sign in with Google to submit."), true);
+        return;
+      }
+
+      const payload = {
+        url: $("#subUrl").value.trim(),
+        name: $("#subName").value.trim(),
+        category: $("#subCat").value,
+        description: $("#subDesc").value.trim(),
+      };
+
+      if (!/^https?:\/\/\S+\.\S+/i.test(payload.url)) {
+        setNote(t("sub.errUrl", "Enter a valid http(s) URL."), "is-err");
+        return;
+      }
+      if (payload.name.length < 2) {
+        setNote(t("sub.errName", "Give the app a name (2+ characters)."), "is-err");
+        return;
+      }
+
+      const original = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = t("sub.sending", "Submitting…");
+
+      try {
+        const res = await fetch("/api/submissions", {
+          method: "POST",
+          headers: { "content-type": "application/json", accept: "application/json" },
+          body: JSON.stringify(payload),
+        });
+
+        if (res.status === 401) {
+          authState.user = null;
+          renderAuth();
+          toast(t("sub.needAuth", "Sign in with Google to submit."), true);
+          return;
+        }
+        if (res.status === 429) {
+          setNote(t("sub.rateLimited", "Too many submissions this hour — try again later."), "is-err");
+          return;
+        }
+        if (!res.ok) throw new Error("status " + res.status);
+
+        form.reset();
+        $("#subCat").selectedIndex = 0;
+        setNote(t("sub.thanks", "Received ✓ We'll review it and add it to the catalog."), "is-ok");
+        loadSubmissions();
+      } catch (_) {
+        setNote(t("sub.failed", "Something went wrong. Please try again."), "is-err");
+      } finally {
+        btn.disabled = false;
+        btn.textContent = original;
+      }
     });
   }
 
@@ -379,8 +477,10 @@
   const authNext = () => location.pathname + location.search + location.hash;
 
   function renderAuth() {
+    if (!authState.loaded) return;
+    renderSubmit();
     const host = $("#auth");
-    if (!host || !authState.loaded) return;
+    if (!host) return;
     const { user, authEnabled } = authState;
 
     if (user) {

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>404 — Not found · JevHunt</title>
+<meta name="robots" content="noindex" />
+<meta name="theme-color" content="#0B0B0C" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="stylesheet" href="/assets/css/fonts.css?v=81b65047a3" />
+<link rel="stylesheet" href="/assets/css/style.css?v=5a6699359f" />
+</head>
+<body>
+<div class="bg-grid" aria-hidden="true"></div>
+<div class="bg-glow" aria-hidden="true"></div>
+<div class="bg-noise" aria-hidden="true"></div>
+
+<main class="err">
+  <div class="wrap err__inner">
+    <div class="err__code">404</div>
+    <h1 class="err__title">This decision wasn't in the schema.</h1>
+    <p class="err__sub">
+      The page you asked for doesn't exist, or it moved. Jev would return
+      <code>unknown</code> here — with high confidence.
+    </p>
+    <div class="err__term">
+      <span class="t-key">path</span>
+      <span class="t-arrow">→</span>
+      <span class="t-val t-false" id="errPath">/</span>
+    </div>
+    <div class="err__actions">
+      <a class="btn btn--primary" href="/">Back to JevHunt</a>
+      <a class="btn btn--ghost" href="/#apps">Browse the directory</a>
+    </div>
+    <div class="err__glyph" aria-hidden="true">∵ ⩆ ⩆ ∵</div>
+  </div>
+</main>
+
+<script>
+  document.getElementById("errPath").textContent = location.pathname || "/";
+  try {
+    var t = localStorage.getItem("jh-theme");
+    if (t) document.documentElement.setAttribute("data-theme", t);
+  } catch (e) {}
+</script>
+</body>
+</html>

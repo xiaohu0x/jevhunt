@@ -17,8 +17,9 @@ Static front-end **plus** a small serverless backend, all on Cloudflare:
 ```
 public/                     → static assets (the deploy root)
   index.html
+  404.html                  → real 404 (avoids soft-404 on unknown paths)
   favicon.* og.png          → icons live at the site root
-  site.webmanifest
+  site.webmanifest robots.txt sitemap.xml
   _headers                  → security + cache headers
   assets/css|js|fonts/
 
@@ -29,7 +30,9 @@ functions/                  → Cloudflare Pages Functions (the API)
   api/auth/google.js        → GET  /api/auth/google
   api/auth/callback.js      → GET  /api/auth/callback
   api/auth/logout.js        → POST /api/auth/logout
+  api/submissions.js        → GET/POST /api/submissions
 
+tools/stamp.mjs             → content-hash cache busting (no deps)
 migrations/0001_init.sql    → D1 schema
 wrangler.toml               → bindings + config
 ```
@@ -154,15 +157,35 @@ Edit `public/assets/js/data.js` → `JH.apps`:
 
 Hero stats, category counts and filters update automatically.
 
+## Deploy
+
+```bash
+npm run deploy     # stamps asset URLs, then wrangler pages deploy
+```
+
+`wrangler` must be authenticated (`npx wrangler login`) or `CLOUDFLARE_API_TOKEN`
+set. The account must also own the `jevhunt.com` zone — Cloudflare rejects a
+proxied CNAME that points across accounts (error 1014).
+
+### Cache busting
+
+Pages serves `/assets/*` with a long `max-age`, so a plain deploy would leave
+browsers on the previous bundle. `tools/stamp.mjs` rewrites the CSS/JS
+references in `index.html` and `404.html` to `…?v=<content-hash>`, giving every
+revision a distinct cache key. It is dependency-free and deterministic —
+re-running it with unchanged assets is a no-op.
+
 ## Roadmap
 
 - [x] Information-first single page
 - [x] App / playbook / category catalog
 - [x] EN / 中文 + dark / light
 - [x] Cloudflare Pages + D1 + Google login
-- [ ] Wire the submit form to `POST /api/submissions` (table already exists)
+- [x] Real submissions API (`POST /api/submissions`) with validation + rate limit
+- [x] Cache-busted assets, real 404, robots.txt, sitemap.xml
+- [ ] Submission moderation UI (review/approve from the database)
 - [ ] Individual listing pages + SEO metadata
-- [ ] Submission moderation & voting
+- [ ] Voting on submissions
 - [ ] Independent Jev benchmarks
 
 ## Disclaimer
