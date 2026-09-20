@@ -5,7 +5,7 @@ pages_build_output_dir = "public"
 # Public, non-secret config. GOOGLE_CLIENT_SECRET is a Worker secret
 # (set with: npx wrangler pages secret put GOOGLE_CLIENT_SECRET).
 [vars]
-GOOGLE_CLIENT_ID = ""
+GOOGLE_CLIENT_ID = "549996556432-vdcaf3ais7mig0f84alus4q36qjaosna.apps.googleusercontent.com"
 
 [[d1_databases]]
 binding = "DB"
