@@ -2,43 +2,122 @@
 
 **The directory for software built on Jev.** — 基于 JVE 模型的应用导航站
 
-JevHunt indexes apps, playbooks and tools built on [Jev](https://typesafe.ai/) — the *System One* model
-from TypeSafe AI that returns **typed decisions with calibrated confidence** instead of prose.
+A community directory for apps, playbooks and tools built on [Jev](https://typesafe.ai/) — the
+*System One* model from TypeSafe AI that returns **typed decisions with calibrated confidence**
+instead of prose.
 
-> Phase 1 (current): information-first. The model launched days ago and the ecosystem is small,
-> so the site focuses on *explaining* Jev and cataloguing what exists.
-> Phase 2: community submissions. Phase 3: full navigation / discovery product.
+Live: **https://jevhunt.pages.dev**
 
 ---
 
-## Stack
+## Architecture
 
-Zero dependencies, zero build step. Plain HTML + CSS + vanilla JS, self-hosted webfonts.
+Static front-end **plus** a small serverless backend, all on Cloudflare:
 
 ```
-index.html                 # single-page site
-site.webmanifest           # PWA manifest
-assets/
-  css/fonts.css            # self-hosted @font-face (latin subset)
-  css/style.css            # design system + components
-  js/data.js               # catalog, playbooks, timeline, i18n strings
-  js/main.js               # rendering + interactions
-  fonts/*.woff2            # Inter / JetBrains Mono / Space Grotesk
-  icons/                   # favicon / PWA / social card (see below)
+public/                     → static assets (the deploy root)
+  index.html
+  favicon.* og.png          → icons live at the site root
+  site.webmanifest
+  _headers                  → security + cache headers
+  assets/css|js|fonts/
+
+functions/                  → Cloudflare Pages Functions (the API)
+  _lib/auth.js              → sessions, cookies, CSRF state, D1 helpers
+  _lib/google.js            → Google OAuth 2.0 / OIDC
+  api/me.js                 → GET  /api/me
+  api/auth/google.js        → GET  /api/auth/google
+  api/auth/callback.js      → GET  /api/auth/callback
+  api/auth/logout.js        → POST /api/auth/logout
+
+migrations/0001_init.sql    → D1 schema
+wrangler.toml               → bindings + config
 ```
 
-## Run locally
+| Concern | Choice |
+| --- | --- |
+| Hosting | Cloudflare Pages |
+| Database | Cloudflare D1 (SQLite) — binding `DB` |
+| Auth | Google OAuth 2.0 (Authorization Code + OIDC) |
+| Sessions | Server-side rows in D1, opaque token in an `HttpOnly` cookie |
+| Build step | None — plain HTML/CSS/JS |
+
+## Local development
 
 ```bash
-python3 -m http.server 8777
-# → http://localhost:8777
+npm install                # only for the wrangler dev dependency
+npm run db:migrate:local   # create the local D1 tables
+npm run dev                # → http://localhost:8788
 ```
 
-Any static server works. No install, no compilation.
+To exercise the OAuth flow locally, create `.dev.vars` (git-ignored):
 
-## Design language
+```ini
+GOOGLE_CLIENT_ID="....apps.googleusercontent.com"
+GOOGLE_CLIENT_SECRET="..."
+```
 
-Derived from the official Jev / TypeSafe AI aesthetic, pushed further for readability:
+## Google OAuth setup
+
+Login only works once Google credentials exist — this part must be done in the
+[Google Cloud Console](https://console.cloud.google.com/apis/credentials):
+
+1. Create (or pick) a project → **APIs & Services → OAuth consent screen**
+   - User type **External**; fill app name + support email
+   - While in *Testing*, add your own Google account under **Test users**
+2. **Credentials → Create credentials → OAuth client ID**
+   - Application type: **Web application**
+   - **Authorized redirect URIs** — must match exactly, including scheme and path:
+     ```
+     https://jevhunt.pages.dev/api/auth/callback
+     http://localhost:8788/api/auth/callback     ← for local dev
+     ```
+3. Wire the values into the deployment:
+
+```bash
+# public client id → wrangler.toml [vars]
+# secret → encrypted Workers secret
+npx wrangler pages secret put GOOGLE_CLIENT_SECRET --project-name jevhunt
+```
+
+Then redeploy (`npm run deploy`). `/api/me` will start reporting `authEnabled: true`
+and the **Sign in** button becomes active. Until then the button renders disabled
+with an explanatory tooltip — nothing breaks.
+
+## Database
+
+Schema in `migrations/0001_init.sql`:
+
+| Table | Purpose |
+| --- | --- |
+| `users` | one row per person, keyed by the Google `sub` claim |
+| `sessions` | SHA-256 hash of the session token + expiry (never the raw token) |
+| `submissions` | user-submitted apps for the directory |
+| `oauth_states` | single-use CSRF nonces for the OAuth round-trip |
+
+```bash
+npm run db:migrate:remote   # apply to production D1
+npm run db:studio           # list recent users
+```
+
+## Security notes
+
+- Session tokens are 32 random bytes; **only their SHA-256 hash is stored**.
+- Cookies are `HttpOnly`, `SameSite=Lax`, and `Secure` whenever served over HTTPS
+  (automatically relaxed on `http://localhost` for local dev).
+- OAuth `state` is persisted in D1, single-use, expires in 10 minutes, and must
+  match a cookie — blocking login CSRF.
+- Post-login redirects are restricted to same-origin absolute paths (`safeNext`)
+  to prevent open redirects.
+- The authorization code is exchanged server-to-server; the profile is read from
+  Google's `userinfo` endpoint rather than trusting a client-supplied token.
+- Expired sessions and state rows are swept opportunistically.
+- `public/_headers` sets `nosniff`, `X-Frame-Options: DENY`, a referrer policy and
+  `Permissions-Policy`.
+
+## Design system
+
+Derived from the official Jev / TypeSafe AI aesthetic, pushed further for readability.
 
 | Token | Dark | Light |
 | --- | --- | --- |
@@ -49,36 +128,15 @@ Derived from the official Jev / TypeSafe AI aesthetic, pushed further for readab
 | Display | Space Grotesk | — |
 | Body | Inter | — |
 
-- Terminal / brutalist layout: 1px rules, mono labels, ASCII glyphs (`∵ ⩆ ✢`), version tags.
-- Signature components: typing terminal, marquee, benchmark band, directory grid, playbook tabs.
-- **Dual theme** (dark / light) and **bilingual EN / 中文** toggle, both persisted to `localStorage`.
-- All text meets **WCAG AA** contrast in both themes (audited).
-- Respects `prefers-reduced-motion`; no horizontal overflow from 390px up.
-
-## Icons & social card
-
-All icons live in `assets/icons/` and are referenced with **relative paths** — no root-level
-`favicon.ico`. This matters because the site is served from a sub-path
-(`/jevhunt/`), where the browser's implicit `/favicon.ico` request would miss.
-
-| File | Use |
-| --- | --- |
-| `favicon.svg` | Primary icon (modern browsers, any size) |
-| `favicon-32.png` | PNG fallback |
-| `favicon.ico` | Legacy / shortcuts (16, 32, 48, 64) |
-| `apple-touch-icon.png` | iOS home screen (180×180) |
-| `icon-192.png`, `icon-512.png` | PWA (512 also maskable) |
-| `og.png` | Social share card (1200×630) |
-
-The brand mark is a rounded dark square with a pink `J` and magenta dot, derived from the
-inline logo. `theme-color` is synced to the active theme at runtime.
-
-> ⚠️ `og:image`, `og:url` and `canonical` in `index.html` use the absolute GitHub Pages URL,
-> because social crawlers require absolute image URLs. Update these three if you add a custom domain.
+- Self-hosted webfonts (latin subset) — no CDN, so it renders offline and behind
+  restrictive networks; CJK falls back to the system stack.
+- Dual theme (dark/light) and bilingual EN/中文, persisted to `localStorage`.
+- All text meets **WCAG AA** contrast in both themes; no horizontal overflow from 390px.
+- Honours `prefers-reduced-motion`.
 
 ## Adding an app to the catalog
 
-Edit `assets/js/data.js` → `JH.apps`:
+Edit `public/assets/js/data.js` → `JH.apps`:
 
 ```js
 {
@@ -100,15 +158,11 @@ Hero stats, category counts and filters update automatically.
 - [x] Information-first single page
 - [x] App / playbook / category catalog
 - [x] EN / 中文 + dark / light
-- [ ] Real submission backend (currently a client-side stub)
+- [x] Cloudflare Pages + D1 + Google login
+- [ ] Wire the submit form to `POST /api/submissions` (table already exists)
 - [ ] Individual listing pages + SEO metadata
 - [ ] Submission moderation & voting
 - [ ] Independent Jev benchmarks
-
-## Deploy
-
-Static — deploys anywhere. For GitHub Pages, see `.github/workflows/pages.yml`
-(Settings → Pages → Source: GitHub Actions).
 
 ## Disclaimer
 

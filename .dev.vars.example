@@ -1,0 +1,4 @@
+# Local-only secrets for `wrangler pages dev`. Git-ignored.
+# Copy from Google Cloud Console → APIs & Services → Credentials → OAuth client.
+GOOGLE_CLIENT_ID=""
+GOOGLE_CLIENT_SECRET=""

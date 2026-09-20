@@ -327,6 +327,17 @@ JH.i18n = {
     "cat.routing": "路由",
     "cat.docs": "文档智能",
     "cat.voice": "语音与实时",
+
+    "auth.signin": "登录",
+    "auth.signout": "退出登录",
+    "auth.signedout": "已退出登录",
+    "auth.signoutfail": "退出失败，请重试",
+    "auth.unavailable": "Google 登录尚未配置",
+    "auth.err.cancelled": "已取消登录",
+    "auth.err.exchange": "Google 登录失败，请重试",
+    "auth.err.state": "登录会话已过期，请重试",
+    "auth.err.config": "Google 登录尚未配置",
+    "auth.err.generic": "登录失败",
   },
 };
 

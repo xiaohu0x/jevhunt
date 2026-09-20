@@ -31,6 +31,8 @@
   }
 
   const dict = (k) => (window.JH.i18n[state.lang] || {})[k];
+  const t = (key, fallback) => dict(key) ?? fallback;
+  const escAttr = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
   function applyLang(lang) {
     state.lang = lang;
@@ -51,6 +53,7 @@
     renderFilters();
     renderCategories();
     renderApps();
+    renderAuth();
   }
 
   /* ----------------------------- terminal typing ------------------------ */
@@ -353,6 +356,125 @@
     window.addEventListener("scroll", onScroll, { passive: true });
   }
 
+  /* ----------------------------- toast ---------------------------------- */
+  let toastTimer;
+  function toast(msg, isErr) {
+    const el = $("#toast");
+    if (!el) return;
+    el.textContent = msg;
+    el.classList.toggle("is-err", !!isErr);
+    el.hidden = false;
+    requestAnimationFrame(() => el.classList.add("is-on"));
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+      el.classList.remove("is-on");
+      setTimeout(() => { el.hidden = true; }, 320);
+    }, 4200);
+  }
+
+  /* ----------------------------- auth ----------------------------------- */
+  const GOOGLE_G = '<svg width="15" height="15" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>';
+
+  const authState = { user: null, authEnabled: false, loaded: false };
+  const authNext = () => location.pathname + location.search + location.hash;
+
+  function renderAuth() {
+    const host = $("#auth");
+    if (!host || !authState.loaded) return;
+    const { user, authEnabled } = authState;
+
+    if (user) {
+      const name = user.name || user.email || "?";
+      const initial = name.trim().charAt(0).toUpperCase();
+      const avatar = user.picture
+        ? `<img class="auth__avatar" src="${escAttr(user.picture)}" alt="" referrerpolicy="no-referrer" />`
+        : `<span class="auth__avatar" style="display:grid;place-items:center;font-family:var(--mono);font-size:.74rem">${escAttr(initial)}</span>`;
+      host.innerHTML = `<div class="auth__user">
+        <button class="auth__btn" id="authBtn" aria-haspopup="menu" aria-expanded="false">
+          ${avatar}<span class="auth__name">${escAttr(name)}</span>
+          <svg class="auth__chev" width="13" height="13" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+        <div class="auth__menu" id="authMenu" role="menu" hidden>
+          <div class="auth__meta">
+            ${user.picture ? `<img src="${escAttr(user.picture)}" alt="" referrerpolicy="no-referrer" />` : ""}
+            <div><div class="auth__meta-name">${escAttr(user.name || "")}</div>
+            <div class="auth__meta-email">${escAttr(user.email || "")}</div></div>
+          </div>
+          <button class="auth__item" id="signOut" role="menuitem">${t("auth.signout", "Sign out")}</button>
+        </div></div>`;
+
+      const btn = $("#authBtn"), menu = $("#authMenu");
+      const close = () => { btn.setAttribute("aria-expanded", "false"); menu.hidden = true; };
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const open = btn.getAttribute("aria-expanded") === "true";
+        btn.setAttribute("aria-expanded", String(!open));
+        menu.hidden = open;
+      });
+      menu.addEventListener("click", (e) => e.stopPropagation());
+      document.addEventListener("click", close);
+      document.addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });
+      $("#signOut").addEventListener("click", signOut);
+      return;
+    }
+
+    if (!authEnabled) {
+      host.innerHTML = `<span class="auth__signin" aria-disabled="true" title="${escAttr(t("auth.unavailable", "Google login is not configured"))}">${GOOGLE_G}${t("auth.signin", "Sign in")}</span>`;
+      return;
+    }
+    host.innerHTML = `<a class="auth__signin" href="/api/auth/google?next=${encodeURIComponent(authNext())}">${GOOGLE_G}${t("auth.signin", "Sign in")}</a>`;
+  }
+
+  async function signOut() {
+    try {
+      const res = await fetch("/api/auth/logout", { method: "POST" });
+      if (!res.ok) throw new Error("status " + res.status);
+      authState.user = null;
+      renderAuth();
+      toast(t("auth.signedout", "Signed out"));
+    } catch (_) {
+      toast(t("auth.signoutfail", "Could not sign out. Try again."), true);
+    }
+  }
+
+  const AUTH_ERRORS = {
+    cancelled: ["auth.err.cancelled", "Sign-in was cancelled"],
+    exchange_failed: ["auth.err.exchange", "Google sign-in failed. Please try again."],
+    bad_state: ["auth.err.state", "Sign-in session expired. Please try again."],
+    expired_state: ["auth.err.state", "Sign-in session expired. Please try again."],
+    not_configured: ["auth.err.config", "Google login is not configured"],
+  };
+
+  function handleAuthError() {
+    const p = new URLSearchParams(location.search);
+    const code = p.get("auth_error");
+    if (!code) return;
+    const [key, fallback] = AUTH_ERRORS[code] || ["auth.err.generic", "Sign-in failed"];
+    toast(t(key, fallback), true);
+    p.delete("auth_error");
+    const qs = p.toString();
+    history.replaceState({}, "", location.pathname + (qs ? "?" + qs : "") + location.hash);
+  }
+
+  async function initAuth() {
+    const host = $("#auth");
+    if (!host || location.protocol === "file:") return;
+    try {
+      const res = await fetch("/api/me", { headers: { accept: "application/json" } });
+      const ct = res.headers.get("content-type") || "";
+      if (!res.ok || !ct.includes("application/json")) throw new Error("not an api");
+      const data = await res.json();
+      authState.user = data.user || null;
+      authState.authEnabled = !!data.authEnabled;
+    } catch (_) {
+      authState.user = null;
+      authState.authEnabled = false;
+    }
+    authState.loaded = true;
+    renderAuth();
+    handleAuthError();
+  }
+
   /* ----------------------------- boot ----------------------------------- */
   function init() {
     applyTheme(state.theme);
@@ -377,6 +499,7 @@
     initCopy();
     initSubmit();
     initNav();
+    initAuth();
     $("#year").textContent = new Date().getFullYear();
 
     $("#themeBtn").addEventListener("click", () => applyTheme(state.theme === "dark" ? "light" : "dark"));

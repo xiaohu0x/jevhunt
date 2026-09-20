@@ -1,0 +1,13 @@
+name = "jevhunt"
+compatibility_date = "2025-01-01"
+pages_build_output_dir = "public"
+
+# Public, non-secret config. GOOGLE_CLIENT_SECRET is a Worker secret
+# (set with: npx wrangler pages secret put GOOGLE_CLIENT_SECRET).
+[vars]
+GOOGLE_CLIENT_ID = ""
+
+[[d1_databases]]
+binding = "DB"
+database_name = "jevhunt-db"
+database_id = "1948332e-a06c-4a97-8b24-f71d77dfb324"

@@ -11,3 +11,12 @@
 # logs / temp
 *.log
 /tmp/
+
+# Cloudflare / wrangler
+.wrangler/
+node_modules/
+
+# local secrets — never commit
+.dev.vars
+.env
+.env.*
