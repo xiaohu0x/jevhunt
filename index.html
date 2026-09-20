@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>JevHunt — The directory for software built on Jev</title>
+<meta name="description" content="JevHunt indexes apps, playbooks and tools built on Jev — the System One model from TypeSafe AI that returns typed decisions with calibrated confidence." />
+
+<meta property="og:title" content="JevHunt — The directory for software built on Jev" />
+<meta property="og:description" content="Apps, playbooks and tools for machine-native intelligence. Curated for builders." />
+<meta property="og:type" content="website" />
+<meta name="theme-color" content="#0B0B0C" />
+
+<link rel="stylesheet" href="assets/css/fonts.css" />
+<link rel="stylesheet" href="assets/css/style.css" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230B0B0C'/%3E%3Cpath d='M10 7h11v3.2h-7.6v6.4H20v3.2h-6.6V25H10z' fill='%23F386A1'/%3E%3Ccircle cx='23' cy='23' r='3' fill='%23D45BB6'/%3E%3C/svg%3E" />
+</head>
+<body>
+
+<!-- background layers -->
+<div class="bg-grid" aria-hidden="true"></div>
+<div class="bg-glow" aria-hidden="true"></div>
+<div class="bg-noise" aria-hidden="true"></div>
+
+<!-- ============ NAV ============ -->
+<header class="nav" id="nav">
+  <div class="nav__inner">
+    <a class="brand" href="#top" aria-label="JevHunt home">
+      <span class="brand__mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32" width="26" height="26">
+          <rect x="1" y="1" width="30" height="30" rx="7" fill="none" stroke="currentColor" stroke-opacity=".35"/>
+          <path d="M10 7h11v3.2h-7.6v6.4H20v3.2h-6.6V25H10z" fill="currentColor"/>
+          <circle cx="23" cy="23" r="2.6" class="brand__dot"/>
+        </svg>
+      </span>
+      <span class="brand__word">JEV<span>HUNT</span></span>
+      <span class="brand__ver">v0.1</span>
+    </a>
+
+    <nav class="nav__links" aria-label="Primary">
+      <a href="#about" data-i18n="nav.about">Model</a>
+      <a href="#apps" data-i18n="nav.apps">Apps</a>
+      <a href="#playbooks" data-i18n="nav.playbooks">Playbooks</a>
+      <a href="#timeline" data-i18n="nav.timeline">Timeline</a>
+    </nav>
+
+    <div class="nav__actions">
+      <button class="icon-btn" id="langBtn" title="Switch language" aria-label="Switch language">
+        <span id="langLabel">中</span>
+      </button>
+      <button class="icon-btn" id="themeBtn" title="Toggle theme" aria-label="Toggle theme">
+        <svg class="ico-sun" viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="4.2" fill="currentColor"/><g stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 2.5v2.6M12 18.9v2.6M2.5 12h2.6M18.9 12h2.6M5.2 5.2l1.9 1.9M16.9 16.9l1.9 1.9M18.8 5.2l-1.9 1.9M7.1 16.9l-1.9 1.9"/></g></svg>
+        <svg class="ico-moon" viewBox="0 0 24 24" width="17" height="17"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z" fill="currentColor"/></svg>
+      </button>
+      <a class="btn btn--sm btn--primary" href="#submit" data-i18n="nav.submit">Submit app</a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="wrap hero__grid">
+    <div class="hero__copy">
+      <div class="eyebrow reveal">
+        <span class="pulse" aria-hidden="true"></span>
+        <span data-i18n="hero.eyebrow">Jev ecosystem directory — model live 2 days ago</span>
+      </div>
+
+      <h1 class="hero__title reveal" data-i18n-html="hero.title">
+        Hunt the frontier of<br /><em>machine-native</em> software.
+      </h1>
+
+      <p class="hero__sub reveal" data-i18n-html="hero.sub">
+        <strong>JevHunt</strong> indexes every app, playbook and tool built on
+        <strong>Jev</strong> — the System One model from TypeSafe AI that returns
+        <em>typed decisions with calibrated confidence</em>. Discover what the ecosystem is
+        building, then ship your own.
+      </p>
+
+      <div class="hero__search reveal">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M16.5 16.5 21 21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <input id="heroSearch" type="search" autocomplete="off"
+               data-i18n-ph="hero.search" placeholder="Search apps, playbooks, schemas…" />
+        <kbd>/</kbd>
+      </div>
+
+      <div class="hero__chips reveal" id="heroChips">
+        <button class="chip" data-jump="Coding Agents" data-i18n="cat.coding">Coding Agents</button>
+        <button class="chip" data-jump="Classification" data-i18n="cat.classification">Classification</button>
+        <button class="chip" data-jump="Routing" data-i18n="cat.routing">Routing</button>
+        <button class="chip" data-jump="Document AI" data-i18n="cat.docs">Document AI</button>
+        <button class="chip" data-jump="Voice & Live" data-i18n="cat.voice">Voice &amp; Live</button>
+      </div>
+
+      <div class="hero__cta reveal">
+        <a class="btn btn--primary" href="#apps" data-i18n="hero.cta1">Browse the directory</a>
+        <a class="btn btn--ghost" href="https://typesafe.ai/" target="_blank" rel="noopener" data-i18n="hero.cta2">Official Jev docs ↗</a>
+      </div>
+    </div>
+
+    <!-- terminal -->
+    <div class="hero__term reveal">
+      <div class="term">
+        <div class="term__bar">
+          <span class="dot dot--r"></span><span class="dot dot--y"></span><span class="dot dot--g"></span>
+          <span class="term__title">jev · decision.py</span>
+          <span class="term__badge">~120ms</span>
+        </div>
+        <pre class="term__body"><code id="termCode"></code><span class="caret" id="termCaret">█</span></pre>
+        <div class="term__foot">
+          <span class="t-key">intent</span><span class="t-arrow">→</span><span class="t-val">"refund"</span>
+          <span class="t-p">p=0.94</span>
+          <span class="t-sep">·</span>
+          <span class="t-key">needs_human</span><span class="t-arrow">→</span><span class="t-val t-false">false</span>
+          <span class="t-p">p=0.88</span>
+        </div>
+      </div>
+      <div class="term__glyph" aria-hidden="true">∵ ⩆ ⩆ ∵</div>
+    </div>
+  </div>
+
+  <!-- stat strip -->
+  <div class="wrap">
+    <div class="stat-strip reveal">
+      <div class="stat">
+        <div class="stat__n" id="statApps" data-count="12" data-suffix="+">0</div>
+        <div class="stat__l" data-i18n="stat.apps">Apps indexed</div>
+      </div>
+      <div class="stat">
+        <div class="stat__n" id="statCats" data-count="9">0</div>
+        <div class="stat__l" data-i18n="stat.cats">Categories</div>
+      </div>
+      <div class="stat">
+        <div class="stat__n" data-count="193.6" data-suffix="x" data-dec="1">0</div>
+        <div class="stat__l" data-i18n="stat.speed">Faster than chat</div>
+      </div>
+      <div class="stat">
+        <div class="stat__n" data-count="2" data-prefix="D+">0</div>
+        <div class="stat__l" data-i18n="stat.age">Days since launch</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MARQUEE ============ -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee__track">
+    <span class="marquee__item">Decisions, not strings</span><span class="marquee__sym">✢</span>
+    <span class="marquee__item">Zero hallucinations</span><span class="marquee__sym">✢</span>
+    <span class="marquee__item">Typed outputs</span><span class="marquee__sym">✢</span>
+    <span class="marquee__item">Calibrated confidence</span><span class="marquee__sym">✢</span>
+    <span class="marquee__item">RLCD</span><span class="marquee__sym">✢</span>
+    <span class="marquee__item">System One Models</span><span class="marquee__sym">✢</span>
+    <span class="marquee__item">$42 / B input tokens</span><span class="marquee__sym">✢</span>
+    <span class="marquee__item">Made for machines</span><span class="marquee__sym">✢</span>
+    <!-- duplicate -->
+    <span class="marquee__item">Decisions, not strings</span><span class="marquee__sym">✢</span>
+    <span class="marquee__item">Zero hallucinations</span><span class="marquee__sym">✢</span>
+    <span class="marquee__item">Typed outputs</span><span class="marquee__sym">✢</span>
+    <span class="marquee__item">Calibrated confidence</span><span class="marquee__sym">✢</span>
+    <span class="marquee__item">RLCD</span><span class="marquee__sym">✢</span>
+    <span class="marquee__item">System One Models</span><span class="marquee__sym">✢</span>
+    <span class="marquee__item">$42 / B input tokens</span><span class="marquee__sym">✢</span>
+    <span class="marquee__item">Made for machines</span><span class="marquee__sym">✢</span>
+  </div>
+</div>
+
+<!-- ============ ABOUT / MODEL ============ -->
+<section class="section" id="about">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-head__no">01</div>
+      <div class="sec-head__txt">
+        <h2 data-i18n="about.title">What is Jev?</h2>
+        <p data-i18n="about.lead">A new class of model that speaks in decisions, not paragraphs.</p>
+      </div>
+    </div>
+
+    <div class="about__grid">
+      <article class="feature reveal">
+        <div class="feature__ico" aria-hidden="true">⟠</div>
+        <h3 data-i18n="f1.title">Decisions, not strings</h3>
+        <p data-i18n="f1.body">Jev returns typed outputs your software can act on directly — enums, booleans, scored integers. No parsing prose, no fragile regex.</p>
+      </article>
+      <article class="feature reveal">
+        <div class="feature__ico" aria-hidden="true">⩆</div>
+        <h3 data-i18n="f2.title">Calibrated confidence</h3>
+        <p data-i18n="f2.body">Every decision ships with an estimate of how sure the model is. Act autonomously above your threshold, escalate to a human below it.</p>
+      </article>
+      <article class="feature reveal">
+        <div class="feature__ico" aria-hidden="true">∵</div>
+        <h3 data-i18n="f3.title">Zero hallucinations</h3>
+        <p data-i18n="f3.body">Jev doesn't write prose, so there's nothing to hallucinate. Outputs stay inside the schema you declared at call time.</p>
+      </article>
+      <article class="feature reveal">
+        <div class="feature__ico" aria-hidden="true">✢</div>
+        <h3 data-i18n="f4.title">More like code</h3>
+        <p data-i18n="f4.body">Reliable, fast, self-consistent and type-safe — built with a new architecture, sampler and a training algorithm called RLCD.</p>
+      </article>
+    </div>
+
+    <!-- benchmark band -->
+    <div class="bench reveal">
+      <div class="bench__left">
+        <div class="bench__label" data-i18n="bench.label">Workflow intelligence vs. cost</div>
+        <h3 class="bench__title" data-i18n-html="bench.title">Intelligence per dollar, <em>off the charts</em>.</h3>
+        <div class="bench__bars" aria-hidden="true">
+          <div class="bar bar--jev"><span class="bar__name">JEV</span><span class="bar__fill"></span><span class="bar__v">0.114s</span></div>
+          <div class="bar bar--llm"><span class="bar__name">LLM</span><span class="bar__fill"></span><span class="bar__v">8.566s</span></div>
+        </div>
+      </div>
+      <div class="bench__right">
+        <div class="big-stat"><div class="big-stat__n">193.6<span>x</span></div><div class="big-stat__l" data-i18n="bench.s1">Faster on System One tasks</div></div>
+        <div class="big-stat"><div class="big-stat__n">444.6<span>x</span></div><div class="big-stat__l" data-i18n="bench.s2">Cheaper per workflow</div></div>
+        <div class="big-stat"><div class="big-stat__n">$42</div><div class="big-stat__l" data-i18n="bench.s3">Per billion input tokens</div></div>
+        <div class="big-stat"><div class="big-stat__n">238<span>x</span></div><div class="big-stat__l" data-i18n="bench.s4">Lower input price than chat LLMs</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ APPS / DIRECTORY ============ -->
+<section class="section section--alt" id="apps">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-head__no">02</div>
+      <div class="sec-head__txt">
+        <h2 data-i18n="apps.title">The directory</h2>
+        <p data-i18n="apps.lead">Apps, recipes and open-source tools built on Jev. Filter, search, ship.</p>
+      </div>
+    </div>
+
+    <div class="dir reveal">
+      <div class="dir__bar">
+        <div class="dir__search">
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M16.5 16.5 21 21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          <input id="dirSearch" type="search" autocomplete="off" data-i18n-ph="apps.search" placeholder="Search by name, tag or use case…" />
+        </div>
+        <div class="dir__filters" id="dirFilters"></div>
+      </div>
+      <div class="dir__meta">
+        <span id="dirCount">42 apps</span>
+        <span class="dir__sort" data-i18n="apps.sort">sorted by signal</span>
+      </div>
+      <div class="app-grid" id="appGrid"></div>
+      <div class="dir__empty" id="dirEmpty" hidden data-i18n="apps.empty">No apps match that query — try another tag.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CATEGORIES ============ -->
+<section class="section" id="categories">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-head__no">03</div>
+      <div class="sec-head__txt">
+        <h2 data-i18n="cats.title">Browse by use case</h2>
+        <p data-i18n="cats.lead">Where machine-native decisions create the most leverage today.</p>
+      </div>
+    </div>
+    <div class="cat-grid" id="catGrid"></div>
+  </div>
+</section>
+
+<!-- ============ PLAYBOOKS ============ -->
+<section class="section section--alt" id="playbooks">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-head__no">04</div>
+      <div class="sec-head__txt">
+        <h2 data-i18n="pb.title">Playbooks</h2>
+        <p data-i18n="pb.lead">Copy-paste patterns for the modes builders use most.</p>
+      </div>
+    </div>
+
+    <div class="pb reveal">
+      <div class="pb__tabs" id="pbTabs" role="tablist"></div>
+      <div class="pb__panel">
+        <div class="pb__code">
+          <div class="pb__codebar">
+            <span class="pb__file" id="pbFile">classify.py</span>
+            <button class="copy-btn" id="copyBtn" data-i18n="pb.copy">Copy</button>
+          </div>
+          <pre><code id="pbCode"></code></pre>
+        </div>
+        <aside class="pb__side">
+          <div class="pb__mode" id="pbMode">mode · classify</div>
+          <p id="pbDesc"></p>
+          <ul class="pb__list" id="pbList"></ul>
+          <a class="btn btn--ghost btn--sm" href="https://typesafe.ai/" target="_blank" rel="noopener" data-i18n="pb.docs">Read official docs ↗</a>
+        </aside>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TIMELINE ============ -->
+<section class="section" id="timeline">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-head__no">05</div>
+      <div class="sec-head__txt">
+        <h2 data-i18n="tl.title">Two days in</h2>
+        <p data-i18n="tl.lead">Jev is brand new. Here's what has happened — and what's next.</p>
+      </div>
+    </div>
+    <div class="timeline" id="timeline">
+      <div class="tl__line" aria-hidden="true"></div>
+      <div id="tlItems"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SUBMIT ============ -->
+<section class="section" id="submit">
+  <div class="wrap">
+    <div class="cta reveal">
+      <div class="cta__glow" aria-hidden="true"></div>
+      <div class="cta__inner">
+        <div class="cta__eyebrow">◢ <span data-i18n="cta.eyebrow">Open submission</span></div>
+        <h2 data-i18n-html="cta.title">Built something on Jev?<br />Get it hunted.</h2>
+        <p data-i18n="cta.lead">The catalog grows with the community. Submit an app, a mode recipe, a typed schema or an open-source plugin and we'll feature it in the directory.</p>
+        <form class="cta__form" id="submitForm">
+          <input type="url" id="repoUrl" data-i18n-ph="cta.ph" placeholder="https://github.com/you/your-jev-thing" required />
+          <button class="btn btn--primary" type="submit" data-i18n="cta.btn">Submit for review</button>
+        </form>
+        <div class="cta__note" id="formNote" data-i18n="cta.note">Ideas, demos, half-finished experiments — all welcome.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="wrap footer__grid">
+    <div class="footer__brand">
+      <a class="brand" href="#top">
+        <span class="brand__mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" width="24" height="24">
+            <rect x="1" y="1" width="30" height="30" rx="7" fill="none" stroke="currentColor" stroke-opacity=".35"/>
+            <path d="M10 7h11v3.2h-7.6v6.4H20v3.2h-6.6V25H10z" fill="currentColor"/>
+            <circle cx="23" cy="23" r="2.6" class="brand__dot"/>
+          </svg>
+        </span>
+        <span class="brand__word">JEV<span>HUNT</span></span>
+      </a>
+      <p data-i18n="foot.blurb">An independent, community-run directory for the Jev ecosystem. Not affiliated with TypeSafe AI.</p>
+      <div class="footer__ver">TS.AI // JEVHUNT.0S1</div>
+    </div>
+    <div class="footer__col">
+      <h4 data-i18n="foot.explore">Explore</h4>
+      <a href="#apps" data-i18n="nav.apps">Apps</a>
+      <a href="#playbooks" data-i18n="nav.playbooks">Playbooks</a>
+      <a href="#categories" data-i18n="cats.title">Categories</a>
+      <a href="#timeline" data-i18n="nav.timeline">Timeline</a>
+    </div>
+    <div class="footer__col">
+      <h4 data-i18n="foot.official">Official</h4>
+      <a href="https://typesafe.ai/" target="_blank" rel="noopener">typesafe.ai ↗</a>
+      <a href="https://typesafe.ai/" target="_blank" rel="noopener">Model docs ↗</a>
+      <a href="https://typesafe.ai/" target="_blank" rel="noopener">Pricing ↗</a>
+      <a href="https://typesafe.ai/" target="_blank" rel="noopener">Enterprise ↗</a>
+    </div>
+    <div class="footer__col">
+      <h4 data-i18n="foot.community">Community</h4>
+      <a href="#submit" data-i18n="nav.submit">Submit app</a>
+      <a href="https://www.jevai.org/" target="_blank" rel="noopener">jevai.org ↗</a>
+      <a href="https://github.com/xiaohu0x/jevhunt" target="_blank" rel="noopener">GitHub ↗</a>
+    </div>
+  </div>
+  <div class="wrap footer__base">
+    <span>© <span id="year"></span> JevHunt</span>
+    <span class="footer__glyph">∵ ⩆ ⩆ ∵</span>
+    <span data-i18n="foot.made">Made for builders.</span>
+  </div>
+</footer>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
