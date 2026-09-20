@@ -7,6 +7,17 @@
   const $  = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 
+  const localeKey = document.documentElement.dataset.locale || window.JH.i18n?.defaultLocale || "en";
+  const locale = window.JH.i18n?.locales?.[localeKey] || window.JH.i18n?.locales?.en;
+  const messages = locale?.messages || {};
+  function t(key, values = {}, fallback = key) {
+    let output = messages[key] ?? fallback;
+    for (const [name, value] of Object.entries(values)) {
+      output = output.replaceAll(`{${name}}`, String(value));
+    }
+    return output;
+  }
+
   const state = {
     theme: localStorage.getItem("jh-theme") || "dark",
     filter: "all",
@@ -16,7 +27,7 @@
   };
 
   const PAGE_SIZE = 20;
-  const number = new Intl.NumberFormat("en-US");
+  const number = new Intl.NumberFormat(locale?.lang || "en-US");
 
   /* ----------------------------- theme ---------------------------------- */
   function applyTheme(t) {
@@ -154,7 +165,13 @@
   function catLabel(id) {
     const item = category(id);
     if (!item) return id;
-    return item.name;
+    return t(`category.${id}.name`, {}, item.name);
+  }
+
+  function catDescription(id) {
+    const item = category(id);
+    if (!item) return "";
+    return t(`category.${id}.desc`, {}, item.desc);
   }
 
   function resetCatalogWindow() {
@@ -169,7 +186,7 @@
   }
 
   function compareName(left, right) {
-    return left.localeCompare(right, "en", { sensitivity: "base" });
+    return left.localeCompare(right, locale?.lang || "en", { sensitivity: "base" });
   }
 
   function renderFilters() {
@@ -178,10 +195,10 @@
     const counts = new Map();
     window.JH.apps.forEach(app => counts.set(app.cat, (counts.get(app.cat) || 0) + 1));
     const cats = [
-      { id: "all", label: "All" },
+      { id: "all", label: t("apps.all") },
       ...window.JH.categories
         .filter(c => counts.has(c.id))
-        .map(c => ({ id: c.id, label: c.name })),
+        .map(c => ({ id: c.id, label: catLabel(c.id) })),
     ];
     host.innerHTML = cats.map(c =>
       `<button class="fchip${state.filter === c.id ? " is-active" : ""}" data-cat="${escAttr(c.id)}" aria-pressed="${state.filter === c.id}">${escAttr(c.label)}</button>`
@@ -216,13 +233,13 @@
     const shown = list.slice(0, state.visible);
     grid.innerHTML = shown.map(a => {
       const repoUrl = `https://github.com/${a.repo.split("/").map(encodeURIComponent).join("/")}`;
-      const description = a.desc || "No project description available.";
+      const description = a.desc || t("apps.noDescription");
       const published = a.created
-        ? `published ${a.created}`
+        ? t("apps.published", { date: a.created })
         : null;
       const updated = a.pushed
-        ? `updated ${a.pushed}`
-        : "update date unknown";
+        ? t("apps.updated", { date: a.pushed })
+        : t("apps.unknownUpdate");
       return `
       <article class="card">
         <div class="card__top">
@@ -243,14 +260,17 @@
             <a class="card__go" href="${escAttr(repoUrl)}" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
             <a class="card__site" href="${escAttr(a.evidence)}" target="_blank" rel="ugc nofollow noopener noreferrer">README <span aria-hidden="true">↗</span></a>
           </span>
-          <span class="card__stat" aria-label="${number.format(a.stars)} GitHub stars">★ ${number.format(a.stars)}</span>
+          <span class="card__stat" aria-label="${escAttr(t("apps.starsLabel", { count: number.format(a.stars) }))}">★ ${number.format(a.stars)}</span>
         </div>
       </article>`;
     }).join("");
 
     const count = $("#dirCount");
     if (count) {
-      count.textContent = `Showing ${number.format(shown.length)} of ${number.format(list.length)} projects`;
+      count.textContent = t("apps.count", {
+        shown: number.format(shown.length),
+        total: number.format(list.length),
+      });
     }
     const empty = $("#dirEmpty");
     if (empty) empty.hidden = list.length !== 0;
@@ -258,7 +278,7 @@
     if (more) {
       more.hidden = shown.length >= list.length;
       const remaining = Math.min(PAGE_SIZE, list.length - shown.length);
-      more.textContent = `Load ${remaining} more`;
+      more.textContent = t("apps.loadCount", { count: number.format(remaining) });
     }
 
     $$(".card", grid).forEach(card => {
@@ -276,8 +296,8 @@
     if (!host) return;
     host.innerHTML = window.JH.categories.map(c => {
       const n = window.JH.apps.filter(a => a.cat === c.id).length;
-      const label = c.name;
-      const desc = c.desc;
+      const label = catLabel(c.id);
+      const desc = catDescription(c.id);
       return `<button class="cat" data-cat="${escAttr(c.id)}">
         <span class="cat__ico" aria-hidden="true">${escAttr(c.icon)}</span>
         <span class="cat__b"><span class="cat__name">${escAttr(label)}</span><span class="cat__desc">${escAttr(desc)}</span></span>
@@ -314,9 +334,11 @@
     if (!p) return;
     $("#pbFile").textContent = p.file;
     $("#pbMode").textContent = p.mode;
-    $("#pbDesc").textContent = p.desc;
+    $("#pbDesc").textContent = t(`playbook.${p.id}.desc`, {}, p.desc);
     $("#pbCode").innerHTML = p.code;
-    $("#pbList").innerHTML = p.list.map(li => `<li>${li}</li>`).join("");
+    $("#pbList").innerHTML = p.list.map((item, index) =>
+      `<li>${escAttr(t(`playbook.${p.id}.${index + 1}`, {}, item))}</li>`
+    ).join("");
   }
 
   function initCopy() {
@@ -327,7 +349,7 @@
       try {
         await navigator.clipboard.writeText(text);
         const old = btn.textContent;
-        btn.textContent = "Copied ✓";
+        btn.textContent = t("pb.copied");
         setTimeout(() => { btn.textContent = old; }, 1400);
       } catch (_) { /* clipboard unavailable */ }
     });
@@ -337,11 +359,11 @@
   function renderTimeline() {
     const host = $("#tlItems");
     if (!host) return;
-    host.innerHTML = window.JH.timeline.map(t => `
-      <div class="tl-item reveal${t.future ? " tl-item--future" : ""}">
-        <div class="tl-date">${t.date}</div>
-        <div class="tl-title">${t.title}</div>
-        <div class="tl-desc">${t.desc}</div>
+    host.innerHTML = window.JH.timeline.map((item, index) => `
+      <div class="tl-item reveal${item.future ? " tl-item--future" : ""}">
+        <div class="tl-date">${escAttr(t(`timeline.${index}.date`, {}, item.date))}</div>
+        <div class="tl-title">${escAttr(t(`timeline.${index}.title`, {}, item.title))}</div>
+        <div class="tl-desc">${escAttr(t(`timeline.${index}.desc`, {}, item.desc))}</div>
       </div>
     `).join("");
   }
@@ -401,6 +423,15 @@
     }
   }
 
+  function initLocaleSelect() {
+    const select = $("#languageSelect");
+    if (!select || !locale) return;
+    select.value = locale.path;
+    select.addEventListener("change", () => {
+      location.assign(select.value + location.hash);
+    });
+  }
+
   function initFeatureGlow() {
     $$(".feature").forEach(card => card.addEventListener("mousemove", e => {
       const r = card.getBoundingClientRect();
@@ -414,9 +445,9 @@
     const sel = $("#subCat");
     if (!sel) return;
     const selected = sel.value;
-    const label = "Category";
+    const label = t("form.category");
     const opts = (window.JH.categories || []).map(c =>
-      `<option value="${escAttr(c.id)}">${escAttr(c.name)}</option>`
+      `<option value="${escAttr(c.id)}">${escAttr(catLabel(c.id))}</option>`
     ).join("");
     sel.innerHTML = `<option value="" disabled selected>${label}</option>${opts}`;
     if ([...sel.options].some(option => option.value === selected)) sel.value = selected;
@@ -431,7 +462,7 @@
       const list = (await res.json()).submissions || [];
       if (!list.length) { host.hidden = true; return; }
       host.hidden = false;
-      host.innerHTML = `<h4>Your submissions</h4>` + list.map(s =>
+      host.innerHTML = `<h4>${escAttr(t("form.yourSubmissions"))}</h4>` + list.map(s =>
         `<div class="sub__item">
            <span class="sub__item-name">${escAttr(s.name)}</span>
            <span class="sub__item-url">${escAttr(s.url)}</span>
@@ -468,7 +499,7 @@
       };
 
       if (!authState.user) {
-        toast("Sign in with Google to submit.", true);
+        toast(t("form.signIn"), true);
         return;
       }
 
@@ -481,22 +512,22 @@
 
       const repositoryUrl = normalizeGitHubRepoUrl(payload.url);
       if (!repositoryUrl) {
-        setNote("Enter a GitHub repository URL like https://github.com/owner/repo.", "is-err");
+        setNote(t("form.repoInvalid"), "is-err");
         return;
       }
       payload.url = repositoryUrl;
       if (payload.name.length < 2) {
-        setNote("Give the app a name (2+ characters).", "is-err");
+        setNote(t("form.nameInvalid"), "is-err");
         return;
       }
       if (!$("#subConsent").checked) {
-        setNote("Confirm the Terms and Privacy Policy before submitting.", "is-err");
+        setNote(t("form.consentInvalid"), "is-err");
         return;
       }
 
       const original = btn.textContent;
       btn.disabled = true;
-      btn.textContent = "Submitting…";
+      btn.textContent = t("form.submitting");
 
       try {
         const res = await fetch("/api/submissions", {
@@ -508,21 +539,21 @@
         if (res.status === 401) {
           authState.user = null;
           renderAuth();
-          toast("Sign in with Google to submit.", true);
+          toast(t("form.signIn"), true);
           return;
         }
         if (res.status === 429) {
-          setNote("Too many submissions this hour — try again later.", "is-err");
+          setNote(t("form.rateLimit"), "is-err");
           return;
         }
         if (!res.ok) throw new Error("status " + res.status);
 
         form.reset();
         $("#subCat").selectedIndex = 0;
-        setNote("Received ✓ We'll review it and add it to the catalog.", "is-ok");
+        setNote(t("form.received"), "is-ok");
         loadSubmissions();
       } catch (_) {
-        setNote("Something went wrong. Please try again.", "is-err");
+        setNote(t("form.error"), "is-err");
       } finally {
         btn.disabled = false;
         btn.textContent = original;
@@ -583,8 +614,8 @@
             <div><div class="auth__meta-name">${escAttr(user.name || "")}</div>
             <div class="auth__meta-email">${escAttr(user.email || "")}</div></div>
           </div>
-          <a class="auth__item" href="/privacy/" role="menuitem">Privacy and data use</a>
-          <button class="auth__item" id="signOut" role="menuitem">Sign out</button>
+          <a class="auth__item" href="/privacy/" role="menuitem">${escAttr(t("auth.privacy"))}</a>
+          <button class="auth__item" id="signOut" role="menuitem">${escAttr(t("auth.signOut"))}</button>
         </div></div>`;
 
       const btn = $("#authBtn"), menu = $("#authMenu");
@@ -603,10 +634,10 @@
     }
 
     if (!authEnabled) {
-      host.innerHTML = `<span class="auth__signin auth__signin--disabled" aria-disabled="true" title="Google sign-in is unavailable in this environment">${GOOGLE_G}<span>Continue with Google</span></span>`;
+      host.innerHTML = `<span class="auth__signin auth__signin--disabled" aria-disabled="true" title="${escAttr(t("auth.unavailable"))}">${GOOGLE_G}<span>${escAttr(t("auth.continue"))}</span></span>`;
       return;
     }
-    host.innerHTML = `<a class="auth__signin" href="/api/auth/google?next=${encodeURIComponent(authNext())}" aria-label="Continue to Google's secure sign-in page">${GOOGLE_G}<span>Continue with Google</span></a>`;
+    host.innerHTML = `<a class="auth__signin" href="/api/auth/google?next=${encodeURIComponent(authNext())}" aria-label="${escAttr(t("auth.secure"))}">${GOOGLE_G}<span>${escAttr(t("auth.continue"))}</span></a>`;
   }
 
   async function signOut() {
@@ -615,25 +646,25 @@
       if (!res.ok) throw new Error("status " + res.status);
       authState.user = null;
       renderAuth();
-      toast("Signed out");
+      toast(t("auth.signedOut"));
     } catch (_) {
-      toast("Could not sign out. Try again.", true);
+      toast(t("auth.signOutError"), true);
     }
   }
 
   const AUTH_ERRORS = {
-    cancelled: "Sign-in was cancelled",
-    exchange_failed: "Google sign-in failed. Please try again.",
-    bad_state: "Sign-in session expired. Please try again.",
-    expired_state: "Sign-in session expired. Please try again.",
-    not_configured: "Google login is not configured",
+    cancelled: t("auth.cancelled"),
+    exchange_failed: t("auth.failed"),
+    bad_state: t("auth.expired"),
+    expired_state: t("auth.expired"),
+    not_configured: t("auth.notConfigured"),
   };
 
   function handleAuthError() {
     const p = new URLSearchParams(location.search);
     const code = p.get("auth_error");
     if (!code) return;
-    toast(AUTH_ERRORS[code] || "Sign-in failed", true);
+    toast(AUTH_ERRORS[code] || t("auth.generic"), true);
     p.delete("auth_error");
     const qs = p.toString();
     history.replaceState({}, "", location.pathname + (qs ? "?" + qs : "") + location.hash);
@@ -642,7 +673,7 @@
   async function initAuth() {
     const host = $("#auth");
     if (!host || location.protocol === "file:") return;
-    host.innerHTML = `<span class="auth__signin auth__signin--loading" aria-busy="true">${GOOGLE_G}<span>Continue with Google</span></span>`;
+    host.innerHTML = `<span class="auth__signin auth__signin--loading" aria-busy="true">${GOOGLE_G}<span>${escAttr(t("auth.continue"))}</span></span>`;
     try {
       const res = await fetch("/api/me", { headers: { accept: "application/json" } });
       const ct = res.headers.get("content-type") || "";
@@ -682,6 +713,7 @@
     initSearch();
     initChips();
     initDirectory();
+    initLocaleSelect();
     initFeatureGlow();
     initCopy();
     initSubmit();

@@ -10,6 +10,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const read = file => readFileSync(resolve(root, file), "utf8");
 const index = read("public/index.html");
 const main = read("public/assets/js/main.js");
+const i18n = read("public/assets/js/i18n.js");
 const projects = read("public/assets/js/projects.js");
 const headers = read("public/_headers");
 
@@ -66,8 +67,10 @@ test("the home page explains authentication and sensitive-data boundaries", () =
   assert.match(index, /Browsing JevHunt never requires an account/);
   assert.match(index, /never asks for your Google password, JEV API key, or payment details/);
   assert.match(index, /id="subConsent" required/);
-  assert.match(main, /Confirm the Terms and Privacy Policy before submitting/);
-  assert.match(main, /Continue with Google/);
+  assert.match(i18n, /Confirm the Terms and Privacy Policy before submitting/);
+  assert.match(i18n, /Continue with Google/);
+  assert.match(main, /t\("form\.consentInvalid"\)/);
+  assert.match(main, /t\("auth\.continue"\)/);
 });
 
 test("security headers constrain executable content and transport", () => {

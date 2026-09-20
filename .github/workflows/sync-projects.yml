@@ -32,7 +32,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add public/catalog-audit.json public/assets/js/projects.js public/index.html public/404.html public/privacy/index.html public/terms/index.html public/security/index.html public/sitemap.xml
+          git add public/catalog-audit.json public/assets/js/projects.js public/assets/js/i18n.js public/index.html public/zh-cn public/zh-tw public/ja public/ko public/es public/fr public/de public/pt-br public/404.html public/privacy/index.html public/terms/index.html public/security/index.html public/sitemap.xml
           if git diff --cached --quiet; then
             echo "Catalog is already current."
             exit 0

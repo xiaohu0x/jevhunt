@@ -18,6 +18,7 @@ const pub = join(root, "public");
 const ASSETS = [
   "assets/css/fonts.css",
   "assets/css/style.css",
+  "assets/js/i18n.js",
   "assets/js/data.js",
   "assets/js/projects.js",
   "assets/js/main.js",

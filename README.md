@@ -17,6 +17,8 @@ Static front-end **plus** a small serverless backend, all on Cloudflare:
 ```
 public/                     → static assets (the deploy root)
   index.html
+  zh-cn|zh-tw|ja|ko|es|fr|de|pt-br/
+    index.html              → generated localized home pages
   404.html                  → real 404 (avoids soft-404 on unknown paths)
   favicon.* og.png          → icons live at the site root
   site.webmanifest robots.txt sitemap.xml
@@ -36,6 +38,7 @@ functions/                  → Cloudflare Pages Functions (the API)
 
 tools/stamp.mjs             → content-hash cache busting (no deps)
 tools/prerender-catalog.mjs → first-page HTML + ItemList SEO generation
+tools/localize.mjs          → localized pages, hreflang, JSON-LD + sitemap
 tools/sync-projects.mjs     → validated GitHub catalog sync (no deps)
 migrations/0001_init.sql    → D1 schema
 wrangler.toml               → bindings + config
@@ -138,7 +141,10 @@ Derived from the official Jev / TypeSafe AI aesthetic, pushed further for readab
 
 - Self-hosted webfonts (latin subset) — no CDN, so it renders offline and behind
   restrictive networks; CJK falls back to the system stack.
-- Dual theme (dark/light), with the UI presented in English only.
+- Dual theme (dark/light), with static, crawlable pages in English, Simplified Chinese,
+  Traditional Chinese, Japanese, Korean, Spanish, French, German and Brazilian Portuguese.
+- Every locale has a self-referencing canonical URL, reciprocal `hreflang` links,
+  localized Title/Description/H1, Open Graph metadata and JSON-LD.
 - All text meets **WCAG AA** contrast in both themes; no horizontal overflow from 390px.
 - Honours `prefers-reduced-motion`.
 
@@ -167,8 +173,9 @@ or external posts. The generated rejection report is published at
 
 To add a project, use the submission form on JevHunt or submit it to the upstream source. Hero
 stats, category counts, search, filters, star ranking, and publish/update date sorting update from
-the generated snapshot. The build also prerenders the top 20 projects into `index.html`, keeping
-the static and rendered home page within the 1,200–1,800 word SEO target.
+the generated snapshot. The build also prerenders the top 20 projects into `index.html`, then
+generates each localized route from that snapshot. This keeps the English static page within the
+1,200–1,800 word SEO target while giving crawlers localized metadata and visible page copy.
 
 ## Deploy
 
@@ -192,7 +199,7 @@ re-running it with unchanged assets is a no-op.
 
 - [x] Information-first single page
 - [x] Searchable catalog of all discoverable Jev GitHub projects
-- [x] English-only UI + dark / light themes
+- [x] Nine-language UI and SEO + dark / light themes
 - [x] Cloudflare Pages + D1 + Google login
 - [x] Real submissions API (`POST /api/submissions`) with validation + rate limit
 - [x] Cache-busted assets, real 404, robots.txt, sitemap.xml

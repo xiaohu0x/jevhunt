@@ -4,7 +4,7 @@
   "private": true,
   "description": "The directory for software built on Jev — Cloudflare Pages + D1 + Google OAuth",
   "scripts": {
-    "build": "node tools/prerender-catalog.mjs && node tools/stamp.mjs",
+    "build": "node tools/prerender-catalog.mjs && node tools/localize.mjs && node tools/stamp.mjs",
     "catalog:sync": "node tools/sync-projects.mjs",
     "test": "node --test tools/*.test.mjs",
     "dev": "wrangler pages dev",
