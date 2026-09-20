@@ -59,9 +59,8 @@ function renderCard(project) {
     `<span class="tag">${esc(updated)}</span>`,
   ].filter(Boolean).map(tag => `            ${tag}`).join("\n");
   const links = [
-    `<a class="card__go" href="${esc(repository)}" target="_blank" rel="noopener">GitHub <span aria-hidden="true">↗</span></a>`,
-    `<a class="card__site" href="${esc(project.evidence)}" target="_blank" rel="noopener">README <span aria-hidden="true">↗</span></a>`,
-    project.site ? `<a class="card__site" href="${esc(project.site)}" target="_blank" rel="noopener">site <span aria-hidden="true">↗</span></a>` : null,
+    `<a class="card__go" href="${esc(repository)}" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>`,
+    `<a class="card__site" href="${esc(project.evidence)}" target="_blank" rel="ugc nofollow noopener noreferrer">README <span aria-hidden="true">↗</span></a>`,
   ].filter(Boolean).map(link => `              ${link}`).join("\n");
 
   return `        <article class="card">

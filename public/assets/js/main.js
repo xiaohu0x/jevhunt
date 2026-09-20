@@ -29,6 +29,25 @@
 
   const escAttr = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
+  function normalizeGitHubRepoUrl(value) {
+    try {
+      const parsed = new URL(value);
+      const parts = parsed.pathname.split("/").filter(Boolean);
+      const owner = parts[0] || "";
+      const repo = (parts[1] || "").replace(/\.git$/i, "");
+      const validOwner = /^[A-Za-z0-9](?:[A-Za-z0-9-]{0,37}[A-Za-z0-9])?$/.test(owner);
+      const validRepo = repo.length <= 100 && /^[A-Za-z0-9._-]+$/.test(repo) && repo !== "." && repo !== "..";
+
+      if (parsed.protocol !== "https:" || parsed.hostname.toLowerCase() !== "github.com" ||
+          parsed.port || parsed.username || parsed.password || parsed.search || parsed.hash ||
+          parts.length !== 2 || !validOwner || !validRepo) return null;
+
+      return `https://github.com/${owner}/${repo}`;
+    } catch {
+      return null;
+    }
+  }
+
   /* ----------------------------- terminal typing ------------------------ */
   const CODE = [
     'import typesafe',
@@ -221,9 +240,8 @@
         </div>
         <div class="card__foot">
           <span class="card__links">
-            <a class="card__go" href="${escAttr(repoUrl)}" target="_blank" rel="noopener">GitHub <span aria-hidden="true">↗</span></a>
-            <a class="card__site" href="${escAttr(a.evidence)}" target="_blank" rel="noopener">README <span aria-hidden="true">↗</span></a>
-            ${a.site ? `<a class="card__site" href="${escAttr(a.site)}" target="_blank" rel="noopener">site <span aria-hidden="true">↗</span></a>` : ""}
+            <a class="card__go" href="${escAttr(repoUrl)}" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+            <a class="card__site" href="${escAttr(a.evidence)}" target="_blank" rel="ugc nofollow noopener noreferrer">README <span aria-hidden="true">↗</span></a>
           </span>
           <span class="card__stat" aria-label="${number.format(a.stars)} GitHub stars">★ ${number.format(a.stars)}</span>
         </div>
@@ -461,12 +479,18 @@
         description: $("#subDesc").value.trim(),
       };
 
-      if (!/^https?:\/\/\S+\.\S+/i.test(payload.url)) {
-        setNote("Enter a valid http(s) URL.", "is-err");
+      const repositoryUrl = normalizeGitHubRepoUrl(payload.url);
+      if (!repositoryUrl) {
+        setNote("Enter a GitHub repository URL like https://github.com/owner/repo.", "is-err");
         return;
       }
+      payload.url = repositoryUrl;
       if (payload.name.length < 2) {
         setNote("Give the app a name (2+ characters).", "is-err");
+        return;
+      }
+      if (!$("#subConsent").checked) {
+        setNote("Confirm the Terms and Privacy Policy before submitting.", "is-err");
         return;
       }
 
@@ -559,6 +583,7 @@
             <div><div class="auth__meta-name">${escAttr(user.name || "")}</div>
             <div class="auth__meta-email">${escAttr(user.email || "")}</div></div>
           </div>
+          <a class="auth__item" href="/privacy/" role="menuitem">Privacy and data use</a>
           <button class="auth__item" id="signOut" role="menuitem">Sign out</button>
         </div></div>`;
 
@@ -578,10 +603,10 @@
     }
 
     if (!authEnabled) {
-      host.innerHTML = `<span class="auth__signin auth__signin--disabled" aria-disabled="true" title="Google sign-in is unavailable in this environment">${GOOGLE_G}<span>Sign in</span></span>`;
+      host.innerHTML = `<span class="auth__signin auth__signin--disabled" aria-disabled="true" title="Google sign-in is unavailable in this environment">${GOOGLE_G}<span>Continue with Google</span></span>`;
       return;
     }
-    host.innerHTML = `<a class="auth__signin" href="/api/auth/google?next=${encodeURIComponent(authNext())}">${GOOGLE_G}<span>Sign in</span></a>`;
+    host.innerHTML = `<a class="auth__signin" href="/api/auth/google?next=${encodeURIComponent(authNext())}" aria-label="Continue to Google's secure sign-in page">${GOOGLE_G}<span>Continue with Google</span></a>`;
   }
 
   async function signOut() {
@@ -617,7 +642,7 @@
   async function initAuth() {
     const host = $("#auth");
     if (!host || location.protocol === "file:") return;
-    host.innerHTML = `<span class="auth__signin auth__signin--loading" aria-busy="true">${GOOGLE_G}<span>Sign in</span></span>`;
+    host.innerHTML = `<span class="auth__signin auth__signin--loading" aria-busy="true">${GOOGLE_G}<span>Continue with Google</span></span>`;
     try {
       const res = await fetch("/api/me", { headers: { accept: "application/json" } });
       const ct = res.headers.get("content-type") || "";

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7QNDGTH1T4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-7QNDGTH1T4');
+</script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Security &amp; Safe Browsing | JevHunt</title>
+<meta name="description" content="JevHunt security practices, safe browsing guidance and responsible vulnerability reporting." />
+<meta name="robots" content="index, follow" />
+<meta name="theme-color" id="themeColor" content="#0B0B0C" />
+<link rel="canonical" href="https://jevhunt.com/security/" />
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml" />
+<link rel="stylesheet" href="/assets/css/fonts.css?v=81b65047a3" />
+<link rel="stylesheet" href="/assets/css/style.css?v=ab760a1bd7" />
+</head>
+<body>
+<div class="bg-grid" aria-hidden="true"></div><div class="bg-glow" aria-hidden="true"></div><div class="bg-noise" aria-hidden="true"></div>
+<header class="legal-nav"><div class="nav__inner">
+  <a class="brand" href="/" aria-label="JevHunt home"><span class="brand__mark" aria-hidden="true"><svg class="brand__symbol" viewBox="0 0 64 64" width="32" height="32"><rect class="brand__frame" x="1.5" y="1.5" width="61" height="61" rx="15"/><path class="brand__j" d="M18 17h27v19c0 9-5.2 14-13.4 14-6.2 0-10.7-2.8-13.2-8.2"/><g class="brand__target"><circle class="brand__target-ring" cx="45" cy="17" r="6.5"/><circle class="brand__target-dot" cx="45" cy="17" r="2.4"/></g></svg></span><span class="brand__word">JEV<span>HUNT</span></span></a>
+  <nav class="legal-nav__links" aria-label="Legal pages"><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/">Directory</a></nav>
+</div></header>
+
+<main class="legal"><div class="wrap">
+  <header class="legal__header"><div class="legal__kicker">Security</div><h1>Safe browsing and reporting</h1><p class="legal__summary">JevHunt hosts a directory, not executable downloads. Community project links are limited to GitHub repositories and README evidence so visitors can inspect the source before using a project.</p><p class="legal__updated">Last updated: September 21, 2026</p></header>
+  <div class="legal__content">
+    <div class="legal__notice"><p><strong>JevHunt will never ask for your Google password, recovery code, private repository token, JEV API key or payment details.</strong> A request for any of these should be treated as suspicious.</p></div>
+    <section><h2>Controls in place</h2><ul><li>HTTPS with HSTS, restrictive security headers and a Content Security Policy.</li><li>Server-side OAuth sessions stored as one-way token hashes in Cloudflare D1.</li><li>Single-use, expiring OAuth state values to prevent login CSRF.</li><li>Same-origin redirect validation after Google sign-in.</li><li>Submission authentication, validation and rate limiting.</li><li>README-based catalog verification and no direct links to unreviewed project websites.</li></ul></section>
+    <section><h2>Using community projects</h2><p>A verified JEV reference is not a security audit. Read the repository, inspect release artifacts, review requested permissions and use an isolated environment when evaluating unfamiliar code. GitHub and project authors control repository content after it is listed.</p></section>
+    <section><h2>Report a vulnerability</h2><p>Use the repository's <a href="https://github.com/xiaohu0x/jevhunt/security" target="_blank" rel="noopener noreferrer">Security page</a> for responsible reporting guidance. If private reporting is unavailable, open a minimal <a href="https://github.com/xiaohu0x/jevhunt/issues" target="_blank" rel="noopener noreferrer">GitHub issue</a> without exploit details or personal data so a maintainer can arrange a private channel.</p></section>
+    <section><h2>Report deceptive content</h2><p>Report a suspicious listing, misleading claim or unsafe repository through the issue tracker. Include the JevHunt listing name and GitHub repository URL. Do not visit or attach suspected payloads.</p></section>
+  </div>
+</div></main>
+
+<footer class="footer"><div class="wrap footer__base"><span>© 2026 JevHunt</span><a href="/.well-known/security.txt">security.txt</a><a href="/terms/">Terms</a></div></footer>
+<script>try{var t=localStorage.getItem("jh-theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+</body>
+</html>

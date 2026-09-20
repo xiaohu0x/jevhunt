@@ -8,7 +8,7 @@
  * safe. Deterministic: re-running with unchanged assets is a no-op.
  */
 import { createHash } from "node:crypto";
-import { readFileSync, writeFileSync } from "node:fs";
+import { readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -23,7 +23,15 @@ const ASSETS = [
   "assets/js/main.js",
 ];
 
-const PAGES = ["index.html", "404.html"];
+function htmlPages(dir = pub) {
+  return readdirSync(dir, { withFileTypes: true }).flatMap(entry => {
+    const path = join(dir, entry.name);
+    if (entry.isDirectory()) return htmlPages(path);
+    return entry.isFile() && entry.name.endsWith(".html") ? [path.slice(pub.length + 1)] : [];
+  });
+}
+
+const PAGES = htmlPages();
 
 const hash = (rel) =>
   createHash("sha256").update(readFileSync(join(pub, rel))).digest("hex").slice(0, 10);

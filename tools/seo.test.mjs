@@ -8,6 +8,9 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const readPublic = file => readFileSync(resolve(root, "public", file), "utf8");
 const index = readPublic("index.html");
 const notFound = readPublic("404.html");
+const privacy = readPublic("privacy/index.html");
+const terms = readPublic("terms/index.html");
+const security = readPublic("security/index.html");
 const main = readPublic("assets/js/main.js");
 const data = readPublic("assets/js/data.js");
 const editorialIndex = index.replace(
@@ -102,15 +105,18 @@ test("prerendered projects publish matching ItemList structured data", () => {
 
 test("manifest, sitemap and brand sources carry the updated identity", () => {
   const manifest = JSON.parse(readPublic("site.webmanifest"));
+  const sitemap = readPublic("sitemap.xml");
   assert.match(manifest.name, /^JEV AI Model\b/);
-  assert.match(readPublic("sitemap.xml"), /<loc>https:\/\/jevhunt\.com\/<\/loc>/);
+  assert.match(sitemap, /<loc>https:\/\/jevhunt\.com\/<\/loc>/);
+  assert.match(sitemap, /<loc>https:\/\/jevhunt\.com\/privacy\/<\/loc>/);
+  assert.match(sitemap, /<loc>https:\/\/jevhunt\.com\/terms\/<\/loc>/);
+  assert.match(sitemap, /<loc>https:\/\/jevhunt\.com\/security\/<\/loc>/);
   assert.match(readPublic("favicon.svg"), /JevHunt J target mark/);
   assert.match(readPublic("og-source.svg"), />JEV AI<\/text>/);
 });
 
-test("first viewport includes the immediate OmniAKey API route", () => {
-  assert.match(index, /Need JEV AI Model API access without waiting\?/);
-  assert.match(index, /href="https:\/\/omniakey\.com\/"/);
+test("the home page does not promote third-party API access", () => {
+  assert.doesNotMatch(index, /API access without waiting|instant API access/i);
 });
 
 test("editorial navigation points to the official JEV source", () => {
@@ -126,7 +132,14 @@ test("Google authentication stays visible in every auth state", () => {
 });
 
 test("every HTML page loads the configured Google tag exactly once", () => {
-  for (const [name, html] of [["index.html", index], ["404.html", notFound]]) {
+  const pages = [
+    ["index.html", index],
+    ["404.html", notFound],
+    ["privacy/index.html", privacy],
+    ["terms/index.html", terms],
+    ["security/index.html", security],
+  ];
+  for (const [name, html] of pages) {
     assert.match(html, /<head>\s*<!-- Google tag \(gtag\.js\) -->/);
     assert.equal(
       html.match(/googletagmanager\.com\/gtag\/js\?id=G-7QNDGTH1T4/g)?.length,

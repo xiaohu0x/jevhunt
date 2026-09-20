@@ -54,16 +54,6 @@ function date(value) {
   return /^\d{4}-\d{2}-\d{2}$/.test(normalized) ? normalized : null;
 }
 
-function webUrl(value) {
-  if (!value) return null;
-  try {
-    const url = new URL(value);
-    return url.protocol === "https:" || url.protocol === "http:" ? url.toString() : null;
-  } catch {
-    return null;
-  }
-}
-
 function serialize(value) {
   return JSON.stringify(value)
     .replace(/\u2028/g, "\\u2028")
@@ -108,7 +98,6 @@ for (const project of upstream.projects) {
     created: date(project.created),
     added: date(project.added),
     pushed: date(project.pushed),
-    site: webUrl(project.site),
   });
 }
 
@@ -173,6 +162,24 @@ const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
     <lastmod>${sitemapLastModified}</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://jevhunt.com/privacy/</loc>
+    <lastmod>2026-09-21</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  <url>
+    <loc>https://jevhunt.com/terms/</loc>
+    <lastmod>2026-09-21</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  <url>
+    <loc>https://jevhunt.com/security/</loc>
+    <lastmod>2026-09-21</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.2</priority>
   </url>
 </urlset>
 `;

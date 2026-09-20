@@ -5,6 +5,27 @@ const FIELDS = { name: 120, url: 500, description: 1000, category: 60 };
 
 const clean = (v, max) => String(v ?? "").trim().slice(0, max);
 
+export function normalizeGitHubRepoUrl(value) {
+  let parsed;
+  try {
+    parsed = new URL(String(value ?? "").trim());
+  } catch {
+    return null;
+  }
+
+  const parts = parsed.pathname.split("/").filter(Boolean);
+  const owner = parts[0] ?? "";
+  const repo = (parts[1] ?? "").replace(/\.git$/i, "");
+  const validOwner = /^[A-Za-z0-9](?:[A-Za-z0-9-]{0,37}[A-Za-z0-9])?$/.test(owner);
+  const validRepo = repo.length <= 100 && /^[A-Za-z0-9._-]+$/.test(repo) && repo !== "." && repo !== "..";
+
+  if (parsed.protocol !== "https:" || parsed.hostname.toLowerCase() !== "github.com" ||
+      parsed.port || parsed.username || parsed.password || parsed.search || parsed.hash ||
+      parts.length !== 2 || !validOwner || !validRepo) return null;
+
+  return `https://github.com/${owner}/${repo}`;
+}
+
 /**
  * GET /api/submissions
  * The signed-in user's own submissions. Returns an empty list when anonymous.
@@ -40,12 +61,12 @@ export async function onRequestPost({ request, env }) {
   }
 
   const name = clean(body.name, FIELDS.name);
-  const url = clean(body.url, FIELDS.url);
+  const url = normalizeGitHubRepoUrl(clean(body.url, FIELDS.url));
   const description = clean(body.description, FIELDS.description);
   const category = clean(body.category, FIELDS.category);
 
   if (name.length < 2) return json({ error: "invalid_name" }, { status: 400 });
-  if (!/^https?:\/\/\S+\.\S+/i.test(url)) return json({ error: "invalid_url" }, { status: 400 });
+  if (!url) return json({ error: "invalid_url" }, { status: 400 });
 
   const t = now();
 

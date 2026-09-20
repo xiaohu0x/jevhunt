@@ -1,0 +1,6 @@
+Contact: https://github.com/xiaohu0x/jevhunt/security
+Contact: https://github.com/xiaohu0x/jevhunt/issues
+Canonical: https://jevhunt.com/.well-known/security.txt
+Policy: https://jevhunt.com/security/
+Preferred-Languages: en, zh
+Expires: 2027-09-21T00:00:00.000Z
