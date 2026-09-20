@@ -35,6 +35,7 @@ functions/                  → Cloudflare Pages Functions (the API)
   api/submissions.js        → GET/POST /api/submissions
 
 tools/stamp.mjs             → content-hash cache busting (no deps)
+tools/prerender-catalog.mjs → first-page HTML + ItemList SEO generation
 tools/sync-projects.mjs     → validated GitHub catalog sync (no deps)
 migrations/0001_init.sql    → D1 schema
 wrangler.toml               → bindings + config
@@ -47,7 +48,7 @@ wrangler.toml               → bindings + config
 | Database | Cloudflare D1 (SQLite) — binding `DB` |
 | Auth | Google OAuth 2.0 (Authorization Code + OIDC) |
 | Sessions | Server-side rows in D1, opaque token in an `HttpOnly` cookie |
-| Build step | None — plain HTML/CSS/JS |
+| Build step | Node prerender + cache stamping; plain HTML/CSS/JS output |
 
 ## Local development
 
@@ -166,12 +167,13 @@ or external posts. The generated rejection report is published at
 
 To add a project, use the submission form on JevHunt or submit it to the upstream source. Hero
 stats, category counts, search, filters, star ranking, and publish/update date sorting update from
-the generated snapshot.
+the generated snapshot. The build also prerenders the top 20 projects into `index.html`, keeping
+the static and rendered home page within the 1,200–1,800 word SEO target.
 
 ## Deploy
 
 ```bash
-npm run deploy     # stamps asset URLs, then wrangler pages deploy
+npm run deploy     # prerenders the catalog, stamps asset URLs, then deploys
 ```
 
 `wrangler` must be authenticated (`npx wrangler login`) or `CLOUDFLARE_API_TOKEN`

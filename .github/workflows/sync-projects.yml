@@ -25,7 +25,8 @@ jobs:
         run: |
           npm test
           node tools/sync-projects.mjs
-          node tools/stamp.mjs
+          npm run build
+          npm test
 
       - name: Commit catalog changes
         run: |

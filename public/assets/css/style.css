@@ -473,6 +473,7 @@ html[data-theme="light"] .fchip.is-active{ color:#fff; }
 .card:hover{ background:color-mix(in srgb,var(--panel) 88%, transparent); z-index:2; }
 .card:hover::after{ opacity:1; }
 .card__top{ display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
+.card__heading{ margin:0; font-size:inherit; line-height:1.25; letter-spacing:0; }
 .card__name{ font-family:var(--disp); font-weight:600; font-size:1.06rem; letter-spacing:0; overflow-wrap:anywhere; }
 .card__name:hover{ color:var(--accent); }
 .card__author{ font-family:var(--mono); font-size:.68rem; color:var(--muted); margin-top:3px; }

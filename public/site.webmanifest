@@ -1,7 +1,7 @@
 {
-  "name": "JEV AI Software Directory - JevHunt",
+  "name": "JEV AI Model Directory - JevHunt",
   "short_name": "JevHunt",
-  "description": "A directory of verified JEV AI open-source projects, SDKs, integrations, agent tools and apps.",
+  "description": "A directory of verified open-source projects, SDKs, integrations and tools built with the JEV AI Model.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

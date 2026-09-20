@@ -12,10 +12,10 @@
     filter: "all",
     query: "",
     sort: "stars-desc",
-    visible: 48,
+    visible: 20,
   };
 
-  const PAGE_SIZE = 48;
+  const PAGE_SIZE = 20;
   const number = new Intl.NumberFormat("en-US");
 
   /* ----------------------------- theme ---------------------------------- */
@@ -208,7 +208,7 @@
       <article class="card">
         <div class="card__top">
           <div>
-            <a class="card__name" href="${escAttr(repoUrl)}" target="_blank" rel="noopener">${escAttr(a.name)}</a>
+            <h2 class="card__heading"><a class="card__name" href="${escAttr(repoUrl)}" target="_blank" rel="noopener">${escAttr(a.name)}</a></h2>
             <div class="card__author">${escAttr(a.repo)}</div>
           </div>
           <span class="badge badge--catalog">${escAttr(catLabel(a.cat))}</span>

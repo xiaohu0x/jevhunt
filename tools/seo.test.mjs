@@ -9,6 +9,29 @@ const readPublic = file => readFileSync(resolve(root, "public", file), "utf8");
 const index = readPublic("index.html");
 const main = readPublic("assets/js/main.js");
 const data = readPublic("assets/js/data.js");
+const editorialIndex = index.replace(
+  /<!-- catalog-prerender:start -->[\s\S]*?<!-- catalog-prerender:end -->/,
+  ""
+);
+
+function decodeHtml(value) {
+  return value
+    .replace(/&amp;/g, "&")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&nbsp;/g, " ");
+}
+
+function visibleWords(html) {
+  const body = html.match(/<body\b[^>]*>([\s\S]*?)<\/body>/i)?.[1] || "";
+  const text = decodeHtml(body
+    .replace(/<script\b[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style\b[\s\S]*?<\/style>/gi, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim());
+  return text.match(/[A-Za-z0-9]+(?:['’][A-Za-z0-9]+)*/g) || [];
+}
 
 function contentOf(selector) {
   const match = index.match(selector);
@@ -16,15 +39,19 @@ function contentOf(selector) {
   return match[1].trim();
 }
 
-test("primary SEO fields lead with JEV AI and describe the directory", () => {
-  const title = contentOf(/<title>([^<]+)<\/title>/i);
+test("primary SEO fields lead with JEV AI Model and stay within limits", () => {
+  const title = decodeHtml(contentOf(/<title>([^<]+)<\/title>/i));
   const description = contentOf(/<meta name="description" content="([^"]+)"/i);
   const h1 = contentOf(/<h1[^>]*>([^<]+)<\/h1>/i);
 
-  assert.match(title, /^JEV AI\b/);
-  assert.match(description, /^JEV AI\b/);
-  assert.match(h1, /^JEV AI\b/);
-  assert.match(title, /Software Directory/);
+  assert.match(title, /^JEV AI Model\b/);
+  assert.match(description, /^JEV AI Model\b/);
+  assert.match(h1, /^JEV AI Model\b/);
+  assert.ok([...title].length <= 60, `Title is ${[...title].length} characters`);
+  assert.ok([...description].length <= 160, `Description is ${[...description].length} characters`);
+  assert.ok([...h1].length <= 80, `H1 is ${[...h1].length} characters`);
+  assert.match(title, /Directory/);
+  assert.match(h1, /projects directory/i);
   assert.match(description, /verified open-source projects/);
   assert.doesNotMatch(title + description + h1, /[\u3400-\u9fff]/);
   assert.equal(index.match(/<h1\b/gi)?.length, 1);
@@ -33,31 +60,55 @@ test("primary SEO fields lead with JEV AI and describe the directory", () => {
   assert.doesNotMatch(index, /id="langBtn"/);
   assert.doesNotMatch(main, /jh-lang|applyLang/);
   assert.doesNotMatch(data, /JH\.i18n|catZh|\bzhDesc\b/);
-  assert.doesNotMatch(index + main + data, /[\u3400-\u9fff]/);
+  assert.doesNotMatch(editorialIndex + main + data, /[\u3400-\u9fff]/);
 });
 
 test("social metadata and structured data use the same canonical identity", () => {
-  assert.match(index, /<meta property="og:title" content="JEV AI/);
-  assert.match(index, /<meta name="twitter:title" content="JEV AI/);
+  assert.match(index, /<meta property="og:title" content="JEV AI Model/);
+  assert.match(index, /<meta name="twitter:title" content="JEV AI Model/);
   assert.match(index, /<meta property="og:image" content="https:\/\/jevhunt\.com\/og\.png\?v=2"/);
 
   const jsonLd = contentOf(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/i);
   const graph = JSON.parse(jsonLd)["@graph"];
   assert.ok(graph.some(item => item["@type"] === "WebSite" && item.url === "https://jevhunt.com/"));
-  assert.ok(graph.some(item => item["@type"] === "CollectionPage" && /^JEV AI\b/.test(item.name)));
+  assert.ok(graph.some(item => item["@type"] === "CollectionPage" && /^JEV AI Model\b/.test(item.name)));
   assert.ok(graph.every(item => !item.inLanguage || item.inLanguage === "en"));
+});
+
+test("the initial catalog is prerendered within the target word count", () => {
+  const catalog = contentOf(/<!-- catalog-prerender:start -->([\s\S]*?)<!-- catalog-prerender:end -->/i);
+  assert.equal(catalog.match(/<article class="card">/g)?.length, 20);
+  assert.equal(catalog.match(/<h2 class="card__heading">/g)?.length, 20);
+  assert.match(index, /<span id="dirCount">Showing 20 of \d+ projects<\/span>/);
+  assert.match(main, /const PAGE_SIZE = 20;/);
+
+  const wordCount = visibleWords(index).length;
+  assert.ok(wordCount >= 1200 && wordCount <= 1800, `Static body has ${wordCount} words`);
+
+  const editorialMentions = (visibleWords(editorialIndex).join(" ").match(/\bJEV AI Model\b/g) || []).length;
+  assert.ok(editorialMentions >= 6, `Only ${editorialMentions} editorial JEV AI Model mentions`);
+});
+
+test("prerendered projects publish matching ItemList structured data", () => {
+  const jsonLd = contentOf(/<script id="catalogStructuredData" type="application\/ld\+json">([\s\S]*?)<\/script>/i);
+  const itemList = JSON.parse(jsonLd);
+  assert.equal(itemList["@type"], "ItemList");
+  assert.equal(itemList.numberOfItems, 20);
+  assert.equal(itemList.itemListElement.length, 20);
+  assert.deepEqual(itemList.itemListElement.map(item => item.position), Array.from({ length: 20 }, (_, i) => i + 1));
+  assert.ok(itemList.itemListElement.every(item => item.item.codeRepository.startsWith("https://github.com/")));
 });
 
 test("manifest, sitemap and brand sources carry the updated identity", () => {
   const manifest = JSON.parse(readPublic("site.webmanifest"));
-  assert.match(manifest.name, /^JEV AI\b/);
+  assert.match(manifest.name, /^JEV AI Model\b/);
   assert.match(readPublic("sitemap.xml"), /<loc>https:\/\/jevhunt\.com\/<\/loc>/);
   assert.match(readPublic("favicon.svg"), /JevHunt J target mark/);
   assert.match(readPublic("og-source.svg"), />JEV AI<\/text>/);
 });
 
 test("first viewport includes the immediate OmniAKey API route", () => {
-  assert.match(index, /Need the JEV model API without waiting\?/);
+  assert.match(index, /Need JEV AI Model API access without waiting\?/);
   assert.match(index, /href="https:\/\/omniakey\.com\/"/);
 });
 
