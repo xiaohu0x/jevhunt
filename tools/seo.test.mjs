@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url";
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const readPublic = file => readFileSync(resolve(root, "public", file), "utf8");
 const index = readPublic("index.html");
+const notFound = readPublic("404.html");
 const main = readPublic("assets/js/main.js");
 const data = readPublic("assets/js/data.js");
 const editorialIndex = index.replace(
@@ -122,4 +123,20 @@ test("Google authentication stays visible in every auth state", () => {
   assert.match(main, /auth__signin auth__signin--loading/);
   assert.match(main, /auth__signin auth__signin--disabled/);
   assert.match(main, /href="\/api\/auth\/google\?next=/);
+});
+
+test("every HTML page loads the configured Google tag exactly once", () => {
+  for (const [name, html] of [["index.html", index], ["404.html", notFound]]) {
+    assert.match(html, /<head>\s*<!-- Google tag \(gtag\.js\) -->/);
+    assert.equal(
+      html.match(/googletagmanager\.com\/gtag\/js\?id=G-7QNDGTH1T4/g)?.length,
+      1,
+      `${name} must load gtag.js once`
+    );
+    assert.equal(
+      html.match(/gtag\('config', 'G-7QNDGTH1T4'\)/g)?.length,
+      1,
+      `${name} must configure GA4 once`
+    );
+  }
 });
