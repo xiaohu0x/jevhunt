@@ -6,7 +6,7 @@ A community directory for apps, playbooks and tools built on [Jev](https://types
 *System One* model from TypeSafe AI that returns **typed decisions with calibrated confidence**
 instead of prose.
 
-Live: **https://jevhunt.pages.dev**
+Live: **https://jevhunt.com**
 
 ---
 
@@ -36,7 +36,8 @@ wrangler.toml               → bindings + config
 
 | Concern | Choice |
 | --- | --- |
-| Hosting | Cloudflare Pages |
+| Hosting | Cloudflare Pages (`jevhunt`) |
+| Domain | `jevhunt.com` + `www` (zone + project in the same CF account) |
 | Database | Cloudflare D1 (SQLite) — binding `DB` |
 | Auth | Google OAuth 2.0 (Authorization Code + OIDC) |
 | Sessions | Server-side rows in D1, opaque token in an `HttpOnly` cookie |
@@ -69,7 +70,7 @@ Login only works once Google credentials exist — this part must be done in the
    - Application type: **Web application**
    - **Authorized redirect URIs** — must match exactly, including scheme and path:
      ```
-     https://jevhunt.pages.dev/api/auth/callback
+     https://jevhunt.com/api/auth/callback
      http://localhost:8788/api/auth/callback     ← for local dev
      ```
 3. Wire the values into the deployment:

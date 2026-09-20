@@ -10,4 +10,4 @@ GOOGLE_CLIENT_ID = ""
 [[d1_databases]]
 binding = "DB"
 database_name = "jevhunt-db"
-database_id = "1948332e-a06c-4a97-8b24-f71d77dfb324"
+database_id = "7775e979-c7fc-4322-a6de-215b0436495a"

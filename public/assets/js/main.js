@@ -418,8 +418,10 @@
       return;
     }
 
+    // Google login is not configured yet — keep the header clean rather
+    // than showing a permanently disabled button.
     if (!authEnabled) {
-      host.innerHTML = `<span class="auth__signin" aria-disabled="true" title="${escAttr(t("auth.unavailable", "Google login is not configured"))}">${GOOGLE_G}${t("auth.signin", "Sign in")}</span>`;
+      host.innerHTML = "";
       return;
     }
     host.innerHTML = `<a class="auth__signin" href="/api/auth/google?next=${encodeURIComponent(authNext())}">${GOOGLE_G}${t("auth.signin", "Sign in")}</a>`;
