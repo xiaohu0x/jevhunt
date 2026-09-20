@@ -1,5 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="JevHunt">
-  <rect width="64" height="64" rx="14" fill="#0B0B0C"/>
-  <path d="M20 14h22v6.4H28.8v12.8H40v6.4H26.8V50H20z" fill="#F386A1"/>
-  <circle cx="46" cy="46" r="6" fill="#D45BB6"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="512" height="512" role="img" aria-label="JevHunt J target mark">
+  <rect width="64" height="64" fill="#0B0B0C"/>
+  <rect x="2" y="2" width="60" height="60" rx="13" fill="none" stroke="#F386A1" stroke-width="2" stroke-opacity=".34"/>
+  <path d="M18 17h27v19c0 9-5.2 14-13.4 14-6.2 0-10.7-2.8-13.2-8.2" fill="none" stroke="#F386A1" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="45" cy="17" r="6.5" fill="#0B0B0C" stroke="#D45BB6" stroke-width="2.5"/>
+  <circle cx="45" cy="17" r="2.4" fill="#D45BB6"/>
 </svg>

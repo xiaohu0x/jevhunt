@@ -19,6 +19,7 @@ const ASSETS = [
   "assets/css/fonts.css",
   "assets/css/style.css",
   "assets/js/data.js",
+  "assets/js/projects.js",
   "assets/js/main.js",
 ];
 

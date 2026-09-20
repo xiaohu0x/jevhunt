@@ -1,0 +1,112 @@
+{
+  "policy": "repository-readme-v3",
+  "source": "hellogumbo/awesome-jev",
+  "sourceUpdated": "2026-09-20",
+  "candidateCount": 574,
+  "verifiedCount": 555,
+  "rejectedCount": 19,
+  "criteria": [
+    "Official repositories owned by typesafe-ai are accepted.",
+    "Other repositories must contain first-party Jev or System One technical evidence in their default-branch README.",
+    "Accepted signals include Jev model/API identifiers, the System One endpoint, official SDK identifiers, or Jev references paired with TypeSafe or operational context.",
+    "A TypeSafe name or website link alone is not evidence, and Jev-only repository naming is insufficient.",
+    "A third-party catalog description, repository name, stars, or external post is not evidence."
+  ],
+  "rejected": [
+    {
+      "name": "eve",
+      "repo": "vercel/eve",
+      "reason": "README has no qualifying Jev or System One evidence"
+    },
+    {
+      "name": "ai-cli",
+      "repo": "vercel-labs/ai-cli",
+      "reason": "README has no qualifying Jev or System One evidence"
+    },
+    {
+      "name": "notra",
+      "repo": "usenotra/notra",
+      "reason": "README has no qualifying Jev or System One evidence"
+    },
+    {
+      "name": "LegalForecastBench",
+      "repo": "johnhughes3/LegalForecastBench",
+      "reason": "README has no qualifying Jev or System One evidence"
+    },
+    {
+      "name": "kyotsu-ai-bench",
+      "repo": "shibadogcap/kyotsu-ai-bench",
+      "reason": "README not found"
+    },
+    {
+      "name": "almond-fastloop",
+      "repo": "eriestra/almond-fastloop",
+      "reason": "README not found"
+    },
+    {
+      "name": "pdoom-protocol",
+      "repo": "onionminionops-beep/pdoom-protocol",
+      "reason": "README has no qualifying Jev or System One evidence"
+    },
+    {
+      "name": "jev.mods",
+      "repo": "Hardel-DW/jev.mods",
+      "reason": "README not found"
+    },
+    {
+      "name": "openjev-experiments",
+      "repo": "zefir1990/openjev-experiments",
+      "reason": "README has no qualifying Jev or System One evidence"
+    },
+    {
+      "name": "Search-Function-Test",
+      "repo": "Shifros/Search-Function-Test",
+      "reason": "README not found"
+    },
+    {
+      "name": "jev-finance-benchmark",
+      "repo": "hifizz/jev-finance-benchmark",
+      "reason": "README not found"
+    },
+    {
+      "name": "FinancialPredictionJev",
+      "repo": "thodoh1/FinancialPredictionJev",
+      "reason": "README not found"
+    },
+    {
+      "name": "Typesafe_chess_eval",
+      "repo": "AliceRoselia/Typesafe_chess_eval",
+      "reason": "README has no qualifying Jev or System One evidence"
+    },
+    {
+      "name": "typesafe-demo-mcp",
+      "repo": "bestagentkits/typesafe-demo-mcp",
+      "reason": "README not found"
+    },
+    {
+      "name": "PocketJev",
+      "repo": "NullPo-jp/PocketJev",
+      "reason": "README has no qualifying Jev or System One evidence"
+    },
+    {
+      "name": "Jackalope",
+      "repo": "Jackalope-Dev/jackalope",
+      "reason": "README has no qualifying Jev or System One evidence"
+    },
+    {
+      "name": "jev_projects",
+      "repo": "X0EF/jev_projects",
+      "reason": "README not found"
+    },
+    {
+      "name": "typesafe-vs-deepseek",
+      "repo": "markfive-proto/typesafe-vs-deepseek",
+      "reason": "README not found"
+    },
+    {
+      "name": "Cheshi",
+      "repo": "CheshiAI/Cheshi",
+      "reason": "README has no qualifying Jev or System One evidence"
+    }
+  ]
+}

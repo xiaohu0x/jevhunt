@@ -1,6 +1,6 @@
 # JevHunt
 
-**The directory for software built on Jev.** — 基于 JVE 模型的应用导航站
+**The directory for software built on Jev.**
 
 A community directory for apps, playbooks and tools built on [Jev](https://typesafe.ai/) — the
 *System One* model from TypeSafe AI that returns **typed decisions with calibrated confidence**
@@ -20,8 +20,10 @@ public/                     → static assets (the deploy root)
   404.html                  → real 404 (avoids soft-404 on unknown paths)
   favicon.* og.png          → icons live at the site root
   site.webmanifest robots.txt sitemap.xml
+  catalog-audit.json        → generated README-verification report
   _headers                  → security + cache headers
   assets/css|js|fonts/
+    js/projects.js          → generated open-source repository snapshot
 
 functions/                  → Cloudflare Pages Functions (the API)
   _lib/auth.js              → sessions, cookies, CSRF state, D1 helpers
@@ -33,6 +35,7 @@ functions/                  → Cloudflare Pages Functions (the API)
   api/submissions.js        → GET/POST /api/submissions
 
 tools/stamp.mjs             → content-hash cache busting (no deps)
+tools/sync-projects.mjs     → validated GitHub catalog sync (no deps)
 migrations/0001_init.sql    → D1 schema
 wrangler.toml               → bindings + config
 ```
@@ -134,28 +137,36 @@ Derived from the official Jev / TypeSafe AI aesthetic, pushed further for readab
 
 - Self-hosted webfonts (latin subset) — no CDN, so it renders offline and behind
   restrictive networks; CJK falls back to the system stack.
-- Dual theme (dark/light) and bilingual EN/中文, persisted to `localStorage`.
+- Dual theme (dark/light), with the UI presented in English only.
 - All text meets **WCAG AA** contrast in both themes; no horizontal overflow from 390px.
 - Honours `prefers-reduced-motion`.
 
-## Adding an app to the catalog
+## Project catalog
 
-Edit `public/assets/js/data.js` → `JH.apps`:
+The public directory is a checked-in static snapshot of every active GitHub repository in
+[`hellogumbo/awesome-jev`](https://github.com/hellogumbo/awesome-jev). It contains unique
+repositories across official projects, SDKs, integrations, agent tools, browser and computer use,
+applications, games, demos, research, and community directories. The current repository and star
+counts are read from the generated snapshot and displayed on the site.
 
-```js
-{
-  name: "My Jev App",
-  author: "your-handle",
-  desc: "One or two sentences on what decision it makes.",
-  cat: "Routing",                 // must match a JH.categories name
-  status: "beta",                  // live | beta | preview | recipe | wanted
-  signal: 85,                      // curation weight, drives sort order
-  tags: ["Agents", "Open source"],
-  href: "https://github.com/you/my-jev-app",
-}
+Refresh it with:
+
+```bash
+npm run catalog:sync
+npm run build
 ```
 
-Hero stats, category counts and filters update automatically.
+The sync validates repository names and categories, drops removed entries, deduplicates
+case-insensitively, restricts website links to HTTP(S), and refuses suspiciously small source
+snapshots. Except for official `typesafe-ai/*` repositories, inclusion requires first-party Jev
+or System One technical evidence in the repository's own default-branch README. A TypeSafe name or
+website link by itself is not enough; neither are repository names, stars, upstream descriptions,
+or external posts. The generated rejection report is published at
+`/catalog-audit.json`. `.github/workflows/sync-projects.yml` runs the same refresh daily.
+
+To add a project, use the submission form on JevHunt or submit it to the upstream source. Hero
+stats, category counts, search, filters, star ranking, and publish/update date sorting update from
+the generated snapshot.
 
 ## Deploy
 
@@ -178,18 +189,20 @@ re-running it with unchanged assets is a no-op.
 ## Roadmap
 
 - [x] Information-first single page
-- [x] App / playbook / category catalog
-- [x] EN / 中文 + dark / light
+- [x] Searchable catalog of all discoverable Jev GitHub projects
+- [x] English-only UI + dark / light themes
 - [x] Cloudflare Pages + D1 + Google login
 - [x] Real submissions API (`POST /api/submissions`) with validation + rate limit
 - [x] Cache-busted assets, real 404, robots.txt, sitemap.xml
 - [ ] Submission moderation UI (review/approve from the database)
 - [ ] Individual listing pages + SEO metadata
 - [ ] Voting on submissions
+- [x] Daily project discovery snapshot
 - [ ] Independent Jev benchmarks
 
 ## Disclaimer
 
 JevHunt is an **independent, community-run** directory. It is not affiliated with, endorsed by,
 or operated by TypeSafe AI. "Jev" and related marks belong to their respective owners.
-Catalog seed entries are illustrative and should be verified before being relied upon.
+Catalog entries are imported from the attributed community source and should be verified before
+being relied upon.

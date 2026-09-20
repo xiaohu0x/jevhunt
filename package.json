@@ -5,6 +5,8 @@
   "description": "The directory for software built on Jev — Cloudflare Pages + D1 + Google OAuth",
   "scripts": {
     "build": "node tools/stamp.mjs",
+    "catalog:sync": "node tools/sync-projects.mjs",
+    "test": "node --test tools/*.test.mjs",
     "dev": "wrangler pages dev",
     "deploy": "node tools/stamp.mjs && wrangler pages deploy",
     "db:migrate:local": "wrangler d1 execute jevhunt-db --local --file=./migrations/0001_init.sql",

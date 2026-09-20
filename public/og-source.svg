@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="JEV AI open-source software directory">
+  <defs>
+    <pattern id="grid" width="64" height="64" patternUnits="userSpaceOnUse">
+      <path d="M64 0H0V64" fill="none" stroke="#FFFFFF" stroke-opacity=".055"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="#0B0B0C"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect x="0" y="0" width="10" height="630" fill="#F386A1"/>
+
+  <g transform="translate(72 58)">
+    <rect width="68" height="68" rx="16" fill="#101012" stroke="#F386A1" stroke-opacity=".42" stroke-width="2"/>
+    <path d="M19 18h29v20c0 9-5.3 14-13.7 14-6.3 0-10.8-2.8-13.4-8.2" fill="none" stroke="#F386A1" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="48" cy="18" r="6.5" fill="#101012" stroke="#D45BB6" stroke-width="2.5"/>
+    <circle cx="48" cy="18" r="2.4" fill="#D45BB6"/>
+  </g>
+  <text x="160" y="92" fill="#F4F4F5" font-family="Arial, sans-serif" font-size="30" font-weight="700">JEV<tspan fill="#F386A1">HUNT</tspan></text>
+  <text x="160" y="121" fill="#8F8F99" font-family="Menlo, monospace" font-size="15">AI PROJECT INDEX</text>
+
+  <text x="72" y="267" fill="#F386A1" font-family="Arial, sans-serif" font-size="104" font-weight="800">JEV AI</text>
+  <text x="72" y="346" fill="#F4F4F5" font-family="Arial, sans-serif" font-size="62" font-weight="700">OPEN-SOURCE</text>
+  <text x="72" y="418" fill="#F4F4F5" font-family="Arial, sans-serif" font-size="62" font-weight="700">SOFTWARE DIRECTORY</text>
+
+  <line x1="72" y1="462" x2="694" y2="462" stroke="#F386A1" stroke-width="3"/>
+  <text x="72" y="509" fill="#B7B7BF" font-family="Arial, sans-serif" font-size="25">Verified projects, SDKs, integrations and agent tools.</text>
+  <text x="72" y="570" fill="#09AEA1" font-family="Menlo, monospace" font-size="17">README VERIFIED</text>
+  <text x="260" y="570" fill="#7E7E89" font-family="Menlo, monospace" font-size="17">/</text>
+  <text x="290" y="570" fill="#F5B454" font-family="Menlo, monospace" font-size="17">OPEN SOURCE</text>
+  <text x="448" y="570" fill="#7E7E89" font-family="Menlo, monospace" font-size="17">/</text>
+  <text x="478" y="570" fill="#F386A1" font-family="Menlo, monospace" font-size="17">JEVHUNT.COM</text>
+
+  <g transform="translate(975 315)" fill="none">
+    <circle r="116" stroke="#F386A1" stroke-opacity=".12" stroke-width="2"/>
+    <circle r="78" stroke="#F386A1" stroke-opacity=".25" stroke-width="2"/>
+    <circle r="37" stroke="#D45BB6" stroke-width="3"/>
+    <circle r="8" fill="#D45BB6"/>
+    <path d="M0-142v38M0 104v38M-142 0h38M104 0h38" stroke="#09AEA1" stroke-width="3" stroke-linecap="round"/>
+  </g>
+</svg>

@@ -9,10 +9,14 @@
 
   const state = {
     theme: localStorage.getItem("jh-theme") || "dark",
-    lang:  localStorage.getItem("jh-lang")  || "en",
-    filter: "All",
+    filter: "all",
     query: "",
+    sort: "stars-desc",
+    visible: 48,
   };
+
+  const PAGE_SIZE = 48;
+  const number = new Intl.NumberFormat("en-US");
 
   /* ----------------------------- theme ---------------------------------- */
   function applyTheme(t) {
@@ -23,38 +27,7 @@
     if (meta) meta.setAttribute("content", t === "light" ? "#FAFAF9" : "#0B0B0C");
   }
 
-  /* ----------------------------- i18n ----------------------------------- */
-  function captureOriginals() {
-    $$("[data-i18n]").forEach(el => { if (el.dataset.origText === undefined) el.dataset.origText = el.textContent; });
-    $$("[data-i18n-html]").forEach(el => { if (el.dataset.origHtml === undefined) el.dataset.origHtml = el.innerHTML; });
-    $$("[data-i18n-ph]").forEach(el => { if (el.dataset.origPh === undefined) el.dataset.origPh = el.placeholder; });
-  }
-
-  const dict = (k) => (window.JH.i18n[state.lang] || {})[k];
-  const t = (key, fallback) => dict(key) ?? fallback;
   const escAttr = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-
-  function applyLang(lang) {
-    state.lang = lang;
-    localStorage.setItem("jh-lang", lang);
-    document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
-
-    $$("[data-i18n]").forEach(el => {
-      el.textContent = lang === "en" ? el.dataset.origText : (dict(el.dataset.i18n) ?? el.dataset.origText);
-    });
-    $$("[data-i18n-html]").forEach(el => {
-      el.innerHTML = lang === "en" ? el.dataset.origHtml : (dict(el.dataset.i18nHtml) ?? el.dataset.origHtml);
-    });
-    $$("[data-i18n-ph]").forEach(el => {
-      el.placeholder = lang === "en" ? el.dataset.origPh : (dict(el.dataset.i18nPh) ?? el.dataset.origPh);
-    });
-
-    $("#langLabel").textContent = lang === "en" ? "中" : "EN";
-    renderFilters();
-    renderCategories();
-    renderApps();
-    renderAuth();
-  }
 
   /* ----------------------------- terminal typing ------------------------ */
   const CODE = [
@@ -125,9 +98,10 @@
       function step(now) {
         const p = Math.min(1, (now - start) / dur);
         const e = 1 - Math.pow(1 - p, 3);
-        el.textContent = pre + (target * e).toFixed(dec) + suf;
+        const value = target * e;
+        el.textContent = pre + (dec ? value.toFixed(dec) : number.format(Math.round(value))) + suf;
         if (p < 1) requestAnimationFrame(step);
-        else el.textContent = pre + target.toFixed(dec) + suf;
+        else el.textContent = pre + (dec ? target.toFixed(dec) : number.format(target)) + suf;
       }
       requestAnimationFrame(step);
     });
@@ -154,21 +128,48 @@
   }
 
   /* ----------------------------- apps ----------------------------------- */
-  function catLabel(name) {
-    return state.lang === "zh" ? (window.JH.catZh[name] || name) : name;
+  function category(id) {
+    return window.JH.categories.find(c => c.id === id);
+  }
+
+  function catLabel(id) {
+    const item = category(id);
+    if (!item) return id;
+    return item.name;
+  }
+
+  function resetCatalogWindow() {
+    state.visible = PAGE_SIZE;
+  }
+
+  function compareDate(left, right, direction = "desc") {
+    if (left && right) return direction === "asc" ? left.localeCompare(right) : right.localeCompare(left);
+    if (left) return -1;
+    if (right) return 1;
+    return 0;
+  }
+
+  function compareName(left, right) {
+    return left.localeCompare(right, "en", { sensitivity: "base" });
   }
 
   function renderFilters() {
     const host = $("#dirFilters");
     if (!host) return;
-    const cats = ["All", ...new Set(window.JH.apps.map(a => a.cat))];
+    const counts = new Map();
+    window.JH.apps.forEach(app => counts.set(app.cat, (counts.get(app.cat) || 0) + 1));
+    const cats = [
+      { id: "all", label: "All" },
+      ...window.JH.categories
+        .filter(c => counts.has(c.id))
+        .map(c => ({ id: c.id, label: c.name })),
+    ];
     host.innerHTML = cats.map(c =>
-      `<button class="fchip${state.filter === c ? " is-active" : ""}" data-cat="${c}">${
-        c === "All" ? (state.lang === "zh" ? "全部" : "All") : catLabel(c)
-      }</button>`
+      `<button class="fchip${state.filter === c.id ? " is-active" : ""}" data-cat="${escAttr(c.id)}" aria-pressed="${state.filter === c.id}">${escAttr(c.label)}</button>`
     ).join("");
     $$(".fchip", host).forEach(b => b.addEventListener("click", () => {
       state.filter = b.dataset.cat;
+      resetCatalogWindow();
       renderFilters();
       renderApps();
     }));
@@ -177,38 +178,70 @@
   function renderApps() {
     const grid = $("#appGrid");
     if (!grid) return;
-    const q = state.query.toLowerCase();
+    const q = state.query.trim().toLowerCase();
 
     const list = window.JH.apps
-      .filter(a => state.filter === "All" || a.cat === state.filter)
-      .filter(a => !q || (a.name + a.desc + a.cat + a.tags.join(" ") + a.author).toLowerCase().includes(q))
-      .sort((a, b) => b.signal - a.signal);
+      .filter(a => state.filter === "all" || a.cat === state.filter)
+      .filter(a => !q || [a.name, a.repo, a.author, a.desc, a.language, catLabel(a.cat)]
+        .filter(Boolean).join(" ").toLowerCase().includes(q))
+      .sort((a, b) => {
+        if (state.sort === "stars-asc") return a.stars - b.stars || compareDate(a.created, b.created) || compareName(a.name, b.name);
+        if (state.sort === "created-desc") return compareDate(a.created, b.created) || b.stars - a.stars || compareName(a.name, b.name);
+        if (state.sort === "created-asc") return compareDate(a.created, b.created, "asc") || b.stars - a.stars || compareName(a.name, b.name);
+        if (state.sort === "updated-desc") return compareDate(a.pushed, b.pushed) || b.stars - a.stars || compareName(a.name, b.name);
+        if (state.sort === "added-desc") return compareDate(a.added, b.added) || b.stars - a.stars || compareName(a.name, b.name);
+        if (state.sort === "name-asc") return compareName(a.name, b.name) || b.stars - a.stars;
+        return b.stars - a.stars || compareDate(a.created, b.created) || compareName(a.name, b.name);
+      });
 
-    grid.innerHTML = list.map(a => `
-      <a class="card" href="${a.href}" ${a.href.startsWith("http") ? 'target="_blank" rel="noopener"' : ""}>
+    const shown = list.slice(0, state.visible);
+    grid.innerHTML = shown.map(a => {
+      const repoUrl = `https://github.com/${a.repo.split("/").map(encodeURIComponent).join("/")}`;
+      const description = a.desc || "No project description available.";
+      const published = a.created
+        ? `published ${a.created}`
+        : null;
+      const updated = a.pushed
+        ? `updated ${a.pushed}`
+        : "update date unknown";
+      return `
+      <article class="card">
         <div class="card__top">
           <div>
-            <div class="card__name">${a.name}</div>
-            <div class="card__author">@${a.author}</div>
+            <a class="card__name" href="${escAttr(repoUrl)}" target="_blank" rel="noopener">${escAttr(a.name)}</a>
+            <div class="card__author">${escAttr(a.repo)}</div>
           </div>
-          <span class="badge badge--${a.status}">${a.status}</span>
+          <span class="badge badge--catalog">${escAttr(catLabel(a.cat))}</span>
         </div>
-        <p class="card__desc">${a.desc}</p>
+        <p class="card__desc">${escAttr(description)}</p>
         <div class="card__tags">
-          ${a.tags.map(t => `<span class="tag">${t}</span>`).join("")}
-          <span class="tag">${catLabel(a.cat)}</span>
+          ${a.language ? `<span class="tag">${escAttr(a.language)}</span>` : ""}
+          ${published ? `<span class="tag">${escAttr(published)}</span>` : ""}
+          <span class="tag">${escAttr(updated)}</span>
         </div>
         <div class="card__foot">
-          <span class="card__go">${a.href.startsWith("http") ? "open repo" : "view"} <span aria-hidden="true">→</span></span>
-          <span class="card__stat">signal ${a.signal}</span>
+          <span class="card__links">
+            <a class="card__go" href="${escAttr(repoUrl)}" target="_blank" rel="noopener">GitHub <span aria-hidden="true">↗</span></a>
+            <a class="card__site" href="${escAttr(a.evidence)}" target="_blank" rel="noopener">README <span aria-hidden="true">↗</span></a>
+            ${a.site ? `<a class="card__site" href="${escAttr(a.site)}" target="_blank" rel="noopener">site <span aria-hidden="true">↗</span></a>` : ""}
+          </span>
+          <span class="card__stat" aria-label="${number.format(a.stars)} GitHub stars">★ ${number.format(a.stars)}</span>
         </div>
-      </a>
-    `).join("");
+      </article>`;
+    }).join("");
 
     const count = $("#dirCount");
-    if (count) count.textContent = `${list.length} ${state.lang === "zh" ? "个应用" : "apps"}`;
+    if (count) {
+      count.textContent = `Showing ${number.format(shown.length)} of ${number.format(list.length)} projects`;
+    }
     const empty = $("#dirEmpty");
     if (empty) empty.hidden = list.length !== 0;
+    const more = $("#loadMore");
+    if (more) {
+      more.hidden = shown.length >= list.length;
+      const remaining = Math.min(PAGE_SIZE, list.length - shown.length);
+      more.textContent = `Load ${remaining} more`;
+    }
 
     $$(".card", grid).forEach(card => {
       card.addEventListener("mousemove", (e) => {
@@ -224,17 +257,18 @@
     const host = $("#catGrid");
     if (!host) return;
     host.innerHTML = window.JH.categories.map(c => {
-      const n = window.JH.apps.filter(a => a.cat === c.name).length;
-      const label = state.lang === "zh" ? c.zh : c.name;
-      const desc = state.lang === "zh" ? `${n} 个已收录` : c.desc;
-      return `<button class="cat" data-cat="${c.name}">
-        <span class="cat__ico" aria-hidden="true">${c.icon}</span>
-        <span class="cat__b"><span class="cat__name">${label}</span><span class="cat__desc">${desc}</span></span>
-        <span class="cat__n">${n}</span>
+      const n = window.JH.apps.filter(a => a.cat === c.id).length;
+      const label = c.name;
+      const desc = c.desc;
+      return `<button class="cat" data-cat="${escAttr(c.id)}">
+        <span class="cat__ico" aria-hidden="true">${escAttr(c.icon)}</span>
+        <span class="cat__b"><span class="cat__name">${escAttr(label)}</span><span class="cat__desc">${escAttr(desc)}</span></span>
+        <span class="cat__n">${number.format(n)}</span>
       </button>`;
     }).join("");
     $$(".cat", host).forEach(b => b.addEventListener("click", () => {
       state.filter = b.dataset.cat;
+      resetCatalogWindow();
       renderFilters();
       renderApps();
       $("#apps").scrollIntoView({ behavior: "smooth" });
@@ -275,7 +309,7 @@
       try {
         await navigator.clipboard.writeText(text);
         const old = btn.textContent;
-        btn.textContent = state.lang === "zh" ? "已复制 ✓" : "Copied ✓";
+        btn.textContent = "Copied ✓";
         setTimeout(() => { btn.textContent = old; }, 1400);
       } catch (_) { /* clipboard unavailable */ }
     });
@@ -300,16 +334,19 @@
     const hero = $("#heroSearch");
     function setQuery(v) {
       state.query = v;
+      resetCatalogWindow();
       renderApps();
     }
     if (dir) dir.addEventListener("input", e => { if (hero) hero.value = e.target.value; setQuery(e.target.value); });
     if (hero) hero.addEventListener("input", e => {
       if (dir) dir.value = e.target.value;
       setQuery(e.target.value);
-      if (e.target.value && window.scrollY < 200) $("#apps").scrollIntoView({ behavior: "smooth" });
+      if (e.target.value) $("#apps").scrollIntoView({ behavior: "smooth" });
     });
     document.addEventListener("keydown", e => {
-      if (e.key === "/" && document.activeElement.tagName !== "INPUT") {
+      const active = document.activeElement;
+      const isEditing = active && (active.matches("input, textarea, select") || active.isContentEditable);
+      if (e.key === "/" && !isEditing) {
         e.preventDefault();
         (hero || dir)?.focus();
       }
@@ -319,10 +356,31 @@
   function initChips() {
     $$("#heroChips .chip").forEach(chip => chip.addEventListener("click", () => {
       state.filter = chip.dataset.jump;
+      resetCatalogWindow();
       renderFilters();
       renderApps();
       $("#apps").scrollIntoView({ behavior: "smooth" });
     }));
+  }
+
+  function initDirectory() {
+    const sort = $("#dirSort");
+    if (sort) {
+      sort.value = state.sort;
+      sort.addEventListener("change", () => {
+        state.sort = sort.value;
+        resetCatalogWindow();
+        renderApps();
+      });
+    }
+
+    const more = $("#loadMore");
+    if (more) {
+      more.addEventListener("click", () => {
+        state.visible += PAGE_SIZE;
+        renderApps();
+      });
+    }
   }
 
   function initFeatureGlow() {
@@ -336,13 +394,14 @@
   /* ----------------------------- submissions ---------------------------- */
   function fillCategories() {
     const sel = $("#subCat");
-    if (!sel || sel.dataset.filled) return;
-    const label = state.lang === "zh" ? "选择分类" : "Category";
+    if (!sel) return;
+    const selected = sel.value;
+    const label = "Category";
     const opts = (window.JH.categories || []).map(c =>
-      `<option value="${escAttr(c.name)}">${escAttr(state.lang === "zh" ? c.zh : c.name)}</option>`
+      `<option value="${escAttr(c.id)}">${escAttr(c.name)}</option>`
     ).join("");
     sel.innerHTML = `<option value="" disabled selected>${label}</option>${opts}`;
-    sel.dataset.filled = "1";
+    if ([...sel.options].some(option => option.value === selected)) sel.value = selected;
   }
 
   async function loadSubmissions() {
@@ -354,7 +413,7 @@
       const list = (await res.json()).submissions || [];
       if (!list.length) { host.hidden = true; return; }
       host.hidden = false;
-      host.innerHTML = `<h4>${t("sub.mine", "Your submissions")}</h4>` + list.map(s =>
+      host.innerHTML = `<h4>Your submissions</h4>` + list.map(s =>
         `<div class="sub__item">
            <span class="sub__item-name">${escAttr(s.name)}</span>
            <span class="sub__item-url">${escAttr(s.url)}</span>
@@ -391,7 +450,7 @@
       };
 
       if (!authState.user) {
-        toast(t("sub.needAuth", "Sign in with Google to submit."), true);
+        toast("Sign in with Google to submit.", true);
         return;
       }
 
@@ -403,17 +462,17 @@
       };
 
       if (!/^https?:\/\/\S+\.\S+/i.test(payload.url)) {
-        setNote(t("sub.errUrl", "Enter a valid http(s) URL."), "is-err");
+        setNote("Enter a valid http(s) URL.", "is-err");
         return;
       }
       if (payload.name.length < 2) {
-        setNote(t("sub.errName", "Give the app a name (2+ characters)."), "is-err");
+        setNote("Give the app a name (2+ characters).", "is-err");
         return;
       }
 
       const original = btn.textContent;
       btn.disabled = true;
-      btn.textContent = t("sub.sending", "Submitting…");
+      btn.textContent = "Submitting…";
 
       try {
         const res = await fetch("/api/submissions", {
@@ -425,21 +484,21 @@
         if (res.status === 401) {
           authState.user = null;
           renderAuth();
-          toast(t("sub.needAuth", "Sign in with Google to submit."), true);
+          toast("Sign in with Google to submit.", true);
           return;
         }
         if (res.status === 429) {
-          setNote(t("sub.rateLimited", "Too many submissions this hour — try again later."), "is-err");
+          setNote("Too many submissions this hour — try again later.", "is-err");
           return;
         }
         if (!res.ok) throw new Error("status " + res.status);
 
         form.reset();
         $("#subCat").selectedIndex = 0;
-        setNote(t("sub.thanks", "Received ✓ We'll review it and add it to the catalog."), "is-ok");
+        setNote("Received ✓ We'll review it and add it to the catalog.", "is-ok");
         loadSubmissions();
       } catch (_) {
-        setNote(t("sub.failed", "Something went wrong. Please try again."), "is-err");
+        setNote("Something went wrong. Please try again.", "is-err");
       } finally {
         btn.disabled = false;
         btn.textContent = original;
@@ -500,7 +559,7 @@
             <div><div class="auth__meta-name">${escAttr(user.name || "")}</div>
             <div class="auth__meta-email">${escAttr(user.email || "")}</div></div>
           </div>
-          <button class="auth__item" id="signOut" role="menuitem">${t("auth.signout", "Sign out")}</button>
+          <button class="auth__item" id="signOut" role="menuitem">Sign out</button>
         </div></div>`;
 
       const btn = $("#authBtn"), menu = $("#authMenu");
@@ -518,13 +577,11 @@
       return;
     }
 
-    // Google login is not configured yet — keep the header clean rather
-    // than showing a permanently disabled button.
     if (!authEnabled) {
-      host.innerHTML = "";
+      host.innerHTML = `<span class="auth__signin auth__signin--disabled" aria-disabled="true" title="Google sign-in is unavailable in this environment">${GOOGLE_G}<span>Sign in</span></span>`;
       return;
     }
-    host.innerHTML = `<a class="auth__signin" href="/api/auth/google?next=${encodeURIComponent(authNext())}">${GOOGLE_G}${t("auth.signin", "Sign in")}</a>`;
+    host.innerHTML = `<a class="auth__signin" href="/api/auth/google?next=${encodeURIComponent(authNext())}">${GOOGLE_G}<span>Sign in</span></a>`;
   }
 
   async function signOut() {
@@ -533,26 +590,25 @@
       if (!res.ok) throw new Error("status " + res.status);
       authState.user = null;
       renderAuth();
-      toast(t("auth.signedout", "Signed out"));
+      toast("Signed out");
     } catch (_) {
-      toast(t("auth.signoutfail", "Could not sign out. Try again."), true);
+      toast("Could not sign out. Try again.", true);
     }
   }
 
   const AUTH_ERRORS = {
-    cancelled: ["auth.err.cancelled", "Sign-in was cancelled"],
-    exchange_failed: ["auth.err.exchange", "Google sign-in failed. Please try again."],
-    bad_state: ["auth.err.state", "Sign-in session expired. Please try again."],
-    expired_state: ["auth.err.state", "Sign-in session expired. Please try again."],
-    not_configured: ["auth.err.config", "Google login is not configured"],
+    cancelled: "Sign-in was cancelled",
+    exchange_failed: "Google sign-in failed. Please try again.",
+    bad_state: "Sign-in session expired. Please try again.",
+    expired_state: "Sign-in session expired. Please try again.",
+    not_configured: "Google login is not configured",
   };
 
   function handleAuthError() {
     const p = new URLSearchParams(location.search);
     const code = p.get("auth_error");
     if (!code) return;
-    const [key, fallback] = AUTH_ERRORS[code] || ["auth.err.generic", "Sign-in failed"];
-    toast(t(key, fallback), true);
+    toast(AUTH_ERRORS[code] || "Sign-in failed", true);
     p.delete("auth_error");
     const qs = p.toString();
     history.replaceState({}, "", location.pathname + (qs ? "?" + qs : "") + location.hash);
@@ -561,6 +617,7 @@
   async function initAuth() {
     const host = $("#auth");
     if (!host || location.protocol === "file:") return;
+    host.innerHTML = `<span class="auth__signin auth__signin--loading" aria-busy="true">${GOOGLE_G}<span>Sign in</span></span>`;
     try {
       const res = await fetch("/api/me", { headers: { accept: "application/json" } });
       const ct = res.headers.get("content-type") || "";
@@ -580,23 +637,26 @@
   /* ----------------------------- boot ----------------------------------- */
   function init() {
     applyTheme(state.theme);
-    captureOriginals();
     // keep hero stats in sync with the catalog
     const sA = document.getElementById("statApps");
     const sC = document.getElementById("statCats");
+    const sS = document.getElementById("statStars");
     if (sA) sA.dataset.count = String(window.JH.apps.length);
     if (sC) sC.dataset.count = String(window.JH.categories.length);
+    if (sS) sS.dataset.count = String(window.JH.catalogMeta?.totalStars || 0);
+    const sync = document.getElementById("catalogUpdated");
+    if (sync) sync.textContent = window.JH.catalogMeta?.updated || "—";
     renderTimeline();
     renderPlaybookTabs();
     renderPlaybook();
     renderCategories();
     renderFilters();
     renderApps();
-    applyLang(state.lang);
     initReveal();
     typeTerminal();
     initSearch();
     initChips();
+    initDirectory();
     initFeatureGlow();
     initCopy();
     initSubmit();
@@ -605,7 +665,6 @@
     $("#year").textContent = new Date().getFullYear();
 
     $("#themeBtn").addEventListener("click", () => applyTheme(state.theme === "dark" ? "light" : "dark"));
-    $("#langBtn").addEventListener("click", () => applyLang(state.lang === "en" ? "zh" : "en"));
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
