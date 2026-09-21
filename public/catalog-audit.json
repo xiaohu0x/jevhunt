@@ -2,8 +2,8 @@
   "policy": "repository-readme-v3",
   "source": "hellogumbo/awesome-jev",
   "sourceUpdated": "2026-09-20",
-  "candidateCount": 574,
-  "verifiedCount": 555,
+  "candidateCount": 606,
+  "verifiedCount": 587,
   "rejectedCount": 19,
   "criteria": [
     "Official repositories owned by typesafe-ai are accepted.",
@@ -64,11 +64,6 @@
       "reason": "README not found"
     },
     {
-      "name": "jev-finance-benchmark",
-      "repo": "hifizz/jev-finance-benchmark",
-      "reason": "README not found"
-    },
-    {
       "name": "FinancialPredictionJev",
       "repo": "thodoh1/FinancialPredictionJev",
       "reason": "README not found"
@@ -86,6 +81,11 @@
     {
       "name": "PocketJev",
       "repo": "NullPo-jp/PocketJev",
+      "reason": "README has no qualifying Jev or System One evidence"
+    },
+    {
+      "name": "TypeAR",
+      "repo": "TypeAR-AI/TypeAR",
       "reason": "README has no qualifying Jev or System One evidence"
     },
     {
