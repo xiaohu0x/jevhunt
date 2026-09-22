@@ -202,6 +202,49 @@ html[data-theme="light"] .btn--primary{ color:#fff; }
 .btn--ghost{ border-color:var(--line-2); color:var(--text); background:color-mix(in srgb, var(--panel) 60%, transparent); }
 .btn--ghost:hover{ border-color:var(--accent); color:var(--accent); transform:translateY(-2px); }
 
+/* ------------------------------ API guide ------------------------------- */
+.api-guide{
+  border-bottom:1px solid color-mix(in srgb,var(--teal) 36%,var(--line));
+  background:color-mix(in srgb,var(--teal) 9%,var(--bg));
+  transition:background .22s var(--ease),border-color .22s var(--ease);
+}
+.api-guide:hover{
+  border-bottom-color:color-mix(in srgb,var(--teal) 64%,var(--line));
+  background:color-mix(in srgb,var(--teal) 13%,var(--bg));
+}
+.api-guide__link{
+  min-height:88px; padding-block:14px;
+  display:grid; grid-template-columns:44px minmax(0,1fr) auto; align-items:center; gap:18px;
+}
+.api-guide__mark{
+  width:44px; height:44px; display:grid; place-items:center; flex:none;
+  border:1px solid color-mix(in srgb,var(--teal) 58%,transparent); border-radius:10px;
+  background:color-mix(in srgb,var(--teal) 16%,var(--panel)); color:var(--teal);
+  font-family:var(--mono); font-size:.82rem; font-weight:700;
+}
+.api-guide__copy{ min-width:0; display:flex; align-items:baseline; flex-wrap:wrap; gap:2px 14px; }
+.api-guide__eyebrow{
+  width:100%; color:var(--teal); font-family:var(--mono); font-size:.66rem;
+  font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+}
+.api-guide__copy strong{ font-family:var(--disp); font-size:1rem; letter-spacing:0; }
+.api-guide__desc{ color:var(--text-2); font-size:.84rem; line-height:1.5; }
+.api-guide__cta{
+  display:inline-flex; align-items:center; gap:8px; color:var(--teal);
+  font-family:var(--mono); font-size:.76rem; font-weight:700; white-space:nowrap;
+  transition:gap .2s var(--ease),color .2s var(--ease);
+}
+.api-guide__link:hover .api-guide__cta{ gap:12px; color:var(--text); }
+@media(max-width:700px){
+  .api-guide__link{ grid-template-columns:38px minmax(0,1fr); gap:10px 14px; padding-block:13px; }
+  .api-guide__mark{ width:38px; height:38px; border-radius:9px; }
+  .api-guide__copy{ display:block; }
+  .api-guide__copy strong,.api-guide__desc{ display:block; }
+  .api-guide__copy strong{ margin-top:2px; }
+  .api-guide__desc{ margin-top:2px; font-size:.78rem; }
+  .api-guide__cta{ grid-column:2; font-size:.72rem; }
+}
+
 /* ------------------------------ hero ------------------------------------ */
 .hero{ padding:64px 0 0; }
 .hero__grid{

@@ -55,6 +55,7 @@ function translateElements(source, messages) {
       ["data-i18n-ph", "placeholder"],
       ["data-i18n-aria-label", "aria-label"],
       ["data-i18n-title", "title"],
+      ["data-i18n-href", "href"],
     ]) {
       const tagPattern = new RegExp(`<[^>]*\\b${marker}="${escapedKey}"[^>]*>`, "gi");
       html = html.replace(tagPattern, tag => {

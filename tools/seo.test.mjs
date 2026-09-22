@@ -141,8 +141,26 @@ test("manifest, sitemap and brand sources carry the updated identity", () => {
   assert.match(readPublic("og-source.svg"), />JEV AI<\/text>/);
 });
 
-test("the home page does not promote third-party API access", () => {
-  assert.doesNotMatch(index, /API access without waiting|instant API access/i);
+test("the API integration guide is prominent and locale-aware", () => {
+  const expectedGuideUrls = {
+    en: "https://omniakey.com/blog/jev-model-explained",
+    "zh-cn": "https://omniakey.com/zh/blog/jev-model-explained",
+    "zh-tw": "https://omniakey.com/zh/blog/jev-model-explained",
+    ja: "https://omniakey.com/ja/blog/jev-model-explained",
+    ko: "https://omniakey.com/ko/blog/jev-model-explained",
+    es: "https://omniakey.com/es/blog/jev-model-explained",
+    fr: "https://omniakey.com/fr/blog/jev-model-explained",
+    de: "https://omniakey.com/de/blog/jev-model-explained",
+    "pt-br": "https://omniakey.com/pt-BR/blog/jev-model-explained",
+  };
+
+  for (const { key, html } of localizedPages) {
+    const guide = contentOf(/(<aside class="api-guide"[\s\S]*?<\/aside>)/i, html);
+    assert.match(guide, new RegExp(`href="${expectedGuideUrls[key].replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}"`), key);
+    assert.match(guide, /target="_blank" rel="noopener noreferrer"/i, key);
+    assert.match(guide, /OmniaKey/i, key);
+    assert.ok(html.indexOf("class=\"api-guide\"") < html.indexOf("id=\"apps\""), `${key} guide must precede the catalog`);
+  }
 });
 
 test("editorial navigation points to the official JEV source", () => {

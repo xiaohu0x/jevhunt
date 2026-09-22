@@ -29,11 +29,26 @@ test("the public catalog exposes only GitHub repository and README links", () =>
   assert.match(main, /rel="ugc nofollow noopener noreferrer">README/);
 });
 
-test("public assets contain no removed API marketplace promotion", () => {
+test("OmniaKey references are limited to the approved API guide", () => {
   const removedBrand = new RegExp(["omni", "akey"].join(""), "i");
   for (const file of publicTextFiles()) {
-    assert.doesNotMatch(readFileSync(file, "utf8"), removedBrand, file);
+    const source = readFileSync(file, "utf8");
+    if (!removedBrand.test(source)) continue;
+
+    if (file.endsWith("/assets/js/i18n.js")) {
+      for (const line of source.split("\n").filter(value => removedBrand.test(value))) {
+        assert.match(line, /"guide\.(?:href|eyebrow)"/, file);
+      }
+      continue;
+    }
+
+    const guide = source.match(/<aside class="api-guide"[\s\S]*?<\/aside>/i)?.[0];
+    assert.ok(guide, `Unscoped OmniaKey reference in ${file}`);
+    assert.match(guide, /href="https:\/\/omniakey\.com\/(?:blog|(?:zh|ja|ko|es|fr|de|pt-BR)\/blog)\/jev-model-explained"/i, file);
+    assert.doesNotMatch(source.replace(guide, ""), removedBrand, file);
   }
+
+  assert.doesNotMatch(index, /API access without waiting|instant API access/i);
 });
 
 test("project submissions accept only canonical GitHub repository URLs", () => {
