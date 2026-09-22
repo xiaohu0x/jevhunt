@@ -1,10 +1,10 @@
 {
   "policy": "repository-readme-v3",
   "source": "hellogumbo/awesome-jev",
-  "sourceUpdated": "2026-09-20",
-  "candidateCount": 606,
-  "verifiedCount": 587,
-  "rejectedCount": 19,
+  "sourceUpdated": "2026-09-21",
+  "candidateCount": 717,
+  "verifiedCount": 700,
+  "rejectedCount": 17,
   "criteria": [
     "Official repositories owned by typesafe-ai are accepted.",
     "Other repositories must contain first-party Jev or System One technical evidence in their default-branch README.",
@@ -36,11 +36,6 @@
     {
       "name": "kyotsu-ai-bench",
       "repo": "shibadogcap/kyotsu-ai-bench",
-      "reason": "README not found"
-    },
-    {
-      "name": "almond-fastloop",
-      "repo": "eriestra/almond-fastloop",
       "reason": "README not found"
     },
     {
@@ -84,11 +79,6 @@
       "reason": "README has no qualifying Jev or System One evidence"
     },
     {
-      "name": "TypeAR",
-      "repo": "TypeAR-AI/TypeAR",
-      "reason": "README has no qualifying Jev or System One evidence"
-    },
-    {
       "name": "Jackalope",
       "repo": "Jackalope-Dev/jackalope",
       "reason": "README has no qualifying Jev or System One evidence"
@@ -104,8 +94,8 @@
       "reason": "README not found"
     },
     {
-      "name": "Cheshi",
-      "repo": "CheshiAI/Cheshi",
+      "name": "dohnuts",
+      "repo": "PsiACE/dohnuts",
       "reason": "README has no qualifying Jev or System One evidence"
     }
   ]
