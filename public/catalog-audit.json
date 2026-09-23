@@ -1,10 +1,10 @@
 {
   "policy": "repository-readme-v3",
   "source": "hellogumbo/awesome-jev",
-  "sourceUpdated": "2026-09-21",
-  "candidateCount": 717,
-  "verifiedCount": 700,
-  "rejectedCount": 17,
+  "sourceUpdated": "2026-09-22",
+  "candidateCount": 814,
+  "verifiedCount": 794,
+  "rejectedCount": 20,
   "criteria": [
     "Official repositories owned by typesafe-ai are accepted.",
     "Other repositories must contain first-party Jev or System One technical evidence in their default-branch README.",
@@ -54,6 +54,11 @@
       "reason": "README has no qualifying Jev or System One evidence"
     },
     {
+      "name": "river-oaks",
+      "repo": "BunsDev/river-oaks",
+      "reason": "README not found"
+    },
+    {
       "name": "Search-Function-Test",
       "repo": "Shifros/Search-Function-Test",
       "reason": "README not found"
@@ -96,6 +101,16 @@
     {
       "name": "dohnuts",
       "repo": "PsiACE/dohnuts",
+      "reason": "README has no qualifying Jev or System One evidence"
+    },
+    {
+      "name": "typesafe_register",
+      "repo": "Futureppo/typesafe_register",
+      "reason": "README has no qualifying Jev or System One evidence"
+    },
+    {
+      "name": "Jev-Case",
+      "repo": "Hiwoniu/Jev-Case",
       "reason": "README has no qualifying Jev or System One evidence"
     }
   ]
