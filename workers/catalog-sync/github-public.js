@@ -49,9 +49,10 @@ export class PublicGitHub {
       headers: { accept: html ? "text/html" : raw ? "text/plain" : "application/vnd.github+json", "user-agent": "JevHunt public catalog (+https://jevhunt.com/methodology/)" },
       signal: AbortSignal.timeout(12000),
     });
-    if (response.status === 404) return null;
+    if (response.status === 404) { await response.body?.cancel(); return null; }
     if (!response.ok) {
       const retryAt = Number(response.headers.get("x-ratelimit-reset")) || (Number(response.headers.get("retry-after")) ? Math.floor(Date.now() / 1000) + Number(response.headers.get("retry-after")) : 0);
+      await response.body?.cancel();
       throw Object.assign(new Error(`Source returned HTTP ${response.status}: ${new URL(url).pathname}`), { retryAt, status: response.status });
     }
     const text = await limitedText(response, limit);

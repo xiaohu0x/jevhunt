@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { database } from "./helpers/d1.mjs";
 import { tick } from "../workers/catalog-sync/engine.js";
-import { parseRepositoryPage } from "../workers/catalog-sync/github-public.js";
+import { parseRepositoryPage, PublicGitHub } from "../workers/catalog-sync/github-public.js";
 import { catalogMeta } from "../shared/catalog-data.js";
 
 const commit = "a".repeat(40);
@@ -69,4 +69,16 @@ test("only the scheduled handler advances the scheduler heartbeat", async t => {
   assert.equal(env.DB.db.prepare("SELECT last_scheduled_at n FROM catalog_control").get().n, 0);
   await tick(env, "scheduled");
   assert.ok(env.DB.db.prepare("SELECT last_scheduled_at n FROM catalog_control").get().n > 0);
+});
+
+test("GitHub API backoff prevents further requests until its reset time", async () => {
+  let requests = 0;
+  const retryAt = Math.floor(Date.now() / 1000) + 3600;
+  const client = new PublicGitHub(async () => { requests++; return new Response("limited", { status: 403, headers: { "x-ratelimit-reset": String(retryAt) } }); });
+  await assert.rejects(client.api("/search/repositories?q=jev"));
+  assert.equal(client.apiRetryAt, retryAt);
+  await assert.rejects(client.api("/repos/example/jev"), /rate limit/);
+  assert.equal(requests, 1);
+  const resumed = new PublicGitHub(async () => { throw new Error("Must not request during cooldown"); }, retryAt);
+  await assert.rejects(resumed.api("/repos/example/jev"), /rate limit/);
 });
