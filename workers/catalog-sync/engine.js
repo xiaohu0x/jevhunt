@@ -142,10 +142,10 @@ async function saveProject(DB, project, oldRepo, now) {
 
 export async function tick(env, trigger = "manual") {
   const now = epoch(), DB = env.DB;
-  const lease = await DB.prepare("UPDATE catalog_control SET lease_until=?,last_tick_at=?,last_scheduled_at=CASE WHEN ? IN ('scheduled','alarm') THEN ? ELSE last_scheduled_at END WHERE id=1 AND lease_until < ? RETURNING id")
+  const lease = await DB.prepare("UPDATE catalog_control SET lease_until=?,last_tick_at=?,last_scheduled_at=CASE WHEN ? IN ('scheduled','alarm') THEN ? ELSE last_scheduled_at END WHERE id=1 AND lease_until < ? RETURNING id,meta")
     .bind(now + 180, now, trigger, now, now).first();
   if (!lease) return { status: "busy" };
-  const runId = crypto.randomUUID(), github = new PublicGitHub();
+  const runId = crypto.randomUUID(), github = new PublicGitHub(undefined, JSON.parse(lease.meta || "{}").githubApiRetryAt || 0);
   let result = { checked: 0, published: 0, changed: 0, message: "No work due" }, failed = null;
   try {
     const sources = [...sourceConfig.sources, ...sourceConfig.githubQueries.map((query, i) => ({ id: `github-search-${i}`, query, type: "search" }))];
@@ -205,7 +205,7 @@ export async function tick(env, trigger = "manual") {
   } catch (error) { failed = error.message; }
   finally {
     await DB.batch([
-      DB.prepare("UPDATE catalog_control SET lease_until=0,last_error=? WHERE id=1").bind(failed),
+      DB.prepare("UPDATE catalog_control SET lease_until=0,last_error=?,meta=json_set(meta,'$.githubApiRetryAt',?) WHERE id=1").bind(failed, github.apiRetryAt),
       DB.prepare("INSERT INTO catalog_runs(id,started_at,finished_at,status,checked,published,message) VALUES(?,?,?,?,?,?,?)")
         .bind(runId, now, epoch(), failed ? "degraded" : "ok", result.checked, result.published, failed || result.message),
       DB.prepare("DELETE FROM catalog_runs WHERE started_at < ?").bind(now - 7 * 86400),

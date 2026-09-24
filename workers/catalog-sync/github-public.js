@@ -42,7 +42,7 @@ export function parseRepositoryPage(html) {
 }
 
 export class PublicGitHub {
-  constructor(fetcher = (url, options) => fetch(url, options)) { this.fetcher = fetcher; this.requests = 0; }
+  constructor(fetcher = (url, options) => fetch(url, options), apiRetryAt = 0) { this.fetcher = fetcher; this.requests = 0; this.apiRetryAt = apiRetryAt; }
   async request(url, { raw = false, html = false, limit = 1_500_000 } = {}) {
     if (++this.requests > 35) throw new Error("Batch request budget reached");
     const response = await this.fetcher(url, {
@@ -51,8 +51,8 @@ export class PublicGitHub {
     });
     if (response.status === 404) return null;
     if (!response.ok) {
-      const retryAt = Number(response.headers.get("x-ratelimit-reset")) || 0;
-      throw Object.assign(new Error(`Source returned HTTP ${response.status}`), { retryAt, status: response.status });
+      const retryAt = Number(response.headers.get("x-ratelimit-reset")) || (Number(response.headers.get("retry-after")) ? Math.floor(Date.now() / 1000) + Number(response.headers.get("retry-after")) : 0);
+      throw Object.assign(new Error(`Source returned HTTP ${response.status}: ${new URL(url).pathname}`), { retryAt, status: response.status });
     }
     const text = await limitedText(response, limit);
     return raw || html ? text : JSON.parse(text);
@@ -69,7 +69,15 @@ export class PublicGitHub {
     if (!response.ok) throw new Error(`Approved source returned HTTP ${response.status}`);
     return true;
   }
-  api(path) { return this.request("https://api.github.com" + path, { limit: 2_000_000 }); }
+  async api(path) {
+    const now = Math.floor(Date.now() / 1000);
+    if (this.apiRetryAt > now) throw Object.assign(new Error("GitHub API is waiting for its rate limit to reset"), { status: 429, retryAt: this.apiRetryAt });
+    try { return await this.request("https://api.github.com" + path, { limit: 2_000_000 }); }
+    catch (error) {
+      if ([403, 429].includes(error.status)) this.apiRetryAt = Math.max(now + 900, error.retryAt || 0);
+      throw Object.assign(error, { retryAt: this.apiRetryAt || error.retryAt });
+    }
+  }
   async metadata(candidate, prior) {
     let page;
     try {
