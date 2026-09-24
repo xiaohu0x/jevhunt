@@ -21,7 +21,7 @@ function card(p) {
   return `<article class="card"><div class="card__top"><div><h2 class="card__heading"><a class="card__name" href="${projectPath(p.repo)}">${esc(p.name)}</a></h2><div class="card__author">${esc(p.repo)}</div></div></div><p class="card__desc">${esc(p.desc)}</p><div class="card__tags"><span class="tag">${esc(label("relationship", p.relationship || "unclassified"))}</span><span class="tag">${esc(label("evidence", p.evidenceLevel || "legacy-unreviewed"))}</span>${p.archived ? '<span class="tag">Archived</span>' : ''}</div><div class="card__foot"><a href="${projectPath(p.repo)}">Details →</a><span>★ ${p.stars.toLocaleString("en-US")}</span></div></article>`;
 }
 const urls = new Set(projects.map(p => projectPath(p.repo)));
-const redirects = ["https://www.jevhunt.com/* https://jevhunt.com/:splat 301"];
+const redirects = [];
 for (const p of projects) {
   const path = projectPath(p.repo), detail = p.evidenceDetail;
   const category = categories.find(c => c.id === p.cat);

@@ -39,6 +39,10 @@ async function verify() {
   if (!logout.ok || !logout.headers.get("set-cookie")?.includes("Max-Age=0")) throw new Error("Logout cookie cleanup failed");
   const missing = await get("/this-route-must-not-exist-jevhunt-release-check/");
   if (missing.status !== 404) throw new Error("Unknown paths must return a real 404");
+  if (new URL(origin).hostname === "jevhunt.com") {
+    const canonical = await fetch("https://www.jevhunt.com/", { redirect: "manual", signal: AbortSignal.timeout(15000) });
+    if (![301, 308].includes(canonical.status) || canonical.headers.get("location") !== "https://jevhunt.com/") throw new Error("www must redirect to the canonical origin");
+  }
   return live;
 }
 let failure;

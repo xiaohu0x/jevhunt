@@ -6,6 +6,7 @@ import { onRequestPost as logout } from "../functions/api/auth/logout.js";
 import { onRequestGet as queue, onRequestPost as review } from "../functions/api/admin/submissions.js";
 import { onRequestGet as published } from "../functions/api/catalog-submissions.js";
 import { onRequestGet as callback } from "../functions/api/auth/callback.js";
+import { onRequest as canonical } from "../functions/_middleware.js";
 
 import { database } from "./helpers/d1.mjs";
 
@@ -23,6 +24,13 @@ async function setup(t) {
   return { env, request };
 }
 const payload = (i = 0) => ({ name: `Project ${i}`, url: `https://github.com/example/repo-${i}`, description: "A test", category: "apps", consent: true });
+
+test("www requests redirect to the canonical HTTPS origin before login or rendering", async () => {
+  const response = await canonical({ request: new Request("https://www.jevhunt.com/zh-cn/?q=router"), next() { throw new Error("Should redirect first"); } });
+  assert.equal(response.status, 308);
+  assert.equal(response.headers.get("location"), "https://jevhunt.com/zh-cn/?q=router");
+  assert.equal(await (await canonical({ request: new Request("https://jevhunt.com/"), next: () => new Response("ok") })).text(), "ok");
+});
 
 test("redirect normalization rejects scheme, control and backslash authority tricks", () => {
   for (const value of ["//evil.example", "/\\evil.example", "/\t/evil.example", "/\n/evil.example", "https://evil.example", null, "/path\u007f"]) assert.equal(safeNext(value), "/", JSON.stringify(value));
