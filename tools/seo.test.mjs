@@ -84,7 +84,7 @@ test("social metadata and structured data use each locale's canonical identity",
     const canonical = `https://jevhunt.com${locale.path}`;
     assert.match(html, /<meta property="og:title" content="[^"]*JEV AI/);
     assert.match(html, /<meta name="twitter:title" content="[^"]*JEV AI/);
-    assert.match(html, /<meta property="og:image" content="https:\/\/jevhunt\.com\/og\.png\?v=2"/);
+    assert.match(html, /<meta property="og:image" content="https:\/\/jevhunt\.com\/og\.png\?v=\d+"/);
     assert.match(html, new RegExp(`<meta property="og:locale" content="${locale.ogLocale}"`));
 
     const jsonLd = contentOf(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/i, html);
@@ -96,18 +96,17 @@ test("social metadata and structured data use each locale's canonical identity",
   }
 });
 
-test("the initial catalog is prerendered within the target word count", () => {
+test("the initial catalog is prerendered with stable crawlable project links", () => {
   const catalog = contentOf(/<!-- catalog-prerender:start -->([\s\S]*?)<!-- catalog-prerender:end -->/i);
   assert.equal(catalog.match(/<article class="card">/g)?.length, 20);
   assert.equal(catalog.match(/<h2 class="card__heading">/g)?.length, 20);
   assert.match(index, /<span id="dirCount">Showing 20 of \d+ projects<\/span>/);
   assert.match(main, /const PAGE_SIZE = 20;/);
 
-  const wordCount = visibleWords(index).length;
-  assert.ok(wordCount >= 1200 && wordCount <= 1800, `Static body has ${wordCount} words`);
+  assert.match(catalog, /href="\/projects\//);
+  assert.match(index, /href="\/browse\/"/);
+  assert.doesNotMatch(index, /Zero hallucinations|193\.6<span>x/);
 
-  const editorialMentions = (visibleWords(editorialIndex).join(" ").match(/\bJEV AI Model\b/g) || []).length;
-  assert.ok(editorialMentions >= 6, `Only ${editorialMentions} editorial JEV AI Model mentions`);
 });
 
 test("prerendered projects publish matching ItemList structured data", () => {

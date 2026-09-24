@@ -1,7 +1,8 @@
-import { clearSessionCookie, destroySession, json } from "../../_lib/auth.js";
+import { clearSessionCookie, destroySession, json, sameOrigin } from "../../_lib/auth.js";
 
 /** POST /api/auth/logout — destroys the session and clears the cookie. */
 export async function onRequestPost({ request, env }) {
+  if (!sameOrigin(request)) return json({ error: "invalid_origin" }, { status: 403 });
   await destroySession(request, env);
 
   const headers = new Headers({ "cache-control": "no-store" });

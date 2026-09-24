@@ -1,0 +1,30 @@
+name: Validate JevHunt
+on:
+  pull_request:
+  push:
+    branches: [main, 'codex/**']
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - run: npm ci
+      - run: pip install -r requirements-examples.txt
+      - run: npm run build
+      - run: npm test
+      - run: npm run test:examples
+      - name: Compile Pages Functions
+        run: npx wrangler pages functions build functions --outdir=.cache/functions
+
+      - name: Compile scheduled Worker
+        run: npx wrangler deploy --config workers/catalog-sync/wrangler.toml --dry-run --outdir=.cache/catalog-worker

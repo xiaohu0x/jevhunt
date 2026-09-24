@@ -1,94 +1,48 @@
-import { getSession, json, now } from "../_lib/auth.js";
-
+import { getSession, json, now, sameOrigin } from "../_lib/auth.js";
+import { CATEGORIES, normalizeGitHubRepoUrl, readJson, textField } from "../_lib/input.js";
+export { normalizeGitHubRepoUrl } from "../_lib/input.js";
 const MAX_PER_HOUR = 5;
-const FIELDS = { name: 120, url: 500, description: 1000, category: 60 };
 
-const clean = (v, max) => String(v ?? "").trim().slice(0, max);
-
-export function normalizeGitHubRepoUrl(value) {
-  let parsed;
-  try {
-    parsed = new URL(String(value ?? "").trim());
-  } catch {
-    return null;
-  }
-
-  const parts = parsed.pathname.split("/").filter(Boolean);
-  const owner = parts[0] ?? "";
-  const repo = (parts[1] ?? "").replace(/\.git$/i, "");
-  const validOwner = /^[A-Za-z0-9](?:[A-Za-z0-9-]{0,37}[A-Za-z0-9])?$/.test(owner);
-  const validRepo = repo.length <= 100 && /^[A-Za-z0-9._-]+$/.test(repo) && repo !== "." && repo !== "..";
-
-  if (parsed.protocol !== "https:" || parsed.hostname.toLowerCase() !== "github.com" ||
-      parsed.port || parsed.username || parsed.password || parsed.search || parsed.hash ||
-      parts.length !== 2 || !validOwner || !validRepo) return null;
-
-  return `https://github.com/${owner}/${repo}`;
-}
-
-/**
- * GET /api/submissions
- * The signed-in user's own submissions. Returns an empty list when anonymous.
- */
 export async function onRequestGet({ request, env }) {
   const session = await getSession(request, env);
   if (!session) return json({ submissions: [] });
-
   const rows = await env.DB.prepare(
-    `SELECT id, name, url, description, category, status, created_at
-       FROM submissions
-      WHERE user_id = ?
-      ORDER BY created_at DESC
-      LIMIT 20`
+    `SELECT id, name, url, description, category, status, created_at, reviewed_at, review_note
+     FROM submissions WHERE user_id = ? ORDER BY created_at DESC LIMIT 50`
   ).bind(session.user.id).all();
-
   return json({ submissions: rows.results ?? [] });
 }
 
-/**
- * POST /api/submissions
- * Creates a pending submission. Requires a session.
- */
 export async function onRequestPost({ request, env }) {
+  if (!sameOrigin(request)) return json({ error: "invalid_origin" }, { status: 403 });
   const session = await getSession(request, env);
   if (!session) return json({ error: "unauthorized" }, { status: 401 });
-
   let body;
-  try {
-    body = await request.json();
-  } catch {
-    return json({ error: "invalid_json" }, { status: 400 });
-  }
-
-  const name = clean(body.name, FIELDS.name);
-  const url = normalizeGitHubRepoUrl(clean(body.url, FIELDS.url));
-  const description = clean(body.description, FIELDS.description);
-  const category = clean(body.category, FIELDS.category);
-
-  if (name.length < 2) return json({ error: "invalid_name" }, { status: 400 });
+  try { body = await readJson(request); }
+  catch (error) { return json({ error: error.message }, { status: error.status || 400 }); }
+  const name = textField(body.name, 120, 2), url = normalizeGitHubRepoUrl(body.url);
+  const description = textField(body.description ?? "", 1000);
+  if (!name) return json({ error: "invalid_name" }, { status: 400 });
   if (!url) return json({ error: "invalid_url" }, { status: 400 });
-
-  const t = now();
-
-  const recent = await env.DB.prepare(
-    `SELECT COUNT(*) AS n FROM submissions WHERE user_id = ? AND created_at > ?`
-  ).bind(session.user.id, t - 3600).first();
-
-  if ((recent?.n ?? 0) >= MAX_PER_HOUR) {
-    return json({ error: "rate_limited", limit: MAX_PER_HOUR }, { status: 429 });
+  if (description === null) return json({ error: "invalid_description" }, { status: 400 });
+  if (!CATEGORIES.includes(body.category)) return json({ error: "invalid_category" }, { status: 400 });
+  if (body.consent !== true) return json({ error: "consent_required" }, { status: 400 });
+  const t = now(), id = crypto.randomUUID();
+  // The quota and duplicate checks share the INSERT's SQLite write transaction.
+  const result = await env.DB.prepare(
+    `INSERT INTO submissions (id, user_id, name, url, description, category, status, created_at, consent_at)
+     SELECT ?, ?, ?, ?, ?, ?, 'pending', ?, ?
+     WHERE (SELECT COUNT(*) FROM submissions WHERE user_id = ? AND created_at > ?) < ?
+       AND NOT EXISTS (SELECT 1 FROM submissions WHERE user_id = ? AND lower(url) = lower(?)
+                       AND status IN ('pending', 'approved'))`
+  ).bind(id, session.user.id, name, url, description, body.category, t, t,
+    session.user.id, t - 3600, MAX_PER_HOUR, session.user.id, url).run();
+  if (!result.meta.changes) {
+    const duplicate = await env.DB.prepare(
+      `SELECT id FROM submissions WHERE user_id = ? AND lower(url) = lower(?) AND status IN ('pending', 'approved')`
+    ).bind(session.user.id, url).first();
+    return duplicate ? json({ error: "duplicate_submission" }, { status: 409 })
+      : json({ error: "rate_limited", limit: MAX_PER_HOUR }, { status: 429, headers: { "Retry-After": "3600" } });
   }
-
-  const id = crypto.randomUUID();
-  await env.DB.prepare(
-    `INSERT INTO submissions (id, user_id, name, url, description, category, status, created_at)
-     VALUES (?, ?, ?, ?, ?, ?, 'pending', ?)`
-  ).bind(id, session.user.id, name, url, description, category, t).run();
-
-  return json(
-    {
-      ok: true,
-      submission: { id, name, url, description, category, status: "pending", created_at: t },
-    },
-    { status: 201 }
-  );
+  return json({ ok: true, submission: { id, name, url, description, category: body.category, status: "pending", created_at: t } }, { status: 201 });
 }

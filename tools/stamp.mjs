@@ -15,14 +15,15 @@ import { fileURLToPath } from "node:url";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const pub = join(root, "public");
 
-const ASSETS = [
-  "assets/css/fonts.css",
-  "assets/css/style.css",
-  "assets/js/i18n.js",
-  "assets/js/data.js",
-  "assets/js/projects.js",
-  "assets/js/main.js",
-];
+function scripts(dir = join(pub, "assets/js")) {
+  return readdirSync(dir, { withFileTypes: true }).flatMap(entry => entry.isDirectory()
+    ? scripts(join(dir, entry.name)) : entry.name.endsWith(".js") ? [join(dir, entry.name).slice(pub.length + 1)] : []);
+}
+// Hash the imported module too; it has the same long browser cache lifetime.
+const stateVersion = createHash("sha256").update(readFileSync(join(pub, "assets/js/catalog-state.js"))).digest("hex").slice(0, 10);
+const mainFile = join(pub, "assets/js/main.js");
+writeFileSync(mainFile, readFileSync(mainFile, "utf8").replace(/from "\.\/catalog-state\.js(?:\?v=[a-f0-9]+)?"/, `from "./catalog-state.js?v=${stateVersion}"`));
+const ASSETS = ["assets/css/fonts.css", "assets/css/style.css", ...scripts()];
 
 function htmlPages(dir = pub) {
   return readdirSync(dir, { withFileTypes: true }).flatMap(entry => {

@@ -11,3 +11,7 @@ GOOGLE_CLIENT_ID = "549996556432-vdcaf3ais7mig0f84alus4q36qjaosna.apps.googleuse
 binding = "DB"
 database_name = "jevhunt-db"
 database_id = "7775e979-c7fc-4322-a6de-215b0436495a"
+
+[[services]]
+binding = "CATALOG_SYNC"
+service = "jevhunt-catalog-sync"

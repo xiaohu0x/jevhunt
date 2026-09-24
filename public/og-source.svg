@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="JEV AI open-source software directory">
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="JEV AI public project directory">
   <defs>
     <pattern id="grid" width="64" height="64" patternUnits="userSpaceOnUse">
       <path d="M64 0H0V64" fill="none" stroke="#FFFFFF" stroke-opacity=".055"/>
@@ -18,14 +18,14 @@
   <text x="160" y="121" fill="#8F8F99" font-family="Menlo, monospace" font-size="15">AI PROJECT INDEX</text>
 
   <text x="72" y="267" fill="#F386A1" font-family="Arial, sans-serif" font-size="104" font-weight="800">JEV AI</text>
-  <text x="72" y="346" fill="#F4F4F5" font-family="Arial, sans-serif" font-size="62" font-weight="700">OPEN-SOURCE</text>
-  <text x="72" y="418" fill="#F4F4F5" font-family="Arial, sans-serif" font-size="62" font-weight="700">SOFTWARE DIRECTORY</text>
+  <text x="72" y="346" fill="#F4F4F5" font-family="Arial, sans-serif" font-size="50" font-weight="700">PUBLIC PROJECTS</text>
+  <text x="72" y="418" fill="#F4F4F5" font-family="Arial, sans-serif" font-size="50" font-weight="700">APPS · SDKs · RESEARCH</text>
 
   <line x1="72" y1="462" x2="694" y2="462" stroke="#F386A1" stroke-width="3"/>
-  <text x="72" y="509" fill="#B7B7BF" font-family="Arial, sans-serif" font-size="25">Verified projects, SDKs, integrations and agent tools.</text>
-  <text x="72" y="570" fill="#09AEA1" font-family="Menlo, monospace" font-size="17">README VERIFIED</text>
+  <text x="72" y="509" fill="#B7B7BF" font-family="Arial, sans-serif" font-size="25">Projects, SDKs and research with source evidence.</text>
+  <text x="72" y="570" fill="#09AEA1" font-family="Menlo, monospace" font-size="17">SOURCE EVIDENCE</text>
   <text x="260" y="570" fill="#7E7E89" font-family="Menlo, monospace" font-size="17">/</text>
-  <text x="290" y="570" fill="#F5B454" font-family="Menlo, monospace" font-size="17">OPEN SOURCE</text>
+  <text x="290" y="570" fill="#F5B454" font-family="Menlo, monospace" font-size="17">PUBLIC CODE</text>
   <text x="448" y="570" fill="#7E7E89" font-family="Menlo, monospace" font-size="17">/</text>
   <text x="478" y="570" fill="#F386A1" font-family="Menlo, monospace" font-size="17">JEVHUNT.COM</text>
 

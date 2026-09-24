@@ -1,117 +1,258 @@
 {
-  "policy": "repository-readme-v3",
-  "source": "hellogumbo/awesome-jev",
-  "sourceUpdated": "2026-09-22",
-  "candidateCount": 814,
-  "verifiedCount": 794,
-  "rejectedCount": 20,
-  "criteria": [
-    "Official repositories owned by typesafe-ai are accepted.",
-    "Other repositories must contain first-party Jev or System One technical evidence in their default-branch README.",
-    "Accepted signals include Jev model/API identifiers, the System One endpoint, official SDK identifiers, or Jev references paired with TypeSafe or operational context.",
-    "A TypeSafe name or website link alone is not evidence, and Jev-only repository naming is insufficient.",
-    "A third-party catalog description, repository name, stars, or external post is not evidence."
+  "excluded": [
+    {
+      "repo": "datamodel-code-generator/datamodel-code-generator",
+      "reason": "Lists the TypeSafe SDK as a downstream user; no Jev decision integration established."
+    },
+    {
+      "repo": "Futureppo/typesafe_register",
+      "reason": "Account registration automation is outside Jev application scope."
+    },
+    {
+      "repo": "2951461586/Jev-Register-Tool",
+      "reason": "Account registration automation is outside Jev application scope."
+    }
   ],
+  "policy": "evidence-v5",
+  "syncedAt": "2026-09-24T08:40:10.508Z",
+  "catalogHash": "ff8eff64e04ccffadd0a",
+  "sources": [
+    {
+      "id": "awesome-jev",
+      "url": "https://github.com/hellogumbo/awesome-jev",
+      "sourceUpdatedAt": "2026-09-23",
+      "status": "ok"
+    },
+    {
+      "id": "typesafe-field-guide",
+      "url": "https://github.com/AbdelStark/awesome-typesafe-jev",
+      "sourceUpdatedAt": "2026-09-23",
+      "status": "ok"
+    },
+    {
+      "id": "typesafe-official",
+      "url": "https://github.com/typesafe-ai",
+      "status": "ok"
+    },
+    {
+      "id": "approved-submissions",
+      "status": "failed",
+      "error": "Approved submission feed unavailable"
+    },
+    {
+      "id": "github-search",
+      "query": "jev typesafe in:name,description fork:false",
+      "count": 2246,
+      "status": "cached",
+      "checkedAt": "2026-09-24T07:33:16.452Z"
+    },
+    {
+      "id": "github-search",
+      "query": "\"@typesafe-ai/sdk\" in:readme fork:false",
+      "count": 424,
+      "status": "cached",
+      "checkedAt": "2026-09-24T07:33:16.452Z"
+    },
+    {
+      "id": "github-search",
+      "query": "\"typesafe-sdk\" in:readme fork:false",
+      "count": 844,
+      "status": "cached",
+      "checkedAt": "2026-09-24T07:33:16.452Z"
+    },
+    {
+      "id": "github-search",
+      "query": "topic:jev fork:false",
+      "count": 1545,
+      "status": "cached",
+      "checkedAt": "2026-09-24T07:33:16.452Z"
+    }
+  ],
+  "candidateCount": 3947,
+  "listedCount": 3906,
+  "evidenceLevels": {
+    "documented": 3824,
+    "code-reference": 78,
+    "official": 4
+  },
+  "rejectedCount": 38,
   "rejected": [
     {
-      "name": "eve",
-      "repo": "vercel/eve",
-      "reason": "README has no qualifying Jev or System One evidence"
-    },
-    {
-      "name": "ai-cli",
       "repo": "vercel-labs/ai-cli",
-      "reason": "README has no qualifying Jev or System One evidence"
+      "reason": "No qualifying first-party usage evidence; needs review"
     },
     {
-      "name": "notra",
       "repo": "usenotra/notra",
-      "reason": "README has no qualifying Jev or System One evidence"
+      "reason": "No qualifying first-party usage evidence; needs review"
     },
     {
-      "name": "LegalForecastBench",
-      "repo": "johnhughes3/LegalForecastBench",
-      "reason": "README has no qualifying Jev or System One evidence"
+      "repo": "Twister915/typesafe-ai",
+      "reason": "No qualifying first-party usage evidence; needs review"
     },
     {
-      "name": "kyotsu-ai-bench",
-      "repo": "shibadogcap/kyotsu-ai-bench",
-      "reason": "README not found"
+      "repo": "nshkrdotcom/typesafe_sdk",
+      "reason": "No qualifying first-party usage evidence; needs review"
     },
     {
-      "name": "pdoom-protocol",
+      "repo": "bnsd55/jevmlx",
+      "reason": "No qualifying first-party usage evidence; needs review"
+    },
+    {
       "repo": "onionminionops-beep/pdoom-protocol",
-      "reason": "README has no qualifying Jev or System One evidence"
+      "reason": "No qualifying first-party usage evidence; needs review"
     },
     {
-      "name": "jev.mods",
-      "repo": "Hardel-DW/jev.mods",
-      "reason": "README not found"
-    },
-    {
-      "name": "openjev-experiments",
       "repo": "zefir1990/openjev-experiments",
-      "reason": "README has no qualifying Jev or System One evidence"
+      "reason": "No qualifying first-party usage evidence; needs review"
     },
     {
-      "name": "river-oaks",
-      "repo": "BunsDev/river-oaks",
-      "reason": "README not found"
+      "repo": "heiwa4126/jev-bun1",
+      "reason": "No qualifying first-party usage evidence; needs review"
     },
     {
-      "name": "Search-Function-Test",
-      "repo": "Shifros/Search-Function-Test",
-      "reason": "README not found"
+      "repo": "DeepBlueDynamics/typesafe-arena",
+      "reason": "No qualifying first-party usage evidence; needs review"
     },
     {
-      "name": "FinancialPredictionJev",
-      "repo": "thodoh1/FinancialPredictionJev",
-      "reason": "README not found"
+      "repo": "Bud-ro/jev-demos",
+      "reason": "No qualifying first-party usage evidence; needs review"
     },
     {
-      "name": "Typesafe_chess_eval",
       "repo": "AliceRoselia/Typesafe_chess_eval",
-      "reason": "README has no qualifying Jev or System One evidence"
+      "reason": "No qualifying first-party usage evidence; needs review"
     },
     {
-      "name": "typesafe-demo-mcp",
-      "repo": "bestagentkits/typesafe-demo-mcp",
-      "reason": "README not found"
-    },
-    {
-      "name": "PocketJev",
       "repo": "NullPo-jp/PocketJev",
-      "reason": "README has no qualifying Jev or System One evidence"
+      "reason": "No qualifying first-party usage evidence; needs review"
     },
     {
-      "name": "Jackalope",
-      "repo": "Jackalope-Dev/jackalope",
-      "reason": "README has no qualifying Jev or System One evidence"
+      "repo": "vinnylarouge/jevlike",
+      "reason": "No qualifying first-party usage evidence; needs review"
     },
     {
-      "name": "jev_projects",
-      "repo": "X0EF/jev_projects",
-      "reason": "README not found"
+      "repo": "olanotolu/jevbetter",
+      "reason": "No qualifying first-party usage evidence; needs review"
     },
     {
-      "name": "typesafe-vs-deepseek",
-      "repo": "markfive-proto/typesafe-vs-deepseek",
-      "reason": "README not found"
+      "repo": "aabolfazl/typesafe-local",
+      "reason": "No qualifying first-party usage evidence; needs review"
     },
     {
-      "name": "dohnuts",
+      "repo": "keeltrace/hermes-nerve",
+      "reason": "No qualifying first-party usage evidence; needs review"
+    },
+    {
+      "repo": "fabricioctelles/modelsystem",
+      "reason": "No qualifying first-party usage evidence; needs review"
+    },
+    {
+      "repo": "DevMortimer/pi-warden",
+      "reason": "No qualifying first-party usage evidence; needs review"
+    },
+    {
+      "repo": "rashedInt32/jev-lens.nvim",
+      "reason": "No qualifying first-party usage evidence; needs review"
+    },
+    {
+      "repo": "philippdubach/pi-jev-router",
+      "reason": "No qualifying first-party usage evidence; needs review"
+    },
+    {
       "repo": "PsiACE/dohnuts",
-      "reason": "README has no qualifying Jev or System One evidence"
+      "reason": "No qualifying first-party usage evidence; needs review"
     },
     {
-      "name": "typesafe_register",
-      "repo": "Futureppo/typesafe_register",
-      "reason": "README has no qualifying Jev or System One evidence"
+      "repo": "fritzprix/systemone-lite",
+      "reason": "No qualifying first-party usage evidence; needs review"
     },
     {
-      "name": "Jev-Case",
       "repo": "Hiwoniu/Jev-Case",
-      "reason": "README has no qualifying Jev or System One evidence"
+      "reason": "No qualifying first-party usage evidence; needs review"
+    },
+    {
+      "repo": "symfony/ai-type-safe-platform",
+      "reason": "No qualifying first-party usage evidence; needs review"
+    },
+    {
+      "repo": "pjt3591oo/laya-server",
+      "reason": "No qualifying first-party usage evidence; needs review"
+    },
+    {
+      "repo": "DreamBlooms/dohnuts.cpp",
+      "reason": "No qualifying first-party usage evidence; needs review"
+    },
+    {
+      "repo": "Alex314618-create/JevRev",
+      "reason": "No qualifying first-party usage evidence; needs review"
+    },
+    {
+      "repo": "weitianxin/JevAny",
+      "reason": "No qualifying first-party usage evidence; needs review"
+    },
+    {
+      "repo": "rcarmo/go-system-one",
+      "reason": "No qualifying first-party usage evidence; needs review"
+    },
+    {
+      "repo": "amigos-robot/amigos-jev",
+      "reason": "No qualifying first-party usage evidence; needs review"
+    },
+    {
+      "repo": "vercel-labs/ai-python",
+      "reason": "No qualifying first-party usage evidence; needs review"
+    },
+    {
+      "repo": "Asymptote-Labs/agent-beacon",
+      "reason": "No qualifying first-party usage evidence; needs review"
+    },
+    {
+      "repo": "bestagentkits/typesafe-demo-mcp",
+      "reason": "No qualifying first-party usage evidence; needs review"
+    },
+    {
+      "repo": "X0EF/jev_projects",
+      "reason": "No qualifying first-party usage evidence; needs review"
+    },
+    {
+      "repo": "markfive-proto/typesafe-vs-deepseek",
+      "reason": "No qualifying first-party usage evidence; needs review"
+    },
+    {
+      "repo": "shibadogcap/kyotsu-ai-bench",
+      "reason": "No qualifying first-party usage evidence; needs review"
+    },
+    {
+      "repo": "thodoh1/FinancialPredictionJev",
+      "reason": "No qualifying first-party usage evidence; needs review"
+    },
+    {
+      "repo": "Hardel-DW/jev.mods",
+      "reason": "No qualifying first-party usage evidence; needs review"
     }
+  ],
+  "unavailable": [
+    {
+      "repo": "brudarko/jev-mac-voice",
+      "reason": "Repository is not publicly reachable; retained for rechecking"
+    }
+  ],
+  "errors": [
+    {
+      "repo": "brudarko/jev-mac-voice",
+      "reason": "not-found"
+    }
+  ],
+  "changes": {
+    "added": [],
+    "removed": [
+      "brudarko/jev-mac-voice"
+    ]
+  },
+  "criteria": [
+    "Documented means first-party documentation mentions an integration.",
+    "Code reference means an API identifier was found in source; code was not executed.",
+    "Reviewed means an editor reviewed the linked source. No listing implies independent runtime validation.",
+    "Local alternatives, research and resources are labeled separately.",
+    "Coverage is bounded by the reported sources, searches and errors; it is not exhaustive."
   ]
 }

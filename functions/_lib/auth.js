@@ -11,14 +11,15 @@ export const SESSION_TTL = 60 * 60 * 24 * 30; // 30 days (seconds)
 /* ----------------------------- primitives ------------------------------- */
 
 export function json(data, init = {}) {
-  return new Response(JSON.stringify(data), {
-    ...init,
-    headers: {
-      "content-type": "application/json; charset=utf-8",
-      "cache-control": "no-store",
-      ...(init.headers || {}),
-    },
-  });
+  const headers = new Headers(init.headers);
+  if (!headers.has("content-type")) headers.set("content-type", "application/json; charset=utf-8");
+  headers.set("cache-control", "no-store");
+  return new Response(JSON.stringify(data), { ...init, headers });
+}
+
+export function sameOrigin(request) {
+  const origin = request.headers.get("Origin");
+  return origin === new URL(request.url).origin && request.headers.get("Sec-Fetch-Site") !== "cross-site";
 }
 
 export function randomToken(bytes = 32) {
@@ -39,7 +40,7 @@ export const now = () => Math.floor(Date.now() / 1000);
 export function getCookie(request, name) {
   const header = request.headers.get("Cookie") || "";
   const match = header.match(new RegExp(`(?:^|;\\s*)${name}=([^;]*)`));
-  return match ? decodeURIComponent(match[1]) : null;
+  try { return match ? decodeURIComponent(match[1]) : null; } catch { return null; }
 }
 
 export function serializeCookie(name, value, opts = {}) {
@@ -85,10 +86,10 @@ export function clearSessionCookie(request) {
   });
 }
 
-/** Returns { user, sessionId } or null. Also slides the expiry forward. */
+/** Fixed 30-day lifetime, matching the cookie. Logging in creates a new session. */
 export async function getSession(request, env) {
   const token = getCookie(request, SESSION_COOKIE);
-  if (!token) return null;
+  if (!token || !/^[a-f0-9]{64}$/.test(token)) return null;
 
   const id = await sha256hex(token);
   const row = await env.DB.prepare(
@@ -100,15 +101,9 @@ export async function getSession(request, env) {
   if (!row) return null;
 
   const t = now();
-  if (row.expires_at < t) {
+  if (row.expires_at <= t) {
     await env.DB.prepare(`DELETE FROM sessions WHERE id = ?`).bind(id).run();
     return null;
-  }
-
-  // refresh at most once a day to avoid a write on every request
-  if (row.expires_at - t < SESSION_TTL - 86400) {
-    await env.DB.prepare(`UPDATE sessions SET expires_at = ? WHERE id = ?`)
-      .bind(t + SESSION_TTL, id).run();
   }
 
   return {
@@ -142,18 +137,19 @@ export async function issueState(env, next = "/") {
 export async function consumeState(env, state) {
   if (!state) return null;
   const row = await env.DB.prepare(
-    `SELECT expires_at, next FROM oauth_states WHERE state = ?`
+    `DELETE FROM oauth_states WHERE state = ? RETURNING expires_at, next`
   ).bind(state).first();
-  if (!row) return null;
-  await env.DB.prepare(`DELETE FROM oauth_states WHERE state = ?`).bind(state).run();
-  return row.expires_at >= now() ? row : null;
+  return row && row.expires_at > now() ? row : null;
 }
 
 /** Only allow same-origin absolute paths (block //evil.com and schemes). */
 export function safeNext(value) {
-  if (typeof value !== "string") return "/";
-  if (!value.startsWith("/") || value.startsWith("//")) return "/";
-  return value;
+  if (typeof value !== "string" || !value.startsWith("/") || /[\\\x00-\x20\x7f]/.test(value)) return "/";
+  try {
+    const base = "https://jevhunt.invalid";
+    const url = new URL(value, base);
+    return url.origin === base ? url.pathname + url.search + url.hash : "/";
+  } catch { return "/"; }
 }
 
 /** Housekeeping — called opportunistically, cheap and indexed. */

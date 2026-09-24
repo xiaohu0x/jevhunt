@@ -41,11 +41,11 @@ export async function exchangeCodeForUser(env, request, code) {
     method: "POST",
     headers: { "content-type": "application/x-www-form-urlencoded" },
     body,
+    signal: AbortSignal.timeout(15_000),
   });
 
   if (!tokenRes.ok) {
-    const detail = await tokenRes.text().catch(() => "");
-    throw new Error(`token_exchange_failed:${tokenRes.status}:${detail.slice(0, 200)}`);
+    throw new Error(`token_exchange_failed:${tokenRes.status}`);
   }
 
   const tokens = await tokenRes.json();
@@ -55,6 +55,7 @@ export async function exchangeCodeForUser(env, request, code) {
   // is authoritative — no need to hand-verify the id_token signature.
   const infoRes = await fetch(USERINFO_ENDPOINT, {
     headers: { Authorization: `Bearer ${tokens.access_token}` },
+    signal: AbortSignal.timeout(15_000),
   });
   if (!infoRes.ok) throw new Error(`userinfo_failed:${infoRes.status}`);
 
@@ -63,7 +64,7 @@ export async function exchangeCodeForUser(env, request, code) {
 
   return {
     sub: profile.sub,
-    email: profile.email,
+    email: profile.email.trim().toLowerCase(),
     emailVerified: profile.email_verified === true,
     name: profile.name || profile.email.split("@")[0],
     picture: profile.picture || null,

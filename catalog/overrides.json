@@ -1,0 +1,54 @@
+{
+  "projects": [
+    {
+      "repo": "NandhaKishorM/laya",
+      "category": "research",
+      "relationship": "local-alternative"
+    },
+    {
+      "repo": "jaredpalmer/kev",
+      "category": "research",
+      "relationship": "local-alternative"
+    },
+    {
+      "repo": "TheoLeeCJ/SemIf-OpenJev",
+      "category": "research",
+      "relationship": "local-alternative"
+    },
+    {
+      "repo": "vinnylarouge/jevlike",
+      "category": "research",
+      "relationship": "local-alternative"
+    },
+    {
+      "repo": "TianyuCodings/NanoJev",
+      "category": "research",
+      "relationship": "local-alternative"
+    }
+  ],
+  "excluded": [
+    {
+      "repo": "datamodel-code-generator/datamodel-code-generator",
+      "reason": "Lists the TypeSafe SDK as a downstream user; no Jev decision integration established."
+    },
+    {
+      "repo": "Futureppo/typesafe_register",
+      "reason": "Account registration automation is outside Jev application scope."
+    },
+    {
+      "repo": "2951461586/Jev-Register-Tool",
+      "reason": "Account registration automation is outside Jev application scope."
+    }
+  ],
+  "codePaths": {
+    "vercel-labs/fx": [
+      "src/builtins/gateway/typesafe_permission_reviewer.zig"
+    ],
+    "vercel/eve": [
+      "packages/eve/src/ai/evaluate.ts"
+    ],
+    "24601/rh-guard": [
+      "src/lib/risk/jev.ts"
+    ]
+  }
+}

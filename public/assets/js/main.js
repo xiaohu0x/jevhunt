@@ -1,3 +1,4 @@
+import { readCatalogState, catalogUrl, matchesProject, projectPath } from "./catalog-state.js?v=4bb61dfc34";
 /* ==========================================================================
    JevHunt — interactions
    ========================================================================== */
@@ -6,6 +7,13 @@
 
   const $  = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+
+  try {
+    const seed = JSON.parse(document.getElementById("liveCatalogSeed")?.textContent || "null");
+    if (seed?.meta?.mode === "live-d1" && Array.isArray(seed.apps)) {
+      window.JH.apps = seed.apps; window.JH.catalogMeta = seed.meta; window.JH.catalogRemote = true;
+    }
+  } catch { /* The static fallback remains usable. */ }
 
   const localeKey = document.documentElement.dataset.locale || window.JH.i18n?.defaultLocale || "en";
   const locale = window.JH.i18n?.locales?.[localeKey] || window.JH.i18n?.locales?.en;
@@ -18,13 +26,12 @@
     return output;
   }
 
-  const state = {
-    theme: localStorage.getItem("jh-theme") || "dark",
-    filter: "all",
-    query: "",
-    sort: "stars-desc",
-    visible: 20,
-  };
+  function storedTheme() {
+    try { return localStorage.getItem("jh-theme") === "light" ? "light" : "dark"; } catch { return "dark"; }
+  }
+  const state = { theme: storedTheme(), ...readCatalogState(location.href, window.JH.categories.map(c => c.id)) };
+  function saveFilters() { history.replaceState({}, "", catalogUrl(location.href, state)); }
+
 
   const PAGE_SIZE = 20;
   const number = new Intl.NumberFormat(locale?.lang || "en-US");
@@ -33,7 +40,7 @@
   function applyTheme(t) {
     document.documentElement.setAttribute("data-theme", t);
     state.theme = t;
-    localStorage.setItem("jh-theme", t);
+    try { localStorage.setItem("jh-theme", t); } catch { /* Storage is optional. */ }
     const meta = document.getElementById("themeColor");
     if (meta) meta.setAttribute("content", t === "light" ? "#FAFAF9" : "#0B0B0C");
   }
@@ -60,24 +67,7 @@
   }
 
   /* ----------------------------- terminal typing ------------------------ */
-  const CODE = [
-    'import typesafe',
-    '',
-    'client = typesafe.Client(api_key="jev_...")',
-    '',
-    'decision = client.decide(',
-    '    model="jev-1",',
-    '    state=support_ticket_text,',
-    '    questions={',
-    '        "intent": ["refund", "bug", "billing", "other"],',
-    '        "needs_human": bool,',
-    '        "urgency": ("score", 1, 5),',
-    '    },',
-    ')',
-    '',
-    '# → {"intent": ("refund", p=0.94)}',
-    '#    "needs_human": (false, p=0.88)}',
-  ].join("\n");
+  const CODE = window.JH.playbooks[0].code;
 
   const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
@@ -123,10 +113,10 @@
       const dec = parseInt(el.dataset.dec || "0", 10);
       const pre = el.dataset.prefix || "";
       const suf = el.dataset.suffix || "";
-      const dur = 1300;
+      const dur = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 1300;
       const start = performance.now();
       function step(now) {
-        const p = Math.min(1, (now - start) / dur);
+        const p = dur === 0 ? 1 : Math.min(1, (now - start) / dur);
         const e = 1 - Math.pow(1 - p, 3);
         const value = target * e;
         el.textContent = pre + (dec ? value.toFixed(dec) : number.format(Math.round(value))) + suf;
@@ -211,15 +201,59 @@
     }));
   }
 
+  let catalogLoading;
+  async function loadLiveCatalog(all = false) {
+    const response = await fetch("/api/catalog" + (all ? "?all=1&v=" + encodeURIComponent(window.JH.catalogMeta.catalogHash) : ""), { headers: { accept: "application/json" } });
+    if (!response.ok) throw new Error("Catalog unavailable");
+    const data = await response.json();
+    if (!Array.isArray(data.apps) || !data.meta?.projectCount) throw new Error("Invalid catalog response");
+    if (!all && window.JH.catalogLoaded) {
+      if (data.meta.catalogHash !== window.JH.catalogMeta.catalogHash) return loadLiveCatalog(true);
+      return;
+    }
+    window.JH.apps = data.apps; window.JH.catalogMeta = data.meta;
+    window.JH.catalogRemote = true; window.JH.catalogLoaded = all;
+    const count = document.getElementById("statApps");
+    if (count) { count.dataset.count = String(data.meta.projectCount); count.textContent = number.format(data.meta.projectCount); }
+    const stars = document.getElementById("statStars");
+    if (stars) { stars.dataset.count = String(data.meta.totalStars); stars.textContent = number.format(data.meta.totalStars); }
+    const sync = document.getElementById("catalogUpdated");
+    if (sync) sync.textContent = data.meta.syncedAt.slice(0, 10);
+    renderCategories(); renderFilters();
+  }
+  async function ensureCatalog() {
+    if (window.JH.catalogLoaded) return;
+    if (!catalogLoading) {
+      const load = window.JH.catalogRemote ? loadLiveCatalog(true)
+        : import("./catalog-all.js?v=" + encodeURIComponent(window.JH.catalogMeta.catalogHash));
+      catalogLoading = load.then(() => { catalogLoading = null; renderApps(); }).catch(error => {
+        catalogLoading = null; toast(t("apps.loadFailed", {}, "Could not load the catalog. Try again."), true); throw error;
+      });
+    }
+    return catalogLoading;
+  }
+  async function refreshLiveCatalog() {
+    try {
+      if (document.hidden) return;
+      const all = !!window.JH.catalogLoaded;
+      await loadLiveCatalog(all);
+      catalogLoading = null;
+      renderApps();
+    } catch { /* Keep the last usable data during a network failure. */ }
+  }
+
   function renderApps() {
     const grid = $("#appGrid");
     if (!grid) return;
-    const q = state.query.trim().toLowerCase();
-
+    const needsAll = state.query || state.filter !== "all" || state.kind !== "all" || state.language !== "all" || state.activity !== "all" || state.sort !== "stars-desc" || state.visible > PAGE_SIZE;
+    if (!window.JH.catalogLoaded && needsAll) {
+      saveFilters();
+      $("#dirCount").textContent = t("apps.loading", {}, "Loading catalog…");
+      ensureCatalog().catch(() => {});
+      return;
+    }
     const list = window.JH.apps
-      .filter(a => state.filter === "all" || a.cat === state.filter)
-      .filter(a => !q || [a.name, a.repo, a.author, a.desc, a.language, catLabel(a.cat)]
-        .filter(Boolean).join(" ").toLowerCase().includes(q))
+      .filter(a => matchesProject(a, state, catLabel))
       .sort((a, b) => {
         if (state.sort === "stars-asc") return a.stars - b.stars || compareDate(a.created, b.created) || compareName(a.name, b.name);
         if (state.sort === "created-desc") return compareDate(a.created, b.created) || b.stars - a.stars || compareName(a.name, b.name);
@@ -231,6 +265,7 @@
       });
 
     const shown = list.slice(0, state.visible);
+    const total = window.JH.catalogLoaded ? list.length : (window.JH.catalogMeta.projectCount || list.length);
     grid.innerHTML = shown.map(a => {
       const repoUrl = `https://github.com/${a.repo.split("/").map(encodeURIComponent).join("/")}`;
       const description = a.desc || t("apps.noDescription");
@@ -244,40 +279,45 @@
       <article class="card">
         <div class="card__top">
           <div>
-            <h2 class="card__heading"><a class="card__name" href="${escAttr(repoUrl)}" target="_blank" rel="noopener">${escAttr(a.name)}</a></h2>
+            <h2 class="card__heading"><a class="card__name" href="${escAttr(projectPath(a.repo))}">${escAttr(a.name)}</a></h2>
             <div class="card__author">${escAttr(a.repo)}</div>
           </div>
-          <span class="badge badge--catalog">${escAttr(catLabel(a.cat))}</span>
+          <span class="badge badge--catalog">${escAttr(t("relationship." + (a.relationship || "unclassified")))}</span>
         </div>
         <p class="card__desc">${escAttr(description)}</p>
         <div class="card__tags">
           ${a.language ? `<span class="tag">${escAttr(a.language)}</span>` : ""}
+          <span class="tag">${escAttr(t("evidence." + (a.evidenceLevel || "legacy-unreviewed")))}</span>
+          ${a.fork ? `<span class="tag">${escAttr(t("apps.fork"))}</span>` : ""}
+          ${a.archived ? `<span class="tag">${escAttr(t("apps.archived"))}</span>` : ""}
+          ${a.freshness && a.freshness !== "current" ? `<span class="tag">${escAttr(t("apps.stale"))}</span>` : ""}
           ${published ? `<span class="tag">${escAttr(published)}</span>` : ""}
           <span class="tag">${escAttr(updated)}</span>
         </div>
         <div class="card__foot">
           <span class="card__links">
             <a class="card__go" href="${escAttr(repoUrl)}" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-            <a class="card__site" href="${escAttr(a.evidence)}" target="_blank" rel="ugc nofollow noopener noreferrer">README <span aria-hidden="true">↗</span></a>
+            <a class="card__site" href="${escAttr(a.evidence)}" target="_blank" rel="ugc nofollow noopener noreferrer">${escAttr(t("apps.evidence"))} <span aria-hidden="true">↗</span></a>
           </span>
           <span class="card__stat" aria-label="${escAttr(t("apps.starsLabel", { count: number.format(a.stars) }))}">★ ${number.format(a.stars)}</span>
         </div>
       </article>`;
     }).join("");
 
+    saveFilters();
     const count = $("#dirCount");
     if (count) {
       count.textContent = t("apps.count", {
         shown: number.format(shown.length),
-        total: number.format(list.length),
+        total: number.format(total),
       });
     }
     const empty = $("#dirEmpty");
     if (empty) empty.hidden = list.length !== 0;
     const more = $("#loadMore");
     if (more) {
-      more.hidden = shown.length >= list.length;
-      const remaining = Math.min(PAGE_SIZE, list.length - shown.length);
+      more.hidden = shown.length >= total;
+      const remaining = Math.min(PAGE_SIZE, total - shown.length);
       more.textContent = t("apps.loadCount", { count: number.format(remaining) });
     }
 
@@ -295,7 +335,7 @@
     const host = $("#catGrid");
     if (!host) return;
     host.innerHTML = window.JH.categories.map(c => {
-      const n = window.JH.apps.filter(a => a.cat === c.id).length;
+      const n = window.JH.catalogMeta.categoryCounts?.[c.id] ?? window.JH.apps.filter(a => a.cat === c.id).length;
       const label = catLabel(c.id);
       const desc = catDescription(c.id);
       return `<button class="cat" data-cat="${escAttr(c.id)}">
@@ -335,7 +375,7 @@
     $("#pbFile").textContent = p.file;
     $("#pbMode").textContent = p.mode;
     $("#pbDesc").textContent = t(`playbook.${p.id}.desc`, {}, p.desc);
-    $("#pbCode").innerHTML = p.code;
+    $("#pbCode").innerHTML = highlight(p.code);
     $("#pbList").innerHTML = p.list.map((item, index) =>
       `<li>${escAttr(t(`playbook.${p.id}.${index + 1}`, {}, item))}</li>`
     ).join("");
@@ -377,11 +417,13 @@
       resetCatalogWindow();
       renderApps();
     }
+    if (dir) dir.value = state.query;
+    if (hero) hero.value = state.query;
     if (dir) dir.addEventListener("input", e => { if (hero) hero.value = e.target.value; setQuery(e.target.value); });
     if (hero) hero.addEventListener("input", e => {
       if (dir) dir.value = e.target.value;
       setQuery(e.target.value);
-      if (e.target.value) $("#apps").scrollIntoView({ behavior: "smooth" });
+
     });
     document.addEventListener("keydown", e => {
       const active = document.activeElement;
@@ -404,6 +446,17 @@
   }
 
   function initDirectory() {
+    const language = $("#languageFilter");
+    if (language) {
+      const languages = window.JH.catalogMeta.languages || [...new Set(window.JH.apps.map(p => p.language || "unknown"))].sort();
+      language.innerHTML = `<option value="all">${escAttr(t("apps.allLanguages"))}</option>` + languages.map(value => `<option value="${escAttr(value)}">${escAttr(value === "unknown" ? t("apps.unknownLanguage") : value)}</option>`).join("");
+    }
+    for (const [id, key] of [["languageFilter", "language"], ["kindFilter", "kind"], ["activityFilter", "activity"]]) {
+      const control = $("#" + id);
+      if (control) { control.value = state[key]; control.addEventListener("change", () => { state[key] = control.value; resetCatalogWindow(); renderApps(); }); }
+    }
+    $("#resetFilters")?.addEventListener("click", () => { location.assign(location.pathname + "#apps"); });
+    window.addEventListener("popstate", () => { Object.assign(state, readCatalogState(location.href, window.JH.categories.map(c => c.id))); renderFilters(); renderApps(); });
     const sort = $("#dirSort");
     if (sort) {
       sort.value = state.sort;
@@ -428,7 +481,7 @@
     if (!select || !locale) return;
     select.value = locale.path;
     select.addEventListener("change", () => {
-      location.assign(select.value + location.hash);
+      location.assign(select.value + location.search + location.hash);
     });
   }
 
@@ -460,6 +513,7 @@
       const res = await fetch("/api/submissions", { headers: { accept: "application/json" } });
       if (!res.ok) throw new Error("status " + res.status);
       const list = (await res.json()).submissions || [];
+      if (!authState.user) { host.hidden = true; return; }
       if (!list.length) { host.hidden = true; return; }
       host.hidden = false;
       host.innerHTML = `<h4>${escAttr(t("form.yourSubmissions"))}</h4>` + list.map(s =>
@@ -508,6 +562,7 @@
         name: $("#subName").value.trim(),
         category: $("#subCat").value,
         description: $("#subDesc").value.trim(),
+        consent: $("#subConsent").checked,
       };
 
       const repositoryUrl = normalizeGitHubRepoUrl(payload.url);
@@ -520,6 +575,7 @@
         setNote(t("form.nameInvalid"), "is-err");
         return;
       }
+      if (!payload.category) { setNote(t("form.categoryInvalid"), "is-err"); return; }
       if (!$("#subConsent").checked) {
         setNote(t("form.consentInvalid"), "is-err");
         return;
@@ -546,6 +602,8 @@
           setNote(t("form.rateLimit"), "is-err");
           return;
         }
+        if (res.status === 409) { setNote(t("form.duplicate"), "is-err"); return; }
+        if (res.status === 400 || res.status === 413) { setNote(t("form.invalid"), "is-err"); return; }
         if (!res.ok) throw new Error("status " + res.status);
 
         form.reset();
@@ -590,7 +648,9 @@
   const authState = { user: null, authEnabled: false, loaded: false };
   const authNext = () => location.pathname + location.search + location.hash;
 
+  let clearAuthListeners = () => {};
   function renderAuth() {
+    clearAuthListeners();
     if (!authState.loaded) return;
     renderSubmit();
     const host = $("#auth");
@@ -614,6 +674,7 @@
             <div><div class="auth__meta-name">${escAttr(user.name || "")}</div>
             <div class="auth__meta-email">${escAttr(user.email || "")}</div></div>
           </div>
+          ${authState.isAdmin ? `<a class="auth__item" href="/admin/" role="menuitem">Review submissions</a>` : ""}
           <a class="auth__item" href="/privacy/" role="menuitem">${escAttr(t("auth.privacy"))}</a>
           <button class="auth__item" id="signOut" role="menuitem">${escAttr(t("auth.signOut"))}</button>
         </div></div>`;
@@ -628,7 +689,9 @@
       });
       menu.addEventListener("click", (e) => e.stopPropagation());
       document.addEventListener("click", close);
-      document.addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });
+      const onEscape = e => { if (e.key === "Escape") close(); };
+      document.addEventListener("keydown", onEscape);
+      clearAuthListeners = () => { document.removeEventListener("click", close); document.removeEventListener("keydown", onEscape); };
       $("#signOut").addEventListener("click", signOut);
       return;
     }
@@ -658,6 +721,8 @@
     bad_state: t("auth.expired"),
     expired_state: t("auth.expired"),
     not_configured: t("auth.notConfigured"),
+    unverified_email: t("auth.unverified"),
+    account_conflict: t("auth.accountConflict"),
   };
 
   function handleAuthError() {
@@ -681,6 +746,7 @@
       const data = await res.json();
       authState.user = data.user || null;
       authState.authEnabled = !!data.authEnabled;
+      authState.isAdmin = !!data.isAdmin;
     } catch (_) {
       authState.user = null;
       authState.authEnabled = false;
@@ -697,11 +763,11 @@
     const sA = document.getElementById("statApps");
     const sC = document.getElementById("statCats");
     const sS = document.getElementById("statStars");
-    if (sA) sA.dataset.count = String(window.JH.apps.length);
+    if (sA) sA.dataset.count = String(window.JH.catalogMeta.projectCount || window.JH.apps.length);
     if (sC) sC.dataset.count = String(window.JH.categories.length);
     if (sS) sS.dataset.count = String(window.JH.catalogMeta?.totalStars || 0);
     const sync = document.getElementById("catalogUpdated");
-    if (sync) sync.textContent = window.JH.catalogMeta?.updated || "—";
+    if (sync) sync.textContent = window.JH.catalogMeta?.syncedAt?.slice(0, 10) || window.JH.catalogMeta?.updated || "—";
     renderTimeline();
     renderPlaybookTabs();
     renderPlaybook();
@@ -719,6 +785,8 @@
     initSubmit();
     initNav();
     initAuth();
+    if (!window.JH.catalogRemote) refreshLiveCatalog();
+    setInterval(refreshLiveCatalog, 300000);
     $("#year").textContent = new Date().getFullYear();
 
     $("#themeBtn").addEventListener("click", () => applyTheme(state.theme === "dark" ? "light" : "dark"));

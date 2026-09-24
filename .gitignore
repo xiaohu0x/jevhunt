@@ -20,3 +20,22 @@ node_modules/
 .dev.vars
 .env
 .env.*
+
+# catalog HTTP cache and local verification state
+.cache/
+
+# Generated from the committed catalog during every build.
+public/projects/
+public/categories/
+public/browse/
+public/admin/
+public/methodology/
+public/status/
+public/assets/js/locales/
+public/assets/js/catalog-all.js
+public/build-info.json
+
+public/assets/locales/
+
+# Local investigation notes and audit deliverables
+/reports/

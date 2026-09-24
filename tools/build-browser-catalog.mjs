@@ -1,0 +1,11 @@
+import { readFileSync, writeFileSync } from "node:fs";
+const { meta, apps } = JSON.parse(readFileSync("public/catalog.json", "utf8"));
+const fields = ["name", "repo", "desc", "cat", "language", "stars", "created", "added", "pushed", "archived", "fork", "relationship", "evidenceLevel", "evidence", "freshness"];
+const projects = apps.map(p => Object.fromEntries(fields.map(key => [key, p[key]])));
+const first = [...projects].sort((a, b) => b.stars - a.stars || (b.created || "").localeCompare(a.created || "") || a.name.localeCompare(b.name, "en", { sensitivity: "base" })).slice(0, 20);
+const browserMeta = Object.fromEntries(["policy", "updated", "syncedAt", "catalogHash", "projectCount", "totalStars"].map(key => [key, meta[key]]));
+browserMeta.categoryCounts = Object.fromEntries([...new Set(apps.map(p => p.cat))].map(cat => [cat, apps.filter(p => p.cat === cat).length]));
+browserMeta.languages = [...new Set(apps.map(p => p.language || "unknown"))].sort();
+writeFileSync("public/assets/js/projects.js", "/* Initial page; full index loads on interaction. */\nwindow.JH = window.JH || {};\nwindow.JH.catalogMeta = " + JSON.stringify(browserMeta) + ";\nwindow.JH.apps = " + JSON.stringify(first) + ";\n");
+writeFileSync("public/assets/js/catalog-all.js", "window.JH.apps = " + JSON.stringify(projects) + ";\nwindow.JH.catalogLoaded = true;\n");
+console.log(`Browser catalog: ${first.length} initial listings; ${projects.length} in the searchable index.`);

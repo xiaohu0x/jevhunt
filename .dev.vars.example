@@ -2,3 +2,6 @@
 # Copy from Google Cloud Console → APIs & Services → Credentials → OAuth client.
 GOOGLE_CLIENT_ID=""
 GOOGLE_CLIENT_SECRET=""
+
+# Optional local editorial access; production uses an encrypted Pages secret.
+ADMIN_EMAILS="editor@example.com"

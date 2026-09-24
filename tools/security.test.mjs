@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import test from "node:test";
+import { runInNewContext } from "node:vm";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { safeNext } from "../functions/_lib/auth.js";
@@ -26,7 +27,7 @@ test("the public catalog exposes only GitHub repository and README links", () =>
   assert.doesNotMatch(main, /a\.site/);
   assert.doesNotMatch(index, />site\s*<span aria-hidden="true">↗<\/span>/i);
   assert.match(main, /rel="ugc nofollow noopener noreferrer">GitHub/);
-  assert.match(main, /rel="ugc nofollow noopener noreferrer">README/);
+  assert.match(main, /rel="ugc nofollow noopener noreferrer">\$\{escAttr\(t\("apps\.evidence"\)\)\}/);
 });
 
 test("OmniaKey references are limited to the approved API guide", () => {
@@ -35,9 +36,20 @@ test("OmniaKey references are limited to the approved API guide", () => {
     const source = readFileSync(file, "utf8");
     if (!removedBrand.test(source)) continue;
 
-    if (file.endsWith("/assets/js/i18n.js")) {
-      for (const line of source.split("\n").filter(value => removedBrand.test(value))) {
-        assert.match(line, /"guide\.(?:href|eyebrow)"/, file);
+    if (/\/assets\/locales\/[^/]+\.json$/.test(file)) {
+      for (const [key, value] of Object.entries(JSON.parse(source).messages)) {
+        if (removedBrand.test(value)) assert.match(key, /^guide\.(?:href|eyebrow)$/, file);
+      }
+      continue;
+    }
+
+    if (file.endsWith("/assets/js/i18n.js") || /\/assets\/js\/locales\//.test(file)) {
+      const sandbox = { window: { JH: {} } };
+      runInNewContext(source, sandbox);
+      for (const locale of Object.values(sandbox.window.JH.i18n.locales)) {
+        for (const [key, value] of Object.entries(locale.messages)) {
+          if (removedBrand.test(value)) assert.match(key, /^guide\.(?:href|eyebrow)$/, file);
+        }
       }
       continue;
     }

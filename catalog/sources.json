@@ -1,0 +1,29 @@
+{
+  "sources": [
+    {
+      "id": "awesome-jev",
+      "url": "https://raw.githubusercontent.com/hellogumbo/awesome-jev/main/data/projects.json",
+      "type": "projects",
+      "homepage": "https://github.com/hellogumbo/awesome-jev"
+    },
+    {
+      "id": "typesafe-field-guide",
+      "url": "https://raw.githubusercontent.com/AbdelStark/awesome-typesafe-jev/main/resources.json",
+      "type": "resources",
+      "homepage": "https://github.com/AbdelStark/awesome-typesafe-jev"
+    }
+  ],
+  "githubQueries": [
+    "jev typesafe in:name,description fork:false",
+    "\"@typesafe-ai/sdk\" in:readme fork:false",
+    "\"typesafe-sdk\" in:readme fork:false",
+    "topic:jev fork:false"
+  ],
+  "officialRepos": [
+    "typesafe-ai/typesafe-sdk-python",
+    "typesafe-ai/typesafe-sdk-js",
+    "typesafe-ai/system-one-adapter-python",
+    "typesafe-ai/skills"
+  ],
+  "submissionsUrl": "https://jevhunt.com/api/catalog-submissions"
+}

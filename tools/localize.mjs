@@ -183,6 +183,7 @@ function renderLocale(source, localeKey, locale) {
   html = localizePrerenderedCatalog(html, locale.messages);
   html = updateStructuredData(html, locale, canonical);
   html = selectCurrentLocale(html, localeKey);
+  html = html.replace(/src="\/assets\/js\/(?:i18n|locales\/[a-z-]+)\.js(?:\?v=[a-f0-9]+)?"/, `src="/assets/js/locales/${localeKey}.js"`);
   return html;
 }
 
@@ -222,6 +223,11 @@ for (const [key, locale] of entries) {
     : resolve(publicDir, locale.path.slice(1), "index.html");
   mkdirSync(dirname(output), { recursive: true });
   writeFileSync(output, html);
+  const localeScript = resolve(publicDir, "assets/js/locales", `${key}.js`);
+  mkdirSync(dirname(localeScript), { recursive: true });
+  mkdirSync(resolve(publicDir, "assets/locales"), { recursive: true });
+  writeFileSync(resolve(publicDir, "assets/locales", `${key}.json`), JSON.stringify({ messages: locale.messages, lang: locale.lang }) + "\n");
+  writeFileSync(localeScript, "window.JH = window.JH || {};\nwindow.JH.i18n = " + JSON.stringify({ defaultLocale: key, locales: { [key]: locale } }) + ";\n");
 }
 
 let sitemapLastModified = "2026-09-21";

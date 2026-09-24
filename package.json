@@ -1,19 +1,29 @@
 {
   "name": "jevhunt",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
-  "description": "The directory for software built on Jev — Cloudflare Pages + D1 + Google OAuth",
+  "description": "The directory for software built on Jev \u2014 Cloudflare Pages + D1 + Google OAuth",
   "scripts": {
-    "build": "node tools/prerender-catalog.mjs && node tools/localize.mjs && node tools/stamp.mjs",
+    "build": "node tools/build-browser-catalog.mjs && node tools/prerender-catalog.mjs && node tools/localize.mjs && node tools/build-directory.mjs && node tools/stamp.mjs && node tools/build-manifest.mjs",
     "catalog:sync": "node tools/sync-projects.mjs",
     "test": "node --test tools/*.test.mjs",
     "dev": "wrangler pages dev",
-    "deploy": "npm run build && wrangler pages deploy",
-    "db:migrate:local": "wrangler d1 execute jevhunt-db --local --file=./migrations/0001_init.sql",
-    "db:migrate:remote": "wrangler d1 execute jevhunt-db --remote --file=./migrations/0001_init.sql",
-    "db:studio": "wrangler d1 execute jevhunt-db --remote --command \"SELECT id, email, name, created_at FROM users ORDER BY created_at DESC LIMIT 20;\""
+    "deploy": "npm run build && npm test && npm run db:migrate:remote && npm run catalog:seed:remote && npm run deploy:worker && wrangler pages deploy public --project-name jevhunt --branch main --commit-dirty=true && npm run verify:production",
+    "db:migrate:local": "wrangler d1 migrations apply jevhunt-db --local",
+    "db:migrate:remote": "wrangler d1 migrations apply jevhunt-db --remote",
+    "db:studio": "wrangler d1 execute jevhunt-db --remote --command \"SELECT id, email, name, created_at FROM users ORDER BY created_at DESC LIMIT 20;\"",
+    "test:examples": "python3 tools/test-examples.py",
+    "verify:production": "node tools/verify-deploy.mjs https://jevhunt.com",
+    "catalog:seed:local": "node tools/seed-catalog.mjs",
+    "catalog:seed:remote": "node tools/seed-catalog.mjs --remote",
+    "deploy:worker": "wrangler deploy --config workers/catalog-sync/wrangler.toml"
   },
   "devDependencies": {
+    "jsdom": "^29.1.1",
     "wrangler": "^4.84.1"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=22.13"
   }
 }

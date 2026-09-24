@@ -1,217 +1,151 @@
 # JevHunt
 
-**The directory for software built on Jev.**
+A public directory of Jev applications, integrations, SDKs, local alternatives and research. Live at **https://jevhunt.com**.
 
-A community directory for apps, playbooks and tools built on [Jev](https://typesafe.ai/) — the
-*System One* model from TypeSafe AI that returns **typed decisions with calibrated confidence**
-instead of prose.
+Every listing has a relationship label, source evidence and freshness information. Documentation or a source-code reference is not a runtime test. Coverage is limited to the discovery sources and searches recorded in `/catalog-audit.json`.
 
-Live: **https://jevhunt.com**
+## Development
 
----
+Node 24 and Python 3.12 are used in CI. The frontend is plain JavaScript, HTML and CSS; Cloudflare Pages Functions use D1 for Google sessions and submissions.
 
-## Architecture
-
-Static front-end **plus** a small serverless backend, all on Cloudflare:
-
-```
-public/                     → static assets (the deploy root)
-  index.html
-  zh-cn|zh-tw|ja|ko|es|fr|de|pt-br/
-    index.html              → generated localized home pages
-  404.html                  → real 404 (avoids soft-404 on unknown paths)
-  favicon.* og.png          → icons live at the site root
-  site.webmanifest robots.txt sitemap.xml
-  catalog-audit.json        → generated README-verification report
-  _headers                  → security + cache headers
-  assets/css|js|fonts/
-    js/projects.js          → generated open-source repository snapshot
-
-functions/                  → Cloudflare Pages Functions (the API)
-  _lib/auth.js              → sessions, cookies, CSRF state, D1 helpers
-  _lib/google.js            → Google OAuth 2.0 / OIDC
-  api/me.js                 → GET  /api/me
-  api/auth/google.js        → GET  /api/auth/google
-  api/auth/callback.js      → GET  /api/auth/callback
-  api/auth/logout.js        → POST /api/auth/logout
-  api/submissions.js        → GET/POST /api/submissions
-
-tools/stamp.mjs             → content-hash cache busting (no deps)
-tools/prerender-catalog.mjs → first-page HTML + ItemList SEO generation
-tools/localize.mjs          → localized pages, hreflang, JSON-LD + sitemap
-tools/sync-projects.mjs     → validated GitHub catalog sync (no deps)
-migrations/0001_init.sql    → D1 schema
-wrangler.toml               → bindings + config
-```
-
-| Concern | Choice |
-| --- | --- |
-| Hosting | Cloudflare Pages (`jevhunt`) |
-| Domain | `jevhunt.com` + `www` (zone + project in the same CF account) |
-| Database | Cloudflare D1 (SQLite) — binding `DB` |
-| Auth | Google OAuth 2.0 (Authorization Code + OIDC) |
-| Sessions | Server-side rows in D1, opaque token in an `HttpOnly` cookie |
-| Build step | Node prerender + cache stamping; plain HTML/CSS/JS output |
-
-## Local development
-
-```bash
-npm install                # only for the wrangler dev dependency
-npm run db:migrate:local   # create the local D1 tables
-npm run dev                # → http://localhost:8788
-```
-
-To exercise the OAuth flow locally, create `.dev.vars` (git-ignored):
-
-```ini
-GOOGLE_CLIENT_ID="....apps.googleusercontent.com"
-GOOGLE_CLIENT_SECRET="..."
-```
-
-## Google OAuth setup
-
-Login only works once Google credentials exist — this part must be done in the
-[Google Cloud Console](https://console.cloud.google.com/apis/credentials):
-
-1. Create (or pick) a project → **APIs & Services → OAuth consent screen**
-   - User type **External**; fill app name + support email
-   - While in *Testing*, add your own Google account under **Test users**
-2. **Credentials → Create credentials → OAuth client ID**
-   - Application type: **Web application**
-   - **Authorized redirect URIs** — must match exactly, including scheme and path:
-     ```
-     https://jevhunt.com/api/auth/callback
-     http://localhost:8788/api/auth/callback     ← for local dev
-     ```
-3. Wire the values into the deployment:
-
-```bash
-# public client id → wrangler.toml [vars]
-# secret → encrypted Workers secret
-npx wrangler pages secret put GOOGLE_CLIENT_SECRET --project-name jevhunt
-```
-
-Then redeploy (`npm run deploy`). `/api/me` will start reporting `authEnabled: true`
-and the **Sign in** button becomes active. Until then the button renders disabled
-with an explanatory tooltip — nothing breaks.
-
-## Database
-
-Schema in `migrations/0001_init.sql`:
-
-| Table | Purpose |
-| --- | --- |
-| `users` | one row per person, keyed by the Google `sub` claim |
-| `sessions` | SHA-256 hash of the session token + expiry (never the raw token) |
-| `submissions` | user-submitted apps for the directory |
-| `oauth_states` | single-use CSRF nonces for the OAuth round-trip |
-
-```bash
-npm run db:migrate:remote   # apply to production D1
-npm run db:studio           # list recent users
-```
-
-## Security notes
-
-- Session tokens are 32 random bytes; **only their SHA-256 hash is stored**.
-- Cookies are `HttpOnly`, `SameSite=Lax`, and `Secure` whenever served over HTTPS
-  (automatically relaxed on `http://localhost` for local dev).
-- OAuth `state` is persisted in D1, single-use, expires in 10 minutes, and must
-  match a cookie — blocking login CSRF.
-- Post-login redirects are restricted to same-origin absolute paths (`safeNext`)
-  to prevent open redirects.
-- The authorization code is exchanged server-to-server; the profile is read from
-  Google's `userinfo` endpoint rather than trusting a client-supplied token.
-- Expired sessions and state rows are swept opportunistically.
-- `public/_headers` sets `nosniff`, `X-Frame-Options: DENY`, a referrer policy and
-  `Permissions-Policy`.
-
-## Design system
-
-Derived from the official Jev / TypeSafe AI aesthetic, pushed further for readability.
-
-| Token | Dark | Light |
-| --- | --- | --- |
-| Background | `#0B0B0C` | `#FAFAF9` |
-| Accent (brand pink) | `#F386A1` | `#CE2B63` |
-| Accent 2 | `#D45BB6` | `#A61E7A` |
-| Mono | JetBrains Mono | — |
-| Display | Space Grotesk | — |
-| Body | Inter | — |
-
-- Self-hosted webfonts (latin subset) — no CDN, so it renders offline and behind
-  restrictive networks; CJK falls back to the system stack.
-- Dual theme (dark/light), with static, crawlable pages in English, Simplified Chinese,
-  Traditional Chinese, Japanese, Korean, Spanish, French, German and Brazilian Portuguese.
-- Every locale has a self-referencing canonical URL, reciprocal `hreflang` links,
-  localized Title/Description/H1, Open Graph metadata and JSON-LD.
-- All text meets **WCAG AA** contrast in both themes; no horizontal overflow from 390px.
-- Honours `prefers-reduced-motion`.
-
-## Project catalog
-
-The public directory is a checked-in static snapshot of every active GitHub repository in
-[`hellogumbo/awesome-jev`](https://github.com/hellogumbo/awesome-jev). It contains unique
-repositories across official projects, SDKs, integrations, agent tools, browser and computer use,
-applications, games, demos, research, and community directories. The current repository and star
-counts are read from the generated snapshot and displayed on the site.
-
-Refresh it with:
-
-```bash
-npm run catalog:sync
+```sh
+npm ci
 npm run build
+npm run db:migrate:local
+npm run dev
 ```
 
-The sync validates repository names and categories, drops removed entries, deduplicates
-case-insensitively, restricts website links to HTTP(S), and refuses suspiciously small source
-snapshots. Except for official `typesafe-ai/*` repositories, inclusion requires first-party Jev
-or System One technical evidence in the repository's own default-branch README. A TypeSafe name or
-website link by itself is not enough; neither are repository names, stars, upstream descriptions,
-or external posts. The generated rejection report is published at
-`/catalog-audit.json`. `.github/workflows/sync-projects.yml` runs the same refresh daily.
+Copy `.dev.vars.example` to `.dev.vars` for local Google OAuth credentials and optional administrator access. The registered local callback is `http://localhost:8788/api/auth/callback`. Browsing works without authentication. Production Google credentials are encrypted Pages secrets; do not put them in Git or client-side assets.
 
-To add a project, use the submission form on JevHunt or submit it to the upstream source. Hero
-stats, category counts, search, filters, star ranking, and publish/update date sorting update from
-the generated snapshot. The build also prerenders the top 20 projects into `index.html`, then
-generates each localized route from that snapshot. This keeps the English static page within the
-1,200–1,800 word SEO target while giving crawlers localized metadata and visible page copy.
-
-## Deploy
-
-```bash
-npm run deploy     # prerenders the catalog, stamps asset URLs, then deploys
+```sh
+npm test
+pip install -r requirements-examples.txt
+npm run test:examples
+npx wrangler pages functions build functions --outdir=.cache/functions
 ```
 
-`wrangler` must be authenticated (`npx wrangler login`) or `CLOUDFLARE_API_TOKEN`
-set. The account must also own the `jevhunt.com` zone — Cloudflare rejects a
-proxied CNAME that points across accounts (error 1014).
+The Python example tests use the actual SDK and an offline HTTP transport. They make no billable model calls. The DOM tests simulate interactions, storage failures, search and pagination without operating a browser.
 
-### Cache busting
+## Live catalog and scheduled updates
 
-Pages serves `/assets/*` with a long `max-age`, so a plain deploy would leave
-browsers on the previous bundle. `tools/stamp.mjs` rewrites the CSS/JS
-references in `index.html` and `404.html` to `…?v=<content-hash>`, giving every
-revision a distinct cache key. It is dependency-free and deterministic —
-re-running it with unchanged assets is a no-op.
+The data path runs entirely in Cloudflare:
 
-## Roadmap
+```mermaid
+flowchart LR
+    Sources[Community feeds and public GitHub] --> Cron[Worker Cron]
+    Cron --> DB[(D1 catalog and work queue)]
+    Review[Editorial review] --> DB
+    DB --> Pages[Pages Functions]
+    Pages --> Visitors[Directory and project pages]
+```
 
-- [x] Information-first single page
-- [x] Searchable catalog of all discoverable Jev GitHub projects
-- [x] Nine-language UI and SEO + dark / light themes
-- [x] Cloudflare Pages + D1 + Google login
-- [x] Real submissions API (`POST /api/submissions`) with validation + rate limit
-- [x] Cache-busted assets, real 404, robots.txt, sitemap.xml
-- [ ] Submission moderation UI (review/approve from the database)
-- [ ] Individual listing pages + SEO metadata
-- [ ] Voting on submissions
-- [x] Daily project discovery snapshot
-- [ ] Independent Jev benchmarks
+`workers/catalog-sync` uses a persistent Cloudflare Durable Object alarm to advance a small batch every minute. Cron Triggers also wake and repair the clock. The first site request starts the clock if necessary; startup is idempotent. Community feeds refresh every six hours. Paginated GitHub searches and repository checks continue between feed updates, with persisted cursors, retry times and a lease that prevents overlapping batches. Existing repositories are rechecked continuously; individual evidence and metadata check dates are shown on their pages.
 
-## Disclaimer
+The worker reads public GitHub repository metadata and commit-pinned source evidence. It does not store an account-wide Cloudflare token or a GitHub publishing credential. GitHub is used for source control, CI and public repository data; committing catalog data is not part of the live update path.
 
-JevHunt is an **independent, community-run** directory. It is not affiliated with, endorsed by,
-or operated by TypeSafe AI. "Jev" and related marks belong to their respective owners.
-Catalog entries are imported from the attributed community source and should be verified before
-being relied upon.
+`catalog/sources.json` configures two independent community sources, an official repository allowlist and GitHub discovery queries. The checked-in `public/catalog.json` is an initial/fallback snapshot. The live API, homepage rendering, project pages, category pages and sitemap read D1, so newly discovered projects appear without rebuilding the site.
+
+Local bootstrap tools remain available:
+
+```sh
+npm run catalog:sync              # authenticated gh or GITHUB_TOKEN, for a full local audit
+npm run catalog:seed:local        # insert missing initial records into local D1
+npm run catalog:seed:remote       # insert-only; preserves newer worker/editor records
+```
+
+`npm run catalog:sync -- --skip-search` refreshes known repositories and community feeds while retaining previous search provenance. `--accept-policy-change` is only for an editor-approved large reduction after inspecting `.cache/proposed-catalog.json`; automatic updates retain old data when checks fail.
+
+The shared evidence policy distinguishes:
+
+- **Official:** an allowlisted TypeSafe SDK/resource.
+- **Documented:** a first-party usage statement or API/SDK reference.
+- **Code reference:** an API identifier found in source, linked at a fixed commit.
+- **Editor reviewed:** a human-approved source reference and classification.
+- **Needs review:** retained historical data awaiting a successful check.
+
+Local alternatives, research and directories are separate from applications that call Jev. Negative statements, image badges, bare recommendation links and downstream-user lists do not establish integration evidence. Stars measure the whole repository.
+
+Editorial corrections belong in `catalog/overrides.json`; `codePaths` can point to an integration that is absent from the README. Transient failures keep published data and schedule a retry. Repeatedly unreachable repositories leave the active directory but retain a tombstone. An automatic removal floor prevents an unexpected mass disappearance.
+
+Inspect `/status/`, `/api/catalog/status` and `/api/health` for source results, queued work, recent runs and the **real scheduled heartbeat (including durable alarms)**. Manual test runs do not fake that heartbeat. `/catalog.json` exports current public project data, and `/api/catalog?all=1` provides the compact browser index.
+
+## Build and discovery pages
+
+`npm run build` generates:
+
+- Nine localized landing pages with canonical/hreflang metadata and a prerendered first page.
+- One small language bundle per locale and a 20-entry initial catalog. The complete search index loads on interaction.
+- `/projects/<owner>/<repo>/` with facts, evidence, related projects and source links.
+- Crawlable `/browse/` and `/categories/<category>/` pagination, a complete sitemap, and redirects for known repository renames.
+- `/methodology/`, `/status/`, and the private-use `/admin/` interface (noindex; access is checked by the API).
+- `/build-info.json`, containing the source commit, catalog identity and hashes used to verify a release.
+
+Generated static pages are fallback artifacts. Pages Functions render the live homepage, project details, category pagination, status and sitemap from D1. The code build and the live catalog each have their own version. `tools/stamp.mjs` versions assets and the imported catalog-state module to match the long cache lifetime.
+
+Search, category, project type, language, archival state, sort order and loaded page count persist in the URL. Locale switching preserves this state.
+
+## Submission and editorial workflow
+
+Google sign-in requires a verified email. Accounts are keyed by Google's stable subject; matching emails cannot rebind another account. Session lifetime is a fixed 30 days, matching the cookie. OAuth states are consumed atomically, and post-login redirects are restricted to the current origin.
+
+Submissions require an authenticated same-origin JSON request, canonical GitHub repository URL, category and consent. Input size/type limits are enforced server-side. A single SQL statement enforces the five-per-hour quota and active-submission duplicate checks.
+
+Configure the `ADMIN_EMAILS` encrypted Pages secret with a comma-separated list of authorized Google account emails, then sign in at `/admin/`. The queue uses cursor pagination so reviewing entries cannot skip later submissions. Approval requires a source URL pinned to a 40-character commit, a category, a relationship and a review note. Concurrent edits return a conflict.
+
+`GET /api/catalog-submissions` exports approved public fields and withdrawn repository identifiers without submitter identities or private notes. D1 triggers atomically queue approved projects for the worker. Withdrawing a previously approved listing immediately excludes it from live queries and blocks rediscovery; approval removes the block. Rejected, never-approved submissions remain private. The administrator can also queue a discovery refresh through a private Worker service binding.
+
+Database changes are additive and versioned under `migrations/`:
+
+```sh
+npm run db:migrate:local
+npm run db:migrate:remote
+```
+
+The original production tables were created before migration tracking. Migration 0001 uses `IF NOT EXISTS`, so the migrations runner can adopt that database safely.
+
+## Deploying code
+
+The Pages frontend and the private scheduler Worker share the existing D1 database. One SQLite Durable Object stores the timer; job progress and catalog records remain in D1. The worker has no public workers.dev or preview URL. Its manual endpoint is accessible through an administrator-authenticated Pages API and a private service binding.
+
+Authenticate Wrangler once on the deployment machine. Keep the Google OAuth secret and `ADMIN_EMAILS` in encrypted Pages secrets:
+
+```sh
+npx wrangler login
+npx wrangler pages secret put GOOGLE_CLIENT_SECRET --project-name jevhunt
+npx wrangler pages secret put ADMIN_EMAILS --project-name jevhunt
+npm run deploy
+```
+
+`npm run deploy` builds and tests the site, applies additive database migrations, inserts missing bootstrap records, deploys the scheduled Worker, deploys Pages and verifies production. Updates after this initial release run automatically inside Cloudflare. No GitHub Actions deployment secret is required.
+
+The existing public client ID and D1 binding are in `wrangler.toml`. Pages does not accept `account_id` in that file; use the environment if multiple Cloudflare accounts are available. The scheduler config is `workers/catalog-sync/wrangler.toml`.
+
+Cloudflare can take several minutes to propagate a new Cron Trigger. Production verification requires a recent **automatic timer** invocation, a successful source check, the expected code build, live server-rendered catalog data, working D1, anonymous admin denial, logout cookie cleanup and a real 404. A deployment command returning success alone is not sufficient.
+
+CI on pull requests and code branches builds the fallback artifacts, checks behavior and schema, validates the real SDK examples offline, and compiles both the Pages Functions and the Worker. CI does not publish catalog updates.
+
+For local UI/API work:
+
+```sh
+npm run db:migrate:local
+npm run catalog:seed:local
+npx wrangler pages dev public --port 8788
+```
+
+Test the scheduler in a separate local sandbox. Two independent `workerd` processes must not open the same SQLite persistence files:
+
+```sh
+npx wrangler d1 migrations apply jevhunt-db --local --persist-to .cache/scheduler-state
+node tools/seed-catalog.mjs --persist-to .cache/scheduler-state
+npx wrangler dev --config workers/catalog-sync/wrangler.toml --port 8790 --persist-to .cache/scheduler-state --test-scheduled
+```
+
+`POST /start` arms the local durable timer; `POST /tick` advances a manual batch. `/__scheduled` tests Cron wake-up. Unit tests use isolated in-memory D1 databases. Use a Cloudflare preview deployment for the full shared-D1 integration test.
+
+On a production incident, Pages deployment history can restore the previous code build. Worker versions can also be rolled back. Catalog data and retry cursors persist in D1; all schema changes are additive and the bootstrap is insert-only.
+
+## Known scope
+
+The directory covers discoverable public GitHub projects. It does not certify installation, security, performance, license compatibility, or the truth of every author claim. A public repository without a stated license is labeled accordingly. Source evidence and relationship labels make those limits inspectable.
+
+JevHunt is independent and is not affiliated with TypeSafe AI. Product names belong to their respective owners.

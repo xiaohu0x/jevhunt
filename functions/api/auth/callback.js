@@ -1,5 +1,5 @@
 import {
-  clearSessionCookie, consumeState, createSession, getCookie, now,
+  consumeState, createSession, getCookie, now,
   safeNext, serializeCookie, sessionCookie, sweep, STATE_COOKIE,
 } from "../../_lib/auth.js";
 import { exchangeCodeForUser, isConfigured } from "../../_lib/google.js";
@@ -16,13 +16,13 @@ export async function onRequestGet({ request, env }) {
       status,
       headers: {
         Location: target.toString(),
-        "Set-Cookie": clearSessionCookie(request),
+        "Set-Cookie": serializeCookie(STATE_COOKIE, "", { maxAge: 0, secure: url.protocol === "https:" }),
         "Cache-Control": "no-store",
       },
     });
   };
 
-  if (!isConfigured(env)) return fail("not_configured", 503);
+  if (!isConfigured(env)) return fail("not_configured");
   if (url.searchParams.get("error")) return fail("cancelled");
 
   const code = url.searchParams.get("code");
@@ -43,34 +43,24 @@ export async function onRequestGet({ request, env }) {
     return fail("exchange_failed");
   }
 
+  if (!profile.emailVerified) return fail("unverified_email");
   const t = now();
-  let user = await env.DB.prepare(
-    `SELECT id FROM users WHERE google_sub = ?`
-  ).bind(profile.sub).first();
-
-  if (user) {
-    await env.DB.prepare(
-      `UPDATE users SET email = ?, name = ?, picture = ?, last_login_at = ? WHERE id = ?`
-    ).bind(profile.email, profile.name, profile.picture, t, user.id).run();
-  } else {
-    // A row with this email may exist from another provider/round — reuse it.
-    const byEmail = await env.DB.prepare(
-      `SELECT id FROM users WHERE email = ?`
-    ).bind(profile.email).first();
-
-    if (byEmail) {
-      await env.DB.prepare(
-        `UPDATE users SET google_sub = ?, name = ?, picture = ?, last_login_at = ? WHERE id = ?`
-      ).bind(profile.sub, profile.name, profile.picture, t, byEmail.id).run();
-      user = byEmail;
-    } else {
-      const id = crypto.randomUUID();
-      await env.DB.prepare(
-        `INSERT INTO users (id, google_sub, email, name, picture, created_at, last_login_at)
-         VALUES (?, ?, ?, ?, ?, ?, ?)`
-      ).bind(id, profile.sub, profile.email, profile.name, profile.picture, t, t).run();
-      user = { id };
-    }
+  // A Google subject is the identity. Never rebind an existing account by email.
+  const emailOwner = await env.DB.prepare(`SELECT google_sub FROM users WHERE lower(email) = ?`)
+    .bind(profile.email).first();
+  if (emailOwner && emailOwner.google_sub !== profile.sub) return fail("account_conflict");
+  let user;
+  try {
+    user = await env.DB.prepare(
+      `INSERT INTO users (id, google_sub, email, name, picture, created_at, last_login_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?)
+       ON CONFLICT(google_sub) DO UPDATE SET email = excluded.email, name = excluded.name,
+         picture = excluded.picture, last_login_at = excluded.last_login_at
+       RETURNING id`
+    ).bind(crypto.randomUUID(), profile.sub, profile.email, profile.name, profile.picture, t, t).first();
+  } catch (error) {
+    console.error("oauth user update failed");
+    return fail("account_conflict");
   }
 
   const token = await createSession(env, request, user.id);
