@@ -39,10 +39,11 @@ async function verify() {
   if (!logout.ok || !logout.headers.get("set-cookie")?.includes("Max-Age=0")) throw new Error("Logout cookie cleanup failed");
   const missing = await get("/this-route-must-not-exist-jevhunt-release-check/");
   if (missing.status !== 404) throw new Error("Unknown paths must return a real 404");
+  return live;
 }
 let failure;
 for (let attempt = 0; attempt < 8; attempt++) {
-  try { await verify(); console.log(`Verified production build ${expected.buildId}: ${expected.projectCount} projects, pages, API access control and D1 health.`); failure = null; break; }
+  try { const live = await verify(); console.log(`Verified production build ${expected.buildId}: ${live.projectCount} live projects, pages, API access control, D1 health and automatic scheduler heartbeat.`); failure = null; break; }
   catch (error) { failure = error; console.log(`Verification ${attempt + 1}/8: ${error.message}`); if (attempt < 7) await new Promise(resolve => setTimeout(resolve, 5000)); }
 }
 if (failure) throw failure;
