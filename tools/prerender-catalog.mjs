@@ -167,7 +167,13 @@ html = replaceRequired(
 );
 html = replaceRequired(
   html,
-  /(<div class="stat__n stat__n--date" id="catalogUpdated">)[^<]*(<\/div>)/,
+  /(<div class="stat__n stat__n--date" id="catalogUpdated" data-iso=")[^"]*(")/,
+  `$1${esc(catalogMeta.syncedAt || "")}$2`,
+  "catalog timestamp metadata"
+);
+html = replaceRequired(
+  html,
+  /(<div class="stat__n stat__n--date" id="catalogUpdated"[^>]*>)[^<]*(<\/div>)/,
   `$1${esc(catalogMeta.syncedAt?.slice(0, 10) || catalogMeta.updated || "Unknown")}$2`,
   "catalog date"
 );

@@ -35,6 +35,22 @@ import { readCatalogState, catalogUrl, matchesProject, projectPath } from "./cat
 
   const PAGE_SIZE = 20;
   const number = new Intl.NumberFormat(locale?.lang || "en-US");
+  const catalogDate = new Intl.DateTimeFormat(locale?.lang || "en-US", {
+    dateStyle: "medium", timeStyle: "short", timeZone: "UTC",
+  });
+
+  function updateCatalogTimestamp(iso) {
+    const element = $("#catalogUpdated");
+    if (!element || !iso) return;
+    const date = new Date(iso);
+    if (Number.isNaN(date.getTime())) return;
+    const formatted = catalogDate.format(date);
+    const label = t("stat.updatedAt", { date: formatted }, formatted);
+    element.textContent = formatted;
+    element.dataset.iso = date.toISOString();
+    element.title = label;
+    element.setAttribute("aria-label", label);
+  }
 
   /* ----------------------------- theme ---------------------------------- */
   function applyTheme(t) {
@@ -219,8 +235,7 @@ import { readCatalogState, catalogUrl, matchesProject, projectPath } from "./cat
     if (count) { count.dataset.count = String(data.meta.projectCount); count.textContent = number.format(data.meta.projectCount); }
     const stars = document.getElementById("statStars");
     if (stars) { stars.dataset.count = String(data.meta.totalStars); stars.textContent = number.format(data.meta.totalStars); }
-    const sync = document.getElementById("catalogUpdated");
-    if (sync) sync.textContent = data.meta.syncedAt.slice(0, 10);
+    updateCatalogTimestamp(data.meta.syncedAt);
     renderCategories(); renderFilters();
   }
   async function ensureCatalog() {
@@ -465,11 +480,23 @@ import { readCatalogState, catalogUrl, matchesProject, projectPath } from "./cat
     $("#resetFilters")?.addEventListener("click", () => { location.assign(location.pathname + "#apps"); });
     window.addEventListener("popstate", () => { Object.assign(state, readCatalogState(location.href, window.JH.categories.map(c => c.id))); renderFilters(); renderApps(); });
     const sort = $("#dirSort");
+    const fresh = $("#freshProjects");
+    const syncFreshButton = () => fresh?.setAttribute("aria-pressed", String(state.sort === "updated-desc"));
+    if (fresh) fresh.addEventListener("click", () => {
+      state.sort = "updated-desc";
+      catalogFailed = false;
+      if (sort) sort.value = state.sort;
+      syncFreshButton();
+      resetCatalogWindow();
+      renderApps();
+    });
     if (sort) {
       sort.value = state.sort;
+      syncFreshButton();
       sort.addEventListener("change", () => {
         state.sort = sort.value;
         catalogFailed = false;
+        syncFreshButton();
         resetCatalogWindow();
         renderApps();
       });
@@ -774,8 +801,7 @@ import { readCatalogState, catalogUrl, matchesProject, projectPath } from "./cat
     if (sA) sA.dataset.count = String(window.JH.catalogMeta.projectCount || window.JH.apps.length);
     if (sC) sC.dataset.count = String(window.JH.categories.length);
     if (sS) sS.dataset.count = String(window.JH.catalogMeta?.totalStars || 0);
-    const sync = document.getElementById("catalogUpdated");
-    if (sync) sync.textContent = window.JH.catalogMeta?.syncedAt?.slice(0, 10) || window.JH.catalogMeta?.updated || "—";
+    updateCatalogTimestamp(window.JH.catalogMeta?.syncedAt || window.JH.catalogMeta?.updated);
     renderTimeline();
     renderPlaybookTabs();
     renderPlaybook();

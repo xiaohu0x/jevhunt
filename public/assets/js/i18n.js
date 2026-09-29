@@ -77,7 +77,7 @@ window.JH.i18n = {
         "stat.apps": "Public repositories",
         "stat.cats": "Categories",
         "stat.stars": "GitHub stars",
-        "stat.updated": "Catalog snapshot",
+        "stat.updated": "Last updated",
         "about.title": "What is the JEV AI Model?",
         "about.lead": "TypeSafe AI's System One model speaks in decisions, not paragraphs.",
         "f1.title": "Decisions, not strings",
@@ -195,7 +195,8 @@ window.JH.i18n = {
         "apps.reset": "Reset filters",
         "apps.fork": "Fork",
         "apps.loading": "Loading catalog…",
-        "apps.loadFailed": "Could not load the catalog. Please try again."
+        "apps.loadFailed": "Could not load the catalog. Please try again.",
+        "stat.updatedAt": "Catalog updated {date} UTC"
       }
     },
     "zh-cn": {
@@ -272,7 +273,7 @@ window.JH.i18n = {
         "stat.apps": "公开仓库",
         "stat.cats": "项目分类",
         "stat.stars": "GitHub Star",
-        "stat.updated": "目录快照",
+        "stat.updated": "最近更新",
         "about.title": "JEV AI 模型是什么？",
         "about.lead": "TypeSafe AI 的 System One 模型输出决策，而不是大段文字。",
         "f1.title": "决策，而非字符串",
@@ -390,7 +391,8 @@ window.JH.i18n = {
         "apps.reset": "重置筛选",
         "apps.fork": "派生仓库",
         "apps.loading": "正在加载目录…",
-        "apps.loadFailed": "无法加载目录，请重试。"
+        "apps.loadFailed": "无法加载目录，请重试。",
+        "stat.updatedAt": "目录最近更新：{date} UTC"
       }
     },
     "zh-tw": {
@@ -467,7 +469,7 @@ window.JH.i18n = {
         "stat.apps": "公開儲存庫",
         "stat.cats": "專案分類",
         "stat.stars": "GitHub Star",
-        "stat.updated": "目錄快照",
+        "stat.updated": "最近更新",
         "about.title": "什麼是 JEV AI 模型？",
         "about.lead": "TypeSafe AI 的 System One 模型輸出決策，而不是長篇文字。",
         "f1.title": "決策，而非字串",
@@ -585,7 +587,8 @@ window.JH.i18n = {
         "apps.reset": "重設篩選",
         "apps.fork": "分支儲存庫",
         "apps.loading": "正在載入目錄…",
-        "apps.loadFailed": "無法載入目錄，請再試一次。"
+        "apps.loadFailed": "無法載入目錄，請再試一次。",
+        "stat.updatedAt": "目錄最近更新：{date} UTC"
       }
     },
     "ja": {
@@ -662,7 +665,7 @@ window.JH.i18n = {
         "stat.apps": "公開リポジトリ",
         "stat.cats": "カテゴリ",
         "stat.stars": "GitHub Star",
-        "stat.updated": "カタログ更新日",
+        "stat.updated": "最終更新",
         "about.title": "JEV AIモデルとは？",
         "about.lead": "TypeSafe AIのSystem Oneモデルは、文章ではなく意思決定を返します。",
         "f1.title": "文字列ではなく意思決定",
@@ -780,7 +783,8 @@ window.JH.i18n = {
         "apps.reset": "絞り込みをリセット",
         "apps.fork": "フォーク",
         "apps.loading": "カタログを読み込み中…",
-        "apps.loadFailed": "カタログを読み込めませんでした。もう一度お試しください。"
+        "apps.loadFailed": "カタログを読み込めませんでした。もう一度お試しください。",
+        "stat.updatedAt": "カタログ最終更新: {date} UTC"
       }
     },
     "ko": {
@@ -857,7 +861,7 @@ window.JH.i18n = {
         "stat.apps": "공개 저장소",
         "stat.cats": "카테고리",
         "stat.stars": "GitHub Star",
-        "stat.updated": "카탈로그 스냅샷",
+        "stat.updated": "최근 업데이트",
         "about.title": "JEV AI 모델이란?",
         "about.lead": "TypeSafe AI의 System One 모델은 문장이 아니라 결정을 전달합니다.",
         "f1.title": "문자열이 아닌 결정",
@@ -975,7 +979,8 @@ window.JH.i18n = {
         "apps.reset": "필터 초기화",
         "apps.fork": "포크",
         "apps.loading": "목록을 불러오는 중…",
-        "apps.loadFailed": "목록을 불러오지 못했습니다. 다시 시도해 주세요."
+        "apps.loadFailed": "목록을 불러오지 못했습니다. 다시 시도해 주세요.",
+        "stat.updatedAt": "카탈로그 최근 업데이트: {date} UTC"
       }
     },
     "es": {
@@ -1052,7 +1057,7 @@ window.JH.i18n = {
         "stat.apps": "Repositorios públicos",
         "stat.cats": "Categorías",
         "stat.stars": "Stars en GitHub",
-        "stat.updated": "Corte del catálogo",
+        "stat.updated": "Última actualización",
         "about.title": "¿Qué es el modelo JEV AI?",
         "about.lead": "El modelo System One de TypeSafe AI responde con decisiones, no con párrafos.",
         "f1.title": "Decisiones, no texto",
@@ -1170,7 +1175,8 @@ window.JH.i18n = {
         "apps.reset": "Restablecer filtros",
         "apps.fork": "Bifurcación",
         "apps.loading": "Cargando catálogo…",
-        "apps.loadFailed": "No se pudo cargar el catálogo. Inténtalo de nuevo."
+        "apps.loadFailed": "No se pudo cargar el catálogo. Inténtalo de nuevo.",
+        "stat.updatedAt": "Catálogo actualizado: {date} UTC"
       }
     },
     "fr": {
@@ -1247,7 +1253,7 @@ window.JH.i18n = {
         "stat.apps": "Dépôts publics",
         "stat.cats": "Catégories",
         "stat.stars": "Stars GitHub",
-        "stat.updated": "Mise à jour du catalogue",
+        "stat.updated": "Dernière mise à jour",
         "about.title": "Qu'est-ce que le modèle JEV AI ?",
         "about.lead": "Le modèle System One de TypeSafe AI répond par des décisions, pas par des paragraphes.",
         "f1.title": "Des décisions, pas du texte",
@@ -1365,7 +1371,8 @@ window.JH.i18n = {
         "apps.reset": "Réinitialiser les filtres",
         "apps.fork": "Fork",
         "apps.loading": "Chargement du catalogue…",
-        "apps.loadFailed": "Impossible de charger le catalogue. Réessayez."
+        "apps.loadFailed": "Impossible de charger le catalogue. Réessayez.",
+        "stat.updatedAt": "Catalogue mis à jour : {date} UTC"
       }
     },
     "de": {
@@ -1442,7 +1449,7 @@ window.JH.i18n = {
         "stat.apps": "Öffentliche Repositories",
         "stat.cats": "Kategorien",
         "stat.stars": "GitHub Stars",
-        "stat.updated": "Katalogstand",
+        "stat.updated": "Zuletzt aktualisiert",
         "about.title": "Was ist das JEV AI Model?",
         "about.lead": "Das System-One-Modell von TypeSafe AI antwortet mit Entscheidungen statt Absätzen.",
         "f1.title": "Entscheidungen statt Text",
@@ -1560,7 +1567,8 @@ window.JH.i18n = {
         "apps.reset": "Filter zurücksetzen",
         "apps.fork": "Fork",
         "apps.loading": "Katalog wird geladen…",
-        "apps.loadFailed": "Der Katalog konnte nicht geladen werden. Versuche es erneut."
+        "apps.loadFailed": "Der Katalog konnte nicht geladen werden. Versuche es erneut.",
+        "stat.updatedAt": "Katalog aktualisiert: {date} UTC"
       }
     },
     "pt-br": {
@@ -1637,7 +1645,7 @@ window.JH.i18n = {
         "stat.apps": "Repositórios públicos",
         "stat.cats": "Categorias",
         "stat.stars": "Stars no GitHub",
-        "stat.updated": "Snapshot do catálogo",
+        "stat.updated": "Última atualização",
         "about.title": "O que é o modelo JEV AI?",
         "about.lead": "O modelo System One da TypeSafe AI responde com decisões, não com parágrafos.",
         "f1.title": "Decisões, não texto",
@@ -1755,7 +1763,8 @@ window.JH.i18n = {
         "apps.reset": "Redefinir filtros",
         "apps.fork": "Fork",
         "apps.loading": "Carregando catálogo…",
-        "apps.loadFailed": "Não foi possível carregar o catálogo. Tente novamente."
+        "apps.loadFailed": "Não foi possível carregar o catálogo. Tente novamente.",
+        "stat.updatedAt": "Catálogo atualizado: {date} UTC"
       }
     },
     "ru": {
@@ -1832,7 +1841,7 @@ window.JH.i18n = {
         "stat.apps": "Публичные репозитории",
         "stat.cats": "Категории",
         "stat.stars": "Звёзды GitHub",
-        "stat.updated": "Снимок каталога",
+        "stat.updated": "Последнее обновление",
         "about.title": "Что такое модель JEV AI?",
         "about.lead": "Модель System One от TypeSafe AI выдаёт решения вместо абзацев текста.",
         "f1.title": "Решения вместо строк",
@@ -1950,7 +1959,8 @@ window.JH.i18n = {
         "apps.reset": "Сбросить фильтры",
         "apps.fork": "Форк",
         "apps.loading": "Загрузка каталога…",
-        "apps.loadFailed": "Не удалось загрузить каталог. Попробуйте снова."
+        "apps.loadFailed": "Не удалось загрузить каталог. Попробуйте снова.",
+        "stat.updatedAt": "Каталог обновлён: {date} UTC"
       }
     },
     "hi": {
@@ -2027,7 +2037,7 @@ window.JH.i18n = {
         "stat.apps": "सार्वजनिक रिपॉज़िटरी",
         "stat.cats": "श्रेणियाँ",
         "stat.stars": "GitHub स्टार",
-        "stat.updated": "कैटलॉग स्नैपशॉट",
+        "stat.updated": "आखिरी अपडेट",
         "about.title": "JEV AI मॉडल क्या है?",
         "about.lead": "TypeSafe AI का System One मॉडल अनुच्छेदों के बजाय निर्णय देता है।",
         "f1.title": "स्ट्रिंग के बजाय निर्णय",
@@ -2145,7 +2155,8 @@ window.JH.i18n = {
         "apps.reset": "फ़िल्टर रीसेट करें",
         "apps.fork": "फ़ोर्क",
         "apps.loading": "कैटलॉग लोड हो रहा है…",
-        "apps.loadFailed": "कैटलॉग लोड नहीं हो सका। फिर कोशिश करें।"
+        "apps.loadFailed": "कैटलॉग लोड नहीं हो सका। फिर कोशिश करें।",
+        "stat.updatedAt": "कैटलॉग अपडेट: {date} UTC"
       }
     },
     "id": {
@@ -2222,7 +2233,7 @@ window.JH.i18n = {
         "stat.apps": "Repositori publik",
         "stat.cats": "Kategori",
         "stat.stars": "Bintang GitHub",
-        "stat.updated": "Snapshot katalog",
+        "stat.updated": "Terakhir diperbarui",
         "about.title": "Apa itu model JEV AI?",
         "about.lead": "Model System One dari TypeSafe AI menghasilkan keputusan, bukan paragraf.",
         "f1.title": "Keputusan, bukan string",
@@ -2340,7 +2351,8 @@ window.JH.i18n = {
         "apps.reset": "Reset filter",
         "apps.fork": "Fork",
         "apps.loading": "Memuat katalog…",
-        "apps.loadFailed": "Tidak dapat memuat katalog. Silakan coba lagi."
+        "apps.loadFailed": "Tidak dapat memuat katalog. Silakan coba lagi.",
+        "stat.updatedAt": "Katalog diperbarui: {date} UTC"
       }
     },
     "vi": {
@@ -2417,7 +2429,7 @@ window.JH.i18n = {
         "stat.apps": "Kho mã công khai",
         "stat.cats": "Danh mục",
         "stat.stars": "Sao GitHub",
-        "stat.updated": "Ảnh chụp dữ liệu danh bạ",
+        "stat.updated": "Cập nhật gần nhất",
         "about.title": "Mô hình JEV AI là gì?",
         "about.lead": "Mô hình System One của TypeSafe AI trả về quyết định thay vì các đoạn văn.",
         "f1.title": "Quyết định thay vì chuỗi văn bản",
@@ -2535,7 +2547,8 @@ window.JH.i18n = {
         "apps.reset": "Đặt lại bộ lọc",
         "apps.fork": "Bản fork",
         "apps.loading": "Đang tải danh bạ…",
-        "apps.loadFailed": "Không thể tải danh bạ. Vui lòng thử lại."
+        "apps.loadFailed": "Không thể tải danh bạ. Vui lòng thử lại.",
+        "stat.updatedAt": "Danh bạ cập nhật: {date} UTC"
       }
     },
     "tr": {
@@ -2612,7 +2625,7 @@ window.JH.i18n = {
         "stat.apps": "Herkese açık depolar",
         "stat.cats": "Kategoriler",
         "stat.stars": "GitHub yıldızları",
-        "stat.updated": "Katalog anlık görüntüsü",
+        "stat.updated": "Son güncelleme",
         "about.title": "JEV AI modeli nedir?",
         "about.lead": "TypeSafe AI’ın System One modeli paragraflar yerine kararlar üretir.",
         "f1.title": "Metin yerine kararlar",
@@ -2730,7 +2743,8 @@ window.JH.i18n = {
         "apps.reset": "Filtreleri sıfırla",
         "apps.fork": "Çatal depo",
         "apps.loading": "Katalog yükleniyor…",
-        "apps.loadFailed": "Katalog yüklenemedi. Lütfen tekrar deneyin."
+        "apps.loadFailed": "Katalog yüklenemedi. Lütfen tekrar deneyin.",
+        "stat.updatedAt": "Katalog güncellendi: {date} UTC"
       }
     },
     "it": {
@@ -2807,7 +2821,7 @@ window.JH.i18n = {
         "stat.apps": "Repository pubblici",
         "stat.cats": "Categorie",
         "stat.stars": "Stelle GitHub",
-        "stat.updated": "Istantanea del catalogo",
+        "stat.updated": "Ultimo aggiornamento",
         "about.title": "Che cos’è il modello JEV AI?",
         "about.lead": "Il modello System One di TypeSafe AI risponde con decisioni anziché paragrafi.",
         "f1.title": "Decisioni anziché stringhe",
@@ -2925,7 +2939,8 @@ window.JH.i18n = {
         "apps.reset": "Reimposta filtri",
         "apps.fork": "Fork",
         "apps.loading": "Caricamento del catalogo…",
-        "apps.loadFailed": "Impossibile caricare il catalogo. Riprova."
+        "apps.loadFailed": "Impossibile caricare il catalogo. Riprova.",
+        "stat.updatedAt": "Catalogo aggiornato: {date} UTC"
       }
     }
   }

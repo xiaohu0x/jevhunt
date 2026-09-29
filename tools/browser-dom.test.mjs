@@ -40,10 +40,15 @@ test("directory initializes with blocked browser storage and only the first page
   const { document, window, loads } = await boot(t, { storageBlocked: true });
   assert.equal(document.querySelectorAll("#appGrid .card").length, 20);
   assert.equal(document.getElementById("statApps").dataset.count, String(window.JH.catalogMeta.projectCount));
+  assert.equal(document.getElementById("catalogUpdated").dataset.iso, window.JH.catalogMeta.syncedAt);
+  assert.match(document.getElementById("catalogUpdated").getAttribute("aria-label"), /Catalog updated .* UTC/);
   assert.equal(loads(), 0);
   assert.equal(document.getElementById("loadMore").hidden, false);
   assert.ok(document.querySelector('#dirFilters [data-cat="sdks"]'));
   assert.ok(document.querySelector('#dirFilters [data-cat="games"]'));
+  document.getElementById("freshProjects").click();
+  assert.equal(document.getElementById("dirSort").value, "updated-desc");
+  assert.equal(document.getElementById("freshProjects").getAttribute("aria-pressed"), "true");
   assert.ok(document.querySelector("#auth a[href^='/api/auth/google']"));
   document.getElementById("themeBtn").click();
   assert.equal(document.documentElement.dataset.theme, "light");
@@ -70,6 +75,7 @@ test("new locales initialize and search with translated labels and all 15 langua
     assert.equal(select.value, `/${locale}/`, locale);
     assert.equal(document.querySelector("#auth a").textContent.includes(messages["auth.continue"]), true, locale);
     assert.equal(document.getElementById("subDesc").getAttribute("aria-label"), messages["sub.desc"], locale);
+    assert.match(document.getElementById("catalogUpdated").getAttribute("aria-label"), /UTC/);
     assert.ok(document.querySelector("#appGrid .card__site").textContent.includes(messages["apps.evidence"]), locale);
     const input = document.getElementById("dirSearch");
     input.value = "no-project-can-match-this-unique-query";

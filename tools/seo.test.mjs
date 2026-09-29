@@ -101,6 +101,7 @@ test("the initial catalog is prerendered with stable crawlable project links", (
   assert.equal(catalog.match(/<article class="card">/g)?.length, 20);
   assert.equal(catalog.match(/<h2 class="card__heading">/g)?.length, 20);
   assert.match(index, /<span id="dirCount">Showing 20 of \d+ projects<\/span>/);
+  assert.match(index, /id="catalogUpdated" data-iso="\d{4}-\d{2}-\d{2}T[^\"]+Z"/);
   assert.match(main, /const PAGE_SIZE = 20;/);
 
   assert.match(catalog, /href="\/projects\//);

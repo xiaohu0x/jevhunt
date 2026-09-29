@@ -19,7 +19,10 @@ export async function landing(context, locale = "en") {
     .on("#dirCount", { element: el => el.setInnerContent(count) })
     .on("#statApps", { element: el => { el.setAttribute("data-count", String(meta.projectCount)); el.setInnerContent(String(meta.projectCount)); } })
     .on("#statStars", { element: el => { el.setAttribute("data-count", String(meta.totalStars)); el.setInnerContent(String(meta.totalStars)); } })
-    .on("#catalogUpdated", { element: el => el.setInnerContent(meta.syncedAt.slice(0, 10)) })
+    .on("#catalogUpdated", { element: el => {
+      el.setAttribute("data-iso", meta.syncedAt);
+      el.setInnerContent(meta.syncedAt.slice(0, 10));
+    } })
     .on("#liveCatalogSeed", { element: el => el.setInnerContent(jsonLd({ meta, apps }), { html: true }) })
     .on("#catalogStructuredData", { element: el => el.setInnerContent(jsonLd({ "@context": "https://schema.org", "@type": "ItemList", "@id": ORIGIN + (locale === "en" ? "/" : `/${locale}/`) + "#projects",
       inLanguage: localeData.lang || "en", name: messages["apps.title"] || "Jev projects", numberOfItems: apps.length,

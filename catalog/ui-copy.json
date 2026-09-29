@@ -49,7 +49,9 @@
     "apps.status": "Update status",
     "apps.reset": "Reset filters",
     "apps.loading": "Loading catalog…",
-    "apps.loadFailed": "Could not load the catalog. Please try again."
+    "apps.loadFailed": "Could not load the catalog. Please try again.",
+    "stat.updated": "Last updated",
+    "stat.updatedAt": "Catalog updated {date} UTC"
   },
   "zh-cn": {
     "apps.lead": "发现 Jev 应用、集成、SDK、独立替代模型与研究项目。每个条目都注明与 Jev 的关系，并提供来源证据。",
@@ -101,7 +103,9 @@
     "apps.status": "更新状态",
     "apps.reset": "重置筛选",
     "apps.loading": "正在加载目录…",
-    "apps.loadFailed": "无法加载目录，请重试。"
+    "apps.loadFailed": "无法加载目录，请重试。",
+    "stat.updated": "最近更新",
+    "stat.updatedAt": "目录最近更新：{date} UTC"
   },
   "zh-tw": {
     "apps.lead": "探索 Jev 應用、整合、SDK、獨立替代模型與研究專案。每個項目都標示與 Jev 的關係，並提供來源證據。",
@@ -153,7 +157,9 @@
     "apps.status": "更新狀態",
     "apps.reset": "重設篩選",
     "apps.loading": "正在載入目錄…",
-    "apps.loadFailed": "無法載入目錄，請再試一次。"
+    "apps.loadFailed": "無法載入目錄，請再試一次。",
+    "stat.updated": "最近更新",
+    "stat.updatedAt": "目錄最近更新：{date} UTC"
   },
   "ja": {
     "apps.lead": "Jev アプリ、連携、SDK、独立した代替モデルと研究を探せます。各項目に Jev との関係と出典を表示します。",
@@ -205,7 +211,9 @@
     "apps.status": "更新状況",
     "apps.reset": "絞り込みをリセット",
     "apps.loading": "カタログを読み込み中…",
-    "apps.loadFailed": "カタログを読み込めませんでした。もう一度お試しください。"
+    "apps.loadFailed": "カタログを読み込めませんでした。もう一度お試しください。",
+    "stat.updated": "最終更新",
+    "stat.updatedAt": "カタログ最終更新: {date} UTC"
   },
   "ko": {
     "apps.lead": "Jev 앱, 통합, SDK, 독립 대안 모델과 연구를 찾아보세요. 각 항목에 Jev와의 관계와 출처를 표시합니다.",
@@ -257,7 +265,9 @@
     "apps.status": "업데이트 상태",
     "apps.reset": "필터 초기화",
     "apps.loading": "목록을 불러오는 중…",
-    "apps.loadFailed": "목록을 불러오지 못했습니다. 다시 시도해 주세요."
+    "apps.loadFailed": "목록을 불러오지 못했습니다. 다시 시도해 주세요.",
+    "stat.updated": "최근 업데이트",
+    "stat.updatedAt": "카탈로그 최근 업데이트: {date} UTC"
   },
   "es": {
     "apps.lead": "Explora aplicaciones Jev, integraciones, SDK, alternativas independientes e investigación. Cada ficha indica su relación con Jev y enlaza las pruebas.",
@@ -309,7 +319,9 @@
     "apps.status": "Estado de actualización",
     "apps.reset": "Restablecer filtros",
     "apps.loading": "Cargando catálogo…",
-    "apps.loadFailed": "No se pudo cargar el catálogo. Inténtalo de nuevo."
+    "apps.loadFailed": "No se pudo cargar el catálogo. Inténtalo de nuevo.",
+    "stat.updated": "Última actualización",
+    "stat.updatedAt": "Catálogo actualizado: {date} UTC"
   },
   "fr": {
     "apps.lead": "Découvrez applications Jev, intégrations, SDK, alternatives indépendantes et recherches. Chaque fiche indique sa relation avec Jev et les sources correspondantes.",
@@ -361,7 +373,9 @@
     "apps.status": "État des mises à jour",
     "apps.reset": "Réinitialiser les filtres",
     "apps.loading": "Chargement du catalogue…",
-    "apps.loadFailed": "Impossible de charger le catalogue. Réessayez."
+    "apps.loadFailed": "Impossible de charger le catalogue. Réessayez.",
+    "stat.updated": "Dernière mise à jour",
+    "stat.updatedAt": "Catalogue mis à jour : {date} UTC"
   },
   "de": {
     "apps.lead": "Entdecke Jev-Anwendungen, Integrationen, SDKs, unabhängige Alternativen und Forschung. Jeder Eintrag zeigt den Bezug zu Jev und verlinkt die Belege.",
@@ -413,7 +427,9 @@
     "apps.status": "Aktualisierungsstatus",
     "apps.reset": "Filter zurücksetzen",
     "apps.loading": "Katalog wird geladen…",
-    "apps.loadFailed": "Der Katalog konnte nicht geladen werden. Versuche es erneut."
+    "apps.loadFailed": "Der Katalog konnte nicht geladen werden. Versuche es erneut.",
+    "stat.updated": "Zuletzt aktualisiert",
+    "stat.updatedAt": "Katalog aktualisiert: {date} UTC"
   },
   "pt-br": {
     "apps.lead": "Explore apps Jev, integrações, SDKs, alternativas independentes e pesquisas. Cada projeto mostra sua relação com Jev e links para as evidências.",
@@ -465,6 +481,32 @@
     "apps.status": "Estado das atualizações",
     "apps.reset": "Redefinir filtros",
     "apps.loading": "Carregando catálogo…",
-    "apps.loadFailed": "Não foi possível carregar o catálogo. Tente novamente."
+    "apps.loadFailed": "Não foi possível carregar o catálogo. Tente novamente.",
+    "stat.updated": "Última atualização",
+    "stat.updatedAt": "Catálogo atualizado: {date} UTC"
+  },
+  "ru": {
+    "stat.updated": "Последнее обновление",
+    "stat.updatedAt": "Каталог обновлён: {date} UTC"
+  },
+  "hi": {
+    "stat.updated": "आखिरी अपडेट",
+    "stat.updatedAt": "कैटलॉग अपडेट: {date} UTC"
+  },
+  "id": {
+    "stat.updated": "Terakhir diperbarui",
+    "stat.updatedAt": "Katalog diperbarui: {date} UTC"
+  },
+  "vi": {
+    "stat.updated": "Cập nhật gần nhất",
+    "stat.updatedAt": "Danh bạ cập nhật: {date} UTC"
+  },
+  "tr": {
+    "stat.updated": "Son güncelleme",
+    "stat.updatedAt": "Katalog güncellendi: {date} UTC"
+  },
+  "it": {
+    "stat.updated": "Ultimo aggiornamento",
+    "stat.updatedAt": "Catalogo aggiornato: {date} UTC"
   }
 }
