@@ -4,6 +4,7 @@ import { readFileSync } from "node:fs";
 import { JSDOM } from "jsdom";
 import * as stateHelpers from "../public/assets/js/catalog-state.js";
 import { renderProjectCard } from "../public/assets/js/project-card.js";
+import { readCatalogQuery } from "../shared/catalog-query.js";
 
 const read = file => readFileSync(`public/${file}`, "utf8");
 async function boot(t, { storageBlocked = false, live = false, locale = "en", query = "", catalogHandler, pagedSeed = false, fastTimeout = false, mobile = false, theme } = {}) {
@@ -29,6 +30,7 @@ async function boot(t, { storageBlocked = false, live = false, locale = "en", qu
   function catalogResponse(path) {
     const url = new URL(path, "https://jevhunt.com");
     const requested = stateHelpers.readCatalogState(url, [...new Set(snapshot.apps.map(app => app.cat))]);
+    requested.query = readCatalogQuery(url.searchParams).q;
     const matches = [...snapshot.apps, added].filter(app => stateHelpers.matchesProject(app, requested));
     matches.sort((left, right) => requested.sort === "name-asc" ? left.name.localeCompare(right.name) : right.stars - left.stars || right.created?.localeCompare(left.created || "") || left.name.localeCompare(right.name));
     const pageSize = Number(url.searchParams.get("per_page")) || 20;
@@ -52,8 +54,7 @@ async function boot(t, { storageBlocked = false, live = false, locale = "en", qu
   if (live) {
     const seed = pagedSeed ? await catalogResponse(path + query).json() : { meta: { ...window.JH.catalogMeta, mode: "live-d1" }, apps: window.JH.apps };
     if (pagedSeed) {
-      const requested = stateHelpers.readCatalogState(window.location.href, window.JH.categories.map(category => category.id));
-      seed.query = { q: requested.query, category: requested.filter, kind: requested.kind, language: requested.language, activity: requested.activity, sort: requested.sort, page: requested.page, pageSize: 20, locale };
+      seed.query = { ...readCatalogQuery(new URL(window.location.href).searchParams), pageSize: 20, locale };
     }
     window.document.getElementById("liveCatalogSeed").textContent = JSON.stringify(seed);
   }
@@ -70,6 +71,7 @@ test("directory initializes with blocked browser storage and only the first page
   assert.equal(document.querySelectorAll("#appGrid .card").length, 20);
   assert.equal(document.getElementById("statApps").dataset.count, String(window.JH.catalogMeta.projectCount));
   assert.equal(document.getElementById("catalogUpdated").dataset.iso, window.JH.catalogMeta.syncedAt);
+  assert.equal(document.getElementById("catalogUpdated").getAttribute("datetime"), window.JH.catalogMeta.syncedAt);
   assert.match(document.getElementById("catalogUpdated").getAttribute("aria-label"), /Catalog updated .* UTC/);
   assert.match(document.getElementById("catalogUpdated").textContent, /UTC$/);
   assert.equal(loads(), 0);
@@ -296,6 +298,29 @@ test("matching server-rendered filtered pages hydrate without a duplicate API re
   assert.equal(document.querySelectorAll("#appGrid .card").length, 20);
   assert.equal(document.querySelector('#directoryPagesBottom [aria-current="page"]').textContent, "3");
   assert.match(document.getElementById("dirCount").textContent, /41–60/);
+});
+
+test("server-normalized searches hydrate once while preserving the visitor's input", async t => {
+  const query = "SYSTEM  ONE";
+  const { document, requests } = await boot(t, { live: true, pagedSeed: true, query: "?q=" + encodeURIComponent(query) });
+  assert.equal(requests.length, 0);
+  assert.equal(document.getElementById("dirSearch").value, query);
+  assert.equal(document.getElementById("appGrid").getAttribute("aria-busy"), "false");
+  assert.equal(document.querySelectorAll("#appGrid .card").length, 20);
+});
+
+test("a live refresh keeps the readable catalog time and machine timestamp consistent", async t => {
+  const syncedAt = "2026-09-29T12:34:56.000Z";
+  const { document } = await boot(t, { live: true, catalogHandler: async (_path, _options, reply) => {
+    const data = await reply().json(); data.meta.syncedAt = syncedAt; return Response.json(data);
+  } });
+  document.querySelector('#directoryPagesBottom a[rel="next"]').click();
+  await new Promise(resolve => setImmediate(resolve));
+  const time = document.getElementById("catalogUpdated");
+  assert.equal(time.dataset.iso, syncedAt);
+  assert.equal(time.getAttribute("datetime"), syncedAt);
+  assert.match(time.textContent, /12:34/);
+  assert.match(time.textContent, /UTC$/);
 });
 
 test("a timed-out live request leaves loading state and keeps the previous results", async t => {

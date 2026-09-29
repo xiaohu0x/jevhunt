@@ -54,6 +54,7 @@ import { renderProjectCard } from "./project-card.js?v=3e5057a044";
     const label = t("stat.updatedAt", { date: formatted }, formatted);
     element.textContent = formatted + " UTC";
     element.dataset.iso = date.toISOString();
+    element.setAttribute("datetime", date.toISOString());
     element.title = label;
     element.setAttribute("aria-label", label);
   }
@@ -230,7 +231,8 @@ import { renderProjectCard } from "./project-card.js?v=3e5057a044";
   let catalogFailed = false;
   let catalogCountLabel = $("#dirCount")?.textContent || "";
   let catalogViewSignature = "";
-  const catalogSignature = (value = state) => JSON.stringify([value.page, value.query.trim(), value.filter, value.kind, value.language, value.activity, value.sort, localeKey]);
+  const searchKey = value => String(value || "").replace(/\s+/g, " ").trim().slice(0, 300).toLowerCase();
+  const catalogSignature = (value = state) => JSON.stringify([value.page, searchKey(value.query), value.filter, value.kind, value.language, value.activity, value.sort, localeKey]);
   let liveCatalogSignature = "";
   let livePagination = window.JH.catalogPagination;
   if (window.JH.catalogRemote) {
