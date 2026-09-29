@@ -239,7 +239,8 @@ import { renderProjectCard } from "./project-card.js?v=3e5057a044";
     if (livePagination && Number.isInteger(livePagination.page)) {
       const query = window.JH.catalogQuery;
       const seedState = query ? { page: query.page || livePagination.page, query: query.q || "", filter: query.category || "all", kind: query.kind || "all", language: query.language || "all", activity: query.activity || "all", sort: query.sort || "stars-desc" } : state;
-      const seedMatches = !query || (catalogSignature(seedState) === catalogSignature() && (!query.locale || query.locale === localeKey));
+      const requestedState = { ...state, page: Math.min(state.page, Math.max(1, Number(livePagination.totalPages) || state.page)) };
+      const seedMatches = !query || (catalogSignature(seedState) === catalogSignature(requestedState) && (!query.locale || query.locale === localeKey));
       if (seedMatches) {
         state.page = livePagination.page;
         liveCatalogSignature = catalogSignature();
@@ -626,7 +627,8 @@ import { renderProjectCard } from "./project-card.js?v=3e5057a044";
   function initDirectory() {
     const language = $("#languageFilter");
     if (language) {
-      const languages = window.JH.catalogMeta.languages || [...new Set(window.JH.apps.map(p => p.language || "unknown"))].sort();
+      const available = window.JH.catalogMeta.languages || window.JH.apps.map(p => p.language || "unknown");
+      const languages = [...new Set([...available, ...(state.language === "all" ? [] : [state.language])])].sort();
       language.innerHTML = `<option value="all">${escAttr(t("apps.allLanguages"))}</option>` + languages.map(value => `<option value="${escAttr(value)}">${escAttr(value === "unknown" ? t("apps.unknownLanguage") : value)}</option>`).join("");
     }
     for (const [id, key] of [["languageFilter", "language"], ["kindFilter", "kind"], ["activityFilter", "activity"]]) {

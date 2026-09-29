@@ -54,7 +54,7 @@ async function boot(t, { storageBlocked = false, live = false, locale = "en", qu
   if (live) {
     const seed = pagedSeed ? await catalogResponse(path + query).json() : { meta: { ...window.JH.catalogMeta, mode: "live-d1" }, apps: window.JH.apps };
     if (pagedSeed) {
-      seed.query = { ...readCatalogQuery(new URL(window.location.href).searchParams), pageSize: 20, locale };
+      seed.query = { ...readCatalogQuery(new URL(window.location.href).searchParams), page: seed.pagination.page, pageSize: 20, locale };
     }
     window.document.getElementById("liveCatalogSeed").textContent = JSON.stringify(seed);
   }
@@ -307,6 +307,15 @@ test("server-normalized searches hydrate once while preserving the visitor's inp
   assert.equal(document.getElementById("dirSearch").value, query);
   assert.equal(document.getElementById("appGrid").getAttribute("aria-busy"), "false");
   assert.equal(document.querySelectorAll("#appGrid .card").length, 20);
+});
+
+test("a server-clamped empty result keeps its requested language and does not refetch", async t => {
+  const { document, requests, window } = await boot(t, { live: true, pagedSeed: true, query: "?page=999&language=NotARealLanguage" });
+  assert.equal(requests.length, 0);
+  assert.equal(document.getElementById("languageFilter").value, "NotARealLanguage");
+  assert.equal(document.getElementById("dirEmpty").hidden, false);
+  assert.equal(document.querySelectorAll("#appGrid .card").length, 0);
+  assert.equal(new URL(window.location.href).searchParams.get("page"), null);
 });
 
 test("a live refresh keeps the readable catalog time and machine timestamp consistent", async t => {

@@ -21,11 +21,60 @@ export async function landing(context, locale = "en") {
   const localeMessages = localized.messages;
   const query = { ...readCatalogQuery(new URL(context.request.url).searchParams), mode: "page", full: false, pageSize: 20, locale };
   const { apps, pagination } = await readCatalogPage(context.env.DB, query, localeMessages);
+  query.page = pagination.page;
+  const t = (key, fallback) => localeMessages[key] || fallback;
   const numbers = new Intl.NumberFormat(localized.info.lang);
   const shown = pagination.total ? `${numbers.format(pagination.start)}–${numbers.format(pagination.end)}` : "0";
   const count = (localeMessages["apps.count"] || "Showing {shown} of {total} projects").replace("{shown}", shown).replace("{total}", numbers.format(pagination.total));
   const timestamp = new Intl.DateTimeFormat(localized.info.lang, { dateStyle: "medium", timeStyle: "short", timeZone: "UTC" }).format(new Date(meta.syncedAt));
+  const homeUrl = ORIGIN + localized.info.path;
+  const documentUrl = new URL(homeUrl);
+  const filtered = !!query.q || ["category", "kind", "language", "activity"].some(key => query[key] !== "all") || query.sort !== "stars-desc";
+  for (const key of ["q", "category", "kind", "language", "activity", "sort"]) {
+    if (query[key] !== (key === "q" ? "" : key === "sort" ? "stars-desc" : "all")) documentUrl.searchParams.set(key, query[key]);
+  }
+  if (pagination.page > 1) documentUrl.searchParams.set("page", String(pagination.page));
+  const pageUrl = documentUrl.href;
+  const canonical = filtered ? homeUrl : pageUrl;
+  const pageLabel = t("apps.page", "Page {page} of {pages}").replace("{page}", numbers.format(pagination.page)).replace("{pages}", numbers.format(pagination.totalPages));
+  // Keep the localized editorial metadata while giving each paginated collection its own identity.
+  const source = await response.clone().text();
+  const decode = value => value.replace(/&(?:amp|lt|gt|quot|#39);/g, entity => ({ "&amp;": "&", "&lt;": "<", "&gt;": ">", "&quot;": '"', "&#39;": "'" })[entity]);
+  const baseTitle = decode(source.match(/<title>([^<]*)<\/title>/i)?.[1] || t("apps.title", "Jev projects"));
+  const title = !filtered && pagination.page > 1 ? `${baseTitle.replace(/\s*[|·]\s*JevHunt$/, "")} — ${pageLabel} | JevHunt` : baseTitle;
+  let siteSchema;
+  try { siteSchema = JSON.parse(source.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/i)?.[1] || "null"); } catch { /* Leave unrelated malformed source metadata untouched. */ }
+  for (const node of siteSchema?.["@graph"] || []) {
+    if (node["@type"] === "WebSite") { node.url = homeUrl; node["@id"] = homeUrl + "#website"; }
+    if (node["@type"] === "CollectionPage") {
+      node.url = pageUrl; node["@id"] = pageUrl + "#directory"; node.isPartOf = { "@id": homeUrl + "#website" };
+      if (!filtered && pagination.page > 1) node.name = `${node.name} — ${pageLabel}`;
+    }
+  }
+  const categories = [{ id: "all", name: t("apps.all", "All") }, ...CATEGORY_IDS.filter(id => Object.hasOwn(meta.categoryCounts, id)).map((id, i) => ({ id, name: t(`category.${id}.name`, CATEGORY_NAMES[CATEGORY_IDS.indexOf(id)]) }))];
+  const languages = [...new Set(["all", ...meta.languages, query.language])];
+  const selectedOption = selected => ({ element: el => {
+    if (el.getAttribute("value") === selected) el.setAttribute("selected", ""); else el.removeAttribute("selected");
+  } });
   const rewrite = new HTMLRewriter()
+    .on("title", { element: el => el.setInnerContent(title) })
+    .on('link[rel="canonical"]', { element: el => el.setAttribute("href", canonical) })
+    .on('meta[property="og:url"]', { element: el => el.setAttribute("content", pageUrl) })
+    .on('meta[property="og:title"], meta[name="twitter:title"]', { element: el => el.setAttribute("content", title) })
+    .on('meta[name="robots"]', { element: el => { if (filtered) el.setAttribute("content", "noindex, follow"); } })
+    .on('link[rel="alternate"][hreflang]', { element: el => {
+      if (filtered) { el.remove(); return; }
+      const alternate = new URL(el.getAttribute("href"));
+      if (pagination.page > 1) alternate.searchParams.set("page", String(pagination.page)); else alternate.searchParams.delete("page");
+      el.setAttribute("href", alternate.href);
+    } })
+    .on('script[type="application/ld+json"]:not([id])', { element: el => { if (siteSchema) el.setInnerContent(jsonLd(siteSchema), { html: true }); } })
+    .on("#dirSearch", { element: el => el.setAttribute("value", query.q) })
+    .on("#dirFilters", { element: el => el.setInnerContent(categories.map(category => `<button class="fchip${query.category === category.id ? " is-active" : ""}" data-cat="${esc(category.id)}" aria-pressed="${query.category === category.id}">${esc(category.name)}</button>`).join(""), { html: true }) })
+    .on("#languageFilter", { element: el => el.setInnerContent(languages.map(language => `<option value="${esc(language)}"${query.language === language ? " selected" : ""}>${esc(language === "all" ? t("apps.allLanguages", "All languages") : language === "unknown" ? t("apps.unknownLanguage", "Not reported") : language)}</option>`).join(""), { html: true }) })
+    .on("#kindFilter option", selectedOption(query.kind))
+    .on("#activityFilter option", selectedOption(query.activity))
+    .on("#dirSort option", selectedOption(query.sort))
     .on("#appGrid", { element: el => el.setInnerContent(apps.map(p => renderCard(p, localeMessages, { basePath: locale === "en" ? "" : `/${locale}` })).join(""), { html: true }) })
     .on("#dirCount", { element: el => el.setInnerContent(count) })
     .on("#dirEmpty", { element: el => { if (pagination.total) el.setAttribute("hidden", ""); else el.removeAttribute("hidden"); } })
@@ -42,7 +91,7 @@ export async function landing(context, locale = "en") {
       el.setInnerContent(timestamp + " UTC");
     } })
     .on("#liveCatalogSeed", { element: el => el.setInnerContent(jsonLd({ meta, apps, pagination, query }), { html: true }) })
-    .on("#catalogStructuredData", { element: el => el.setInnerContent(jsonLd({ "@context": "https://schema.org", "@type": "ItemList", "@id": ORIGIN + (locale === "en" ? "/" : `/${locale}/`) + "#projects",
+    .on("#catalogStructuredData", { element: el => el.setInnerContent(jsonLd({ "@context": "https://schema.org", "@type": "ItemList", "@id": pageUrl + "#projects",
       inLanguage: localized.data.lang || "en", name: localeMessages["apps.title"] || "Jev projects", numberOfItems: apps.length,
       itemListElement: apps.map((p, i) => ({ "@type": "ListItem", position: pagination.start + i, item: { "@type": "SoftwareSourceCode", name: p.name, url: ORIGIN + projectPath(p.repo, locale === "en" ? "" : `/${locale}`), codeRepository: "https://github.com/" + p.repo } })) }), { html: true }) });
   const result = rewrite.transform(response);
