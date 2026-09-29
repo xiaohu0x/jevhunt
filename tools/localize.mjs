@@ -184,6 +184,10 @@ function renderLocale(source, localeKey, locale) {
   html = localizePrerenderedCatalog(html, locale.messages);
   html = updateStructuredData(html, locale, canonical);
   html = selectCurrentLocale(html, localeKey);
+  if (localeKey !== defaultLocale) {
+    html = html.replace(/href="\/projects\//g, `href="${locale.path}projects/`);
+    html = html.replace(/https:\/\/jevhunt\.com\/projects\//g, `${origin}${locale.path}projects/`);
+  }
   html = html.replace(/src="\/assets\/js\/(?:i18n|locales\/[a-z-]+)\.js(?:\?v=[a-f0-9]+)?"/, `src="/assets/js/locales/${localeKey}.js"`);
   return html;
 }

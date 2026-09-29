@@ -41,4 +41,4 @@ export function matchesProject(project, state, label = id => id) {
     && (!query || [project.name, project.repo, project.desc, project.language, label(project.cat)].filter(Boolean).join(" ").toLowerCase().includes(query));
 }
 
-export const projectPath = repo => "/projects/" + repo.toLowerCase().split("/").map(encodeURIComponent).join("/") + "/";
+export const projectPath = (repo, prefix = "") => `${prefix}/projects/` + repo.toLowerCase().split("/").map(encodeURIComponent).join("/") + "/";

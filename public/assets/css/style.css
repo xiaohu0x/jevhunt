@@ -868,7 +868,7 @@ select.sub__field:invalid{ color:var(--muted); }
 .facts{margin:18px 0;}.facts>div{display:grid;grid-template-columns:minmax(110px,1fr) 2fr;gap:14px;padding:10px 0;border-bottom:1px solid var(--line);}
 .facts dt{color:var(--muted);}.facts dd{margin:0;overflow-wrap:anywhere;}
 .breadcrumbs{color:var(--accent);margin-bottom:18px;font-size:.85rem;}
-.related{margin:36px 0;}.legal code{overflow-wrap:anywhere;font-family:var(--mono);font-size:.85em;}
+.related{margin:36px 0;}.related__empty{padding:18px 0;color:var(--muted);font-family:var(--mono);font-size:.82rem;}.legal code{overflow-wrap:anywhere;font-family:var(--mono);font-size:.85em;}
 .review-card{padding:24px;border:1px solid var(--line);border-radius:16px;margin:24px 0;background:var(--panel);}
 .review-card p{margin:12px 0;overflow-wrap:anywhere;}.review-form{display:grid;gap:14px;}
 .review-form label{display:grid;gap:6px;}.review-form input,.review-form select,.review-form textarea,#reviewStatus{padding:12px;background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:8px;max-width:100%;}

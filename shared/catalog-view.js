@@ -5,7 +5,7 @@ export const RELATION_LABELS = { "jev-app": "Jev application", integration: "Int
 export const EVIDENCE_LABELS = { official: "Official", documented: "Documented", "code-reference": "Code reference", reviewed: "Editor reviewed", "legacy-unreviewed": "Needs review" };
 const label = (messages, key, fallback) => messages?.[key] || fallback;
 
-export function renderCard(p, messages = {}) {
+export function renderCard(p, messages = {}, { basePath = "" } = {}) {
   const relation = label(messages, "relationship." + p.relationship, RELATION_LABELS[p.relationship] || "Relationship under review");
   const evidence = label(messages, "evidence." + p.evidenceLevel, EVIDENCE_LABELS[p.evidenceLevel] || "Needs review");
   const published = p.created ? label(messages, "apps.published", "published {date}").replace("{date}", p.created) : "";
@@ -19,23 +19,37 @@ export function renderCard(p, messages = {}) {
     published ? `<span class="tag">${esc(published)}</span>` : "",
     `<span class="tag">${esc(updated)}</span>`,
   ].filter(Boolean).join("");
-  return `<article class="card"><div class="card__top"><div><h2 class="card__heading"><a class="card__name" href="${projectPath(p.repo)}">${esc(p.name)}</a></h2><div class="card__author">${esc(p.repo)}</div></div><span class="badge badge--catalog">${esc(relation)}</span></div>
+  return `<article class="card"><div class="card__top"><div><h2 class="card__heading"><a class="card__name" href="${projectPath(p.repo, basePath)}">${esc(p.name)}</a></h2><div class="card__author">${esc(p.repo)}</div></div><span class="badge badge--catalog">${esc(relation)}</span></div>
 <p class="card__desc">${esc(p.desc || label(messages, "apps.noDescription", "No project description available."))}</p><div class="card__tags">${tags}</div>
 <div class="card__foot"><span class="card__links"><a class="card__go" href="${repoUrl(p.repo)}" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a><a class="card__site" href="${esc(p.evidence)}" target="_blank" rel="ugc nofollow noopener noreferrer">${esc(label(messages, "apps.evidence", "Evidence"))} <span aria-hidden="true">↗</span></a></span><span class="card__stat" aria-label="${esc(label(messages, "apps.starsLabel", "{count} GitHub stars").replace("{count}", Number(p.stars || 0).toLocaleString("en-US")))}">★ ${Number(p.stars || 0).toLocaleString("en-US")}</span></div></article>`;
 }
 
-export function renderProject(p, meta, related = []) {
-  const path = projectPath(p.repo), detail = p.evidenceDetail;
-  const relation = RELATION_LABELS[p.relationship] || "Relationship under review", level = EVIDENCE_LABELS[p.evidenceLevel] || "Needs review";
-  const properties = [["Relationship to Jev", relation], ["Evidence", level], ["Language", p.language || "Not reported"],
-    ["License", p.license || "Not reported; check the repository"], ["Origin", p.fork ? "Fork" : "Original repository"],
-    ["Repository status", p.archived ? "Archived" : "Not archived"], ["Created", p.created || "Not reported"],
-    ["GitHub stars", Number(p.stars || 0).toLocaleString("en-US")], ["Evidence checked", p.evidenceCheckedAt || meta.syncedAt],
-    ["Metadata checked", p.metadataCheckedAt || "See catalog source date"], ["Check status", p.freshness || "Needs review"]];
-  const body = `<header class="legal__header"><nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">JevHunt</a> / <a href="/categories/${esc(p.cat)}/">${esc(CATEGORY_NAMES[CATEGORY_IDS.indexOf(p.cat)] || p.cat)}</a></nav><h1>${esc(p.name)}</h1><p class="legal__summary">${esc(p.desc)}</p><p><a class="btn btn--primary" href="${repoUrl(p.repo)}" target="_blank" rel="ugc nofollow noopener noreferrer">Open GitHub ↗</a> <a class="btn btn--ghost" href="${esc(p.evidence)}" target="_blank" rel="ugc nofollow noopener noreferrer">Read evidence ↗</a></p></header>
-<div class="project-detail"><section><h2>Project facts</h2><dl class="facts">${properties.map(([key, value]) => `<div><dt>${esc(key)}</dt><dd>${esc(value)}</dd></div>`).join("")}</dl><p>Stars measure the whole repository, including work unrelated to Jev.</p></section><section><h2>Evidence and scope</h2><p>${esc(level)} records the linked documentation or source. JevHunt has not independently run or benchmarked this project.</p>${detail?.excerpt ? `<blockquote>${esc(detail.excerpt)}</blockquote>` : ''}${detail?.commit ? `<p>Evidence commit: <code>${esc(detail.commit)}</code></p>` : ''}<p>Discovered through: ${esc((p.provenance || []).join(", "))}.</p><a href="/methodology/">How we review →</a></section></div>
-<section class="related"><h2>Related projects</h2><div class="app-grid">${related.map(other => renderCard(other)).join("")}</div></section><p><a href="https://github.com/xiaohu0x/jevhunt/issues/new?title=${encodeURIComponent("Listing correction: " + p.repo)}" rel="noopener noreferrer">Suggest a correction</a></p>`;
-  return page({ title: p.name + " — " + relation, description: p.desc, path, body, schema: { "@context": "https://schema.org", "@type": ["resource", "research"].includes(p.relationship) ? "CreativeWork" : "SoftwareSourceCode", name: p.name, description: p.desc, url: ORIGIN + path, codeRepository: repoUrl(p.repo), programmingLanguage: p.language || undefined } });
+export function renderProject(p, meta, similar = [], active = [], messages = {}, { localeKey = "en", localeInfo = null, localePrefix = "" } = {}) {
+  const path = projectPath(p.repo, localePrefix), detail = p.evidenceDetail;
+  const t = (key, fallback) => messages[key] || fallback;
+  const relation = label(messages, "relationship." + p.relationship, RELATION_LABELS[p.relationship] || "Relationship under review");
+  const level = label(messages, "evidence." + p.evidenceLevel, EVIDENCE_LABELS[p.evidenceLevel] || "Needs review");
+  const category = label(messages, "category." + p.cat, CATEGORY_NAMES[CATEGORY_IDS.indexOf(p.cat)] || p.cat);
+  const notReported = t("project.notReported", "Not reported");
+  const status = p.archived ? t("project.archived", "Archived") : t("project.notArchived", "Not archived");
+  const checkStatus = p.freshness === "current" ? t("apps.active", "Current") : t("apps.stale", "Check pending");
+  const number = Number(p.stars || 0).toLocaleString(localeInfo?.lang || "en-US");
+  const properties = [
+    [t("project.relationship", "Relationship to Jev"), relation], [t("project.evidence", "Evidence"), level],
+    [t("apps.language", "Language"), p.language || notReported], [t("project.license", "License"), p.license || t("project.licenseMissing", "Not reported; check the repository")],
+    [t("project.origin", "Origin"), p.fork ? t("project.fork", "Fork") : t("project.original", "Original repository")],
+    [t("project.status", "Repository status"), status], [t("project.created", "Created"), p.created || notReported],
+    [t("project.stars", "GitHub stars"), number], [t("project.evidenceChecked", "Evidence checked"), p.evidenceCheckedAt || meta.syncedAt],
+    [t("project.metadataChecked", "Metadata checked"), p.metadataCheckedAt || t("project.catalogDate", "See catalog source date")],
+    [t("project.checkStatus", "Check status"), checkStatus],
+  ];
+  const cardOptions = { basePath: localePrefix };
+  const renderRecommendations = (items, title, empty) => `<section class="related"><h2>${esc(title)}</h2>${items.length ? `<div class="app-grid">${items.map(other => renderCard(other, messages, cardOptions)).join("")}</div>` : `<p class="related__empty">${esc(empty)}</p>`}</section>`;
+  const correction = `https://github.com/xiaohu0x/jevhunt/issues/new?title=${encodeURIComponent("Listing correction: " + p.repo)}`;
+  const body = `<header class="legal__header"><nav class="breadcrumbs" aria-label="${esc(t("project.breadcrumb", "Breadcrumb"))}"><a href="${localePrefix || "/"}">JevHunt</a> / <a href="${localePrefix}/categories/${esc(p.cat)}/">${esc(category)}</a></nav><h1>${esc(p.name)}</h1><p class="legal__summary">${esc(p.desc || t("apps.noDescription", "No project description available."))}</p><p><a class="btn btn--primary" href="${repoUrl(p.repo)}" target="_blank" rel="ugc nofollow noopener noreferrer">${esc(t("project.openGithub", "Open GitHub"))} ↗</a> <a class="btn btn--ghost" href="${esc(p.evidence)}" target="_blank" rel="ugc nofollow noopener noreferrer">${esc(t("project.readEvidence", "Read evidence"))} ↗</a></p></header>
+<div class="project-detail"><section><h2>${esc(t("project.facts", "Project facts"))}</h2><dl class="facts">${properties.map(([key, value]) => `<div><dt>${esc(key)}</dt><dd>${esc(value)}</dd></div>`).join("")}</dl><p>${esc(t("project.starsNote", "Stars measure the whole repository, including work unrelated to Jev."))}</p></section><section><h2>${esc(t("project.evidenceScope", "Evidence and scope"))}</h2><p>${esc(t("project.evidenceScopeText", "{level} records the linked documentation or source. JevHunt has not independently run or benchmarked this project.").replace("{level}", level))}</p>${detail?.excerpt ? `<blockquote>${esc(detail.excerpt)}</blockquote>` : ""}${detail?.commit ? `<p>${esc(t("project.evidenceCommit", "Evidence commit"))}: <code>${esc(detail.commit)}</code></p>` : ""}<p>${esc(t("project.discovered", "Discovered through: {sources}.").replace("{sources}", (p.provenance || []).join(", ")))}</p><a href="${localePrefix}/methodology/">${esc(t("project.reviewMethod", "How we review"))} →</a></section></div>
+${renderRecommendations(similar, t("project.similar", "Similar projects"), t("project.noSimilar", "No similar projects found."))}${renderRecommendations(active, t("project.active", "Recently active projects"), t("project.noActive", "No recently active projects found."))}<p><a href="${correction}" rel="noopener noreferrer">${esc(t("project.correction", "Suggest a correction"))}</a> · <a href="${localePrefix}/#submit">${esc(t("project.submit", "Submit a project"))}</a></p>`;
+  return page({ title: p.name + " — " + relation, description: p.desc || t("apps.noDescription", "No project description available."), path, body, messages, localeKey, localeInfo, localePrefix, schema: { "@context": "https://schema.org", "@type": ["resource", "research"].includes(p.relationship) ? "CreativeWork" : "SoftwareSourceCode", name: p.name, description: p.desc, url: ORIGIN + path, codeRepository: repoUrl(p.repo), programmingLanguage: p.language || undefined } });
 }
 
 export function renderListing(items, { base, title, total, number }) {

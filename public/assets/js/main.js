@@ -1,4 +1,4 @@
-import { readCatalogState, catalogUrl, matchesProject, projectPath } from "./catalog-state.js?v=4bb61dfc34";
+import { readCatalogState, catalogUrl, matchesProject, projectPath } from "./catalog-state.js?v=376b07d07a";
 /* ==========================================================================
    JevHunt — interactions
    ========================================================================== */
@@ -300,7 +300,7 @@ import { readCatalogState, catalogUrl, matchesProject, projectPath } from "./cat
       <article class="card">
         <div class="card__top">
           <div>
-            <h2 class="card__heading"><a class="card__name" href="${escAttr(projectPath(a.repo))}">${escAttr(a.name)}</a></h2>
+            <h2 class="card__heading"><a class="card__name" href="${escAttr(projectPath(a.repo, localeKey === "en" ? "" : `/${localeKey}`))}">${escAttr(a.name)}</a></h2>
             <div class="card__author">${escAttr(a.repo)}</div>
           </div>
           <span class="badge badge--catalog">${escAttr(t("relationship." + (a.relationship || "unclassified")))}</span>
