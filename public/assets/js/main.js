@@ -182,8 +182,8 @@ import { readCatalogState, catalogUrl, matchesProject, projectPath } from "./cat
   function renderFilters() {
     const host = $("#dirFilters");
     if (!host) return;
-    const counts = new Map();
-    window.JH.apps.forEach(app => counts.set(app.cat, (counts.get(app.cat) || 0) + 1));
+    const counts = new Map(Object.entries(window.JH.catalogMeta?.categoryCounts || {}));
+    window.JH.apps.forEach(app => { if (!counts.has(app.cat)) counts.set(app.cat, 1); });
     const cats = [
       { id: "all", label: t("apps.all") },
       ...window.JH.categories
@@ -202,6 +202,7 @@ import { readCatalogState, catalogUrl, matchesProject, projectPath } from "./cat
   }
 
   let catalogLoading;
+  let catalogFailed = false;
   async function loadLiveCatalog(all = false) {
     const response = await fetch("/api/catalog" + (all ? "?all=1&v=" + encodeURIComponent(window.JH.catalogMeta.catalogHash) : ""), { headers: { accept: "application/json" } });
     if (!response.ok) throw new Error("Catalog unavailable");
@@ -212,6 +213,7 @@ import { readCatalogState, catalogUrl, matchesProject, projectPath } from "./cat
       return;
     }
     window.JH.apps = data.apps; window.JH.catalogMeta = data.meta;
+    catalogFailed = false;
     window.JH.catalogRemote = true; window.JH.catalogLoaded = all;
     const count = document.getElementById("statApps");
     if (count) { count.dataset.count = String(data.meta.projectCount); count.textContent = number.format(data.meta.projectCount); }
@@ -227,7 +229,11 @@ import { readCatalogState, catalogUrl, matchesProject, projectPath } from "./cat
       const load = window.JH.catalogRemote ? loadLiveCatalog(true)
         : import("./catalog-all.js?v=" + encodeURIComponent(window.JH.catalogMeta.catalogHash));
       catalogLoading = load.then(() => { catalogLoading = null; renderApps(); }).catch(error => {
-        catalogLoading = null; toast(t("apps.loadFailed", {}, "Could not load the catalog. Try again."), true); throw error;
+        catalogLoading = null;
+        catalogFailed = true;
+        renderApps();
+        toast(t("apps.loadFailed", {}, "Could not load the catalog. Try again."), true);
+        throw error;
       });
     }
     return catalogLoading;
@@ -246,7 +252,7 @@ import { readCatalogState, catalogUrl, matchesProject, projectPath } from "./cat
     const grid = $("#appGrid");
     if (!grid) return;
     const needsAll = state.query || state.filter !== "all" || state.kind !== "all" || state.language !== "all" || state.activity !== "all" || state.sort !== "stars-desc" || state.visible > PAGE_SIZE;
-    if (!window.JH.catalogLoaded && needsAll) {
+    if (!window.JH.catalogLoaded && needsAll && !catalogFailed) {
       saveFilters();
       $("#dirCount").textContent = t("apps.loading", {}, "Loading catalog…");
       ensureCatalog().catch(() => {});
@@ -265,7 +271,7 @@ import { readCatalogState, catalogUrl, matchesProject, projectPath } from "./cat
       });
 
     const shown = list.slice(0, state.visible);
-    const total = window.JH.catalogLoaded ? list.length : (window.JH.catalogMeta.projectCount || list.length);
+    const total = window.JH.catalogLoaded || catalogFailed ? list.length : (window.JH.catalogMeta.projectCount || list.length);
     grid.innerHTML = shown.map(a => {
       const repoUrl = `https://github.com/${a.repo.split("/").map(encodeURIComponent).join("/")}`;
       const description = a.desc || t("apps.noDescription");
@@ -414,6 +420,7 @@ import { readCatalogState, catalogUrl, matchesProject, projectPath } from "./cat
     const hero = $("#heroSearch");
     function setQuery(v) {
       state.query = v;
+      catalogFailed = false;
       resetCatalogWindow();
       renderApps();
     }
@@ -453,7 +460,7 @@ import { readCatalogState, catalogUrl, matchesProject, projectPath } from "./cat
     }
     for (const [id, key] of [["languageFilter", "language"], ["kindFilter", "kind"], ["activityFilter", "activity"]]) {
       const control = $("#" + id);
-      if (control) { control.value = state[key]; control.addEventListener("change", () => { state[key] = control.value; resetCatalogWindow(); renderApps(); }); }
+      if (control) { control.value = state[key]; control.addEventListener("change", () => { state[key] = control.value; catalogFailed = false; resetCatalogWindow(); renderApps(); }); }
     }
     $("#resetFilters")?.addEventListener("click", () => { location.assign(location.pathname + "#apps"); });
     window.addEventListener("popstate", () => { Object.assign(state, readCatalogState(location.href, window.JH.categories.map(c => c.id))); renderFilters(); renderApps(); });
@@ -462,6 +469,7 @@ import { readCatalogState, catalogUrl, matchesProject, projectPath } from "./cat
       sort.value = state.sort;
       sort.addEventListener("change", () => {
         state.sort = sort.value;
+        catalogFailed = false;
         resetCatalogWindow();
         renderApps();
       });

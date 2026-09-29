@@ -8,9 +8,20 @@ const label = (messages, key, fallback) => messages?.[key] || fallback;
 export function renderCard(p, messages = {}) {
   const relation = label(messages, "relationship." + p.relationship, RELATION_LABELS[p.relationship] || "Relationship under review");
   const evidence = label(messages, "evidence." + p.evidenceLevel, EVIDENCE_LABELS[p.evidenceLevel] || "Needs review");
+  const published = p.created ? label(messages, "apps.published", "published {date}").replace("{date}", p.created) : "";
+  const updated = p.pushed ? label(messages, "apps.updated", "updated {date}").replace("{date}", p.pushed) : label(messages, "apps.unknownUpdate", "update date unknown");
+  const tags = [
+    p.language ? `<span class="tag">${esc(p.language)}</span>` : "",
+    `<span class="tag">${esc(evidence)}</span>`,
+    p.fork ? `<span class="tag">${esc(label(messages, "apps.fork", "Fork"))}</span>` : "",
+    p.archived ? `<span class="tag">${esc(label(messages, "apps.archived", "Archived"))}</span>` : "",
+    p.freshness && p.freshness !== "current" ? `<span class="tag">${esc(label(messages, "apps.stale", "Check pending"))}</span>` : "",
+    published ? `<span class="tag">${esc(published)}</span>` : "",
+    `<span class="tag">${esc(updated)}</span>`,
+  ].filter(Boolean).join("");
   return `<article class="card"><div class="card__top"><div><h2 class="card__heading"><a class="card__name" href="${projectPath(p.repo)}">${esc(p.name)}</a></h2><div class="card__author">${esc(p.repo)}</div></div><span class="badge badge--catalog">${esc(relation)}</span></div>
-<p class="card__desc">${esc(p.desc)}</p><div class="card__tags">${p.language ? `<span class="tag">${esc(p.language)}</span>` : ''}<span class="tag">${esc(evidence)}</span>${p.fork ? `<span class="tag">${esc(label(messages, "apps.fork", "Fork"))}</span>` : ''}${p.archived ? `<span class="tag">${esc(label(messages, "apps.archived", "Archived"))}</span>` : ''}${p.freshness !== "current" ? `<span class="tag">${esc(label(messages, "apps.stale", "Check pending"))}</span>` : ''}</div>
-<div class="card__foot"><a href="${projectPath(p.repo)}">${esc(label(messages, "apps.details", "Details"))} →</a><span>★ ${Number(p.stars || 0).toLocaleString("en-US")}</span></div></article>`;
+<p class="card__desc">${esc(p.desc || label(messages, "apps.noDescription", "No project description available."))}</p><div class="card__tags">${tags}</div>
+<div class="card__foot"><span class="card__links"><a class="card__go" href="${repoUrl(p.repo)}" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a><a class="card__site" href="${esc(p.evidence)}" target="_blank" rel="ugc nofollow noopener noreferrer">${esc(label(messages, "apps.evidence", "Evidence"))} <span aria-hidden="true">↗</span></a></span><span class="card__stat" aria-label="${esc(label(messages, "apps.starsLabel", "{count} GitHub stars").replace("{count}", Number(p.stars || 0).toLocaleString("en-US")))}">★ ${Number(p.stars || 0).toLocaleString("en-US")}</span></div></article>`;
 }
 
 export function renderProject(p, meta, related = []) {

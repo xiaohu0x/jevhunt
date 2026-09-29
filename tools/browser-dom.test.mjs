@@ -42,9 +42,24 @@ test("directory initializes with blocked browser storage and only the first page
   assert.equal(document.getElementById("statApps").dataset.count, String(window.JH.catalogMeta.projectCount));
   assert.equal(loads(), 0);
   assert.equal(document.getElementById("loadMore").hidden, false);
+  assert.ok(document.querySelector('#dirFilters [data-cat="sdks"]'));
+  assert.ok(document.querySelector('#dirFilters [data-cat="games"]'));
   assert.ok(document.querySelector("#auth a[href^='/api/auth/google']"));
   document.getElementById("themeBtn").click();
   assert.equal(document.documentElement.dataset.theme, "light");
+});
+test("a failed full catalog request keeps the preview usable and leaves loading state", async t => {
+  const { document, window } = await boot(t);
+  const originalLoad = window.__loadCatalog;
+  window.__loadCatalog = async () => { throw new Error("network unavailable"); };
+  const input = document.getElementById("dirSearch");
+  input.value = "a-query-that-forces-the-full-index";
+  input.dispatchEvent(new window.Event("input", { bubbles: true }));
+  await new Promise(resolve => setImmediate(resolve));
+  assert.notEqual(document.getElementById("dirCount").textContent, window.JH.i18n.locales.en.messages["apps.loading"]);
+  assert.equal(document.getElementById("dirEmpty").hidden, false);
+  assert.ok(document.getElementById("toast").textContent.includes(window.JH.i18n.locales.en.messages["apps.loadFailed"]));
+  window.__loadCatalog = originalLoad;
 });
 test("new locales initialize and search with translated labels and all 15 language options", async t => {
   for (const locale of ["ru", "hi", "id", "vi", "tr", "it"]) {
