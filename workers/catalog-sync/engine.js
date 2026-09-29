@@ -148,7 +148,7 @@ export async function tick(env, trigger = "manual") {
   const runId = crypto.randomUUID(), github = new PublicGitHub(undefined, JSON.parse(lease.meta || "{}").githubApiRetryAt || 0);
   let result = { checked: 0, published: 0, changed: 0, message: "No work due" }, failed = null;
   try {
-    const sources = [...sourceConfig.sources, ...sourceConfig.githubQueries.map((query, i) => ({ id: `github-search-${i}`, query, type: "search" }))];
+    const sources = [...sourceConfig.githubQueries.map((query, i) => ({ id: `github-search-${i}`, query, type: "search" })), ...sourceConfig.sources];
     const states = await DB.prepare("SELECT * FROM catalog_sources").all();
     const due = sources.find(source => !(states.results.find(s => s.id === source.id)?.next_due_at > now));
     if (due) {

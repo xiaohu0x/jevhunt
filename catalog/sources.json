@@ -14,11 +14,17 @@
     }
   ],
   "githubQueries": [
-    "jev typesafe in:name,description fork:false",
+    "jev in:name,description,readme fork:false",
+    "typesafe in:name,description,readme fork:false",
+    "\"TypeSafe Jev\" in:readme fork:false",
     "\"@typesafe-ai/sdk\" in:readme fork:false",
     "\"typesafe-sdk\" in:readme fork:false",
+    "\"jev-latest\" in:readme fork:false",
+    "\"system one\" in:readme,description fork:false",
+    "\"TYPESAFE_API_KEY\" in:readme fork:false",
     "topic:jev fork:false"
   ],
+  "githubSearchMaxPages": 120,
   "officialRepos": [
     "typesafe-ai/typesafe-sdk-python",
     "typesafe-ai/typesafe-sdk-js",

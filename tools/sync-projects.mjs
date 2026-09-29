@@ -96,19 +96,29 @@ try {
   }
   for (const project of overrides.projects) add(project, "editorial");
   if (!process.argv.includes("--skip-search")) {
+    const searchSources = [];
     for (const query of config.githubQueries) {
       console.log("Discovering:", query);
       try {
-        const result = await github.search(query + " is:public");
+        const result = await github.search(query + " is:public", { maxPages: config.githubSearchMaxPages || 120 });
         for (const item of result.items) add({ repo: item.full_name, description: item.description }, "github-search");
-        sources.push({ id: "github-search", query, count: result.items.length, status: result.truncated ? "partial" : "ok" });
-      } catch (error) { sources.push({ id: "github-search", query, status: "failed", error: error.message }); }
+        const record = { id: "github-search", query, count: result.items.length, requests: result.requests, status: result.truncated ? "partial" : "ok" };
+        sources.push(record); searchSources.push(record);
+      } catch (error) {
+        const record = { id: "github-search", query, status: "failed", error: error.message };
+        sources.push(record); searchSources.push(record);
+      }
+    }
+    if (!searchSources.some(source => ["ok", "partial"].includes(source.status))) {
+      throw new Error("All GitHub repository searches failed; retaining published snapshot.");
     }
   } else {
     const cachedSearches = (previous.meta.sources || []).filter(source => source.id === "github-search" && source.query);
     sources.push(...(cachedSearches.length ? cachedSearches.map(source => ({ ...source, status: "cached", checkedAt: source.checkedAt || previous.meta.syncedAt })) : [{ id: "github-search", status: "skipped" }]));
   }
-  if (!sources.some(source => ["awesome-jev", "typesafe-field-guide"].includes(source.id) && source.status === "ok")) throw new Error("All community discovery feeds failed; retaining published snapshot.");
+  if (process.argv.includes("--skip-search") && !sources.some(source => ["awesome-jev", "typesafe-field-guide"].includes(source.id) && source.status === "ok")) {
+    throw new Error("All supplemental discovery feeds failed while GitHub search was skipped; retaining published snapshot.");
+  }
   const excluded = new Set([...editorialBlocks, ...overrides.excluded].map(p => (typeof p === "string" ? p : p.repo).toLowerCase()));
   const input = [...candidates.values()].filter(p => !excluded.has(p.repo.toLowerCase()));
   console.log(`Fetching canonical metadata for ${input.length} repository candidates...`);
@@ -180,7 +190,7 @@ try {
   const sourceDates = sources.map(s => s.sourceUpdatedAt).filter(Boolean).sort();
   const oldRepos = new Set(previous.apps.map(p => p.repo.toLowerCase())), newRepos = new Set(unique.map(p => p.repo.toLowerCase()));
   const changes = { added: unique.filter(p => !oldRepos.has(p.repo.toLowerCase())).map(p => p.repo), removed: previous.apps.filter(p => !newRepos.has(p.repo.toLowerCase())).map(p => p.repo) };
-  const meta = { policy: POLICY_VERSION, source: "Multiple sources", sourceUrl: "https://jevhunt.com/methodology/",
+  const meta = { policy: POLICY_VERSION, source: "GitHub repository search plus supplemental feeds", sourceUrl: "https://jevhunt.com/methodology/",
     updated: sourceDates.at(-1) || started.slice(0, 10), syncedAt: started, catalogHash: dataHash,
     candidateCount: input.length, rejectedCount: rejected.length, projectCount: unique.length,
     totalStars: unique.reduce((sum, p) => sum + p.stars, 0), sources, staleCount: unique.filter(p => p.freshness !== "current").length, unavailableCount: unavailable.length,

@@ -4,6 +4,7 @@ import { database } from "./helpers/d1.mjs";
 import { tick } from "../workers/catalog-sync/engine.js";
 import { parseRepositoryPage, PublicGitHub } from "../workers/catalog-sync/github-public.js";
 import { catalogMeta } from "../shared/catalog-data.js";
+import sourceConfig from "../catalog/sources.json" with { type: "json" };
 
 const commit = "a".repeat(40);
 const html = `<script type="application/json" data-target="react-app.embeddedData">${JSON.stringify({ payload: {
@@ -15,7 +16,7 @@ const html = `<script type="application/json" data-target="react-app.embeddedDat
 function ready(t) {
   const DB = database(); t.after(() => DB.db.close());
   const now = Math.floor(Date.now() / 1000);
-  for (const id of ["awesome-jev", "typesafe-field-guide", "github-search-0", "github-search-1", "github-search-2", "github-search-3"]) {
+  for (const id of [...sourceConfig.sources.map(source => source.id), ...sourceConfig.githubQueries.map((_, index) => `github-search-${index}`)]) {
     DB.db.prepare("INSERT INTO catalog_sources(id,next_due_at) VALUES(?,?)").run(id, now + 86400);
   }
   return { DB, VERIFY_BATCH_SIZE: "1" };

@@ -2,7 +2,7 @@
 
 A public directory of Jev applications, integrations, SDKs, local alternatives and research. Live at **https://jevhunt.com**.
 
-Every listing has a relationship label, source evidence and freshness information. Documentation or a source-code reference is not a runtime test. Coverage is limited to the discovery sources and searches recorded in `/catalog-audit.json`.
+Every listing has a relationship label, source evidence and freshness information. Documentation or a source-code reference is not a runtime test. GitHub Repository Search is the primary discovery path; supplemental community feeds, official repositories and approved submissions add coverage. Search queries, result counts, request counts and partial-result flags are recorded in `/catalog-audit.json`.
 
 ## Development
 
@@ -43,7 +43,7 @@ flowchart LR
 
 The worker reads public GitHub repository metadata and commit-pinned source evidence. It does not store an account-wide Cloudflare token or a GitHub publishing credential. GitHub is used for source control, CI and public repository data; committing catalog data is not part of the live update path.
 
-`catalog/sources.json` configures two independent community sources, an official repository allowlist and GitHub discovery queries. The checked-in `public/catalog.json` is an initial/fallback snapshot. The live API, homepage rendering, project pages, category pages and sitemap read D1, so newly discovered projects appear without rebuilding the site.
+`catalog/sources.json` configures GitHub Repository Search queries, two supplemental community sources and an official repository allowlist. Search is partitioned by creation date when GitHub's 1,000-result window would hide repositories; partial results and request counts are disclosed. The checked-in `public/catalog.json` is an initial/fallback snapshot. The live API, homepage rendering, project pages, category pages and sitemap read D1, so newly discovered projects appear without rebuilding the site.
 
 Local bootstrap tools remain available:
 
@@ -53,7 +53,7 @@ npm run catalog:seed:local        # insert missing initial records into local D1
 npm run catalog:seed:remote       # insert-only; preserves newer worker/editor records
 ```
 
-`npm run catalog:sync -- --skip-search` refreshes known repositories and community feeds while retaining previous search provenance. `--accept-policy-change` is only for an editor-approved large reduction after inspecting `.cache/proposed-catalog.json`; automatic updates retain old data when checks fail.
+`npm run catalog:sync -- --skip-search` intentionally skips GitHub discovery and refreshes known repositories plus supplemental feeds while retaining previous search provenance. The normal sync requires at least one successful or partial GitHub search; if all searches fail, it retains the published snapshot. `--accept-policy-change` is only for an editor-approved large reduction after inspecting `.cache/proposed-catalog.json`; automatic updates retain old data when checks fail.
 
 The shared evidence policy distinguishes:
 
