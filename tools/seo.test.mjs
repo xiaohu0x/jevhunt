@@ -151,6 +151,12 @@ test("the API integration guide is prominent and locale-aware", () => {
     fr: "https://omniakey.com/fr/blog/jev-model-explained",
     de: "https://omniakey.com/de/blog/jev-model-explained",
     "pt-br": "https://omniakey.com/pt-BR/blog/jev-model-explained",
+    ru: "https://omniakey.com/blog/jev-model-explained",
+    hi: "https://omniakey.com/blog/jev-model-explained",
+    id: "https://omniakey.com/blog/jev-model-explained",
+    vi: "https://omniakey.com/blog/jev-model-explained",
+    tr: "https://omniakey.com/blog/jev-model-explained",
+    it: "https://omniakey.com/blog/jev-model-explained",
   };
 
   for (const { key, html } of localizedPages) {

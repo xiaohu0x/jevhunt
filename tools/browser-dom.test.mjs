@@ -5,8 +5,9 @@ import { JSDOM } from "jsdom";
 import * as stateHelpers from "../public/assets/js/catalog-state.js";
 
 const read = file => readFileSync(`public/${file}`, "utf8");
-async function boot(t, { storageBlocked = false, live = false } = {}) {
-  const dom = new JSDOM(read("index.html"), { url: "https://jevhunt.com/", runScripts: "outside-only", pretendToBeVisual: true });
+async function boot(t, { storageBlocked = false, live = false, locale = "en" } = {}) {
+  const path = locale === "en" ? "/" : `/${locale}/`;
+  const dom = new JSDOM(read(path.slice(1) + "index.html"), { url: "https://jevhunt.com" + path, runScripts: "outside-only", pretendToBeVisual: true });
   t.after(() => dom.window.close());
   const { window } = dom;
   Object.assign(window, stateHelpers);
@@ -25,7 +26,7 @@ async function boot(t, { storageBlocked = false, live = false } = {}) {
   if (storageBlocked) Object.defineProperty(window, "localStorage", { get() { throw new Error("Storage blocked"); } });
   let catalogLoads = 0;
   window.__loadCatalog = async () => { catalogLoads++; window.eval(read("assets/js/catalog-all.js")); };
-  for (const file of ["locales/en", "data", "projects"]) window.eval(read(`assets/js/${file}.js`));
+  for (const file of [`locales/${locale}`, "data", "projects"]) window.eval(read(`assets/js/${file}.js`));
   if (live) window.document.getElementById("liveCatalogSeed").textContent = JSON.stringify({ meta: { ...window.JH.catalogMeta, mode: "live-d1" }, apps: window.JH.apps });
   const script = read("assets/js/main.js").replace(/^import[^\n]+\n/, "")
     .replace('import("./catalog-all.js?v=" + encodeURIComponent(window.JH.catalogMeta.catalogHash))', "window.__loadCatalog()");
@@ -44,6 +45,27 @@ test("directory initializes with blocked browser storage and only the first page
   assert.ok(document.querySelector("#auth a[href^='/api/auth/google']"));
   document.getElementById("themeBtn").click();
   assert.equal(document.documentElement.dataset.theme, "light");
+});
+test("new locales initialize and search with translated labels and all 15 language options", async t => {
+  for (const locale of ["ru", "hi", "id", "vi", "tr", "it"]) {
+    const { document, window } = await boot(t, { locale });
+    const messages = window.JH.i18n.locales[locale].messages;
+    const select = document.getElementById("languageSelect");
+    assert.equal(select.options.length, 15, locale);
+    assert.equal(select.value, `/${locale}/`, locale);
+    assert.equal(document.querySelector("#auth a").textContent.includes(messages["auth.continue"]), true, locale);
+    assert.equal(document.getElementById("subDesc").getAttribute("aria-label"), messages["sub.desc"], locale);
+    assert.ok(document.querySelector("#appGrid .card__site").textContent.includes(messages["apps.evidence"]), locale);
+    const input = document.getElementById("dirSearch");
+    input.value = "no-project-can-match-this-unique-query";
+    input.dispatchEvent(new window.Event("input", { bubbles: true }));
+    assert.equal(document.getElementById("dirCount").textContent, messages["apps.loading"], locale);
+    await new Promise(resolve => setImmediate(resolve));
+    assert.equal(document.querySelectorAll("#appGrid .card").length, 0, locale);
+    assert.equal(document.getElementById("dirEmpty").hidden, false, locale);
+    assert.equal(document.getElementById("dirEmpty").textContent.trim(), messages["apps.empty"], locale);
+    assert.equal(new URL(window.location.href).pathname, `/${locale}/`, locale);
+  }
 });
 test("load more obtains the complete index once and preserves the displayed page in the URL", async t => {
   const { document, window, loads } = await boot(t);

@@ -1,10 +1,13 @@
 import { activeClause, CATEGORY_IDS } from "../shared/catalog-data.js";
 import { ORIGIN, projectPath, esc } from "../shared/render.js";
+import { LOCALES } from "../shared/locales.js";
 export async function onRequestGet({ env }) {
   const rows = await env.DB.prepare(`SELECT repo,category,checked_at FROM catalog_entries WHERE ${activeClause} ORDER BY repo`).all();
-  const localePaths = ["/", "/zh-cn/", "/zh-tw/", "/ja/", "/ko/", "/es/", "/fr/", "/de/", "/pt-br/"];
+  const localePaths = Object.values(LOCALES).map(locale => locale.path);
+  const alternates = Object.values(LOCALES).map(locale => `<xhtml:link rel="alternate" hreflang="${locale.hreflang}" href="${ORIGIN}${locale.path}"/>`).join("") +
+    `<xhtml:link rel="alternate" hreflang="x-default" href="${ORIGIN}/"/>`;
   const staticPaths = [...localePaths, "/privacy/", "/terms/", "/security/", "/methodology/", "/status/"];
-  const urls = staticPaths.map(path => `<url><loc>${ORIGIN}${path}</loc></url>`);
+  const urls = staticPaths.map(path => `<url><loc>${ORIGIN}${path}</loc>${localePaths.includes(path) ? alternates : ""}</url>`);
   const counts = Object.fromEntries(CATEGORY_IDS.map(id => [id, 0]));
   for (const row of rows.results) {
     counts[row.category] = (counts[row.category] || 0) + 1;
@@ -13,5 +16,5 @@ export async function onRequestGet({ env }) {
   for (const [base, count] of [["/browse/", rows.results.length], ...Object.entries(counts).map(([id, count]) => [`/categories/${id}/`, count])]) {
     for (let page = 1; page <= Math.max(1, Math.ceil(count / 24)); page++) urls.push(`<url><loc>${ORIGIN}${base}${page === 1 ? "" : page + "/"}</loc></url>`);
   }
-  return new Response(`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.join("")}</urlset>`, { headers: { "content-type": "application/xml; charset=utf-8", "cache-control": "public, max-age=300" } });
+  return new Response(`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">${urls.join("")}</urlset>`, { headers: { "content-type": "application/xml; charset=utf-8", "cache-control": "public, max-age=300" } });
 }

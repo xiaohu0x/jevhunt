@@ -46,6 +46,12 @@
 <link rel="alternate" hreflang="fr" href="https://jevhunt.com/fr/" />
 <link rel="alternate" hreflang="de" href="https://jevhunt.com/de/" />
 <link rel="alternate" hreflang="pt-BR" href="https://jevhunt.com/pt-br/" />
+<link rel="alternate" hreflang="ru" href="https://jevhunt.com/ru/" />
+<link rel="alternate" hreflang="hi" href="https://jevhunt.com/hi/" />
+<link rel="alternate" hreflang="id" href="https://jevhunt.com/id/" />
+<link rel="alternate" hreflang="vi" href="https://jevhunt.com/vi/" />
+<link rel="alternate" hreflang="tr" href="https://jevhunt.com/tr/" />
+<link rel="alternate" hreflang="it" href="https://jevhunt.com/it/" />
 <link rel="alternate" hreflang="x-default" href="https://jevhunt.com/" />
 <meta property="og:locale:alternate" content="en_US" />
 <meta property="og:locale:alternate" content="zh_CN" />
@@ -55,6 +61,12 @@
 <meta property="og:locale:alternate" content="fr_FR" />
 <meta property="og:locale:alternate" content="de_DE" />
 <meta property="og:locale:alternate" content="pt_BR" />
+<meta property="og:locale:alternate" content="ru_RU" />
+<meta property="og:locale:alternate" content="hi_IN" />
+<meta property="og:locale:alternate" content="id_ID" />
+<meta property="og:locale:alternate" content="vi_VN" />
+<meta property="og:locale:alternate" content="tr_TR" />
+<meta property="og:locale:alternate" content="it_IT" />
 <!-- locale-alternates:end -->
 
 <link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml" />
@@ -126,6 +138,36 @@
           "@type": "Language",
           "name": "Português",
           "alternateName": "pt-BR"
+        },
+        {
+          "@type": "Language",
+          "name": "Русский",
+          "alternateName": "ru"
+        },
+        {
+          "@type": "Language",
+          "name": "हिन्दी",
+          "alternateName": "hi"
+        },
+        {
+          "@type": "Language",
+          "name": "Bahasa Indonesia",
+          "alternateName": "id"
+        },
+        {
+          "@type": "Language",
+          "name": "Tiếng Việt",
+          "alternateName": "vi"
+        },
+        {
+          "@type": "Language",
+          "name": "Türkçe",
+          "alternateName": "tr"
+        },
+        {
+          "@type": "Language",
+          "name": "Italiano",
+          "alternateName": "it"
         }
       ]
     },
@@ -509,16 +551,22 @@
       <label class="lang-picker" aria-label="Idioma" data-i18n-aria-label="a11y.language">
         <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M3 12h18M12 3c2.3 2.5 3.5 5.5 3.5 9S14.3 18.5 12 21M12 3c-2.3 2.5-3.5 5.5-3.5 9s1.2 6.5 3.5 9" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
         <select id="languageSelect" aria-label="Idioma" data-i18n-aria-label="a11y.language">
-          <option value="/" data-locale-option="en">English</option>
-          <option value="/zh-cn/" data-locale-option="zh-cn">简体中文</option>
-          <option value="/zh-tw/" data-locale-option="zh-tw">繁體中文</option>
-          <option value="/ja/" data-locale-option="ja">日本語</option>
-          <option value="/ko/" data-locale-option="ko">한국어</option>
-          <option value="/es/" data-locale-option="es" selected>Español</option>
-          <option value="/fr/" data-locale-option="fr">Français</option>
-          <option value="/de/" data-locale-option="de">Deutsch</option>
-          <option value="/pt-br/" data-locale-option="pt-br">Português</option>
-        </select>
+<option value="/" data-locale-option="en">English</option>
+<option value="/zh-cn/" data-locale-option="zh-cn">简体中文</option>
+<option value="/zh-tw/" data-locale-option="zh-tw">繁體中文</option>
+<option value="/ja/" data-locale-option="ja">日本語</option>
+<option value="/ko/" data-locale-option="ko">한국어</option>
+<option value="/es/" data-locale-option="es" selected>Español</option>
+<option value="/fr/" data-locale-option="fr">Français</option>
+<option value="/de/" data-locale-option="de">Deutsch</option>
+<option value="/pt-br/" data-locale-option="pt-br">Português</option>
+<option value="/ru/" data-locale-option="ru">Русский</option>
+<option value="/hi/" data-locale-option="hi">हिन्दी</option>
+<option value="/id/" data-locale-option="id">Bahasa Indonesia</option>
+<option value="/vi/" data-locale-option="vi">Tiếng Việt</option>
+<option value="/tr/" data-locale-option="tr">Türkçe</option>
+<option value="/it/" data-locale-option="it">Italiano</option>
+</select>
       </label>
       <button class="icon-btn" id="themeBtn" title="Cambiar tema" aria-label="Cambiar tema" data-i18n-title="a11y.theme" data-i18n-aria-label="a11y.theme">
         <svg class="ico-sun" viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="4.2" fill="currentColor"/><g stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 2.5v2.6M12 18.9v2.6M2.5 12h2.6M18.9 12h2.6M5.2 5.2l1.9 1.9M16.9 16.9l1.9 1.9M18.8 5.2l-1.9 1.9M7.1 16.9l-1.9 1.9"/></g></svg>
@@ -569,7 +617,7 @@
         <label><span data-i18n="apps.language">Lenguaje</span><select id="languageFilter" aria-label="Language"><option value="all">All languages</option></select></label>
         <label><span data-i18n="apps.type">Tipo</span><select id="kindFilter" aria-label="Project type"><option value="all" data-i18n="apps.allTypes">Todos los tipos</option><option value="jev-app" data-i18n="relationship.jev-app">Aplicación Jev</option><option value="integration" data-i18n="relationship.integration">Integración</option><option value="sdk" data-i18n="relationship.sdk">SDK / cliente</option><option value="local-alternative" data-i18n="relationship.local-alternative">Alternativa local</option><option value="research" data-i18n="relationship.research">Investigación</option><option value="resource" data-i18n="relationship.resource">Recurso / directorio</option><option value="unclassified" data-i18n="relationship.unclassified">Relación por revisar</option></select></label>
         <label><span data-i18n="apps.activity">Estado</span><select id="activityFilter" aria-label="Activity"><option value="all" data-i18n="apps.allActivity">Todos los estados</option><option value="active" data-i18n="apps.active">Sin archivar</option><option value="archived" data-i18n="apps.archived">Archivado</option></select></label>
-        <button class="fchip" id="resetFilters" data-i18n="apps.reset">Reset filters</button>
+        <button class="fchip" id="resetFilters" data-i18n="apps.reset">Restablecer filtros</button>
       </div>
       <div class="dir__meta">
         <span id="dirCount">Mostrando 20 de 3906 proyectos</span>
@@ -606,7 +654,7 @@
           <div class="card__foot">
             <span class="card__links">
               <a class="card__go" href="https://github.com/agentscope-ai/agentscope" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-              <a class="card__site" href="https://github.com/agentscope-ai/agentscope/blob/2c885b58aa79b47f9f3f91f9b06292a24bd29b01/README.md#L77" target="_blank" rel="ugc nofollow noopener noreferrer">Evidence <span aria-hidden="true">↗</span></a>
+              <a class="card__site" href="https://github.com/agentscope-ai/agentscope/blob/2c885b58aa79b47f9f3f91f9b06292a24bd29b01/README.md#L77" target="_blank" rel="ugc nofollow noopener noreferrer"><span data-i18n="apps.evidence">Pruebas</span> <span aria-hidden="true">↗</span></a>
             </span>
             <span class="card__stat" aria-label="32,286 Stars en GitHub">★ 32,286</span>
           </div>
@@ -629,7 +677,7 @@
           <div class="card__foot">
             <span class="card__links">
               <a class="card__go" href="https://github.com/NandhaKishorM/laya" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-              <a class="card__site" href="https://github.com/NandhaKishorM/laya/blob/23a17522aa4942da6cce53a995a275760320b691/README.md#L425" target="_blank" rel="ugc nofollow noopener noreferrer">Evidence <span aria-hidden="true">↗</span></a>
+              <a class="card__site" href="https://github.com/NandhaKishorM/laya/blob/23a17522aa4942da6cce53a995a275760320b691/README.md#L425" target="_blank" rel="ugc nofollow noopener noreferrer"><span data-i18n="apps.evidence">Pruebas</span> <span aria-hidden="true">↗</span></a>
             </span>
             <span class="card__stat" aria-label="21,612 Stars en GitHub">★ 21,612</span>
           </div>
@@ -652,7 +700,7 @@
           <div class="card__foot">
             <span class="card__links">
               <a class="card__go" href="https://github.com/browser-use/jev-ultrafast" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-              <a class="card__site" href="https://github.com/browser-use/jev-ultrafast/blob/1231850a0bf1a0c0341fe408ef1668dbbfdfac46/README.md#L60" target="_blank" rel="ugc nofollow noopener noreferrer">Evidence <span aria-hidden="true">↗</span></a>
+              <a class="card__site" href="https://github.com/browser-use/jev-ultrafast/blob/1231850a0bf1a0c0341fe408ef1668dbbfdfac46/README.md#L60" target="_blank" rel="ugc nofollow noopener noreferrer"><span data-i18n="apps.evidence">Pruebas</span> <span aria-hidden="true">↗</span></a>
             </span>
             <span class="card__stat" aria-label="19,373 Stars en GitHub">★ 19,373</span>
           </div>
@@ -675,7 +723,7 @@
           <div class="card__foot">
             <span class="card__links">
               <a class="card__go" href="https://github.com/vercel-labs/json-render" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-              <a class="card__site" href="https://github.com/vercel-labs/json-render/blob/c2600d73908ed505e6d726f5b6f969ba8f597ce7/apps/web/lib/jev/compose.ts#L26" target="_blank" rel="ugc nofollow noopener noreferrer">Evidence <span aria-hidden="true">↗</span></a>
+              <a class="card__site" href="https://github.com/vercel-labs/json-render/blob/c2600d73908ed505e6d726f5b6f969ba8f597ce7/apps/web/lib/jev/compose.ts#L26" target="_blank" rel="ugc nofollow noopener noreferrer"><span data-i18n="apps.evidence">Pruebas</span> <span aria-hidden="true">↗</span></a>
             </span>
             <span class="card__stat" aria-label="18,220 Stars en GitHub">★ 18,220</span>
           </div>
@@ -698,7 +746,7 @@
           <div class="card__foot">
             <span class="card__links">
               <a class="card__go" href="https://github.com/OpenByteInc/QuantDinger" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-              <a class="card__site" href="https://github.com/OpenByteInc/QuantDinger/blob/9f47e5efbcdcf59fbdccb561554a14c87c419823/README.md#L476" target="_blank" rel="ugc nofollow noopener noreferrer">Evidence <span aria-hidden="true">↗</span></a>
+              <a class="card__site" href="https://github.com/OpenByteInc/QuantDinger/blob/9f47e5efbcdcf59fbdccb561554a14c87c419823/README.md#L476" target="_blank" rel="ugc nofollow noopener noreferrer"><span data-i18n="apps.evidence">Pruebas</span> <span aria-hidden="true">↗</span></a>
             </span>
             <span class="card__stat" aria-label="12,086 Stars en GitHub">★ 12,086</span>
           </div>
@@ -721,7 +769,7 @@
           <div class="card__foot">
             <span class="card__links">
               <a class="card__go" href="https://github.com/YaoApp/yao" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-              <a class="card__site" href="https://github.com/YaoApp/yao/blob/20efb9d42d8a8f88b22c15e05175ba2b964c412b/README.md#L17" target="_blank" rel="ugc nofollow noopener noreferrer">Evidence <span aria-hidden="true">↗</span></a>
+              <a class="card__site" href="https://github.com/YaoApp/yao/blob/20efb9d42d8a8f88b22c15e05175ba2b964c412b/README.md#L17" target="_blank" rel="ugc nofollow noopener noreferrer"><span data-i18n="apps.evidence">Pruebas</span> <span aria-hidden="true">↗</span></a>
             </span>
             <span class="card__stat" aria-label="8,000 Stars en GitHub">★ 8,000</span>
           </div>
@@ -744,7 +792,7 @@
           <div class="card__foot">
             <span class="card__links">
               <a class="card__go" href="https://github.com/tamaratran/fast-jev-compaction" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-              <a class="card__site" href="https://github.com/tamaratran/fast-jev-compaction/blob/e3f262a7f4d42bd8dd32ced30d26176f7cb545b0/README.md#L63" target="_blank" rel="ugc nofollow noopener noreferrer">Evidence <span aria-hidden="true">↗</span></a>
+              <a class="card__site" href="https://github.com/tamaratran/fast-jev-compaction/blob/e3f262a7f4d42bd8dd32ced30d26176f7cb545b0/README.md#L63" target="_blank" rel="ugc nofollow noopener noreferrer"><span data-i18n="apps.evidence">Pruebas</span> <span aria-hidden="true">↗</span></a>
             </span>
             <span class="card__stat" aria-label="6,647 Stars en GitHub">★ 6,647</span>
           </div>
@@ -767,7 +815,7 @@
           <div class="card__foot">
             <span class="card__links">
               <a class="card__go" href="https://github.com/jaredpalmer/kev" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-              <a class="card__site" href="https://github.com/jaredpalmer/kev/blob/62c91838b9a6adc5b386cbeae8ed73daa36ce220/README.md#L92" target="_blank" rel="ugc nofollow noopener noreferrer">Evidence <span aria-hidden="true">↗</span></a>
+              <a class="card__site" href="https://github.com/jaredpalmer/kev/blob/62c91838b9a6adc5b386cbeae8ed73daa36ce220/README.md#L92" target="_blank" rel="ugc nofollow noopener noreferrer"><span data-i18n="apps.evidence">Pruebas</span> <span aria-hidden="true">↗</span></a>
             </span>
             <span class="card__stat" aria-label="6,398 Stars en GitHub">★ 6,398</span>
           </div>
@@ -790,7 +838,7 @@
           <div class="card__foot">
             <span class="card__links">
               <a class="card__go" href="https://github.com/jev-chat/jev-chat-jarvis" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-              <a class="card__site" href="https://github.com/jev-chat/jev-chat-jarvis/blob/b37e7f531f6dedf15505461c3f598cac1f9cee66/README.md#L115" target="_blank" rel="ugc nofollow noopener noreferrer">Evidence <span aria-hidden="true">↗</span></a>
+              <a class="card__site" href="https://github.com/jev-chat/jev-chat-jarvis/blob/b37e7f531f6dedf15505461c3f598cac1f9cee66/README.md#L115" target="_blank" rel="ugc nofollow noopener noreferrer"><span data-i18n="apps.evidence">Pruebas</span> <span aria-hidden="true">↗</span></a>
             </span>
             <span class="card__stat" aria-label="5,519 Stars en GitHub">★ 5,519</span>
           </div>
@@ -813,7 +861,7 @@
           <div class="card__foot">
             <span class="card__links">
               <a class="card__go" href="https://github.com/vercel/eve" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-              <a class="card__site" href="https://github.com/vercel/eve/blob/fdf136461d13aedc40fba75230ad75f91bf0516a/packages/eve/src/ai/evaluate.ts#L10" target="_blank" rel="ugc nofollow noopener noreferrer">Evidence <span aria-hidden="true">↗</span></a>
+              <a class="card__site" href="https://github.com/vercel/eve/blob/fdf136461d13aedc40fba75230ad75f91bf0516a/packages/eve/src/ai/evaluate.ts#L10" target="_blank" rel="ugc nofollow noopener noreferrer"><span data-i18n="apps.evidence">Pruebas</span> <span aria-hidden="true">↗</span></a>
             </span>
             <span class="card__stat" aria-label="5,342 Stars en GitHub">★ 5,342</span>
           </div>
@@ -836,7 +884,7 @@
           <div class="card__foot">
             <span class="card__links">
               <a class="card__go" href="https://github.com/TheoLeeCJ/SemIf-OpenJev" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-              <a class="card__site" href="https://github.com/TheoLeeCJ/SemIf-OpenJev/blob/23cf1f39fc9534fe81437200959b6dfc7106e45a/README.md#L138" target="_blank" rel="ugc nofollow noopener noreferrer">Evidence <span aria-hidden="true">↗</span></a>
+              <a class="card__site" href="https://github.com/TheoLeeCJ/SemIf-OpenJev/blob/23cf1f39fc9534fe81437200959b6dfc7106e45a/README.md#L138" target="_blank" rel="ugc nofollow noopener noreferrer"><span data-i18n="apps.evidence">Pruebas</span> <span aria-hidden="true">↗</span></a>
             </span>
             <span class="card__stat" aria-label="4,154 Stars en GitHub">★ 4,154</span>
           </div>
@@ -859,7 +907,7 @@
           <div class="card__foot">
             <span class="card__links">
               <a class="card__go" href="https://github.com/vercel-labs/fx" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-              <a class="card__site" href="https://github.com/vercel-labs/fx/blob/c95fcc66ada9bea4629f73199391c8a26438d760/src/builtins/gateway/typesafe_permission_reviewer.zig#L9" target="_blank" rel="ugc nofollow noopener noreferrer">Evidence <span aria-hidden="true">↗</span></a>
+              <a class="card__site" href="https://github.com/vercel-labs/fx/blob/c95fcc66ada9bea4629f73199391c8a26438d760/src/builtins/gateway/typesafe_permission_reviewer.zig#L9" target="_blank" rel="ugc nofollow noopener noreferrer"><span data-i18n="apps.evidence">Pruebas</span> <span aria-hidden="true">↗</span></a>
             </span>
             <span class="card__stat" aria-label="3,142 Stars en GitHub">★ 3,142</span>
           </div>
@@ -882,7 +930,7 @@
           <div class="card__foot">
             <span class="card__links">
               <a class="card__go" href="https://github.com/zilliztech/memsearch" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-              <a class="card__site" href="https://github.com/zilliztech/memsearch/blob/2a4652fa086fbd45e92bfd8da7781ebe1642baa7/README.md#L33" target="_blank" rel="ugc nofollow noopener noreferrer">Evidence <span aria-hidden="true">↗</span></a>
+              <a class="card__site" href="https://github.com/zilliztech/memsearch/blob/2a4652fa086fbd45e92bfd8da7781ebe1642baa7/README.md#L33" target="_blank" rel="ugc nofollow noopener noreferrer"><span data-i18n="apps.evidence">Pruebas</span> <span aria-hidden="true">↗</span></a>
             </span>
             <span class="card__stat" aria-label="2,649 Stars en GitHub">★ 2,649</span>
           </div>
@@ -905,7 +953,7 @@
           <div class="card__foot">
             <span class="card__links">
               <a class="card__go" href="https://github.com/jarrodwatts/jev-trader" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-              <a class="card__site" href="https://github.com/jarrodwatts/jev-trader/blob/b587759e459ea049590102e54a0b07800864cdc3/README.md#L3" target="_blank" rel="ugc nofollow noopener noreferrer">Evidence <span aria-hidden="true">↗</span></a>
+              <a class="card__site" href="https://github.com/jarrodwatts/jev-trader/blob/b587759e459ea049590102e54a0b07800864cdc3/README.md#L3" target="_blank" rel="ugc nofollow noopener noreferrer"><span data-i18n="apps.evidence">Pruebas</span> <span aria-hidden="true">↗</span></a>
             </span>
             <span class="card__stat" aria-label="2,229 Stars en GitHub">★ 2,229</span>
           </div>
@@ -928,7 +976,7 @@
           <div class="card__foot">
             <span class="card__links">
               <a class="card__go" href="https://github.com/TianyuCodings/NanoJev" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-              <a class="card__site" href="https://github.com/TianyuCodings/NanoJev/blob/76fdfc9ecdca45a9bcef17991a07d3041a87685a/README.md#L7" target="_blank" rel="ugc nofollow noopener noreferrer">Evidence <span aria-hidden="true">↗</span></a>
+              <a class="card__site" href="https://github.com/TianyuCodings/NanoJev/blob/76fdfc9ecdca45a9bcef17991a07d3041a87685a/README.md#L7" target="_blank" rel="ugc nofollow noopener noreferrer"><span data-i18n="apps.evidence">Pruebas</span> <span aria-hidden="true">↗</span></a>
             </span>
             <span class="card__stat" aria-label="2,155 Stars en GitHub">★ 2,155</span>
           </div>
@@ -950,7 +998,7 @@
           <div class="card__foot">
             <span class="card__links">
               <a class="card__go" href="https://github.com/typesafe-ai/skills" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-              <a class="card__site" href="https://github.com/typesafe-ai/skills/tree/65a39f393687675ce170e6094757de20370365b9" target="_blank" rel="ugc nofollow noopener noreferrer">Evidence <span aria-hidden="true">↗</span></a>
+              <a class="card__site" href="https://github.com/typesafe-ai/skills/tree/65a39f393687675ce170e6094757de20370365b9" target="_blank" rel="ugc nofollow noopener noreferrer"><span data-i18n="apps.evidence">Pruebas</span> <span aria-hidden="true">↗</span></a>
             </span>
             <span class="card__stat" aria-label="2,050 Stars en GitHub">★ 2,050</span>
           </div>
@@ -973,7 +1021,7 @@
           <div class="card__foot">
             <span class="card__links">
               <a class="card__go" href="https://github.com/yibie/awesome-jev" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-              <a class="card__site" href="https://github.com/yibie/awesome-jev/blob/70522eac9aef78207460c8f85ce8f17f05fe9f9c/README.md#L9" target="_blank" rel="ugc nofollow noopener noreferrer">Evidence <span aria-hidden="true">↗</span></a>
+              <a class="card__site" href="https://github.com/yibie/awesome-jev/blob/70522eac9aef78207460c8f85ce8f17f05fe9f9c/README.md#L9" target="_blank" rel="ugc nofollow noopener noreferrer"><span data-i18n="apps.evidence">Pruebas</span> <span aria-hidden="true">↗</span></a>
             </span>
             <span class="card__stat" aria-label="1,556 Stars en GitHub">★ 1,556</span>
           </div>
@@ -996,7 +1044,7 @@
           <div class="card__foot">
             <span class="card__links">
               <a class="card__go" href="https://github.com/Arize-ai/openinference" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-              <a class="card__site" href="https://github.com/Arize-ai/openinference/blob/1bdcb086969226680381156a480f43a2b5f30048/js/packages/openinference-instrumentation-typesafe/examples/all-question-types.ts#L1" target="_blank" rel="ugc nofollow noopener noreferrer">Evidence <span aria-hidden="true">↗</span></a>
+              <a class="card__site" href="https://github.com/Arize-ai/openinference/blob/1bdcb086969226680381156a480f43a2b5f30048/js/packages/openinference-instrumentation-typesafe/examples/all-question-types.ts#L1" target="_blank" rel="ugc nofollow noopener noreferrer"><span data-i18n="apps.evidence">Pruebas</span> <span aria-hidden="true">↗</span></a>
             </span>
             <span class="card__stat" aria-label="1,234 Stars en GitHub">★ 1,234</span>
           </div>
@@ -1019,7 +1067,7 @@
           <div class="card__foot">
             <span class="card__links">
               <a class="card__go" href="https://github.com/awlevin/typesafe-computer-use" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-              <a class="card__site" href="https://github.com/awlevin/typesafe-computer-use/blob/24eb2924c2a95de5b18c2e5d6fdc692cbe87b5ff/README.md#L67" target="_blank" rel="ugc nofollow noopener noreferrer">Evidence <span aria-hidden="true">↗</span></a>
+              <a class="card__site" href="https://github.com/awlevin/typesafe-computer-use/blob/24eb2924c2a95de5b18c2e5d6fdc692cbe87b5ff/README.md#L67" target="_blank" rel="ugc nofollow noopener noreferrer"><span data-i18n="apps.evidence">Pruebas</span> <span aria-hidden="true">↗</span></a>
             </span>
             <span class="card__stat" aria-label="935 Stars en GitHub">★ 935</span>
           </div>
@@ -1042,7 +1090,7 @@
           <div class="card__foot">
             <span class="card__links">
               <a class="card__go" href="https://github.com/Anil-matcha/awesome-jev-by-typesafe" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-              <a class="card__site" href="https://github.com/Anil-matcha/awesome-jev-by-typesafe/blob/68d934eb0b2f2e1c37ea1e701ffcfb4cc5221e7f/README.md#L71" target="_blank" rel="ugc nofollow noopener noreferrer">Evidence <span aria-hidden="true">↗</span></a>
+              <a class="card__site" href="https://github.com/Anil-matcha/awesome-jev-by-typesafe/blob/68d934eb0b2f2e1c37ea1e701ffcfb4cc5221e7f/README.md#L71" target="_blank" rel="ugc nofollow noopener noreferrer"><span data-i18n="apps.evidence">Pruebas</span> <span aria-hidden="true">↗</span></a>
             </span>
             <span class="card__stat" aria-label="830 Stars en GitHub">★ 830</span>
           </div>
@@ -1050,12 +1098,12 @@
         <!-- catalog-prerender:end -->
       </div>
       <div class="dir__empty" id="dirEmpty" hidden data-i18n="apps.empty">No hay proyectos que coincidan con la búsqueda.</div>
-      <nav class="catalog-pages" aria-label="Project pages"><a href="/browse/">Browse all project pages →</a> · <a href="/methodology/" data-i18n="apps.methodology">How we review</a> · <a href="/status/" data-i18n="apps.status">Update status</a></nav>
+      <nav class="catalog-pages" aria-label="Project pages"><a href="/browse/">Browse all project pages →</a> · <a href="/methodology/" data-i18n="apps.methodology">Cómo revisamos</a> · <a href="/status/" data-i18n="apps.status">Estado de actualización</a></nav>
       <div class="dir__more"><button class="btn btn--ghost btn--sm" id="loadMore" type="button" hidden data-i18n="apps.loadMore">Cargar más</button></div>
       <div class="dir__source">
-        <span><span data-i18n="apps.source">Discovery sources</span> <a href="/methodology/" target="_blank" rel="nofollow noopener noreferrer">hellogumbo/awesome-jev ↗</a></span>
+        <span><span data-i18n="apps.source">Fuentes de descubrimiento</span> <a href="/methodology/" target="_blank" rel="nofollow noopener noreferrer">hellogumbo/awesome-jev ↗</a></span>
         <span data-i18n="apps.disclaimer">El código de la comunidad no está avalado; revisa cada repositorio antes de usarlo.</span>
-        <a href="/catalog-audit.json" target="_blank" rel="noopener noreferrer" data-i18n="apps.audit">Sources and evidence report ↗</a>
+        <a href="/catalog-audit.json" target="_blank" rel="noopener noreferrer" data-i18n="apps.audit">Informe de fuentes y evidencias ↗</a>
       </div>
     </div>
   </div>
@@ -1249,12 +1297,12 @@
 
         <form class="sub" id="submitForm" hidden novalidate>
           <div class="sub__row">
-            <input class="sub__field" type="url" id="subUrl" data-i18n-ph="cta.ph" placeholder="https://github.com/you/your-jev-project" pattern="https://github\.com/[^/]+/[^/]+/?" title="Enter a GitHub repository URL" required />
+            <input class="sub__field" type="url" id="subUrl" data-i18n-ph="cta.ph" placeholder="https://github.com/you/your-jev-project" pattern="https://github\.com/[^/]+/[^/]+/?" data-i18n-title="form.repoInvalid" title="Introduce una URL de GitHub como https://github.com/owner/repo." required />
             <input class="sub__field" type="text" id="subName" data-i18n-ph="sub.name" placeholder="Nombre de la app" maxlength="120" required />
           </div>
           <div class="sub__row">
             <select class="sub__field" id="subCat" aria-label="Categoría del proyecto" data-i18n-aria-label="a11y.category" required></select>
-            <textarea class="sub__field" id="subDesc" data-i18n-ph="sub.desc" data-i18n-aria-label="What decision does it make?" aria-label="Project description" placeholder="¿Qué decisión toma?" maxlength="1000" rows="3"></textarea>
+            <textarea class="sub__field" id="subDesc" data-i18n-ph="sub.desc" data-i18n-aria-label="sub.desc" aria-label="¿Qué decisión toma?" placeholder="¿Qué decisión toma?" maxlength="1000" rows="3"></textarea>
           </div>
           <label class="sub__consent">
             <input type="checkbox" id="subConsent" required />
@@ -1324,7 +1372,7 @@
   </div>
 </footer>
 
-<script src="/assets/js/locales/es.js?v=22f8cb5ac1"></script>
+<script src="/assets/js/locales/es.js?v=4f952b0935"></script>
 <script src="/assets/js/data.js?v=442a3e084a"></script>
 <script src="/assets/js/projects.js?v=1a1194f968"></script>
 <script id="liveCatalogSeed" type="application/json">null</script>

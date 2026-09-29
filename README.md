@@ -73,7 +73,7 @@ Inspect `/status/`, `/api/catalog/status` and `/api/health` for source results, 
 
 `npm run build` generates:
 
-- Nine localized landing pages with canonical/hreflang metadata and a prerendered first page.
+- Fifteen localized landing pages with canonical/hreflang metadata and a prerendered first page.
 - One small language bundle per locale and a 20-entry initial catalog. The complete search index loads on interaction.
 - `/projects/<owner>/<repo>/` with facts, evidence, related projects and source links.
 - Crawlable `/browse/` and `/categories/<category>/` pagination, a complete sitemap, and redirects for known repository renames.
@@ -83,6 +83,10 @@ Inspect `/status/`, `/api/catalog/status` and `/api/health` for source results, 
 Generated static pages are fallback artifacts. Pages Functions render the live homepage, project details, category pagination, status and sitemap from D1. The code build and the live catalog each have their own version. `tools/stamp.mjs` versions assets and the imported catalog-state module to match the long cache lifetime.
 
 Search, category, project type, language, archival state, sort order and loaded page count persist in the URL. Locale switching preserves this state.
+
+The supported locales are English (`en`), Simplified Chinese (`zh-cn`), Traditional Chinese (`zh-tw`), Japanese (`ja`), Korean (`ko`), Spanish (`es`), French (`fr`), German (`de`), Brazilian Portuguese (`pt-br`), Russian (`ru`), Hindi (`hi`), Indonesian (`id`), Vietnamese (`vi`), Turkish (`tr`) and Italian (`it`). The 15 locale options represent 14 languages, counting both Chinese scripts separately. This selection prioritizes major developer markets; it is not a ranking by native speaker count. Right-to-left locales are outside the current scope.
+
+`public/assets/js/i18n.js` is the locale source. The build validates message completeness and placeholders, generates the language menu and `shared/locales.js`, and uses that same inventory for edge routes and sitemap alternates. Each visitor downloads only their selected language bundle. Localization covers the landing page interface; repository descriptions, code examples, project detail pages and policy pages retain their source language. New locales link to the existing English OmniaKey integration guide and identify it as English.
 
 ## Submission and editorial workflow
 

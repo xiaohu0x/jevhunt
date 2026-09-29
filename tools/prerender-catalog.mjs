@@ -70,7 +70,7 @@ function renderCard(project) {
   ].filter(Boolean).map(tag => `            ${tag}`).join("\n");
   const links = [
     `<a class="card__go" href="${esc(repository)}" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>`,
-    `<a class="card__site" href="${esc(project.evidence)}" target="_blank" rel="ugc nofollow noopener noreferrer">Evidence <span aria-hidden="true">↗</span></a>`,
+    `<a class="card__site" href="${esc(project.evidence)}" target="_blank" rel="ugc nofollow noopener noreferrer"><span data-i18n="apps.evidence">Evidence</span> <span aria-hidden="true">↗</span></a>`,
   ].filter(Boolean).map(link => `              ${link}`).join("\n");
 
   return `        <article class="card">
