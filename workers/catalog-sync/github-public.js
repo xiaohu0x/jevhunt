@@ -1,5 +1,9 @@
 import { cleanText, validRepo } from "../../shared/catalog-data.js";
 
+export const MAX_PUBLIC_RESPONSE_BYTES = 6_000_000;
+const upstreamDate = value => typeof value === "string" && /^\d{4}-\d{2}-\d{2}T/.test(value) && Number.isFinite(Date.parse(value))
+  ? new Date(value).toISOString().slice(0, 10) : null;
+
 async function limitedText(response, limit) {
   const reader = response.body.getReader(), chunks = [];
   let size = 0;
@@ -26,11 +30,13 @@ export function parseRepositoryPage(html) {
     const fullName = `${repo.ownerLogin}/${repo.name}`;
     if (!validRepo(fullName) || !/^[a-f0-9]{40}$/.test(ref.currentOid)) continue;
     const stars = Number(about?.stargazerCount);
+    const pushed = upstreamDate(repo.pushedAt || repo.pushed_at);
     const language = html.match(/href="\/[^"]+\/search\?l=[^"]+"[^>]*>[\s\S]*?<span[^>]*class="[^"]*text-bold[^\"]*"[^>]*>([^<]+)<\/span>/)?.[1]?.trim();
     return {
       id: repo.id, repo: fullName, name: repo.name, author: repo.ownerLogin,
       commit: ref.currentOid, archived: repo.isArchived === true, fork: repo.isFork === true,
       created: repo.createdAt?.slice(0, 10) || null,
+      ...(pushed ? { pushed, activitySource: "github-repository-page" } : {}),
       desc: cleanText(about?.description),
       ...(Number.isFinite(stars) ? { stars } : {}),
       ...(language ? { language } : {}),
@@ -39,6 +45,16 @@ export function parseRepositoryPage(html) {
     };
   }
   throw new Error("GitHub page metadata not recognized");
+}
+
+export function parseCommitFeed(atom, expectedCommit = null) {
+  for (const entry of atom.matchAll(/<entry\b[^>]*>([\s\S]*?)<\/entry>/g)) {
+    const commit = entry[1].match(/<id>\s*tag:github\.com,2008:Grit::Commit\/([a-f0-9]{40})\s*<\/id>/)?.[1];
+    if (!commit || (expectedCommit && commit !== expectedCommit)) continue;
+    const pushed = upstreamDate(entry[1].match(/<updated>\s*([^<]+?)\s*<\/updated>/)?.[1]);
+    return { commit, ...(pushed ? { pushed, activitySource: "github-commit-feed" } : {}) };
+  }
+  return null;
 }
 
 export class PublicGitHub {
@@ -55,7 +71,7 @@ export class PublicGitHub {
       await response.body?.cancel();
       throw Object.assign(new Error(`Source returned HTTP ${response.status}: ${new URL(url).pathname}`), { retryAt, status: response.status });
     }
-    const text = await limitedText(response, limit);
+    const text = await limitedText(response, Math.min(MAX_PUBLIC_RESPONSE_BYTES, Math.max(1, Number(limit) || 1_500_000)));
     return raw || html ? text : JSON.parse(text);
   }
   raw(repo, commit, path) {
@@ -80,21 +96,33 @@ export class PublicGitHub {
     }
   }
   async metadata(candidate, prior) {
-    let page;
+    let metadata;
     try {
-      page = await this.request("https://github.com/" + candidate.repo, { html: true });
+      const page = await this.request("https://github.com/" + candidate.repo, { html: true, limit: MAX_PUBLIC_RESPONSE_BYTES });
       if (page === null) return null;
-      return parseRepositoryPage(page);
+      metadata = parseRepositoryPage(page);
     } catch (error) {
       if ([403, 429].includes(error.status)) throw error;
       // The public commit feed is a versioned fallback if GitHub changes its
       // page layout. Metadata retains its stated upstream date in this case.
       const atom = await this.request(`https://github.com/${candidate.repo}/commits/HEAD.atom`, { raw: true, limit: 100_000 });
       if (!atom) return null;
-      const commit = atom.match(/Grit::Commit\/([a-f0-9]{40})/)?.[1];
-      if (!commit) throw error;
-      return { ...(prior || {}), repo: candidate.repo, commit,
+      const current = parseCommitFeed(atom);
+      if (!current) throw error;
+      return { ...(prior || {}), repo: candidate.repo, ...current,
         metadataSource: "retained-metadata-with-current-commit", metadataWarning: error.message };
     }
+    if (!metadata.pushed) {
+      try {
+        const atom = await this.request(`https://github.com/${metadata.repo}/commits/HEAD.atom`, { raw: true, limit: 100_000 });
+        const current = atom ? parseCommitFeed(atom, metadata.commit) : null;
+        if (current?.pushed) Object.assign(metadata, current);
+      } catch (error) {
+        // A failed activity feed must not discard valid repository metadata.
+        // Keep the last known activity date; never substitute the check time.
+        metadata.activityWarning = error.message;
+      }
+    }
+    return metadata;
   }
 }

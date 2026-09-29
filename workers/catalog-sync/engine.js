@@ -47,7 +47,20 @@ async function discover(DB, github, source, state, now) {
     }
     nextState = { sourceUpdatedAt: data.updated || data.last_updated, candidates: candidates.length };
   } else {
-    const windows = state.windows?.length ? state.windows : [{ from: "2008-01-01", to: new Date().toISOString().slice(0, 10), page: 1 }];
+    // Numeric source IDs survive configuration edits. A cursor only belongs to
+    // the exact query that created it, including qualifiers such as fork:false.
+    const sameQuery = state.query === source.query;
+    const continuing = sameQuery && state.windows?.length;
+    const windows = continuing ? state.windows.map(window => ({ ...window })) : [{ from: "2008-01-01", to: new Date(now * 1000).toISOString().slice(0, 10), page: 1 }];
+    state = { query: source.query, windows, partial: continuing ? !!state.partial : false,
+      lastCompleteAt: sameQuery ? state.lastCompleteAt || null : null,
+      lastPageAt: sameQuery ? state.lastPageAt || null : null,
+      pagesScanned: continuing ? Number(state.pagesScanned || 0) : 0 };
+    // Persist the reset before external I/O so a rate-limit failure cannot
+    // leave an old query's windows or completion timestamp masquerading as new.
+    await DB.prepare(`INSERT INTO catalog_sources(id,state) VALUES(?,?) ON CONFLICT(id) DO UPDATE SET state=excluded.state,
+      last_success_at=CASE WHEN ? THEN catalog_sources.last_success_at ELSE 0 END`)
+      .bind(source.id, JSON.stringify(state), sameQuery ? 1 : 0).run();
     const window = windows[0];
     const q = `${source.query} is:public created:${window.from}..${window.to}`;
     const result = await github.api(`/search/repositories?q=${encodeURIComponent(q)}&per_page=100&page=${window.page}`);
@@ -64,7 +77,8 @@ async function discover(DB, github, source, state, now) {
       if (window.page < Math.min(10, Math.ceil(result.total_count / 100))) window.page++;
       else windows.shift();
     }
-    nextState = { windows, partial: !!partial, lastCompleteAt: windows.length ? state.lastCompleteAt || null : now, lastPageAt: now };
+    nextState = { query: source.query, windows, partial: !!partial, lastCompleteAt: windows.length ? state.lastCompleteAt || null : now,
+      lastPageAt: now, pagesScanned: state.pagesScanned + 1 };
     delay = windows.length ? 20 * 60 : 6 * 3600;
   }
   await enqueue(DB, candidates, now);
@@ -81,30 +95,36 @@ async function verify(DB, github, candidate, prior, now) {
   const metadata = await github.metadata(candidate, prior);
   if (!metadata) throw Object.assign(new Error("Repository is unavailable or no longer public"), { unavailable: true });
   const repo = metadata.repo, canonical = repo.toLowerCase();
-  const blocked = await DB.prepare("SELECT w.repo FROM catalog_withdrawals w WHERE w.repo IN (?, ?) OR EXISTS (SELECT 1 FROM catalog_aliases a WHERE a.old_repo=w.repo AND a.new_repo=?)").bind(key, canonical, canonical).first();
-  if (blocked) return { excluded: true };
-  if (!prior && key !== canonical) {
-    const canonicalRow = await DB.prepare("SELECT payload FROM catalog_entries WHERE repo=?").bind(canonical).first();
-    if (canonicalRow) prior = JSON.parse(canonicalRow.payload);
-  }
+  const stableId = Number.isSafeInteger(Number(metadata.id)) && Number(metadata.id) > 0 ? Number(metadata.id) : null;
+  const identityRow = stableId ? await DB.prepare("SELECT repo,payload FROM catalog_entries WHERE github_id=?").bind(stableId).first() : null;
+  const canonicalRow = !prior || key !== canonical ? await DB.prepare("SELECT payload FROM catalog_entries WHERE repo=?").bind(canonical).first() : null;
+  const previous = [prior, canonicalRow ? JSON.parse(canonicalRow.payload) : null, identityRow ? JSON.parse(identityRow.payload) : null].filter(Boolean);
+  prior = previous.at(-1) || null;
+  const previousRepos = [...new Set([key, canonical, identityRow?.repo].filter(Boolean))];
+  const placeholders = previousRepos.map(() => "?").join(",");
+  const blocked = await DB.prepare(`SELECT w.repo FROM catalog_withdrawals w WHERE w.repo IN (${placeholders})
+    OR EXISTS (SELECT 1 FROM catalog_aliases a WHERE a.old_repo=w.repo AND a.new_repo IN (${placeholders}))`)
+    .bind(...previousRepos, ...previousRepos).first();
+  if (blocked || previousRepos.some(value => excluded.has(value))) return { excluded: true };
   const editorial = overrides.projects.find(p => p.repo.toLowerCase() === canonical);
   const project = {
-    ...(prior || {}), ...metadata,
+    ...(prior || {}), ...metadata, ...(stableId ? { id: stableId } : {}),
     name: repo.split("/")[1], repo, author: repo.split("/")[0],
     desc: metadata.desc || cleanText(candidate.description || prior?.desc),
-    cat: inferCategory(editorial || candidate || prior),
+    cat: inferCategory(editorial || { ...(prior || {}), ...candidate }),
     stars: metadata.stars ?? candidate.stars ?? prior?.stars ?? 0,
     language: metadata.language || candidate.language || prior?.language || null,
     created: metadata.created || candidate.created || prior?.created || null,
     added: prior?.added || new Date(now * 1000).toISOString().slice(0, 10),
-    pushed: candidate.pushed || prior?.pushed || null,
-    provenance: [...new Set([...(prior?.provenance || []), ...(candidate.provenance || [])])],
+    pushed: metadata.pushed || candidate.pushed || prior?.pushed || null,
+    provenance: [...new Set([...previous.flatMap(item => item.provenance || []), ...(candidate.provenance || [])])],
     freshness: metadata.metadataWarning ? "metadata-stale" : "current", evidenceCheckedAt: new Date(now * 1000).toISOString(),
     metadataCheckedAt: metadata.metadataWarning ? prior?.metadataCheckedAt || null : new Date(now * 1000).toISOString(),
   };
   let detail = prior?.commit === project.commit && prior.evidencePolicy === POLICY_VERSION ? prior.evidenceDetail : null;
-  const approval = await DB.prepare("SELECT evidence_url, relationship, category FROM submissions WHERE status='approved' AND (lower(url) IN (?,?) OR lower(url) IN (SELECT 'https://github.com/' || old_repo FROM catalog_aliases WHERE new_repo=?)) ORDER BY reviewed_at DESC LIMIT 1")
-    .bind("https://github.com/" + canonical, "https://github.com/" + key, canonical).first();
+  const approval = await DB.prepare(`SELECT evidence_url, relationship, category FROM submissions WHERE status='approved'
+    AND (lower(url) IN (${placeholders}) OR lower(url) IN (SELECT 'https://github.com/' || old_repo FROM catalog_aliases WHERE new_repo IN (${placeholders}))) ORDER BY reviewed_at DESC LIMIT 1`)
+    .bind(...previousRepos.map(value => "https://github.com/" + value), ...previousRepos).first();
   if (approval) {
     const parts = approval.evidence_url?.match(/\/blob\/([a-f0-9]{40})\/(.+?)(?:#.*)?$/i);
     if (parts && await github.exists(repo, parts[1], decodeURIComponent(parts[2]))) {
@@ -119,16 +139,20 @@ async function verify(DB, github, candidate, prior, now) {
   if (project.cat === "official" && !canonical.startsWith("typesafe-ai/")) project.cat = inferCategory({ repo, description: project.desc });
   if (!detail) return { rejected: true, reason: "No qualifying first-party usage evidence" };
   if (editorial?.relationship) detail = { ...detail, relationship: editorial.relationship };
-  return { project: { ...project, relationship: detail.relationship, evidenceLevel: detail.level, evidencePolicy: POLICY_VERSION, evidence: detail.url, evidenceDetail: detail, verification: detail.level } };
+  return { previousRepos, project: { ...project, relationship: detail.relationship, evidenceLevel: detail.level, evidencePolicy: POLICY_VERSION, evidence: detail.url, evidenceDetail: detail, verification: detail.level } };
 }
 
-async function saveProject(DB, project, oldRepo, now) {
+async function saveProject(DB, project, oldRepo, now, previousRepos = []) {
   const key = project.repo.toLowerCase(), statements = [];
   statements.push(DB.prepare("DELETE FROM catalog_aliases WHERE old_repo=?").bind(key));
-  if (oldRepo !== key) {
-    statements.push(DB.prepare("UPDATE catalog_aliases SET new_repo=?,updated_at=? WHERE new_repo=?").bind(key, now, oldRepo));
-    statements.push(DB.prepare("INSERT OR REPLACE INTO catalog_aliases VALUES(?,?,?)").bind(oldRepo, key, now));
-    statements.push(DB.prepare("DELETE FROM catalog_entries WHERE repo=?").bind(oldRepo));
+  const obsolete = [...new Set([oldRepo, ...previousRepos])].filter(value => value !== key);
+  for (const previousRepo of obsolete) {
+    statements.push(DB.prepare("UPDATE catalog_aliases SET new_repo=?,updated_at=? WHERE new_repo=?").bind(key, now, previousRepo));
+    statements.push(DB.prepare("INSERT OR REPLACE INTO catalog_aliases VALUES(?,?,?)").bind(previousRepo, key, now));
+    // Delete the old identity inside the same transaction before upserting the
+    // canonical path, preserving the unique GitHub ID and editorial aliases.
+    statements.push(DB.prepare("DELETE FROM catalog_entries WHERE repo=?").bind(previousRepo));
+    statements.push(DB.prepare("DELETE FROM catalog_candidates WHERE repo=?").bind(previousRepo));
   }
   statements.push(DB.prepare(`INSERT INTO catalog_entries(repo,github_id,payload,preview,name,category,relationship,language,stars,created,active,checked_at,next_check_at,failures,last_error)
     VALUES(?,?,?,?,?,?,?,?,?,?,1,?,?,0,NULL) ON CONFLICT(repo) DO UPDATE SET github_id=excluded.github_id,payload=excluded.payload,
@@ -150,7 +174,10 @@ export async function tick(env, trigger = "manual") {
   try {
     const sources = [...sourceConfig.githubQueries.map((query, i) => ({ id: `github-search-${i}`, query, type: "search" })), ...sourceConfig.sources];
     const states = await DB.prepare("SELECT * FROM catalog_sources").all();
-    const due = sources.find(source => !(states.results.find(s => s.id === source.id)?.next_due_at > now));
+    const due = sources.find(source => {
+      const state = states.results.find(item => item.id === source.id);
+      return !(state?.next_due_at > now) || (source.type === "search" && JSON.parse(state?.state || "{}").query !== source.query);
+    });
     if (due) {
       const state = states.results.find(s => s.id === due.id);
       try { result = await discover(DB, github, due, state ? JSON.parse(state.state) : {}, now); }
@@ -173,7 +200,7 @@ export async function tick(env, trigger = "manual") {
         const prior = priorRow ? JSON.parse(priorRow.payload) : null;
         try {
           const checked = await verify(DB, github, JSON.parse(item.payload), prior, now);
-          if (checked.project) { await saveProject(DB, checked.project, item.repo, now); result.published++; result.changed++; }
+          if (checked.project) { await saveProject(DB, checked.project, item.repo, now, checked.previousRepos); result.published++; result.changed++; }
           else {
             if (checked.rejected && priorRow?.active && !await removalAllowed(DB)) throw new Error("Large catalog decline paused for editor review");
             await DB.batch([
