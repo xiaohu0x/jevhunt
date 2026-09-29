@@ -480,23 +480,11 @@ import { readCatalogState, catalogUrl, matchesProject, projectPath } from "./cat
     $("#resetFilters")?.addEventListener("click", () => { location.assign(location.pathname + "#apps"); });
     window.addEventListener("popstate", () => { Object.assign(state, readCatalogState(location.href, window.JH.categories.map(c => c.id))); renderFilters(); renderApps(); });
     const sort = $("#dirSort");
-    const fresh = $("#freshProjects");
-    const syncFreshButton = () => fresh?.setAttribute("aria-pressed", String(state.sort === "updated-desc"));
-    if (fresh) fresh.addEventListener("click", () => {
-      state.sort = "updated-desc";
-      catalogFailed = false;
-      if (sort) sort.value = state.sort;
-      syncFreshButton();
-      resetCatalogWindow();
-      renderApps();
-    });
     if (sort) {
       sort.value = state.sort;
-      syncFreshButton();
       sort.addEventListener("change", () => {
         state.sort = sort.value;
         catalogFailed = false;
-        syncFreshButton();
         resetCatalogWindow();
         renderApps();
       });

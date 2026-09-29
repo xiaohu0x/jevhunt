@@ -46,9 +46,6 @@ test("directory initializes with blocked browser storage and only the first page
   assert.equal(document.getElementById("loadMore").hidden, false);
   assert.ok(document.querySelector('#dirFilters [data-cat="sdks"]'));
   assert.ok(document.querySelector('#dirFilters [data-cat="games"]'));
-  document.getElementById("freshProjects").click();
-  assert.equal(document.getElementById("dirSort").value, "updated-desc");
-  assert.equal(document.getElementById("freshProjects").getAttribute("aria-pressed"), "true");
   assert.ok(document.querySelector("#auth a[href^='/api/auth/google']"));
   document.getElementById("themeBtn").click();
   assert.equal(document.documentElement.dataset.theme, "light");
