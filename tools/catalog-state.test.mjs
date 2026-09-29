@@ -9,11 +9,12 @@ test('shared filters round trip without losing the locale or authentication erro
   assert.equal(output.pathname, '/zh-cn/');
   assert.equal(output.searchParams.get('auth_error'), 'cancelled');
   assert.deepEqual(readCatalogState(output, ['agents']), state);
-  assert.equal(state.visible, 60);
+  assert.equal(state.page, 3);
 });
 test('unknown filters and unbounded pagination cannot alter the catalog model', () => {
   const state = readCatalogState('https://jevhunt.com/?category=bad&kind=bad&sort=bad&page=-2');
-  assert.equal(state.filter, 'all'); assert.equal(state.kind, 'all'); assert.equal(state.sort, 'stars-desc'); assert.equal(state.visible, 20);
+  assert.equal(state.filter, 'all'); assert.equal(state.kind, 'all'); assert.equal(state.sort, 'stars-desc'); assert.equal(state.page, 1);
+  assert.equal(readCatalogState('https://jevhunt.com/?page=1000000').page, 1000);
 });
 test('language, relationship, archival state and text filters compose', () => {
   const state = readCatalogState('https://jevhunt.com/?kind=integration&language=Python&activity=active&q=router', ['agents']);

@@ -6,6 +6,7 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { safeNext } from "../functions/_lib/auth.js";
 import { normalizeGitHubRepoUrl } from "../functions/api/submissions.js";
+import { JSDOM } from "jsdom";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const read = file => readFileSync(resolve(root, file), "utf8");
@@ -26,8 +27,13 @@ test("the public catalog exposes only GitHub repository and README links", () =>
   assert.doesNotMatch(projects, /"site":/);
   assert.doesNotMatch(main, /a\.site/);
   assert.doesNotMatch(index, />site\s*<span aria-hidden="true">↗<\/span>/i);
-  assert.match(main, /rel="ugc nofollow noopener noreferrer">GitHub/);
-  assert.match(main, /rel="ugc nofollow noopener noreferrer">\$\{escAttr\(t\("apps\.evidence"\)\)\}/);
+  const dom = new JSDOM(index, { url: "https://jevhunt.com/" });
+  for (const link of dom.window.document.querySelectorAll("#appGrid .card__go, #appGrid .card__site")) {
+    assert.equal(new URL(link.href).origin, "https://github.com");
+    for (const rel of ["ugc", "nofollow", "noopener", "noreferrer"]) assert.ok(link.relList.contains(rel));
+  }
+  assert.equal(dom.window.document.querySelectorAll("#appGrid .card__details").length, 20);
+  dom.window.close();
 });
 
 test("OmniaKey references are limited to the approved API guide", () => {
@@ -54,7 +60,7 @@ test("OmniaKey references are limited to the approved API guide", () => {
       continue;
     }
 
-    const guide = source.match(/<aside class="api-guide"[\s\S]*?<\/aside>/i)?.[0];
+    const guide = source.match(/<aside class="[^"]*\bapi-guide\b[^"]*"[\s\S]*?<\/aside>/i)?.[0];
     assert.ok(guide, `Unscoped OmniaKey reference in ${file}`);
     assert.match(guide, /href="https:\/\/omniakey\.com\/(?:blog|(?:zh|ja|ko|es|fr|de|pt-BR)\/blog)\/jev-model-explained"/i, file);
     assert.doesNotMatch(source.replace(guide, ""), removedBrand, file);
@@ -91,8 +97,8 @@ test("trust pages and a security contact are published", () => {
 });
 
 test("the home page explains authentication and sensitive-data boundaries", () => {
-  assert.match(index, /Browsing JevHunt never requires an account/);
-  assert.match(index, /never asks for your Google password, JEV API key, or payment details/);
+  assert.match(index, /No account needed to browse/);
+  assert.match(index, /never ask for passwords, API keys or payment/);
   assert.match(index, /id="subConsent" required/);
   assert.match(i18n, /Confirm the Terms and Privacy Policy before submitting/);
   assert.match(i18n, /Continue with Google/);

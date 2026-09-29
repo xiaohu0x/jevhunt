@@ -23,7 +23,9 @@ function scripts(dir = join(pub, "assets/js")) {
 const stateVersion = createHash("sha256").update(readFileSync(join(pub, "assets/js/catalog-state.js"))).digest("hex").slice(0, 10);
 const mainFile = join(pub, "assets/js/main.js");
 writeFileSync(mainFile, readFileSync(mainFile, "utf8").replace(/from "\.\/catalog-state\.js(?:\?v=[a-f0-9]+)?"/, `from "./catalog-state.js?v=${stateVersion}"`));
-const ASSETS = ["assets/css/fonts.css", "assets/css/style.css", ...scripts()];
+const cardVersion = createHash("sha256").update(readFileSync(join(pub, "assets/js/project-card.js"))).digest("hex").slice(0, 10);
+writeFileSync(mainFile, readFileSync(mainFile, "utf8").replace(/from "\.\/project-card\.js(?:\?v=[a-f0-9]+)?"/, `from "./project-card.js?v=${cardVersion}"`));
+const ASSETS = ["assets/css/fonts.css", "assets/css/style.css", "assets/css/directory.css", ...scripts()];
 
 function htmlPages(dir = pub) {
   return readdirSync(dir, { withFileTypes: true }).flatMap(entry => {

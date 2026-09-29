@@ -3,6 +3,8 @@ import test from "node:test";
 import { readFileSync, existsSync } from "node:fs";
 import { runInNewContext } from "node:vm";
 import { loadData, projectPath, hash } from "./lib/site.mjs";
+import { JSDOM } from "jsdom";
+import { renderProject } from "../shared/catalog-view.js";
 const { apps, i18n, catalogMeta } = loadData();
 const read = path => readFileSync("public/" + path, "utf8");
 
@@ -48,4 +50,42 @@ test("release manifest describes the files actually built", () => {
   for (const asset of manifest.assets) assert.equal(hash(readFileSync("public" + asset.path + (asset.path.endsWith("/") ? "index.html" : ""))), asset.hash, asset.path);
   assert.doesNotMatch(read("sitemap.xml"), /<loc>https:\/\/jevhunt\.com\/admin\//);
   assert.match(read("admin/index.html"), /noindex, nofollow/);
+});
+
+test("static project fallbacks share live SEO metadata and both recommendation sections", t => {
+  const samples = [...new Set([apps[0], apps.find(project => !project.desc), apps.find(project => project.relationship === "resource")].filter(Boolean))];
+  for (const project of samples) {
+    const path = projectPath(project.repo);
+    const built = new JSDOM(read(path.slice(1) + "index.html"), { url: "https://jevhunt.com" + path });
+    const live = new JSDOM(renderProject(project, catalogMeta, [], [], i18n.locales.en.messages, { localeInfo: i18n.locales.en }));
+    t.after(() => { built.window.close(); live.window.close(); });
+    const actual = built.window.document, expected = live.window.document;
+    assert.equal(actual.title, expected.title, path);
+    assert.ok(actual.title.includes(project.repo), path);
+    assert.equal(actual.querySelector('link[rel="canonical"]').href, "https://jevhunt.com" + path);
+    assert.equal(actual.querySelector('meta[name="description"]').content, expected.querySelector('meta[name="description"]').content);
+    const schema = document => JSON.parse(document.querySelector('script[type="application/ld+json"]').textContent);
+    assert.deepEqual(schema(actual), schema(expected), path);
+    assert.equal(schema(actual)["@graph"][0].inLanguage, "en");
+    assert.equal(schema(actual)["@graph"][1]["@type"], "BreadcrumbList");
+    assert.equal(actual.querySelectorAll('script[src*="googletagmanager.com/gtag/js"]').length, 1);
+    assert.equal(actual.querySelectorAll('script[src*="/assets/js/analytics.js"]').length, 1);
+    assert.ok(actual.querySelector("#similar-projects"), path);
+    assert.ok(actual.querySelector("#active-projects"), path);
+    const recommendations = [...actual.querySelectorAll(".related .card__name")].map(link => link.pathname);
+    assert.equal(new Set(recommendations).size, recommendations.length, path);
+    assert.ok(recommendations.every(link => link !== path), path);
+  }
+});
+
+test("static pagination publishes the same page identity as live pagination", t => {
+  const dom = new JSDOM(read("browse/2/index.html"), { url: "https://jevhunt.com/browse/2/" });
+  t.after(() => dom.window.close());
+  const document = dom.window.document;
+  assert.equal(document.title, "Jev ecosystem projects — page 2 | JevHunt");
+  assert.equal(document.querySelector('link[rel="canonical"]').href, "https://jevhunt.com/browse/2/");
+  const schema = JSON.parse(document.querySelector('script[type="application/ld+json"]').textContent);
+  assert.equal(schema.inLanguage, "en");
+  assert.equal(schema.itemListElement[0].position, 25);
+  assert.equal(document.querySelector('a[rel="prev"]').href, "https://jevhunt.com/browse/");
 });

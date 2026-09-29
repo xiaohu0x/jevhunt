@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-locale="es" data-theme="dark">
+<html lang="es" data-locale="es" data-theme="light">
 <head>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-7QNDGTH1T4"></script>
@@ -34,7 +34,7 @@
 <meta name="twitter:description" content="Descubre apps JEV AI, SDK, integraciones, alternativas locales e investigación. Consulta la actividad y las fuentes de cada proyecto." />
 <meta name="twitter:image" content="https://jevhunt.com/og.png?v=3" />
 <meta name="twitter:image:alt" content="Directorio de proyectos públicos JEV AI | JevHunt" />
-<meta name="theme-color" id="themeColor" content="#0B0B0C" />
+<meta name="theme-color" id="themeColor" content="#F7F5F2" />
 <link rel="canonical" href="https://jevhunt.com/es/" />
 <!-- locale-alternates:start -->
 <link rel="alternate" hreflang="en" href="https://jevhunt.com/" />
@@ -75,8 +75,8 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2" sizes="180x180" />
 <link rel="manifest" href="/site.webmanifest?v=2" />
 
-<link rel="stylesheet" href="/assets/css/fonts.css?v=81b65047a3" />
-<link rel="stylesheet" href="/assets/css/style.css?v=02ed8bd859" />
+<link rel="stylesheet" href="/assets/css/fonts.css?v=8104e0e4c0" />
+<link rel="stylesheet" href="/assets/css/style.css?v=c14ae3517c" />
 
 <script type="application/ld+json">
 {
@@ -514,41 +514,24 @@
   "inLanguage": "es"
 }
 </script>
+<link rel="stylesheet" href="/assets/css/directory.css?v=f6082d06ca" />
 </head>
-<body>
-
-<!-- background layers -->
-<div class="bg-grid" aria-hidden="true"></div>
-<div class="bg-glow" aria-hidden="true"></div>
-<div class="bg-noise" aria-hidden="true"></div>
-
-<!-- ============ NAV ============ -->
-<header class="nav" id="nav">
+<body class="directory-home">
+<aside class="api-guide home-announcement" aria-label="Guía de integración de la API de JEV" data-i18n-aria-label="guide.aria">
+  <a class="api-guide__link wrap" href="https://omniakey.com/es/blog/jev-model-explained" target="_blank" rel="noopener noreferrer" data-i18n-href="guide.href">
+    <span class="home-announcement__badge" data-i18n="home.guideBadge">Guía</span>
+    <span class="home-announcement__text" data-i18n="home.guideText">API JEV: precios, casos de uso y una petición jev-latest funcional</span>
+    <span class="api-guide__cta"><span data-i18n="guide.cta">Abrir la guía</span> <span aria-hidden="true">→</span></span>
+  </a>
+</aside>
+<header class="nav home-nav" id="nav">
   <div class="nav__inner">
-    <a class="brand" href="#top" aria-label="JEV AI Model projects directory home">
-      <span class="brand__mark" aria-hidden="true">
-        <svg class="brand__symbol" viewBox="0 0 64 64" width="32" height="32">
-          <rect class="brand__frame" x="1.5" y="1.5" width="61" height="61" rx="15"/>
-          <path class="brand__j" d="M18 17h27v19c0 9-5.2 14-13.4 14-6.2 0-10.7-2.8-13.2-8.2"/>
-          <g class="brand__target">
-            <circle class="brand__target-ring" cx="45" cy="17" r="6.5"/>
-            <circle class="brand__target-dot" cx="45" cy="17" r="2.4"/>
-          </g>
-        </svg>
-      </span>
-      <span class="brand__word">JEV<span>HUNT</span></span>
-      <span class="brand__ver">AI INDEX</span>
-    </a>
-
-    <nav class="nav__links" aria-label="Primary">
-      <a href="#apps" data-i18n="nav.apps">Proyectos</a>
-      <a href="#about" data-i18n="nav.about">Modelo</a>
-      <a href="#playbooks" data-i18n="nav.playbooks">Guías</a>
-      <a href="#timeline" data-i18n="nav.timeline">Cronología</a>
-    </nav>
-
-    <div class="nav__actions">
-      <label class="lang-picker" aria-label="Idioma" data-i18n-aria-label="a11y.language">
+    <a class="brand" href="#top" aria-label="JEV AI Model projects directory home"><span class="brand__mark" aria-hidden="true">J</span><span class="brand__word">JevHunt</span></a>
+    <div class="home-nav-panel" id="mobileMenu" hidden>
+      <nav class="nav__links" aria-label="Primary">
+        <a href="#apps" data-i18n="nav.apps">Proyectos</a><a href="#about" data-i18n="nav.about">Modelo</a><a href="#playbooks" data-i18n="nav.playbooks">Guías</a><a href="#timeline" data-i18n="nav.timeline">Cronología</a>
+      </nav>
+      <div class="nav__actions"><label class="lang-picker" aria-label="Idioma" data-i18n-aria-label="a11y.language">
         <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M3 12h18M12 3c2.3 2.5 3.5 5.5 3.5 9S14.3 18.5 12 21M12 3c-2.3 2.5-3.5 5.5-3.5 9s1.2 6.5 3.5 9" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
         <select id="languageSelect" aria-label="Idioma" data-i18n-aria-label="a11y.language">
 <option value="/" data-locale-option="en">English</option>
@@ -567,61 +550,41 @@
 <option value="/tr/" data-locale-option="tr">Türkçe</option>
 <option value="/it/" data-locale-option="it">Italiano</option>
 </select>
-      </label>
-      <button class="icon-btn" id="themeBtn" title="Cambiar tema" aria-label="Cambiar tema" data-i18n-title="a11y.theme" data-i18n-aria-label="a11y.theme">
+      </label><button class="icon-btn" id="themeBtn" title="Cambiar tema" aria-label="Cambiar tema" data-i18n-title="a11y.theme" data-i18n-aria-label="a11y.theme">
         <svg class="ico-sun" viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="4.2" fill="currentColor"/><g stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 2.5v2.6M12 18.9v2.6M2.5 12h2.6M18.9 12h2.6M5.2 5.2l1.9 1.9M16.9 16.9l1.9 1.9M18.8 5.2l-1.9 1.9M7.1 16.9l-1.9 1.9"/></g></svg>
         <svg class="ico-moon" viewBox="0 0 24 24" width="17" height="17"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z" fill="currentColor"/></svg>
-      </button>
-      <a class="btn btn--sm btn--primary" href="#submit" data-i18n="nav.submit">Enviar proyecto</a>
-      <div class="auth" id="auth"></div>
+      </button><div class="auth" id="auth"></div></div>
     </div>
+    <a class="btn btn--sm btn--primary home-nav__submit" href="#submit" data-i18n="nav.submit">Enviar proyecto</a>
+    <button class="icon-btn home-menu-toggle" id="mobileMenuToggle" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="Abrir menú" data-i18n-aria-label="home.menu"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
   </div>
 </header>
-
 <main id="top">
-
-<!-- ============ API GUIDE ============ -->
-<aside class="api-guide" aria-label="Guía de integración de la API de JEV" data-i18n-aria-label="guide.aria">
-  <a class="api-guide__link wrap" href="https://omniakey.com/es/blog/jev-model-explained" target="_blank" rel="noopener noreferrer" data-i18n-href="guide.href">
-    <span class="api-guide__mark" aria-hidden="true">{ }</span>
-    <span class="api-guide__copy">
-      <span class="api-guide__eyebrow" data-i18n="guide.eyebrow">API DE JEV · GUÍA DE OMNIAKEY</span>
-      <strong data-i18n="guide.title">¿Necesitas acceso a la API de JEV?</strong>
-      <span class="api-guide__desc" data-i18n="guide.desc">Consulta precios, casos de uso y una solicitud jev-latest lista para ejecutar.</span>
-    </span>
-    <span class="api-guide__cta"><span data-i18n="guide.cta">Abrir la guía</span><span aria-hidden="true">↗</span></span>
-  </a>
-</aside>
-
-<!-- ============ PROJECT DIRECTORY ============ -->
-<section class="section section--alt catalog-first" id="apps">
-  <div class="wrap">
-    <div class="sec-head reveal">
-      <div class="sec-head__no">01</div>
-      <div class="sec-head__txt">
-        <h1 data-i18n="apps.title">Directorio de proyectos públicos JEV AI</h1>
-        <p data-i18n="apps.lead">Explora aplicaciones Jev, integraciones, SDK, alternativas independientes e investigación. Cada ficha indica su relación con Jev y enlaza las pruebas.</p>
-        <p class="trust-note" data-i18n="apps.trust">No necesitas una cuenta para explorar JevHunt. El acceso con Google solo se usa para enviar un proyecto público; JevHunt nunca pide tu contraseña de Google, clave API de JEV ni datos de pago.</p>
-      </div>
-    </div>
-
-    <div class="dir">
-      <div class="dir__bar">
-        <div class="dir__search">
-          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M16.5 16.5 21 21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-          <input id="dirSearch" type="search" autocomplete="off" aria-label="Buscar proyectos" data-i18n-aria-label="a11y.search" data-i18n-ph="apps.search" placeholder="Buscar por nombre, repositorio, lenguaje o categoría..." />
-        </div>
-        <div class="dir__filters" id="dirFilters"></div>
-      </div>
-      <div class="dir__facets">
-        <label><span data-i18n="apps.language">Lenguaje</span><select id="languageFilter" aria-label="Language"><option value="all">All languages</option></select></label>
-        <label><span data-i18n="apps.type">Tipo</span><select id="kindFilter" aria-label="Project type"><option value="all" data-i18n="apps.allTypes">Todos los tipos</option><option value="jev-app" data-i18n="relationship.jev-app">Aplicación Jev</option><option value="integration" data-i18n="relationship.integration">Integración</option><option value="sdk" data-i18n="relationship.sdk">SDK / cliente</option><option value="local-alternative" data-i18n="relationship.local-alternative">Alternativa local</option><option value="research" data-i18n="relationship.research">Investigación</option><option value="resource" data-i18n="relationship.resource">Recurso / directorio</option><option value="unclassified" data-i18n="relationship.unclassified">Relación por revisar</option></select></label>
-        <label><span data-i18n="apps.activity">Estado</span><select id="activityFilter" aria-label="Activity"><option value="all" data-i18n="apps.allActivity">Todos los estados</option><option value="active" data-i18n="apps.active">Sin archivar</option><option value="archived" data-i18n="apps.archived">Archivado</option></select></label>
+<section class="home-hero wrap" aria-labelledby="homeTitle">
+  <div class="home-eyebrow"><span data-i18n="home.eyebrow">Directorio independiente</span><span aria-hidden="true">·</span><span class="home-eyebrow__count"><span id="statApps" data-count="3906">3,906</span> <span data-i18n="home.projects">proyectos</span></span></div>
+  <h1 id="homeTitle" data-i18n="home.title">Todo el ecosistema JEV AI, en un solo lugar.</h1>
+  <p class="home-hero__lead" data-i18n="home.lead">Aplicaciones, integraciones, SDK, alternativas locales e investigación. Cada proyecto enlaza a su fuente.</p>
+  <form class="home-search" id="directorySearchForm" role="search">
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <label class="sr-only" for="dirSearch" data-i18n="a11y.search">Buscar proyectos</label>
+    <input id="dirSearch" type="search" name="q" autocomplete="off" aria-label="Buscar proyectos" data-i18n-aria-label="a11y.search" data-i18n-ph="apps.search" placeholder="Buscar por nombre, repositorio, lenguaje o categoría..." />
+    <kbd aria-hidden="true">/</kbd><button type="submit" data-i18n="a11y.search">Buscar proyectos</button>
+  </form>
+  <div class="home-trust"><span class="home-trust__main"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5c0 4.5 3 8.5 7 10 4-1.5 7-5.5 7-10V6z"/><path d="m9 12 2 2 4-4"/></svg><span data-i18n="home.trust">Explora sin cuenta. Nunca pedimos contraseñas, claves API ni pagos.</span></span><span class="home-trust__independent" data-i18n="home.independent">Sin afiliación con TypeSafe AI</span></div>
+</section>
+<section class="home-directory wrap" id="apps" aria-label="Proyectos" data-i18n-aria-label="nav.apps">
+  <aside class="directory-sidebar">
+    <div class="directory-categories"><h2 class="directory-filter-heading" data-i18n="form.category">Categoría</h2><div class="dir__filters" id="dirFilters"></div></div>
+    <div class="dir__facets" id="directoryFacets" hidden>
+        <label><span data-i18n="apps.language">Lenguaje</span><select id="languageFilter" aria-label="Lenguaje" data-i18n-aria-label="apps.language"><option value="all">All languages</option></select></label>
+        <label><span data-i18n="apps.type">Tipo</span><select id="kindFilter" aria-label="Tipo" data-i18n-aria-label="apps.type"><option value="all" data-i18n="apps.allTypes">Todos los tipos</option><option value="jev-app" data-i18n="relationship.jev-app">Aplicación Jev</option><option value="integration" data-i18n="relationship.integration">Integración</option><option value="sdk" data-i18n="relationship.sdk">SDK / cliente</option><option value="local-alternative" data-i18n="relationship.local-alternative">Alternativa local</option><option value="research" data-i18n="relationship.research">Investigación</option><option value="resource" data-i18n="relationship.resource">Recurso / directorio</option><option value="unclassified" data-i18n="relationship.unclassified">Relación por revisar</option></select></label>
+        <label><span data-i18n="apps.activity">Estado</span><select id="activityFilter" aria-label="Estado" data-i18n-aria-label="apps.activity"><option value="all" data-i18n="apps.allActivity">Todos los estados</option><option value="active" data-i18n="apps.active">Sin archivar</option><option value="archived" data-i18n="apps.archived">Archivado</option></select></label>
         <button class="fchip" id="resetFilters" data-i18n="apps.reset">Restablecer filtros</button>
       </div>
-      <div class="dir__meta">
-        <span id="dirCount">Mostrando 20 de 3906 proyectos</span>
-        <label class="dir__sort">
+    <aside class="directory-submit"><h2 data-i18n="home.submitTitle">¿Has creado algo con JEV?</h2><p data-i18n="home.submitLead">Envía tu repositorio de GitHub. Revisamos las fuentes antes de publicarlo.</p><a class="btn btn--primary" href="#submit" data-i18n="home.submitCta">Envía tu proyecto</a></aside>
+  </aside>
+  <div class="directory-results">
+    <div class="dir__meta"><span id="dirCount" role="status">Mostrando 20 de 3906 proyectos</span><button class="directory-filters-toggle" type="button" id="filtersToggle" aria-expanded="false" aria-controls="directoryFacets"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4"/></svg><span data-i18n="home.filters">Filtros</span></button><label class="dir__sort">
           <span data-i18n="apps.sort">Ordenar</span>
           <select id="dirSort" aria-label="Ordenar proyectos" data-i18n-aria-label="a11y.sort">
             <option value="stars-desc" data-i18n="apps.sortStarsDesc">Stars: de mayor a menor</option>
@@ -632,485 +595,78 @@
             <option value="added-desc" data-i18n="apps.sortNewest">Añadidos recientemente</option>
             <option value="name-asc" data-i18n="apps.sortName">Nombre A-Z</option>
           </select>
-        </label>
-      </div>
-      <nav class="catalog-pages catalog-pages--directory" id="directoryPages" aria-label="Pagination"></nav>
-      <div class="app-grid" id="appGrid" aria-live="polite">
-        <!-- catalog-prerender:start -->
-        <article class="card">
-          <div class="card__top">
-            <div>
-              <h2 class="card__heading"><a class="card__name" href="/es/projects/agentscope-ai/agentscope/">agentscope</a></h2>
-              <div class="card__author">agentscope-ai/agentscope</div>
-            </div>
-            <span class="badge badge--catalog" data-i18n="relationship.jev-app">Aplicación Jev</span>
-          </div>
-          <a class="card__descLink" href="/es/projects/agentscope-ai/agentscope/"><p class="card__desc">Build and run agents you can see, understand and trust.</p></a>
-          <div class="card__tags">
-            <span class="tag">Python</span>
-            <span class="tag" data-i18n="evidence.documented">Documentado</span>
-            <span class="tag">publicado 2024-01-12</span>
-            <span class="tag">actualizado 2026-09-24</span>
-          </div>
-          <div class="card__foot">
-            <span class="card__links">
-              <a class="card__go" href="https://github.com/agentscope-ai/agentscope" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-              <a class="card__site" href="https://github.com/agentscope-ai/agentscope/blob/2c885b58aa79b47f9f3f91f9b06292a24bd29b01/README.md#L77" target="_blank" rel="ugc nofollow noopener noreferrer"><span data-i18n="apps.evidence">Pruebas</span> <span aria-hidden="true">↗</span></a>
-            </span>
-            <span class="card__stat" aria-label="32,286 Stars en GitHub">★ 32,286</span>
-          </div>
-        </article>
-        <article class="card">
-          <div class="card__top">
-            <div>
-              <h2 class="card__heading"><a class="card__name" href="/es/projects/nandhakishorm/laya/">laya</a></h2>
-              <div class="card__author">NandhaKishorM/laya</div>
-            </div>
-            <span class="badge badge--catalog" data-i18n="relationship.local-alternative">Alternativa local</span>
-          </div>
-          <a class="card__descLink" href="/es/projects/nandhakishorm/laya/"><p class="card__desc">Non-autoregressive System 1 decision engine. Typed choice, score and yes/no decisions over any text in a single forward pass, in 100+ languages, with a router that picks the right checkpoint per request.</p></a>
-          <div class="card__tags">
-            <span class="tag">Python</span>
-            <span class="tag" data-i18n="evidence.documented">Documentado</span>
-            <span class="tag">publicado 2026-09-18</span>
-            <span class="tag">actualizado 2026-09-24</span>
-          </div>
-          <div class="card__foot">
-            <span class="card__links">
-              <a class="card__go" href="https://github.com/NandhaKishorM/laya" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-              <a class="card__site" href="https://github.com/NandhaKishorM/laya/blob/23a17522aa4942da6cce53a995a275760320b691/README.md#L425" target="_blank" rel="ugc nofollow noopener noreferrer"><span data-i18n="apps.evidence">Pruebas</span> <span aria-hidden="true">↗</span></a>
-            </span>
-            <span class="card__stat" aria-label="21,612 Stars en GitHub">★ 21,612</span>
-          </div>
-        </article>
-        <article class="card">
-          <div class="card__top">
-            <div>
-              <h2 class="card__heading"><a class="card__name" href="/es/projects/browser-use/jev-ultrafast/">jev-ultrafast</a></h2>
-              <div class="card__author">browser-use/jev-ultrafast</div>
-            </div>
-            <span class="badge badge--catalog" data-i18n="relationship.jev-app">Aplicación Jev</span>
-          </div>
-          <a class="card__descLink" href="/es/projects/browser-use/jev-ultrafast/"><p class="card__desc">Fastest and cheapest web agent</p></a>
-          <div class="card__tags">
-            <span class="tag">Python</span>
-            <span class="tag" data-i18n="evidence.documented">Documentado</span>
-            <span class="tag">publicado 2026-09-16</span>
-            <span class="tag">actualizado 2026-09-18</span>
-          </div>
-          <div class="card__foot">
-            <span class="card__links">
-              <a class="card__go" href="https://github.com/browser-use/jev-ultrafast" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-              <a class="card__site" href="https://github.com/browser-use/jev-ultrafast/blob/1231850a0bf1a0c0341fe408ef1668dbbfdfac46/README.md#L60" target="_blank" rel="ugc nofollow noopener noreferrer"><span data-i18n="apps.evidence">Pruebas</span> <span aria-hidden="true">↗</span></a>
-            </span>
-            <span class="card__stat" aria-label="19,373 Stars en GitHub">★ 19,373</span>
-          </div>
-        </article>
-        <article class="card">
-          <div class="card__top">
-            <div>
-              <h2 class="card__heading"><a class="card__name" href="/es/projects/vercel-labs/json-render/">json-render</a></h2>
-              <div class="card__author">vercel-labs/json-render</div>
-            </div>
-            <span class="badge badge--catalog" data-i18n="relationship.integration">Integración</span>
-          </div>
-          <a class="card__descLink" href="/es/projects/vercel-labs/json-render/"><p class="card__desc">The Generative UI framework</p></a>
-          <div class="card__tags">
-            <span class="tag">TypeScript</span>
-            <span class="tag" data-i18n="evidence.code-reference">Referencia en código</span>
-            <span class="tag">publicado 2026-01-14</span>
-            <span class="tag">actualizado 2026-09-23</span>
-          </div>
-          <div class="card__foot">
-            <span class="card__links">
-              <a class="card__go" href="https://github.com/vercel-labs/json-render" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-              <a class="card__site" href="https://github.com/vercel-labs/json-render/blob/c2600d73908ed505e6d726f5b6f969ba8f597ce7/apps/web/lib/jev/compose.ts#L26" target="_blank" rel="ugc nofollow noopener noreferrer"><span data-i18n="apps.evidence">Pruebas</span> <span aria-hidden="true">↗</span></a>
-            </span>
-            <span class="card__stat" aria-label="18,220 Stars en GitHub">★ 18,220</span>
-          </div>
-        </article>
-        <article class="card">
-          <div class="card__top">
-            <div>
-              <h2 class="card__heading"><a class="card__name" href="/es/projects/openbyteinc/quantdinger/">QuantDinger</a></h2>
-              <div class="card__author">OpenByteInc/QuantDinger</div>
-            </div>
-            <span class="badge badge--catalog" data-i18n="relationship.integration">Integración</span>
-          </div>
-          <a class="card__descLink" href="/es/projects/openbyteinc/quantdinger/"><p class="card__desc">Open-source AI Trading OS, agent trading, and vibe trading, with Jev System One integration. Research, build Python strategies, backtest, and paper/live trade across crypto, stocks, and forex. Launch your own multi-tenant trading SaaS with built-in user management, billing, payments, and settlement.</p></a>
-          <div class="card__tags">
-            <span class="tag">Python</span>
-            <span class="tag" data-i18n="evidence.documented">Documentado</span>
-            <span class="tag">publicado 2025-12-28</span>
-            <span class="tag">actualizado 2026-09-24</span>
-          </div>
-          <div class="card__foot">
-            <span class="card__links">
-              <a class="card__go" href="https://github.com/OpenByteInc/QuantDinger" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-              <a class="card__site" href="https://github.com/OpenByteInc/QuantDinger/blob/9f47e5efbcdcf59fbdccb561554a14c87c419823/README.md#L476" target="_blank" rel="ugc nofollow noopener noreferrer"><span data-i18n="apps.evidence">Pruebas</span> <span aria-hidden="true">↗</span></a>
-            </span>
-            <span class="card__stat" aria-label="12,086 Stars en GitHub">★ 12,086</span>
-          </div>
-        </article>
-        <article class="card">
-          <div class="card__top">
-            <div>
-              <h2 class="card__heading"><a class="card__name" href="/es/projects/yaoapp/yao/">yao</a></h2>
-              <div class="card__author">YaoApp/yao</div>
-            </div>
-            <span class="badge badge--catalog" data-i18n="relationship.jev-app">Aplicación Jev</span>
-          </div>
-          <a class="card__descLink" href="/es/projects/yaoapp/yao/"><p class="card__desc">✨ All your agents and workspaces in one place, on every device you own. Track tasks on a board, accessible from desktop, mobile, browser, or API. Self-hosted.</p></a>
-          <div class="card__tags">
-            <span class="tag">Go</span>
-            <span class="tag" data-i18n="evidence.documented">Documentado</span>
-            <span class="tag">publicado 2021-09-06</span>
-            <span class="tag">actualizado 2026-09-24</span>
-          </div>
-          <div class="card__foot">
-            <span class="card__links">
-              <a class="card__go" href="https://github.com/YaoApp/yao" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-              <a class="card__site" href="https://github.com/YaoApp/yao/blob/20efb9d42d8a8f88b22c15e05175ba2b964c412b/README.md#L17" target="_blank" rel="ugc nofollow noopener noreferrer"><span data-i18n="apps.evidence">Pruebas</span> <span aria-hidden="true">↗</span></a>
-            </span>
-            <span class="card__stat" aria-label="8,000 Stars en GitHub">★ 8,000</span>
-          </div>
-        </article>
-        <article class="card">
-          <div class="card__top">
-            <div>
-              <h2 class="card__heading"><a class="card__name" href="/es/projects/tamaratran/fast-jev-compaction/">fast-jev-compaction</a></h2>
-              <div class="card__author">tamaratran/fast-jev-compaction</div>
-            </div>
-            <span class="badge badge--catalog" data-i18n="relationship.integration">Integración</span>
-          </div>
-          <a class="card__descLink" href="/es/projects/tamaratran/fast-jev-compaction/"><p class="card__desc">Claude Code plugin that replaces the compaction summary with Jev decisions: every tool call and result is scored in one fast request, stale ones are dropped or truncated, everything kept stays verbatim.</p></a>
-          <div class="card__tags">
-            <span class="tag">TypeScript</span>
-            <span class="tag" data-i18n="evidence.documented">Documentado</span>
-            <span class="tag">publicado 2026-09-17</span>
-            <span class="tag">actualizado 2026-09-18</span>
-          </div>
-          <div class="card__foot">
-            <span class="card__links">
-              <a class="card__go" href="https://github.com/tamaratran/fast-jev-compaction" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-              <a class="card__site" href="https://github.com/tamaratran/fast-jev-compaction/blob/e3f262a7f4d42bd8dd32ced30d26176f7cb545b0/README.md#L63" target="_blank" rel="ugc nofollow noopener noreferrer"><span data-i18n="apps.evidence">Pruebas</span> <span aria-hidden="true">↗</span></a>
-            </span>
-            <span class="card__stat" aria-label="6,647 Stars en GitHub">★ 6,647</span>
-          </div>
-        </article>
-        <article class="card">
-          <div class="card__top">
-            <div>
-              <h2 class="card__heading"><a class="card__name" href="/es/projects/jaredpalmer/kev/">kev</a></h2>
-              <div class="card__author">jaredpalmer/kev</div>
-            </div>
-            <span class="badge badge--catalog" data-i18n="relationship.local-alternative">Alternativa local</span>
-          </div>
-          <a class="card__descLink" href="/es/projects/jaredpalmer/kev/"><p class="card__desc">tiny Jev-like family of decision models built on top of Qwen3.5 you can train and run on your own</p></a>
-          <div class="card__tags">
-            <span class="tag">Python</span>
-            <span class="tag" data-i18n="evidence.documented">Documentado</span>
-            <span class="tag">publicado 2026-09-17</span>
-            <span class="tag">actualizado 2026-09-24</span>
-          </div>
-          <div class="card__foot">
-            <span class="card__links">
-              <a class="card__go" href="https://github.com/jaredpalmer/kev" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-              <a class="card__site" href="https://github.com/jaredpalmer/kev/blob/62c91838b9a6adc5b386cbeae8ed73daa36ce220/README.md#L92" target="_blank" rel="ugc nofollow noopener noreferrer"><span data-i18n="apps.evidence">Pruebas</span> <span aria-hidden="true">↗</span></a>
-            </span>
-            <span class="card__stat" aria-label="6,398 Stars en GitHub">★ 6,398</span>
-          </div>
-        </article>
-        <article class="card">
-          <div class="card__top">
-            <div>
-              <h2 class="card__heading"><a class="card__name" href="/es/projects/jev-chat/jev-chat-jarvis/">jev-chat-jarvis</a></h2>
-              <div class="card__author">jev-chat/jev-chat-jarvis</div>
-            </div>
-            <span class="badge badge--catalog" data-i18n="relationship.jev-app">Aplicación Jev</span>
-          </div>
-          <a class="card__descLink" href="/es/projects/jev-chat/jev-chat-jarvis/"><p class="card__desc">装在手机上的对话副驾：在微信 / QQ / X / 飞书里读懂对方、给出候选回复、一键填入输入框，发不发由你。非侵入，只读屏幕，不 hook 不改包。</p></a>
-          <div class="card__tags">
-            <span class="tag">Kotlin</span>
-            <span class="tag" data-i18n="evidence.documented">Documentado</span>
-            <span class="tag">publicado 2026-09-21</span>
-            <span class="tag">actualizado 2026-09-24</span>
-          </div>
-          <div class="card__foot">
-            <span class="card__links">
-              <a class="card__go" href="https://github.com/jev-chat/jev-chat-jarvis" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-              <a class="card__site" href="https://github.com/jev-chat/jev-chat-jarvis/blob/b37e7f531f6dedf15505461c3f598cac1f9cee66/README.md#L115" target="_blank" rel="ugc nofollow noopener noreferrer"><span data-i18n="apps.evidence">Pruebas</span> <span aria-hidden="true">↗</span></a>
-            </span>
-            <span class="card__stat" aria-label="5,519 Stars en GitHub">★ 5,519</span>
-          </div>
-        </article>
-        <article class="card">
-          <div class="card__top">
-            <div>
-              <h2 class="card__heading"><a class="card__name" href="/es/projects/vercel/eve/">eve</a></h2>
-              <div class="card__author">vercel/eve</div>
-            </div>
-            <span class="badge badge--catalog" data-i18n="relationship.jev-app">Aplicación Jev</span>
-          </div>
-          <a class="card__descLink" href="/es/projects/vercel/eve/"><p class="card__desc">The Open Framework for Building Agents</p></a>
-          <div class="card__tags">
-            <span class="tag">TypeScript</span>
-            <span class="tag" data-i18n="evidence.code-reference">Referencia en código</span>
-            <span class="tag">publicado 2026-06-16</span>
-            <span class="tag">actualizado 2026-09-24</span>
-          </div>
-          <div class="card__foot">
-            <span class="card__links">
-              <a class="card__go" href="https://github.com/vercel/eve" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-              <a class="card__site" href="https://github.com/vercel/eve/blob/fdf136461d13aedc40fba75230ad75f91bf0516a/packages/eve/src/ai/evaluate.ts#L10" target="_blank" rel="ugc nofollow noopener noreferrer"><span data-i18n="apps.evidence">Pruebas</span> <span aria-hidden="true">↗</span></a>
-            </span>
-            <span class="card__stat" aria-label="5,342 Stars en GitHub">★ 5,342</span>
-          </div>
-        </article>
-        <article class="card">
-          <div class="card__top">
-            <div>
-              <h2 class="card__heading"><a class="card__name" href="/es/projects/theoleecj/semif-openjev/">SemIf-OpenJev</a></h2>
-              <div class="card__author">TheoLeeCJ/SemIf-OpenJev</div>
-            </div>
-            <span class="badge badge--catalog" data-i18n="relationship.local-alternative">Alternativa local</span>
-          </div>
-          <a class="card__descLink" href="/es/projects/theoleecj/semif-openjev/"><p class="card__desc">Semantic ifs from open models, on a 3090 at home. Independent; not affiliated with Jev or TypeSafe.</p></a>
-          <div class="card__tags">
-            <span class="tag">Python</span>
-            <span class="tag" data-i18n="evidence.documented">Documentado</span>
-            <span class="tag">publicado 2026-09-16</span>
-            <span class="tag">actualizado 2026-09-23</span>
-          </div>
-          <div class="card__foot">
-            <span class="card__links">
-              <a class="card__go" href="https://github.com/TheoLeeCJ/SemIf-OpenJev" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-              <a class="card__site" href="https://github.com/TheoLeeCJ/SemIf-OpenJev/blob/23cf1f39fc9534fe81437200959b6dfc7106e45a/README.md#L138" target="_blank" rel="ugc nofollow noopener noreferrer"><span data-i18n="apps.evidence">Pruebas</span> <span aria-hidden="true">↗</span></a>
-            </span>
-            <span class="card__stat" aria-label="4,154 Stars en GitHub">★ 4,154</span>
-          </div>
-        </article>
-        <article class="card">
-          <div class="card__top">
-            <div>
-              <h2 class="card__heading"><a class="card__name" href="/es/projects/vercel-labs/fx/">fx</a></h2>
-              <div class="card__author">vercel-labs/fx</div>
-            </div>
-            <span class="badge badge--catalog" data-i18n="relationship.jev-app">Aplicación Jev</span>
-          </div>
-          <a class="card__descLink" href="/es/projects/vercel-labs/fx/"><p class="card__desc">Unix like coding agent</p></a>
-          <div class="card__tags">
-            <span class="tag">Zig</span>
-            <span class="tag" data-i18n="evidence.code-reference">Referencia en código</span>
-            <span class="tag">publicado 2026-08-11</span>
-            <span class="tag">actualizado 2026-09-24</span>
-          </div>
-          <div class="card__foot">
-            <span class="card__links">
-              <a class="card__go" href="https://github.com/vercel-labs/fx" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-              <a class="card__site" href="https://github.com/vercel-labs/fx/blob/c95fcc66ada9bea4629f73199391c8a26438d760/src/builtins/gateway/typesafe_permission_reviewer.zig#L9" target="_blank" rel="ugc nofollow noopener noreferrer"><span data-i18n="apps.evidence">Pruebas</span> <span aria-hidden="true">↗</span></a>
-            </span>
-            <span class="card__stat" aria-label="3,142 Stars en GitHub">★ 3,142</span>
-          </div>
-        </article>
-        <article class="card">
-          <div class="card__top">
-            <div>
-              <h2 class="card__heading"><a class="card__name" href="/es/projects/zilliztech/memsearch/">memsearch</a></h2>
-              <div class="card__author">zilliztech/memsearch</div>
-            </div>
-            <span class="badge badge--catalog" data-i18n="relationship.integration">Integración</span>
-          </div>
-          <a class="card__descLink" href="/es/projects/zilliztech/memsearch/"><p class="card__desc">A persistent, unified memory layer for all your AI agents (e.g. Claude Code, Codex, DSH), backed by Markdown and Milvus.</p></a>
-          <div class="card__tags">
-            <span class="tag">Python</span>
-            <span class="tag" data-i18n="evidence.documented">Documentado</span>
-            <span class="tag">publicado 2026-02-09</span>
-            <span class="tag">actualizado 2026-09-24</span>
-          </div>
-          <div class="card__foot">
-            <span class="card__links">
-              <a class="card__go" href="https://github.com/zilliztech/memsearch" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-              <a class="card__site" href="https://github.com/zilliztech/memsearch/blob/2a4652fa086fbd45e92bfd8da7781ebe1642baa7/README.md#L33" target="_blank" rel="ugc nofollow noopener noreferrer"><span data-i18n="apps.evidence">Pruebas</span> <span aria-hidden="true">↗</span></a>
-            </span>
-            <span class="card__stat" aria-label="2,649 Stars en GitHub">★ 2,649</span>
-          </div>
-        </article>
-        <article class="card">
-          <div class="card__top">
-            <div>
-              <h2 class="card__heading"><a class="card__name" href="/es/projects/jarrodwatts/jev-trader/">jev-trader</a></h2>
-              <div class="card__author">jarrodwatts/jev-trader</div>
-            </div>
-            <span class="badge badge--catalog" data-i18n="relationship.jev-app">Aplicación Jev</span>
-          </div>
-          <a class="card__descLink" href="/es/projects/jarrodwatts/jev-trader/"><p class="card__desc">One AI trade decision every Monad block. Jev on Kuru MON-USDC.</p></a>
-          <div class="card__tags">
-            <span class="tag">TypeScript</span>
-            <span class="tag" data-i18n="evidence.documented">Documentado</span>
-            <span class="tag">publicado 2026-09-16</span>
-            <span class="tag">actualizado 2026-09-17</span>
-          </div>
-          <div class="card__foot">
-            <span class="card__links">
-              <a class="card__go" href="https://github.com/jarrodwatts/jev-trader" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-              <a class="card__site" href="https://github.com/jarrodwatts/jev-trader/blob/b587759e459ea049590102e54a0b07800864cdc3/README.md#L3" target="_blank" rel="ugc nofollow noopener noreferrer"><span data-i18n="apps.evidence">Pruebas</span> <span aria-hidden="true">↗</span></a>
-            </span>
-            <span class="card__stat" aria-label="2,229 Stars en GitHub">★ 2,229</span>
-          </div>
-        </article>
-        <article class="card">
-          <div class="card__top">
-            <div>
-              <h2 class="card__heading"><a class="card__name" href="/es/projects/tianyucodings/nanojev/">NanoJev</a></h2>
-              <div class="card__author">TianyuCodings/NanoJev</div>
-            </div>
-            <span class="badge badge--catalog" data-i18n="relationship.local-alternative">Alternativa local</span>
-          </div>
-          <a class="card__descLink" href="/es/projects/tianyucodings/nanojev/"><p class="card__desc">A nano replica of Jev: parallel decisions, dynamic candidates, and an end-to-end training pipeline.</p></a>
-          <div class="card__tags">
-            <span class="tag">Python</span>
-            <span class="tag" data-i18n="evidence.documented">Documentado</span>
-            <span class="tag">publicado 2026-09-17</span>
-            <span class="tag">actualizado 2026-09-21</span>
-          </div>
-          <div class="card__foot">
-            <span class="card__links">
-              <a class="card__go" href="https://github.com/TianyuCodings/NanoJev" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-              <a class="card__site" href="https://github.com/TianyuCodings/NanoJev/blob/76fdfc9ecdca45a9bcef17991a07d3041a87685a/README.md#L7" target="_blank" rel="ugc nofollow noopener noreferrer"><span data-i18n="apps.evidence">Pruebas</span> <span aria-hidden="true">↗</span></a>
-            </span>
-            <span class="card__stat" aria-label="2,155 Stars en GitHub">★ 2,155</span>
-          </div>
-        </article>
-        <article class="card">
-          <div class="card__top">
-            <div>
-              <h2 class="card__heading"><a class="card__name" href="/es/projects/typesafe-ai/skills/">skills</a></h2>
-              <div class="card__author">typesafe-ai/skills</div>
-            </div>
-            <span class="badge badge--catalog" data-i18n="relationship.resource">Recurso / directorio</span>
-          </div>
-          <a class="card__descLink" href="/es/projects/typesafe-ai/skills/"><p class="card__desc">Agent skills for building with TypeSafe's System One API</p></a>
-          <div class="card__tags">
-            <span class="tag" data-i18n="evidence.official">Oficial</span>
-            <span class="tag">publicado 2026-08-24</span>
-            <span class="tag">actualizado 2026-09-12</span>
-          </div>
-          <div class="card__foot">
-            <span class="card__links">
-              <a class="card__go" href="https://github.com/typesafe-ai/skills" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-              <a class="card__site" href="https://github.com/typesafe-ai/skills/tree/65a39f393687675ce170e6094757de20370365b9" target="_blank" rel="ugc nofollow noopener noreferrer"><span data-i18n="apps.evidence">Pruebas</span> <span aria-hidden="true">↗</span></a>
-            </span>
-            <span class="card__stat" aria-label="2,050 Stars en GitHub">★ 2,050</span>
-          </div>
-        </article>
-        <article class="card">
-          <div class="card__top">
-            <div>
-              <h2 class="card__heading"><a class="card__name" href="/es/projects/yibie/awesome-jev/">awesome-jev</a></h2>
-              <div class="card__author">yibie/awesome-jev</div>
-            </div>
-            <span class="badge badge--catalog" data-i18n="relationship.resource">Recurso / directorio</span>
-          </div>
-          <a class="card__descLink" href="/es/projects/yibie/awesome-jev/"><p class="card__desc">A curated list of public projects, integrations, and discussions built on Jev — TypeSafe AI's System One model for typed decisions.</p></a>
-          <div class="card__tags">
-            <span class="tag">Python</span>
-            <span class="tag" data-i18n="evidence.documented">Documentado</span>
-            <span class="tag">publicado 2026-09-17</span>
-            <span class="tag">actualizado 2026-09-24</span>
-          </div>
-          <div class="card__foot">
-            <span class="card__links">
-              <a class="card__go" href="https://github.com/yibie/awesome-jev" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-              <a class="card__site" href="https://github.com/yibie/awesome-jev/blob/70522eac9aef78207460c8f85ce8f17f05fe9f9c/README.md#L9" target="_blank" rel="ugc nofollow noopener noreferrer"><span data-i18n="apps.evidence">Pruebas</span> <span aria-hidden="true">↗</span></a>
-            </span>
-            <span class="card__stat" aria-label="1,556 Stars en GitHub">★ 1,556</span>
-          </div>
-        </article>
-        <article class="card">
-          <div class="card__top">
-            <div>
-              <h2 class="card__heading"><a class="card__name" href="/es/projects/arize-ai/openinference/">openinference</a></h2>
-              <div class="card__author">Arize-ai/openinference</div>
-            </div>
-            <span class="badge badge--catalog" data-i18n="relationship.jev-app">Aplicación Jev</span>
-          </div>
-          <a class="card__descLink" href="/es/projects/arize-ai/openinference/"><p class="card__desc">OpenTelemetry Instrumentation for AI Observability</p></a>
-          <div class="card__tags">
-            <span class="tag">Python</span>
-            <span class="tag" data-i18n="evidence.code-reference">Referencia en código</span>
-            <span class="tag">publicado 2023-12-26</span>
-            <span class="tag">actualizado 2026-09-24</span>
-          </div>
-          <div class="card__foot">
-            <span class="card__links">
-              <a class="card__go" href="https://github.com/Arize-ai/openinference" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-              <a class="card__site" href="https://github.com/Arize-ai/openinference/blob/1bdcb086969226680381156a480f43a2b5f30048/js/packages/openinference-instrumentation-typesafe/examples/all-question-types.ts#L1" target="_blank" rel="ugc nofollow noopener noreferrer"><span data-i18n="apps.evidence">Pruebas</span> <span aria-hidden="true">↗</span></a>
-            </span>
-            <span class="card__stat" aria-label="1,234 Stars en GitHub">★ 1,234</span>
-          </div>
-        </article>
-        <article class="card">
-          <div class="card__top">
-            <div>
-              <h2 class="card__heading"><a class="card__name" href="/es/projects/awlevin/typesafe-computer-use/">typesafe-computer-use</a></h2>
-              <div class="card__author">awlevin/typesafe-computer-use</div>
-            </div>
-            <span class="badge badge--catalog" data-i18n="relationship.jev-app">Aplicación Jev</span>
-          </div>
-          <a class="card__descLink" href="/es/projects/awlevin/typesafe-computer-use/"><p class="card__desc">Computer use for about $0.0002 a step: OCR the screen, classify the next action with TypeSafe, click. macOS.</p></a>
-          <div class="card__tags">
-            <span class="tag">Python</span>
-            <span class="tag" data-i18n="evidence.documented">Documentado</span>
-            <span class="tag">publicado 2026-09-16</span>
-            <span class="tag">actualizado 2026-09-23</span>
-          </div>
-          <div class="card__foot">
-            <span class="card__links">
-              <a class="card__go" href="https://github.com/awlevin/typesafe-computer-use" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-              <a class="card__site" href="https://github.com/awlevin/typesafe-computer-use/blob/24eb2924c2a95de5b18c2e5d6fdc692cbe87b5ff/README.md#L67" target="_blank" rel="ugc nofollow noopener noreferrer"><span data-i18n="apps.evidence">Pruebas</span> <span aria-hidden="true">↗</span></a>
-            </span>
-            <span class="card__stat" aria-label="935 Stars en GitHub">★ 935</span>
-          </div>
-        </article>
-        <article class="card">
-          <div class="card__top">
-            <div>
-              <h2 class="card__heading"><a class="card__name" href="/es/projects/anil-matcha/awesome-jev-by-typesafe/">awesome-jev-by-typesafe</a></h2>
-              <div class="card__author">Anil-matcha/awesome-jev-by-typesafe</div>
-            </div>
-            <span class="badge badge--catalog" data-i18n="relationship.resource">Recurso / directorio</span>
-          </div>
-          <a class="card__descLink" href="/es/projects/anil-matcha/awesome-jev-by-typesafe/"><p class="card__desc">Evidence-backed use cases, patterns, prompts, and starter code for TypeSafe Jev — a System One model for fast, typed, confidence-aware decisions in software.</p></a>
-          <div class="card__tags">
-            <span class="tag">Python</span>
-            <span class="tag" data-i18n="evidence.documented">Documentado</span>
-            <span class="tag">publicado 2023-05-17</span>
-            <span class="tag">actualizado 2026-09-23</span>
-          </div>
-          <div class="card__foot">
-            <span class="card__links">
-              <a class="card__go" href="https://github.com/Anil-matcha/awesome-jev-by-typesafe" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-              <a class="card__site" href="https://github.com/Anil-matcha/awesome-jev-by-typesafe/blob/68d934eb0b2f2e1c37ea1e701ffcfb4cc5221e7f/README.md#L71" target="_blank" rel="ugc nofollow noopener noreferrer"><span data-i18n="apps.evidence">Pruebas</span> <span aria-hidden="true">↗</span></a>
-            </span>
-            <span class="card__stat" aria-label="830 Stars en GitHub">★ 830</span>
-          </div>
-        </article>
-        <!-- catalog-prerender:end -->
-      </div>
-      <div class="dir__empty" id="dirEmpty" hidden data-i18n="apps.empty">No hay proyectos que coincidan con la búsqueda.</div>
-      <nav class="catalog-pages" aria-label="Project pages"><a href="/browse/">Browse all project pages →</a> · <a href="/methodology/" data-i18n="apps.methodology">Cómo revisamos</a> · <a href="/status/" data-i18n="apps.status">Estado de actualización</a></nav>
-      <div class="dir__more"><button class="btn btn--ghost btn--sm" id="loadMore" type="button" hidden data-i18n="apps.loadMore">Cargar más</button></div>
-      <div class="dir__source">
-        <span><span data-i18n="apps.source">Fuentes de descubrimiento</span> <a href="/methodology/" target="_blank" rel="nofollow noopener noreferrer">hellogumbo/awesome-jev ↗</a></span>
-        <span data-i18n="apps.disclaimer">El código de la comunidad no está avalado; revisa cada repositorio antes de usarlo.</span>
-        <a href="/catalog-audit.json" target="_blank" rel="noopener noreferrer" data-i18n="apps.audit">Informe de fuentes y evidencias ↗</a>
-      </div>
-    </div>
+        </label></div>
+    <div class="directory-freshness"><span data-i18n="stat.updated">Última actualización</span><time id="catalogUpdated" data-iso="2026-09-24T08:40:10.508Z" datetime="2026-09-24T08:40:10.508Z">24 sept 2026, 8:40 UTC</time></div>
+    <div class="app-grid" id="appGrid" aria-live="polite" tabindex="-1"><!-- catalog-prerender:start -->
+<article class="card"><div class="card__top"><span class="card__avatar" data-kind="jev-app" aria-hidden="true">A</span><div class="card__identity"><h2 class="card__heading"><a class="card__name" href="/es/projects/agentscope-ai/agentscope/">agentscope</a></h2><div class="card__author">agentscope-ai/agentscope</div></div><span class="card__stat" aria-label="32.286 Stars en GitHub"><span aria-hidden="true">★</span> 32.286</span></div>
+<a class="card__descLink" href="/es/projects/agentscope-ai/agentscope/"><p class="card__desc">Build and run agents you can see, understand and trust.</p></a><div class="card__tags"><span class="badge badge--catalog" data-kind="jev-app">Aplicación Jev</span><span class="tag tag--language">Python</span><time class="tag tag--updated" datetime="2026-09-24">actualizado 2026-09-24</time></div>
+<div class="card__foot"><span class="card__links"><a class="card__details" href="/es/projects/agentscope-ai/agentscope/">Detalles <span aria-hidden="true">→</span></a><a class="card__go" href="https://github.com/agentscope-ai/agentscope" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a><a class="card__site" href="https://github.com/agentscope-ai/agentscope/blob/2c885b58aa79b47f9f3f91f9b06292a24bd29b01/README.md#L77" title="Documentado" target="_blank" rel="ugc nofollow noopener noreferrer">Pruebas <span aria-hidden="true">↗</span></a></span></div></article>
+<article class="card"><div class="card__top"><span class="card__avatar" data-kind="local-alternative" aria-hidden="true">L</span><div class="card__identity"><h2 class="card__heading"><a class="card__name" href="/es/projects/nandhakishorm/laya/">laya</a></h2><div class="card__author">NandhaKishorM/laya</div></div><span class="card__stat" aria-label="21.612 Stars en GitHub"><span aria-hidden="true">★</span> 21.612</span></div>
+<a class="card__descLink" href="/es/projects/nandhakishorm/laya/"><p class="card__desc">Non-autoregressive System 1 decision engine. Typed choice, score and yes/no decisions over any text in a single forward pass, in 100+ languages, with a router that picks the right checkpoint per request.</p></a><div class="card__tags"><span class="badge badge--catalog" data-kind="local-alternative">Alternativa local</span><span class="tag tag--language">Python</span><time class="tag tag--updated" datetime="2026-09-24">actualizado 2026-09-24</time></div>
+<div class="card__foot"><span class="card__links"><a class="card__details" href="/es/projects/nandhakishorm/laya/">Detalles <span aria-hidden="true">→</span></a><a class="card__go" href="https://github.com/NandhaKishorM/laya" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a><a class="card__site" href="https://github.com/NandhaKishorM/laya/blob/23a17522aa4942da6cce53a995a275760320b691/README.md#L425" title="Documentado" target="_blank" rel="ugc nofollow noopener noreferrer">Pruebas <span aria-hidden="true">↗</span></a></span></div></article>
+<article class="card"><div class="card__top"><span class="card__avatar" data-kind="jev-app" aria-hidden="true">J</span><div class="card__identity"><h2 class="card__heading"><a class="card__name" href="/es/projects/browser-use/jev-ultrafast/">jev-ultrafast</a></h2><div class="card__author">browser-use/jev-ultrafast</div></div><span class="card__stat" aria-label="19.373 Stars en GitHub"><span aria-hidden="true">★</span> 19.373</span></div>
+<a class="card__descLink" href="/es/projects/browser-use/jev-ultrafast/"><p class="card__desc">Fastest and cheapest web agent</p></a><div class="card__tags"><span class="badge badge--catalog" data-kind="jev-app">Aplicación Jev</span><span class="tag tag--language">Python</span><time class="tag tag--updated" datetime="2026-09-18">actualizado 2026-09-18</time></div>
+<div class="card__foot"><span class="card__links"><a class="card__details" href="/es/projects/browser-use/jev-ultrafast/">Detalles <span aria-hidden="true">→</span></a><a class="card__go" href="https://github.com/browser-use/jev-ultrafast" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a><a class="card__site" href="https://github.com/browser-use/jev-ultrafast/blob/1231850a0bf1a0c0341fe408ef1668dbbfdfac46/README.md#L60" title="Documentado" target="_blank" rel="ugc nofollow noopener noreferrer">Pruebas <span aria-hidden="true">↗</span></a></span></div></article>
+<article class="card"><div class="card__top"><span class="card__avatar" data-kind="integration" aria-hidden="true">J</span><div class="card__identity"><h2 class="card__heading"><a class="card__name" href="/es/projects/vercel-labs/json-render/">json-render</a></h2><div class="card__author">vercel-labs/json-render</div></div><span class="card__stat" aria-label="18.220 Stars en GitHub"><span aria-hidden="true">★</span> 18.220</span></div>
+<a class="card__descLink" href="/es/projects/vercel-labs/json-render/"><p class="card__desc">The Generative UI framework</p></a><div class="card__tags"><span class="badge badge--catalog" data-kind="integration">Integración</span><span class="tag tag--language">TypeScript</span><time class="tag tag--updated" datetime="2026-09-23">actualizado 2026-09-23</time></div>
+<div class="card__foot"><span class="card__links"><a class="card__details" href="/es/projects/vercel-labs/json-render/">Detalles <span aria-hidden="true">→</span></a><a class="card__go" href="https://github.com/vercel-labs/json-render" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a><a class="card__site" href="https://github.com/vercel-labs/json-render/blob/c2600d73908ed505e6d726f5b6f969ba8f597ce7/apps/web/lib/jev/compose.ts#L26" title="Referencia en código" target="_blank" rel="ugc nofollow noopener noreferrer">Pruebas <span aria-hidden="true">↗</span></a></span></div></article>
+<article class="card"><div class="card__top"><span class="card__avatar" data-kind="integration" aria-hidden="true">Q</span><div class="card__identity"><h2 class="card__heading"><a class="card__name" href="/es/projects/openbyteinc/quantdinger/">QuantDinger</a></h2><div class="card__author">OpenByteInc/QuantDinger</div></div><span class="card__stat" aria-label="12.086 Stars en GitHub"><span aria-hidden="true">★</span> 12.086</span></div>
+<a class="card__descLink" href="/es/projects/openbyteinc/quantdinger/"><p class="card__desc">Open-source AI Trading OS, agent trading, and vibe trading, with Jev System One integration. Research, build Python strategies, backtest, and paper/live trade across crypto, stocks, and forex. Launch your own multi-tenant trading SaaS with built-in user management, billing, payments, and settlement.</p></a><div class="card__tags"><span class="badge badge--catalog" data-kind="integration">Integración</span><span class="tag tag--language">Python</span><time class="tag tag--updated" datetime="2026-09-24">actualizado 2026-09-24</time></div>
+<div class="card__foot"><span class="card__links"><a class="card__details" href="/es/projects/openbyteinc/quantdinger/">Detalles <span aria-hidden="true">→</span></a><a class="card__go" href="https://github.com/OpenByteInc/QuantDinger" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a><a class="card__site" href="https://github.com/OpenByteInc/QuantDinger/blob/9f47e5efbcdcf59fbdccb561554a14c87c419823/README.md#L476" title="Documentado" target="_blank" rel="ugc nofollow noopener noreferrer">Pruebas <span aria-hidden="true">↗</span></a></span></div></article>
+<article class="card"><div class="card__top"><span class="card__avatar" data-kind="jev-app" aria-hidden="true">Y</span><div class="card__identity"><h2 class="card__heading"><a class="card__name" href="/es/projects/yaoapp/yao/">yao</a></h2><div class="card__author">YaoApp/yao</div></div><span class="card__stat" aria-label="8000 Stars en GitHub"><span aria-hidden="true">★</span> 8000</span></div>
+<a class="card__descLink" href="/es/projects/yaoapp/yao/"><p class="card__desc">✨ All your agents and workspaces in one place, on every device you own. Track tasks on a board, accessible from desktop, mobile, browser, or API. Self-hosted.</p></a><div class="card__tags"><span class="badge badge--catalog" data-kind="jev-app">Aplicación Jev</span><span class="tag tag--language">Go</span><time class="tag tag--updated" datetime="2026-09-24">actualizado 2026-09-24</time></div>
+<div class="card__foot"><span class="card__links"><a class="card__details" href="/es/projects/yaoapp/yao/">Detalles <span aria-hidden="true">→</span></a><a class="card__go" href="https://github.com/YaoApp/yao" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a><a class="card__site" href="https://github.com/YaoApp/yao/blob/20efb9d42d8a8f88b22c15e05175ba2b964c412b/README.md#L17" title="Documentado" target="_blank" rel="ugc nofollow noopener noreferrer">Pruebas <span aria-hidden="true">↗</span></a></span></div></article>
+<article class="card"><div class="card__top"><span class="card__avatar" data-kind="integration" aria-hidden="true">F</span><div class="card__identity"><h2 class="card__heading"><a class="card__name" href="/es/projects/tamaratran/fast-jev-compaction/">fast-jev-compaction</a></h2><div class="card__author">tamaratran/fast-jev-compaction</div></div><span class="card__stat" aria-label="6647 Stars en GitHub"><span aria-hidden="true">★</span> 6647</span></div>
+<a class="card__descLink" href="/es/projects/tamaratran/fast-jev-compaction/"><p class="card__desc">Claude Code plugin that replaces the compaction summary with Jev decisions: every tool call and result is scored in one fast request, stale ones are dropped or truncated, everything kept stays verbatim.</p></a><div class="card__tags"><span class="badge badge--catalog" data-kind="integration">Integración</span><span class="tag tag--language">TypeScript</span><time class="tag tag--updated" datetime="2026-09-18">actualizado 2026-09-18</time></div>
+<div class="card__foot"><span class="card__links"><a class="card__details" href="/es/projects/tamaratran/fast-jev-compaction/">Detalles <span aria-hidden="true">→</span></a><a class="card__go" href="https://github.com/tamaratran/fast-jev-compaction" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a><a class="card__site" href="https://github.com/tamaratran/fast-jev-compaction/blob/e3f262a7f4d42bd8dd32ced30d26176f7cb545b0/README.md#L63" title="Documentado" target="_blank" rel="ugc nofollow noopener noreferrer">Pruebas <span aria-hidden="true">↗</span></a></span></div></article>
+<article class="card"><div class="card__top"><span class="card__avatar" data-kind="local-alternative" aria-hidden="true">K</span><div class="card__identity"><h2 class="card__heading"><a class="card__name" href="/es/projects/jaredpalmer/kev/">kev</a></h2><div class="card__author">jaredpalmer/kev</div></div><span class="card__stat" aria-label="6398 Stars en GitHub"><span aria-hidden="true">★</span> 6398</span></div>
+<a class="card__descLink" href="/es/projects/jaredpalmer/kev/"><p class="card__desc">tiny Jev-like family of decision models built on top of Qwen3.5 you can train and run on your own</p></a><div class="card__tags"><span class="badge badge--catalog" data-kind="local-alternative">Alternativa local</span><span class="tag tag--language">Python</span><time class="tag tag--updated" datetime="2026-09-24">actualizado 2026-09-24</time></div>
+<div class="card__foot"><span class="card__links"><a class="card__details" href="/es/projects/jaredpalmer/kev/">Detalles <span aria-hidden="true">→</span></a><a class="card__go" href="https://github.com/jaredpalmer/kev" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a><a class="card__site" href="https://github.com/jaredpalmer/kev/blob/62c91838b9a6adc5b386cbeae8ed73daa36ce220/README.md#L92" title="Documentado" target="_blank" rel="ugc nofollow noopener noreferrer">Pruebas <span aria-hidden="true">↗</span></a></span></div></article>
+<article class="card"><div class="card__top"><span class="card__avatar" data-kind="jev-app" aria-hidden="true">J</span><div class="card__identity"><h2 class="card__heading"><a class="card__name" href="/es/projects/jev-chat/jev-chat-jarvis/">jev-chat-jarvis</a></h2><div class="card__author">jev-chat/jev-chat-jarvis</div></div><span class="card__stat" aria-label="5519 Stars en GitHub"><span aria-hidden="true">★</span> 5519</span></div>
+<a class="card__descLink" href="/es/projects/jev-chat/jev-chat-jarvis/"><p class="card__desc">装在手机上的对话副驾：在微信 / QQ / X / 飞书里读懂对方、给出候选回复、一键填入输入框，发不发由你。非侵入，只读屏幕，不 hook 不改包。</p></a><div class="card__tags"><span class="badge badge--catalog" data-kind="jev-app">Aplicación Jev</span><span class="tag tag--language">Kotlin</span><time class="tag tag--updated" datetime="2026-09-24">actualizado 2026-09-24</time></div>
+<div class="card__foot"><span class="card__links"><a class="card__details" href="/es/projects/jev-chat/jev-chat-jarvis/">Detalles <span aria-hidden="true">→</span></a><a class="card__go" href="https://github.com/jev-chat/jev-chat-jarvis" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a><a class="card__site" href="https://github.com/jev-chat/jev-chat-jarvis/blob/b37e7f531f6dedf15505461c3f598cac1f9cee66/README.md#L115" title="Documentado" target="_blank" rel="ugc nofollow noopener noreferrer">Pruebas <span aria-hidden="true">↗</span></a></span></div></article>
+<article class="card"><div class="card__top"><span class="card__avatar" data-kind="jev-app" aria-hidden="true">E</span><div class="card__identity"><h2 class="card__heading"><a class="card__name" href="/es/projects/vercel/eve/">eve</a></h2><div class="card__author">vercel/eve</div></div><span class="card__stat" aria-label="5342 Stars en GitHub"><span aria-hidden="true">★</span> 5342</span></div>
+<a class="card__descLink" href="/es/projects/vercel/eve/"><p class="card__desc">The Open Framework for Building Agents</p></a><div class="card__tags"><span class="badge badge--catalog" data-kind="jev-app">Aplicación Jev</span><span class="tag tag--language">TypeScript</span><time class="tag tag--updated" datetime="2026-09-24">actualizado 2026-09-24</time></div>
+<div class="card__foot"><span class="card__links"><a class="card__details" href="/es/projects/vercel/eve/">Detalles <span aria-hidden="true">→</span></a><a class="card__go" href="https://github.com/vercel/eve" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a><a class="card__site" href="https://github.com/vercel/eve/blob/fdf136461d13aedc40fba75230ad75f91bf0516a/packages/eve/src/ai/evaluate.ts#L10" title="Referencia en código" target="_blank" rel="ugc nofollow noopener noreferrer">Pruebas <span aria-hidden="true">↗</span></a></span></div></article>
+<article class="card"><div class="card__top"><span class="card__avatar" data-kind="local-alternative" aria-hidden="true">S</span><div class="card__identity"><h2 class="card__heading"><a class="card__name" href="/es/projects/theoleecj/semif-openjev/">SemIf-OpenJev</a></h2><div class="card__author">TheoLeeCJ/SemIf-OpenJev</div></div><span class="card__stat" aria-label="4154 Stars en GitHub"><span aria-hidden="true">★</span> 4154</span></div>
+<a class="card__descLink" href="/es/projects/theoleecj/semif-openjev/"><p class="card__desc">Semantic ifs from open models, on a 3090 at home. Independent; not affiliated with Jev or TypeSafe.</p></a><div class="card__tags"><span class="badge badge--catalog" data-kind="local-alternative">Alternativa local</span><span class="tag tag--language">Python</span><time class="tag tag--updated" datetime="2026-09-23">actualizado 2026-09-23</time></div>
+<div class="card__foot"><span class="card__links"><a class="card__details" href="/es/projects/theoleecj/semif-openjev/">Detalles <span aria-hidden="true">→</span></a><a class="card__go" href="https://github.com/TheoLeeCJ/SemIf-OpenJev" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a><a class="card__site" href="https://github.com/TheoLeeCJ/SemIf-OpenJev/blob/23cf1f39fc9534fe81437200959b6dfc7106e45a/README.md#L138" title="Documentado" target="_blank" rel="ugc nofollow noopener noreferrer">Pruebas <span aria-hidden="true">↗</span></a></span></div></article>
+<article class="card"><div class="card__top"><span class="card__avatar" data-kind="jev-app" aria-hidden="true">F</span><div class="card__identity"><h2 class="card__heading"><a class="card__name" href="/es/projects/vercel-labs/fx/">fx</a></h2><div class="card__author">vercel-labs/fx</div></div><span class="card__stat" aria-label="3142 Stars en GitHub"><span aria-hidden="true">★</span> 3142</span></div>
+<a class="card__descLink" href="/es/projects/vercel-labs/fx/"><p class="card__desc">Unix like coding agent</p></a><div class="card__tags"><span class="badge badge--catalog" data-kind="jev-app">Aplicación Jev</span><span class="tag tag--language">Zig</span><time class="tag tag--updated" datetime="2026-09-24">actualizado 2026-09-24</time></div>
+<div class="card__foot"><span class="card__links"><a class="card__details" href="/es/projects/vercel-labs/fx/">Detalles <span aria-hidden="true">→</span></a><a class="card__go" href="https://github.com/vercel-labs/fx" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a><a class="card__site" href="https://github.com/vercel-labs/fx/blob/c95fcc66ada9bea4629f73199391c8a26438d760/src/builtins/gateway/typesafe_permission_reviewer.zig#L9" title="Referencia en código" target="_blank" rel="ugc nofollow noopener noreferrer">Pruebas <span aria-hidden="true">↗</span></a></span></div></article>
+<article class="card"><div class="card__top"><span class="card__avatar" data-kind="integration" aria-hidden="true">M</span><div class="card__identity"><h2 class="card__heading"><a class="card__name" href="/es/projects/zilliztech/memsearch/">memsearch</a></h2><div class="card__author">zilliztech/memsearch</div></div><span class="card__stat" aria-label="2649 Stars en GitHub"><span aria-hidden="true">★</span> 2649</span></div>
+<a class="card__descLink" href="/es/projects/zilliztech/memsearch/"><p class="card__desc">A persistent, unified memory layer for all your AI agents (e.g. Claude Code, Codex, DSH), backed by Markdown and Milvus.</p></a><div class="card__tags"><span class="badge badge--catalog" data-kind="integration">Integración</span><span class="tag tag--language">Python</span><time class="tag tag--updated" datetime="2026-09-24">actualizado 2026-09-24</time></div>
+<div class="card__foot"><span class="card__links"><a class="card__details" href="/es/projects/zilliztech/memsearch/">Detalles <span aria-hidden="true">→</span></a><a class="card__go" href="https://github.com/zilliztech/memsearch" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a><a class="card__site" href="https://github.com/zilliztech/memsearch/blob/2a4652fa086fbd45e92bfd8da7781ebe1642baa7/README.md#L33" title="Documentado" target="_blank" rel="ugc nofollow noopener noreferrer">Pruebas <span aria-hidden="true">↗</span></a></span></div></article>
+<article class="card"><div class="card__top"><span class="card__avatar" data-kind="jev-app" aria-hidden="true">J</span><div class="card__identity"><h2 class="card__heading"><a class="card__name" href="/es/projects/jarrodwatts/jev-trader/">jev-trader</a></h2><div class="card__author">jarrodwatts/jev-trader</div></div><span class="card__stat" aria-label="2229 Stars en GitHub"><span aria-hidden="true">★</span> 2229</span></div>
+<a class="card__descLink" href="/es/projects/jarrodwatts/jev-trader/"><p class="card__desc">One AI trade decision every Monad block. Jev on Kuru MON-USDC.</p></a><div class="card__tags"><span class="badge badge--catalog" data-kind="jev-app">Aplicación Jev</span><span class="tag tag--language">TypeScript</span><time class="tag tag--updated" datetime="2026-09-17">actualizado 2026-09-17</time></div>
+<div class="card__foot"><span class="card__links"><a class="card__details" href="/es/projects/jarrodwatts/jev-trader/">Detalles <span aria-hidden="true">→</span></a><a class="card__go" href="https://github.com/jarrodwatts/jev-trader" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a><a class="card__site" href="https://github.com/jarrodwatts/jev-trader/blob/b587759e459ea049590102e54a0b07800864cdc3/README.md#L3" title="Documentado" target="_blank" rel="ugc nofollow noopener noreferrer">Pruebas <span aria-hidden="true">↗</span></a></span></div></article>
+<article class="card"><div class="card__top"><span class="card__avatar" data-kind="local-alternative" aria-hidden="true">N</span><div class="card__identity"><h2 class="card__heading"><a class="card__name" href="/es/projects/tianyucodings/nanojev/">NanoJev</a></h2><div class="card__author">TianyuCodings/NanoJev</div></div><span class="card__stat" aria-label="2155 Stars en GitHub"><span aria-hidden="true">★</span> 2155</span></div>
+<a class="card__descLink" href="/es/projects/tianyucodings/nanojev/"><p class="card__desc">A nano replica of Jev: parallel decisions, dynamic candidates, and an end-to-end training pipeline.</p></a><div class="card__tags"><span class="badge badge--catalog" data-kind="local-alternative">Alternativa local</span><span class="tag tag--language">Python</span><time class="tag tag--updated" datetime="2026-09-21">actualizado 2026-09-21</time></div>
+<div class="card__foot"><span class="card__links"><a class="card__details" href="/es/projects/tianyucodings/nanojev/">Detalles <span aria-hidden="true">→</span></a><a class="card__go" href="https://github.com/TianyuCodings/NanoJev" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a><a class="card__site" href="https://github.com/TianyuCodings/NanoJev/blob/76fdfc9ecdca45a9bcef17991a07d3041a87685a/README.md#L7" title="Documentado" target="_blank" rel="ugc nofollow noopener noreferrer">Pruebas <span aria-hidden="true">↗</span></a></span></div></article>
+<article class="card"><div class="card__top"><span class="card__avatar" data-kind="resource" aria-hidden="true">S</span><div class="card__identity"><h2 class="card__heading"><a class="card__name" href="/es/projects/typesafe-ai/skills/">skills</a></h2><div class="card__author">typesafe-ai/skills</div></div><span class="card__stat" aria-label="2050 Stars en GitHub"><span aria-hidden="true">★</span> 2050</span></div>
+<a class="card__descLink" href="/es/projects/typesafe-ai/skills/"><p class="card__desc">Agent skills for building with TypeSafe&#39;s System One API</p></a><div class="card__tags"><span class="badge badge--catalog" data-kind="resource">Recurso / directorio</span><time class="tag tag--updated" datetime="2026-09-12">actualizado 2026-09-12</time></div>
+<div class="card__foot"><span class="card__links"><a class="card__details" href="/es/projects/typesafe-ai/skills/">Detalles <span aria-hidden="true">→</span></a><a class="card__go" href="https://github.com/typesafe-ai/skills" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a><a class="card__site" href="https://github.com/typesafe-ai/skills/tree/65a39f393687675ce170e6094757de20370365b9" title="Oficial" target="_blank" rel="ugc nofollow noopener noreferrer">Pruebas <span aria-hidden="true">↗</span></a></span></div></article>
+<article class="card"><div class="card__top"><span class="card__avatar" data-kind="resource" aria-hidden="true">A</span><div class="card__identity"><h2 class="card__heading"><a class="card__name" href="/es/projects/yibie/awesome-jev/">awesome-jev</a></h2><div class="card__author">yibie/awesome-jev</div></div><span class="card__stat" aria-label="1556 Stars en GitHub"><span aria-hidden="true">★</span> 1556</span></div>
+<a class="card__descLink" href="/es/projects/yibie/awesome-jev/"><p class="card__desc">A curated list of public projects, integrations, and discussions built on Jev — TypeSafe AI&#39;s System One model for typed decisions.</p></a><div class="card__tags"><span class="badge badge--catalog" data-kind="resource">Recurso / directorio</span><span class="tag tag--language">Python</span><time class="tag tag--updated" datetime="2026-09-24">actualizado 2026-09-24</time></div>
+<div class="card__foot"><span class="card__links"><a class="card__details" href="/es/projects/yibie/awesome-jev/">Detalles <span aria-hidden="true">→</span></a><a class="card__go" href="https://github.com/yibie/awesome-jev" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a><a class="card__site" href="https://github.com/yibie/awesome-jev/blob/70522eac9aef78207460c8f85ce8f17f05fe9f9c/README.md#L9" title="Documentado" target="_blank" rel="ugc nofollow noopener noreferrer">Pruebas <span aria-hidden="true">↗</span></a></span></div></article>
+<article class="card"><div class="card__top"><span class="card__avatar" data-kind="jev-app" aria-hidden="true">O</span><div class="card__identity"><h2 class="card__heading"><a class="card__name" href="/es/projects/arize-ai/openinference/">openinference</a></h2><div class="card__author">Arize-ai/openinference</div></div><span class="card__stat" aria-label="1234 Stars en GitHub"><span aria-hidden="true">★</span> 1234</span></div>
+<a class="card__descLink" href="/es/projects/arize-ai/openinference/"><p class="card__desc">OpenTelemetry Instrumentation for AI Observability</p></a><div class="card__tags"><span class="badge badge--catalog" data-kind="jev-app">Aplicación Jev</span><span class="tag tag--language">Python</span><time class="tag tag--updated" datetime="2026-09-24">actualizado 2026-09-24</time></div>
+<div class="card__foot"><span class="card__links"><a class="card__details" href="/es/projects/arize-ai/openinference/">Detalles <span aria-hidden="true">→</span></a><a class="card__go" href="https://github.com/Arize-ai/openinference" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a><a class="card__site" href="https://github.com/Arize-ai/openinference/blob/1bdcb086969226680381156a480f43a2b5f30048/js/packages/openinference-instrumentation-typesafe/examples/all-question-types.ts#L1" title="Referencia en código" target="_blank" rel="ugc nofollow noopener noreferrer">Pruebas <span aria-hidden="true">↗</span></a></span></div></article>
+<article class="card"><div class="card__top"><span class="card__avatar" data-kind="jev-app" aria-hidden="true">T</span><div class="card__identity"><h2 class="card__heading"><a class="card__name" href="/es/projects/awlevin/typesafe-computer-use/">typesafe-computer-use</a></h2><div class="card__author">awlevin/typesafe-computer-use</div></div><span class="card__stat" aria-label="935 Stars en GitHub"><span aria-hidden="true">★</span> 935</span></div>
+<a class="card__descLink" href="/es/projects/awlevin/typesafe-computer-use/"><p class="card__desc">Computer use for about $0.0002 a step: OCR the screen, classify the next action with TypeSafe, click. macOS.</p></a><div class="card__tags"><span class="badge badge--catalog" data-kind="jev-app">Aplicación Jev</span><span class="tag tag--language">Python</span><time class="tag tag--updated" datetime="2026-09-23">actualizado 2026-09-23</time></div>
+<div class="card__foot"><span class="card__links"><a class="card__details" href="/es/projects/awlevin/typesafe-computer-use/">Detalles <span aria-hidden="true">→</span></a><a class="card__go" href="https://github.com/awlevin/typesafe-computer-use" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a><a class="card__site" href="https://github.com/awlevin/typesafe-computer-use/blob/24eb2924c2a95de5b18c2e5d6fdc692cbe87b5ff/README.md#L67" title="Documentado" target="_blank" rel="ugc nofollow noopener noreferrer">Pruebas <span aria-hidden="true">↗</span></a></span></div></article>
+<article class="card"><div class="card__top"><span class="card__avatar" data-kind="resource" aria-hidden="true">A</span><div class="card__identity"><h2 class="card__heading"><a class="card__name" href="/es/projects/anil-matcha/awesome-jev-by-typesafe/">awesome-jev-by-typesafe</a></h2><div class="card__author">Anil-matcha/awesome-jev-by-typesafe</div></div><span class="card__stat" aria-label="830 Stars en GitHub"><span aria-hidden="true">★</span> 830</span></div>
+<a class="card__descLink" href="/es/projects/anil-matcha/awesome-jev-by-typesafe/"><p class="card__desc">Evidence-backed use cases, patterns, prompts, and starter code for TypeSafe Jev — a System One model for fast, typed, confidence-aware decisions in software.</p></a><div class="card__tags"><span class="badge badge--catalog" data-kind="resource">Recurso / directorio</span><span class="tag tag--language">Python</span><time class="tag tag--updated" datetime="2026-09-23">actualizado 2026-09-23</time></div>
+<div class="card__foot"><span class="card__links"><a class="card__details" href="/es/projects/anil-matcha/awesome-jev-by-typesafe/">Detalles <span aria-hidden="true">→</span></a><a class="card__go" href="https://github.com/Anil-matcha/awesome-jev-by-typesafe" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a><a class="card__site" href="https://github.com/Anil-matcha/awesome-jev-by-typesafe/blob/68d934eb0b2f2e1c37ea1e701ffcfb4cc5221e7f/README.md#L71" title="Documentado" target="_blank" rel="ugc nofollow noopener noreferrer">Pruebas <span aria-hidden="true">↗</span></a></span></div></article>
+<!-- catalog-prerender:end --></div>
+    <div class="dir__empty" id="dirEmpty" hidden data-i18n="apps.empty">No hay proyectos que coincidan con la búsqueda.</div>
+    <nav class="catalog-pages catalog-pages--directory" id="directoryPagesBottom" aria-label="Pagination"><a href="/browse/" data-i18n="apps.browseAll">Ver todos los proyectos</a></nav>
+    <div class="directory-about"><span><span id="statCats" data-count="10">10</span> <span data-i18n="stat.cats">Categorías</span></span><span><span id="statStars" data-count="199526">199,526</span> <span data-i18n="stat.stars">Stars en GitHub</span></span><a href="/methodology/" data-i18n="apps.methodology">Cómo revisamos</a><a href="/status/" data-i18n="apps.status">Estado de actualización</a></div>
+    <div class="dir__source"><span><span data-i18n="apps.source">Fuentes de descubrimiento</span> <a href="/methodology/" data-i18n="apps.discoverySources">Búsqueda de GitHub y fuentes de la comunidad</a></span><a href="/catalog-audit.json" data-i18n="apps.audit">Informe de fuentes y evidencias ↗</a></div>
   </div>
 </section>
-
-<!-- ============ HERO ============ -->
+<div class="home-resources wrap">
+<details class="home-resource"><summary><span data-i18n="foot.explore">Explorar</span><span aria-hidden="true">+</span></summary><!-- ============ HERO ============ -->
 <section class="hero">
   <div class="wrap hero__grid">
     <div class="hero__copy">
@@ -1123,12 +679,7 @@
 
       <p class="hero__sub reveal" data-i18n-html="hero.sub">Explora aplicaciones Jev, integraciones, SDK, alternativas independientes e investigación. Cada ficha indica su relación con Jev y enlaza las pruebas.</p>
 
-      <div class="hero__search reveal">
-        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M16.5 16.5 21 21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-        <input id="heroSearch" type="search" autocomplete="off" aria-label="Buscar proyectos" data-i18n-aria-label="a11y.search"
-               data-i18n-ph="hero.search" placeholder="Buscar proyectos, repositorios, lenguajes..." />
-        <kbd>/</kbd>
-      </div>
+
 
       <div class="hero__chips reveal" id="heroChips">
         <button class="chip" data-jump="agents" data-i18n="cat.agents">Herramientas para agentes</button>
@@ -1159,27 +710,6 @@
     </div>
   </div>
 
-  <!-- stat strip -->
-  <div class="wrap">
-    <div class="stat-strip reveal">
-      <div class="stat">
-        <div class="stat__n" id="statApps" data-count="3906">3,906</div>
-        <div class="stat__l" data-i18n="stat.apps">Repositorios públicos</div>
-      </div>
-      <div class="stat">
-        <div class="stat__n" id="statCats" data-count="10">10</div>
-        <div class="stat__l" data-i18n="stat.cats">Categorías</div>
-      </div>
-      <div class="stat">
-        <div class="stat__n" id="statStars" data-count="199526">199,526</div>
-        <div class="stat__l" data-i18n="stat.stars">Stars en GitHub</div>
-      </div>
-      <div class="stat">
-        <div class="stat__n stat__n--date" id="catalogUpdated" data-iso="2026-09-24T08:40:10.508Z">2026-09-24</div>
-        <div class="stat__l" data-i18n="stat.updated">Última actualización</div>
-      </div>
-    </div>
-  </div>
 </section>
 
 <!-- ============ ABOUT / MODEL ============ -->
@@ -1283,7 +813,8 @@
   </div>
 </section>
 
-<!-- ============ SUBMIT ============ -->
+</details>
+<details class="home-resource home-resource--submit"><summary><span data-i18n="home.submitTitle">¿Has creado algo con JEV?</span><span aria-hidden="true">+</span></summary><!-- ============ SUBMIT ============ -->
 <section class="section" id="submit">
   <div class="wrap">
     <div class="cta reveal">
@@ -1321,27 +852,19 @@
   </div>
 </section>
 
+</details>
+</div>
 </main>
-
 <!-- ============ FOOTER ============ -->
 <footer class="footer">
   <div class="wrap footer__grid">
     <div class="footer__brand">
       <a class="brand" href="#top" aria-label="JEV AI Model projects directory home">
-        <span class="brand__mark" aria-hidden="true">
-          <svg class="brand__symbol" viewBox="0 0 64 64" width="30" height="30">
-            <rect class="brand__frame" x="1.5" y="1.5" width="61" height="61" rx="15"/>
-            <path class="brand__j" d="M18 17h27v19c0 9-5.2 14-13.4 14-6.2 0-10.7-2.8-13.2-8.2"/>
-            <g class="brand__target">
-              <circle class="brand__target-ring" cx="45" cy="17" r="6.5"/>
-              <circle class="brand__target-dot" cx="45" cy="17" r="2.4"/>
-            </g>
-          </svg>
-        </span>
-        <span class="brand__word">JEV<span>HUNT</span></span>
+        <span class="brand__mark" aria-hidden="true">J</span>
+        <span class="brand__word">JevHunt</span>
       </a>
       <p data-i18n="foot.blurb">Directorio independiente gestionado por la comunidad para proyectos del modelo JEV AI. No está afiliado a TypeSafe AI. JevHunt no vende acceso a la API ni solicita contraseñas o claves API.</p>
-      <div class="footer__ver">TS.AI // JEVHUNT.0S1</div>
+
     </div>
     <div class="footer__col">
       <h4 data-i18n="foot.explore">Explorar</h4>
@@ -1368,16 +891,17 @@
   </div>
   <div class="wrap footer__base">
     <span>© <span id="year"></span> JevHunt</span>
-    <span class="footer__glyph">∵ ⩆ ⩆ ∵</span>
+
     <span data-i18n="foot.made">Hecho para quienes construyen.</span>
   </div>
 </footer>
 
-<script src="/assets/js/locales/es.js?v=65ebf069b8"></script>
+<script src="/assets/js/locales/es.js?v=3ab9095ad1"></script>
 <script src="/assets/js/data.js?v=442a3e084a"></script>
 <script src="/assets/js/projects.js?v=1a1194f968"></script>
 <script id="liveCatalogSeed" type="application/json">null</script>
-<script type="module" src="/assets/js/main.js?v=a8dd01a487"></script>
+<script src="/assets/js/analytics.js?v=b3a8b122f8" defer></script>
+<script type="module" src="/assets/js/main.js?v=3e595b16c7"></script>
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 </body>

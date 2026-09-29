@@ -100,7 +100,7 @@ test("the initial catalog is prerendered with stable crawlable project links", (
   const catalog = contentOf(/<!-- catalog-prerender:start -->([\s\S]*?)<!-- catalog-prerender:end -->/i);
   assert.equal(catalog.match(/<article class="card">/g)?.length, 20);
   assert.equal(catalog.match(/<h2 class="card__heading">/g)?.length, 20);
-  assert.match(index, /<span id="dirCount">Showing 20 of \d+ projects<\/span>/);
+  assert.match(index, /<span id="dirCount"[^>]*>Showing 20 of \d+ projects<\/span>/);
   assert.match(index, /id="catalogUpdated" data-iso="\d{4}-\d{2}-\d{2}T[^\"]+Z"/);
   assert.match(main, /const PAGE_SIZE = 20;/);
 
@@ -161,11 +161,11 @@ test("the API integration guide is prominent and locale-aware", () => {
   };
 
   for (const { key, html } of localizedPages) {
-    const guide = contentOf(/(<aside class="api-guide"[\s\S]*?<\/aside>)/i, html);
+    const guide = contentOf(/(<aside class="[^"]*\bapi-guide\b[^"]*"[\s\S]*?<\/aside>)/i, html);
     assert.match(guide, new RegExp(`href="${expectedGuideUrls[key].replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}"`), key);
     assert.match(guide, /target="_blank" rel="noopener noreferrer"/i, key);
     assert.match(guide, /OmniaKey/i, key);
-    assert.ok(html.indexOf("class=\"api-guide\"") < html.indexOf("id=\"apps\""), `${key} guide must precede the catalog`);
+    assert.ok(html.indexOf(guide) < html.indexOf("id=\"apps\""), `${key} guide must precede the catalog`);
   }
 });
 

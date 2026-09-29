@@ -13,14 +13,24 @@ export function page({ title, description, path, body, schema, noindex = false, 
   const t = (key, fallback) => messages[key] || fallback;
   const lang = localeInfo?.lang || "en";
   const link = value => localePrefix + value;
+  const directory = localePrefix ? `${localePrefix}/#apps` : "/browse/";
   const projectSuffix = path.match(/\/projects\/(.+)$/)?.[1] || "";
   const footerLocales = localeLinks
-    ? Object.entries(LOCALES).map(([key, locale]) => `<a href="${projectSuffix ? `${locale.path}projects/${projectSuffix}` : locale.path}"${key === localeKey ? " aria-current=\"page\"" : ""}>${esc(locale.lang)}</a>`).join("")
+    ? Object.entries(LOCALES).map(([key, locale]) => `<a href="${projectSuffix ? `${locale.path}projects/${projectSuffix}` : locale.path}" lang="${esc(locale.lang)}" hreflang="${esc(locale.hreflang)}"${key === localeKey ? " aria-current=\"page\"" : ""}>${esc(locale.label || locale.lang)}</a>`).join("")
     : "";
-  const alternates = projectSuffix ? Object.values(LOCALES).map(locale => `<link rel="alternate" hreflang="${esc(locale.hreflang)}" href="${ORIGIN}${locale.path}projects/${esc(projectSuffix)}"/>`).join("") + `<link rel="alternate" hreflang="x-default" href="${ORIGIN}/projects/${esc(projectSuffix)}"/>` : "";
+  const alternates = projectSuffix && !noindex ? Object.values(LOCALES).map(locale => `<link rel="alternate" hreflang="${esc(locale.hreflang)}" href="${ORIGIN}${locale.path}projects/${esc(projectSuffix)}"/>`).join("") + `<link rel="alternate" hreflang="x-default" href="${ORIGIN}/projects/${esc(projectSuffix)}"/>` : "";
   return `<!DOCTYPE html>
-<html lang="${esc(lang)}" data-locale="${esc(localeKey)}" data-theme="dark"><head>
+<html lang="${esc(lang)}" data-locale="${esc(localeKey)}" data-theme="light"><head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7QNDGTH1T4"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-7QNDGTH1T4');
+</script>
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<script>try{document.documentElement.dataset.theme=localStorage.getItem('jh-theme')==='dark'?'dark':'light'}catch{}</script>
 <title>${esc(title)} | JevHunt</title><meta name="description" content="${esc(description.slice(0, 160))}"/>
 <link rel="canonical" href="${ORIGIN}${esc(path)}"/>
 ${alternates}
@@ -28,12 +38,12 @@ ${noindex ? '<meta name="robots" content="noindex, nofollow"/>' : ''}
 <meta property="og:title" content="${esc(title)} | JevHunt"/><meta property="og:description" content="${esc(description.slice(0, 160))}"/>
 <meta property="og:type" content="website"/><meta property="og:url" content="${ORIGIN}${esc(path)}"/><meta property="og:image" content="${ORIGIN}/og.png?v=3"/>
 <meta name="twitter:card" content="summary_large_image"/><link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml"/>
-<link rel="stylesheet" href="${asset("/assets/css/fonts.css")}"/><link rel="stylesheet" href="${asset("/assets/css/style.css")}"/>
+<link rel="stylesheet" href="${asset("/assets/css/fonts.css")}"/><link rel="stylesheet" href="${asset("/assets/css/style.css")}"/><link rel="stylesheet" href="${asset("/assets/css/directory.css")}"/>
 ${schema ? `<script type="application/ld+json">${jsonLd(schema)}</script>` : ''}
-</head><body>
-<header class="legal-nav"><div class="nav__inner"><a class="brand" href="${link("/")}">JEV<span>HUNT</span></a><nav class="legal-nav__links" aria-label="${esc(t("nav.apps", "Main navigation"))}"><a href="${link("/browse/")}">${esc(t("nav.apps", "Projects"))}</a><a href="${link("/methodology/")}">${esc(t("apps.evidence", "Evidence"))}</a><a href="${link("/status/")}">${esc(t("apps.status", "Updates"))}</a><a href="${link("/#submit")}">${esc(t("nav.submit", "Submit"))}</a></nav><button class="icon-btn" id="pageTheme" aria-label="${esc(t("a11y.theme", "Toggle theme"))}">◐</button></div></header>
+</head><body class="directory-detail">
+<header class="legal-nav"><div class="nav__inner"><a class="brand" href="${link("/")}">JEV<span>HUNT</span></a><nav class="legal-nav__links" aria-label="${esc(t("nav.apps", "Main navigation"))}"><a href="${directory}">${esc(t("nav.apps", "Projects"))}</a><a href="/methodology/">${esc(t("apps.evidence", "Evidence"))}</a><a href="/status/">${esc(t("apps.status", "Updates"))}</a><a href="${link("/#submit")}">${esc(t("nav.submit", "Submit"))}</a></nav><button class="icon-btn" id="pageTheme" aria-label="${esc(t("a11y.theme", "Toggle theme"))}">◐</button></div></header>
 <main class="legal"><div class="wrap">${body}</div></main>
-<footer class="footer"><div class="wrap footer__base"><span>${esc(t("foot.blurb", "Independent Jev ecosystem directory"))}</span><a href="${link("/privacy/")}">${esc(t("foot.privacy", "Privacy"))}</a><a href="${link("/terms/")}">${esc(t("foot.terms", "Terms"))}</a><a href="${link("/security/")}">${esc(t("foot.security", "Security"))}</a>${footerLocales}</div></footer>
-<script src="${asset("/assets/js/page.js")}"></script>${script ? `<script type="module" src="${esc(asset(script))}"></script>` : ''}
+<footer class="footer"><div class="wrap footer__base"><span>${esc(t("foot.blurb", "Independent Jev ecosystem directory"))}</span><a href="/privacy/">${esc(t("foot.privacy", "Privacy"))}</a><a href="/terms/">${esc(t("foot.terms", "Terms"))}</a><a href="/security/">${esc(t("foot.security", "Security"))}</a>${footerLocales}</div></footer>
+<script src="${asset("/assets/js/analytics.js")}" defer></script><script src="${asset("/assets/js/page.js")}"></script>${script ? `<script type="module" src="${esc(asset(script))}"></script>` : ''}
 </body></html>`;
 }

@@ -1,4 +1,5 @@
-import { readCatalogState, catalogUrl, matchesProject, projectPath } from "./catalog-state.js?v=376b07d07a";
+import { readCatalogState, catalogUrl, matchesProject } from "./catalog-state.js?v=3a1701cd8f";
+import { renderProjectCard } from "./project-card.js?v=3e5057a044";
 /* ==========================================================================
    JevHunt — interactions
    ========================================================================== */
@@ -12,6 +13,8 @@ import { readCatalogState, catalogUrl, matchesProject, projectPath } from "./cat
     const seed = JSON.parse(document.getElementById("liveCatalogSeed")?.textContent || "null");
     if (seed?.meta?.mode === "live-d1" && Array.isArray(seed.apps)) {
       window.JH.apps = seed.apps; window.JH.catalogMeta = seed.meta; window.JH.catalogRemote = true;
+      window.JH.catalogPagination = seed.pagination || null;
+      window.JH.catalogQuery = seed.query || null;
     }
   } catch { /* The static fallback remains usable. */ }
 
@@ -27,10 +30,13 @@ import { readCatalogState, catalogUrl, matchesProject, projectPath } from "./cat
   }
 
   function storedTheme() {
-    try { return localStorage.getItem("jh-theme") === "light" ? "light" : "dark"; } catch { return "dark"; }
+    try { return localStorage.getItem("jh-theme") === "dark" ? "dark" : "light"; } catch { return "light"; }
   }
   const state = { theme: storedTheme(), ...readCatalogState(location.href, window.JH.categories.map(c => c.id)) };
-  function saveFilters() { history.replaceState({}, "", catalogUrl(location.href, state)); }
+  function saveFilters(push = false) {
+    const url = catalogUrl(location.href, state);
+    if (url !== location.pathname + location.search + location.hash) history[push ? "pushState" : "replaceState"]({}, "", url);
+  }
 
 
   const PAGE_SIZE = 20;
@@ -46,7 +52,7 @@ import { readCatalogState, catalogUrl, matchesProject, projectPath } from "./cat
     if (Number.isNaN(date.getTime())) return;
     const formatted = catalogDate.format(date);
     const label = t("stat.updatedAt", { date: formatted }, formatted);
-    element.textContent = formatted;
+    element.textContent = formatted + " UTC";
     element.dataset.iso = date.toISOString();
     element.title = label;
     element.setAttribute("aria-label", label);
@@ -58,7 +64,7 @@ import { readCatalogState, catalogUrl, matchesProject, projectPath } from "./cat
     state.theme = t;
     try { localStorage.setItem("jh-theme", t); } catch { /* Storage is optional. */ }
     const meta = document.getElementById("themeColor");
-    if (meta) meta.setAttribute("content", t === "light" ? "#FAFAF9" : "#0B0B0C");
+    if (meta) meta.setAttribute("content", t === "light" ? "#F7F5F2" : "#17161A");
   }
 
   const escAttr = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -83,7 +89,7 @@ import { readCatalogState, catalogUrl, matchesProject, projectPath } from "./cat
   }
 
   /* ----------------------------- terminal typing ------------------------ */
-  const CODE = window.JH.playbooks[0].code;
+  const CODE = window.JH.playbooks?.[0]?.code || "";
 
   const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
@@ -106,7 +112,7 @@ import { readCatalogState, catalogUrl, matchesProject, projectPath } from "./cat
   function typeTerminal() {
     const el = $("#termCode");
     if (!el) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || el.closest("details:not([open])")) {
       el.innerHTML = highlight(CODE);
       return;
     }
@@ -181,7 +187,9 @@ import { readCatalogState, catalogUrl, matchesProject, projectPath } from "./cat
   }
 
   function resetCatalogWindow() {
-    state.visible = PAGE_SIZE;
+    state.page = 1;
+    catalogFailed = false;
+    scrollAfterPage = false;
   }
 
   function compareDate(left, right, direction = "desc") {
@@ -212,6 +220,7 @@ import { readCatalogState, catalogUrl, matchesProject, projectPath } from "./cat
     $$(".fchip", host).forEach(b => b.addEventListener("click", () => {
       state.filter = b.dataset.cat;
       resetCatalogWindow();
+      saveFilters(true);
       renderFilters();
       renderApps();
     }));
@@ -219,30 +228,127 @@ import { readCatalogState, catalogUrl, matchesProject, projectPath } from "./cat
 
   let catalogLoading;
   let catalogFailed = false;
-  async function loadLiveCatalog(all = false) {
-    const response = await fetch("/api/catalog" + (all ? "?all=1&v=" + encodeURIComponent(window.JH.catalogMeta.catalogHash) : ""), { headers: { accept: "application/json" } });
-    if (!response.ok) throw new Error("Catalog unavailable");
-    const data = await response.json();
-    if (!Array.isArray(data.apps) || !data.meta?.projectCount) throw new Error("Invalid catalog response");
-    if (!all && window.JH.catalogLoaded) {
-      if (data.meta.catalogHash !== window.JH.catalogMeta.catalogHash) return loadLiveCatalog(true);
-      return;
+  let catalogCountLabel = $("#dirCount")?.textContent || "";
+  let catalogViewSignature = "";
+  const catalogSignature = (value = state) => JSON.stringify([value.page, value.query.trim(), value.filter, value.kind, value.language, value.activity, value.sort, localeKey]);
+  let liveCatalogSignature = "";
+  let livePagination = window.JH.catalogPagination;
+  if (window.JH.catalogRemote) {
+    if (livePagination && Number.isInteger(livePagination.page)) {
+      const query = window.JH.catalogQuery;
+      const seedState = query ? { page: query.page || livePagination.page, query: query.q || "", filter: query.category || "all", kind: query.kind || "all", language: query.language || "all", activity: query.activity || "all", sort: query.sort || "stars-desc" } : state;
+      const seedMatches = !query || (catalogSignature(seedState) === catalogSignature() && (!query.locale || query.locale === localeKey));
+      if (seedMatches) {
+        state.page = livePagination.page;
+        liveCatalogSignature = catalogSignature();
+      }
+    } else liveCatalogSignature = catalogSignature(readCatalogState(location.origin + location.pathname));
+  }
+  let liveRequestController;
+  let liveRequestId = 0;
+  let livePendingSignature = "";
+  let scrollAfterPage = false;
+  let searchTimer;
+
+  function cancelLiveRequest() {
+    liveRequestId++;
+    liveRequestController?.abort();
+    liveRequestController = null;
+    livePendingSignature = "";
+  }
+
+  function showCatalogLoading(loading) {
+    $("#appGrid")?.setAttribute("aria-busy", String(loading));
+    $("#directoryPagesBottom")?.setAttribute("aria-busy", String(loading));
+    let status = $("#catalogLoadingStatus");
+    if (!status && loading) {
+      status = document.createElement("p");
+      status.id = "catalogLoadingStatus";
+      status.className = "catalog-loading-status";
+      status.setAttribute("role", "status");
+      $("#directoryPagesBottom")?.before(status);
     }
-    window.JH.apps = data.apps; window.JH.catalogMeta = data.meta;
-    catalogFailed = false;
-    window.JH.catalogRemote = true; window.JH.catalogLoaded = all;
-    const count = document.getElementById("statApps");
-    if (count) { count.dataset.count = String(data.meta.projectCount); count.textContent = number.format(data.meta.projectCount); }
-    const stars = document.getElementById("statStars");
-    if (stars) { stars.dataset.count = String(data.meta.totalStars); stars.textContent = number.format(data.meta.totalStars); }
-    updateCatalogTimestamp(data.meta.syncedAt);
-    renderCategories(); renderFilters();
+    if (status) {
+      status.hidden = !loading;
+      status.textContent = t("apps.loading", {}, "Loading catalog…");
+    }
+    if (loading) {
+      showCatalogError(false);
+      $("#dirCount").textContent = t("apps.loading", {}, "Loading catalog…");
+    }
+  }
+
+  function showCatalogError(failed) {
+    let notice = $("#catalogLoadError");
+    if (!notice && failed) {
+      notice = document.createElement("div");
+      notice.id = "catalogLoadError";
+      notice.className = "catalog-load-error";
+      notice.setAttribute("role", "status");
+      notice.innerHTML = `<p>${escAttr(t("apps.loadFailed", {}, "Could not load the catalog. Please try again."))}</p><button class="btn btn--ghost btn--sm" id="catalogRetry" type="button">${escAttr(t("apps.retry", {}, "Retry"))}</button>`;
+      ($("#directoryPagesBottom") || $("#appGrid"))?.before(notice);
+      $("#catalogRetry", notice)?.addEventListener("click", () => {
+        catalogFailed = false;
+        if (window.JH.catalogRemote) liveCatalogSignature = "";
+        renderApps();
+      });
+    }
+    if (notice) notice.hidden = !failed;
+  }
+  async function loadLiveCatalog() {
+    const signature = catalogSignature();
+    if (livePendingSignature === signature) return;
+    cancelLiveRequest();
+    const requestId = liveRequestId;
+    const controller = new AbortController();
+    let timedOut = false;
+    const timeout = setTimeout(() => { timedOut = true; controller.abort(); }, 20000);
+    liveRequestController = controller;
+    livePendingSignature = signature;
+    const params = new URLSearchParams({ page: String(state.page), per_page: String(PAGE_SIZE), locale: localeKey });
+    for (const [key, value, fallback] of [["q", state.query.trim(), ""], ["category", state.filter, "all"], ["kind", state.kind, "all"], ["language", state.language, "all"], ["activity", state.activity, "all"], ["sort", state.sort, "stars-desc"]]) {
+      if (value !== fallback) params.set(key, value);
+    }
+    showCatalogLoading(true);
+    try {
+      const response = await fetch("/api/catalog?" + params, { headers: { accept: "application/json" }, signal: controller.signal });
+      if (!response.ok) throw new Error("Catalog unavailable");
+      const data = await response.json();
+      if (requestId !== liveRequestId || signature !== catalogSignature()) return;
+      if (controller.signal.aborted) throw new Error("Catalog request timed out");
+      if (!Array.isArray(data.apps) || !data.meta || !data.pagination || !Number.isInteger(data.pagination.page) || !Number.isInteger(data.pagination.total) || data.pagination.total < 0 || data.pagination.pageSize !== PAGE_SIZE || data.apps.length > PAGE_SIZE) throw new Error("Invalid catalog response");
+      window.JH.apps = data.apps; window.JH.catalogMeta = data.meta;
+      window.JH.catalogRemote = true;
+      window.JH.catalogLoaded = false;
+      state.page = data.pagination.page;
+      livePagination = data.pagination;
+      liveCatalogSignature = catalogSignature();
+      livePendingSignature = "";
+      liveRequestController = null;
+      catalogFailed = false;
+      const count = document.getElementById("statApps");
+      if (count) { count.dataset.count = String(data.meta.projectCount); count.textContent = number.format(data.meta.projectCount); }
+      const stars = document.getElementById("statStars");
+      if (stars) { stars.dataset.count = String(data.meta.totalStars); stars.textContent = number.format(data.meta.totalStars); }
+      updateCatalogTimestamp(data.meta.syncedAt);
+      renderCategories(); renderFilters(); renderApps();
+    } catch (error) {
+      if (requestId !== liveRequestId || (controller.signal.aborted && !timedOut)) return;
+      livePendingSignature = "";
+      liveRequestController = null;
+      catalogFailed = true;
+      showCatalogLoading(false);
+      showCatalogError(true);
+      $("#dirCount").textContent = catalogCountLabel;
+      toast(t("apps.loadFailed", {}, "Could not load the catalog. Please try again."), true);
+    } finally {
+      clearTimeout(timeout);
+    }
   }
   async function ensureCatalog() {
     if (window.JH.catalogLoaded) return;
     if (!catalogLoading) {
-      const load = window.JH.catalogRemote ? loadLiveCatalog(true)
-        : import("./catalog-all.js?v=" + encodeURIComponent(window.JH.catalogMeta.catalogHash));
+      const load = import("./catalog-all.js?v=" + encodeURIComponent(window.JH.catalogMeta.catalogHash));
       catalogLoading = load.then(() => { catalogLoading = null; renderApps(); }).catch(error => {
         catalogLoading = null;
         catalogFailed = true;
@@ -255,41 +361,72 @@ import { readCatalogState, catalogUrl, matchesProject, projectPath } from "./cat
   }
 
   function renderDirectoryPages(total) {
-    const host = $("#directoryPages");
-    if (!host) return;
+    const hosts = [$("#directoryPagesBottom")].filter(Boolean);
+    if (!hosts.length) return;
     const pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
-    const current = Math.min(pages, Math.max(1, Math.ceil(state.visible / PAGE_SIZE)));
-    const previous = t("apps.previous", "Previous");
-    const next = t("apps.next", "Next");
-    const pageLabel = t("apps.page", "Page {page} of {pages}").replace("{page}", current).replace("{pages}", pages);
-    host.innerHTML = `${current > 1 ? `<button type="button" data-page="${current - 1}">${previous}</button>` : ""}<span>${pageLabel}</span>${current < pages ? `<button type="button" data-page="${current + 1}">${next}</button>` : ""}`;
-    host.querySelectorAll("[data-page]").forEach(button => button.addEventListener("click", () => {
-      state.visible = Number(button.dataset.page) * PAGE_SIZE;
-      renderApps();
-      $("#apps")?.scrollIntoView({ behavior: "smooth" });
-    }));
+    const current = state.page;
+    const pageLabel = t("apps.page", { page: number.format(current), pages: number.format(pages) }, "Page {page} of {pages}");
+    const range = total ? `${number.format((current - 1) * PAGE_SIZE + 1)}–${number.format(Math.min(current * PAGE_SIZE, total))} / ${number.format(total)}` : `0 / 0`;
+    const pageLink = (page, text, rel = "") => {
+      const url = new URL(catalogUrl(location.href, { ...state, page }), location.origin);
+      url.hash = "apps";
+      return `<a href="${escAttr(url.pathname + url.search + url.hash)}" data-page="${page}"${rel ? ` rel="${rel}"` : ""}${page === current ? ' aria-current="page"' : ""}>${escAttr(text)}</a>`;
+    };
+    const pageNumbers = [...new Set([1, current - 1, current, current + 1, pages])].filter(page => page > 0 && page <= pages).sort((a, b) => a - b);
+    const numbers = pageNumbers.map((page, index) => `${index > 0 && page - pageNumbers[index - 1] > 1 ? '<span class="catalog-pages__gap" aria-hidden="true">…</span>' : ""}${pageLink(page, number.format(page))}`).join("");
+    const links = `${current > 1 ? pageLink(current - 1, t("apps.previous", {}, "Previous"), "prev") : ""}${numbers}${current < pages ? pageLink(current + 1, t("apps.next", {}, "Next"), "next") : ""}`;
+    hosts.forEach(host => {
+      host.setAttribute("aria-label", pageLabel);
+      host.hidden = total === 0;
+      host.innerHTML = `<span class="catalog-pages__summary">${escAttr(pageLabel)} <span class="catalog-pages__range">${range}</span></span><span class="catalog-pages__links">${links}</span>`;
+      host.querySelectorAll("[data-page]").forEach(link => link.addEventListener("click", event => {
+        if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        event.preventDefault();
+        if (Number(link.dataset.page) === state.page) return;
+        state.page = Number(link.dataset.page);
+        catalogFailed = false;
+        scrollAfterPage = true;
+        history.pushState({}, "", link.getAttribute("href"));
+        renderApps();
+      }));
+    });
   }
   async function refreshLiveCatalog() {
-    try {
-      if (document.hidden) return;
-      const all = !!window.JH.catalogLoaded;
-      await loadLiveCatalog(all);
-      catalogLoading = null;
-      renderApps();
-    } catch { /* Keep the last usable data during a network failure. */ }
+    if (!window.JH.catalogRemote || document.hidden || livePendingSignature || searchTimer) return;
+    await loadLiveCatalog();
   }
 
   function renderApps() {
     const grid = $("#appGrid");
     if (!grid) return;
-    const needsAll = state.query || state.filter !== "all" || state.kind !== "all" || state.language !== "all" || state.activity !== "all" || state.sort !== "stars-desc" || state.visible > PAGE_SIZE;
-    if (!window.JH.catalogLoaded && needsAll && !catalogFailed) {
+    clearTimeout(searchTimer);
+    searchTimer = null;
+    const remote = !!window.JH.catalogRemote;
+    if (remote) {
+      const signature = catalogSignature();
+      if (livePendingSignature && livePendingSignature !== signature) cancelLiveRequest();
+      if (liveCatalogSignature !== signature) {
+        saveFilters();
+        if (!catalogFailed) loadLiveCatalog();
+        return;
+      }
+    }
+    const needsAll = state.query || state.filter !== "all" || state.kind !== "all" || state.language !== "all" || state.activity !== "all" || state.sort !== "stars-desc" || state.page > 1;
+    if (!remote && !window.JH.catalogLoaded && needsAll) {
       saveFilters();
+      showCatalogLoading(!catalogFailed);
+      showCatalogError(catalogFailed);
+      if (catalogFailed) {
+        $("#dirCount").textContent = catalogCountLabel;
+        return;
+      }
       $("#dirCount").textContent = t("apps.loading", {}, "Loading catalog…");
       ensureCatalog().catch(() => {});
       return;
     }
-    const list = window.JH.apps
+    showCatalogLoading(false);
+    showCatalogError(false);
+    const list = remote ? window.JH.apps : window.JH.apps
       .filter(a => matchesProject(a, state, catLabel))
       .sort((a, b) => {
         if (state.sort === "stars-asc") return a.stars - b.stars || compareDate(a.created, b.created) || compareName(a.name, b.name);
@@ -301,62 +438,35 @@ import { readCatalogState, catalogUrl, matchesProject, projectPath } from "./cat
         return b.stars - a.stars || compareDate(a.created, b.created) || compareName(a.name, b.name);
       });
 
-    const shown = list.slice(0, state.visible);
-    const total = window.JH.catalogLoaded || catalogFailed ? list.length : (window.JH.catalogMeta.projectCount || list.length);
-    grid.innerHTML = shown.map(a => {
-      const repoUrl = `https://github.com/${a.repo.split("/").map(encodeURIComponent).join("/")}`;
-      const description = a.desc || t("apps.noDescription");
-      const published = a.created
-        ? t("apps.published", { date: a.created })
-        : null;
-      const updated = a.pushed
-        ? t("apps.updated", { date: a.pushed })
-        : t("apps.unknownUpdate");
-      return `
-      <article class="card">
-        <div class="card__top">
-          <div>
-            <h2 class="card__heading"><a class="card__name" href="${escAttr(projectPath(a.repo, localeKey === "en" ? "" : `/${localeKey}`))}">${escAttr(a.name)}</a></h2>
-            <div class="card__author">${escAttr(a.repo)}</div>
-          </div>
-          <span class="badge badge--catalog">${escAttr(t("relationship." + (a.relationship || "unclassified")))}</span>
-        </div>
-        <a class="card__descLink" href="${escAttr(projectPath(a.repo, localeKey === "en" ? "" : `/${localeKey}`))}"><p class="card__desc">${escAttr(description)}</p></a>
-        <div class="card__tags">
-          ${a.language ? `<span class="tag">${escAttr(a.language)}</span>` : ""}
-          <span class="tag">${escAttr(t("evidence." + (a.evidenceLevel || "legacy-unreviewed")))}</span>
-          ${a.fork ? `<span class="tag">${escAttr(t("apps.fork"))}</span>` : ""}
-          ${a.archived ? `<span class="tag">${escAttr(t("apps.archived"))}</span>` : ""}
-          ${a.freshness && a.freshness !== "current" ? `<span class="tag">${escAttr(t("apps.stale"))}</span>` : ""}
-          ${published ? `<span class="tag">${escAttr(published)}</span>` : ""}
-          <span class="tag">${escAttr(updated)}</span>
-        </div>
-        <div class="card__foot">
-          <span class="card__links">
-            <a class="card__go" href="${escAttr(repoUrl)}" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-            <a class="card__site" href="${escAttr(a.evidence)}" target="_blank" rel="ugc nofollow noopener noreferrer">${escAttr(t("apps.evidence"))} <span aria-hidden="true">↗</span></a>
-          </span>
-          <span class="card__stat" aria-label="${escAttr(t("apps.starsLabel", { count: number.format(a.stars) }))}">★ ${number.format(a.stars)}</span>
-        </div>
-      </article>`;
-    }).join("");
+    const total = remote ? (livePagination?.total ?? window.JH.catalogMeta.projectCount) : window.JH.catalogLoaded ? list.length : (window.JH.catalogMeta.projectCount || list.length);
+    state.page = Math.min(state.page, Math.max(1, Math.ceil(total / PAGE_SIZE)));
+    const shown = remote ? list : list.slice((state.page - 1) * PAGE_SIZE, state.page * PAGE_SIZE);
+    grid.innerHTML = shown.map(project => renderProjectCard(project, {
+      messages,
+      basePath: localeKey === "en" ? "" : `/${localeKey}`,
+      locale: locale?.lang || "en",
+    })).join("");
 
     saveFilters();
     const count = $("#dirCount");
     if (count) {
       count.textContent = t("apps.count", {
-        shown: number.format(shown.length),
+        shown: total ? `${number.format((state.page - 1) * PAGE_SIZE + 1)}–${number.format((state.page - 1) * PAGE_SIZE + shown.length)}` : number.format(0),
         total: number.format(total),
       });
+      catalogCountLabel = count.textContent;
     }
     renderDirectoryPages(total);
     const empty = $("#dirEmpty");
     if (empty) empty.hidden = list.length !== 0;
     const more = $("#loadMore");
-    if (more) {
-      more.hidden = shown.length >= total;
-      const remaining = Math.min(PAGE_SIZE, total - shown.length);
-      more.textContent = t("apps.loadCount", { count: number.format(remaining) });
+    if (more) more.hidden = true;
+    const viewSignature = JSON.stringify([state.page, state.query.trim(), state.filter, state.kind, state.language, state.activity, state.sort, total]);
+    if (window.JH.track && viewSignature !== catalogViewSignature) {
+      catalogViewSignature = viewSignature;
+      const event = { page: state.page, result_count: total, query_length: state.query.trim().length, category: state.filter, kind: state.kind, language: state.language, activity: state.activity, sort: state.sort };
+      window.JH.track("catalog_view", event);
+      if (!total) window.JH.track("no_results", event);
     }
 
     $$(".card", grid).forEach(card => {
@@ -366,6 +476,12 @@ import { readCatalogState, catalogUrl, matchesProject, projectPath } from "./cat
         card.style.setProperty("--my", (e.clientY - r.top) + "px");
       });
     });
+    if (scrollAfterPage) {
+      scrollAfterPage = false;
+      grid.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+      grid.setAttribute("tabindex", "-1");
+      grid.focus({ preventScroll: true });
+    }
   }
 
   /* ----------------------------- categories ----------------------------- */
@@ -385,6 +501,7 @@ import { readCatalogState, catalogUrl, matchesProject, projectPath } from "./cat
     $$(".cat", host).forEach(b => b.addEventListener("click", () => {
       state.filter = b.dataset.cat;
       resetCatalogWindow();
+      saveFilters(true);
       renderFilters();
       renderApps();
       $("#apps").scrollIntoView({ behavior: "smooth" });
@@ -408,20 +525,21 @@ import { readCatalogState, catalogUrl, matchesProject, projectPath } from "./cat
   }
 
   function renderPlaybook() {
-    const p = window.JH.playbooks[pbIndex];
+    const p = window.JH.playbooks?.[pbIndex];
     if (!p) return;
-    $("#pbFile").textContent = p.file;
-    $("#pbMode").textContent = p.mode;
-    $("#pbDesc").textContent = t(`playbook.${p.id}.desc`, {}, p.desc);
-    $("#pbCode").innerHTML = highlight(p.code);
-    $("#pbList").innerHTML = p.list.map((item, index) =>
+    const file = $("#pbFile"), mode = $("#pbMode"), description = $("#pbDesc"), code = $("#pbCode"), list = $("#pbList");
+    if (file) file.textContent = p.file;
+    if (mode) mode.textContent = p.mode;
+    if (description) description.textContent = t(`playbook.${p.id}.desc`, {}, p.desc);
+    if (code) code.innerHTML = highlight(p.code);
+    if (list) list.innerHTML = p.list.map((item, index) =>
       `<li>${escAttr(t(`playbook.${p.id}.${index + 1}`, {}, item))}</li>`
     ).join("");
   }
 
   function initCopy() {
     const btn = $("#copyBtn");
-    if (!btn) return;
+    if (!btn || !$("#pbCode")) return;
     btn.addEventListener("click", async () => {
       const text = $("#pbCode").textContent;
       try {
@@ -454,7 +572,13 @@ import { readCatalogState, catalogUrl, matchesProject, projectPath } from "./cat
       state.query = v;
       catalogFailed = false;
       resetCatalogWindow();
-      renderApps();
+      if (window.JH.catalogRemote) {
+        cancelLiveRequest();
+        clearTimeout(searchTimer);
+        saveFilters();
+        showCatalogLoading(true);
+        searchTimer = setTimeout(renderApps, 200);
+      } else renderApps();
     }
     if (dir) dir.value = state.query;
     if (hero) hero.value = state.query;
@@ -464,12 +588,24 @@ import { readCatalogState, catalogUrl, matchesProject, projectPath } from "./cat
       setQuery(e.target.value);
 
     });
+    $("#directorySearchForm")?.addEventListener("submit", event => {
+      event.preventDefault();
+      clearTimeout(searchTimer);
+      searchTimer = null;
+      if (window.JH.catalogRemote) cancelLiveRequest();
+      state.query = dir?.value || "";
+      resetCatalogWindow();
+      scrollAfterPage = true;
+      if (hero) hero.value = state.query;
+      saveFilters();
+      renderApps();
+    });
     document.addEventListener("keydown", e => {
       const active = document.activeElement;
       const isEditing = active && (active.matches("input, textarea, select") || active.isContentEditable);
       if (e.key === "/" && !isEditing) {
         e.preventDefault();
-        (hero || dir)?.focus();
+        (dir || hero)?.focus();
       }
     });
   }
@@ -478,6 +614,7 @@ import { readCatalogState, catalogUrl, matchesProject, projectPath } from "./cat
     $$("#heroChips .chip").forEach(chip => chip.addEventListener("click", () => {
       state.filter = chip.dataset.jump;
       resetCatalogWindow();
+      saveFilters(true);
       renderFilters();
       renderApps();
       $("#apps").scrollIntoView({ behavior: "smooth" });
@@ -492,10 +629,28 @@ import { readCatalogState, catalogUrl, matchesProject, projectPath } from "./cat
     }
     for (const [id, key] of [["languageFilter", "language"], ["kindFilter", "kind"], ["activityFilter", "activity"]]) {
       const control = $("#" + id);
-      if (control) { control.value = state[key]; control.addEventListener("change", () => { state[key] = control.value; catalogFailed = false; resetCatalogWindow(); renderApps(); }); }
+      if (control) { control.value = state[key]; control.addEventListener("change", () => { state[key] = control.value; resetCatalogWindow(); saveFilters(true); renderApps(); }); }
     }
-    $("#resetFilters")?.addEventListener("click", () => { location.assign(location.pathname + "#apps"); });
-    window.addEventListener("popstate", () => { Object.assign(state, readCatalogState(location.href, window.JH.categories.map(c => c.id))); renderFilters(); renderApps(); });
+    const restoreControls = () => {
+      for (const [id, key] of [["dirSearch", "query"], ["heroSearch", "query"], ["languageFilter", "language"], ["kindFilter", "kind"], ["activityFilter", "activity"], ["dirSort", "sort"]]) {
+        const control = $("#" + id);
+        if (control) control.value = state[key];
+      }
+      renderFilters();
+    };
+    $("#resetFilters")?.addEventListener("click", () => {
+      Object.assign(state, readCatalogState(location.origin + location.pathname));
+      catalogFailed = false;
+      saveFilters(true);
+      restoreControls();
+      renderApps();
+    });
+    window.addEventListener("popstate", () => {
+      Object.assign(state, readCatalogState(location.href, window.JH.categories.map(c => c.id)));
+      catalogFailed = false;
+      restoreControls();
+      renderApps();
+    });
     const sort = $("#dirSort");
     if (sort) {
       sort.value = state.sort;
@@ -503,14 +658,7 @@ import { readCatalogState, catalogUrl, matchesProject, projectPath } from "./cat
         state.sort = sort.value;
         catalogFailed = false;
         resetCatalogWindow();
-        renderApps();
-      });
-    }
-
-    const more = $("#loadMore");
-    if (more) {
-      more.addEventListener("click", () => {
-        state.visible += PAGE_SIZE;
+        saveFilters(true);
         renderApps();
       });
     }
@@ -523,6 +671,54 @@ import { readCatalogState, catalogUrl, matchesProject, projectPath } from "./cat
     select.addEventListener("change", () => {
       location.assign(select.value + location.search + location.hash);
     });
+  }
+
+  function initResponsiveNavigation() {
+    const mobile = window.matchMedia("(max-width: 760px)");
+    const filterToggle = $("#filtersToggle"), facets = $("#directoryFacets");
+    const menuToggle = $("#mobileMenuToggle"), menu = $("#mobileMenu");
+    let filtersOpen = false;
+    let menuOpen = false;
+    function update() {
+      if (facets) facets.hidden = mobile.matches && !filtersOpen;
+      if (menu) menu.hidden = mobile.matches && !menuOpen;
+      filterToggle?.setAttribute("aria-expanded", String(!mobile.matches || filtersOpen));
+      menuToggle?.setAttribute("aria-expanded", String(!mobile.matches || menuOpen));
+    }
+    filterToggle?.addEventListener("click", () => { filtersOpen = !filtersOpen; menuOpen = false; update(); });
+    menuToggle?.addEventListener("click", () => { menuOpen = !menuOpen; filtersOpen = false; update(); });
+    document.addEventListener("keydown", event => {
+      if (event.key !== "Escape" || !mobile.matches) return;
+      const toggle = menuOpen ? menuToggle : filtersOpen ? filterToggle : null;
+      if (!toggle) return;
+      menuOpen = false; filtersOpen = false; update();
+      toggle.focus();
+    });
+    for (const panel of [menu, facets].filter(Boolean)) panel.addEventListener("click", event => {
+      if (!mobile.matches || !event.target.closest("a[href]")) return;
+      menuOpen = false; filtersOpen = false; update();
+    });
+    mobile.addEventListener?.("change", () => { menuOpen = false; filtersOpen = false; update(); });
+    update();
+
+    function revealHash(hash, scroll = false) {
+      let id;
+      try { id = decodeURIComponent(hash.slice(1)); } catch { return; }
+      if (!id) return;
+      const target = document.getElementById(id);
+      if (!target) return;
+      for (let node = target; node; node = node.parentElement) if (node.tagName === "DETAILS") node.open = true;
+      if (mobile.matches && facets?.contains(target)) { filtersOpen = true; update(); }
+      if (scroll) requestAnimationFrame(() => target.scrollIntoView({ block: "start" }));
+    }
+    document.addEventListener("click", event => {
+      const anchor = event.target.closest("a[href]");
+      if (!anchor) return;
+      const url = new URL(anchor.href, location.href);
+      if (url.origin === location.origin && url.pathname === location.pathname && url.search === location.search) revealHash(url.hash);
+    });
+    window.addEventListener("hashchange", () => revealHash(location.hash, true));
+    revealHash(location.hash, true);
   }
 
   function initFeatureGlow() {
@@ -661,6 +857,7 @@ import { readCatalogState, catalogUrl, matchesProject, projectPath } from "./cat
 
   function initNav() {
     const nav = $("#nav");
+    if (!nav) return;
     const onScroll = () => nav.classList.toggle("is-stuck", window.scrollY > 8);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -819,16 +1016,17 @@ import { readCatalogState, catalogUrl, matchesProject, projectPath } from "./cat
     initChips();
     initDirectory();
     initLocaleSelect();
+    initResponsiveNavigation();
     initFeatureGlow();
     initCopy();
     initSubmit();
     initNav();
     initAuth();
-    if (!window.JH.catalogRemote) refreshLiveCatalog();
     setInterval(refreshLiveCatalog, 300000);
-    $("#year").textContent = new Date().getFullYear();
+    const year = $("#year");
+    if (year) year.textContent = new Date().getFullYear();
 
-    $("#themeBtn").addEventListener("click", () => applyTheme(state.theme === "dark" ? "light" : "dark"));
+    $("#themeBtn")?.addEventListener("click", () => applyTheme(state.theme === "dark" ? "light" : "dark"));
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);

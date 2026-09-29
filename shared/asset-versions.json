@@ -1,7 +1,9 @@
 {
-  "/assets/css/fonts.css": "81b65047a3",
-  "/assets/css/style.css": "02ed8bd859",
-  "/assets/js/page.js": "2a749fc62a",
+  "/assets/css/fonts.css": "8104e0e4c0",
+  "/assets/css/style.css": "c14ae3517c",
+  "/assets/css/directory.css": "f6082d06ca",
+  "/assets/js/page.js": "d456ce57be",
   "/assets/js/status.js": "a46b703c68",
-  "/assets/js/admin.js": "3b0a3cbb3d"
+  "/assets/js/admin.js": "3b0a3cbb3d",
+  "/assets/js/analytics.js": "b3a8b122f8"
 }

@@ -15,7 +15,7 @@ export function readCatalogState(url, categories = []) {
     kind: KINDS.includes(kind) ? kind : "all",
     language: (params.get("language") || "all").slice(0, 50),
     activity: ["active", "archived"].includes(activity) ? activity : "all",
-    visible: page * 20,
+    page,
   };
 }
 
@@ -24,7 +24,7 @@ export function catalogUrl(url, state) {
   for (const [key, value, fallback] of [
     ["q", state.query.trim(), ""], ["category", state.filter, "all"], ["sort", state.sort, "stars-desc"],
     ["kind", state.kind, "all"], ["language", state.language, "all"], ["activity", state.activity, "all"],
-    ["page", Math.ceil(state.visible / 20), 1],
+    ["page", state.page, 1],
   ]) {
     if (value === fallback) output.searchParams.delete(key);
     else output.searchParams.set(key, String(value));

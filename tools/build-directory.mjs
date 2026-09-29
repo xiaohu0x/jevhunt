@@ -1,12 +1,12 @@
 import { readFileSync, writeFileSync, mkdirSync, rmSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { dirname } from "node:path";
-import { loadData, esc, page, ORIGIN, projectPath, repoUrl, hash } from "./lib/site.mjs";
-import { renderCard } from "../shared/catalog-view.js";
+import { loadData, esc, page, ORIGIN, projectPath } from "./lib/site.mjs";
+import { renderProject, renderListing } from "../shared/catalog-view.js";
 
 const { apps, categories, catalogMeta: meta, i18n } = loadData();
 const catalog = JSON.parse(readFileSync("public/catalog.json", "utf8"));
-const projects = [...catalog.apps].sort((a, b) => b.stars - a.stars || a.repo.localeCompare(b.repo));
+const projects = [...catalog.apps].sort((a, b) => b.stars - a.stars || (b.created || "").localeCompare(a.created || "") || a.name.localeCompare(b.name, "en", { sensitivity: "base" }) || a.repo.localeCompare(b.repo));
 const messages = i18n.locales.en.messages;
 const discoveryConfig = JSON.parse(readFileSync("catalog/sources.json", "utf8"));
 const discoverySources = [
@@ -15,7 +15,6 @@ const discoverySources = [
   { id: "Official TypeSafe repositories", url: "https://github.com/typesafe-ai" },
   { id: "Approved editorial submissions", url: "/#submit" },
 ];
-const label = (kind, key) => messages[`${kind}.${key}`] || key;
 const paths = [];
 // Only generated outputs are replaced. Source assets and editorial pages are separate.
 for (const directory of ["projects", "browse", "categories"]) rmSync(`public/${directory}`, { recursive: true, force: true });
@@ -23,21 +22,41 @@ function write(path, html) {
   const target = "public" + path + "index.html";
   mkdirSync(dirname(target), { recursive: true }); writeFileSync(target, html); paths.push(path);
 }
-const card = project => renderCard(project, messages);
+// Index and rank once; each detail page inspects only bounded recommendation pools.
+const categoryProjects = new Map();
+const relationProjects = new Map();
+for (const project of projects) {
+  if (!categoryProjects.has(project.cat)) categoryProjects.set(project.cat, []);
+  categoryProjects.get(project.cat).push(project);
+  const relationKey = `${project.cat}:${project.relationship || "unclassified"}`;
+  if (!relationProjects.has(relationKey)) relationProjects.set(relationKey, []);
+  const group = relationProjects.get(relationKey);
+  if (group.length < 7) group.push(project);
+}
+const recentProjects = projects.filter(project => project.archived === false && /^\d{4}-\d{2}-\d{2}$/.test(project.pushed || "") && Number.isFinite(Date.parse(project.pushed)) && new Date(project.pushed).toISOString().slice(0, 10) === project.pushed)
+  .sort((a, b) => b.pushed.localeCompare(a.pushed) || b.stars - a.stars || a.repo.localeCompare(b.repo)).slice(0, 13);
+function takeRecommendations(candidates, excluded) {
+  const chosen = [];
+  for (const candidate of candidates) {
+    const key = candidate.repo.toLowerCase();
+    if (excluded.has(key)) continue;
+    excluded.add(key);
+    chosen.push(candidate);
+    if (chosen.length === 6) break;
+  }
+  return chosen;
+}
 const urls = new Set(projects.map(p => projectPath(p.repo)));
 const redirects = [];
 for (const p of projects) {
-  const path = projectPath(p.repo), detail = p.evidenceDetail;
-  const category = categories.find(c => c.id === p.cat);
-  const relation = label("relationship", p.relationship || "unclassified"), level = label("evidence", p.evidenceLevel || "legacy-unreviewed");
-  const properties = [["Relationship to Jev", relation], ["Repository origin", p.fork === true ? "Fork" : p.fork === false ? "Original repository" : "Unknown"], ["Evidence", level], ["Language", p.language || "Not reported"], ["License", p.license || "Not reported; check the repository"], ["Repository status", p.archived === true ? "Archived" : p.archived === false ? "Not archived" : "Unknown"], ["Created", p.created || "Not reported"], ["Last code update", p.pushed || "Not reported"], ["GitHub stars", p.stars.toLocaleString("en-US")], ["Check status", p.freshness || "Needs review"]];
-  const related = projects.filter(other => other.id !== p.id && other.cat === p.cat && other.relationship === p.relationship).slice(0, 4);
-  const body = `<header class="legal__header"><nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">JevHunt</a> / <a href="/categories/${esc(p.cat)}/">${esc(category?.name || p.cat)}</a></nav><h1>${esc(p.name)}</h1><p class="legal__summary">${esc(p.desc || "See the repository for project documentation.")}</p><p><a class="btn btn--primary" href="${repoUrl(p.repo)}" target="_blank" rel="ugc nofollow noopener noreferrer">Open GitHub ↗</a> <a class="btn btn--ghost" href="${esc(p.evidence)}" target="_blank" rel="ugc nofollow noopener noreferrer">Read evidence ↗</a></p></header>
-<div class="project-detail"><section><h2>Project facts</h2><dl class="facts">${properties.map(([key, value]) => `<div><dt>${esc(key)}</dt><dd>${esc(value)}</dd></div>`).join("")}</dl><p>Stars measure the whole repository, including work unrelated to Jev.</p></section>
-<section><h2>Evidence and scope</h2><p>${esc(level)}: this records ${p.evidenceLevel === "reviewed" ? "an editor's review of the linked source" : p.evidenceLevel === "code-reference" ? "a Jev API reference found in source code" : p.evidenceLevel === "official" ? "official TypeSafe ownership" : "what the project's own documentation states"}. JevHunt has not independently run or benchmarked this project.</p>${detail?.excerpt ? `<blockquote>${esc(detail.excerpt)}</blockquote>` : ''}${detail?.commit ? `<p>Evidence commit: <code>${esc(detail.commit)}</code></p>` : ''}<p>Discovered through: ${esc((p.provenance || ["legacy snapshot"]).join(", "))}. Catalog checked ${esc(meta.syncedAt || meta.updated)}.</p><a href="/methodology/">Read the evidence policy →</a></section></div>
-<section class="related"><h2>Related projects</h2><div class="app-grid">${related.map(card).join("")}</div></section><p><a href="https://github.com/xiaohu0x/jevhunt/issues/new?title=${encodeURIComponent("Listing correction: " + p.repo)}" rel="noopener noreferrer">Suggest a correction</a> · <a href="/#submit">Submit a project</a></p>`;
-  const schema = { "@context": "https://schema.org", "@type": ["resource", "research"].includes(p.relationship) ? "CreativeWork" : "SoftwareSourceCode", name: p.name, description: p.desc, url: ORIGIN + path, codeRepository: repoUrl(p.repo), dateModified: p.pushed || undefined, programmingLanguage: p.language || undefined };
-  write(path, page({ title: p.name + " — " + relation, description: p.desc, path, body, schema }));
+  const path = projectPath(p.repo);
+  const excluded = new Set([p.repo.toLowerCase()]);
+  const similar = takeRecommendations([
+    ...(relationProjects.get(`${p.cat}:${p.relationship || "unclassified"}`) || []),
+    ...categoryProjects.get(p.cat).slice(0, 13),
+  ], excluded);
+  const active = takeRecommendations(recentProjects, excluded);
+  write(path, renderProject(p, meta, similar, active, messages, { localeInfo: i18n.locales.en }));
   if (p.previousRepo && !urls.has(projectPath(p.previousRepo))) redirects.push(`${projectPath(p.previousRepo)} ${path} 301`);
 }
 for (const p of catalog.unavailable || []) {
@@ -51,14 +70,11 @@ function listings(items, base, title) {
   const pages = Math.max(1, Math.ceil(items.length / 24));
   for (let n = 1; n <= pages; n++) {
     const path = n === 1 ? base : `${base}${n}/`, slice = items.slice((n - 1) * 24, n * 24);
-    const nav = `<nav class="catalog-pages" aria-label="Pagination">${n > 1 ? `<a rel="prev" href="${n === 2 ? base : base + (n - 1) + '/'}">← Previous</a>` : ''} <span>Page ${n} of ${pages}</span> ${n < pages ? `<a rel="next" href="${base}${n + 1}/">Next →</a>` : ''}</nav>`;
-    const categoryLinks = categories.map(c => `<a class="fchip" href="/categories/${c.id}/">${esc(c.name)}</a>`).join(" ");
-    const body = `<header class="legal__header"><h1>${esc(title)}${n > 1 ? ` — page ${n}` : ''}</h1><p>${items.length} repositories. Evidence labels describe documentation and source references; they do not certify runtime behavior.</p><p><a href="/">Search and filter the directory →</a></p></header><nav class="dir__filters" aria-label="Categories">${categoryLinks}</nav>${nav}<div class="app-grid">${slice.map(card).join("")}</div>${nav}`;
-    write(path, page({ title: title + (n > 1 ? ` — page ${n}` : ''), description: `Browse ${title}: applications, source evidence and repository activity. Page ${n}.`, path, body, schema: { "@context": "https://schema.org", "@type": "ItemList", numberOfItems: slice.length, itemListElement: slice.map((p, i) => ({ "@type": "ListItem", position: (n - 1) * 24 + i + 1, url: ORIGIN + projectPath(p.repo), name: p.name })) } }));
+    write(path, renderListing(slice, { base, title, total: items.length, number: n }));
   }
 }
 listings(projects, "/browse/", "Jev ecosystem projects");
-for (const category of categories) listings(projects.filter(p => p.cat === category.id), `/categories/${category.id}/`, category.name + " for Jev");
+for (const category of categories) listings(categoryProjects.get(category.id) || [], `/categories/${category.id}/`, category.name + " for Jev");
 
 write("/methodology/", page({ title: "Sources and evidence policy", description: "How JevHunt discovers, classifies and reviews projects, handles stale data and distinguishes Jev integrations from independent alternatives.", path: "/methodology/", body: `<header class="legal__header"><h1>Sources and evidence</h1><p>JevHunt uses GitHub Repository Search as its primary discovery path and supplements it with community feeds, official repositories and approved submissions. Coverage is broad but cannot be guaranteed exhaustive.</p></header><div class="legal__content"><section><h2>What each label means</h2><ul><li><strong>Official:</strong> an allowlisted SDK or resource owned by TypeSafe.</li><li><strong>Documented:</strong> first-party documentation states a Jev use or includes an API / SDK reference.</li><li><strong>Code reference:</strong> a Jev API identifier was found in source, linked at a specific commit.</li><li><strong>Editor reviewed:</strong> an editor checked the linked source and project classification.</li><li><strong>Needs review:</strong> retained historical data awaiting a successful new check.</li></ul><p>These labels do not mean we executed the code, audited its security or reproduced its performance claims.</p></section><section><h2>Project types</h2><p>Applications, optional integrations, SDKs, local alternatives, research and resource directories have separate labels. A local alternative may reproduce the decision interface without calling TypeSafe Jev. Classification is based on project descriptions and source documentation and can be corrected by editors.</p></section><section><h2>Discovery sources</h2><ul>${discoverySources.map(source => `<li>${esc(source.id)}${source.url ? ` — <a href="${esc(source.url)}" rel="noopener noreferrer">source</a>` : ''}${source.query ? `: <code>${esc(source.query)}</code>` : ''}</li>`).join("")}</ul><p>GitHub Search queries cover repository names, descriptions, README references, topics, SDK identifiers and model identifiers. Community directories add discovery links. Current metadata comes from GitHub. README and source references are pinned to commits. Search pages are partitioned by creation date when GitHub's 1,000-result limit is reached; partial results and request counts are disclosed in the audit report.</p></section><section><h2>Updates and corrections</h2><p>A Cloudflare scheduled worker advances small batches every minute and refreshes GitHub Search windows continuously. Failed individual checks retain the last known result with a stale label. Unavailable repositories are retained for rechecking. Editors may approve, reject, reclassify or withdraw submissions. Approvals are queued in D1 and appear after the worker checks their evidence; pages read the live catalog.</p><p><a href="/status/">Update status</a> · <a href="/catalog-audit.json">Machine-readable audit report</a> · <a href="/catalog.json">Catalog JSON</a> · <a href="https://github.com/xiaohu0x/jevhunt/issues">Report a correction</a></p></section></div>` }));
 

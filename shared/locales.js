@@ -3,76 +3,91 @@ export const LOCALES = {
   "en": {
     "path": "/",
     "lang": "en",
-    "hreflang": "en"
+    "hreflang": "en",
+    "label": "English"
   },
   "zh-cn": {
     "path": "/zh-cn/",
     "lang": "zh-CN",
-    "hreflang": "zh-CN"
+    "hreflang": "zh-CN",
+    "label": "简体中文"
   },
   "zh-tw": {
     "path": "/zh-tw/",
     "lang": "zh-TW",
-    "hreflang": "zh-TW"
+    "hreflang": "zh-TW",
+    "label": "繁體中文"
   },
   "ja": {
     "path": "/ja/",
     "lang": "ja",
-    "hreflang": "ja"
+    "hreflang": "ja",
+    "label": "日本語"
   },
   "ko": {
     "path": "/ko/",
     "lang": "ko",
-    "hreflang": "ko"
+    "hreflang": "ko",
+    "label": "한국어"
   },
   "es": {
     "path": "/es/",
     "lang": "es",
-    "hreflang": "es"
+    "hreflang": "es",
+    "label": "Español"
   },
   "fr": {
     "path": "/fr/",
     "lang": "fr",
-    "hreflang": "fr"
+    "hreflang": "fr",
+    "label": "Français"
   },
   "de": {
     "path": "/de/",
     "lang": "de",
-    "hreflang": "de"
+    "hreflang": "de",
+    "label": "Deutsch"
   },
   "pt-br": {
     "path": "/pt-br/",
     "lang": "pt-BR",
-    "hreflang": "pt-BR"
+    "hreflang": "pt-BR",
+    "label": "Português"
   },
   "ru": {
     "path": "/ru/",
     "lang": "ru",
-    "hreflang": "ru"
+    "hreflang": "ru",
+    "label": "Русский"
   },
   "hi": {
     "path": "/hi/",
     "lang": "hi",
-    "hreflang": "hi"
+    "hreflang": "hi",
+    "label": "हिन्दी"
   },
   "id": {
     "path": "/id/",
     "lang": "id",
-    "hreflang": "id"
+    "hreflang": "id",
+    "label": "Bahasa Indonesia"
   },
   "vi": {
     "path": "/vi/",
     "lang": "vi",
-    "hreflang": "vi"
+    "hreflang": "vi",
+    "label": "Tiếng Việt"
   },
   "tr": {
     "path": "/tr/",
     "lang": "tr",
-    "hreflang": "tr"
+    "hreflang": "tr",
+    "label": "Türkçe"
   },
   "it": {
     "path": "/it/",
     "lang": "it",
-    "hreflang": "it"
+    "hreflang": "it",
+    "label": "Italiano"
   }
 };

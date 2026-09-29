@@ -82,7 +82,15 @@ Inspect `/status/`, `/api/catalog/status` and `/api/health` for source results, 
 
 Generated static pages are fallback artifacts. Pages Functions render the live homepage, project details, category pagination, status and sitemap from D1. The code build and the live catalog each have their own version. `tools/stamp.mjs` versions assets and the imported catalog-state module to match the long cache lifetime.
 
-Search, category, project type, language, archival state, sort order and loaded page count persist in the URL. Locale switching preserves this state.
+Search, category, project type, language, archival state, sort order and page number persist in the URL. Locale switching and browser history preserve this state. Pages contain 20 independent results; pagination appears below the cards.
+
+The homepage follows the supplied desktop/mobile redesign: a compact guide banner, prominent search, sidebar filters on desktop, collapsible filters on mobile and shared project cards. The data, counts and timestamps come from the catalog. `public/assets/css/directory.css` implements the layout, and the fonts are self-hosted with Unicode subsets. Light mode is the default; an explicit saved dark-mode preference is retained.
+
+`GET /api/catalog?page=2&per_page=20` returns only the requested page with `pagination` metadata. Search and filters are applied in D1, and cache keys include normalized filters and the catalog revision. The homepage uses the same query for server rendering, so a direct link to page 6 returns items 101–120 before JavaScript runs. The `all=1` export remains available but is not required for live browsing. An initial static snapshot remains usable if live data is unavailable.
+
+Project pages, static fallbacks and browser results share `public/assets/js/project-card.js`. Name, description and Details links open the localized project page; repository and evidence links stay external. The shared page renderer provides canonical URLs, language alternates, breadcrumb metadata and consistent analytics. Discovery events record counts and dimensions, not raw search terms.
+
+Discovery health is separate from service liveness. `/api/catalog/status` reports each configured GitHub query, its current cursor, completed scan date, partial results and 24/72-hour repository-check coverage. Changing a query resets its cursor; GitHub ID merges retain rename aliases and withdrawal rules. Anonymous GitHub rate limits can still delay discovery.
 
 The supported locales are English (`en`), Simplified Chinese (`zh-cn`), Traditional Chinese (`zh-tw`), Japanese (`ja`), Korean (`ko`), Spanish (`es`), French (`fr`), German (`de`), Brazilian Portuguese (`pt-br`), Russian (`ru`), Hindi (`hi`), Indonesian (`id`), Vietnamese (`vi`), Turkish (`tr`) and Italian (`it`). The 15 locale options represent 14 languages, counting both Chinese scripts separately. This selection prioritizes major developer markets; it is not a ranking by native speaker count. Right-to-left locales are outside the current scope.
 
