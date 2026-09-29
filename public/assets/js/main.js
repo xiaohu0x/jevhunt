@@ -253,6 +253,22 @@ import { readCatalogState, catalogUrl, matchesProject, projectPath } from "./cat
     }
     return catalogLoading;
   }
+
+  function renderDirectoryPages(total) {
+    const host = $("#directoryPages");
+    if (!host) return;
+    const pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+    const current = Math.min(pages, Math.max(1, Math.ceil(state.visible / PAGE_SIZE)));
+    const previous = t("apps.previous", "Previous");
+    const next = t("apps.next", "Next");
+    const pageLabel = t("apps.page", "Page {page} of {pages}").replace("{page}", current).replace("{pages}", pages);
+    host.innerHTML = `${current > 1 ? `<button type="button" data-page="${current - 1}">${previous}</button>` : ""}<span>${pageLabel}</span>${current < pages ? `<button type="button" data-page="${current + 1}">${next}</button>` : ""}`;
+    host.querySelectorAll("[data-page]").forEach(button => button.addEventListener("click", () => {
+      state.visible = Number(button.dataset.page) * PAGE_SIZE;
+      renderApps();
+      $("#apps")?.scrollIntoView({ behavior: "smooth" });
+    }));
+  }
   async function refreshLiveCatalog() {
     try {
       if (document.hidden) return;
@@ -305,7 +321,7 @@ import { readCatalogState, catalogUrl, matchesProject, projectPath } from "./cat
           </div>
           <span class="badge badge--catalog">${escAttr(t("relationship." + (a.relationship || "unclassified")))}</span>
         </div>
-        <p class="card__desc">${escAttr(description)}</p>
+        <a class="card__descLink" href="${escAttr(projectPath(a.repo, localeKey === "en" ? "" : `/${localeKey}`))}"><p class="card__desc">${escAttr(description)}</p></a>
         <div class="card__tags">
           ${a.language ? `<span class="tag">${escAttr(a.language)}</span>` : ""}
           <span class="tag">${escAttr(t("evidence." + (a.evidenceLevel || "legacy-unreviewed")))}</span>
@@ -333,6 +349,7 @@ import { readCatalogState, catalogUrl, matchesProject, projectPath } from "./cat
         total: number.format(total),
       });
     }
+    renderDirectoryPages(total);
     const empty = $("#dirEmpty");
     if (empty) empty.hidden = list.length !== 0;
     const more = $("#loadMore");

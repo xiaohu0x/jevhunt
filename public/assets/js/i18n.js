@@ -231,7 +231,10 @@ window.JH.i18n = {
         "project.browse": "Browse available projects",
         "project.noSimilar": "No similar projects found.",
         "project.noActive": "No recently active projects found.",
-        "project.catalogDate": "See catalog source date"
+        "project.catalogDate": "See catalog source date",
+        "apps.previous": "Previous",
+        "apps.next": "Next",
+        "apps.page": "Page {page} of {pages}"
       }
     },
     "zh-cn": {
@@ -462,7 +465,10 @@ window.JH.i18n = {
         "project.browse": "浏览可用项目",
         "project.noSimilar": "暂无相似项目。",
         "project.noActive": "暂无最近活跃项目。",
-        "project.catalogDate": "查看目录来源日期"
+        "project.catalogDate": "查看目录来源日期",
+        "apps.previous": "上一页",
+        "apps.next": "下一页",
+        "apps.page": "第 {page} 页，共 {pages} 页"
       }
     },
     "zh-tw": {
@@ -693,7 +699,10 @@ window.JH.i18n = {
         "project.browse": "瀏覽可用專案",
         "project.noSimilar": "目前沒有相似專案。",
         "project.noActive": "目前沒有最近活躍專案。",
-        "project.catalogDate": "查看目錄來源日期"
+        "project.catalogDate": "查看目錄來源日期",
+        "apps.previous": "上一頁",
+        "apps.next": "下一頁",
+        "apps.page": "第 {page} 頁，共 {pages} 頁"
       }
     },
     "ja": {
@@ -924,7 +933,10 @@ window.JH.i18n = {
         "project.browse": "利用可能なプロジェクトを見る",
         "project.noSimilar": "類似プロジェクトはありません。",
         "project.noActive": "最近アクティブなプロジェクトはありません。",
-        "project.catalogDate": "カタログの確認日を見る"
+        "project.catalogDate": "カタログの確認日を見る",
+        "apps.previous": "前へ",
+        "apps.next": "次へ",
+        "apps.page": "{pages}ページ中 {page}ページ"
       }
     },
     "ko": {
@@ -1155,7 +1167,10 @@ window.JH.i18n = {
         "project.browse": "사용 가능한 프로젝트 보기",
         "project.noSimilar": "유사한 프로젝트가 없습니다.",
         "project.noActive": "최근 활발한 프로젝트가 없습니다.",
-        "project.catalogDate": "카탈로그 소스 날짜 보기"
+        "project.catalogDate": "카탈로그 소스 날짜 보기",
+        "apps.previous": "이전",
+        "apps.next": "다음",
+        "apps.page": "{pages}페이지 중 {page}페이지"
       }
     },
     "es": {
@@ -1386,7 +1401,10 @@ window.JH.i18n = {
         "project.browse": "Ver proyectos disponibles",
         "project.noSimilar": "No hay proyectos similares.",
         "project.noActive": "No hay proyectos activos recientemente.",
-        "project.catalogDate": "Ver fecha de origen del catálogo"
+        "project.catalogDate": "Ver fecha de origen del catálogo",
+        "apps.previous": "Anterior",
+        "apps.next": "Siguiente",
+        "apps.page": "Página {page} de {pages}"
       }
     },
     "fr": {
@@ -1617,7 +1635,10 @@ window.JH.i18n = {
         "project.browse": "Voir les projets disponibles",
         "project.noSimilar": "Aucun projet similaire.",
         "project.noActive": "Aucun projet actif récemment.",
-        "project.catalogDate": "Voir la date de la source du catalogue"
+        "project.catalogDate": "Voir la date de la source du catalogue",
+        "apps.previous": "Précédent",
+        "apps.next": "Suivant",
+        "apps.page": "Page {page} sur {pages}"
       }
     },
     "de": {
@@ -1848,7 +1869,10 @@ window.JH.i18n = {
         "project.browse": "Verfügbare Projekte anzeigen",
         "project.noSimilar": "Keine ähnlichen Projekte gefunden.",
         "project.noActive": "Keine kürzlich aktiven Projekte gefunden.",
-        "project.catalogDate": "Katalog-Quelldatum anzeigen"
+        "project.catalogDate": "Katalog-Quelldatum anzeigen",
+        "apps.previous": "Zurück",
+        "apps.next": "Weiter",
+        "apps.page": "Seite {page} von {pages}"
       }
     },
     "pt-br": {
@@ -2079,7 +2103,10 @@ window.JH.i18n = {
         "project.browse": "Ver projetos disponíveis",
         "project.noSimilar": "Nenhum projeto semelhante.",
         "project.noActive": "Nenhum projeto ativo recentemente.",
-        "project.catalogDate": "Ver data da fonte do catálogo"
+        "project.catalogDate": "Ver data da fonte do catálogo",
+        "apps.previous": "Anterior",
+        "apps.next": "Próxima",
+        "apps.page": "Página {page} de {pages}"
       }
     },
     "ru": {
@@ -2310,7 +2337,10 @@ window.JH.i18n = {
         "project.browse": "Открыть доступные проекты",
         "project.noSimilar": "Похожие проекты не найдены.",
         "project.noActive": "Недавно активные проекты не найдены.",
-        "project.catalogDate": "Дата источника каталога"
+        "project.catalogDate": "Дата источника каталога",
+        "apps.previous": "Назад",
+        "apps.next": "Далее",
+        "apps.page": "Страница {page} из {pages}"
       }
     },
     "hi": {
@@ -2541,7 +2571,10 @@ window.JH.i18n = {
         "project.browse": "उपलब्ध प्रोजेक्ट देखें",
         "project.noSimilar": "कोई समान प्रोजेक्ट नहीं मिला।",
         "project.noActive": "हाल में सक्रिय प्रोजेक्ट नहीं मिला।",
-        "project.catalogDate": "कैटलॉग स्रोत तारीख देखें"
+        "project.catalogDate": "कैटलॉग स्रोत तारीख देखें",
+        "apps.previous": "पिछला",
+        "apps.next": "अगला",
+        "apps.page": "पृष्ठ {page} / {pages}"
       }
     },
     "id": {
@@ -2772,7 +2805,10 @@ window.JH.i18n = {
         "project.browse": "Lihat proyek yang tersedia",
         "project.noSimilar": "Tidak ada proyek serupa.",
         "project.noActive": "Tidak ada proyek yang baru aktif.",
-        "project.catalogDate": "Lihat tanggal sumber katalog"
+        "project.catalogDate": "Lihat tanggal sumber katalog",
+        "apps.previous": "Sebelumnya",
+        "apps.next": "Berikutnya",
+        "apps.page": "Halaman {page} dari {pages}"
       }
     },
     "vi": {
@@ -3003,7 +3039,10 @@ window.JH.i18n = {
         "project.browse": "Xem dự án khả dụng",
         "project.noSimilar": "Không có dự án tương tự.",
         "project.noActive": "Không có dự án hoạt động gần đây.",
-        "project.catalogDate": "Xem ngày nguồn của danh bạ"
+        "project.catalogDate": "Xem ngày nguồn của danh bạ",
+        "apps.previous": "Trước",
+        "apps.next": "Sau",
+        "apps.page": "Trang {page} / {pages}"
       }
     },
     "tr": {
@@ -3234,7 +3273,10 @@ window.JH.i18n = {
         "project.browse": "Kullanılabilir projeleri gör",
         "project.noSimilar": "Benzer proje bulunamadı.",
         "project.noActive": "Yakın zamanda aktif proje bulunamadı.",
-        "project.catalogDate": "Katalog kaynak tarihini gör"
+        "project.catalogDate": "Katalog kaynak tarihini gör",
+        "apps.previous": "Önceki",
+        "apps.next": "Sonraki",
+        "apps.page": "Sayfa {page} / {pages}"
       }
     },
     "it": {
@@ -3465,7 +3507,10 @@ window.JH.i18n = {
         "project.browse": "Vedi i progetti disponibili",
         "project.noSimilar": "Nessun progetto simile.",
         "project.noActive": "Nessun progetto attivo di recente.",
-        "project.catalogDate": "Vedi la data della fonte del catalogo"
+        "project.catalogDate": "Vedi la data della fonte del catalogo",
+        "apps.previous": "Precedente",
+        "apps.next": "Successiva",
+        "apps.page": "Pagina {page} di {pages}"
       }
     }
   }

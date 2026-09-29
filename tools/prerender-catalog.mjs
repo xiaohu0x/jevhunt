@@ -81,7 +81,7 @@ function renderCard(project) {
             </div>
             <span class="badge badge--catalog" data-i18n="relationship.${relationship}">${esc(category)}</span>
           </div>
-          <p class="card__desc">${esc(description)}</p>
+          <a class="card__descLink" href="${esc(detailUrl(project))}"><p class="card__desc">${esc(description)}</p></a>
           <div class="card__tags">
 ${tags}
           </div>

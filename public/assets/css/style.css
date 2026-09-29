@@ -538,6 +538,8 @@ html[data-theme="light"] .fchip.is-active{ color:#fff; }
 .card__name:hover{ color:var(--accent); }
 .card__author{ font-family:var(--mono); font-size:.68rem; color:var(--muted); margin-top:3px; }
 .card__desc{ color:var(--text-2); font-size:.86rem; line-height:1.6; flex:1; }
+.card__descLink{ display:block; flex:1; color:inherit; text-decoration:none; }
+.card__descLink:hover .card__desc{ color:var(--text); }
 .card__tags{ display:flex; flex-wrap:wrap; gap:6px; }
 .tag{
   font-family:var(--mono); font-size:.66rem; color:var(--muted);
@@ -858,6 +860,10 @@ select.sub__field:invalid{ color:var(--muted); }
 .dir__facets label{display:grid;gap:6px;font-family:var(--mono);font-size:.72rem;color:var(--text-2);}
 .dir__facets select{max-width:220px;background:var(--panel);color:var(--text);border:1px solid var(--line);padding:9px;border-radius:8px;}
 .catalog-pages{padding:16px 20px;font-size:.85rem;color:var(--accent);line-height:1.8;}
+.catalog-pages--directory{display:flex;align-items:center;justify-content:center;gap:12px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+.catalog-pages--directory button{border:1px solid var(--line);border-radius:7px;padding:5px 10px;background:transparent;color:var(--accent);font:inherit;cursor:pointer;}
+.catalog-pages--directory button:hover:not(:disabled){border-color:var(--accent);background:var(--panel-2);}
+.catalog-pages--directory button:disabled{opacity:.4;cursor:default;}
 .source-note{margin-top:24px;color:var(--accent);}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto !important;animation:none !important;transition:none !important;}}
 

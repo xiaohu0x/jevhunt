@@ -20,7 +20,7 @@ export function renderCard(p, messages = {}, { basePath = "" } = {}) {
     `<span class="tag">${esc(updated)}</span>`,
   ].filter(Boolean).join("");
   return `<article class="card"><div class="card__top"><div><h2 class="card__heading"><a class="card__name" href="${projectPath(p.repo, basePath)}">${esc(p.name)}</a></h2><div class="card__author">${esc(p.repo)}</div></div><span class="badge badge--catalog">${esc(relation)}</span></div>
-<p class="card__desc">${esc(p.desc || label(messages, "apps.noDescription", "No project description available."))}</p><div class="card__tags">${tags}</div>
+<a class="card__descLink" href="${projectPath(p.repo, basePath)}"><p class="card__desc">${esc(p.desc || label(messages, "apps.noDescription", "No project description available."))}</p></a><div class="card__tags">${tags}</div>
 <div class="card__foot"><span class="card__links"><a class="card__go" href="${repoUrl(p.repo)}" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a><a class="card__site" href="${esc(p.evidence)}" target="_blank" rel="ugc nofollow noopener noreferrer">${esc(label(messages, "apps.evidence", "Evidence"))} <span aria-hidden="true">↗</span></a></span><span class="card__stat" aria-label="${esc(label(messages, "apps.starsLabel", "{count} GitHub stars").replace("{count}", Number(p.stars || 0).toLocaleString("en-US")))}">★ ${Number(p.stars || 0).toLocaleString("en-US")}</span></div></article>`;
 }
 

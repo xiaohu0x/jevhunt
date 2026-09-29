@@ -46,6 +46,10 @@ test("directory initializes with blocked browser storage and only the first page
   assert.equal(document.getElementById("loadMore").hidden, false);
   assert.ok(document.querySelector('#dirFilters [data-cat="sdks"]'));
   assert.ok(document.querySelector('#dirFilters [data-cat="games"]'));
+  assert.ok(document.querySelector('#appGrid .card__descLink[href="/projects/agentscope-ai/agentscope/"]'));
+  assert.match(document.getElementById("directoryPages").textContent, /Page 1/);
+  document.querySelector('#directoryPages [data-page="2"]').click();
+  assert.equal(new URL(window.location.href).searchParams.get("page"), "2");
   assert.ok(document.querySelector("#auth a[href^='/api/auth/google']"));
   document.getElementById("themeBtn").click();
   assert.equal(document.documentElement.dataset.theme, "light");
