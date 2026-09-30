@@ -96,6 +96,51 @@ The supported locales are English (`en`), Simplified Chinese (`zh-cn`), Traditio
 
 `public/assets/js/i18n.js` is the locale source. The build validates message completeness and placeholders, generates the language menu and `shared/locales.js`, and uses that same inventory for edge routes and sitemap alternates. Each visitor downloads only their selected language bundle. Localization covers the landing page interface; repository descriptions, code examples, project detail pages and policy pages retain their source language. New locales link to the existing English OmniaKey integration guide and identify it as English.
 
+## Project search metadata
+
+Project titles lead with the project name and a localized, evidence-based use case.
+Owners appear at the end only when active repository names collide. All 15 locale
+routes use `shared/project-seo.js`; the English static fallback uses the same
+generator. Meta descriptions, the visible introduction and social/schema descriptions
+stay in sync. Original repository descriptions remain labeled as source text.
+
+The wording rules and evidence boundaries are documented in
+[`docs/project-seo-rules.md`](docs/project-seo-rules.md). Reviewed project-specific
+details belong in `catalog/project-seo.json`; the locale vocabulary lives in
+`shared/project-seo-copy.js`. Newly discovered repositories inherit these rules.
+Migration 0007 indexes the active-name disambiguation lookup.
+
+Run `npm run audit:project-seo -- --static` after building to inspect every supported
+locale and English fallback. Pass `--catalog /path/to/catalog.json --out reports/name`
+to inspect a captured live catalog without replacing the checked-in snapshot. Reports
+include exact before/after metadata and content-review flags; those flags do not
+change indexing policy.
+
+## Guides and FAQ content
+
+`/blog/` contains task-specific Jev guides. `/faq/`, `/ja/faq/`, `/ko/faq/` and
+`/pt-br/faq/` answer the corresponding English, Japanese, Korean and Portuguese
+questions. The localized FAQs cover different tasks and are not declared as
+equivalent translations with hreflang. Links to English content identify their
+destination language.
+
+Article HTML lives in `content/blog/`; questions live in `content/faq/`.
+`content/editorial.json` owns titles, descriptions, related guides, routes and
+the factual review date. `npm run build` renders these through the shared page
+helper, adds localized navigation and writes the static sitemap. The live D1
+sitemap uses the same editorial route inventory. Release verification checks
+all generated content hashes, live sitemap inclusion and the referenced image.
+
+`docs/gsc-intents-2026-09-29.md` records the public content-intent plan;
+`docs/gsc-intent-plan.json` keeps anonymized row coverage for tests. Raw GSC
+queries, workbook identifiers and performance metrics stay in local audit records.
+`docs/editorial-evidence.md` records the sources and claim boundaries. Update evidence and the review date when changing factual
+claims; interface compatibility is not evidence of identical model behavior.
+
+The content tests check intent coverage, metadata, links, sitemap routes and
+FAQ deep links. `npm run test:examples` also exercises the published document
+classification snippet with the real SDK and an offline transport.
+
 ## Submission and editorial workflow
 
 Google sign-in requires a verified email. Accounts are keyed by Google's stable subject; matching emails cannot rebind another account. Session lifetime is a fixed 30 days, matching the cookie. OAuth states are consumed atomically, and post-login redirects are restricted to the current origin.

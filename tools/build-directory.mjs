@@ -3,10 +3,12 @@ import { execFileSync } from "node:child_process";
 import { dirname } from "node:path";
 import { loadData, esc, page, ORIGIN, projectPath } from "./lib/site.mjs";
 import { renderProject, renderListing } from "../shared/catalog-view.js";
+import { duplicateProjectNames, projectNameKey } from "../shared/project-seo.js";
 
 const { apps, categories, catalogMeta: meta, i18n } = loadData();
 const catalog = JSON.parse(readFileSync("public/catalog.json", "utf8"));
 const projects = [...catalog.apps].sort((a, b) => b.stars - a.stars || (b.created || "").localeCompare(a.created || "") || a.name.localeCompare(b.name, "en", { sensitivity: "base" }) || a.repo.localeCompare(b.repo));
+const duplicateNames = duplicateProjectNames(projects);
 const messages = i18n.locales.en.messages;
 const discoveryConfig = JSON.parse(readFileSync("catalog/sources.json", "utf8"));
 const discoverySources = [
@@ -56,7 +58,7 @@ for (const p of projects) {
     ...categoryProjects.get(p.cat).slice(0, 13),
   ], excluded);
   const active = takeRecommendations(recentProjects, excluded);
-  write(path, renderProject(p, meta, similar, active, messages, { localeInfo: i18n.locales.en }));
+  write(path, renderProject(p, meta, similar, active, messages, { localeInfo: i18n.locales.en, duplicateName: duplicateNames.has(projectNameKey(p)) }));
   if (p.previousRepo && !urls.has(projectPath(p.previousRepo))) redirects.push(`${projectPath(p.previousRepo)} ${path} 301`);
 }
 for (const p of catalog.unavailable || []) {

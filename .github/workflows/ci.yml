@@ -22,6 +22,7 @@ jobs:
       - run: pip install -r requirements-examples.txt
       - run: npm run build
       - run: npm test
+      - run: npm run audit:project-seo -- --static
       - run: npm run test:examples
       - name: Compile Pages Functions
         run: npx wrangler pages functions build functions --outdir=.cache/functions

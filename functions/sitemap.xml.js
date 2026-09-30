@@ -1,6 +1,7 @@
 import { activeClause, CATEGORY_IDS } from "../shared/catalog-data.js";
 import { ORIGIN, projectPath, esc } from "../shared/render.js";
 import { LOCALES } from "../shared/locales.js";
+import { EDITORIAL_ROUTES } from "../shared/editorial-routes.js";
 export async function onRequestGet({ env }) {
   const rows = await env.DB.prepare(`SELECT repo,category,checked_at FROM catalog_entries WHERE ${activeClause} ORDER BY repo`).all();
   const localePaths = Object.values(LOCALES).map(locale => locale.path);
@@ -8,6 +9,7 @@ export async function onRequestGet({ env }) {
     `<xhtml:link rel="alternate" hreflang="x-default" href="${ORIGIN}/"/>`;
   const staticPaths = [...localePaths, "/privacy/", "/terms/", "/security/", "/methodology/", "/status/"];
   const urls = staticPaths.map(path => `<url><loc>${ORIGIN}${path}</loc>${localePaths.includes(path) ? alternates : ""}</url>`);
+  for (const { path, modified } of EDITORIAL_ROUTES) urls.push(`<url><loc>${ORIGIN}${esc(path)}</loc><lastmod>${esc(modified)}</lastmod></url>`);
   const counts = Object.fromEntries(CATEGORY_IDS.map(id => [id, 0]));
   for (const row of rows.results) {
     counts[row.category] = (counts[row.category] || 0) + 1;

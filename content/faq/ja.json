@@ -1,0 +1,16 @@
+{
+  "sections": [
+    { "id": "official", "title": "公式サイトとアカウント", "questions": [
+      { "id": "official-site", "question": "Jevの公式サイトはどこですか？", "answer": "<p>Jevの開発元は<a href=\"https://typesafe.ai/\">TypeSafe AI（英語）</a>です。APIの利用方法は<a href=\"https://docs.typesafe.ai/introduction\">公式ドキュメント（英語）</a>で確認できます。JevHuntは独立したコミュニティのプロジェクトディレクトリであり、モデルの提供元ではありません。</p>" },
+      { "id": "register", "question": "登録とAPIキーの発行はどこで行いますか？", "answer": "<p><a href=\"https://console.typesafe.ai/\">TypeSafeの公式コンソール（英語）</a>を利用してください。<a href=\"https://docs.typesafe.ai/introduction/quickstart\">クイックスタート（英語）</a>に、キーの発行先と最初のリクエストが記載されています。JevHuntへの登録ではTypeSafeのアカウントやAPIキーは発行されません。</p>" },
+      { "id": "playground", "question": "コードを書く前にJevを試せますか？", "answer": "<p>公式の<a href=\"https://console.typesafe.ai/playground\">Playground（英語）</a>で、状態を表すテキストと質問を入力して試せます。コミュニティにもデモがありますが、公式コンソールとは区別し、利用するモデルやデータの送信先を確認してください。</p>" },
+      { "id": "status", "question": "JevHuntの更新情報はAPIの稼働状況ですか？", "answer": "<p><a href=\"/status/\">JevHuntの更新情報（英語）</a>は、プロジェクトの発見処理とカタログの更新状況を示します。推論APIの障害確認には、利用している提供元のコンソール、エラー内容、リクエスト記録を確認してください。</p>" }
+    ] },
+    { "id": "model", "title": "モデル、SDK、アプリの違い", "questions": [
+      { "id": "what-is-jev", "question": "Jevはチャットやコードを生成するモデルですか？", "answer": "<p>公式文書のJevは、与えられた状態に対して選択、評価、真偽の確率を返す判断モデルです。文章やコードを生成する役割とは異なります。<a href=\"https://docs.typesafe.ai/concepts/system-one\">System Oneの説明（英語）</a>で各出力を確認できます。</p>" },
+      { "id": "download", "question": "Jevをダウンロードするには何をインストールしますか？", "answer": "<p>公式の導入手順では、ホストされたAPIとクライアントSDKを使います。Pythonは<code>typesafe-sdk</code>、JavaScript/TypeScriptは<code>@typesafe-ai/sdk</code>です。SDKのインストールは、モデルの重みを端末に入れることとは異なります。<a href=\"/blog/jev-api-sdk-guide/\">APIとSDKのガイド（英語）</a>をご覧ください。</p>" },
+      { "id": "local", "question": "LayaやLEVは公式Jevのローカル版ですか？", "answer": "<p>これらは独立したモデルや実装です。似たAPIを使っていても、重み、学習方法、判断結果が同じとは限りません。端末で動かす場合は、各プロジェクトのライセンス、モデル、実行環境を確認してください。<a href=\"/blog/jev-local-alternatives/\">ローカル代替モデルの比較（英語）</a>に確認項目をまとめています。</p>" },
+      { "id": "apps", "question": "Jevという名前のアプリは公式ですか？", "answer": "<p>名前だけでは判断できません。アプリの所有者、元のリポジトリ、利用するモデルを確認してください。<a href=\"/ja/#apps\">プロジェクト一覧</a>にはコミュニティのアプリや統合ツールも含まれます。アプリが端末で動いていても、推論は外部のAPIで行われる場合があります。</p>" }
+    ] }
+  ]
+}

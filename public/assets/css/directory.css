@@ -18,7 +18,9 @@ html[data-theme="dark"] .directory-home,html[data-theme="dark"] .directory-detai
 .directory-detail .legal-nav{background:var(--bg);}
 .directory-detail .legal{padding-top:48px;}
 .directory-detail .legal__header{max-width:900px;}
-.directory-detail .legal__header h1{font-family:var(--disp);font-size:clamp(2rem,4.5vw,3.5rem);}
+.directory-detail .legal__header h1{font-family:var(--disp);font-size:clamp(2rem,4.5vw,3.5rem);overflow-wrap:anywhere;}
+.directory-detail .project-source-description{margin-top:12px;color:var(--text-2);font-size:.9rem;line-height:1.65;overflow-wrap:anywhere;}
+.directory-detail .project-repo{overflow-wrap:anywhere;}
 .directory-detail .project-detail{gap:24px;}
 .directory-detail .project-detail>section{min-width:0;padding:24px;background:var(--panel);border:1px solid var(--line);border-radius:16px;}
 .directory-detail .project-detail h2{margin-top:0;}
@@ -53,7 +55,7 @@ html[data-theme="dark"] .directory-home,html[data-theme="dark"] .directory-detai
 .directory-home .brand__mark{width:34px;height:34px;border-radius:9px;background:var(--accent);color:var(--accent-ink);font-family:var(--disp);font-size:20px;font-weight:800;display:grid;place-items:center;}
 .directory-home .brand__word{font-family:var(--disp);font-size:21px;font-weight:700;letter-spacing:-.3px;}
 .directory-home .home-nav-panel{display:flex;align-items:center;gap:24px;flex:1;min-width:0;}
-.directory-home .nav__links{display:flex;gap:26px;margin-left:18px;}
+.directory-home .nav__links{display:flex;gap:16px;margin-left:18px;flex-wrap:wrap;}
 .directory-home .nav__links a{font-family:var(--sans);font-size:15px;font-weight:500;padding:8px 0;border-radius:0;color:var(--text-2);}
 .directory-home .nav__links a:first-child{color:var(--text);}
 .directory-home .nav__links a:hover{background:transparent;color:var(--accent);}
@@ -295,5 +297,11 @@ html[data-theme="dark"] .directory-home #dirFilters .fchip.is-active{background:
   .directory-home .footer__col h4{font-size:12px;}
   .directory-home .footer__col a{font-size:12px;overflow-wrap:anywhere;}
   .directory-home .footer__base{margin-top:24px;font-size:11px;}
+}
+@media(max-width:360px){
+  .directory-home .dir__meta{grid-template-columns:minmax(0,1fr);}
+  .directory-home #dirCount{min-width:0;max-width:100%;white-space:normal;overflow-wrap:anywhere;}
+  .directory-home .dir__sort{min-width:0;max-width:100%;justify-self:stretch;}
+  .directory-home .dir__sort select{width:100%;min-width:0;max-width:none;}
 }
 @media(prefers-reduced-motion:reduce){.directory-home .card{transition:none;}.directory-home .card:hover{transform:none;}}

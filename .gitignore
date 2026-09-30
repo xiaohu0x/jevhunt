@@ -34,6 +34,11 @@ public/status/
 public/assets/js/locales/
 public/assets/js/catalog-all.js
 public/build-info.json
+public/blog/
+public/faq/
+public/ja/faq/
+public/ko/faq/
+public/pt-br/faq/
 
 public/assets/locales/
 

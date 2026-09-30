@@ -5,7 +5,9 @@ import { runInNewContext } from "node:vm";
 import { loadData, projectPath, hash } from "./lib/site.mjs";
 import { JSDOM } from "jsdom";
 import { renderProject } from "../shared/catalog-view.js";
+import { duplicateProjectNames, projectNameKey } from "../shared/project-seo.js";
 const { apps, i18n, catalogMeta } = loadData();
+const duplicateNames = duplicateProjectNames(apps);
 const read = path => readFileSync("public/" + path, "utf8");
 
 test("every indexed repository has a unique local page, safe evidence, and crawlable sitemap entry", () => {
@@ -57,11 +59,11 @@ test("static project fallbacks share live SEO metadata and both recommendation s
   for (const project of samples) {
     const path = projectPath(project.repo);
     const built = new JSDOM(read(path.slice(1) + "index.html"), { url: "https://jevhunt.com" + path });
-    const live = new JSDOM(renderProject(project, catalogMeta, [], [], i18n.locales.en.messages, { localeInfo: i18n.locales.en }));
+    const live = new JSDOM(renderProject(project, catalogMeta, [], [], i18n.locales.en.messages, { localeInfo: i18n.locales.en, duplicateName: duplicateNames.has(projectNameKey(project)) }));
     t.after(() => { built.window.close(); live.window.close(); });
     const actual = built.window.document, expected = live.window.document;
     assert.equal(actual.title, expected.title, path);
-    assert.ok(actual.title.includes(project.repo), path);
+    assert.ok(actual.title.startsWith(project.name), path);
     assert.equal(actual.querySelector('link[rel="canonical"]').href, "https://jevhunt.com" + path);
     assert.equal(actual.querySelector('meta[name="description"]').content, expected.querySelector('meta[name="description"]').content);
     const schema = document => JSON.parse(document.querySelector('script[type="application/ld+json"]').textContent);

@@ -1,0 +1,14 @@
+{
+  "version": "2026-09-30",
+  "projects": {
+    "tauricresearch/tradingagents": {
+      "name": "TradingAgents",
+      "topic": "multiAgentTrading",
+      "summaryKey": "tradingScope",
+      "evidencePattern": "social.*(?:screen|filter)|(?:screen|filter).*social",
+      "source": "https://github.com/TauricResearch/TradingAgents/blob/8b22d43d01d9ddda5d686d093d5385884622f3de/README.md",
+      "reviewedAt": "2026-09-30",
+      "note": "Optional StockTwits/Reddit post screening before the Sentiment Analyst reads posts; not an assertion that Jev runs the entire trading framework."
+    }
+  }
+}

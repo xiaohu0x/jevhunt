@@ -1,0 +1,19 @@
+<p>Jev trading projects place typed judgments inside a market-data and execution loop. Their decisions, controller rules and simulated or real execution need separate evaluation. A working dashboard or model confidence does not establish profitable trading.</p>
+<h2 id="project">What jarrodwatts/jev-trader documents</h2>
+<p><a href="https://github.com/jarrodwatts/jev-trader">jev-trader</a> describes using the Kuru MON-USDC order book on Monad, selecting a side and maintaining post-only limit orders. Its README distinguishes the configured decision model from a mock momentum policy and distinguishes dry-run mode from signed execution.</p>
+<p>The documented default is a mock policy, and the linked public deployment is described as a dry-run mock deployment. Seeing its chart move is therefore not evidence that a live Jev call made the decision or that a trade filled on-chain. Verify the model identity and execution mode in the actual records.</p>
+<h2 id="architecture">Keep the model judgment separate from the controller</h2>
+<pre><code>market snapshot + bounded question -> model judgment
+    -> deterministic eligibility and risk checks
+    -> simulated or real order submission
+    -> execution records and position reconciliation</code></pre>
+<p>The model can judge the supplied state. Code owns numeric arithmetic, position limits, order validity and whether execution is enabled. The <a href="https://docs.typesafe.ai/model-jaggedness/jev-1.13">Jev 1.13 guidance</a> specifically recommends keeping precise arithmetic in code.</p>
+<p>Log the observation time, model version, answer, controller decision, order identifier and resulting fill or cancellation. If a source, inference request or execution step fails, its failure must remain visible instead of turning into a fabricated market decision.</p>
+<h2 id="testing">A realistic research comparison</h2>
+<p>Use the same market observations, decision times, execution rules and constraints for the compared policies. Include fees, latency, cancellations, missed fills and unavailable requests. A favorable decision before those effects is not the same as a completed trade outcome.</p>
+<p>Keep strategy tuning separate from out-of-sample evaluation. Avoid using information that was not available at the original decision time. Report the test window and market conditions; one short run cannot establish behavior in other conditions.</p>
+<h2 id="modes">Mock, replay, paper and live modes</h2>
+<table><caption>What an observed result can establish</caption><thead><tr><th>Mode</th><th>What you can inspect</th><th>What remains unproven</th></tr></thead><tbody><tr><td>Mock policy</td><td>Interface and controller plumbing.</td><td>Actual model decisions.</td></tr><tr><td>Historical replay</td><td>Decisions under recorded observations.</td><td>Live data and realistic execution unless explicitly modeled.</td></tr><tr><td>Paper or dry run</td><td>Live observation and simulated actions.</td><td>Actual fills, transaction costs and realized outcomes.</td></tr><tr><td>Live execution</td><td>Actual order and fill records.</td><td>Future profitability or reliability across regimes.</td></tr></tbody></table>
+<h2 id="read-results">How to read a trading project's claims</h2>
+<p>Ask which decisions came from Jev, which model version answered, which results were simulated, and whether the execution and accounting records reconcile. Inspect limitations as closely as headline performance numbers.</p>
+<p>This is an engineering reading guide for a community experiment. JevHunt has not operated the bot, reproduced its trading results or established a return expectation. The <a href="/blog/jev-benchmarks-evaluation/">decision-model evaluation guide</a> provides a general scorecard, but model accuracy and trading outcomes are different measurements.</p>

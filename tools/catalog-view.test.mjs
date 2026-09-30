@@ -51,9 +51,9 @@ test("missing descriptions and dates use repository facts without inventing clai
   t.after(() => dom.window.close());
   const document = dom.window.document;
   const description = document.querySelector('meta[name="description"]').content;
-  assert.ok(description.includes(project.repo));
-  assert.ok(description.includes(locale.messages["relationship.integration"]));
-  assert.ok(description.includes(locale.messages["category.agents.name"]));
+  assert.ok(description.includes(project.name));
+  assert.ok(description.includes("Jev"));
+  assert.ok(description.includes("智能体工具"));
   assert.ok(description.includes("Python"));
   assert.equal(document.querySelector(".legal__summary").textContent, description);
   const schema = JSON.parse(document.querySelector('script[type="application/ld+json"]').textContent)["@graph"][0];
@@ -62,7 +62,7 @@ test("missing descriptions and dates use repository facts without inventing clai
   assert.equal(facts[locale.messages["project.evidenceChecked"]], locale.messages["project.notReported"]);
   assert.equal(facts[locale.messages["project.status"]], locale.messages["project.notReported"]);
   assert.equal(facts[locale.messages["project.origin"]], locale.messages["project.notReported"]);
-  const other = new JSDOM(renderProject({ ...project, repo: "another/example" }, {}, [], [], locale.messages));
+  const other = new JSDOM(renderProject({ ...project, repo: "another/example" }, {}, [], [], locale.messages, { duplicateName: true }));
   t.after(() => other.window.close());
   assert.notEqual(document.title, other.window.document.title);
 });

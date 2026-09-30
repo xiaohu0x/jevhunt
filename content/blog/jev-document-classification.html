@@ -1,0 +1,45 @@
+<p>Use Jev to judge extracted document text against defined categories or independent tags. Parsing, file handling and review stay in your application. Begin with one category decision and test ambiguous or unprocessable documents before automating actions.</p>
+<h2 id="taxonomy">Define categories before writing questions</h2>
+<p>A Choice suits an exclusive category: invoice, contract, correspondence or other. If a document can be both confidential and urgent, use separate yes/no questions for those flags. The <a href="https://docs.typesafe.ai/primitives">primitive documentation</a> distinguishes an exclusive choice from independent Noul judgments.</p>
+<p>Write category definitions that address boundary cases. For example, decide whether a quote belongs with invoices and whether an email containing a contract attachment is classified by its message or attachment. When a hierarchy is necessary, the <a href="https://docs.typesafe.ai/cookbooks/hierarchical_classification">official classification recipe</a> provides a starting pattern.</p>
+<h2 id="text">Extract text locally and preserve the original</h2>
+<p>The documented Jev model is text-only. A PDF, scan or office document therefore needs a parser or OCR stage first. Keep page locations and document identifiers so a reviewer can find the evidence that produced a judgment.</p>
+<p>Empty, unreadable and unsupported inputs are preprocessing failures, not meaningful categories. Route them to a separate processing queue. Do not conceal an OCR failure by labeling the document “other.”</p>
+<h2 id="python">A typed Python category example</h2>
+<p>This example uses the <a href="https://docs.typesafe.ai/sdk/python">official SDK</a>, reads <code>TYPESAFE_API_KEY</code>, makes one billable request when run, and prints a proposed queue. The review threshold is illustrative and must be evaluated on your own labeled documents.</p>
+<pre><code>from typesafe_sdk import Choice, TypeSafeClient
+
+REVIEW_AT = 0.85  # Example policy, not a universal threshold.
+
+with TypeSafeClient() as client:
+    response = client.system_one(
+        state={"document": "Invoice for document hosting, due next month."},
+        questions={
+            "category": Choice(
+                instructions="Classify document by its main purpose.",
+                criteria={
+                    "invoice": "A request for payment for goods or services",
+                    "contract": "An agreement establishing obligations",
+                    "correspondence": "A message without those purposes",
+                    "other": "None of the listed purposes",
+                },
+            )
+        },
+    )
+
+answer = response.choices["category"]
+queue = (
+    "review"
+    if answer.confidence is None
+    or answer.confidence &lt; REVIEW_AT
+    or answer.choice == "other"
+    else answer.choice
+)
+print(queue)</code></pre>
+<p>The snippet does not move or delete files. Before adding those actions, validate transport failures and response shape, keep originals recoverable and record the model version. API failures should leave the item unprocessed rather than silently applying a category.</p>
+<h2 id="application">A community application to inspect</h2>
+<p><a href="https://github.com/Charlyhno-eng/jev-document-classification">Jev Document Classification</a> describes local text extraction, typed judgments through Vercel AI Gateway, review and unprocessable buckets, and preview/undo behavior. “Local-first” here does not mean its model inference is offline. Inspect the gateway settings and exactly which text is sent.</p>
+<p>Evaluate such an application separately from the model: a correct category cannot compensate for overwriting a file, mixing up document IDs or losing the link to the original.</p>
+<h2 id="validation">A useful validation set</h2>
+<ul><li>Clear examples and near-boundary cases for every category.</li><li>Documents outside the taxonomy and mixed-purpose documents.</li><li>Empty scans, poor OCR and unsupported formats.</li><li>Relevant languages and vocabulary from your actual users.</li><li>Text that tries to instruct the classifier to choose a label.</li></ul>
+<p>Measure per-category mistakes and the share routed to review. Confirm whether reviewers can recover the relevant page. The <a href="https://docs.typesafe.ai/model-jaggedness/jev-1.13">official failure notes</a> describe adversarial and context-related limitations; typed output is not a security guarantee.</p>

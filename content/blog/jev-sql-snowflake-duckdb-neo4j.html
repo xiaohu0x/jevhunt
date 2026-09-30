@@ -1,0 +1,23 @@
+<p>Jev can supply a typed label or probability inside a data pipeline. Snowflake and DuckDB integrations expose that judgment to SQL; graph projects use it to choose relationships or propose edges. Your database code still owns filtering, persistence and permissions.</p>
+<h2 id="sql">Semantic SQL in Snowflake and DuckDB</h2>
+<p><a href="https://github.com/KranzL/Jevflake">Jevflake</a> is a community Snowflake integration with dbt and Terraform setup paths. Its README documents <code>jev_noul</code>, <code>jev_choice</code>, <code>jev_score</code> and <code>jev_ask</code>. It requires configured external access, a stored API secret and appropriate roles. Those setup requirements matter before any model-generated judgment appears in a query.</p>
+<p>For DuckDB, <a href="https://github.com/recodelabs/duckdb-jev">recodelabs/duckdb-jev</a> describes semantic filtering, ranking and classification functions. Its README distinguishes the proposed community installation path from loading available builds. Check the current installation status and DuckDB version instead of assuming every command in an introductory snippet is available through a package registry.</p>
+<p>Different <a href="/?q=duckdb#apps">DuckDB projects</a> expose different functions, batching and backend choices. Choose the exact repository before writing SQL against its interface.</p>
+<h2 id="pipeline">Filter ordinary facts before model calls</h2>
+<p>Use deterministic predicates for known dates, identifiers, permissions and exact values. Apply the semantic decision only to the candidates that still require interpretation. For support records, that might mean selecting new, authorized rows first, then judging whether their text requests a refund.</p>
+<pre><code>authorized source rows
+    -> exact SQL filters
+    -> typed semantic judgments
+    -> persisted result + model/question version
+    -> reporting, routing or review</code></pre>
+<p>This is an architectural example, not syntax for a particular extension. Persisting a result makes its provenance visible and avoids accidentally recomputing an expensive judgment every time a dashboard runs.</p>
+<h2 id="cache">Cache with the question and model identity</h2>
+<p>A record's answer depends on more than its row ID. A practical cache identity includes the relevant content, question definitions, model version and preprocessing version. Changing the rubric should invalidate the earlier judgment even if the original document stayed the same.</p>
+<p>Keep error states separate from negative answers. A failed API request is not a low probability, an empty category or evidence that the row did not match. Store retry and review state so the pipeline can recover without hiding missing work.</p>
+<h2 id="graphs">Graph traversal is different from graph construction</h2>
+<p><a href="https://github.com/jexp/neo4jev">Neo4Jev</a> presents neighboring graph relationships as Choice options and asks whether a traversal goal has been reached. The graph supplies legal moves; Jev judges among the supplied candidates. Code controls branching, stopping conditions and the search budget.</p>
+<p><a href="https://github.com/chenmingtang830/jevgraph">JevGraph</a> instead describes a document-to-graph pipeline with local parsing, candidate blocking, typed relation decisions and deterministic schema checks. A proposed edge remains a claim supported by source evidence; being structurally valid does not make it factually true.</p>
+<p>The official <a href="https://docs.typesafe.ai/cookbooks/entity_alignment">entity-alignment cookbook</a> addresses another related job: deciding whether candidate records describe the same entity. Matching identities, navigating edges and proposing relationships should have separate tests.</p>
+<h2 id="rollout">Check the operational contract</h2>
+<ul><li>Which columns leave the database, and under whose permissions?</li><li>Where is the API key stored and which roles can use it?</li><li>How many calls can a query trigger, including retries?</li><li>Can a rerun reuse valid results without hiding failures?</li><li>Can a reviewer trace each result to the source and rubric?</li></ul>
+<p>Start with a bounded table and an output-only view. Compare judgments with labels, inspect failures, and only then connect them to downstream operations. Ordinary constraints and access controls remain the authoritative checks.</p>

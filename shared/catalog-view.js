@@ -2,6 +2,7 @@ import { renderProjectCard } from "../public/assets/js/project-card.js";
 import { LOCALES } from "./locales.js";
 import { esc, page, projectPath, repoUrl, ORIGIN } from "./render.js";
 import { CATEGORY_IDS, CATEGORY_NAMES } from "./catalog-data.js";
+import { projectSeo } from "./project-seo.js";
 
 export const RELATION_LABELS = { "jev-app": "Jev application", integration: "Integration", sdk: "SDK / client", "local-alternative": "Local alternative", research: "Research", resource: "Resource / directory", unclassified: "Relationship under review" };
 export const EVIDENCE_LABELS = { official: "Official", documented: "Documented", "code-reference": "Code reference", reviewed: "Editor reviewed", "legacy-unreviewed": "Needs review" };
@@ -12,15 +13,16 @@ export function renderCard(p, messages = {}, { basePath = "" } = {}) {
   return renderProjectCard(p, { messages, basePath, locale: LOCALES[basePath.slice(1)]?.lang || "en" });
 }
 
-export function renderProject(p, meta, similar = [], active = [], messages = {}, { localeKey = "en", localeInfo = null, localePrefix = "" } = {}) {
+export function renderProject(p, meta, similar = [], active = [], messages = {}, { localeKey = "en", localeInfo = null, localePrefix = "", duplicateName = false } = {}) {
   const path = projectPath(p.repo, localePrefix), detail = p.evidenceDetail;
   const t = (key, fallback) => messages[key] || fallback;
-  const relation = label(messages, "relationship." + p.relationship, RELATION_LABELS[p.relationship] || "Relationship under review");
+  const seo = projectSeo(p, { localeKey, duplicateName });
+  const relation = label(messages, "relationship." + seo.relationship, RELATION_LABELS[seo.relationship] || "Relationship under review");
   const level = label(messages, "evidence." + p.evidenceLevel, EVIDENCE_LABELS[p.evidenceLevel] || "Needs review");
   const category = label(messages, "category." + p.cat + ".name", CATEGORY_NAMES[CATEGORY_IDS.indexOf(p.cat)] || p.cat);
   const categoryPath = localePrefix ? `${localePrefix}/?category=${encodeURIComponent(p.cat)}#apps` : `/categories/${encodeURIComponent(p.cat)}/`;
   const homePath = `${localePrefix}/`;
-  const description = p.desc?.trim() || `${p.name} (${p.repo}) — ${relation}. ${[category, p.language].filter(Boolean).join(" · ")}.`;
+  const description = seo.description;
   const notReported = t("project.notReported", "Not reported");
   const status = p.archived === true ? t("project.archived", "Archived") : p.archived === false ? t("project.notArchived", "Not archived") : notReported;
   const checkStatus = p.freshness === "current" ? t("project.checkCurrent", "Up to date") : t("apps.stale", "Check pending");
@@ -52,13 +54,13 @@ export function renderProject(p, meta, similar = [], active = [], messages = {},
   const cardOptions = { basePath: localePrefix };
   const renderRecommendations = (items, title, empty, id) => `<section class="related" id="${id}" aria-labelledby="${id}-heading"><h2 id="${id}-heading">${esc(title)}</h2>${items.length ? `<div class="app-grid">${items.map(other => renderCard(other, messages, cardOptions)).join("")}</div>` : `<p class="related__empty">${esc(empty)}</p>`}</section>`;
   const correction = `https://github.com/xiaohu0x/jevhunt/issues/new?title=${encodeURIComponent("Listing correction: " + p.repo)}`;
-  const body = `<header class="legal__header"><nav class="breadcrumbs" aria-label="${esc(t("project.breadcrumb", "Breadcrumb"))}"><a href="${homePath}">JevHunt</a> / <a href="${categoryPath}">${esc(category)}</a></nav><h1>${esc(p.name)}</h1><p class="project-repo">${esc(p.repo)}</p><p class="legal__summary">${esc(description)}</p><p><a class="btn btn--primary" href="${repoUrl(p.repo)}" target="_blank" rel="ugc nofollow noopener noreferrer">${esc(t("project.openGithub", "Open GitHub"))} ↗</a> <a class="btn btn--ghost" href="${esc(p.evidence)}" target="_blank" rel="ugc nofollow noopener noreferrer">${esc(t("project.readEvidence", "Read evidence"))} ↗</a></p></header>
+  const body = `<header class="legal__header"><nav class="breadcrumbs" aria-label="${esc(t("project.breadcrumb", "Breadcrumb"))}"><a href="${homePath}">JevHunt</a> / <a href="${categoryPath}">${esc(category)}</a></nav><h1>${esc(seo.heading)}</h1><p class="project-repo">${esc(p.repo)}</p><p class="legal__summary">${esc(description)}</p>${p.desc?.trim() ? `<p class="project-source-description"><strong>${esc(seo.sourceHeading)}:</strong> <span dir="auto">${esc(p.desc.trim())}</span></p>` : ""}<p><a class="btn btn--primary" href="${repoUrl(p.repo)}" target="_blank" rel="ugc nofollow noopener noreferrer">${esc(t("project.openGithub", "Open GitHub"))} ↗</a> <a class="btn btn--ghost" href="${esc(p.evidence)}" target="_blank" rel="ugc nofollow noopener noreferrer">${esc(t("project.readEvidence", "Read evidence"))} ↗</a></p></header>
 <div class="project-detail"><section aria-labelledby="project-facts"><h2 id="project-facts">${esc(t("project.facts", "Project facts"))}</h2><dl class="facts">${properties.map(([key, value]) => `<div><dt>${esc(key)}</dt><dd>${esc(value)}</dd></div>`).join("")}</dl><p>${esc(t("project.starsNote", "Stars measure the whole repository, including work unrelated to Jev."))}</p></section><section aria-labelledby="project-evidence"><h2 id="project-evidence">${esc(t("project.evidenceScope", "Evidence and scope"))}</h2><p>${esc(t("project.evidenceScopeText", "{level} records the linked documentation or source. JevHunt has not independently run or benchmarked this project.").replace("{level}", level))}</p>${detail?.excerpt ? `<blockquote cite="${esc(p.evidence)}">${esc(detail.excerpt)}</blockquote>` : ""}${detail?.commit ? `<p>${esc(t("project.evidenceCommit", "Evidence commit"))}: <code>${esc(detail.commit)}</code></p>` : ""}<p>${esc(t("project.discovered", "Discovered through: {sources}.").replace("{sources}", (p.provenance || []).join(", ")))}</p><a href="/methodology/">${esc(t("project.reviewMethod", "How we review"))} →</a></section></div>
 ${renderRecommendations(similar, t("project.similar", "Similar projects"), t("project.noSimilar", "No similar projects found."), "similar-projects")}${renderRecommendations(active, t("project.active", "Recently active projects"), t("project.noActive", "No recently active projects found."), "active-projects")}<p><a href="${correction}" rel="noopener noreferrer">${esc(t("project.correction", "Suggest a correction"))}</a> · <a href="${localePrefix}/#submit">${esc(t("project.submit", "Submit a project"))}</a></p>`;
   const inLanguage = localeInfo?.lang || "en";
   const dateModified = validDate(p.pushed) ? p.pushed : undefined;
-  return page({ title: p.repo + " — " + relation, description, path, body, messages, localeKey, localeInfo, localePrefix, schema: { "@context": "https://schema.org", "@graph": [
-    { "@type": ["resource", "research"].includes(p.relationship) ? "CreativeWork" : "SoftwareSourceCode", "@id": ORIGIN + path + "#project", name: p.name, description, url: ORIGIN + path, codeRepository: repoUrl(p.repo), programmingLanguage: p.language || undefined, inLanguage, dateModified },
+  return page({ title: seo.title, description, path, body, messages, localeKey, localeInfo, localePrefix, schema: { "@context": "https://schema.org", "@graph": [
+    { "@type": ["resource", "research"].includes(seo.relationship) ? "CreativeWork" : "SoftwareSourceCode", "@id": ORIGIN + path + "#project", name: seo.name, description, url: ORIGIN + path, codeRepository: repoUrl(p.repo), programmingLanguage: p.language || undefined, inLanguage, dateModified },
     { "@type": "BreadcrumbList", inLanguage, itemListElement: [
       { "@type": "ListItem", position: 1, name: "JevHunt", item: ORIGIN + homePath },
       { "@type": "ListItem", position: 2, name: category, item: ORIGIN + categoryPath },

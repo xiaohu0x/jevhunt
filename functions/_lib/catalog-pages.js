@@ -118,14 +118,15 @@ export async function projectPage(context, locale = "en") {
     return missing(context);
   }
   const p = JSON.parse(row.payload), meta = await catalogMeta(context.env.DB);
-  const [similarRows, localized] = await Promise.all([
+  const [similarRows, localized, sameName] = await Promise.all([
     context.env.DB.prepare(`SELECT preview AS data FROM catalog_entries WHERE ${activeClause} AND category=? AND repo!=? ORDER BY CASE WHEN relationship=? THEN 0 ELSE 1 END, stars DESC LIMIT 6`).bind(p.cat, key, p.relationship || "unclassified").all(),
     localeData(context, locale),
+    context.env.DB.prepare(`SELECT repo FROM catalog_entries WHERE name = ? COLLATE NOCASE AND repo != ? AND ${activeClause} LIMIT 1`).bind(p.name, key).first(),
   ]);
   const similar = similarRows.results.map(r => JSON.parse(r.data));
   const excluded = [key, ...similar.map(project => project.repo.toLowerCase())];
   const activeRows = await context.env.DB.prepare(`SELECT preview AS data FROM catalog_entries WHERE ${activeClause} AND repo NOT IN (${excluded.map(() => "?").join(",")}) AND json_extract(payload,'$.archived') = 0 AND json_extract(payload,'$.pushed') GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]' AND date(json_extract(payload,'$.pushed'), '+0 days') = json_extract(payload,'$.pushed') ORDER BY json_extract(payload,'$.pushed') DESC, stars DESC LIMIT 6`).bind(...excluded).all();
-  return htmlResponse(renderProject(p, meta, similar, activeRows.results.map(r => JSON.parse(r.data)), localized.messages, { localeKey: locale, localeInfo: localized.info, localePrefix: prefix }));
+  return htmlResponse(renderProject(p, meta, similar, activeRows.results.map(r => JSON.parse(r.data)), localized.messages, { localeKey: locale, localeInfo: localized.info, localePrefix: prefix, duplicateName: !!sameName }));
 }
 
 export async function listingPage(context, category) {

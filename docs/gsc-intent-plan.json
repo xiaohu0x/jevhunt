@@ -1,0 +1,453 @@
+{
+  "source": "Private Search Console export; raw workbook and performance metrics retained locally, not published in the repository.",
+  "snapshotDate": "2026-09-29",
+  "querySheetRange": "Queries!A2:E193",
+  "filters": {
+    "searchType": "Web",
+    "timeRange": "Last 24 hours",
+    "timezone": "UTC-04:00"
+  },
+  "groups": [
+    {
+      "id": "official",
+      "intent": "找到官方网站、注册、文档和状态入口",
+      "type": "navigational",
+      "target": "/faq/#official-site",
+      "rows": [
+        4,
+        9,
+        38,
+        64,
+        70,
+        79,
+        104,
+        108,
+        134,
+        142,
+        157,
+        160,
+        187
+      ]
+    },
+    {
+      "id": "download",
+      "intent": "下载客户端、SDK，区分云端模型与本地安装",
+      "type": "informational",
+      "target": "/faq/#download",
+      "rows": [
+        17,
+        46,
+        99,
+        103,
+        106,
+        123,
+        131
+      ]
+    },
+    {
+      "id": "fundamentals",
+      "intent": "理解 Jev、System One、state 和结构化决策",
+      "type": "informational",
+      "target": "/blog/what-is-jev/",
+      "rows": [
+        26,
+        52,
+        65,
+        125,
+        190,
+        191
+      ]
+    },
+    {
+      "id": "examples",
+      "intent": "找到 cookbook、应用示例、showcase 和 playground",
+      "type": "informational",
+      "target": "/blog/jev-cookbook-use-cases/",
+      "rows": [
+        2,
+        3,
+        18,
+        21,
+        23,
+        24,
+        36,
+        39,
+        94,
+        133,
+        143,
+        155,
+        165
+      ]
+    },
+    {
+      "id": "local-models",
+      "intent": "比较独立本地决策模型、开放权重和 CPU/MLX 部署",
+      "type": "commercial-investigation",
+      "target": "/blog/jev-local-alternatives/",
+      "rows": [
+        7,
+        8,
+        10,
+        16,
+        22,
+        29,
+        35,
+        37,
+        45,
+        49,
+        50,
+        53,
+        56,
+        58,
+        68,
+        71,
+        72,
+        78,
+        87,
+        88,
+        93,
+        97,
+        114,
+        116,
+        118,
+        137,
+        138,
+        140,
+        141,
+        145,
+        146,
+        148,
+        158,
+        172,
+        178,
+        180
+      ]
+    },
+    {
+      "id": "adapters",
+      "intent": "把已有 LLM 包装成 Jev 风格接口",
+      "type": "informational",
+      "target": "/blog/jev-local-alternatives/#adapters",
+      "rows": [
+        41,
+        110,
+        147,
+        151,
+        174,
+        186,
+        193
+      ]
+    },
+    {
+      "id": "agent-routing",
+      "intent": "在编码 Agent 中路由模型、工具、技能和任务",
+      "type": "informational",
+      "target": "/blog/jev-coding-agent-integrations/",
+      "rows": [
+        15,
+        40,
+        42,
+        90,
+        96,
+        105,
+        113,
+        132,
+        139,
+        153,
+        159,
+        181,
+        192
+      ]
+    },
+    {
+      "id": "codex",
+      "intent": "选择 Jev 与 Codex 的集成方式",
+      "type": "informational",
+      "target": "/blog/jev-coding-agent-integrations/#codex",
+      "rows": [
+        67,
+        95,
+        166
+      ]
+    },
+    {
+      "id": "opencode",
+      "intent": "理解 OpenCode 插件和 Jev 决策层",
+      "type": "informational",
+      "target": "/blog/jev-coding-agent-integrations/#opencode",
+      "rows": [
+        27,
+        83,
+        115
+      ]
+    },
+    {
+      "id": "hermes",
+      "intent": "寻找 Hermes 技能、工具和模型路由集成",
+      "type": "informational",
+      "target": "/blog/jev-coding-agent-integrations/#hermes",
+      "rows": [
+        28,
+        33,
+        168
+      ]
+    },
+    {
+      "id": "pi-omp",
+      "intent": "理解 Pi/Oh My Pi 模型路由和工具审批",
+      "type": "informational",
+      "target": "/blog/jev-coding-agent-integrations/#pi-omp",
+      "rows": [
+        14,
+        31,
+        100,
+        102,
+        117,
+        149,
+        162,
+        163
+      ]
+    },
+    {
+      "id": "sdk",
+      "intent": "使用 SDK、CLI 和类型化框架接入 Jev",
+      "type": "informational",
+      "target": "/blog/jev-api-sdk-guide/#sdk",
+      "rows": [
+        81,
+        82,
+        135,
+        170,
+        182
+      ]
+    },
+    {
+      "id": "providers",
+      "intent": "区分 TypeSafe API、OpenRouter Decisions、模型路由及 Google/Vertex",
+      "type": "informational",
+      "target": "/blog/jev-api-sdk-guide/#providers",
+      "rows": [
+        34,
+        59,
+        107,
+        121,
+        122,
+        124
+      ]
+    },
+    {
+      "id": "compaction",
+      "intent": "选择上下文裁剪和压缩方案并保留必要信息",
+      "type": "informational",
+      "target": "/blog/jev-context-compaction/",
+      "rows": [
+        12,
+        57,
+        111
+      ]
+    },
+    {
+      "id": "sql",
+      "intent": "在 Snowflake 和 DuckDB 内做语义分类及筛选",
+      "type": "informational",
+      "target": "/blog/jev-sql-snowflake-duckdb-neo4j/#sql",
+      "rows": [
+        5,
+        19,
+        167
+      ]
+    },
+    {
+      "id": "graphs",
+      "intent": "使用 Neo4j、知识图谱和实体关系决策",
+      "type": "informational",
+      "target": "/blog/jev-sql-snowflake-duckdb-neo4j/#graphs",
+      "rows": [
+        85,
+        164,
+        179
+      ]
+    },
+    {
+      "id": "retrieval",
+      "intent": "语义代码搜索、RAG 重排和资料筛选",
+      "type": "informational",
+      "target": "/blog/jev-semantic-search-rag/",
+      "rows": [
+        51,
+        66,
+        73,
+        91,
+        156,
+        173,
+        183
+      ]
+    },
+    {
+      "id": "classification",
+      "intent": "设计文档分类、标签和人工复核流程",
+      "type": "informational",
+      "target": "/blog/jev-document-classification/",
+      "rows": [
+        13
+      ]
+    },
+    {
+      "id": "guardrails",
+      "intent": "工具审批、PII 检测和风险判定",
+      "type": "informational",
+      "target": "/blog/jev-guardrails-permissions/",
+      "rows": [
+        44,
+        69,
+        77
+      ]
+    },
+    {
+      "id": "benchmarks",
+      "intent": "查找 JevBench/Arena，比较准确率、校准、延迟和成本",
+      "type": "commercial-investigation",
+      "target": "/blog/jev-benchmarks-evaluation/",
+      "rows": [
+        6,
+        20,
+        48,
+        54,
+        55
+      ]
+    },
+    {
+      "id": "computer-use",
+      "intent": "理解浏览器、视觉和语音控制的外层工具链",
+      "type": "informational",
+      "target": "/blog/jev-computer-use-games/#computer-use",
+      "rows": [
+        32,
+        47,
+        60,
+        80,
+        101,
+        127,
+        130,
+        150,
+        169,
+        189
+      ]
+    },
+    {
+      "id": "robotics",
+      "intent": "查看具身控制和机器人决策实验",
+      "type": "informational",
+      "target": "/blog/jev-computer-use-games/#robotics",
+      "rows": [
+        152,
+        161
+      ]
+    },
+    {
+      "id": "games",
+      "intent": "查看 Doom、Pokemon、Snake、Mario 等游戏 Agent",
+      "type": "informational",
+      "target": "/blog/jev-computer-use-games/#games",
+      "rows": [
+        11,
+        76,
+        84,
+        98,
+        112
+      ]
+    },
+    {
+      "id": "desktop-mobile",
+      "intent": "找到桌面、手机、Jarvis、聊天和办公客户端",
+      "type": "navigational",
+      "target": "/blog/jev-desktop-mobile-apps/",
+      "rows": [
+        25,
+        30,
+        61,
+        62,
+        63,
+        109,
+        126,
+        129,
+        136,
+        144,
+        177,
+        188
+      ]
+    },
+    {
+      "id": "ui",
+      "intent": "UI 组件、调用可视化和浏览器扩展",
+      "type": "informational",
+      "target": "/blog/jev-desktop-mobile-apps/#ui",
+      "rows": [
+        43,
+        74,
+        75,
+        86,
+        175,
+        176
+      ]
+    },
+    {
+      "id": "trading",
+      "intent": "理解交易项目架构和研究局限",
+      "type": "informational",
+      "target": "/blog/jev-trading-projects/",
+      "rows": [
+        89,
+        92,
+        119,
+        171
+      ]
+    },
+    {
+      "id": "research",
+      "intent": "理解 JEPA 组合实验、模型能力及 AGI 说法的证据边界",
+      "type": "informational",
+      "target": "/blog/jev-benchmarks-evaluation/#research",
+      "rows": [
+        120,
+        128,
+        154
+      ]
+    },
+    {
+      "id": "unresolved-entity",
+      "intent": "找到名称不明确的 GitHub 项目，先核对实体",
+      "type": "navigational-uncertain",
+      "target": "/faq/#find-a-project",
+      "rows": [
+        184,
+        185
+      ],
+      "note": "无法建立可靠实体证据的查询保留待核，不创建无依据的专项 SEO 页。"
+    }
+  ],
+  "uncertainRows": [
+    39,
+    45,
+    48,
+    59,
+    65,
+    125,
+    184,
+    185
+  ],
+  "formulaRecovery": {
+    "row": 128,
+    "displayed": "#NAME?",
+    "formula": "=+\"jev\" \"jepa\"",
+    "topic": "JEPA / Jev research",
+    "note": "保留导出的公式文本作为证据，不将 #NAME? 当作关键词，也不修改原工作表。"
+  },
+  "rules": [
+    "每条原始查询只归入一个主意图；相关意图可通过内链覆盖。",
+    "查询维度与页面维度独立汇总；本报表不能证明任何单条查询对应的落地页。",
+    "按可见查询的展示量、点击量及任务完整性排序，不推断长期趋势或搜索量。",
+    "项目品牌词保留现有项目页；专题文章承担选择、解释和工作流问题。",
+    "无法确认的实体保留待核记录，不凭词形或一条展示编造文章。"
+  ]
+}

@@ -1,5 +1,7 @@
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
+import { JSDOM } from "jsdom";
+import { EDITORIAL_ROUTES } from "../shared/editorial-routes.js";
 const origin = process.argv[2] || "https://jevhunt.com";
 const expected = JSON.parse(readFileSync("public/build-info.json", "utf8"));
 const fingerprint = text => createHash("sha256").update(text).digest("hex").slice(0, 20);
@@ -39,6 +41,15 @@ async function verify() {
   if (!logout.ok || !logout.headers.get("set-cookie")?.includes("Max-Age=0")) throw new Error("Logout cookie cleanup failed");
   const missing = await get("/this-route-must-not-exist-jevhunt-release-check/");
   if (missing.status !== 404) throw new Error("Unknown paths must return a real 404");
+  const sitemapResponse = await get("/sitemap.xml");
+  if (!sitemapResponse.ok) throw new Error("Editorial sitemap request failed");
+  const sitemap = new JSDOM(await sitemapResponse.text(), { contentType: "application/xml" });
+  const urls = new Set([...sitemap.window.document.getElementsByTagName("loc")].map(element => element.textContent));
+  sitemap.window.close();
+  for (const { path } of EDITORIAL_ROUTES) if (!urls.has("https://jevhunt.com" + path)) throw new Error("Missing editorial sitemap URL: " + path);
+  const screenshot = await get("/assets/images/jev-showcase.png");
+  const screenshotBytes = Buffer.from(await screenshot.arrayBuffer());
+  if (!screenshot.ok || screenshotBytes.subarray(1, 4).toString() !== "PNG" || fingerprint(screenshotBytes) !== fingerprint(readFileSync("public/assets/images/jev-showcase.png"))) throw new Error("Editorial screenshot missing or modified");
   if (new URL(origin).hostname === "jevhunt.com") {
     const canonical = await fetch("https://www.jevhunt.com/", { redirect: "manual", signal: AbortSignal.timeout(15000) });
     if (![301, 308].includes(canonical.status) || canonical.headers.get("location") !== "https://jevhunt.com/") throw new Error("www must redirect to the canonical origin");
@@ -47,7 +58,7 @@ async function verify() {
 }
 let failure;
 for (let attempt = 0; attempt < 8; attempt++) {
-  try { const live = await verify(); console.log(`Verified production build ${expected.buildId}: ${live.projectCount} live projects, pages, API access control, D1 health and automatic scheduler heartbeat.`); failure = null; break; }
+  try { const live = await verify(); console.log(`Verified production build ${expected.buildId}: ${live.projectCount} live projects, ${EDITORIAL_ROUTES.length} editorial routes, sitemap, screenshot, API access control, D1 health and automatic scheduler heartbeat.`); failure = null; break; }
   catch (error) { failure = error; console.log(`Verification ${attempt + 1}/8: ${error.message}`); if (attempt < 7) await new Promise(resolve => setTimeout(resolve, 5000)); }
 }
 if (failure) throw failure;

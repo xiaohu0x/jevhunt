@@ -70,8 +70,11 @@ test("every locale project route returns usable internal journeys and consistent
     const document = documentOf(t, html, origin + path);
     assert.equal(document.documentElement.lang, locale.lang);
     assert.equal(document.querySelector('link[rel="canonical"]').href, origin + path);
-    assert.equal(document.querySelector('meta[name="description"]').content, example.desc);
-    assert.ok(document.title.includes(example.repo));
+    assert.equal(document.querySelector('meta[name="description"]').content, document.querySelector(".legal__summary").textContent);
+    assert.ok(document.querySelector(".project-source-description").textContent.includes(example.desc));
+    assert.ok(document.title.startsWith(example.name));
+    assert.ok(document.title.includes("Jev"));
+    assert.ok(!document.title.includes(example.repo));
     assert.equal(document.querySelectorAll('script[src*="googletagmanager.com/gtag/js"]').length, 1);
     assert.equal(document.querySelectorAll('script[src*="/assets/js/analytics.js"]').length, 1);
     assert.equal(document.querySelector(".breadcrumbs a:last-child").textContent, i18n.locales[key].messages["category.agents.name"]);
@@ -124,6 +127,21 @@ test("D1 recommendations exclude duplicate, archived, withdrawn, and undated act
   assert.equal(new Set([...similar, ...active]).size, 12);
   assert.ok(similar.every(url => url.startsWith("/projects/similar/")));
   assert.deepEqual(active, Array.from({ length: 6 }, (_, i) => `/projects/recent/item-${i}/`));
+});
+
+test("live titles disambiguate names across categories and ignore withdrawn duplicates", async t => {
+  const { DB, insert, dispatch } = fixture(t);
+  insert();
+  insert({ repo: "another/example", name: "example", cat: "research" });
+  for (const prefix of ["", "/zh-cn", "/ja"]) {
+    const document = documentOf(t, await (await dispatch(prefix + "/projects/owner/example/")).text(), origin);
+    assert.match(document.title, /^Example.*\(owner\) \| JevHunt$/);
+    assert.match(document.querySelector('meta[name="description"]').content, /Example \(owner\)/);
+    assert.doesNotMatch(document.querySelector("h1").textContent, /owner/);
+  }
+  DB.db.prepare("INSERT INTO catalog_withdrawals VALUES ('another/example', 1, 'reviewer')").run();
+  const document = documentOf(t, await (await dispatch("/projects/owner/example/")).text(), origin);
+  assert.doesNotMatch(document.title, /\(owner\)/);
 });
 
 test("project alias, withdrawn and missing route responses preserve status and usable recovery", async t => {

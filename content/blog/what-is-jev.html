@@ -1,0 +1,21 @@
+<p>Jev is TypeSafe AI's decision model for software. Give it text as state and questions with a defined answer space; receive choices, scores or yes/no probabilities that your application can use.</p>
+<h2 id="decision-model">A decision model has a different job from a chat model</h2>
+<p>The <a href="https://docs.typesafe.ai/introduction">official introduction</a> describes Jev as a System One model. Its output is a typed judgment, rather than a paragraph, code completion or explanation. That makes it useful at a decision point: which queue receives a ticket, whether a retrieved passage is relevant, or which handler should take a request.</p>
+<p>A surrounding application can still generate text. For example, Jev can select the support team while a separate language model writes a draft response. The routing judgment and the generated response have different responsibilities and need separate evaluation.</p>
+<h2 id="state">What does state mean?</h2>
+<p><a href="https://docs.typesafe.ai/concepts/state">State</a> is the material being judged: a message, a document excerpt, a record, or a JSON object containing the relevant facts. It is not automatically a persistent memory store. Your application decides which context to send on each request.</p>
+<pre><code>{
+  "message": "The upload fails after I choose a PDF.",
+  "product": "Document organizer",
+  "available_teams": ["technical", "billing", "account"]
+}</code></pre>
+<p>Questions describe what to decide about that state. Keep the document itself out of the instruction field, name the relevant state fields, and omit unrelated history. All questions in one request see the same state independently; a later decision that depends on an earlier answer needs a subsequent step in code.</p>
+<h2 id="primitives">Choice, Score and Noul</h2>
+<table><caption>The three documented question types</caption><thead><tr><th>Type</th><th>Use it for</th><th>Read from the answer</th></tr></thead><tbody><tr><td>Choice</td><td>One option from a defined set, such as a department.</td><td>Selected option, option probabilities and confidence.</td></tr><tr><td>Score</td><td>An ordered descriptive rubric, such as urgency levels.</td><td>Score, level probabilities and confidence.</td></tr><tr><td>Noul</td><td>An independent yes/no statement, such as whether a refund is requested.</td><td>A probability from 0 to 1 that the answer is yes.</td></tr></tbody></table>
+<p>The <a href="https://docs.typesafe.ai/primitives">primitive documentation</a> defines the response fields. A Choice always selects from the supplied options, so include an appropriate fallback when your categories do not cover every input. Use separate Nouls when several tags can apply together.</p>
+<h2 id="confidence">A structured answer can still be wrong</h2>
+<p>Constrained output prevents an unexpected answer label; it does not guarantee a correct judgment. <a href="https://docs.typesafe.ai/confidence">Confidence</a> and option probabilities are useful signals, but neither replaces a labeled test set or the application's permission rules. There is no universal threshold that makes every workflow reliable.</p>
+<p>For an initial integration, record the input, actual model version, answer and eventual correct outcome. Decide which cases can proceed automatically and which require review. Test how coverage and errors change together when you adjust the threshold.</p>
+<h2 id="limits">What should stay outside Jev?</h2>
+<p>The documented API accepts text, not raw screenshots, sound or video. Other components must turn those inputs into text or structured fields. Jev also does not become a conversational assistant merely because a community app uses its name.</p>
+<p>The <a href="https://docs.typesafe.ai/model-jaggedness/jev-1.13">Jev 1.13 failure notes</a> recommend keeping arithmetic and date comparisons in code and testing adversarial or irrelevant context. Use ordinary parsers for exact extraction, deterministic checks for permissions, and a generative model when the required output is prose. Start with the <a href="/blog/jev-api-sdk-guide/">API and SDK guide</a> or <a href="/blog/jev-cookbook-use-cases/">an example matching your task</a>.</p>
