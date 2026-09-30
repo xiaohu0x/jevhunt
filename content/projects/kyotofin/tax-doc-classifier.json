@@ -1,0 +1,762 @@
+{
+  "version": "source-content-v1",
+  "repo": "kyotofin/tax-doc-classifier",
+  "repositoryId": 1376004275,
+  "relationship": "jev-app",
+  "category": "apps",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "3e95a77f763c6becb78472f8b2ce2f54237f9214",
+      "url": "https://github.com/kyotofin/tax-doc-classifier/blob/3e95a77f763c6becb78472f8b2ce2f54237f9214/README.md",
+      "sha256": "72c4f74b542eab83b58b8df088f82b8363746924e92e0a68e7635095fc09401f",
+      "accessedAt": "2026-09-30T07:33:50.730Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "The library identifies IRS forms and page kinds from extracted text using a JSON registry of form descriptions.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 7,
+          "end": 21,
+          "quote": "One request per page. The page's text goes to [Jev](https://docs.typesafe.ai), TypeSafe's decision model, which returns a probability over 261 IRS forms and 7 page kinds instead of text. No model is trained and nothing is hosted: the classifier is a JSON file describing each form, generated from the IRS's own PDFs.\n\n```ts\nimport { classifyPage, jevBackend, pdfPageLines } from 'tax-doc-classifier'\nimport criteria from 'tax-doc-classifier/data/criteria.json' with { type: 'json' }\n\nconst lines = await pdfPageLines('return.pdf', 3)\nconst r = await classifyPage(lines, { backend: jevBackend(), criteria })\n// r.form            'form-1040-schedule-a'\n// r.kind            'form_page'\n// r.formConfidence  0.99\n// r.gated           true   (formConfidence >= 0.95)\n```\n\nNo model is trained and nothing is hosted. The classifier is a JSON file of form descriptions (`data/criteria.json`) and a decision model that reads a page and picks from them. The decision model is [TypeSafe Jev](https://docs.typesafe.ai), a System One model that returns a probability over options instead of text."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "Jev chooses a page kind and form; five parent forms can trigger a second schedule question, and blank pages bypass the model.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 70,
+          "end": 88,
+          "quote": "## How it works\n\n```\nPDF page ──pdftotext──▶ { header, body, footer }\n                              │\n                              ▼  one request\n                     kind  : 7 options\n                     form  : 230 options + not_in_this_list\n                              │\n                              ▼  second request only if form ∈ {5471, 8865, 8933, 1118, 5713}\n                     sub   : that form and its schedules\n                              │\n                              ▼\n        { form, kind, formConfidence, gated, probabilities }\n```\n\n- A blank page is answered without a call.\n- The 230 first-list options are every form as the page prints it. Five corporate/foreign forms absorb their 35 schedules and get a second, small question; the hierarchy exists only where the page announces the parent more clearly than the schedule.\n- `formConfidence` is the minimum over steps. Gate on it: above the gate, act; below, fall back to whatever you use today."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Use classifyPage with text lines, jevBackend and criteria.json. PDF helpers additionally require Poppler; the backend needs a TypeSafe key.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 10,
+          "end": 14,
+          "quote": "import { classifyPage, jevBackend, pdfPageLines } from 'tax-doc-classifier'\nimport criteria from 'tax-doc-classifier/data/criteria.json' with { type: 'json' }\n\nconst lines = await pdfPageLines('return.pdf', 3)\nconst r = await classifyPage(lines, { backend: jevBackend(), criteria })"
+        },
+        {
+          "source": "source-1",
+          "start": 25,
+          "end": 33,
+          "quote": "1. **Node 20+ and pnpm.**\n2. **poppler** — provides `pdftotext` and `pdfinfo`, used to read PDF pages. Only `classifyPage` on lines of text works without it.\n   - macOS: `brew install poppler`\n   - Debian/Ubuntu: `apt install poppler-utils`\n3. **A TypeSafe API key.** Get one at [typesafe.ai](https://typesafe.ai), then:\n   ```\n   export TYPESAFE_API_KEY=…\n   ```\n   or put it in a `.env` file (git-ignored) and load it with your usual tooling. The key is read from the environment by `jevBackend()`; it is never written to disk or logged."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "State-tax forms, broker or bank statements, and letters are defined routing categories but are not yet evaluated. Low-confidence pages need the caller’s fallback policy.",
+      "kind": "source-limitation",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 90,
+          "end": 94,
+          "quote": "### Page kinds\n\n`form_page` · `instructions` · `blank` · `cover_sheet` · `state_tax_form` · `broker_or_bank_statement` · `letter_or_other`\n\nThe last three route a page away from the federal form list; they are defined but not yet evaluated."
+        },
+        {
+          "source": "source-1",
+          "start": 86,
+          "end": 88,
+          "quote": "- A blank page is answered without a call.\n- The 230 first-list options are every form as the page prints it. Five corporate/foreign forms absorb their 35 schedules and get a second, small question; the hierarchy exists only where the page announces the parent more clearly than the schedule.\n- `formConfidence` is the minimum over steps. Gate on it: above the gate, act; below, fall back to whatever you use today."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "tax-doc-classifier — Classify US tax document pages with Jev",
+      "h1": "tax-doc-classifier — Classify US tax document pages with Jev",
+      "description": "tax-doc-classifier: Use Jev to select IRS forms and page kinds from extracted tax-document text, with a form-description registry and confidence-based fallback.",
+      "summary": "The library identifies IRS forms and page kinds from extracted text using a JSON registry of form descriptions. Use classifyPage with text lines, jevBackend and criteria.json. PDF helpers additionally require Poppler; the backend needs a TypeSafe key.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "What it does",
+          "text": "The library identifies IRS forms and page kinds from extracted text using a JSON registry of form descriptions.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "Jev chooses a page kind and form; five parent forms can trigger a second schedule question, and blank pages bypass the model.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Getting started",
+          "text": "Use classifyPage with text lines, jevBackend and criteria.json. PDF helpers additionally require Poppler; the backend needs a TypeSafe key.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "State-tax forms, broker or bank statements, and letters are defined routing categories but are not yet evaluated. Low-confidence pages need the caller’s fallback policy.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "tax-doc-classifier — 用 Jev 分类美国税务文档页面",
+      "h1": "tax-doc-classifier — 用 Jev 分类美国税务文档页面",
+      "description": "tax-doc-classifier: Jev 根据提取的税务文本选择 IRS 表单与页面类型，配有表单描述名录和按置信度回退的接口。",
+      "summary": "该库通过表单描述 JSON 名录，对提取的文本识别 IRS 表单和页面类型。 向 classifyPage 提供文本行、jevBackend 和 criteria.json。PDF 辅助功能还需 Poppler，后端需要 TypeSafe 密钥。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "该库通过表单描述 JSON 名录，对提取的文本识别 IRS 表单和页面类型。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "Jev 选择页面类型与表单；五类父表单可能触发第二次附表判断，空白页则不调用模型。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "向 classifyPage 提供文本行、jevBackend 和 criteria.json。PDF 辅助功能还需 Poppler，后端需要 TypeSafe 密钥。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "州税表、券商或银行账单以及信件等分流类别已定义，但尚未评估。低置信度页面需由调用方的回退策略处理。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "tax-doc-classifier — 以 Jev 分類美國稅務文件頁面",
+      "h1": "tax-doc-classifier — 以 Jev 分類美國稅務文件頁面",
+      "description": "tax-doc-classifier: Jev 依擷取的稅務文字選擇 IRS 表單與頁面類型，配有表單描述名錄及依信心值備援的介面。",
+      "summary": "此函式庫利用表單描述 JSON 名錄，從擷取的文字辨識 IRS 表單與頁面類型。 將文字行、jevBackend 及 criteria.json 傳給 classifyPage。PDF 輔助功能另需 Poppler，後端需要 TypeSafe 金鑰。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "此函式庫利用表單描述 JSON 名錄，從擷取的文字辨識 IRS 表單與頁面類型。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "Jev 選擇頁面類型和表單；五種主表單可能觸發第二次附表判斷，空白頁不呼叫模型。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "將文字行、jevBackend 及 criteria.json 傳給 classifyPage。PDF 輔助功能另需 Poppler，後端需要 TypeSafe 金鑰。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "州稅表、券商或銀行對帳單及信件等分流類別已定義，但尚未評估。低信心頁面須由呼叫端的備援策略處理。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "tax-doc-classifier — Jev で米国税務書類のページを分類",
+      "h1": "tax-doc-classifier — Jev で米国税務書類のページを分類",
+      "description": "tax-doc-classifier: 抽出した税務文書のテキストから Jev が IRS フォームとページ種別を選択。説明台帳と信頼度による代替処理に対応します。",
+      "summary": "フォーム説明の JSON 台帳を使い、抽出テキストから IRS フォームとページ種別を識別するライブラリです。 テキスト行、jevBackend、criteria.json を classifyPage に渡します。PDF 用機能には Poppler、接続には TypeSafe キーが必要です。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "できること",
+          "text": "フォーム説明の JSON 台帳を使い、抽出テキストから IRS フォームとページ種別を識別するライブラリです。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "Jev が種別とフォームを選び、5種類の親フォームでは付表用の追加質問が発生します。空白ページはモデルを呼びません。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い始めるには",
+          "text": "テキスト行、jevBackend、criteria.json を classifyPage に渡します。PDF 用機能には Poppler、接続には TypeSafe キーが必要です。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "対象範囲と制約",
+          "text": "州税フォーム、証券・銀行明細、手紙の振り分け区分は定義済みですが未評価です。低信頼度のページは呼び出し側の代替処理が必要です。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "tax-doc-classifier — Jev로 미국 세금 문서 페이지 분류",
+      "h1": "tax-doc-classifier — Jev로 미국 세금 문서 페이지 분류",
+      "description": "tax-doc-classifier: 추출한 세금 문서 텍스트에서 Jev가 IRS 양식과 페이지 종류를 고릅니다. 설명 목록과 신뢰도 기반 대체 처리를 제공합니다.",
+      "summary": "양식 설명 JSON 목록을 사용해 추출된 텍스트에서 IRS 양식과 페이지 종류를 식별하는 라이브러리입니다. classifyPage에 텍스트 줄, jevBackend, criteria.json을 전달합니다. PDF 도우미는 Poppler, 백엔드는 TypeSafe 키가 필요합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "양식 설명 JSON 목록을 사용해 추출된 텍스트에서 IRS 양식과 페이지 종류를 식별하는 라이브러리입니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Jev가 페이지 종류와 양식을 고르며 다섯 상위 양식은 부속 서식 질문을 추가로 호출할 수 있습니다. 빈 페이지는 모델을 호출하지 않습니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "classifyPage에 텍스트 줄, jevBackend, criteria.json을 전달합니다. PDF 도우미는 Poppler, 백엔드는 TypeSafe 키가 필요합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 제약",
+          "text": "주 세금 양식, 증권사·은행 명세서, 편지 분류는 정의됐지만 아직 평가되지 않았습니다. 신뢰도가 낮은 페이지는 호출자의 대체 정책이 필요합니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "tax-doc-classifier — Jev clasifica páginas fiscales de EE. UU.",
+      "h1": "tax-doc-classifier — Clasificar páginas fiscales estadounidenses con Jev",
+      "description": "tax-doc-classifier: Jev elige formularios IRS y tipos de página desde texto fiscal extraído, con registro de descripciones y control por confianza.",
+      "summary": "La biblioteca identifica formularios del IRS y tipos de página a partir del texto extraído y un registro JSON de descripciones. Usa classifyPage con líneas, jevBackend y criteria.json. Las utilidades PDF requieren Poppler y el backend necesita una clave TypeSafe.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "La biblioteca identifica formularios del IRS y tipos de página a partir del texto extraído y un registro JSON de descripciones.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Jev elige tipo y formulario; cinco formularios principales pueden activar una segunda pregunta sobre anexos, y las páginas vacías omiten el modelo.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo empezar",
+          "text": "Usa classifyPage con líneas, jevBackend y criteria.json. Las utilidades PDF requieren Poppler y el backend necesita una clave TypeSafe.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "Las categorías de impuestos estatales, extractos bancarios o bursátiles y cartas están definidas, pero aún no evaluadas. La baja confianza requiere una política de alternativa del cliente.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "tax-doc-classifier — Pages fiscales américaines classées par Jev",
+      "h1": "tax-doc-classifier — Classer des pages fiscales américaines avec Jev",
+      "description": "tax-doc-classifier: Jev sélectionne formulaires IRS et types de pages dans le texte fiscal extrait, avec registre descriptif et seuils de confiance.",
+      "summary": "La bibliothèque identifie les formulaires IRS et les types de pages à partir du texte extrait et d’un registre JSON de descriptions. Utilisez classifyPage avec les lignes, jevBackend et criteria.json. Les fonctions PDF demandent Poppler et le backend une clé TypeSafe.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "La bibliothèque identifie les formulaires IRS et les types de pages à partir du texte extrait et d’un registre JSON de descriptions.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Jev choisit type et formulaire ; cinq formulaires parents peuvent déclencher une question sur l’annexe, tandis que les pages blanches évitent le modèle.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Utilisez classifyPage avec les lignes, jevBackend et criteria.json. Les fonctions PDF demandent Poppler et le backend une clé TypeSafe.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "Les catégories fiscales d’État, relevés bancaires ou de courtier et lettres sont définies mais pas encore évaluées. Les pages incertaines nécessitent une politique de repli côté appelant.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "tax-doc-classifier — US-Steuerseiten mit Jev klassifizieren",
+      "h1": "tax-doc-classifier — US-Steuerseiten mit Jev klassifizieren",
+      "description": "tax-doc-classifier: Jev wählt IRS-Formulare und Seitentypen aus Steuertexten, mit Beschreibungsregister und Konfidenz für Rückfallregeln.",
+      "summary": "Die Bibliothek erkennt IRS-Formulare und Seitentypen aus extrahiertem Text anhand eines JSON-Verzeichnisses mit Formularbeschreibungen. classifyPage mit Textzeilen, jevBackend und criteria.json verwenden. PDF-Hilfen benötigen Poppler, das Backend einen TypeSafe-Schlüssel.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "Die Bibliothek erkennt IRS-Formulare und Seitentypen aus extrahiertem Text anhand eines JSON-Verzeichnisses mit Formularbeschreibungen.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Jev wählt Seitentyp und Formular; fünf Hauptformulare können eine zweite Frage zum Anhang auslösen. Leere Seiten umgehen das Modell.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Einstieg",
+          "text": "classifyPage mit Textzeilen, jevBackend und criteria.json verwenden. PDF-Hilfen benötigen Poppler, das Backend einen TypeSafe-Schlüssel.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Kategorien für Bundesstaaten-Steuerformulare, Bank- oder Brokerbelege und Briefe sind definiert, aber noch nicht bewertet. Unsichere Seiten benötigen eine Rückfallstrategie des Aufrufers.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "tax-doc-classifier — Classificar páginas fiscais dos EUA com Jev",
+      "h1": "tax-doc-classifier — Classificar páginas fiscais dos EUA com Jev",
+      "description": "tax-doc-classifier: Jev escolhe formulários IRS e tipos de página pelo texto extraído, com cadastro de descrições e confiança para alternativas.",
+      "summary": "A biblioteca identifica formulários do IRS e tipos de página a partir do texto extraído e de um cadastro JSON de descrições. Use classifyPage com linhas, jevBackend e criteria.json. As funções PDF exigem Poppler, e o backend precisa de chave TypeSafe.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "A biblioteca identifica formulários do IRS e tipos de página a partir do texto extraído e de um cadastro JSON de descrições.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "O Jev escolhe tipo e formulário; cinco formulários principais podem gerar uma segunda pergunta sobre anexos, e páginas vazias dispensam o modelo.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como começar",
+          "text": "Use classifyPage com linhas, jevBackend e criteria.json. As funções PDF exigem Poppler, e o backend precisa de chave TypeSafe.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "Categorias de formulários estaduais, extratos bancários ou de corretoras e cartas estão definidas, mas ainda não avaliadas. Baixa confiança exige uma política alternativa do chamador.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "tax-doc-classifier — Классификация налоговых страниц США с Jev",
+      "h1": "tax-doc-classifier — Классификация страниц налоговых документов США через Jev",
+      "description": "tax-doc-classifier: Jev выбирает формы IRS и типы страниц по налоговому тексту, с реестром описаний и уверенностью для резервной обработки.",
+      "summary": "Библиотека определяет формы IRS и типы страниц по извлечённому тексту и JSON-реестру описаний форм. Передайте строки, jevBackend и criteria.json в classifyPage. Для PDF-функций нужен Poppler, для бэкенда — ключ TypeSafe.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Библиотека определяет формы IRS и типы страниц по извлечённому тексту и JSON-реестру описаний форм.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Jev выбирает тип страницы и форму; пять родительских форм могут вызвать дополнительный вопрос о приложении. Пустые страницы обходятся без модели.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Начало работы",
+          "text": "Передайте строки, jevBackend и criteria.json в classifyPage. Для PDF-функций нужен Poppler, для бэкенда — ключ TypeSafe.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Категории форм штатов, банковских или брокерских выписок и писем определены, но ещё не оценены. Для низкой уверенности вызывающий код должен задать резервную обработку.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "tax-doc-classifier — Jev से अमेरिकी कर दस्तावेज़ के पृष्ठ वर्गीकृत करें",
+      "h1": "tax-doc-classifier — Jev से अमेरिकी कर दस्तावेज़ के पृष्ठ वर्गीकृत करें",
+      "description": "tax-doc-classifier: Jev निकाले गए कर दस्तावेज़ के पाठ से IRS फ़ॉर्म और पृष्ठ प्रकार चुनता है; विवरण सूची और विश्वास मान वैकल्पिक प्रक्रिया तय करने में मदद करते हैं।",
+      "summary": "यह लाइब्रेरी निकाले गए पाठ और फ़ॉर्म विवरणों की JSON सूची से IRS फ़ॉर्म तथा पृष्ठ प्रकार पहचानती है। classifyPage को पाठ पंक्तियाँ, jevBackend और criteria.json दें। PDF सहायक के लिए Poppler तथा बैकएंड के लिए TypeSafe कुंजी चाहिए।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "परियोजना का काम",
+          "text": "यह लाइब्रेरी निकाले गए पाठ और फ़ॉर्म विवरणों की JSON सूची से IRS फ़ॉर्म तथा पृष्ठ प्रकार पहचानती है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "Jev प्रकार और फ़ॉर्म चुनता है; पाँच मुख्य फ़ॉर्म के लिए अनुसूची का दूसरा प्रश्न हो सकता है। खाली पृष्ठ मॉडल को नहीं भेजे जाते।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "शुरुआत कैसे करें",
+          "text": "classifyPage को पाठ पंक्तियाँ, jevBackend और criteria.json दें। PDF सहायक के लिए Poppler तथा बैकएंड के लिए TypeSafe कुंजी चाहिए।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "राज्य कर फ़ॉर्म, बैंक या ब्रोकर विवरण और पत्र श्रेणियाँ परिभाषित हैं, पर अभी मूल्यांकित नहीं हैं। कम विश्वास वाले पृष्ठों के लिए कॉलर को वैकल्पिक नीति चाहिए।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "tax-doc-classifier — Jev mengklasifikasi halaman pajak AS",
+      "h1": "tax-doc-classifier — Klasifikasi halaman dokumen pajak AS dengan Jev",
+      "description": "tax-doc-classifier: Jev memilih formulir IRS dan jenis halaman dari teks pajak, dengan registri deskripsi dan keyakinan untuk kebijakan cadangan.",
+      "summary": "Pustaka ini mengenali formulir IRS dan jenis halaman dari teks yang diekstrak memakai registri deskripsi formulir JSON. Gunakan classifyPage dengan baris teks, jevBackend, dan criteria.json. Pembantu PDF memerlukan Poppler; backend memerlukan kunci TypeSafe.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "Pustaka ini mengenali formulir IRS dan jenis halaman dari teks yang diekstrak memakai registri deskripsi formulir JSON.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Jev memilih jenis dan formulir; lima formulir induk dapat memicu pertanyaan lampiran kedua, sementara halaman kosong melewati model.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara memulai",
+          "text": "Gunakan classifyPage dengan baris teks, jevBackend, dan criteria.json. Pembantu PDF memerlukan Poppler; backend memerlukan kunci TypeSafe.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Kategori formulir pajak negara bagian, laporan bank atau broker, dan surat sudah ditetapkan tetapi belum dievaluasi. Halaman berkeyakinan rendah perlu kebijakan cadangan pemanggil.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "tax-doc-classifier — Phân loại trang hồ sơ thuế Mỹ bằng Jev",
+      "h1": "tax-doc-classifier — Phân loại trang hồ sơ thuế Mỹ bằng Jev",
+      "description": "tax-doc-classifier: Jev chọn biểu mẫu IRS và loại trang từ văn bản thuế, có danh mục mô tả và độ tin cậy để xử lý dự phòng.",
+      "summary": "Thư viện nhận diện biểu mẫu IRS và loại trang từ văn bản trích xuất qua danh mục mô tả biểu mẫu JSON. Dùng classifyPage với các dòng văn bản, jevBackend và criteria.json. Tiện ích PDF cần Poppler; backend cần khóa TypeSafe.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Công dụng",
+          "text": "Thư viện nhận diện biểu mẫu IRS và loại trang từ văn bản trích xuất qua danh mục mô tả biểu mẫu JSON.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Jev chọn loại trang và biểu mẫu; năm biểu mẫu mẹ có thể tạo câu hỏi phụ về phụ lục, còn trang trắng bỏ qua mô hình.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách bắt đầu",
+          "text": "Dùng classifyPage với các dòng văn bản, jevBackend và criteria.json. Tiện ích PDF cần Poppler; backend cần khóa TypeSafe.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Các nhóm biểu mẫu thuế tiểu bang, sao kê ngân hàng hoặc môi giới và thư đã được định nghĩa nhưng chưa đánh giá. Trang thiếu chắc chắn cần chính sách dự phòng của bên gọi.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "tax-doc-classifier — ABD vergi sayfalarını Jev ile sınıflandırma",
+      "h1": "tax-doc-classifier — Jev ile ABD vergi belgesi sayfalarını sınıflandırma",
+      "description": "tax-doc-classifier: Jev vergi metninden IRS formlarını ve sayfa türlerini seçer; açıklama kaydı ve yedek politika için güven değeri sunar.",
+      "summary": "Kütüphane, çıkarılan metinden ve JSON form açıklamalarından IRS formlarını ve sayfa türlerini belirler. classifyPage işlevine metin satırlarını, jevBackend ve criteria.json verin. PDF yardımcıları Poppler, arka uç TypeSafe anahtarı gerektirir.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "Kütüphane, çıkarılan metinden ve JSON form açıklamalarından IRS formlarını ve sayfa türlerini belirler.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Jev türü ve formu seçer; beş ana form ikinci bir ek form sorusu başlatabilir, boş sayfalarda model çağrılmaz.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Başlangıç",
+          "text": "classifyPage işlevine metin satırlarını, jevBackend ve criteria.json verin. PDF yardımcıları Poppler, arka uç TypeSafe anahtarı gerektirir.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Eyalet vergi formları, banka veya aracı kurum ekstreleri ve mektuplar tanımlanmış, ancak henüz değerlendirilmemiştir. Düşük güven puanına sahip sayfalar, çağıran uygulamanın alternatif işleme politikasını gerektirir.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "tax-doc-classifier — Jev classifica pagine fiscali USA",
+      "h1": "tax-doc-classifier — Classificare pagine fiscali statunitensi con Jev",
+      "description": "tax-doc-classifier: Jev sceglie moduli IRS e tipi di pagina dal testo fiscale, con registro descrittivo e confidenza per gestire alternative.",
+      "summary": "La libreria identifica moduli IRS e tipi di pagina dal testo estratto, usando un registro JSON di descrizioni. Usa classifyPage con righe di testo, jevBackend e criteria.json. Le funzioni PDF richiedono Poppler e il backend una chiave TypeSafe.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "La libreria identifica moduli IRS e tipi di pagina dal testo estratto, usando un registro JSON di descrizioni.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Jev sceglie tipo e modulo; cinque moduli principali possono attivare una seconda domanda sull’allegato, mentre le pagine vuote evitano il modello.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come iniziare",
+          "text": "Usa classifyPage con righe di testo, jevBackend e criteria.json. Le funzioni PDF richiedono Poppler e il backend una chiave TypeSafe.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "Le categorie per moduli statali, estratti bancari o di broker e lettere sono definite ma non ancora valutate. Le pagine incerte richiedono una politica alternativa del chiamante.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

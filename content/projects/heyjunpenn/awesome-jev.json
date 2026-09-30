@@ -1,0 +1,763 @@
+{
+  "version": "source-content-v1",
+  "repo": "heyjunpenn/awesome-jev",
+  "repositoryId": 1376757283,
+  "relationship": "resource",
+  "category": "lists",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "2e66aaca82c88d67b1b12420b4337d2c0e26cd19",
+      "url": "https://github.com/heyjunpenn/awesome-jev/blob/2e66aaca82c88d67b1b12420b4337d2c0e26cd19/README.md",
+      "sha256": "42037821b6a6a7e7bc0576984f84240917375342382e40a688815f28fce81560",
+      "accessedAt": "2026-09-30T07:33:48.433Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "kind": "documented",
+      "text": "Awesome Jev is heyjunpenn’s community catalog of Jev projects, organized into SDKs, agents, applications, research and other categories.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 26,
+          "end": 32,
+          "quote": "## About Awesome Jev\n\nAwesome Jev is an independent, community-maintained catalog of **944 open-source projects** built with [Jev](https://typesafe.ai/), TypeSafe AI's System One model for typed decisions inside software. It is not affiliated with or endorsed by TypeSafe AI.\n\n> **What makes this catalog useful?**\n>\n> Every entry identifies the concrete decision Jev makes and links to the strongest public evidence available—so you can evaluate real implementations, not just project claims."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "kind": "documented",
+      "text": "Entries explain what Jev decides and track implementation evidence, reproduction status and metric provenance.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 1091,
+          "end": 1099,
+          "quote": "Most directories tell you that a project uses Jev. This list also records:\n\n- **What Jev decides** — the exact judgment made inside the project.\n- **Decision anatomy** — state → question → answer → code action.\n- **Call-site evidence** — a link to the implementation when one is public.\n- **Reproduction status** — whether a runbook exists and whether an independent reviewer ran it.\n- **Metric provenance** — official, author-reported, or independently reproduced.\n- **Freshness** — the last human review date and current project status.\n- **Reusable patterns** — the architecture that transfers to other products."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "kind": "documented",
+      "text": "Browse by category, then use the evidence labels and upstream links to inspect a project’s actual decision workflow.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 34,
+          "end": 46,
+          "quote": "## Contents\n\n- ✅ [Official](#official-6) — **6**\n- 📦 [SDKs & clients](#sdks-clients-57) — **57**\n- 🧠 [Jev-like models](#jev-like-models) — **72**\n- 🧩 [Frameworks & integrations](#frameworks-integrations-82) — **82**\n- 🤖 [Agent tooling](#agent-tooling-228) — **228**\n- 🖥️ [Browser & computer use](#browser-computer-use-75) — **75**\n- 🪟 [Applications](#applications-129) — **129**\n- 🎮 [Games & simulations](#games-simulations-73) — **73**\n- 🧪 [Demos & playgrounds](#demos-playgrounds-65) — **65**\n- 📊 [Benchmarks & research](#benchmarks-research-116) — **116**\n- 📚 [Other lists](#other-lists-41) — **41**"
+        },
+        {
+          "source": "source-1",
+          "start": 1103,
+          "end": 1122,
+          "quote": "## How to read an entry\n\n```text\nProject — What Jev decides.\nPrimitive: Choice · Pattern: Typed tool dispatch\nEvidence: Call site verified · Maintainer runbook · Metrics author-reported\n```\n\nVerification labels describe separate facts. They are not a score or ranking.\n\n| Label | Meaning |\n|---|---|\n| **Public source** | The repository is public and its README describes a concrete Jev workflow. |\n| **Call site verified** | A maintainer located public code that calls Jev and consumes its answer. |\n| **Demo only** | A public demo shows the behavior, but no inspectable call site was found. |\n| **README claim** | The upstream project says it uses Jev; the call site has not been verified. |\n| **Maintainer runbook** | The upstream project provides setup and execution instructions. |\n| **Reviewer reproduced** | An independent reviewer ran the documented workflow and recorded the date. |\n| **Author-reported metric** | The number comes from the project author and has not been independently reproduced. |\n| **Third-party reproduced** | A separate public source repeated the measurement with a documented method. |"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "kind": "documented",
+      "text": "The catalog is a dated snapshot, not a TypeSafe endorsement; verify current behavior and licensing in each linked project.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 48,
+          "end": 48,
+          "quote": "This README is a dated snapshot of **944 unique public GitHub repositories**. Stars were captured on **2026-09-18–28** for discovery, not ranking; verify current behavior, activity, and licensing upstream."
+        },
+        {
+          "source": "source-1",
+          "start": 1181,
+          "end": 1187,
+          "quote": "## Disclaimer\n\nAwesome Jev is an independent community resource. It is not affiliated with or endorsed by TypeSafe AI. TypeSafe, Jev, and System One are names or marks of their respective owner.\n\nSchema-valid output is not the same as a correct decision. Evaluate Jev on your own data, set thresholds according to risk, keep consequential actions behind deterministic checks, and provide an appropriate human fallback.\n\nThis project is released under the [MIT License](LICENSE), unless a file states otherwise. Linked projects retain their own licenses."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "Awesome Jev: source-linked project discovery",
+      "h1": "Awesome Jev: source-linked project discovery",
+      "description": "Awesome Jev catalogs community projects by use case, linking Jev decisions to source evidence, reproduction labels and metric provenance.",
+      "summary": "Awesome Jev is heyjunpenn’s community catalog of Jev projects, organized into SDKs, agents, applications, research and other categories. Entries explain what Jev decides and track implementation evidence, reproduction status and metric provenance. Browse by category, then use the evidence labels and upstream links to inspect a project’s actual decision workflow.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose",
+          "text": "Awesome Jev is heyjunpenn’s community catalog of Jev projects, organized into SDKs, agents, applications, research and other categories.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’s role",
+          "text": "Entries explain what Jev decides and track implementation evidence, reproduction status and metric provenance.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "How to use it",
+          "text": "Browse by category, then use the evidence labels and upstream links to inspect a project’s actual decision workflow.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limits to consider",
+          "text": "The catalog is a dated snapshot, not a TypeSafe endorsement; verify current behavior and licensing in each linked project.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "Awesome Jev：有来源链接的项目目录",
+      "h1": "Awesome Jev：有来源链接的项目目录",
+      "description": "Awesome Jev 按用途整理社区项目，把 Jev 的具体决策与源代码证据、复现标签和指标来源关联起来；目录为有日期的快照，不代表 TypeSafe 背书。",
+      "summary": "Awesome Jev 是 heyjunpenn 维护的 Jev 社区目录，按 SDK、智能体、应用、研究等类别组织。 条目解释 Jev 具体决定什么，并记录实现证据、复现状态和指标来源。 按类别浏览，再结合证据标签和上游链接检查项目的实际决策流程。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "Awesome Jev 是 heyjunpenn 维护的 Jev 社区目录，按 SDK、智能体、应用、研究等类别组织。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "条目解释 Jev 具体决定什么，并记录实现证据、复现状态和指标来源。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "按类别浏览，再结合证据标签和上游链接检查项目的实际决策流程。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用边界",
+          "text": "目录是有日期的快照，并非 TypeSafe 背书；当前行为和许可证应到各项目核实。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "Awesome Jev：附來源連結的專案目錄",
+      "h1": "Awesome Jev：附來源連結的專案目錄",
+      "description": "Awesome Jev 依用途整理社群專案，將 Jev 的具體決策連結到原始碼證據、重現標籤與指標來源；目錄為有日期的快照，不代表 TypeSafe 背書。",
+      "summary": "Awesome Jev 是 heyjunpenn 維護的 Jev 社群目錄，依 SDK、代理、應用、研究等類別整理。 條目說明 Jev 具體決定什麼，並記錄實作證據、重現狀態與指標來源。 依類別瀏覽，再搭配證據標籤與上游連結檢查專案的實際決策流程。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "Awesome Jev 是 heyjunpenn 維護的 Jev 社群目錄，依 SDK、代理、應用、研究等類別整理。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "條目說明 Jev 具體決定什麼，並記錄實作證據、重現狀態與指標來源。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "依類別瀏覽，再搭配證據標籤與上游連結檢查專案的實際決策流程。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用限制",
+          "text": "目錄是有日期的快照，並非 TypeSafe 背書；目前行為與授權條款應向各專案確認。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "Awesome Jev：根拠をたどれるプロジェクト一覧",
+      "h1": "Awesome Jev：根拠をたどれるプロジェクト一覧",
+      "description": "Awesome Jev は用途別のコミュニティ一覧です。Jev の判断内容、実装の根拠、再現状況、指標の出所をたどれます。",
+      "summary": "Awesome Jev は heyjunpenn が管理するコミュニティカタログで、SDK、エージェント、アプリ、研究などを分類しています。 各項目は Jev の判断内容に加え、実装の根拠、再現状況、指標の出所を示します。 分類から探し、根拠ラベルと公開元へのリンクで実際の判断フローを確認できます。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "何ができるか",
+          "text": "Awesome Jev は heyjunpenn が管理するコミュニティカタログで、SDK、エージェント、アプリ、研究などを分類しています。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "各項目は Jev の判断内容に加え、実装の根拠、再現状況、指標の出所を示します。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "分類から探し、根拠ラベルと公開元へのリンクで実際の判断フローを確認できます。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "制約と注意点",
+          "text": "特定時点の一覧であり、TypeSafe の推奨ではありません。現在の動作とライセンスは各プロジェクトで確認してください。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "Awesome Jev: 출처를 확인할 수 있는 프로젝트 목록",
+      "h1": "Awesome Jev: 출처를 확인할 수 있는 프로젝트 목록",
+      "description": "Awesome Jev는 용도별 커뮤니티 프로젝트 목록입니다. Jev의 판단 내용과 구현 근거, 재현 표시, 지표 출처를 연결합니다.",
+      "summary": "Awesome Jev는 heyjunpenn의 커뮤니티 목록으로 SDK, 에이전트, 앱, 연구 등으로 Jev 프로젝트를 분류합니다. 각 항목은 Jev가 결정하는 내용과 구현 근거, 재현 상태, 지표 출처를 설명합니다. 범주별로 탐색하고 근거 표시와 원본 링크를 통해 실제 의사결정 흐름을 확인할 수 있습니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "Awesome Jev는 heyjunpenn의 커뮤니티 목록으로 SDK, 에이전트, 앱, 연구 등으로 Jev 프로젝트를 분류합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "각 항목은 Jev가 결정하는 내용과 구현 근거, 재현 상태, 지표 출처를 설명합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "범주별로 탐색하고 근거 표시와 원본 링크를 통해 실제 의사결정 흐름을 확인할 수 있습니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "제약 사항",
+          "text": "특정 시점의 목록이며 TypeSafe의 보증이 아닙니다. 현재 동작과 라이선스는 각 프로젝트에서 확인해야 합니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "Awesome Jev: catálogo de proyectos con fuentes",
+      "h1": "Awesome Jev: catálogo de proyectos con fuentes",
+      "description": "Awesome Jev organiza proyectos comunitarios por uso, vinculando decisiones Jev con fuentes, etiquetas de reproducción y origen de métricas.",
+      "summary": "Awesome Jev es el catálogo comunitario de heyjunpenn, organizado por SDK, agentes, aplicaciones, investigación y otras categorías. Sus entradas explican qué decide Jev y registran pruebas de implementación, reproducción y procedencia de métricas. Explora las categorías y consulta etiquetas de evidencia y enlaces originales para examinar el flujo de decisiones.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "Awesome Jev es el catálogo comunitario de heyjunpenn, organizado por SDK, agentes, aplicaciones, investigación y otras categorías.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "El papel de Jev",
+          "text": "Sus entradas explican qué decide Jev y registran pruebas de implementación, reproducción y procedencia de métricas.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo usarlo",
+          "text": "Explora las categorías y consulta etiquetas de evidencia y enlaces originales para examinar el flujo de decisiones.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Límites a considerar",
+          "text": "Es una instantánea fechada, sin respaldo de TypeSafe; confirma el comportamiento y la licencia actuales en cada proyecto.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "Awesome Jev : catalogue de projets avec sources",
+      "h1": "Awesome Jev : catalogue de projets avec sources",
+      "description": "Awesome Jev classe les projets communautaires par usage et relie les décisions Jev aux sources, aux statuts de reproduction et aux mesures.",
+      "summary": "Awesome Jev est le catalogue communautaire de heyjunpenn, organisé en SDK, agents, applications, recherche et autres catégories. Les fiches expliquent les décisions de Jev et documentent les preuves d’implémentation, la reproduction et l’origine des mesures. Parcourez les catégories, puis suivez les étiquettes de preuve et les liens d’origine pour examiner chaque parcours de décision.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "Awesome Jev est le catalogue communautaire de heyjunpenn, organisé en SDK, agents, applications, recherche et autres catégories.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Le rôle de Jev",
+          "text": "Les fiches expliquent les décisions de Jev et documentent les preuves d’implémentation, la reproduction et l’origine des mesures.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Utilisation",
+          "text": "Parcourez les catégories, puis suivez les étiquettes de preuve et les liens d’origine pour examiner chaque parcours de décision.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limites à connaître",
+          "text": "Ce catalogue daté n’est pas une recommandation de TypeSafe ; vérifiez le fonctionnement et la licence actuels auprès de chaque projet.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "Awesome Jev: Projektkatalog mit Quellen",
+      "h1": "Awesome Jev: Projektkatalog mit Quellen",
+      "description": "Awesome Jev ordnet Community-Projekte nach Einsatz und verknüpft Jev-Entscheidungen mit Quellen, Reproduktionsstatus und Messwertherkunft.",
+      "summary": "Awesome Jev ist heyjunpenns Community-Katalog mit Kategorien für SDKs, Agenten, Anwendungen, Forschung und weitere Jev-Projekte. Einträge erklären Jevs Entscheidungen und dokumentieren Implementierungsbelege, Reproduktionsstatus sowie die Herkunft von Messwerten. Über Kategorien, Belegkennzeichnungen und Originalquellen lässt sich der tatsächliche Entscheidungsablauf eines Projekts prüfen.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "Awesome Jev ist heyjunpenns Community-Katalog mit Kategorien für SDKs, Agenten, Anwendungen, Forschung und weitere Jev-Projekte.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Die Rolle von Jev",
+          "text": "Einträge erklären Jevs Entscheidungen und dokumentieren Implementierungsbelege, Reproduktionsstatus sowie die Herkunft von Messwerten.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Nutzung",
+          "text": "Über Kategorien, Belegkennzeichnungen und Originalquellen lässt sich der tatsächliche Entscheidungsablauf eines Projekts prüfen.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Grenzen",
+          "text": "Der Katalog ist eine datierte Momentaufnahme ohne TypeSafe-Empfehlung. Aktuelles Verhalten und Lizenzen sind beim jeweiligen Projekt zu prüfen.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "Awesome Jev: catálogo de projetos com fontes",
+      "h1": "Awesome Jev: catálogo de projetos com fontes",
+      "description": "Awesome Jev organiza projetos comunitários por uso, ligando decisões Jev a fontes, status de reprodução e origem das métricas.",
+      "summary": "Awesome Jev é o catálogo comunitário de heyjunpenn, organizado por SDKs, agentes, aplicativos, pesquisa e outras categorias. As entradas explicam o que Jev decide e registram evidências de implementação, reprodução e origem das métricas. Explore as categorias e consulte os rótulos de evidência e links originais para examinar cada fluxo de decisão.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "Awesome Jev é o catálogo comunitário de heyjunpenn, organizado por SDKs, agentes, aplicativos, pesquisa e outras categorias.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "O papel do Jev",
+          "text": "As entradas explicam o que Jev decide e registram evidências de implementação, reprodução e origem das métricas.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Explore as categorias e consulte os rótulos de evidência e links originais para examinar cada fluxo de decisão.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limitações",
+          "text": "É um retrato datado, sem endosso da TypeSafe; confirme o comportamento e a licença atuais em cada projeto.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "Awesome Jev: каталог проектов со ссылками на источники",
+      "h1": "Awesome Jev: каталог проектов со ссылками на источники",
+      "description": "Awesome Jev собирает проекты по сценариям и связывает решения Jev с источниками, статусом воспроизведения и происхождением метрик.",
+      "summary": "Awesome Jev — каталог сообщества heyjunpenn с категориями SDK, агентов, приложений, исследований и других проектов Jev. Записи объясняют решения Jev и отмечают подтверждения реализации, статус воспроизведения и происхождение метрик. Выберите категорию, затем изучите пометки о доказательствах и первоисточники, чтобы проверить реальный процесс принятия решений.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Awesome Jev — каталог сообщества heyjunpenn с категориями SDK, агентов, приложений, исследований и других проектов Jev.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Записи объясняют решения Jev и отмечают подтверждения реализации, статус воспроизведения и происхождение метрик.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Выберите категорию, затем изучите пометки о доказательствах и первоисточники, чтобы проверить реальный процесс принятия решений.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ограничения",
+          "text": "Это датированный снимок, а не рекомендация TypeSafe; актуальное поведение и лицензии проверяйте в самих проектах.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "Awesome Jev: स्रोतों सहित परियोजना सूची",
+      "h1": "Awesome Jev: स्रोतों सहित परियोजना सूची",
+      "description": "Awesome Jev उपयोग के अनुसार सामुदायिक प्रोजेक्ट दिखाता है और Jev निर्णयों को स्रोत, पुनरुत्पादन स्थिति तथा मापों से जोड़ता है।",
+      "summary": "Awesome Jev, heyjunpenn की सामुदायिक सूची है, जिसमें SDK, एजेंट, ऐप और शोध जैसी श्रेणियाँ हैं। प्रविष्टियाँ Jev के निर्णय, कार्यान्वयन के साक्ष्य, पुनरुत्पादन की स्थिति और मापों के स्रोत बताती हैं। श्रेणियाँ देखें, फिर साक्ष्य लेबल और मूल लिंक से परियोजना की वास्तविक निर्णय प्रक्रिया जाँचें।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "किस काम आता है",
+          "text": "Awesome Jev, heyjunpenn की सामुदायिक सूची है, जिसमें SDK, एजेंट, ऐप और शोध जैसी श्रेणियाँ हैं।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "प्रविष्टियाँ Jev के निर्णय, कार्यान्वयन के साक्ष्य, पुनरुत्पादन की स्थिति और मापों के स्रोत बताती हैं।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल कैसे करें",
+          "text": "श्रेणियाँ देखें, फिर साक्ष्य लेबल और मूल लिंक से परियोजना की वास्तविक निर्णय प्रक्रिया जाँचें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "सीमाएँ",
+          "text": "यह एक तारीख की झलक है, TypeSafe की स्वीकृति नहीं; मौजूदा व्यवहार और लाइसेंस मूल परियोजना में जाँचें।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "Awesome Jev: katalog proyek dengan sumber",
+      "h1": "Awesome Jev: katalog proyek dengan sumber",
+      "description": "Awesome Jev mengelompokkan proyek komunitas menurut kegunaan, dengan sumber keputusan Jev, status reproduksi, dan asal metrik.",
+      "summary": "Awesome Jev adalah katalog komunitas heyjunpenn yang mengelompokkan proyek menjadi SDK, agen, aplikasi, penelitian, dan kategori lain. Entri menjelaskan keputusan Jev serta mencatat bukti implementasi, status reproduksi, dan asal metrik. Telusuri kategori lalu gunakan label bukti dan tautan sumber untuk memeriksa alur keputusan proyek.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "Awesome Jev adalah katalog komunitas heyjunpenn yang mengelompokkan proyek menjadi SDK, agen, aplikasi, penelitian, dan kategori lain.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Entri menjelaskan keputusan Jev serta mencatat bukti implementasi, status reproduksi, dan asal metrik.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Telusuri kategori lalu gunakan label bukti dan tautan sumber untuk memeriksa alur keputusan proyek.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Batasan",
+          "text": "Katalog ini merupakan cuplikan bertanggal, bukan dukungan TypeSafe; periksa perilaku dan lisensi terbaru pada proyek asal.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "Awesome Jev: danh mục dự án kèm nguồn",
+      "h1": "Awesome Jev: danh mục dự án kèm nguồn",
+      "description": "Awesome Jev phân loại dự án cộng đồng theo ứng dụng, liên kết quyết định Jev với nguồn, trạng thái tái hiện và xuất xứ chỉ số.",
+      "summary": "Awesome Jev là danh mục cộng đồng của heyjunpenn, chia dự án thành SDK, tác tử, ứng dụng, nghiên cứu và nhóm khác. Mỗi mục giải thích Jev quyết định gì, kèm bằng chứng triển khai, tình trạng tái hiện và nguồn chỉ số. Duyệt theo nhóm, rồi dùng nhãn bằng chứng và liên kết gốc để xem quy trình quyết định thực tế.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích",
+          "text": "Awesome Jev là danh mục cộng đồng của heyjunpenn, chia dự án thành SDK, tác tử, ứng dụng, nghiên cứu và nhóm khác.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Mỗi mục giải thích Jev quyết định gì, kèm bằng chứng triển khai, tình trạng tái hiện và nguồn chỉ số.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Duyệt theo nhóm, rồi dùng nhãn bằng chứng và liên kết gốc để xem quy trình quyết định thực tế.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Giới hạn",
+          "text": "Đây là ảnh chụp danh mục tại một thời điểm, không được TypeSafe bảo chứng; hãy kiểm tra hành vi và giấy phép ở dự án gốc.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "Awesome Jev: kaynak bağlantılı proje kataloğu",
+      "h1": "Awesome Jev: kaynak bağlantılı proje kataloğu",
+      "description": "Awesome Jev topluluk projelerini kullanıma göre düzenler; Jev kararlarını kaynaklara, yeniden üretim durumuna ve ölçüm kökenine bağlar.",
+      "summary": "Awesome Jev, heyjunpenn’in SDK, ajan, uygulama, araştırma ve başka kategorilerde düzenlediği topluluk kataloğudur. Kayıtlar Jev’in neye karar verdiğini, uygulama kanıtlarını, yeniden üretim durumunu ve ölçümlerin kaynağını açıklar. Kategorilere göz atın; kanıt etiketleri ve asıl kaynak bağlantılarıyla projenin gerçek karar akışını inceleyin.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "Awesome Jev, heyjunpenn’in SDK, ajan, uygulama, araştırma ve başka kategorilerde düzenlediği topluluk kataloğudur.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Kayıtlar Jev’in neye karar verdiğini, uygulama kanıtlarını, yeniden üretim durumunu ve ölçümlerin kaynağını açıklar.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Kategorilere göz atın; kanıt etiketleri ve asıl kaynak bağlantılarıyla projenin gerçek karar akışını inceleyin.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Sınırlamalar",
+          "text": "Katalog belirli bir tarihin görünümüdür, TypeSafe onayı değildir; güncel davranışı ve lisansı her projede doğrulayın.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "Awesome Jev: catalogo di progetti con fonti",
+      "h1": "Awesome Jev: catalogo di progetti con fonti",
+      "description": "Awesome Jev cataloga progetti comunitari per uso, collegando decisioni Jev a fonti, stato della riproduzione e origine delle metriche.",
+      "summary": "Awesome Jev è il catalogo comunitario di heyjunpenn, organizzato per SDK, agenti, applicazioni, ricerca e altre categorie. Le schede spiegano cosa decide Jev e riportano prove d’implementazione, stato della riproduzione e origine delle metriche. Esplora le categorie, poi usa le etichette delle prove e i collegamenti originali per esaminare i flussi decisionali.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "Awesome Jev è il catalogo comunitario di heyjunpenn, organizzato per SDK, agenti, applicazioni, ricerca e altre categorie.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Il ruolo di Jev",
+          "text": "Le schede spiegano cosa decide Jev e riportano prove d’implementazione, stato della riproduzione e origine delle metriche.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come usarlo",
+          "text": "Esplora le categorie, poi usa le etichette delle prove e i collegamenti originali per esaminare i flussi decisionali.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limiti",
+          "text": "È un’istantanea datata, senza approvazione di TypeSafe; verifica comportamento e licenze attuali nei singoli progetti.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  },
+  "displayName": "Awesome Jev"
+}

@@ -1,6 +1,6 @@
 # 仓库详情页 Title、Description、H1 规则
 
-版本：2026-09-30 / `project-intent-v1`。适用于现有和新增的全部有效仓库，以及全部 15 个语言版本。
+版本：2026-09-30 / `project-intent-v1` + 首批 `source-content-v1`。通用规则适用于现有和新增的全部有效仓库及 15 个语言版本；首批 100 个仓库使用经来源核对的独立文案，详见 [批次与维护说明](project-content-100.md)。
 
 ## 目标与搜索意图
 
@@ -11,7 +11,7 @@
 ## Title
 
 1. **项目名在最前面**，保留仓库或已核实品牌名称的拼写。默认不使用 `owner/repo` 开头。
-2. 应用和集成使用「项目名 + Jev + 具体用途」，例如 `TradingAgents + Jev — Multi-Agent Trading | JevHunt`。名称已含 Jev 时，避免重复追加 Jev。
+2. 应用和集成使用「项目名 + Jev + 具体用途」，例如 `TradingAgents: trading research with optional Jev screening | JevHunt`。标题保留影响判断的可选条件；不能把一个局部功能写成整个项目都依赖 Jev。名称已含 Jev 时，避免重复追加 Jev。
 3. SDK 使用「项目名 + 编程语言 + SDK + Jev」。只有目录已有官方来源证据时，才加「官方」。
 4. 本地替代使用「项目名 + Jev 本地替代方案」，不能暗示它调用 Jev 云端 API。研究和资源目录分别使用研究、评测、资源类表述。
 5. 同名仓库在标题末尾、站点品牌之前加作者，例如 `… (owner) | JevHunt`。活跃目录中没有同名项目时，不占用这个位置。大小写不同也按同名处理；撤回的仓库不参与消歧。
@@ -39,7 +39,7 @@ TradingAgents 的已核实范围是：多智能体交易框架，可选用 Jev �
 
 ## H1 与正文一致性
 
-- H1 使用与 Title 相同的项目名和用途，不加站点品牌，也不把消歧作者重复塞入标题。
+- H1 使用与 Title 相同的项目实体和用途，可比 Title 更完整；不加站点品牌，也不把消歧作者重复塞入标题。
 - 页面首段与 meta description 使用同一份本地化摘要。
 - GitHub 原始简介单独标注为原文，保留完整内容供核对；源码引用保持原文。
 - Open Graph、Twitter 描述以及结构化数据中的 description 与页面摘要一致。
@@ -51,21 +51,21 @@ TradingAgents 的已核实范围是：多智能体交易框架，可选用 Jev �
 
 | 版本 | TradingAgents 标题核心 | 常用关系表达 |
 | --- | --- | --- |
-| en | TradingAgents + Jev — Multi-Agent Trading | Integration / Local Alternative |
-| zh-cn | TradingAgents + Jev：多智能体交易框架 | 接入 / 本地替代方案 |
-| zh-tw | TradingAgents + Jev：多代理交易框架 | 串接 / 本機替代方案 |
-| ja | TradingAgents × Jev｜マルチエージェント取引 | 連携 / ローカル代替モデル |
-| ko | TradingAgents + Jev — 멀티 에이전트 트레이딩 | 연동 / 로컬 대안 |
-| es | TradingAgents + Jev — Trading multiagente | Integración / Alternativa local |
-| fr | TradingAgents + Jev — Trading multi-agent | Intégration / Alternative locale |
-| de | TradingAgents + Jev — Multi-Agenten-Trading | Integration / Lokale Alternative |
-| pt-br | TradingAgents + Jev — Trading com múltiplos agentes | Integração / Alternativa local |
-| ru | TradingAgents + Jev — Мультиагентный трейдинг | Интеграция / Локальная альтернатива |
-| hi | TradingAgents + Jev — मल्टी-एजेंट ट्रेडिंग | इंटीग्रेशन / लोकल विकल्प |
-| id | TradingAgents + Jev — Trading multiagen | Integrasi / Alternatif lokal |
-| vi | TradingAgents + Jev — Giao dịch đa tác tử | Tích hợp / Giải pháp thay thế chạy cục bộ |
-| tr | TradingAgents + Jev — Çok ajanlı alım satım | Entegrasyon / Yerel alternatif |
-| it | TradingAgents + Jev — Trading multiagente | Integrazione / Alternativa locale |
+| en | TradingAgents: trading research with optional Jev screening | Integration / Local Alternative |
+| zh-cn | TradingAgents：可选 Jev 筛选的交易研究框架 | 接入 / 本地替代方案 |
+| zh-tw | TradingAgents：可選用 Jev 篩選的交易研究框架 | 串接 / 本機替代方案 |
+| ja | TradingAgents：Jev で投稿を選別する取引研究 | 連携 / ローカル代替モデル |
+| ko | TradingAgents: 선택적 Jev 필터를 쓰는 거래 연구 | 연동 / 로컬 대안 |
+| es | TradingAgents: investigación bursátil con filtro Jev opcional | Integración / Alternativa local |
+| fr | TradingAgents : recherche financière avec filtrage Jev facultatif | Intégration / Alternative locale |
+| de | TradingAgents: Handelsforschung mit optionalem Jev-Filter | Integration / Lokale Alternative |
+| pt-br | TradingAgents: pesquisa de negociação com filtro Jev opcional | Integração / Alternativa local |
+| ru | TradingAgents: исследование торговли с необязательным фильтром Jev | Интеграция / Локальная альтернатива |
+| hi | TradingAgents: वैकल्पिक Jev फ़िल्टर के साथ ट्रेडिंग शोध | इंटीग्रेशन / लोकल विकल्प |
+| id | TradingAgents: riset perdagangan dengan filter Jev opsional | Integrasi / Alternatif lokal |
+| vi | TradingAgents: nghiên cứu giao dịch với bộ lọc Jev tùy chọn | Tích hợp / Giải pháp thay thế chạy cục bộ |
+| tr | TradingAgents: isteğe bağlı Jev filtresiyle alım satım araştırması | Entegrasyon / Yerel alternatif |
+| it | TradingAgents: ricerca sul trading con filtro Jev facoltativo | Integrazione / Alternativa locale |
 
 语言文案经过模型编写和检查，未声称经过母语人工审核。这里根据技术语言习惯选择表达，并未验证 15 个市场的搜索量、难度或 CTR。实际优化以按国家、语言、查询和页面划分的 GSC 表现继续验证。
 
@@ -73,11 +73,11 @@ TradingAgents 的已核实范围是：多智能体交易框架，可选用 Jev �
 
 - `shared/project-seo.js` 是唯一生成器，动态路由和静态生成共同使用。
 - `shared/project-seo-copy.js` 管理 15 种语言的完整句式与用途词表。
-- `catalog/project-seo.json` 只记录有来源、日期的编辑补充。TradingAgents 的具体用途摘要还要求当前证据片段继续支持相应功能，否则退回普通摘要。
-- 生产详情页读取实时 D1 数据，新增仓库自动使用规则，无需逐条写入 SEO 字段。`0007_project_name_lookup.sql` 为同名查询添加索引。
+- `content/projects/` 的独立文案按稳定 GitHub ID 匹配，优先于旧规则；`catalog/project-seo.json` 继续保存未改造项目的有来源编辑补充。首批 100 个仓库的 TDH、正文与关系以固定来源和 claim ledger 为事实依据。
+- 生产详情页读取实时 D1 数据；`0008_project_content.sql` 独立存储已审阅正文及语言摘要。首批内容同时校正详情、列表和筛选分类。新增仓库使用通用规则并排队补充独立内容；同步器不自动生成事实。`0007_project_name_lookup.sql` 为同名查询添加索引。
 - 构建生成英文静态回退；其他语言继续由已有动态详情路由生成。URL、canonical、15 个语言版本的 hreflang 和可索引状态保持原有策略。
 - 摘要忠实度仍依赖源简介和关系分类。如果仓库简介过时或分类错误，应修正 `catalog/overrides.json` / 证据采集，并加入有来源的精确编辑说明；不能只为了关键词改关系标签。
-- 对一种已观察到的旧分类冲突做显示修正：简介明确自述为目录或基准测试，却被旧数据标成「本地替代」。详情标题、摘要、关系事实与 schema 按明确用途显示为资源或研究，同时记录 `source-relationship-conflict` 供上游数据复核。这不会写入 D1；目录列表及筛选中的历史分类仍应在后续同步时修正。
+- 未改造项目仍保留旧分类冲突提示：简介明确自述为目录或基准测试，却被旧数据标成「本地替代」时，详情按明确用途显示为资源或研究，并记录 `source-relationship-conflict`。首批 100 个项目已通过审阅字段统一写入 D1 的详情、列表和筛选分类，不再只修正展示层。
 
 ## 验证与验收
 

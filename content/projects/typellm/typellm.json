@@ -1,0 +1,768 @@
+{
+  "version": "source-content-v1",
+  "repo": "TypeLLM/TypeLLM",
+  "repositoryId": 1374419657,
+  "relationship": "local-alternative",
+  "category": "research",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "f009f6acb6108f7944ae8d84f0032109860fa812",
+      "url": "https://github.com/TypeLLM/TypeLLM/blob/f009f6acb6108f7944ae8d84f0032109860fa812/README.md",
+      "sha256": "3b230720c4e89617144f817d9d5ce0050702e641e734f057efc5d639d0fe8966",
+      "accessedAt": "2026-09-30T07:33:48.870Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "kind": "documented",
+      "text": "TypeLLM adds JSON Schema-constrained outputs to existing autoregressive models without changing their weights or architecture.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 26,
+          "end": 31,
+          "quote": "TypeLLM brings type-safe generation to existing autoregressive LLMs without changing their architecture or weights. Inspired by [TypeSafe AI's Jev](https://typesafe.ai/blog/introducing-system-one-models-and-jev), it lets models retain their native thinking and free-form generation while producing schema-guaranteed outputs through JSON Schema. Built on [SGLang](https://github.com/sgl-project/sglang), TypeLLM also supports richer interaction patterns beyond independent typed decisions.\n\n\n### Supported output types\n\n**String · Integer · Number · Boolean · Enum choice** — See [schemas and examples](#output-types)."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "kind": "documented",
+      "text": "Inspired by Jev, it retains free text and optional reasoning and supports dependencies between output fields.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 26,
+          "end": 26,
+          "quote": "TypeLLM brings type-safe generation to existing autoregressive LLMs without changing their architecture or weights. Inspired by [TypeSafe AI's Jev](https://typesafe.ai/blog/introducing-system-one-models-and-jev), it lets models retain their native thinking and free-form generation while producing schema-guaranteed outputs through JSON Schema. Built on [SGLang](https://github.com/sgl-project/sglang), TypeLLM also supports richer interaction patterns beyond independent typed decisions."
+        },
+        {
+          "source": "source-1",
+          "start": 35,
+          "end": 42,
+          "quote": "1. **No out-of-schema hallucinations** — Choices stay within the allowed values.\n2. **Negligible output-token cost** — Single-token categorical selection and bounded numeric decoding; optional thinking adds tokens.\n3. **Shared-prefix reuse** — KV caching avoids reprocessing shared context.\n4. **Dependency-aware execution** — Independent fields run together; declare `depends_on` to form a dependency graph.\n5. **Made for open autoregressive LLMs** — Use compatible models you already serve with SGLang.\n6. **Supports thinking mode** — Enable reasoning before the final constrained answer.\n7. **Image input** — Pass images to vision-language models alongside the text context. See [Image input](#image-input).\n8. **Permutation averaging** — Reduce option-order bias on explicit enum questions with balanced, sampled or exhaustive orderings. See the [docs](https://typellm.ai/docs/probabilities#permutation-averaging)."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "kind": "documented",
+      "text": "Serve a compatible model with SGLang, then submit context and typed questions through TypeLLMClient.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 54,
+          "end": 78,
+          "quote": "### 1. Serve a model with SGLang\n\nUse [SGLang](https://github.com/sgl-project/sglang) to configure and serve a\ncompatible autoregressive model on your local GPU server. This example uses\nQwen3.8-27B; follow the\n[Qwen3.8-27B SGLang deployment guide](https://lmsysorg.mintlify.app/cookbook/autoregressive/Qwen/Qwen3.8-27B)\nto start it with prefix caching enabled.\n\nSee [Supported models](#supported-models) for tested checkpoints and thinking behavior.\n\n### 2. Run TypeLLM\n\n```bash\npip install -U typellm\n```\n\nPoint `TypeLLMClient` at the SGLang server's HTTP endpoint:\n\n```python\nfrom typellm import TypeLLMClient\n\nclient = TypeLLMClient(\n    \"http://127.0.0.1:30000\",\n    model=\"Qwen/Qwen3.8-27B\",\n)"
+        },
+        {
+          "source": "source-1",
+          "start": 84,
+          "end": 107,
+          "quote": "response = client.generate(\n    context=\"\"\"\n    Receipt from Hilton London\n    Total: £324.50\n    Employee travelled to London for a client meeting.\n    \"\"\",\n    questions={\n        \"merchant\": {\n            \"type\": \"string\",\n            \"instructions\": \"Return only the merchant name.\",\n        },\n        \"total\": {\n            \"type\": \"number\",\n            \"instructions\": \"Extract the total amount in GBP.\",\n        },\n        \"expense_type\": {\n            \"type\": \"string\",\n            \"enum\": [\"meal\", \"travel\", \"equipment\"],\n            \"instructions\": \"What type of expense is this?\",\n        },\n        \"reimbursable\": {\n            \"type\": \"boolean\",\n            \"instructions\": \"Should this expense be reimbursed?\",\n        },"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "kind": "documented",
+      "text": "Schema constraints govern allowed values; text, numeric outputs and optional reasoning still generate multiple tokens.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 35,
+          "end": 40,
+          "quote": "1. **No out-of-schema hallucinations** — Choices stay within the allowed values.\n2. **Negligible output-token cost** — Single-token categorical selection and bounded numeric decoding; optional thinking adds tokens.\n3. **Shared-prefix reuse** — KV caching avoids reprocessing shared context.\n4. **Dependency-aware execution** — Independent fields run together; declare `depends_on` to form a dependency graph.\n5. **Made for open autoregressive LLMs** — Use compatible models you already serve with SGLang.\n6. **Supports thinking mode** — Enable reasoning before the final constrained answer."
+        },
+        {
+          "source": "source-1",
+          "start": 427,
+          "end": 428,
+          "quote": "Enum and boolean fields use one output token each. Numeric, text, and optional\nthinking outputs use multiple tokens."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "TypeLLM: Jev-inspired structured generation with SGLang",
+      "h1": "TypeLLM: Jev-inspired structured generation with SGLang",
+      "description": "TypeLLM uses SGLang to add schema-constrained outputs to existing models. Inspired by Jev, it also supports free text, reasoning and dependent fields.",
+      "summary": "TypeLLM adds JSON Schema-constrained outputs to existing autoregressive models without changing their weights or architecture. Inspired by Jev, it retains free text and optional reasoning and supports dependencies between output fields. Serve a compatible model with SGLang, then submit context and typed questions through TypeLLMClient.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose",
+          "text": "TypeLLM adds JSON Schema-constrained outputs to existing autoregressive models without changing their weights or architecture.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’s role",
+          "text": "Inspired by Jev, it retains free text and optional reasoning and supports dependencies between output fields.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "How to use it",
+          "text": "Serve a compatible model with SGLang, then submit context and typed questions through TypeLLMClient.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limits to consider",
+          "text": "Schema constraints govern allowed values; text, numeric outputs and optional reasoning still generate multiple tokens.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "TypeLLM：受 Jev 启发的 SGLang 结构化生成",
+      "h1": "TypeLLM：受 Jev 启发的 SGLang 结构化生成",
+      "description": "TypeLLM 借助 SGLang 为现有模型添加 Schema 约束输出，不修改权重；方案受 Jev 启发，同时支持自由文本、可选推理和字段依赖。",
+      "summary": "TypeLLM 为现有自回归模型添加 JSON Schema 约束输出，无需改变权重或架构。 它受 Jev 启发，同时保留自由文本、可选推理，并支持输出字段间的依赖关系。 用 SGLang 部署兼容模型，再通过 TypeLLMClient 提交上下文和类型化问题。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "TypeLLM 为现有自回归模型添加 JSON Schema 约束输出，无需改变权重或架构。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "它受 Jev 启发，同时保留自由文本、可选推理，并支持输出字段间的依赖关系。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "用 SGLang 部署兼容模型，再通过 TypeLLMClient 提交上下文和类型化问题。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用边界",
+          "text": "Schema 约束限定允许的值；文本、数值输出和可选推理仍会生成多个 token。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "TypeLLM：受 Jev 啟發的 SGLang 結構化生成",
+      "h1": "TypeLLM：受 Jev 啟發的 SGLang 結構化生成",
+      "description": "TypeLLM 透過 SGLang 為現有模型加入 Schema 約束輸出，不修改權重；方案受 Jev 啟發，同時支援自由文字、選用推理與欄位相依。",
+      "summary": "TypeLLM 為現有自回歸模型加入 JSON Schema 約束輸出，無需改變權重或架構。 它受 Jev 啟發，同時保留自由文字、選用推理，並支援輸出欄位間的相依關係。 用 SGLang 部署相容模型，再透過 TypeLLMClient 提交脈絡與型別化問題。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "TypeLLM 為現有自回歸模型加入 JSON Schema 約束輸出，無需改變權重或架構。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "它受 Jev 啟發，同時保留自由文字、選用推理，並支援輸出欄位間的相依關係。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "用 SGLang 部署相容模型，再透過 TypeLLMClient 提交脈絡與型別化問題。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用限制",
+          "text": "Schema 約束限定允許的值；文字、數值輸出與選用推理仍會產生多個 token。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "TypeLLM：Jev に着想を得た SGLang 構造化生成",
+      "h1": "TypeLLM：Jev に着想を得た SGLang 構造化生成",
+      "description": "TypeLLM は SGLang で既存モデルにスキーマ制約を追加します。Jev に着想を得つつ、自由文、推論、フィールド間の依存にも対応します。",
+      "summary": "TypeLLM は既存の自己回帰モデルに JSON Schema 制約付き出力を追加し、重みや構造を変更しません。 Jev に着想を得つつ自由文と任意の推論を維持し、出力フィールド間の依存関係にも対応します。 SGLang で互換モデルを起動し、TypeLLMClient から文脈と型付き質問を渡します。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "何ができるか",
+          "text": "TypeLLM は既存の自己回帰モデルに JSON Schema 制約付き出力を追加し、重みや構造を変更しません。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "Jev に着想を得つつ自由文と任意の推論を維持し、出力フィールド間の依存関係にも対応します。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "SGLang で互換モデルを起動し、TypeLLMClient から文脈と型付き質問を渡します。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "制約と注意点",
+          "text": "スキーマは許容値を制限しますが、文章・数値・任意の推論では複数トークンを生成します。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "TypeLLM: Jev에서 영감을 받은 SGLang 구조화 생성",
+      "h1": "TypeLLM: Jev에서 영감을 받은 SGLang 구조화 생성",
+      "description": "TypeLLM은 SGLang으로 기존 모델에 스키마 제약 출력을 추가합니다. Jev에서 영감을 받았으며 자유 텍스트, 추론, 필드 의존성도 지원합니다.",
+      "summary": "TypeLLM은 가중치나 구조를 바꾸지 않고 기존 자기회귀 모델에 JSON Schema 제약 출력을 추가합니다. Jev에서 영감을 받았으며 자유 형식 텍스트, 선택적 추론, 출력 필드 간 의존 관계를 지원합니다. SGLang에서 호환 모델을 서빙한 뒤 TypeLLMClient로 맥락과 타입이 지정된 질문을 전달합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "TypeLLM은 가중치나 구조를 바꾸지 않고 기존 자기회귀 모델에 JSON Schema 제약 출력을 추가합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Jev에서 영감을 받았으며 자유 형식 텍스트, 선택적 추론, 출력 필드 간 의존 관계를 지원합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "SGLang에서 호환 모델을 서빙한 뒤 TypeLLMClient로 맥락과 타입이 지정된 질문을 전달합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "제약 사항",
+          "text": "스키마는 허용 값을 제한합니다. 텍스트, 수치 출력과 선택적 추론은 여전히 여러 토큰을 생성합니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "TypeLLM: generación estructurada inspirada en Jev",
+      "h1": "TypeLLM: generación estructurada inspirada en Jev",
+      "description": "TypeLLM añade salidas restringidas a modelos existentes con SGLang. Inspirado en Jev, permite texto libre, razonamiento y campos dependientes.",
+      "summary": "TypeLLM añade salidas restringidas por JSON Schema a modelos autorregresivos existentes sin cambiar pesos ni arquitectura. Se inspira en Jev, conserva texto libre y razonamiento opcional y admite dependencias entre campos. Sirve un modelo compatible con SGLang y envía contexto y preguntas tipadas mediante TypeLLMClient.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "TypeLLM añade salidas restringidas por JSON Schema a modelos autorregresivos existentes sin cambiar pesos ni arquitectura.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "El papel de Jev",
+          "text": "Se inspira en Jev, conserva texto libre y razonamiento opcional y admite dependencias entre campos.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo usarlo",
+          "text": "Sirve un modelo compatible con SGLang y envía contexto y preguntas tipadas mediante TypeLLMClient.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Límites a considerar",
+          "text": "El esquema limita los valores permitidos; texto, números y razonamiento opcional siguen generando múltiples tokens.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "TypeLLM : génération structurée inspirée de Jev",
+      "h1": "TypeLLM : génération structurée inspirée de Jev",
+      "description": "TypeLLM ajoute des sorties contraintes aux modèles via SGLang. Inspiré de Jev, il permet texte libre, raisonnement et champs dépendants.",
+      "summary": "TypeLLM ajoute des sorties contraintes par JSON Schema aux modèles autorégressifs existants, sans modifier poids ni architecture. Inspiré de Jev, il conserve texte libre et raisonnement facultatif, avec des dépendances entre champs. Servez un modèle compatible avec SGLang, puis envoyez contexte et questions typées via TypeLLMClient.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "TypeLLM ajoute des sorties contraintes par JSON Schema aux modèles autorégressifs existants, sans modifier poids ni architecture.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Le rôle de Jev",
+          "text": "Inspiré de Jev, il conserve texte libre et raisonnement facultatif, avec des dépendances entre champs.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Utilisation",
+          "text": "Servez un modèle compatible avec SGLang, puis envoyez contexte et questions typées via TypeLLMClient.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limites à connaître",
+          "text": "Le schéma encadre les valeurs autorisées ; texte, nombres et raisonnement facultatif génèrent toujours plusieurs tokens.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "TypeLLM: strukturierte Generierung nach Jev-Vorbild",
+      "h1": "TypeLLM: strukturierte Generierung nach Jev-Vorbild",
+      "description": "TypeLLM ergänzt bestehende Modelle über SGLang um Schemaausgaben. Der Jev-inspirierte Ansatz unterstützt Freitext, Reasoning und abhängige Felder.",
+      "summary": "TypeLLM ergänzt bestehende autoregressive Modelle um JSON-Schema-konforme Ausgaben, ohne Gewichte oder Architektur zu ändern. Von Jev inspiriert, behält es Freitext und optionales Reasoning bei und unterstützt Abhängigkeiten zwischen Ausgabefeldern. Ein kompatibles Modell mit SGLang bereitstellen und Kontext sowie typisierte Fragen über TypeLLMClient übergeben.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "TypeLLM ergänzt bestehende autoregressive Modelle um JSON-Schema-konforme Ausgaben, ohne Gewichte oder Architektur zu ändern.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Die Rolle von Jev",
+          "text": "Von Jev inspiriert, behält es Freitext und optionales Reasoning bei und unterstützt Abhängigkeiten zwischen Ausgabefeldern.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Nutzung",
+          "text": "Ein kompatibles Modell mit SGLang bereitstellen und Kontext sowie typisierte Fragen über TypeLLMClient übergeben.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Grenzen",
+          "text": "Das Schema begrenzt erlaubte Werte; Text, Zahlen und optionales Reasoning erzeugen weiterhin mehrere Tokens.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "TypeLLM: geração estruturada inspirada no Jev",
+      "h1": "TypeLLM: geração estruturada inspirada no Jev",
+      "description": "TypeLLM adiciona saídas restritas a modelos com SGLang. Inspirado no Jev, admite texto livre, raciocínio e campos dependentes.",
+      "summary": "TypeLLM adiciona saídas limitadas por JSON Schema a modelos autorregressivos existentes, sem alterar pesos ou arquitetura. Inspirado no Jev, mantém texto livre e raciocínio opcional, com dependências entre campos de saída. Sirva um modelo compatível com SGLang e envie contexto e perguntas tipadas pelo TypeLLMClient.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "TypeLLM adiciona saídas limitadas por JSON Schema a modelos autorregressivos existentes, sem alterar pesos ou arquitetura.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "O papel do Jev",
+          "text": "Inspirado no Jev, mantém texto livre e raciocínio opcional, com dependências entre campos de saída.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Sirva um modelo compatível com SGLang e envie contexto e perguntas tipadas pelo TypeLLMClient.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limitações",
+          "text": "O esquema limita os valores permitidos; texto, números e raciocínio opcional ainda geram vários tokens.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "TypeLLM: структурированная генерация по идее Jev",
+      "h1": "TypeLLM: структурированная генерация по идее Jev",
+      "description": "TypeLLM добавляет схемы вывода моделям через SGLang. Подход вдохновлён Jev, но поддерживает свободный текст, рассуждения и зависимые поля.",
+      "summary": "TypeLLM добавляет вывод по JSON Schema к существующим авторегрессионным моделям без изменения весов или архитектуры. Вдохновлённый Jev подход сохраняет свободный текст и необязательные рассуждения, поддерживая зависимости между полями. Запустите совместимую модель через SGLang и передайте контекст с типизированными вопросами через TypeLLMClient.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "TypeLLM добавляет вывод по JSON Schema к существующим авторегрессионным моделям без изменения весов или архитектуры.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Вдохновлённый Jev подход сохраняет свободный текст и необязательные рассуждения, поддерживая зависимости между полями.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Запустите совместимую модель через SGLang и передайте контекст с типизированными вопросами через TypeLLMClient.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ограничения",
+          "text": "Схема ограничивает допустимые значения; текст, числа и необязательные рассуждения по-прежнему генерируют несколько токенов.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "TypeLLM: Jev से प्रेरित संरचित जनरेशन",
+      "h1": "TypeLLM: Jev से प्रेरित संरचित जनरेशन",
+      "description": "TypeLLM SGLang से मौजूदा मॉडल में स्कीमा-सीमित आउटपुट जोड़ता है। Jev से प्रेरित यह तरीका खुला पाठ, तर्क और फ़ील्ड निर्भरता भी देता है।",
+      "summary": "TypeLLM मौजूदा ऑटोरेग्रेसिव मॉडल में वेट या संरचना बदले बिना JSON Schema से सीमित आउटपुट जोड़ता है। Jev से प्रेरित यह तरीका खुला पाठ, वैकल्पिक तर्क और आउटपुट फ़ील्ड के बीच निर्भरता बनाए रखता है। SGLang पर संगत मॉडल चलाएँ, फिर TypeLLMClient से संदर्भ और निर्धारित उत्तर-प्रकार वाले प्रश्न भेजें।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "किस काम आता है",
+          "text": "TypeLLM मौजूदा ऑटोरेग्रेसिव मॉडल में वेट या संरचना बदले बिना JSON Schema से सीमित आउटपुट जोड़ता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "Jev से प्रेरित यह तरीका खुला पाठ, वैकल्पिक तर्क और आउटपुट फ़ील्ड के बीच निर्भरता बनाए रखता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल कैसे करें",
+          "text": "SGLang पर संगत मॉडल चलाएँ, फिर TypeLLMClient से संदर्भ और निर्धारित उत्तर-प्रकार वाले प्रश्न भेजें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "सीमाएँ",
+          "text": "स्कीमा स्वीकृत मान सीमित करता है; पाठ, संख्याएँ और वैकल्पिक तर्क अभी भी कई टोकन बनाते हैं।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "TypeLLM: generasi terstruktur terinspirasi Jev",
+      "h1": "TypeLLM: generasi terstruktur terinspirasi Jev",
+      "description": "TypeLLM menambahkan keluaran berskema melalui SGLang. Terinspirasi Jev, proyek ini juga mendukung teks bebas, penalaran, dan kolom bergantung.",
+      "summary": "TypeLLM menambahkan keluaran terbatas JSON Schema pada model autoregresif tanpa mengubah bobot atau arsitekturnya. Terinspirasi Jev, proyek ini mempertahankan teks bebas dan penalaran opsional serta mendukung ketergantungan antarkolom keluaran. Sajikan model kompatibel dengan SGLang, lalu kirim konteks dan pertanyaan bertipe melalui TypeLLMClient.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "TypeLLM menambahkan keluaran terbatas JSON Schema pada model autoregresif tanpa mengubah bobot atau arsitekturnya.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Terinspirasi Jev, proyek ini mempertahankan teks bebas dan penalaran opsional serta mendukung ketergantungan antarkolom keluaran.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Sajikan model kompatibel dengan SGLang, lalu kirim konteks dan pertanyaan bertipe melalui TypeLLMClient.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Batasan",
+          "text": "Skema membatasi nilai yang diizinkan; teks, angka, dan penalaran opsional tetap menghasilkan beberapa token.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "TypeLLM: sinh dữ liệu có cấu trúc theo cảm hứng Jev",
+      "h1": "TypeLLM: sinh dữ liệu có cấu trúc theo cảm hứng Jev",
+      "description": "TypeLLM thêm đầu ra ràng buộc lược đồ qua SGLang. Lấy cảm hứng từ Jev, dự án còn hỗ trợ văn bản tự do, suy luận và trường phụ thuộc.",
+      "summary": "TypeLLM thêm đầu ra ràng buộc bằng JSON Schema cho mô hình tự hồi quy mà không đổi trọng số hay kiến trúc. Lấy cảm hứng từ Jev, dự án giữ văn bản tự do, suy luận tùy chọn và hỗ trợ phụ thuộc giữa các trường. Chạy mô hình tương thích bằng SGLang, rồi gửi ngữ cảnh và câu hỏi có kiểu qua TypeLLMClient.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích",
+          "text": "TypeLLM thêm đầu ra ràng buộc bằng JSON Schema cho mô hình tự hồi quy mà không đổi trọng số hay kiến trúc.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Lấy cảm hứng từ Jev, dự án giữ văn bản tự do, suy luận tùy chọn và hỗ trợ phụ thuộc giữa các trường.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Chạy mô hình tương thích bằng SGLang, rồi gửi ngữ cảnh và câu hỏi có kiểu qua TypeLLMClient.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Giới hạn",
+          "text": "Lược đồ giới hạn giá trị hợp lệ; văn bản, số và suy luận tùy chọn vẫn sinh nhiều token.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "TypeLLM: Jev’den esinlenen yapılandırılmış üretim",
+      "h1": "TypeLLM: Jev’den esinlenen yapılandırılmış üretim",
+      "description": "TypeLLM SGLang ile mevcut modellere şema kısıtlı çıktı ekler. Jev’den esinlenen yaklaşım serbest metin, akıl yürütme ve bağımlı alanları destekler.",
+      "summary": "TypeLLM mevcut otoregresif modellere ağırlık veya mimari değişikliği yapmadan JSON Schema kısıtlı çıktılar ekler. Jev’den esinlenir; serbest metni, isteğe bağlı akıl yürütmeyi ve çıktı alanları arasındaki bağımlılıkları destekler. SGLang ile uyumlu model sunun, ardından TypeLLMClient üzerinden bağlam ve türlenmiş soruları gönderin.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "TypeLLM mevcut otoregresif modellere ağırlık veya mimari değişikliği yapmadan JSON Schema kısıtlı çıktılar ekler.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Jev’den esinlenir; serbest metni, isteğe bağlı akıl yürütmeyi ve çıktı alanları arasındaki bağımlılıkları destekler.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "SGLang ile uyumlu model sunun, ardından TypeLLMClient üzerinden bağlam ve türlenmiş soruları gönderin.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Sınırlamalar",
+          "text": "Şema izin verilen değerleri sınırlar; metin, sayısal çıktılar ve isteğe bağlı akıl yürütme birden fazla token üretir.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "TypeLLM: generazione strutturata ispirata a Jev",
+      "h1": "TypeLLM: generazione strutturata ispirata a Jev",
+      "description": "TypeLLM aggiunge output vincolati ai modelli con SGLang. Ispirato a Jev, supporta anche testo libero, ragionamento e campi dipendenti.",
+      "summary": "TypeLLM aggiunge output vincolati da JSON Schema a modelli autoregressivi esistenti senza modificarne pesi o architettura. Ispirato a Jev, conserva testo libero e ragionamento facoltativo e supporta dipendenze fra campi. Servi un modello compatibile con SGLang, poi invia contesto e domande tipizzate tramite TypeLLMClient.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "TypeLLM aggiunge output vincolati da JSON Schema a modelli autoregressivi esistenti senza modificarne pesi o architettura.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Il ruolo di Jev",
+          "text": "Ispirato a Jev, conserva testo libero e ragionamento facoltativo e supporta dipendenze fra campi.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come usarlo",
+          "text": "Servi un modello compatibile con SGLang, poi invia contesto e domande tipizzate tramite TypeLLMClient.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limiti",
+          "text": "Lo schema limita i valori consentiti; testo, numeri e ragionamento facoltativo generano comunque più token.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

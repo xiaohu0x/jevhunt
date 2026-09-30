@@ -1,0 +1,762 @@
+{
+  "version": "source-content-v1",
+  "repo": "TianyuCodings/JevHarness",
+  "repositoryId": 1379401527,
+  "relationship": "integration",
+  "category": "agents",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "34d5c9602f6f73792e2c625cc31dd9ed7b4f39b5",
+      "url": "https://github.com/TianyuCodings/JevHarness/blob/34d5c9602f6f73792e2c625cc31dd9ed7b4f39b5/README.md",
+      "sha256": "fa521b13d179492c1bb7b80f8bc516c1855522f7ef6fda747b4bcfda632c7c58",
+      "accessedAt": "2026-09-30T07:33:51.441Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "JevHarness lets a language model write task-specific features, questions and control logic, with optional improvement from rewards and complete traces.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 5,
+          "end": 13,
+          "quote": "**Let an LLM write a task-specific harness for Jev. Run it, inspect its decisions, and optionally improve it using rewards and complete execution traces.**\n\nA harness turns task observations into useful features, constructs Jev questions and criteria, and combines the structured answers into actions. The authoring LLM can change the code, questions, graph, and memory. Once the harness is fixed, execution uses that code and its Jev calls; it does not need the authoring LLM on every decision.\n\n**Reason deeply during development. Freeze the strategy. Let Jev make fast, fuzzy decisions.**\n\nA strong LLM brings broad intelligence and deep reasoning, but generating that reasoning for every action adds latency and cost. Jev provides fast, lightweight judgment with more limited capacity for open-ended reasoning. JevHarness combines these strengths: let the LLM write a task-specific harness, then optionally improve it using rewards and complete execution traces.\n\nThe harness preserves the LLM's reasoning strategy in explicit code, features, state, instructions, criteria, and control flow. Code computes useful facts; Jev makes **fuzzy, context-sensitive decisions** from those facts. The authoring LLM can revise the harness and its memory during development. Once the selected harness is frozen, its code and Jev calls execute without the authoring LLM on every decision."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "Once frozen, the harness runs its code and Jev decisions without calling the authoring model for every action.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 77,
+          "end": 83,
+          "quote": "The task adapter owns observations, legal actions, side effects, and scoring. The harness owns feature construction, Jev judgments, and decision logic. That boundary makes it possible to change the harness without letting it rewrite its own reward or read hidden task state.\n\n- **Author once, then execute.** Validate a `PipelineSpec` and run it through `PipelineRuntime`. Reflection is optional.\n- **Compose judgments.** Jev supports `choice`, `score`, and `noul` answers. Multiple questions can share one request; independent graph nodes can run concurrently.\n- **Improve from evidence.** The optional GEPA integration selects parents from an instance frontier, compares parent and proposal on the same training batch, and fully evaluates accepted proposals on Eval. It records actual ancestry, including rejected proposals.\n- **Keep the whole trace.** Reflection includes each selected episode's complete decisions, observations, node inputs and outputs, Jev questions and answers, memory, and failures. Lossless deduplication reduces repetition; an input that exceeds the configured byte cap is archived and rejected without truncation.\n- **Freeze the selected harness.** Frozen artifacts bind the specification, runtime, evaluator, and declared task resources. They still need Jev if they contain Jev nodes. A hosted model alias does not pin future provider behavior; stored responses and fresh calls have different reproducibility guarantees."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Explore the archived Pokémon run locally with the website scripts, or install the skill and describe a task to build a harness.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 35,
+          "end": 46,
+          "quote": "## Start with the example\n\nThe Pokémon example includes an actual archived run, the selected harness, a browsable evolution tree, complete decision records, and replay highlights synchronized with their Jev answers. Browsing the archive makes no model requests and starts no games.\n\n```bash\ngit clone https://github.com/TianyuCodings/JevHarness.git\ncd JevHarness\nnode website/build.mjs\nnode website/preview.mjs --port 8768\n```\n\nOpen [localhost:8768](http://localhost:8768). The viewer needs Node.js and a modern browser; battle animations download assets from the official Pokémon Showdown renderer. The archived battle log stays in the browser and is not uploaded to a replay server. See [website setup](website/README.md) for deployment and archive verification."
+        },
+        {
+          "source": "source-1",
+          "start": 146,
+          "end": 146,
+          "quote": "Install the [JevHarness skill](skills/jev-harness/SKILL.md) and describe your task to Codex or Claude Code. You do not need to handwrite Jev instructions or criteria."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "Reported Pokémon gains use the Eval set that selected the harness, not an unseen test. Frozen harnesses still need Jev when their graph contains Jev nodes.",
+      "kind": "source-limitation",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 48,
+          "end": 48,
+          "quote": "The reported improvement is an example result on the selection Eval set, not an independent estimate of performance on unseen games. The page shows Train/Eval only, distinguishes sampled training coverage, and includes rejected proposals."
+        },
+        {
+          "source": "source-1",
+          "start": 83,
+          "end": 83,
+          "quote": "- **Freeze the selected harness.** Frozen artifacts bind the specification, runtime, evaluator, and declared task resources. They still need Jev if they contain Jev nodes. A hosted model alias does not pin future provider behavior; stored responses and fresh calls have different reproducibility guarantees."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "JevHarness — LLM-authored harnesses for Jev execution",
+      "h1": "JevHarness — LLM-authored harnesses for Jev execution",
+      "description": "JevHarness: Build and freeze a task harness with a language model, then run its code and Jev calls; optional reflection uses rewards and complete traces.",
+      "summary": "JevHarness lets a language model write task-specific features, questions and control logic, with optional improvement from rewards and complete traces. Explore the archived Pokémon run locally with the website scripts, or install the skill and describe a task to build a harness.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "What it does",
+          "text": "JevHarness lets a language model write task-specific features, questions and control logic, with optional improvement from rewards and complete traces.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "Once frozen, the harness runs its code and Jev decisions without calling the authoring model for every action.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Getting started",
+          "text": "Explore the archived Pokémon run locally with the website scripts, or install the skill and describe a task to build a harness.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "Reported Pokémon gains use the Eval set that selected the harness, not an unseen test. Frozen harnesses still need Jev when their graph contains Jev nodes.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "JevHarness — 由语言模型编写、交给 Jev 执行的框架",
+      "h1": "JevHarness — 由语言模型编写、交给 Jev 执行的框架",
+      "description": "JevHarness: 用语言模型编写任务框架，再冻结代码与 Jev 判断流程；可选反思利用奖励和完整执行轨迹改进。",
+      "summary": "JevHarness 让语言模型编写任务专用特征、问题和控制逻辑，可利用奖励及完整轨迹改进。 可用网站脚本本地浏览归档的宝可梦运行，或安装技能并描述任务来构建框架。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "JevHarness 让语言模型编写任务专用特征、问题和控制逻辑，可利用奖励及完整轨迹改进。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "框架冻结后，运行依靠代码与 Jev 决策，无需每个动作都调用编写模型。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "可用网站脚本本地浏览归档的宝可梦运行，或安装技能并描述任务来构建框架。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "报告的宝可梦提升来自用于选择框架的 Eval 集，并非未见测试集。冻结图中有 Jev 节点时仍需调用 Jev。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "JevHarness — 由語言模型編寫、交給 Jev 執行的框架",
+      "h1": "JevHarness — 由語言模型編寫、交給 Jev 執行的框架",
+      "description": "JevHarness: 以語言模型編寫任務框架，再凍結程式碼與 Jev 判斷流程；選用反思利用獎勵及完整執行軌跡改進。",
+      "summary": "JevHarness 讓語言模型編寫任務專用特徵、問題與控制邏輯，可用獎勵及完整軌跡改進。 可用網站腳本在本機瀏覽封存的寶可夢執行，或安裝技能並描述任務來建立框架。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "JevHarness 讓語言模型編寫任務專用特徵、問題與控制邏輯，可用獎勵及完整軌跡改進。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "框架凍結後，執行依靠程式碼與 Jev 決策，不必每個動作都呼叫編寫模型。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "可用網站腳本在本機瀏覽封存的寶可夢執行，或安裝技能並描述任務來建立框架。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "報告的寶可夢提升來自選擇框架所用的 Eval 集，並非未見測試集。凍結圖含 Jev 節點時仍需呼叫 Jev。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "JevHarness — 言語モデルが設計し Jev が実行するハーネス",
+      "h1": "JevHarness — 言語モデルが設計し Jev が実行するハーネス",
+      "description": "JevHarness: 言語モデルでタスク用ハーネスを設計し、コードと Jev への質問を固定して実行。報酬と完全な履歴による改善も選べます。",
+      "summary": "JevHarness は言語モデルにタスク固有の特徴、質問、制御を記述させ、報酬と完全な履歴による任意の改善を行えます。 サイト用スクリプトでポケモンの実行記録を閲覧するか、スキルを導入してタスクを伝え、ハーネスを作ります。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "できること",
+          "text": "JevHarness は言語モデルにタスク固有の特徴、質問、制御を記述させ、報酬と完全な履歴による任意の改善を行えます。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "固定後はコードと Jev の判断で動き、毎回の行動で設計用モデルを呼ぶ必要はありません。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い始めるには",
+          "text": "サイト用スクリプトでポケモンの実行記録を閲覧するか、スキルを導入してタスクを伝え、ハーネスを作ります。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "対象範囲と制約",
+          "text": "ポケモンの改善値は選定に用いた Eval 集合での結果で、未知のテストではありません。固定済みでも Jev ノードがあれば Jev が必要です。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "JevHarness — 언어 모델이 작성하고 Jev가 실행하는 하네스",
+      "h1": "JevHarness — 언어 모델이 작성하고 Jev가 실행하는 하네스",
+      "description": "JevHarness: 언어 모델로 작업 하네스를 작성한 뒤 코드와 Jev에 보낼 질문을 고정합니다. 보상과 전체 기록을 활용한 개선은 선택 사항입니다.",
+      "summary": "JevHarness는 언어 모델이 작업별 특징, 질문, 제어 로직을 작성하고 보상과 전체 기록으로 선택적으로 개선하도록 합니다. 웹사이트 스크립트로 보관된 포켓몬 실행을 보거나 스킬을 설치하고 작업을 설명해 하네스를 만듭니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "JevHarness는 언어 모델이 작업별 특징, 질문, 제어 로직을 작성하고 보상과 전체 기록으로 선택적으로 개선하도록 합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "고정한 하네스는 코드와 Jev 판단으로 실행되며 행동마다 작성 모델을 부르지 않아도 됩니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "웹사이트 스크립트로 보관된 포켓몬 실행을 보거나 스킬을 설치하고 작업을 설명해 하네스를 만듭니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 제약",
+          "text": "보고된 포켓몬 개선은 하네스 선택에 쓴 Eval 집합 결과이며 미관측 테스트가 아닙니다. 고정 그래프에 Jev 노드가 있으면 여전히 Jev가 필요합니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "JevHarness — Arneses escritos por LLM para ejecutar con Jev",
+      "h1": "JevHarness — Arneses escritos por LLM para ejecutar con Jev",
+      "description": "JevHarness: Crea un arnés con un modelo de lenguaje y fija su código y preguntas para Jev; la reflexión opcional usa recompensas y trazas completas.",
+      "summary": "JevHarness permite que un modelo escriba características, preguntas y lógica específicas de una tarea, con mejora opcional mediante recompensas y trazas completas. Explora el archivo Pokémon con los scripts web o instala la habilidad y describe una tarea para crear un arnés.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "JevHarness permite que un modelo escriba características, preguntas y lógica específicas de una tarea, con mejora opcional mediante recompensas y trazas completas.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Una vez fijado, ejecuta código y decisiones Jev sin llamar al modelo autor en cada acción.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo empezar",
+          "text": "Explora el archivo Pokémon con los scripts web o instala la habilidad y describe una tarea para crear un arnés.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "La mejora Pokémon usa el conjunto Eval empleado para seleccionar el arnés, no una prueba inédita. Los grafos fijados con nodos Jev siguen necesitándolo.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "JevHarness — Harnais conçus par un LLM et exécutés avec Jev",
+      "h1": "JevHarness — Harnais conçus par un LLM et exécutés avec Jev",
+      "description": "JevHarness: Créez un harnais avec un modèle puis figez son code et ses questions à Jev ; la réflexion facultative utilise récompenses et traces complètes.",
+      "summary": "JevHarness fait écrire caractéristiques, questions et logique propres à une tâche par un modèle, avec amélioration facultative via récompenses et traces complètes. Explorez l’archive Pokémon avec les scripts web ou installez la compétence et décrivez une tâche pour créer un harnais.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "JevHarness fait écrire caractéristiques, questions et logique propres à une tâche par un modèle, avec amélioration facultative via récompenses et traces complètes.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Une fois figé, il exécute le code et les décisions Jev sans rappeler le modèle auteur à chaque action.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Explorez l’archive Pokémon avec les scripts web ou installez la compétence et décrivez une tâche pour créer un harnais.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "Le gain Pokémon utilise l’ensemble Eval ayant servi à sélectionner le harnais, pas un test inédit. Un graphe figé contenant des nœuds Jev en dépend toujours.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "JevHarness — Vom LLM entworfene Abläufe für Jev-Ausführung",
+      "h1": "JevHarness — Vom LLM entworfene Abläufe für Jev-Ausführung",
+      "description": "JevHarness: Ein Sprachmodell entwirft den Ablauf; danach werden Code und Fragen an Jev fixiert. Optionale Reflexion nutzt Belohnungen und vollständige Spuren.",
+      "summary": "JevHarness lässt ein Sprachmodell aufgabenspezifische Merkmale, Fragen und Steuerlogik schreiben und optional anhand von Belohnungen und vollständigen Spuren verbessern. Den Pokémon-Lauf mit Website-Skripten lokal ansehen oder den Skill installieren und eine Aufgabe für einen neuen Ablauf beschreiben.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "JevHarness lässt ein Sprachmodell aufgabenspezifische Merkmale, Fragen und Steuerlogik schreiben und optional anhand von Belohnungen und vollständigen Spuren verbessern.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Nach dem Einfrieren laufen Code und Jev-Entscheidungen ohne den Entwurfs-LLM bei jeder Aktion.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Einstieg",
+          "text": "Den Pokémon-Lauf mit Website-Skripten lokal ansehen oder den Skill installieren und eine Aufgabe für einen neuen Ablauf beschreiben.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Pokémon-Verbesserungen stammen aus dem zur Auswahl genutzten Eval-Satz, nicht aus unbekannten Testfällen. Eingefrorene Graphen mit Jev-Knoten benötigen weiterhin Jev.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "JevHarness — Estruturas escritas por LLM para execução com Jev",
+      "h1": "JevHarness — Estruturas escritas por LLM para execução com Jev",
+      "description": "JevHarness: Crie a estrutura com um modelo e fixe o código e as perguntas para Jev; a reflexão opcional usa recompensas e rastros completos.",
+      "summary": "O JevHarness permite que um modelo escreva características, perguntas e lógica de tarefa, com melhoria opcional por recompensas e rastros completos. Explore o arquivo Pokémon pelos scripts web ou instale a habilidade e descreva uma tarefa para criar a estrutura.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "O JevHarness permite que um modelo escreva características, perguntas e lógica de tarefa, com melhoria opcional por recompensas e rastros completos.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "Depois de fixado, executa código e decisões Jev sem chamar o modelo autor a cada ação.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como começar",
+          "text": "Explore o arquivo Pokémon pelos scripts web ou instale a habilidade e descreva uma tarefa para criar a estrutura.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "A melhoria Pokémon usa o conjunto Eval empregado na seleção, não um teste inédito. Grafos fixados com nós Jev continuam dependendo dele.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "JevHarness — Созданные LLM контуры управления для Jev",
+      "h1": "JevHarness — Созданные LLM контуры управления для Jev",
+      "description": "JevHarness: Создайте контур языковой моделью и зафиксируйте код и вопросы к Jev; необязательное улучшение использует награды и полные трассы.",
+      "summary": "JevHarness поручает языковой модели написать признаки, вопросы и логику задачи с необязательным улучшением по наградам и полным трассам. Изучите архив Pokémon через скрипты сайта либо установите навык и опишите задачу для создания контура.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "JevHarness поручает языковой модели написать признаки, вопросы и логику задачи с необязательным улучшением по наградам и полным трассам.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "После фиксации работают код и решения Jev без вызова модели-автора на каждом действии.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Начало работы",
+          "text": "Изучите архив Pokémon через скрипты сайта либо установите навык и опишите задачу для создания контура.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Улучшение Pokémon получено на Eval-наборе, использованном для выбора, а не на новом тесте. Зафиксированным графам с узлами Jev он по-прежнему нужен.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "JevHarness — LLM द्वारा बनाए ढाँचे में Jev निष्पादन",
+      "h1": "JevHarness — LLM द्वारा बनाए ढाँचे में Jev निष्पादन",
+      "description": "JevHarness: भाषा मॉडल से कार्य ढाँचा बनाएँ, फिर कोड और Jev को भेजे जाने वाले प्रश्न स्थिर करें; वैकल्पिक सुधार पुरस्कार और पूरे रिकॉर्ड उपयोग करता है।",
+      "summary": "JevHarness भाषा मॉडल से काम-विशेष फीचर, प्रश्न और नियंत्रण लिखवाता है, जिन्हें पुरस्कार और पूरे रिकॉर्ड से वैकल्पिक रूप से सुधार सकते हैं। वेबसाइट स्क्रिप्ट से संग्रहित Pokémon रन देखें या स्किल स्थापित करके नया ढाँचा बनाने का काम बताएँ।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "परियोजना का काम",
+          "text": "JevHarness भाषा मॉडल से काम-विशेष फीचर, प्रश्न और नियंत्रण लिखवाता है, जिन्हें पुरस्कार और पूरे रिकॉर्ड से वैकल्पिक रूप से सुधार सकते हैं।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "स्थिर करने के बाद कोड और Jev निर्णय चलते हैं; हर कार्रवाई पर लेखक मॉडल बुलाना नहीं पड़ता।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "शुरुआत कैसे करें",
+          "text": "वेबसाइट स्क्रिप्ट से संग्रहित Pokémon रन देखें या स्किल स्थापित करके नया ढाँचा बनाने का काम बताएँ।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "Pokémon सुधार उसी Eval सेट पर है जिससे ढाँचा चुना गया, अनदेखे परीक्षण पर नहीं। स्थिर ग्राफ में Jev नोड हों तो Jev अभी भी चाहिए।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "JevHarness — Kerangka buatan LLM untuk eksekusi Jev",
+      "h1": "JevHarness — Kerangka buatan LLM untuk eksekusi Jev",
+      "description": "JevHarness: Buat kerangka dengan model bahasa, lalu bekukan kode serta pertanyaan untuk Jev; refleksi opsional memakai reward dan jejak lengkap.",
+      "summary": "JevHarness meminta model bahasa menulis fitur, pertanyaan, dan logika tugas, dengan perbaikan opsional dari reward serta jejak lengkap. Jelajahi arsip Pokémon melalui skrip situs atau pasang keterampilan dan jelaskan tugas untuk membuat kerangka.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "JevHarness meminta model bahasa menulis fitur, pertanyaan, dan logika tugas, dengan perbaikan opsional dari reward serta jejak lengkap.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Setelah dibekukan, kode dan keputusan Jev berjalan tanpa memanggil model penulis pada setiap tindakan.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara memulai",
+          "text": "Jelajahi arsip Pokémon melalui skrip situs atau pasang keterampilan dan jelaskan tugas untuk membuat kerangka.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Peningkatan Pokémon memakai set Eval yang digunakan memilih kerangka, bukan pengujian baru. Graf beku dengan node Jev tetap membutuhkan Jev.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "JevHarness — Khung do LLM viết để Jev thực thi",
+      "h1": "JevHarness — Khung do LLM viết để Jev thực thi",
+      "description": "JevHarness: Tạo khung nhiệm vụ bằng mô hình ngôn ngữ rồi cố định mã và câu hỏi gửi Jev; phản tư tùy chọn dùng thưởng và dấu vết đầy đủ.",
+      "summary": "JevHarness cho mô hình ngôn ngữ viết đặc trưng, câu hỏi và logic riêng của nhiệm vụ, tùy chọn cải thiện bằng thưởng và toàn bộ dấu vết. Xem bản ghi Pokémon bằng script trang web hoặc cài kỹ năng và mô tả nhiệm vụ để tạo khung.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Công dụng",
+          "text": "JevHarness cho mô hình ngôn ngữ viết đặc trưng, câu hỏi và logic riêng của nhiệm vụ, tùy chọn cải thiện bằng thưởng và toàn bộ dấu vết.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Sau khi cố định, mã và quyết định Jev chạy mà không cần gọi mô hình tác giả ở mỗi hành động.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách bắt đầu",
+          "text": "Xem bản ghi Pokémon bằng script trang web hoặc cài kỹ năng và mô tả nhiệm vụ để tạo khung.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Mức cải thiện Pokémon dùng tập Eval để chọn khung, không phải kiểm thử chưa thấy. Đồ thị cố định có nút Jev vẫn cần Jev.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "JevHarness — LLM’nin yazdığı çerçevelerle Jev yürütmesi",
+      "h1": "JevHarness — LLM’nin yazdığı çerçevelerle Jev yürütmesi",
+      "description": "JevHarness: Dil modeliyle görev çerçevesi oluşturup kodu ve Jev’e gönderilen soruları sabitleyin; isteğe bağlı iyileştirme ödülleri ve tam izleri kullanır.",
+      "summary": "JevHarness, dil modeline göreve özgü özellikler, sorular ve kontrol mantığı yazdırır; ödüller ve tam izlerle isteğe bağlı iyileştirme sunar. Web betikleriyle Pokémon arşivini inceleyin veya beceriyi kurup bir çerçeve oluşturmak için görevi tarif edin.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "JevHarness, dil modeline göreve özgü özellikler, sorular ve kontrol mantığı yazdırır; ödüller ve tam izlerle isteğe bağlı iyileştirme sunar.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Sabitlendikten sonra kod ve Jev kararları çalışır; her eylemde yazan modeli çağırmak gerekmez.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Başlangıç",
+          "text": "Web betikleriyle Pokémon arşivini inceleyin veya beceriyi kurup bir çerçeve oluşturmak için görevi tarif edin.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Pokémon artışı çerçeveyi seçmekte kullanılan Eval kümesindedir, görülmemiş testte değil. Jev düğümlü sabit graf yine Jev gerektirir.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "JevHarness — Strutture scritte da LLM per eseguire con Jev",
+      "h1": "JevHarness — Strutture scritte da LLM per eseguire con Jev",
+      "description": "JevHarness: Crea una struttura con un modello e fissa codice e domande per Jev; la riflessione facoltativa usa ricompense e tracce complete.",
+      "summary": "JevHarness fa scrivere a un modello caratteristiche, domande e logica specifiche del compito, con miglioramento facoltativo tramite ricompense e tracce complete. Esplora l’archivio Pokémon con gli script web oppure installa la competenza e descrivi un compito per creare una struttura.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "JevHarness fa scrivere a un modello caratteristiche, domande e logica specifiche del compito, con miglioramento facoltativo tramite ricompense e tracce complete.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Una volta fissato, esegue codice e decisioni Jev senza richiamare il modello autore a ogni azione.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come iniziare",
+          "text": "Esplora l’archivio Pokémon con gli script web oppure installa la competenza e descrivi un compito per creare una struttura.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "Il miglioramento Pokémon usa l’insieme Eval impiegato nella selezione, non un test inedito. I grafi fissati con nodi Jev ne hanno ancora bisogno.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

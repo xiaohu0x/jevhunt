@@ -1,0 +1,763 @@
+{
+  "version": "source-content-v1",
+  "repo": "wy-coliney/jev-browser-use",
+  "repositoryId": 1375500090,
+  "relationship": "integration",
+  "category": "browser",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "cf7e76607d4ec70592b24becadd0296dcda8177a",
+      "url": "https://github.com/wy-coliney/jev-browser-use/blob/cf7e76607d4ec70592b24becadd0296dcda8177a/README.md",
+      "sha256": "fa4c5cdf0df8ee7a24a9f8fbc56e0c500a86aefdc6a5bfe9f1b583347ff25b5c",
+      "accessedAt": "2026-09-30T07:33:49.156Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "kind": "documented",
+      "text": "Jev Browser Use delegates navigation, clicks, toggles and scrolling while Codex handles text entry and final verification.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 3,
+          "end": 5,
+          "quote": "**Jev clicks. Codex thinks and verifies.**\n\nA browser Skill powered by [TypeSafe’s Jev](https://docs.typesafe.ai/introduction). Hand off navigation, clicks, toggles, and scrolling; keep Codex in charge of text input, visual judgment, and the final check."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "kind": "documented",
+      "text": "Jev selects actions from observed controls using accessibility text; the existing Computer Use connection executes them.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 111,
+          "end": 121,
+          "quote": "Jev handles the controls. Codex enters text, handles images, and checks the outcome. When a step needs help, Codex takes over and Jev resumes afterward.\n\n## How it works\n\n![Codex plans, types, and verifies; Jev clicks, navigates, and scrolls](assets/teamwork.png)\n\n**Goal → observe controls → Jev chooses an action → browser → repeat → Codex verifies.**\n\nThe action loop stays inside the existing Computer Use connection, avoiding a new host-model turn for every click. Sessions retain progress across handoffs and check fresh page state before acting. Jev’s completion signal brings Codex back for verification.\n\nJev receives accessibility text, not screenshots. Codex handles typing, visual interpretation, and unsupported controls. Use it for dashboards, settings, reports, and browser checks—not just writing tasks."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "kind": "documented",
+      "text": "Requires Node.js 22+, a connected Codex browser and matching TypeSafe or OpenRouter credentials.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 33,
+          "end": 35,
+          "quote": "Choose the provider that issued your API key. A TypeSafe key goes with `provider: \"typesafe\"` and `TYPESAFE_API_KEY`; an OpenRouter key goes with `provider: \"openrouter\"` and `OPENROUTER_API_KEY`. These keys are not interchangeable, even though both providers offer Jev. Put the key in the dotenv file named by `envFile` in `~/.config/jev-browser-use/config.json`.\n\nYou need **Node.js 22+**, **Codex with Computer Use connected to Chrome or its in-app browser**, and **Jev access through TypeSafe or OpenRouter Decisions**. Installing this Skill does not install the browser connection."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "kind": "documented",
+      "text": "Installing the skill does not provide browser access. Claude Code execution is not yet supported, and Jev receives no screenshots.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 77,
+          "end": 77,
+          "quote": "**Claude Code browser support is coming soon.** The Skill can be installed now; browser execution currently requires the Codex Computer Use runtime."
+        },
+        {
+          "source": "source-1",
+          "start": 121,
+          "end": 121,
+          "quote": "Jev receives accessibility text, not screenshots. Codex handles typing, visual interpretation, and unsupported controls. Use it for dashboards, settings, reports, and browser checks—not just writing tasks."
+        },
+        {
+          "source": "source-1",
+          "start": 35,
+          "end": 35,
+          "quote": "You need **Node.js 22+**, **Codex with Computer Use connected to Chrome or its in-app browser**, and **Jev access through TypeSafe or OpenRouter Decisions**. Installing this Skill does not install the browser connection."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "Jev Browser Use: delegate browser controls from Codex",
+      "h1": "Jev Browser Use: delegate browser controls from Codex",
+      "description": "Jev Browser Use delegates clicks, navigation and scrolling to Jev through Codex’s existing browser connection; Codex handles text, visuals and final checks.",
+      "summary": "Jev Browser Use delegates navigation, clicks, toggles and scrolling while Codex handles text entry and final verification. Jev selects actions from observed controls using accessibility text; the existing Computer Use connection executes them. Requires Node.js 22+, a connected Codex browser and matching TypeSafe or OpenRouter credentials.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose",
+          "text": "Jev Browser Use delegates navigation, clicks, toggles and scrolling while Codex handles text entry and final verification.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’s role",
+          "text": "Jev selects actions from observed controls using accessibility text; the existing Computer Use connection executes them.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "How to use it",
+          "text": "Requires Node.js 22+, a connected Codex browser and matching TypeSafe or OpenRouter credentials.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limits to consider",
+          "text": "Installing the skill does not provide browser access. Claude Code execution is not yet supported, and Jev receives no screenshots.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "Jev Browser Use：让 Codex 委托浏览器操作",
+      "h1": "Jev Browser Use：让 Codex 委托浏览器操作",
+      "description": "Jev Browser Use 通过 Codex 现有浏览器连接，将点击、导航与滚动交给 Jev；Codex 保留文字输入、视觉判断和最终验证职责，安装技能本身不会提供浏览器连接。",
+      "summary": "Jev Browser Use 接管导航、点击、开关和滚动，文字输入与最终验证由 Codex 负责。 Jev 根据无障碍文本从已观察控件中选择动作，由现有 Computer Use 连接执行。 需要 Node.js 22+、已连接浏览器的 Codex，以及匹配的 TypeSafe 或 OpenRouter 凭据。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "Jev Browser Use 接管导航、点击、开关和滚动，文字输入与最终验证由 Codex 负责。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "Jev 根据无障碍文本从已观察控件中选择动作，由现有 Computer Use 连接执行。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "需要 Node.js 22+、已连接浏览器的 Codex，以及匹配的 TypeSafe 或 OpenRouter 凭据。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用边界",
+          "text": "安装技能不会提供浏览器连接。暂不支持 Claude Code 执行，Jev 也不接收截图。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "Jev Browser Use：讓 Codex 委派瀏覽器操作",
+      "h1": "Jev Browser Use：讓 Codex 委派瀏覽器操作",
+      "description": "Jev Browser Use 透過 Codex 既有瀏覽器連線，將點擊、導覽與捲動交給 Jev；Codex 保留文字輸入、視覺判斷與最終驗證，安裝技能本身不會提供瀏覽器連線。",
+      "summary": "Jev Browser Use 接手導覽、點擊、切換與捲動，文字輸入及最終驗證由 Codex 負責。 Jev 根據無障礙文字從已觀察的控制項選擇動作，由現有 Computer Use 連線執行。 需要 Node.js 22+、已連接瀏覽器的 Codex，以及相符的 TypeSafe 或 OpenRouter 憑證。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "Jev Browser Use 接手導覽、點擊、切換與捲動，文字輸入及最終驗證由 Codex 負責。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "Jev 根據無障礙文字從已觀察的控制項選擇動作，由現有 Computer Use 連線執行。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "需要 Node.js 22+、已連接瀏覽器的 Codex，以及相符的 TypeSafe 或 OpenRouter 憑證。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用限制",
+          "text": "安裝技能不會提供瀏覽器連線。暫不支援 Claude Code 執行，Jev 也不接收螢幕截圖。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "Jev Browser Use：Codex のブラウザー操作を委任",
+      "h1": "Jev Browser Use：Codex のブラウザー操作を委任",
+      "description": "Jev Browser Use は Codex の既存接続でクリック、移動、スクロールを Jev に委任し、入力・画像判断・最終確認は Codex に残します。",
+      "summary": "Jev Browser Use は移動、クリック、切り替え、スクロールを担当し、入力と最終確認は Codex が行います。 Jev がアクセシビリティテキストから操作を選び、既存の Computer Use 接続が実行します。 Node.js 22 以降、ブラウザー接続済みの Codex、対応する TypeSafe または OpenRouter の認証情報が必要です。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "何ができるか",
+          "text": "Jev Browser Use は移動、クリック、切り替え、スクロールを担当し、入力と最終確認は Codex が行います。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "Jev がアクセシビリティテキストから操作を選び、既存の Computer Use 接続が実行します。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "Node.js 22 以降、ブラウザー接続済みの Codex、対応する TypeSafe または OpenRouter の認証情報が必要です。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "制約と注意点",
+          "text": "スキルの導入だけではブラウザー接続は得られません。Claude Code での実行は未対応で、Jev にスクリーンショットは送られません。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "Jev Browser Use: Codex 브라우저 조작 위임",
+      "h1": "Jev Browser Use: Codex 브라우저 조작 위임",
+      "description": "Jev Browser Use는 Codex의 기존 브라우저 연결로 클릭·탐색·스크롤을 Jev에 맡기고 입력·시각 판단·최종 확인은 Codex가 수행합니다.",
+      "summary": "Jev Browser Use는 탐색, 클릭, 토글, 스크롤을 맡고 텍스트 입력과 최종 검증은 Codex가 수행합니다. Jev가 접근성 텍스트로 관찰된 컨트롤에서 동작을 선택하고 기존 Computer Use 연결이 실행합니다. Node.js 22+, 브라우저가 연결된 Codex, 해당 제공자의 TypeSafe 또는 OpenRouter 자격 증명이 필요합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "Jev Browser Use는 탐색, 클릭, 토글, 스크롤을 맡고 텍스트 입력과 최종 검증은 Codex가 수행합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Jev가 접근성 텍스트로 관찰된 컨트롤에서 동작을 선택하고 기존 Computer Use 연결이 실행합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "Node.js 22+, 브라우저가 연결된 Codex, 해당 제공자의 TypeSafe 또는 OpenRouter 자격 증명이 필요합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "제약 사항",
+          "text": "스킬 설치만으로 브라우저 연결이 생기지는 않습니다. Claude Code 실행은 아직 미지원이며 Jev는 스크린샷을 받지 않습니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "Jev Browser Use: delegar controles del navegador desde Codex",
+      "h1": "Jev Browser Use: delegar controles del navegador desde Codex",
+      "description": "Jev Browser Use delega clics, navegación y desplazamiento a Jev mediante la conexión Codex existente; Codex escribe, interpreta y verifica.",
+      "summary": "Jev Browser Use se ocupa de navegación, clics, interruptores y desplazamiento; Codex introduce texto y verifica el resultado. Jev elige acciones usando texto de accesibilidad; la conexión Computer Use existente las ejecuta. Requiere Node.js 22+, Codex conectado al navegador y credenciales correspondientes de TypeSafe u OpenRouter.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "Jev Browser Use se ocupa de navegación, clics, interruptores y desplazamiento; Codex introduce texto y verifica el resultado.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "El papel de Jev",
+          "text": "Jev elige acciones usando texto de accesibilidad; la conexión Computer Use existente las ejecuta.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo usarlo",
+          "text": "Requiere Node.js 22+, Codex conectado al navegador y credenciales correspondientes de TypeSafe u OpenRouter.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Límites a considerar",
+          "text": "Instalar la habilidad no añade acceso al navegador. Claude Code aún no ejecuta estos flujos y Jev no recibe capturas.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "Jev Browser Use : déléguer les contrôles depuis Codex",
+      "h1": "Jev Browser Use : déléguer les contrôles depuis Codex",
+      "description": "Jev Browser Use délègue clics, navigation et défilement via le navigateur connecté à Codex ; Codex garde saisie, jugement visuel et vérification.",
+      "summary": "Jev Browser Use gère navigation, clics, bascules et défilement ; Codex saisit le texte et vérifie le résultat. Jev choisit les actions grâce au texte d’accessibilité ; la connexion Computer Use existante les exécute. Node.js 22+, Codex connecté au navigateur et des identifiants TypeSafe ou OpenRouter correspondants sont nécessaires.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "Jev Browser Use gère navigation, clics, bascules et défilement ; Codex saisit le texte et vérifie le résultat.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Le rôle de Jev",
+          "text": "Jev choisit les actions grâce au texte d’accessibilité ; la connexion Computer Use existante les exécute.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Utilisation",
+          "text": "Node.js 22+, Codex connecté au navigateur et des identifiants TypeSafe ou OpenRouter correspondants sont nécessaires.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limites à connaître",
+          "text": "Installer la compétence ne fournit pas de connexion navigateur. L’exécution Claude Code reste indisponible et Jev ne reçoit pas de captures.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "Jev Browser Use: Browserbedienung aus Codex delegieren",
+      "h1": "Jev Browser Use: Browserbedienung aus Codex delegieren",
+      "description": "Jev Browser Use delegiert Klicks, Navigation und Scrollen über Codex’ Browserverbindung an Jev; Codex übernimmt Text, Bildbeurteilung und Prüfung.",
+      "summary": "Jev Browser Use übernimmt Navigation, Klicks, Schalter und Scrollen; Codex erledigt Texteingaben und Abschlussprüfung. Jev wählt Aktionen anhand von Barrierefreiheitstext; die bestehende Computer-Use-Verbindung führt sie aus. Benötigt werden Node.js 22+, Codex mit Browserverbindung und passende TypeSafe- oder OpenRouter-Zugangsdaten.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "Jev Browser Use übernimmt Navigation, Klicks, Schalter und Scrollen; Codex erledigt Texteingaben und Abschlussprüfung.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Die Rolle von Jev",
+          "text": "Jev wählt Aktionen anhand von Barrierefreiheitstext; die bestehende Computer-Use-Verbindung führt sie aus.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Nutzung",
+          "text": "Benötigt werden Node.js 22+, Codex mit Browserverbindung und passende TypeSafe- oder OpenRouter-Zugangsdaten.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Grenzen",
+          "text": "Die Skill-Installation stellt keine Browserverbindung her. Claude-Code-Ausführung wird noch nicht unterstützt; Jev erhält keine Screenshots.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "Jev Browser Use: delegar controles do navegador no Codex",
+      "h1": "Jev Browser Use: delegar controles do navegador no Codex",
+      "description": "Jev Browser Use delega cliques, navegação e rolagem pela conexão do Codex; texto, interpretação visual e verificação final continuam no Codex.",
+      "summary": "Jev Browser Use cuida de navegação, cliques, alternâncias e rolagem; Codex digita o texto e verifica o resultado. Jev escolhe ações com base no texto de acessibilidade; a conexão Computer Use existente as executa. Exige Node.js 22+, Codex conectado ao navegador e credenciais correspondentes de TypeSafe ou OpenRouter.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "Jev Browser Use cuida de navegação, cliques, alternâncias e rolagem; Codex digita o texto e verifica o resultado.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "O papel do Jev",
+          "text": "Jev escolhe ações com base no texto de acessibilidade; a conexão Computer Use existente as executa.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Exige Node.js 22+, Codex conectado ao navegador e credenciais correspondentes de TypeSafe ou OpenRouter.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limitações",
+          "text": "Instalar a habilidade não fornece conexão ao navegador. Claude Code ainda não executa esses fluxos e Jev não recebe capturas.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "Jev Browser Use: делегирование браузерных действий из Codex",
+      "h1": "Jev Browser Use: делегирование браузерных действий из Codex",
+      "description": "Jev Browser Use передаёт Jev клики и навигацию через браузер Codex; ввод текста, визуальная оценка и итоговая проверка остаются Codex.",
+      "summary": "Jev Browser Use выполняет навигацию, клики, переключения и прокрутку; Codex вводит текст и проверяет результат. Jev выбирает действия по тексту доступности; существующее подключение Computer Use выполняет их. Нужны Node.js 22+, Codex с подключённым браузером и соответствующие учётные данные TypeSafe либо OpenRouter.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Jev Browser Use выполняет навигацию, клики, переключения и прокрутку; Codex вводит текст и проверяет результат.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Jev выбирает действия по тексту доступности; существующее подключение Computer Use выполняет их.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Нужны Node.js 22+, Codex с подключённым браузером и соответствующие учётные данные TypeSafe либо OpenRouter.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ограничения",
+          "text": "Установка навыка не создаёт подключение браузера. Запуск через Claude Code пока не поддерживается; скриншоты Jev не получает.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "Jev Browser Use: Codex से ब्राउज़र नियंत्रण सौंपें",
+      "h1": "Jev Browser Use: Codex से ब्राउज़र नियंत्रण सौंपें",
+      "description": "Jev Browser Use Codex के मौजूदा ब्राउज़र से क्लिक, नेविगेशन और स्क्रॉल Jev को देता है; पाठ, दृश्य विश्लेषण और अंतिम जाँच Codex करता है।",
+      "summary": "Jev Browser Use नेविगेशन, क्लिक, टॉगल और स्क्रॉल सँभालता है; Codex पाठ भरता और अंतिम नतीजा जाँचता है। Jev एक्सेसिबिलिटी पाठ से देखे गए कंट्रोल की कार्रवाई चुनता है; मौजूदा Computer Use कनेक्शन उसे चलाता है। Node.js 22+, ब्राउज़र से जुड़ा Codex और संबंधित TypeSafe या OpenRouter क्रेडेंशियल चाहिए।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "किस काम आता है",
+          "text": "Jev Browser Use नेविगेशन, क्लिक, टॉगल और स्क्रॉल सँभालता है; Codex पाठ भरता और अंतिम नतीजा जाँचता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "Jev एक्सेसिबिलिटी पाठ से देखे गए कंट्रोल की कार्रवाई चुनता है; मौजूदा Computer Use कनेक्शन उसे चलाता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल कैसे करें",
+          "text": "Node.js 22+, ब्राउज़र से जुड़ा Codex और संबंधित TypeSafe या OpenRouter क्रेडेंशियल चाहिए।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "सीमाएँ",
+          "text": "स्किल लगाने से ब्राउज़र कनेक्शन नहीं मिलता। Claude Code से संचालन अभी समर्थित नहीं है और Jev स्क्रीनशॉट नहीं लेता।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "Jev Browser Use: delegasikan kontrol browser dari Codex",
+      "h1": "Jev Browser Use: delegasikan kontrol browser dari Codex",
+      "description": "Jev Browser Use mendelegasikan klik, navigasi, dan gulir melalui browser Codex; teks, penilaian visual, dan pemeriksaan akhir tetap ditangani Codex.",
+      "summary": "Jev Browser Use menangani navigasi, klik, tombol alih, dan gulir; Codex memasukkan teks dan memverifikasi hasil. Jev memilih tindakan dari teks aksesibilitas; koneksi Computer Use yang sudah ada menjalankannya. Memerlukan Node.js 22+, Codex yang terhubung ke browser, serta kredensial TypeSafe atau OpenRouter yang sesuai.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "Jev Browser Use menangani navigasi, klik, tombol alih, dan gulir; Codex memasukkan teks dan memverifikasi hasil.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Jev memilih tindakan dari teks aksesibilitas; koneksi Computer Use yang sudah ada menjalankannya.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Memerlukan Node.js 22+, Codex yang terhubung ke browser, serta kredensial TypeSafe atau OpenRouter yang sesuai.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Batasan",
+          "text": "Memasang keterampilan tidak menyediakan koneksi browser. Eksekusi Claude Code belum didukung, dan Jev tidak menerima tangkapan layar.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "Jev Browser Use: giao thao tác trình duyệt từ Codex",
+      "h1": "Jev Browser Use: giao thao tác trình duyệt từ Codex",
+      "description": "Jev Browser Use giao nhấp, điều hướng và cuộn qua kết nối trình duyệt Codex cho Jev; Codex giữ nhập chữ, xem hình và kiểm tra cuối.",
+      "summary": "Jev Browser Use xử lý điều hướng, nhấp, bật tắt và cuộn; Codex nhập văn bản và kiểm tra kết quả cuối. Jev chọn hành động từ văn bản trợ năng; kết nối Computer Use hiện có thực thi chúng. Cần Node.js 22+, Codex đã kết nối trình duyệt và thông tin xác thực đúng của TypeSafe hoặc OpenRouter.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích",
+          "text": "Jev Browser Use xử lý điều hướng, nhấp, bật tắt và cuộn; Codex nhập văn bản và kiểm tra kết quả cuối.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Jev chọn hành động từ văn bản trợ năng; kết nối Computer Use hiện có thực thi chúng.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Cần Node.js 22+, Codex đã kết nối trình duyệt và thông tin xác thực đúng của TypeSafe hoặc OpenRouter.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Giới hạn",
+          "text": "Cài kỹ năng không tạo kết nối trình duyệt. Chưa hỗ trợ chạy qua Claude Code và Jev không nhận ảnh chụp màn hình.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "Jev Browser Use: Codex’ten tarayıcı kontrollerini devretme",
+      "h1": "Jev Browser Use: Codex’ten tarayıcı kontrollerini devretme",
+      "description": "Jev Browser Use, Codex’in mevcut tarayıcısıyla tıklama, gezinme ve kaydırmayı Jev’e devreder; metin, görsel yorum ve son kontrol Codex’te kalır.",
+      "summary": "Jev Browser Use gezinme, tıklama, açma kapama ve kaydırmayı üstlenir; metin girişini ve son doğrulamayı Codex yapar. Jev erişilebilirlik metninden eylemi seçer; mevcut Computer Use bağlantısı uygular. Node.js 22+, tarayıcıya bağlı Codex ve eşleşen TypeSafe veya OpenRouter kimlik bilgileri gerekir.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "Jev Browser Use gezinme, tıklama, açma kapama ve kaydırmayı üstlenir; metin girişini ve son doğrulamayı Codex yapar.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Jev erişilebilirlik metninden eylemi seçer; mevcut Computer Use bağlantısı uygular.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Node.js 22+, tarayıcıya bağlı Codex ve eşleşen TypeSafe veya OpenRouter kimlik bilgileri gerekir.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Sınırlamalar",
+          "text": "Beceriyi kurmak tarayıcı bağlantısı sağlamaz. Claude Code üzerinden çalıştırma henüz desteklenmez; Jev ekran görüntüsü almaz.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "Jev Browser Use: delegare i controlli del browser da Codex",
+      "h1": "Jev Browser Use: delegare i controlli del browser da Codex",
+      "description": "Jev Browser Use delega clic, navigazione e scorrimento tramite il browser Codex; testo, valutazione visiva e verifica finale restano a Codex.",
+      "summary": "Jev Browser Use gestisce navigazione, clic, interruttori e scorrimento; Codex inserisce testo e verifica il risultato. Jev sceglie azioni dal testo di accessibilità; la connessione Computer Use esistente le esegue. Servono Node.js 22+, Codex collegato al browser e credenziali corrispondenti TypeSafe o OpenRouter.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "Jev Browser Use gestisce navigazione, clic, interruttori e scorrimento; Codex inserisce testo e verifica il risultato.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Il ruolo di Jev",
+          "text": "Jev sceglie azioni dal testo di accessibilità; la connessione Computer Use esistente le esegue.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come usarlo",
+          "text": "Servono Node.js 22+, Codex collegato al browser e credenziali corrispondenti TypeSafe o OpenRouter.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limiti",
+          "text": "Installare l’abilità non fornisce la connessione browser. L’esecuzione con Claude Code non è ancora supportata e Jev non riceve screenshot.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  },
+  "displayName": "Jev Browser Use"
+}

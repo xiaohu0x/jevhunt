@@ -1,0 +1,508 @@
+{
+  "version": "project-content-100-2026-09-30",
+  "selectedAt": "2026-09-30",
+  "sourceCatalogHash": "d52a9dfc-a137-413c-a2b0-87e9450444e3",
+  "scope": "First 100 repositories by GitHub stars; user requested this batch before further expansion.",
+  "projects": [
+    {
+      "repo": "TauricResearch/TradingAgents",
+      "repositoryId": 909213664,
+      "rank": 1
+    },
+    {
+      "repo": "agentscope-ai/agentscope",
+      "repositoryId": 742244656,
+      "rank": 2
+    },
+    {
+      "repo": "assafelovic/gpt-researcher",
+      "repositoryId": 639835356,
+      "rank": 3
+    },
+    {
+      "repo": "NandhaKishorM/laya",
+      "repositoryId": 1375382253,
+      "rank": 4
+    },
+    {
+      "repo": "browser-use/jev-ultrafast",
+      "repositoryId": 1373655162,
+      "rank": 5
+    },
+    {
+      "repo": "vercel-labs/json-render",
+      "repositoryId": 1134411737,
+      "rank": 6
+    },
+    {
+      "repo": "OpenByteInc/QuantDinger",
+      "repositoryId": 1124295269,
+      "rank": 7
+    },
+    {
+      "repo": "YaoApp/yao",
+      "repositoryId": 403559729,
+      "rank": 8
+    },
+    {
+      "repo": "jaredpalmer/kev",
+      "repositoryId": 1375069862,
+      "rank": 9
+    },
+    {
+      "repo": "tamaratran/fast-jev-compaction",
+      "repositoryId": 1374005005,
+      "rank": 10
+    },
+    {
+      "repo": "jev-chat/jev-chat-jarvis",
+      "repositoryId": 1379574728,
+      "rank": 11
+    },
+    {
+      "repo": "vercel/eve",
+      "repositoryId": 1271113810,
+      "rank": 12
+    },
+    {
+      "repo": "TheoLeeCJ/SemIf-OpenJev",
+      "repositoryId": 1372482979,
+      "rank": 13
+    },
+    {
+      "repo": "vercel-labs/fx",
+      "repositoryId": 1330702515,
+      "rank": 14
+    },
+    {
+      "repo": "zilliztech/memsearch",
+      "repositoryId": 1153190876,
+      "rank": 15
+    },
+    {
+      "repo": "HarleyCoops/Math-To-Manim",
+      "repositoryId": 919420364,
+      "rank": 16
+    },
+    {
+      "repo": "jarrodwatts/jev-trader",
+      "repositoryId": 1373659194,
+      "rank": 17
+    },
+    {
+      "repo": "TianyuCodings/NanoJev",
+      "repositoryId": 1374702542,
+      "rank": 18
+    },
+    {
+      "repo": "typesafe-ai/skills",
+      "repositoryId": 1345508845,
+      "rank": 19
+    },
+    {
+      "repo": "szczyglis-dev/py-gpt",
+      "repositoryId": 625710399,
+      "rank": 20
+    },
+    {
+      "repo": "yibie/awesome-jev",
+      "repositoryId": 1374561793,
+      "rank": 21
+    },
+    {
+      "repo": "agentconnect-md/agentconnect",
+      "repositoryId": 1310543401,
+      "rank": 22
+    },
+    {
+      "repo": "dzhng/jevgrep",
+      "repositoryId": 1388482474,
+      "rank": 23
+    },
+    {
+      "repo": "Arize-ai/openinference",
+      "repositoryId": 735999703,
+      "rank": 24
+    },
+    {
+      "repo": "feder-cr/jev",
+      "repositoryId": 842982339,
+      "rank": 25
+    },
+    {
+      "repo": "awlevin/typesafe-computer-use",
+      "repositoryId": 1373440611,
+      "rank": 26
+    },
+    {
+      "repo": "Raudaschl/rag-fusion",
+      "repositoryId": 696503950,
+      "rank": 27
+    },
+    {
+      "repo": "reticlehq/reticle",
+      "repositoryId": 1265947881,
+      "rank": 28
+    },
+    {
+      "repo": "kerpopule/hermes-jev-skills",
+      "repositoryId": 1376380583,
+      "rank": 29
+    },
+    {
+      "repo": "heyjunpenn/awesome-jev",
+      "repositoryId": 1376757283,
+      "rank": 30
+    },
+    {
+      "repo": "Mapika/decider",
+      "repositoryId": 1372665897,
+      "rank": 31
+    },
+    {
+      "repo": "ollaya-dev/ollaya",
+      "repositoryId": 1384260430,
+      "rank": 32
+    },
+    {
+      "repo": "nokia-applied-research/AnyJev",
+      "repositoryId": 1379166549,
+      "rank": 33
+    },
+    {
+      "repo": "Anil-matcha/awesome-jev-by-typesafe",
+      "repositoryId": 642065600,
+      "rank": 34
+    },
+    {
+      "repo": "TypeLLM/TypeLLM",
+      "repositoryId": 1374419657,
+      "rank": 35
+    },
+    {
+      "repo": "githubnext/localjev",
+      "repositoryId": 1376174149,
+      "rank": 36
+    },
+    {
+      "repo": "kitfunso/hippo-memory",
+      "repositoryId": 1182306628,
+      "rank": 37
+    },
+    {
+      "repo": "Rizzo-AI-Academy/rizzo-flow",
+      "repositoryId": 1378880709,
+      "rank": 38
+    },
+    {
+      "repo": "wfzyx/von",
+      "repositoryId": 1375397100,
+      "rank": 39
+    },
+    {
+      "repo": "qiz029/dscode",
+      "repositoryId": 1365776373,
+      "rank": 40
+    },
+    {
+      "repo": "v-modal/awesome-jev-tools",
+      "repositoryId": 1377399471,
+      "rank": 41
+    },
+    {
+      "repo": "anishfn/shapeshift",
+      "repositoryId": 1381152958,
+      "rank": 42
+    },
+    {
+      "repo": "wy-coliney/jev-browser-use",
+      "repositoryId": 1375500090,
+      "rank": 43
+    },
+    {
+      "repo": "samuelfaj/distill",
+      "repositoryId": 1174519898,
+      "rank": 44
+    },
+    {
+      "repo": "milind-soni/tiptour-macos",
+      "repositoryId": 1204984760,
+      "rank": 45
+    },
+    {
+      "repo": "jev-chat/jev-chat-windows",
+      "repositoryId": 1379929433,
+      "rank": 46
+    },
+    {
+      "repo": "devagrawal09/jev-review",
+      "repositoryId": 1373665161,
+      "rank": 47
+    },
+    {
+      "repo": "nicobailon/surf-cli",
+      "repositoryId": 1124070604,
+      "rank": 48
+    },
+    {
+      "repo": "LinklyAI/best-skills",
+      "repositoryId": 1330475010,
+      "rank": 49
+    },
+    {
+      "repo": "thruwire/foreman",
+      "repositoryId": 1374349137,
+      "rank": 50
+    },
+    {
+      "repo": "logicrw/awesome-jev-projects",
+      "repositoryId": 1375482713,
+      "rank": 51
+    },
+    {
+      "repo": "receptron/laya",
+      "repositoryId": 1377318357,
+      "rank": 52
+    },
+    {
+      "repo": "kydlikebtc/awesome-jev",
+      "repositoryId": 1380762959,
+      "rank": 53
+    },
+    {
+      "repo": "rmalde/minecraft-agent",
+      "repositoryId": 1377938409,
+      "rank": 54
+    },
+    {
+      "repo": "featherless-ai/simple-jev",
+      "repositoryId": 1375675343,
+      "rank": 55
+    },
+    {
+      "repo": "wuyoscar/jev-skill",
+      "repositoryId": 1377820977,
+      "rank": 56
+    },
+    {
+      "repo": "AbdelStark/awesome-typesafe-jev",
+      "repositoryId": 1374058281,
+      "rank": 57
+    },
+    {
+      "repo": "AnotiaWang/awesome-jev",
+      "repositoryId": 1374404623,
+      "rank": 58
+    },
+    {
+      "repo": "razorback16/openjev",
+      "repositoryId": 1375639479,
+      "rank": 59
+    },
+    {
+      "repo": "pulseaiclub/phi",
+      "repositoryId": 1321152436,
+      "rank": 60
+    },
+    {
+      "repo": "superagents-lab/jev-search",
+      "repositoryId": 1374858514,
+      "rank": 61
+    },
+    {
+      "repo": "kyotofin/tax-doc-classifier",
+      "repositoryId": 1376004275,
+      "rank": 62
+    },
+    {
+      "repo": "jerryjliu/docjev",
+      "repositoryId": 1377427328,
+      "rank": 63
+    },
+    {
+      "repo": "gargpratyush/jev-router",
+      "repositoryId": 1373617155,
+      "rank": 64
+    },
+    {
+      "repo": "OmniJev/awesome-jev-gallery",
+      "repositoryId": 1375039364,
+      "rank": 65
+    },
+    {
+      "repo": "jkudish/jev-mcp",
+      "repositoryId": 1373837418,
+      "rank": 66
+    },
+    {
+      "repo": "jev-chat/jev-chat-jarvis-mac",
+      "repositoryId": 1379617146,
+      "rank": 67
+    },
+    {
+      "repo": "cobanov/awesome-jev",
+      "repositoryId": 1375694187,
+      "rank": 68
+    },
+    {
+      "repo": "notque/vexjoy-agent",
+      "repositoryId": 1184844109,
+      "rank": 69
+    },
+    {
+      "repo": "mrmps/classifier-dev",
+      "repositoryId": 1332654895,
+      "rank": 70
+    },
+    {
+      "repo": "droidrun/mobile-jev",
+      "repositoryId": 1374280231,
+      "rank": 71
+    },
+    {
+      "repo": "robbyczgw-cla/hermes-web-search-plus",
+      "repositoryId": 1184318458,
+      "rank": 72
+    },
+    {
+      "repo": "fhshaik/typesafe-mario",
+      "repositoryId": 1372537050,
+      "rank": 73
+    },
+    {
+      "repo": "dabit3/jev-experiments",
+      "repositoryId": 1375172727,
+      "rank": 74
+    },
+    {
+      "repo": "TianyuCodings/JevHarness",
+      "repositoryId": 1379401527,
+      "rank": 75
+    },
+    {
+      "repo": "realZachi/pg-jev",
+      "repositoryId": 1375026016,
+      "rank": 76
+    },
+    {
+      "repo": "Yinsongxu/LLM2Jev",
+      "repositoryId": 1377047791,
+      "rank": 77
+    },
+    {
+      "repo": "moritzkremb/jev-voice-browser",
+      "repositoryId": 1375142045,
+      "rank": 78
+    },
+    {
+      "repo": "mohsen1/llm-debugger-vscode-extension",
+      "repositoryId": 928126422,
+      "rank": 79
+    },
+    {
+      "repo": "Liuziyu77/Valen",
+      "repositoryId": 1382625851,
+      "rank": 80
+    },
+    {
+      "repo": "typesafe-ai/system-one-adapter-python",
+      "repositoryId": 1328238153,
+      "rank": 81
+    },
+    {
+      "repo": "EthanAlgoX/AIStock",
+      "repositoryId": 1120016879,
+      "rank": 82
+    },
+    {
+      "repo": "itsmostafa/system-one-connector",
+      "repositoryId": 1373977947,
+      "rank": 83
+    },
+    {
+      "repo": "kitze/unclutter",
+      "repositoryId": 1374363973,
+      "rank": 84
+    },
+    {
+      "repo": "ekzhang/openjev-sglang",
+      "repositoryId": 1374869789,
+      "rank": 85
+    },
+    {
+      "repo": "walidboulanouar/awesome-jev-use-cases",
+      "repositoryId": 1377468874,
+      "rank": 86
+    },
+    {
+      "repo": "malevrigns/agent-jev",
+      "repositoryId": 1380116460,
+      "rank": 87
+    },
+    {
+      "repo": "lakeday-org/perch",
+      "repositoryId": 1372535054,
+      "rank": 88
+    },
+    {
+      "repo": "SREGym/SREGym",
+      "repositoryId": 986527564,
+      "rank": 89
+    },
+    {
+      "repo": "Oqura-ai/deepdoc",
+      "repositoryId": 1038357256,
+      "rank": 90
+    },
+    {
+      "repo": "sutro-sh/jev-align",
+      "repositoryId": 1376627816,
+      "rank": 91
+    },
+    {
+      "repo": "hr98w/jev-visual",
+      "repositoryId": 1374829176,
+      "rank": 92
+    },
+    {
+      "repo": "Heman10x-NGU/openJev-verdict-2.0",
+      "repositoryId": 1377115777,
+      "rank": 93
+    },
+    {
+      "repo": "jkudish/jev-browser",
+      "repositoryId": 1374967555,
+      "rank": 94
+    },
+    {
+      "repo": "Devin-AXIS/jev-dsh-decision",
+      "repositoryId": 1377916761,
+      "rank": 95
+    },
+    {
+      "repo": "0xNatoshi/jev-codex-router",
+      "repositoryId": 1373914715,
+      "rank": 96
+    },
+    {
+      "repo": "chainreactors/fingers",
+      "repositoryId": 766231554,
+      "rank": 97
+    },
+    {
+      "repo": "BillionsBobby/JevRouter",
+      "repositoryId": 1375641268,
+      "rank": 98
+    },
+    {
+      "repo": "vinilana/jev-gateway",
+      "repositoryId": 1376284519,
+      "rank": 99
+    },
+    {
+      "repo": "logan-markewich/jeff",
+      "repositoryId": 1376631227,
+      "rank": 100
+    }
+  ]
+}

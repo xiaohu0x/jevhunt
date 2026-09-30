@@ -1,7 +1,7 @@
 export const CATEGORY_IDS = ["official", "sdks", "integrations", "agents", "browser", "apps", "games", "demos", "research", "lists"];
 export const CATEGORY_NAMES = ["Official", "SDKs & Clients", "Integrations", "Agent Tooling", "Browser & Computer Use", "Applications", "Games & Simulations", "Demos & Playgrounds", "Benchmarks & Research", "Directories & Lists"];
-export const PREVIEW_FIELDS = ["name", "repo", "desc", "cat", "language", "stars", "created", "added", "pushed", "archived", "fork", "relationship", "evidenceLevel", "evidence", "freshness"];
-export const publicPreview = project => Object.fromEntries(PREVIEW_FIELDS.map(key => [key, project[key] ?? null]));
+export const PREVIEW_FIELDS = ["id", "name", "repo", "desc", "cat", "language", "stars", "created", "added", "pushed", "archived", "fork", "relationship", "evidenceLevel", "evidence", "freshness"];
+export const publicPreview = project => ({ ...Object.fromEntries(PREVIEW_FIELDS.map(key => [key, project[key] ?? null])), desc: project.content?.summary ?? project.desc ?? null });
 export const validRepo = value => typeof value === "string" && /^[a-z0-9-]+\/[a-z0-9_.-]+$/i.test(value) && value.length <= 160;
 export const cleanText = (value, max = 600) => String(value ?? "").replace(/\s+/g, " ").trim().slice(0, max);
 export function inferCategory(project) {

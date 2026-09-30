@@ -1,0 +1,802 @@
+{
+  "version": "source-content-v1",
+  "repo": "dabit3/jev-experiments",
+  "repositoryId": 1375172727,
+  "relationship": "jev-app",
+  "category": "demos",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "c469e5bfdc73eb3e1999bba2569e66b579a970fd",
+      "url": "https://github.com/dabit3/jev-experiments/blob/c469e5bfdc73eb3e1999bba2569e66b579a970fd/README.md",
+      "sha256": "b0c8968c68bdd95274df29344810fe0b23a1fb9308bdfe1f201a9e4cea8f13eb",
+      "accessedAt": "2026-09-30T07:33:51.252Z"
+    },
+    {
+      "id": "source-2",
+      "path": "inbox-blitz/README.md",
+      "commit": "c469e5bfdc73eb3e1999bba2569e66b579a970fd",
+      "url": "https://github.com/dabit3/jev-experiments/blob/c469e5bfdc73eb3e1999bba2569e66b579a970fd/inbox-blitz/README.md",
+      "sha256": "5cd2347cf1a79d0407e1ac98cb73440cae1965bbe6d8938c94a347f24ec532ac",
+      "accessedAt": "2026-09-30T08:50:41.367851+00:00"
+    },
+    {
+      "id": "source-3",
+      "path": "turbo-rerank/README.md",
+      "commit": "c469e5bfdc73eb3e1999bba2569e66b579a970fd",
+      "url": "https://github.com/dabit3/jev-experiments/blob/c469e5bfdc73eb3e1999bba2569e66b579a970fd/turbo-rerank/README.md",
+      "sha256": "5406052cbdb7b35ee736f799f36c98f0733cf9149759458b6cee7de57c3a004d",
+      "accessedAt": "2026-09-30T08:50:43.993135+00:00"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "The repository collects separate latency-focused demos, including Sift email labeling and Turbo Rerank search ranking.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 5,
+          "end": 5,
+          "quote": "[TypeSafe](https://docs.typesafe.ai/) / Jev latency-focused demos built by Devin. Each app lives in its own top-level directory with its own README, TESTING.md and screenshots."
+        },
+        {
+          "source": "source-2",
+          "start": 3,
+          "end": 8,
+          "quote": "**Type what you mean, get a label.** Describe emails in plain English — *\"customers threatening to\ncancel\"*, *\"sarcastic or passive-aggressive tone\"* — and [TypeSafe Jev](https://docs.typesafe.ai)\njudges all 500 emails against that description in ~5.5 s (p50 ≈ 115 ms), labelling and filtering\nthe inbox live as answers stream in. Stack labels to AND them. Plus the fixed triage pass:\n**500 emails × 7 judgments = 3,500 judgments in 5.3 s**, sorted into a priority queue computed in code, with a\nkeyword-rule baseline on screen so you can see where regex fails."
+        },
+        {
+          "source": "source-3",
+          "start": 25,
+          "end": 45,
+          "quote": "## How Jev is used\n\n`server/jev.ts` → `shared/questions.ts` builds exactly one `systemOne` request per search:\n\n```ts\nstate = { query, candidates: { c01: \"<passage text>\", c02: \"...\", ... c50: \"...\" } }\n\nquestions = {\n  relevance_c01: score(\n    \"How well does the documentation passage `candidates.c01` answer the search query `query`? Judge only this passage on its own; ignore the other candidates.\",\n    [\"Irrelevant: ...\", \"Tangential: ...\", \"Partially answers: ...\", \"Directly answers: ...\"]),\n  ...one per candidate...\n  answer_exists_in_candidates: noul(\n    \"Does at least one of the passages in `candidates` directly answer the search query `query`?\",\n    { true: \"At least one candidate passage contains the specific information the query asks for.\",\n      false: \"No candidate passage answers the query; the closest ones are only on a related topic.\" }),\n}\n```\n\n- Each `score` answer is a probability distribution over the four levels; the code computes an expected relevance `Σ p·level ∈ [0,3]` and sorts by it (ties broken by BM25 order). Jev never generates text — all ordering, rank deltas and metrics are plain code.\n- The `noul` drives the **\"No good answer in the corpus\"** banner (shown when `P(true) < 0.5`), so the UI can stop pretending the top result is an answer."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "Sift asks Jev about email categories and urgency; Turbo Rerank uses per-passage Score questions and a Noul check for answer presence.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-2",
+          "start": 65,
+          "end": 82,
+          "quote": "## What Jev is asked in the triage pass\n\nOne `POST https://api.typesafe.ai/v1/systemone` per email, `model: \"jev-latest\"`, with\n`state = { email: { from, subject, body } }` and these seven questions (verbatim from\n[`server/jev.ts`](server/jev.ts)):\n\n| id | type | question |\n|---|---|---|\n| `category` | choice | Which single category best describes what this email is primarily about? — `billing`, `bug`, `feature_request`, `sales_lead`, `security`, `legal_privacy`, `spam_marketing`, `internal`, `other`, each with a one-line criterion |\n| `needs_reply` | noul | Does the sender expect a human at our company to write back? (mass mailings, automated notifications and newsletters do not) |\n| `urgency` | score | How quickly does this email need action, based on the real situation (ignore sarcastic framing and marketing pressure tactics)? — Can wait a week / This week / Today / Right now |\n| `sentiment` | score | The sender's actual emotional tone toward us, reading past politeness and sarcasm — Friendly / Neutral / Frustrated / Furious |\n| `is_phishing_or_scam` | noul | Is this a phishing attempt or scam (credential theft, fake invoice, gift cards, fake authority)? Pushy but legitimate marketing is `false`. |\n| `mentions_churn_or_cancel` | noul | Is the *sender themselves* cancelling or threatening to leave? (cancellation mentioned in marketing copy does not count) |\n| `asks_for_refund` | noul | Does the sender ask us to refund or credit back money they paid? |\n\nEverything else is plain code: priority weights, lane routing, the 0.7 confidence gate, the\nkeyword baseline, agreement stats, percentiles and cost."
+        },
+        {
+          "source": "source-3",
+          "start": 27,
+          "end": 45,
+          "quote": "`server/jev.ts` → `shared/questions.ts` builds exactly one `systemOne` request per search:\n\n```ts\nstate = { query, candidates: { c01: \"<passage text>\", c02: \"...\", ... c50: \"...\" } }\n\nquestions = {\n  relevance_c01: score(\n    \"How well does the documentation passage `candidates.c01` answer the search query `query`? Judge only this passage on its own; ignore the other candidates.\",\n    [\"Irrelevant: ...\", \"Tangential: ...\", \"Partially answers: ...\", \"Directly answers: ...\"]),\n  ...one per candidate...\n  answer_exists_in_candidates: noul(\n    \"Does at least one of the passages in `candidates` directly answer the search query `query`?\",\n    { true: \"At least one candidate passage contains the specific information the query asks for.\",\n      false: \"No candidate passage answers the query; the closest ones are only on a related topic.\" }),\n}\n```\n\n- Each `score` answer is a probability distribution over the four levels; the code computes an expected relevance `Σ p·level ∈ [0,3]` and sorts by it (ties broken by BM25 order). Jev never generates text — all ordering, rank deltas and metrics are plain code.\n- The `noul` drives the **\"No good answer in the corpus\"** banner (shown when `P(true) < 0.5`), so the UI can stop pretending the top result is an answer."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Each app has its own setup: install dependencies in its directory, configure TYPESAFE_API_KEY and run its development command.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-2",
+          "start": 149,
+          "end": 160,
+          "quote": "### Run it\n\n```sh\ncd inbox-blitz\nnpm ci\nexport TYPESAFE_API_KEY=...   # never shipped to the browser\nnpm run dev                   # server on :8787 + Vite on :5173, one command\n```\n\nOpen http://localhost:5173, press `/`, type an intent (e.g. *customers threatening to cancel*)\nand hit Enter. The fixed seven-question triage pass lives under the toolbar's **⋮ → Triage inbox**\nmenu; its lanes (Priority, Needs review, FYI, Spam) and the keyword-rules comparison appear once it has run."
+        },
+        {
+          "source": "source-3",
+          "start": 49,
+          "end": 59,
+          "quote": "## Run it\n\n```sh\ncd turbo-rerank\nnpm ci\nexport TYPESAFE_API_KEY=...   # server-side only, never shipped to the browser\nnpm run dev                   # Node proxy on :8787 + Vite on :5173 (proxies /api)\nnpm run bench                 # CLI benchmark, same 40 queries\n```\n\n`MOCK=1 npm run dev` / `npm run bench -- --mock` runs an offline token-overlap stub (clearly labelled **MOCK MODE** in the UI and CLI; its numbers are meaningless). Default is the live API."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "Sift’s emails and Turbo Rerank’s corpus are synthetic. Turbo Rerank’s offline mock is a token-overlap stub, not evidence of Jev quality.",
+      "kind": "source-limitation",
+      "evidence": [
+        {
+          "source": "source-2",
+          "start": 144,
+          "end": 147,
+          "quote": "- `src/data/emails.ts` + `src/data/traps.ts` — deterministic generator (seed `20260917`) for 500\n  synthetic emails: support bugs, billing, sales leads, vendor spam, newsletters, internal mail,\n  security alerts, angry escalations, GDPR requests, phishing, threads with quoted history, and the\n  20 traps. No real people, companies or addresses."
+        },
+        {
+          "source": "source-3",
+          "start": 59,
+          "end": 59,
+          "quote": "`MOCK=1 npm run dev` / `npm run bench -- --mock` runs an offline token-overlap stub (clearly labelled **MOCK MODE** in the UI and CLI; its numbers are meaningless). Default is the live API."
+        },
+        {
+          "source": "source-3",
+          "start": 103,
+          "end": 109,
+          "quote": "`shared/corpus/` builds 598 passages in code at startup (deterministic, seeded PRNG, no external data, no real PII) for the fictional company **Northwind**:\n\n- 66 engineering-handbook sections (code review, CI, deploys, incidents, on-call, secrets, access, databases, API design, observability, laptops) — hand-written\n- 41 HR policy passages (leave, remote work, expenses, performance, compensation, hiring, conduct, leaving) — hand-written\n- 491 generated passages for 12 fictional services (Ledger API, Auth Gateway, Notify Hub, …): endpoint reference, error codes, alert runbooks, feature flags, architecture, retention, scaling, changelogs — generated from structured specs with varied phrasing so many passages share vocabulary (rate limits, retries, 401s, lag…) and keyword search has plenty of plausible-looking distractors.\n\n`shared/bench-queries.ts` holds the 40 query → target-id pairs; the `P` badge marks paraphrases that share few or no keywords with the target passage."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "jev-experiments — Jev inbox and reranking demos",
+      "h1": "jev-experiments — Jev demos for inbox triage and search reranking",
+      "description": "jev-experiments: Sift asks Jev about email categories and urgency; Turbo Rerank uses per-passage Score questions and a Noul check for answer presence.",
+      "summary": "The repository collects separate latency-focused demos, including Sift email labeling and Turbo Rerank search ranking. Each app has its own setup: install dependencies in its directory, configure TYPESAFE_API_KEY and run its development command.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "What it does",
+          "text": "The repository collects separate latency-focused demos, including Sift email labeling and Turbo Rerank search ranking.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "Sift asks Jev about email categories and urgency; Turbo Rerank uses per-passage Score questions and a Noul check for answer presence.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Getting started",
+          "text": "Each app has its own setup: install dependencies in its directory, configure TYPESAFE_API_KEY and run its development command.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "Sift’s emails and Turbo Rerank’s corpus are synthetic. Turbo Rerank’s offline mock is a token-overlap stub, not evidence of Jev quality.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "jev-experiments — 邮件分流与搜索重排的 Jev 示例",
+      "h1": "jev-experiments — 邮件分流与搜索重排的 Jev 示例",
+      "description": "jev-experiments: Sift 询问 Jev 邮件类别和紧急程度；Turbo Rerank 对每段提出 Score 问题，并用 Noul 检查是否存在答案。",
+      "summary": "仓库收集独立的延迟导向示例，包括 Sift 邮件标签和 Turbo Rerank 搜索排序。 各应用有独立设置：进入相应目录安装依赖，配置 TYPESAFE_API_KEY 后运行开发命令。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "仓库收集独立的延迟导向示例，包括 Sift 邮件标签和 Turbo Rerank 搜索排序。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "Sift 询问 Jev 邮件类别和紧急程度；Turbo Rerank 对每段提出 Score 问题，并用 Noul 检查是否存在答案。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "各应用有独立设置：进入相应目录安装依赖，配置 TYPESAFE_API_KEY 后运行开发命令。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "Sift 邮件和 Turbo Rerank 语料是合成数据。后者的离线 mock 仅按 token 重合模拟，不是 Jev 质量证据。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "jev-experiments — 郵件分流與搜尋重排的 Jev 範例",
+      "h1": "jev-experiments — 郵件分流與搜尋重排的 Jev 範例",
+      "description": "jev-experiments: Sift 詢問 Jev 郵件類別與急迫性；Turbo Rerank 為每段提出 Score 問題，並用 Noul 檢查有無答案。",
+      "summary": "儲存庫收集獨立的延遲導向範例，包括 Sift 郵件標籤及 Turbo Rerank 搜尋排序。 各應用分別設定：進入相應目錄安裝相依套件，設定 TYPESAFE_API_KEY 後執行開發命令。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "儲存庫收集獨立的延遲導向範例，包括 Sift 郵件標籤及 Turbo Rerank 搜尋排序。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "Sift 詢問 Jev 郵件類別與急迫性；Turbo Rerank 為每段提出 Score 問題，並用 Noul 檢查有無答案。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "各應用分別設定：進入相應目錄安裝相依套件，設定 TYPESAFE_API_KEY 後執行開發命令。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "Sift 郵件及 Turbo Rerank 語料是合成資料。後者的離線 mock 只依 token 重合模擬，不是 Jev 品質證據。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "jev-experiments — メール分類と検索再順位付けの Jev デモ",
+      "h1": "jev-experiments — メール振り分けと検索再順位付けの Jev デモ",
+      "description": "jev-experiments: Sift は Jev にメール分類と緊急度を問い、Turbo Rerank は各文章の Score と回答有無の Noul を使います。",
+      "summary": "遅延に注目した独立デモを集め、Sift のメールラベル付けや Turbo Rerank の検索順位付けを収録します。 各アプリのディレクトリで依存関係を入れ、TYPESAFE_API_KEY を設定して開発用コマンドを実行します。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "できること",
+          "text": "遅延に注目した独立デモを集め、Sift のメールラベル付けや Turbo Rerank の検索順位付けを収録します。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "Sift は Jev にメール分類と緊急度を問い、Turbo Rerank は各文章の Score と回答有無の Noul を使います。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い始めるには",
+          "text": "各アプリのディレクトリで依存関係を入れ、TYPESAFE_API_KEY を設定して開発用コマンドを実行します。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "対象範囲と制約",
+          "text": "メールと検索コーパスは合成データです。Turbo Rerank のオフライン mock はトークン重複による代用品で、Jev の品質の証拠ではありません。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "jev-experiments — 메일 분류와 검색 재정렬 Jev 데모",
+      "h1": "jev-experiments — 메일 분류와 검색 재정렬 Jev 데모",
+      "description": "jev-experiments: Sift는 메일 범주와 긴급도를 Jev에 묻고 Turbo Rerank는 구절별 Score와 답 존재 여부 Noul을 사용합니다.",
+      "summary": "지연 시간에 초점을 둔 개별 데모 모음으로 Sift 메일 라벨링과 Turbo Rerank 검색 정렬을 포함합니다. 각 앱 디렉터리에서 의존성을 설치하고 TYPESAFE_API_KEY를 설정한 다음 개발 명령을 실행합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "지연 시간에 초점을 둔 개별 데모 모음으로 Sift 메일 라벨링과 Turbo Rerank 검색 정렬을 포함합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Sift는 메일 범주와 긴급도를 Jev에 묻고 Turbo Rerank는 구절별 Score와 답 존재 여부 Noul을 사용합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "각 앱 디렉터리에서 의존성을 설치하고 TYPESAFE_API_KEY를 설정한 다음 개발 명령을 실행합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 제약",
+          "text": "메일과 검색 말뭉치는 합성 데이터입니다. Turbo Rerank의 오프라인 mock은 토큰 중복 모형이며 Jev 품질의 근거가 아닙니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "jev-experiments — Demos Jev: correo y reordenación",
+      "h1": "jev-experiments — Demos Jev de triaje de correo y reordenación de búsquedas",
+      "description": "jev-experiments: Sift pregunta a Jev por categoría y urgencia; Turbo Rerank usa Score por pasaje y Noul para comprobar si hay respuesta.",
+      "summary": "El repositorio reúne demos independientes centradas en latencia, como Sift para etiquetar correo y Turbo Rerank para ordenar resultados. Instala dependencias en el directorio de cada aplicación, configura TYPESAFE_API_KEY y ejecuta su comando de desarrollo.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "El repositorio reúne demos independientes centradas en latencia, como Sift para etiquetar correo y Turbo Rerank para ordenar resultados.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Sift pregunta a Jev por categoría y urgencia; Turbo Rerank usa Score por pasaje y Noul para comprobar si hay respuesta.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo empezar",
+          "text": "Instala dependencias en el directorio de cada aplicación, configura TYPESAFE_API_KEY y ejecuta su comando de desarrollo.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "Los correos y el corpus son sintéticos. El mock offline de Turbo Rerank usa solapamiento de tokens y no demuestra calidad de Jev.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "jev-experiments — Démos Jev : tri et reclassement",
+      "h1": "jev-experiments — Démos Jev de tri du courrier et de reclassement",
+      "description": "jev-experiments: Sift demande à Jev catégorie et urgence ; Turbo Rerank utilise Score par passage et Noul pour vérifier la présence d’une réponse.",
+      "summary": "Le dépôt réunit des démos distinctes axées sur la latence, dont Sift pour le courrier et Turbo Rerank pour la recherche. Installez les dépendances dans chaque dossier, configurez TYPESAFE_API_KEY et lancez la commande de développement propre à l’application.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "Le dépôt réunit des démos distinctes axées sur la latence, dont Sift pour le courrier et Turbo Rerank pour la recherche.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Sift demande à Jev catégorie et urgence ; Turbo Rerank utilise Score par passage et Noul pour vérifier la présence d’une réponse.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Installez les dépendances dans chaque dossier, configurez TYPESAFE_API_KEY et lancez la commande de développement propre à l’application.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "Courriels et corpus sont synthétiques. Le mock hors ligne de Turbo Rerank mesure le chevauchement de tokens, pas la qualité de Jev.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "jev-experiments — Jev-Demos für E-Mails und Ranking",
+      "h1": "jev-experiments — Jev-Demos für Posteingang und Such-Neusortierung",
+      "description": "jev-experiments: Sift fragt Jev nach Kategorie und Dringlichkeit; Turbo Rerank nutzt Score pro Passage und Noul zur Prüfung, ob eine Antwort vorhanden ist.",
+      "summary": "Das Repository sammelt getrennte, latenzorientierte Demos wie Sift für E-Mail-Labels und Turbo Rerank für Suchergebnisse. Im jeweiligen App-Verzeichnis Abhängigkeiten installieren, TYPESAFE_API_KEY setzen und den Entwicklungsbefehl starten.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "Das Repository sammelt getrennte, latenzorientierte Demos wie Sift für E-Mail-Labels und Turbo Rerank für Suchergebnisse.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Sift fragt Jev nach Kategorie und Dringlichkeit; Turbo Rerank nutzt Score pro Passage und Noul zur Prüfung, ob eine Antwort vorhanden ist.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Einstieg",
+          "text": "Im jeweiligen App-Verzeichnis Abhängigkeiten installieren, TYPESAFE_API_KEY setzen und den Entwicklungsbefehl starten.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "E-Mails und Korpus sind synthetisch. Turbo Reranks Offline-Mock nutzt Tokenüberlappung und belegt keine Jev-Qualität.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "jev-experiments — Demos Jev: e-mail e reordenação",
+      "h1": "jev-experiments — Demos Jev de triagem de e-mail e reordenação de busca",
+      "description": "jev-experiments: O Sift pergunta categoria e urgência ao Jev; o Turbo Rerank usa Score por trecho e Noul para verificar se há resposta.",
+      "summary": "O repositório reúne demos separadas focadas em latência, como Sift para rotular e-mails e Turbo Rerank para ordenar resultados. Instale dependências no diretório de cada app, configure TYPESAFE_API_KEY e execute seu comando de desenvolvimento.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "O repositório reúne demos separadas focadas em latência, como Sift para rotular e-mails e Turbo Rerank para ordenar resultados.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "O Sift pergunta categoria e urgência ao Jev; o Turbo Rerank usa Score por trecho e Noul para verificar se há resposta.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como começar",
+          "text": "Instale dependências no diretório de cada app, configure TYPESAFE_API_KEY e execute seu comando de desenvolvimento.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "E-mails e corpus são sintéticos. O mock offline do Turbo Rerank usa sobreposição de tokens e não comprova qualidade do Jev.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "jev-experiments — Демо Jev: почта и переранжирование",
+      "h1": "jev-experiments — Демо Jev для почтовой сортировки и переранжирования",
+      "description": "jev-experiments: Sift спрашивает Jev о категории и срочности; Turbo Rerank использует Score для фрагментов и Noul для наличия ответа.",
+      "summary": "Репозиторий объединяет отдельные демо с акцентом на задержку, включая Sift для почты и Turbo Rerank для поиска. Установите зависимости в каталоге приложения, задайте TYPESAFE_API_KEY и выполните его команду разработки.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Репозиторий объединяет отдельные демо с акцентом на задержку, включая Sift для почты и Turbo Rerank для поиска.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Sift спрашивает Jev о категории и срочности; Turbo Rerank использует Score для фрагментов и Noul для наличия ответа.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Начало работы",
+          "text": "Установите зависимости в каталоге приложения, задайте TYPESAFE_API_KEY и выполните его команду разработки.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Письма и корпус синтетические. Офлайн-мок Turbo Rerank сравнивает пересечение токенов и не свидетельствует о качестве Jev.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "jev-experiments — ईमेल छँटाई और खोज क्रम के Jev डेमो",
+      "h1": "jev-experiments — ईमेल छँटाई और खोज क्रम के Jev डेमो",
+      "description": "jev-experiments: Sift Jev से श्रेणी और तात्कालिकता पूछता है; Turbo Rerank हर अंश के लिए Score और उत्तर की मौजूदगी के लिए Noul उपयोग करता है।",
+      "summary": "रिपॉज़िटरी में विलंब-केंद्रित अलग डेमो हैं, जैसे ईमेल लेबलिंग के लिए Sift और खोज क्रम के लिए Turbo Rerank। हर ऐप के फ़ोल्डर में निर्भरताएँ स्थापित करें, TYPESAFE_API_KEY सेट करें और उसका विकास कमांड चलाएँ।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "परियोजना का काम",
+          "text": "रिपॉज़िटरी में विलंब-केंद्रित अलग डेमो हैं, जैसे ईमेल लेबलिंग के लिए Sift और खोज क्रम के लिए Turbo Rerank।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "Sift Jev से श्रेणी और तात्कालिकता पूछता है; Turbo Rerank हर अंश के लिए Score और उत्तर की मौजूदगी के लिए Noul उपयोग करता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "शुरुआत कैसे करें",
+          "text": "हर ऐप के फ़ोल्डर में निर्भरताएँ स्थापित करें, TYPESAFE_API_KEY सेट करें और उसका विकास कमांड चलाएँ।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "ईमेल और कॉर्पस कृत्रिम हैं। Turbo Rerank का ऑफलाइन mock टोकन समानता का नमूना है, Jev गुणवत्ता का प्रमाण नहीं।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "jev-experiments — Demo Jev: email dan peringkat",
+      "h1": "jev-experiments — Demo Jev untuk triase email dan pemeringkatan pencarian",
+      "description": "jev-experiments: Sift menanyakan kategori dan urgensi pada Jev; Turbo Rerank memakai Score per bagian serta Noul untuk keberadaan jawaban.",
+      "summary": "Repositori mengumpulkan demo terpisah berfokus latensi, termasuk Sift untuk label email dan Turbo Rerank untuk pencarian. Pasang dependensi di direktori setiap aplikasi, atur TYPESAFE_API_KEY, lalu jalankan perintah pengembangannya.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "Repositori mengumpulkan demo terpisah berfokus latensi, termasuk Sift untuk label email dan Turbo Rerank untuk pencarian.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Sift menanyakan kategori dan urgensi pada Jev; Turbo Rerank memakai Score per bagian serta Noul untuk keberadaan jawaban.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara memulai",
+          "text": "Pasang dependensi di direktori setiap aplikasi, atur TYPESAFE_API_KEY, lalu jalankan perintah pengembangannya.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Email dan korpus bersifat sintetis. Mock luring Turbo Rerank memakai tumpang tindih token, bukan bukti kualitas Jev.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "jev-experiments — Demo Jev: email và xếp hạng lại",
+      "h1": "jev-experiments — Demo Jev phân luồng email và xếp hạng tìm kiếm",
+      "description": "jev-experiments: Sift hỏi Jev về loại và mức khẩn cấp; Turbo Rerank dùng Score từng đoạn và Noul kiểm tra có câu trả lời hay không.",
+      "summary": "Kho tập hợp các demo riêng chú trọng độ trễ, gồm Sift gán nhãn email và Turbo Rerank xếp hạng tìm kiếm. Cài phụ thuộc trong thư mục mỗi ứng dụng, đặt TYPESAFE_API_KEY rồi chạy lệnh phát triển tương ứng.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Công dụng",
+          "text": "Kho tập hợp các demo riêng chú trọng độ trễ, gồm Sift gán nhãn email và Turbo Rerank xếp hạng tìm kiếm.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Sift hỏi Jev về loại và mức khẩn cấp; Turbo Rerank dùng Score từng đoạn và Noul kiểm tra có câu trả lời hay không.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách bắt đầu",
+          "text": "Cài phụ thuộc trong thư mục mỗi ứng dụng, đặt TYPESAFE_API_KEY rồi chạy lệnh phát triển tương ứng.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Email và kho văn bản là dữ liệu tổng hợp. Mock ngoại tuyến Turbo Rerank chỉ dựa vào token trùng nhau, không chứng minh chất lượng Jev.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "jev-experiments — Jev demoları: e-posta ve sıralama",
+      "h1": "jev-experiments — E-posta sınıflandırma ve arama sıralama Jev demoları",
+      "description": "jev-experiments: Sift Jev’e kategori ve aciliyet sorar; Turbo Rerank parça başına Score ve yanıt varlığı için Noul kullanır.",
+      "summary": "Depo, Sift e-posta etiketleme ve Turbo Rerank arama sıralaması gibi gecikmeye odaklı ayrı demolar toplar. Her uygulamanın dizininde bağımlılıkları kurun, TYPESAFE_API_KEY tanımlayın ve geliştirme komutunu çalıştırın.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "Depo, Sift e-posta etiketleme ve Turbo Rerank arama sıralaması gibi gecikmeye odaklı ayrı demolar toplar.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Sift Jev’e kategori ve aciliyet sorar; Turbo Rerank parça başına Score ve yanıt varlığı için Noul kullanır.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Başlangıç",
+          "text": "Her uygulamanın dizininde bağımlılıkları kurun, TYPESAFE_API_KEY tanımlayın ve geliştirme komutunu çalıştırın.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "E-postalar ve derlem sentetiktir. Turbo Rerank’in çevrimdışı mock’u token örtüşmesine dayanır, Jev kalitesinin kanıtı değildir.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "jev-experiments — Demo Jev: email e riordino",
+      "h1": "jev-experiments — Demo Jev per smistare email e riordinare ricerche",
+      "description": "jev-experiments: Sift chiede a Jev categoria e urgenza; Turbo Rerank usa Score per passaggio e Noul per verificare la presenza di risposte.",
+      "summary": "Il repository raccoglie demo separate incentrate sulla latenza, tra cui Sift per le email e Turbo Rerank per la ricerca. Installa dipendenze nella cartella di ogni app, configura TYPESAFE_API_KEY e avvia il relativo comando di sviluppo.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "Il repository raccoglie demo separate incentrate sulla latenza, tra cui Sift per le email e Turbo Rerank per la ricerca.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Sift chiede a Jev categoria e urgenza; Turbo Rerank usa Score per passaggio e Noul per verificare la presenza di risposte.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come iniziare",
+          "text": "Installa dipendenze nella cartella di ogni app, configura TYPESAFE_API_KEY e avvia il relativo comando di sviluppo.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "Email e corpus sono sintetici. Il mock offline di Turbo Rerank usa sovrapposizione di token e non dimostra la qualità di Jev.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

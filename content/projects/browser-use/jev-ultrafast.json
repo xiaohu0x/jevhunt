@@ -1,0 +1,769 @@
+{
+  "version": "source-content-v1",
+  "repo": "browser-use/jev-ultrafast",
+  "repositoryId": 1373655162,
+  "relationship": "jev-app",
+  "category": "browser",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "path": "README.md",
+      "commit": "1231850a0bf1a0c0341fe408ef1668dbbfdfac46",
+      "url": "https://github.com/browser-use/jev-ultrafast/blob/1231850a0bf1a0c0341fe408ef1668dbbfdfac46/README.md",
+      "sha256": "29f5276b3e6295cabe322cda598e354a9e053dbfd9d831d20f09d0cca279a379",
+      "accessedAt": "2026-09-30T07:33:45.187Z",
+      "id": "s1"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "This browser agent turns visible page controls into an indexed action space for a natural-language goal.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 9,
+          "end": 11,
+          "quote": "**A browser agent with a dynamic, indexed action space.**\n\nGive it one goal. [TypeSafe's Jev](https://docs.typesafe.ai/introduction) picks an operation and an element. A small LLM writes text only when the operation is `TYPE_TEXT`."
+        },
+        {
+          "source": "s1",
+          "start": 21,
+          "end": 31,
+          "quote": "Every observation produces a new element table:\n\n```text\n[1] button    Change ticket type · Round trip\n[2] combobox  Where from?        · San Francisco\n[3] combobox  Where to?          · empty\n[4] textbox   Departure          · empty\n...\n```\n\nThe operations are `CLICK`, `TYPE_TEXT`, `SELECT`, `SCROLL_UP`, `SCROLL_DOWN`, `WAIT`, `DONE`, and `BLOCKED`. Only supported operations and targets are offered."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "Jev chooses the operation and compatible element in one request; a separate small LLM generates text for TYPE_TEXT.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 11,
+          "end": 11,
+          "quote": "Give it one goal. [TypeSafe's Jev](https://docs.typesafe.ai/introduction) picks an operation and an element. A small LLM writes text only when the operation is `TYPE_TEXT`."
+        },
+        {
+          "source": "s1",
+          "start": 49,
+          "end": 49,
+          "quote": "Target questions are speculative. If the operation is `CLICK`, only `click_target` can execute. Two decisions, **one network round trip**. Each target head contains only compatible elements. Native dropdown choices carry an observed element/option index."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Use the local inspector or Python Agent interface, with Chrome connected through Browser Harness and separate decision and text-model credentials.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 60,
+          "end": 68,
+          "quote": "# Add TYPESAFE_API_KEY and TEXT_MODEL_API_KEY.\nuv run jev\n```\n\nOpen **http://127.0.0.1:8766** and click **Start demo → Run automatically**. The inspector shows numbered elements, operation probabilities, target probabilities, and executed actions. **Choose next** pauses before execution.\n\nChrome connects through [Browser Harness](https://github.com/browser-use/browser-harness), installed by `uv sync`. Run `uv run browser-harness --doctor` if it needs connecting. Allow remote debugging in Chrome when prompted.\n\n`TEXT_MODEL_API_KEY` is an OpenRouter key in the example configuration. The current demo uses `inception/mercury-2.5` with reasoning disabled. Gemini, GLM, and DeepSeek can also use the OpenAI-compatible text helper; configure the appropriate model, endpoint, and reasoning setting."
+        },
+        {
+          "source": "s1",
+          "start": 70,
+          "end": 84,
+          "quote": "## Use the library\n\n```python\nfrom jev_ultrafast import Agent\n\nwith Agent(\n    \"https://www.google.com/travel/flights?hl=en\",\n    \"Find one-way flights from Zurich to London on September 20, 2026, \"\n    \"for one adult in economy. Stop when matching flight options are visible.\",\n) as agent:\n    for state in agent.run():\n        print(state[\"elapsed_ms\"], state[\"status\"])\n```\n\nRun with `uv run --env-file .env python your_script.py`. The same policy can run a different task:"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "DONE still needs outcome verification. Frames, shadow roots, uploads and pop-up tabs are outside the MVP; reported timings cover specific tasks.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 122,
+          "end": 126,
+          "quote": "In six alternating runs with identical models and settings, both versions passed **3/3**. Median task time went from **9.450 s → 7.092 s**, a **25% reduction**; median browser protocol calls went from **1,092 → 101**. This is three repeats of one task on one browser profile, not a general reliability benchmark.\n\nThe same policy opened the requested Wikipedia article in **2.798 s** and passed a local hotel search/filter task in **1.896 s**. Runs, failures, source hashes, and measurement boundaries are in [performance.md](docs/performance.md).\n\nA `DONE` choice still requires independent outcome verification. The DOM reader handles common HTML and ARIA controls, not the full accessible-name specification. Shadow roots, frames, canvas, uploads, pop-up tabs, nested scrolling, and arbitrary keyboard widgets remain outside this MVP. Owned tabs share the existing Chrome profile."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "Jev Ultrafast: browser actions from indexed page controls",
+      "h1": "Jev Ultrafast: browser actions from indexed page controls",
+      "description": "Jev Ultrafast uses Jev to choose browser operations and targets, delegating text entry content to a small LLM.",
+      "summary": "This browser agent turns visible page controls into an indexed action space for a natural-language goal. Jev chooses the operation and compatible element in one request; a separate small LLM generates text for TYPE_TEXT.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose and audience",
+          "text": "This browser agent turns visible page controls into an indexed action space for a natural-language goal.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "Jev chooses the operation and compatible element in one request; a separate small LLM generates text for TYPE_TEXT.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Using the project",
+          "text": "Use the local inspector or Python Agent interface, with Chrome connected through Browser Harness and separate decision and text-model credentials.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "DONE still needs outcome verification. Frames, shadow roots, uploads and pop-up tabs are outside the MVP; reported timings cover specific tasks.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "Jev Ultrafast：基于页面控件索引的浏览器操作",
+      "h1": "Jev Ultrafast：基于页面控件索引的浏览器操作",
+      "description": "Jev Ultrafast 用 Jev 选择浏览器操作和目标元素，将输入内容交给小型大语言模型生成。",
+      "summary": "该浏览器智能体将可见页面控件整理成带索引的操作空间，用于执行自然语言目标。 Jev 在一次请求中选择操作及兼容元素；只有 TYPE_TEXT 的文本内容由独立的小型大语言模型生成。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途与适用对象",
+          "text": "该浏览器智能体将可见页面控件整理成带索引的操作空间，用于执行自然语言目标。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "Jev 在一次请求中选择操作及兼容元素；只有 TYPE_TEXT 的文本内容由独立的小型大语言模型生成。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "可用本地检查面板或 Python Agent 接口，通过 Browser Harness 连接 Chrome，并分别配置决策和文本模型凭据。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "DONE 仍需核验实际结果。MVP 不覆盖 frame/iframe、Shadow DOM 根节点、上传或弹出标签页；公布的耗时只针对特定任务。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "Jev Ultrafast：依頁面控制項索引操作瀏覽器",
+      "h1": "Jev Ultrafast：依頁面控制項索引操作瀏覽器",
+      "description": "Jev Ultrafast 用 Jev 選擇瀏覽器操作及目標元素，再由小型語言模型產生輸入文字。",
+      "summary": "這個瀏覽器代理將可見控制項整理成帶索引的操作空間，以執行自然語言目標。 Jev 在同一請求中選出操作與相容元素；TYPE_TEXT 的文字內容另由小型語言模型產生。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途與適用對象",
+          "text": "這個瀏覽器代理將可見控制項整理成帶索引的操作空間，以執行自然語言目標。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "Jev 在同一請求中選出操作與相容元素；TYPE_TEXT 的文字內容另由小型語言模型產生。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "可使用本機檢視面板或 Python Agent 介面，透過 Browser Harness 連接 Chrome，並分別設定決策及文字模型憑證。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "DONE 仍需驗證實際結果。MVP 不涵蓋 frame/iframe、Shadow DOM 根節點、上傳及彈出分頁；公布耗時僅適用於特定任務。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "Jev Ultrafast：ページ要素の索引でブラウザーを操作",
+      "h1": "Jev Ultrafast：ページ要素の索引でブラウザーを操作",
+      "description": "Jev Ultrafast は Jev で操作と対象要素を選び、入力文字の生成を小型 LLM に任せます。",
+      "summary": "表示中のページ部品を索引付きの操作候補に変え、自然言語の目標に沿ってブラウザーを動かします。 Jev が一度の要求で操作と対応する要素を選び、TYPE_TEXT の場合だけ別の小型 LLM が文字を生成します。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途と対象",
+          "text": "表示中のページ部品を索引付きの操作候補に変え、自然言語の目標に沿ってブラウザーを動かします。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev との関係",
+          "text": "Jev が一度の要求で操作と対応する要素を選び、TYPE_TEXT の場合だけ別の小型 LLM が文字を生成します。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "ローカルの検査画面か Python Agent を利用し、Browser Harness で Chrome を接続します。判断用と文章生成用の認証情報が必要です。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範囲と制約",
+          "text": "DONE でも結果の検証が必要です。フレーム、シャドールート、アップロード、ポップアップタブは MVP の対象外で、計測時間は特定タスクのものです。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "Jev Ultrafast: 페이지 요소 인덱스로 브라우저 조작",
+      "h1": "Jev Ultrafast: 페이지 요소 인덱스로 브라우저 조작",
+      "description": "Jev Ultrafast는 Jev로 동작과 대상 요소를 선택하고 입력할 텍스트는 작은 LLM이 생성하도록 합니다.",
+      "summary": "보이는 페이지 컨트롤을 인덱스가 있는 동작 공간으로 바꾸어 자연어 목표에 따라 브라우저를 조작합니다. Jev가 한 요청에서 동작과 호환 요소를 고릅니다. TYPE_TEXT에 필요한 텍스트만 별도 소형 LLM이 생성합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "용도와 대상",
+          "text": "보이는 페이지 컨트롤을 인덱스가 있는 동작 공간으로 바꾸어 자연어 목표에 따라 브라우저를 조작합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Jev가 한 요청에서 동작과 호환 요소를 고릅니다. TYPE_TEXT에 필요한 텍스트만 별도 소형 LLM이 생성합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "로컬 검사 화면이나 Python Agent를 사용하고 Browser Harness로 Chrome을 연결하며 판단 및 텍스트 모델 인증 정보를 각각 설정합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 한계",
+          "text": "DONE 결과도 실제 성공 여부를 확인해야 합니다. 프레임, 섀도 루트, 업로드, 팝업 탭은 MVP 범위 밖이며 공개 시간은 특정 작업의 측정값입니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "Jev Ultrafast: navegador con controles indexados",
+      "h1": "Jev Ultrafast: navegador con controles indexados",
+      "description": "Jev Ultrafast usa Jev para elegir operaciones y elementos del navegador, y un LLM pequeño para generar texto de entrada.",
+      "summary": "El agente convierte los controles visibles en un espacio de acciones indexado para cumplir un objetivo en lenguaje natural. Jev elige operación y elemento compatible en una petición; un LLM independiente genera texto únicamente para TYPE_TEXT.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "El agente convierte los controles visibles en un espacio de acciones indexado para cumplir un objetivo en lenguaje natural.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Jev elige operación y elemento compatible en una petición; un LLM independiente genera texto únicamente para TYPE_TEXT.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo se usa",
+          "text": "Use el inspector local o Python Agent, con Chrome conectado mediante Browser Harness y credenciales separadas para decisiones y texto.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "DONE requiere verificar el resultado. Marcos, raíces shadow, cargas de archivos y pestañas emergentes quedan fuera del MVP; los tiempos publicados corresponden a tareas concretas.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "Jev Ultrafast : navigateur piloté par des contrôles indexés",
+      "h1": "Jev Ultrafast : navigateur piloté par des contrôles indexés",
+      "description": "Jev Ultrafast confie à Jev le choix des opérations et des éléments, et à un petit LLM la génération du texte à saisir.",
+      "summary": "L'agent transforme les contrôles visibles en actions indexées afin de suivre un objectif exprimé en langage naturel. Jev choisit opération et élément compatible dans une requête ; un LLM distinct ne génère du texte que pour TYPE_TEXT.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Usage et public visé",
+          "text": "L'agent transforme les contrôles visibles en actions indexées afin de suivre un objectif exprimé en langage naturel.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Jev choisit opération et élément compatible dans une requête ; un LLM distinct ne génère du texte que pour TYPE_TEXT.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Utilisez l'inspecteur local ou Python Agent, avec Chrome relié par Browser Harness et des identifiants distincts pour les décisions et le texte.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "DONE exige une vérification du résultat. Cadres, racines shadow, téléversements et onglets surgissants restent hors MVP ; les temps publiés concernent des tâches précises.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "Jev Ultrafast: Browsersteuerung über indizierte Seitenelemente",
+      "h1": "Jev Ultrafast: Browsersteuerung über indizierte Seitenelemente",
+      "description": "Jev Ultrafast wählt mit Jev Browseraktionen und Ziele aus; ein kleines LLM erzeugt den einzugebenden Text.",
+      "summary": "Der Agent überführt sichtbare Bedienelemente in einen indizierten Aktionsraum für ein natürlichsprachliches Ziel. Jev wählt Aktion und passendes Element in einer Anfrage; nur für TYPE_TEXT erzeugt ein separates kleines LLM Text.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Zweck und Zielgruppe",
+          "text": "Der Agent überführt sichtbare Bedienelemente in einen indizierten Aktionsraum für ein natürlichsprachliches Ziel.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Jev wählt Aktion und passendes Element in einer Anfrage; nur für TYPE_TEXT erzeugt ein separates kleines LLM Text.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Verwendung",
+          "text": "Verwendbar sind lokaler Inspektor und Python Agent, mit Chrome über Browser Harness sowie getrennten Zugangsdaten für Entscheidungen und Text.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "DONE erfordert weiterhin Ergebnisprüfung. Frames, Shadow Roots, Uploads und Pop-up-Tabs gehören nicht zum MVP; veröffentlichte Zeiten gelten für konkrete Aufgaben.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "Jev Ultrafast: navegação por controles indexados",
+      "h1": "Jev Ultrafast: navegação por controles indexados",
+      "description": "Jev Ultrafast usa Jev para escolher operações e elementos do navegador e um LLM pequeno para gerar o texto digitado.",
+      "summary": "O agente converte controles visíveis em um espaço de ações indexado para cumprir um objetivo em linguagem natural. Jev escolhe operação e elemento compatível em uma solicitação; um LLM separado gera texto apenas para TYPE_TEXT.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Finalidade e público",
+          "text": "O agente converte controles visíveis em um espaço de ações indexado para cumprir um objetivo em linguagem natural.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "Jev escolhe operação e elemento compatível em uma solicitação; um LLM separado gera texto apenas para TYPE_TEXT.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Use o inspetor local ou Python Agent, com Chrome conectado pelo Browser Harness e credenciais separadas para decisão e texto.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "DONE ainda exige verificar o resultado. Frames, raízes shadow, uploads e abas emergentes ficam fora do MVP; os tempos publicados cobrem tarefas específicas.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "Jev Ultrafast: управление браузером по индексам элементов",
+      "h1": "Jev Ultrafast: управление браузером по индексам элементов",
+      "description": "Jev Ultrafast выбирает операции и элементы через Jev, а текст для ввода генерирует небольшая LLM.",
+      "summary": "Агент превращает видимые элементы страницы в индексированный набор действий для выполнения цели на естественном языке. Jev выбирает операцию и подходящий элемент одним запросом; отдельная небольшая LLM генерирует текст только для TYPE_TEXT.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Агент превращает видимые элементы страницы в индексированный набор действий для выполнения цели на естественном языке.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Jev выбирает операцию и подходящий элемент одним запросом; отдельная небольшая LLM генерирует текст только для TYPE_TEXT.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Используйте локальный инспектор или Python Agent, Chrome через Browser Harness и отдельные учётные данные для решений и генерации текста.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "DONE требует проверки результата. Фреймы, теневые корни, загрузка файлов и всплывающие вкладки вне MVP; опубликованное время относится к конкретным задачам.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "Jev Ultrafast: पेज कंट्रोल के इंडेक्स से ब्राउज़र संचालन",
+      "h1": "Jev Ultrafast: पेज कंट्रोल के इंडेक्स से ब्राउज़र संचालन",
+      "description": "Jev Ultrafast, Jev से ब्राउज़र कार्रवाई और लक्ष्य चुनता है; छोटा LLM टाइप किया जाने वाला टेक्स्ट बनाता है।",
+      "summary": "यह एजेंट दिख रहे पेज कंट्रोल को इंडेक्स वाले कार्रवाई विकल्पों में बदलकर प्राकृतिक भाषा का लक्ष्य पूरा करता है। Jev एक अनुरोध में कार्रवाई और अनुकूल तत्व चुनता है; अलग छोटा LLM केवल TYPE_TEXT के लिए टेक्स्ट बनाता है।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "उद्देश्य और उपयोगकर्ता",
+          "text": "यह एजेंट दिख रहे पेज कंट्रोल को इंडेक्स वाले कार्रवाई विकल्पों में बदलकर प्राकृतिक भाषा का लक्ष्य पूरा करता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "Jev एक अनुरोध में कार्रवाई और अनुकूल तत्व चुनता है; अलग छोटा LLM केवल TYPE_TEXT के लिए टेक्स्ट बनाता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल का तरीका",
+          "text": "स्थानीय निरीक्षक या Python Agent इस्तेमाल करें; Chrome को Browser Harness से जोड़ें और निर्णय तथा टेक्स्ट मॉडल के अलग क्रेडेंशियल रखें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "DONE के बाद भी नतीजा जाँचना होता है। फ़्रेम, शैडो रूट, अपलोड और पॉप-अप टैब MVP में शामिल नहीं हैं; प्रकाशित समय खास कार्यों का है।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "Jev Ultrafast: kendali browser melalui elemen berindeks",
+      "h1": "Jev Ultrafast: kendali browser melalui elemen berindeks",
+      "description": "Jev Ultrafast memakai Jev untuk memilih operasi dan elemen browser, serta LLM kecil untuk membuat teks masukan.",
+      "summary": "Agen mengubah kontrol yang terlihat menjadi ruang tindakan berindeks untuk menjalankan tujuan berbahasa alami. Jev memilih operasi dan elemen yang cocok dalam satu permintaan; LLM terpisah hanya menghasilkan teks untuk TYPE_TEXT.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Tujuan dan pengguna",
+          "text": "Agen mengubah kontrol yang terlihat menjadi ruang tindakan berindeks untuk menjalankan tujuan berbahasa alami.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Jev memilih operasi dan elemen yang cocok dalam satu permintaan; LLM terpisah hanya menghasilkan teks untuk TYPE_TEXT.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Gunakan inspektur lokal atau Python Agent, Chrome melalui Browser Harness, serta kredensial terpisah untuk keputusan dan teks.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "DONE tetap memerlukan pemeriksaan hasil. Frame, shadow root, unggahan, dan tab pop-up di luar MVP; waktu yang dilaporkan hanya untuk tugas tertentu.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "Jev Ultrafast: điều khiển trình duyệt qua phần tử có chỉ mục",
+      "h1": "Jev Ultrafast: điều khiển trình duyệt qua phần tử có chỉ mục",
+      "description": "Jev Ultrafast dùng Jev chọn thao tác và phần tử trình duyệt, còn LLM nhỏ tạo nội dung cần nhập.",
+      "summary": "Tác tử chuyển các điều khiển đang hiển thị thành không gian hành động có chỉ mục để thực hiện mục tiêu bằng ngôn ngữ tự nhiên. Jev chọn thao tác và phần tử phù hợp trong một yêu cầu; LLM riêng chỉ tạo văn bản cho TYPE_TEXT.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích và đối tượng",
+          "text": "Tác tử chuyển các điều khiển đang hiển thị thành không gian hành động có chỉ mục để thực hiện mục tiêu bằng ngôn ngữ tự nhiên.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Jev chọn thao tác và phần tử phù hợp trong một yêu cầu; LLM riêng chỉ tạo văn bản cho TYPE_TEXT.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Dùng bảng kiểm tra cục bộ hoặc Python Agent, kết nối Chrome qua Browser Harness và cấu hình riêng thông tin xác thực mô hình quyết định và văn bản.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "DONE vẫn cần kiểm chứng kết quả. Khung, shadow root, tải tệp lên và tab bật lên nằm ngoài MVP; số đo thời gian chỉ áp dụng cho nhiệm vụ cụ thể.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "Jev Ultrafast: indeksli sayfa kontrolleriyle tarayıcı yönetimi",
+      "h1": "Jev Ultrafast: indeksli sayfa kontrolleriyle tarayıcı yönetimi",
+      "description": "Jev Ultrafast, Jev ile tarayıcı işlemini ve hedefi seçer; küçük bir LLM yazılacak metni üretir.",
+      "summary": "Ajan, görünen sayfa kontrollerini doğal dildeki hedef için indeksli bir eylem alanına dönüştürür. Jev tek istekte işlemi ve uygun öğeyi seçer; ayrı bir küçük LLM yalnızca TYPE_TEXT için metin üretir.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Amaç ve hedef kitle",
+          "text": "Ajan, görünen sayfa kontrollerini doğal dildeki hedef için indeksli bir eylem alanına dönüştürür.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Jev tek istekte işlemi ve uygun öğeyi seçer; ayrı bir küçük LLM yalnızca TYPE_TEXT için metin üretir.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Yerel inceleme arayüzü veya Python Agent kullanılır; Chrome, Browser Harness ile bağlanır, karar ve metin modellerinin kimlik bilgileri ayrı ayarlanır.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "DONE sonucu yine doğrulanmalıdır. Çerçeveler, shadow root, yüklemeler ve açılır sekmeler MVP dışındadır; yayımlanan süreler belirli görevlere aittir.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "Jev Ultrafast: browser guidato da controlli indicizzati",
+      "h1": "Jev Ultrafast: browser guidato da controlli indicizzati",
+      "description": "Jev Ultrafast usa Jev per scegliere operazioni ed elementi del browser e un piccolo LLM per generare il testo da digitare.",
+      "summary": "L'agente trasforma i controlli visibili in uno spazio di azioni indicizzato per seguire un obiettivo in linguaggio naturale. Jev sceglie operazione ed elemento compatibile in una richiesta; un LLM separato genera testo solo per TYPE_TEXT.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Scopo e destinatari",
+          "text": "L'agente trasforma i controlli visibili in uno spazio di azioni indicizzato per seguire un obiettivo in linguaggio naturale.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Jev sceglie operazione ed elemento compatibile in una richiesta; un LLM separato genera testo solo per TYPE_TEXT.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come si usa",
+          "text": "Si usa l'ispettore locale o Python Agent, con Chrome collegato tramite Browser Harness e credenziali separate per decisioni e testo.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "DONE richiede comunque la verifica del risultato. Frame, shadow root, caricamenti e schede a comparsa sono fuori dal MVP; i tempi pubblicati riguardano compiti specifici.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  },
+  "displayName": "Jev Ultrafast"
+}

@@ -4,7 +4,7 @@ import { EDITORIAL_ROUTES } from "../shared/editorial-routes.js";
 const { apps, i18n } = loadData();
 const info = JSON.parse(readFileSync("public/build-info.json", "utf8"));
 const paths = ["/404.html", "/privacy/", "/terms/", "/security/",
-  ...["data", "projects", "catalog-all", "main", "catalog-state", "project-card", "page", "admin", "analytics"].map(name => `/assets/js/${name}.js`),
+  ...["data", "projects", "catalog-all", "main", "catalog-state", "catalog-locales", "project-card", "page", "admin", "analytics"].map(name => `/assets/js/${name}.js`),
   "/assets/css/style.css", "/assets/css/fonts.css", "/assets/css/directory.css", "/assets/css/editorial.css", "/assets/js/faq.js", ...Object.keys(i18n.locales).map(key => `/assets/js/locales/${key}.js`), ...EDITORIAL_ROUTES.map(entry => entry.path)];
 const assets = [...new Set(paths)].map(path => ({ path, hash: hash(readFileSync("public" + path + (path.endsWith("/") ? "index.html" : ""))) }));
 const buildId = hash(JSON.stringify({ commit: info.commit, assets }));

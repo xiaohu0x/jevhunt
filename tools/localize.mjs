@@ -4,6 +4,8 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { runInNewContext } from "node:vm";
 import { renderCard } from "../shared/catalog-view.js";
+import { loadProjectContents, localizedProjectPreview } from "./lib/project-content.mjs";
+import { buildSummaryOverlay, summaryOverlayScript } from "./lib/static-catalog.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const publicDir = resolve(root, "public");
@@ -11,6 +13,8 @@ const indexPath = resolve(publicDir, "index.html");
 const localeDataPath = resolve(publicDir, "assets/js/i18n.js");
 const sitemapPath = resolve(publicDir, "sitemap.xml");
 const origin = "https://jevhunt.com";
+const projectContents = loadProjectContents();
+const catalogProjects = JSON.parse(readFileSync(resolve(publicDir, "catalog.json"), "utf8")).apps;
 
 const sandbox = { window: { JH: {} } };
 runInNewContext(readFileSync(localeDataPath, "utf8"), sandbox, { filename: localeDataPath });
@@ -97,7 +101,7 @@ function localizePrerenderedCatalog(source, messages) {
   return html;
 }
 
-function updateStructuredData(source, locale, canonical) {
+function updateStructuredData(source, locale, canonical, localeKey) {
   let html = source;
   const graphPattern = /(<script type="application\/ld\+json">)([\s\S]*?)(<\/script>)/i;
   html = replaceRequired(html, graphPattern, (_match, opening, json, closing) => {
@@ -134,6 +138,14 @@ function updateStructuredData(source, locale, canonical) {
     data.name = locale.seo.itemListName;
     data.description = locale.seo.itemListDescription;
     data.inLanguage = locale.lang;
+    for (const entry of data.itemListElement || []) {
+      const project = sandbox.window.JH.apps.find(project => entry.item?.codeRepository?.toLowerCase() === `https://github.com/${project.repo}`.toLowerCase());
+      if (!project) continue;
+      const localized = localizedProjectPreview(project, projectContents, localeKey);
+      entry.item.name = localized.name;
+      entry.item.description = localized.desc || undefined;
+      entry.item.inLanguage = locale.lang;
+    }
     return `${opening}\n${JSON.stringify(data, null, 2).replace(/</g, "\\u003c")}\n${closing}`;
   }, "ItemList structured data");
   return html;
@@ -185,8 +197,8 @@ function renderLocale(source, localeKey, locale) {
   html = translateElements(html, locale.messages);
   html = localizePrerenderedCatalog(html, locale.messages);
   html = html.replace(/(<!-- catalog-prerender:start -->)[\s\S]*?(<!-- catalog-prerender:end -->)/,
-    (_match, start, end) => `${start}\n${sandbox.window.JH.apps.map(project => renderCard(project, locale.messages, { basePath: localeKey === defaultLocale ? "" : "/" + localeKey })).join("\n")}\n${end}`);
-  html = updateStructuredData(html, locale, canonical);
+    (_match, start, end) => `${start}\n${sandbox.window.JH.apps.map(project => renderCard(localizedProjectPreview(project, projectContents, localeKey), locale.messages, { basePath: localeKey === defaultLocale ? "" : "/" + localeKey })).join("\n")}\n${end}`);
+  html = updateStructuredData(html, locale, canonical, localeKey);
   html = selectCurrentLocale(html, localeKey);
   html = html.replace(/(<time\b[^>]*\bid="catalogUpdated"[^>]*>)[^<]*(<\/time>)/,
     (_match, start, end) => `${start}${escapeHtml(new Intl.DateTimeFormat(locale.lang, { dateStyle: "medium", timeStyle: "short", timeZone: "UTC" }).format(new Date(sandbox.window.JH.catalogMeta.syncedAt)))} UTC${end}`);
@@ -252,7 +264,8 @@ for (const [key, locale] of entries) {
   mkdirSync(dirname(localeScript), { recursive: true });
   mkdirSync(resolve(publicDir, "assets/locales"), { recursive: true });
   writeFileSync(resolve(publicDir, "assets/locales", `${key}.json`), JSON.stringify({ messages: locale.messages, lang: locale.lang }) + "\n");
-  writeFileSync(localeScript, "window.JH = window.JH || {};\nwindow.JH.i18n = " + JSON.stringify({ defaultLocale: key, locales: { [key]: locale } }) + ";\n");
+  writeFileSync(localeScript, "window.JH = window.JH || {};\nwindow.JH.i18n = " + JSON.stringify({ defaultLocale: key, locales: { [key]: locale } }) + ";\n"
+    + summaryOverlayScript(buildSummaryOverlay(catalogProjects, projectContents, key)));
 }
 
 let sitemapLastModified = "2026-09-21";

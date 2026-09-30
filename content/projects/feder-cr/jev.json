@@ -1,0 +1,763 @@
+{
+  "version": "source-content-v1",
+  "repo": "feder-cr/jev",
+  "repositoryId": 842982339,
+  "relationship": "local-alternative",
+  "category": "research",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "path": "README.md",
+      "commit": "62127d4c7f6380e427880b2b39a273427b77511c",
+      "url": "https://github.com/feder-cr/jev/blob/62127d4c7f6380e427880b2b39a273427b77511c/README.md",
+      "sha256": "ffe0a5ab8642bc9c129f42b7d2a362d13d9275fdcd050523087878e52a6f2d37",
+      "accessedAt": "2026-09-30T07:33:48.154Z",
+      "id": "s1"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "Give jevos text or structured state and a yes/no question; it returns the probability of yes.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 1,
+          "end": 4,
+          "quote": "# jevos\n\n**Yes/no decisions on a laptop CPU in 50–220 ms.** Send a text and a yes/no question, get back\nP(yes)."
+        },
+        {
+          "source": "s1",
+          "start": 64,
+          "end": 68,
+          "quote": "| `model` | `jev-latest` (any `jev-*` name works) or the served model's name |\n| `state` | the text to decide on: a string, or any JSON object or array |\n| `questions` | one or more named questions, each `{\"type\": \"noul\", \"instructions\": \"…?\"}` |\n\nEvery answer is `noul`, the probability that the answer is yes (0 to 1). Questions in the same"
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "The local server uses Jev's wire format for Noul requests, allowing existing clients to address a separate self-hosted model.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 55,
+          "end": 68,
+          "quote": "## API\n\nThe server speaks TypeSafe Jev's wire format, so code written for Jev's SDK works unchanged for\nyes/no questions.\n\n### `POST /v1/systemone`\n\n| Field | What it is |\n|---|---|\n| `model` | `jev-latest` (any `jev-*` name works) or the served model's name |\n| `state` | the text to decide on: a string, or any JSON object or array |\n| `questions` | one or more named questions, each `{\"type\": \"noul\", \"instructions\": \"…?\"}` |\n\nEvery answer is `noul`, the probability that the answer is yes (0 to 1). Questions in the same"
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Download the released GGUF and llama.cpp runtime, then serve it on CPU or use jev decide with a request file.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 28,
+          "end": 35,
+          "quote": "## Quickstart\n\nDownload `jevos-q4_k_m.gguf` from the [release](https://github.com/feder-cr/jev/releases/tag/jevos), then:\n\n```bash\nuv sync\nuv run jev download --only runtime        # llama.cpp for this machine\nuv run jev serve --gguf jevos-q4_k_m.gguf --device cpu --threads 16"
+        },
+        {
+          "source": "s1",
+          "start": 132,
+          "end": 137,
+          "quote": "`jev decide` answers one request file without starting a server. The file holds the same body as\n`POST /v1/systemone`, and the answer comes back in the same shape:\n\n```bash\nuv run jev decide --gguf jevos-q4_k_m.gguf --device cpu request.json\n```"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "Choice and Score requests return 422. Put policy rules in instructions: the accepted criteria field is not read.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 103,
+          "end": 105,
+          "quote": "- **Put the rule in the question.** If the decision depends on a policy, write it into\n  `instructions`, as in `refund` above. Jev's optional `criteria` field is accepted but not read.\n- **Yes/no only.** `choice` and `score` questions are refused with a `422`."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "jevos: local yes/no decisions with Jev wire compatibility",
+      "h1": "jevos: local yes/no decisions with Jev wire compatibility",
+      "description": "jevos runs a local model for yes/no probabilities and supports Jev's request format for Noul questions only.",
+      "summary": "Give jevos text or structured state and a yes/no question; it returns the probability of yes. The local server uses Jev's wire format for Noul requests, allowing existing clients to address a separate self-hosted model.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose and audience",
+          "text": "Give jevos text or structured state and a yes/no question; it returns the probability of yes.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "The local server uses Jev's wire format for Noul requests, allowing existing clients to address a separate self-hosted model.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Using the project",
+          "text": "Download the released GGUF and llama.cpp runtime, then serve it on CPU or use jev decide with a request file.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "Choice and Score requests return 422. Put policy rules in instructions: the accepted criteria field is not read.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "jevos：兼容 Jev 是非接口的本地判断",
+      "h1": "jevos：兼容 Jev 是非接口的本地判断",
+      "description": "jevos 用本地模型输出是非概率，仅为 Noul 问题提供 Jev 请求格式兼容。",
+      "summary": "向 jevos 提供文本或结构化状态及是非问题，即可得到“是”的概率。 本地服务器使用 Jev 的 Noul 请求格式，让现有客户端连接到独立的自托管模型。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途与适用对象",
+          "text": "向 jevos 提供文本或结构化状态及是非问题，即可得到“是”的概率。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "本地服务器使用 Jev 的 Noul 请求格式，让现有客户端连接到独立的自托管模型。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "下载发布的 GGUF 与 llama.cpp 运行时后，可用 CPU 启动服务，或通过 jev decide 处理请求文件。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "Choice 和 Score 请求返回 422。策略规则须写在 instructions 中；criteria 字段虽被接受，却不会读取。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "jevos：相容 Jev 是非介面的本機判斷",
+      "h1": "jevos：相容 Jev 是非介面的本機判斷",
+      "description": "jevos 以本機模型輸出是非機率，僅為 Noul 問題提供 Jev 請求格式相容性。",
+      "summary": "提供文字或結構化狀態與是非問題後，jevos 會傳回回答「是」的機率。 本機伺服器使用 Jev 的 Noul 請求格式，讓既有用戶端連接獨立的自架模型。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途與適用對象",
+          "text": "提供文字或結構化狀態與是非問題後，jevos 會傳回回答「是」的機率。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "本機伺服器使用 Jev 的 Noul 請求格式，讓既有用戶端連接獨立的自架模型。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "下載發布的 GGUF 與 llama.cpp 執行環境後，可用 CPU 啟動服務，或以 jev decide 處理請求檔案。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "Choice 和 Score 請求會回傳 422。政策規則須放入 instructions；criteria 欄位雖可傳入，但不會被讀取。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "jevos：Jev 形式に対応するローカルの二択判断",
+      "h1": "jevos：Jev 形式に対応するローカルの二択判断",
+      "description": "jevos はローカルモデルで yes の確率を返し、Noul 質問に限って Jev のリクエスト形式に対応します。",
+      "summary": "文章または構造化状態と、はい・いいえの質問を渡すと、はいの確率が得られます。 Noul 向けの Jev 通信形式を使うため、既存クライアントから別の自前モデルに接続できます。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途と対象",
+          "text": "文章または構造化状態と、はい・いいえの質問を渡すと、はいの確率が得られます。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev との関係",
+          "text": "Noul 向けの Jev 通信形式を使うため、既存クライアントから別の自前モデルに接続できます。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "公開 GGUF と llama.cpp ランタイムを取得し、CPU で提供するか jev decide にリクエストファイルを渡します。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範囲と制約",
+          "text": "Choice と Score は 422 で拒否されます。判断ルールは instructions に記述します。criteria は受理されても読まれません。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "jevos: Jev 형식과 호환되는 로컬 예·아니요 판단",
+      "h1": "jevos: Jev 형식과 호환되는 로컬 예·아니요 판단",
+      "description": "jevos는 로컬 모델로 예·아니요 확률을 반환하며 Noul 질문에 한해 Jev 요청 형식을 지원합니다.",
+      "summary": "텍스트 또는 구조화된 상태와 예·아니요 질문을 주면 '예'일 확률을 반환합니다. 로컬 서버는 Jev의 Noul 통신 형식을 사용해 기존 클라이언트가 별도의 자체 호스팅 모델에 연결할 수 있게 합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "용도와 대상",
+          "text": "텍스트 또는 구조화된 상태와 예·아니요 질문을 주면 '예'일 확률을 반환합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "로컬 서버는 Jev의 Noul 통신 형식을 사용해 기존 클라이언트가 별도의 자체 호스팅 모델에 연결할 수 있게 합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "공개 GGUF와 llama.cpp 런타임을 내려받아 CPU 서버로 실행하거나 요청 파일을 jev decide로 처리합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 한계",
+          "text": "Choice와 Score 요청은 422로 거절됩니다. 정책은 instructions에 넣어야 하며 criteria 필드는 받아도 읽지 않습니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "jevos: decisiones locales sí/no con formato Jev",
+      "h1": "jevos: decisiones locales sí/no con formato Jev",
+      "description": "jevos ejecuta un modelo local de probabilidades sí/no y admite el formato de petición Jev solo para Noul.",
+      "summary": "Proporcione texto o estado estructurado y una pregunta binaria para obtener la probabilidad de sí. El servidor usa el formato Jev para Noul, permitiendo a clientes existentes conectarse a un modelo autohospedado distinto.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "Proporcione texto o estado estructurado y una pregunta binaria para obtener la probabilidad de sí.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "El servidor usa el formato Jev para Noul, permitiendo a clientes existentes conectarse a un modelo autohospedado distinto.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo se usa",
+          "text": "Descargue el GGUF publicado y llama.cpp, ejecútelo en CPU o use jev decide con un archivo de petición.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "Choice y Score devuelven 422. Escriba las políticas en instructions: el campo criteria se acepta, pero no se lee.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "jevos : décisions locales oui/non au format Jev",
+      "h1": "jevos : décisions locales oui/non au format Jev",
+      "description": "jevos exécute un modèle local de probabilités oui/non et accepte le format Jev uniquement pour les questions Noul.",
+      "summary": "Fournissez un texte ou un état structuré et une question binaire pour obtenir la probabilité de oui. Le serveur utilise le format Jev pour Noul, permettant aux clients existants d'accéder à un modèle autohébergé distinct.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Usage et public visé",
+          "text": "Fournissez un texte ou un état structuré et une question binaire pour obtenir la probabilité de oui.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Le serveur utilise le format Jev pour Noul, permettant aux clients existants d'accéder à un modèle autohébergé distinct.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Téléchargez le GGUF publié et llama.cpp, servez le modèle sur CPU ou utilisez jev decide avec un fichier de requête.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "Choice et Score renvoient 422. Placez les règles dans instructions : criteria est accepté mais n'est pas lu.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "jevos: lokale Ja/Nein-Entscheidungen im Jev-Format",
+      "h1": "jevos: lokale Ja/Nein-Entscheidungen im Jev-Format",
+      "description": "jevos führt ein lokales Modell für Ja/Nein-Wahrscheinlichkeiten aus und unterstützt Jevs Anfrageformat nur für Noul.",
+      "summary": "Text oder strukturierter Zustand und eine Ja/Nein-Frage ergeben die Wahrscheinlichkeit für Ja. Der Server nutzt Jevs Noul-Kommunikationsformat, sodass bestehende Clients ein eigenständiges, selbst betriebenes Modell ansprechen können.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Zweck und Zielgruppe",
+          "text": "Text oder strukturierter Zustand und eine Ja/Nein-Frage ergeben die Wahrscheinlichkeit für Ja.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Der Server nutzt Jevs Noul-Kommunikationsformat, sodass bestehende Clients ein eigenständiges, selbst betriebenes Modell ansprechen können.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Verwendung",
+          "text": "Laden Sie veröffentlichtes GGUF und llama.cpp-Laufzeit herunter und betreiben Sie den CPU-Server oder nutzen Sie jev decide mit einer Anfragedatei.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Choice und Score liefern 422. Regeln gehören in instructions; das angenommene Feld criteria wird nicht gelesen.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "jevos: decisões locais sim/não no formato Jev",
+      "h1": "jevos: decisões locais sim/não no formato Jev",
+      "description": "jevos executa um modelo local de probabilidades sim/não e aceita o formato Jev somente para perguntas Noul.",
+      "summary": "Forneça texto ou estado estruturado e uma pergunta binária para receber a probabilidade de sim. O servidor usa o formato Jev para Noul, permitindo que clientes existentes acessem um modelo auto-hospedado separado.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Finalidade e público",
+          "text": "Forneça texto ou estado estruturado e uma pergunta binária para receber a probabilidade de sim.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "O servidor usa o formato Jev para Noul, permitindo que clientes existentes acessem um modelo auto-hospedado separado.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Baixe o GGUF publicado e o runtime llama.cpp, sirva em CPU ou use jev decide com um arquivo de solicitação.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "Choice e Score retornam 422. Coloque as políticas em instructions: o campo criteria é aceito, mas não lido.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "jevos: локальные решения да/нет в формате Jev",
+      "h1": "jevos: локальные решения да/нет в формате Jev",
+      "description": "jevos запускает локальную модель вероятностей да/нет и поддерживает формат запросов Jev только для Noul.",
+      "summary": "Передайте текст или структурированное состояние и бинарный вопрос, чтобы получить вероятность ответа «да». Сервер использует формат Jev для Noul, позволяя существующим клиентам обращаться к отдельной самостоятельно размещённой модели.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Передайте текст или структурированное состояние и бинарный вопрос, чтобы получить вероятность ответа «да».",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Сервер использует формат Jev для Noul, позволяя существующим клиентам обращаться к отдельной самостоятельно размещённой модели.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Загрузите выпущенный GGUF и среду llama.cpp, запустите CPU-сервер либо используйте jev decide с файлом запроса.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Choice и Score возвращают 422. Правила помещаются в instructions; поле criteria принимается, но не читается.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "jevos: Jev प्रारूप में स्थानीय हाँ/नहीं निर्णय",
+      "h1": "jevos: Jev प्रारूप में स्थानीय हाँ/नहीं निर्णय",
+      "description": "jevos स्थानीय मॉडल से हाँ/नहीं की संभावनाएँ देता है और Jev अनुरोध प्रारूप केवल Noul प्रश्नों के लिए स्वीकार करता है।",
+      "summary": "टेक्स्ट या संरचित स्थिति और हाँ/नहीं का प्रश्न दें; jevos 'हाँ' की संभावना लौटाता है। सर्वर Jev का Noul प्रारूप अपनाता है, जिससे मौजूदा क्लाइंट अलग स्वयं होस्ट किए मॉडल से जुड़ सकते हैं।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "उद्देश्य और उपयोगकर्ता",
+          "text": "टेक्स्ट या संरचित स्थिति और हाँ/नहीं का प्रश्न दें; jevos 'हाँ' की संभावना लौटाता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "सर्वर Jev का Noul प्रारूप अपनाता है, जिससे मौजूदा क्लाइंट अलग स्वयं होस्ट किए मॉडल से जुड़ सकते हैं।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल का तरीका",
+          "text": "प्रकाशित GGUF और llama.cpp रनटाइम डाउनलोड करके CPU सर्वर चलाएँ, या अनुरोध फ़ाइल के साथ jev decide इस्तेमाल करें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "Choice और Score पर 422 मिलता है। नीति instructions में रखें; criteria फ़ील्ड स्वीकार होती है, पर पढ़ी नहीं जाती।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "jevos: keputusan lokal ya/tidak dalam format Jev",
+      "h1": "jevos: keputusan lokal ya/tidak dalam format Jev",
+      "description": "jevos menjalankan model lokal untuk probabilitas ya/tidak dan mendukung format permintaan Jev hanya bagi Noul.",
+      "summary": "Berikan teks atau status terstruktur dan pertanyaan ya/tidak untuk memperoleh probabilitas ya. Server memakai format Jev untuk Noul sehingga klien yang ada dapat mengakses model terpisah yang dihosting sendiri.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Tujuan dan pengguna",
+          "text": "Berikan teks atau status terstruktur dan pertanyaan ya/tidak untuk memperoleh probabilitas ya.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Server memakai format Jev untuk Noul sehingga klien yang ada dapat mengakses model terpisah yang dihosting sendiri.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Unduh GGUF rilis dan runtime llama.cpp, jalankan server CPU atau gunakan jev decide dengan berkas permintaan.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Choice dan Score menghasilkan 422. Taruh aturan dalam instructions; kolom criteria diterima tetapi tidak dibaca.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "jevos: quyết định có/không cục bộ theo định dạng Jev",
+      "h1": "jevos: quyết định có/không cục bộ theo định dạng Jev",
+      "description": "jevos chạy mô hình cục bộ cho xác suất có/không và chỉ hỗ trợ định dạng yêu cầu Jev với câu hỏi Noul.",
+      "summary": "Cung cấp văn bản hoặc trạng thái có cấu trúc cùng câu hỏi có/không để nhận xác suất trả lời có. Máy chủ dùng định dạng Jev cho Noul, cho phép ứng dụng khách hiện có kết nối mô hình tự lưu trữ riêng.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích và đối tượng",
+          "text": "Cung cấp văn bản hoặc trạng thái có cấu trúc cùng câu hỏi có/không để nhận xác suất trả lời có.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Máy chủ dùng định dạng Jev cho Noul, cho phép ứng dụng khách hiện có kết nối mô hình tự lưu trữ riêng.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Tải GGUF phát hành và runtime llama.cpp, chạy máy chủ CPU hoặc dùng jev decide với tệp yêu cầu.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Choice và Score trả 422. Đặt quy tắc trong instructions; trường criteria được nhận nhưng không được đọc.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "jevos: Jev biçiminde yerel evet/hayır kararları",
+      "h1": "jevos: Jev biçiminde yerel evet/hayır kararları",
+      "description": "jevos yerel modelle evet/hayır olasılıkları üretir; Jev istek biçimini yalnızca Noul soruları için destekler.",
+      "summary": "Metin veya yapılandırılmış durum ile evet/hayır sorusu verildiğinde evet olasılığı döner. Sunucu Jev’in Noul biçimini kullanır; mevcut istemciler kendi barındırdığınız ayrı bir modele bağlanabilir.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Amaç ve hedef kitle",
+          "text": "Metin veya yapılandırılmış durum ile evet/hayır sorusu verildiğinde evet olasılığı döner.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Sunucu Jev’in Noul biçimini kullanır; mevcut istemciler kendi barındırdığınız ayrı bir modele bağlanabilir.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Yayımlanmış GGUF ve llama.cpp çalışma ortamı indirilir; CPU sunucusu veya istek dosyasıyla jev decide kullanılır.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Choice ve Score istekleri 422 döndürür. Kurallar instructions içine yazılmalıdır; criteria alanı kabul edilir ama okunmaz.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "jevos: decisioni locali sì/no nel formato Jev",
+      "h1": "jevos: decisioni locali sì/no nel formato Jev",
+      "description": "jevos esegue un modello locale per probabilità sì/no e supporta il formato di richiesta Jev solo per Noul.",
+      "summary": "Si forniscono testo o stato strutturato e una domanda binaria per ottenere la probabilità di sì. Il server usa il formato Jev per Noul, permettendo ai client esistenti di collegarsi a un modello autogestito distinto.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Scopo e destinatari",
+          "text": "Si forniscono testo o stato strutturato e una domanda binaria per ottenere la probabilità di sì.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Il server usa il formato Jev per Noul, permettendo ai client esistenti di collegarsi a un modello autogestito distinto.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come si usa",
+          "text": "Si scaricano GGUF pubblicato e runtime llama.cpp, poi si avvia il server CPU o si usa jev decide con un file di richiesta.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "Choice e Score restituiscono 422. Le regole vanno in instructions: il campo criteria viene accettato ma non letto.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  },
+  "displayName": "jevos"
+}

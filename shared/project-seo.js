@@ -1,8 +1,10 @@
 import profiles from "../catalog/project-seo.json" with { type: "json" };
 import { PROJECT_SEO_COPY, TOPIC_KEYS } from "./project-seo-copy.js";
+import { matchingProjectContent } from "./project-content.js";
 
 export const PROJECT_SEO_VERSION = "project-intent-v1";
-export const PROJECT_SEO_LIMITS = { title: 76, description: 190, cjkDescription: 240 };
+// Soft editorial display budgets, never indexing gates or Google character limits.
+export const PROJECT_SEO_LIMITS = { title: 76, heading: 76, description: 190, cjkDescription: 240 };
 const clean = value => String(value ?? "").replace(/\s+/gu, " ").trim();
 const fill = (template, values) => clean(template.replace(/\{(\w+)\}/g, (_, key) => values[key] ?? ""));
 const sourceCode = { en: "source code", "zh-cn": "源码", "zh-tw": "原始碼", ja: "ソースコード", ko: "소스 코드", es: "código fuente", fr: "code source", de: "Quellcode", "pt-br": "código-fonte", ru: "исходный код", hi: "सोर्स कोड", id: "kode sumber", vi: "mã nguồn", tr: "kaynak kodunu", it: "codice sorgente" };
@@ -96,6 +98,26 @@ export function displayUnits(value) {
   return [...value].reduce((total, char) => total + (/\p{Mark}/u.test(char) ? 0 : /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Hangul}]/u.test(char) ? 2 : 1), 0);
 }
 
+const descriptionBudget = locale => ["zh-cn", "zh-tw", "ja", "ko"].includes(locale)
+  ? PROJECT_SEO_LIMITS.cjkDescription : PROJECT_SEO_LIMITS.description;
+
+export function projectSeoLengthDiagnostics({ title = "", heading = "", description = "" }, { localeKey = "en" } = {}) {
+  const locale = Object.hasOwn(PROJECT_SEO_COPY, localeKey) ? localeKey : "en";
+  const fields = {
+    // The renderer appends the site suffix; owner disambiguation is already in title.
+    title: { units: displayUnits(title + " | JevHunt"), budget: PROJECT_SEO_LIMITS.title },
+    heading: { units: displayUnits(heading), budget: PROJECT_SEO_LIMITS.heading },
+    description: { units: displayUnits(description), budget: descriptionBudget(locale) },
+  };
+  return { ...fields, flags: Object.entries(fields).filter(([, value]) => value.units > value.budget).map(([field]) => "long-" + field) };
+}
+
+function withLengthDiagnostics(metadata, locale) {
+  const lengthDiagnostics = projectSeoLengthDiagnostics(metadata, { localeKey: locale });
+  // Diagnose the actual copy without clipping a name, qualification or grapheme.
+  return { ...metadata, lengthDiagnostics, flags: [...metadata.flags, ...lengthDiagnostics.flags] };
+}
+
 function metadataRelationship(project) {
   const relation = project.relationship;
   if (relation !== "local-alternative") return relation;
@@ -108,9 +130,19 @@ function metadataRelationship(project) {
   return relation;
 }
 
-export function projectSeo(project, { localeKey = "en", duplicateName = false } = {}) {
+export function projectSeo(project, { localeKey = "en", duplicateName = false, content = null } = {}) {
   const locale = Object.hasOwn(PROJECT_SEO_COPY, localeKey) ? localeKey : "en";
   const copy = PROJECT_SEO_COPY[locale];
+  if (matchingProjectContent(project, content) && content.locales[locale]) {
+    const localized = content.locales[locale];
+    const name = content.displayName || projectName(project);
+    const owner = clean(project.repo).split("/")[0];
+    return withLengthDiagnostics({ title: localized.title + (duplicateName ? ` (${owner})` : ""), heading: localized.h1,
+      description: duplicateName ? localized.description.replace(name, `${name} (${owner})`) : localized.description,
+      name, topic: localized.sections.find(section => section.kind === "purpose")?.heading,
+      relationship: content.relationship, sourceHeading: copy.sourceHeading, intent: "source-backed",
+      basis: "reviewed-content", scoped: true, duplicateName, flags: content.status === "source-limited" ? ["source-limited"] : [] }, locale);
+  }
   const intent = projectIntent(project);
   const name = intent.profile?.name || projectName(project);
   const owner = clean(project.repo).split("/")[0];
@@ -136,11 +168,11 @@ export function projectSeo(project, { localeKey = "en", duplicateName = false } 
   const code = language ? fill(copy.code, { language }) : sourceCode[locale];
   const archived = project.archived === true ? copy.archived : "";
   const candidates = [join([opening, archived, fill(copy.action, { code })]), join([opening, archived, copy.shortAction])];
-  const budget = ["zh-cn", "zh-tw", "ja", "ko"].includes(locale) ? PROJECT_SEO_LIMITS.cjkDescription : PROJECT_SEO_LIMITS.description;
+  const budget = descriptionBudget(locale);
   // Drop optional copy as complete sentences, rather than clipping a promise,
   // a word, an emoji, or an identifier at an arbitrary 160 UTF-16 code units.
   const description = candidates.find(text => displayUnits(text) <= budget) || candidates.at(-1);
-  return { title, heading, description, name, topic, relationship, sourceHeading: copy.sourceHeading,
+  return withLengthDiagnostics({ title, heading, description, name, topic, relationship, sourceHeading: copy.sourceHeading,
     intent: intent.topic, basis: intent.basis, scoped: intent.scoped, duplicateName,
-    flags: [intent.basis === "catalog-facts" ? "needs-specific-description" : "", resolvedRelationship !== project.relationship ? "source-relationship-conflict" : "", displayUnits(title + " | JevHunt") > PROJECT_SEO_LIMITS.title ? "long-title" : "", displayUnits(description) > budget ? "long-description" : ""].filter(Boolean) };
+    flags: [intent.basis === "catalog-facts" ? "needs-specific-description" : "", resolvedRelationship !== project.relationship ? "source-relationship-conflict" : ""].filter(Boolean) }, locale);
 }

@@ -1,0 +1,756 @@
+{
+  "version": "source-content-v1",
+  "repo": "AbdelStark/awesome-typesafe-jev",
+  "repositoryId": 1374058281,
+  "relationship": "resource",
+  "category": "lists",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "0a8965532d5b420120cf8bf88469642bf5e2b35f",
+      "url": "https://github.com/AbdelStark/awesome-typesafe-jev/blob/0a8965532d5b420120cf8bf88469642bf5e2b35f/README.md",
+      "sha256": "4a9b0af3435beeb0530a2aa44242b568f8ae1171bb1cd7ee3dcadf76635cd25c",
+      "accessedAt": "2026-09-30T07:33:50.204Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "This community guide links live builds, starter examples and independent evaluations to help readers design a concrete Jev decision.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 13,
+          "end": 15,
+          "quote": "<p class=\"hero-description\">A community field guide to TypeSafe's Jev: see one documented call, try live projects, copy a starter, and inspect independent tests.</p>\n\n<p class=\"quick-actions\"><a href=\"https://abdelstark.github.io/awesome-typesafe-jev/#see-jev-at-work\">Try a live build</a> <span class=\"quick-action-separator\" aria-hidden=\"true\">·</span> <a href=\"https://abdelstark.github.io/awesome-typesafe-jev/#shape-a-typed-question\">Shape a decision</a> <span class=\"quick-action-separator\" aria-hidden=\"true\">·</span> <a href=\"https://abdelstark.github.io/awesome-typesafe-jev/#community-projects\">Explore projects</a> <span class=\"quick-action-separator\" aria-hidden=\"true\">·</span> <a href=\"https://abdelstark.github.io/awesome-typesafe-jev/#build-a-listing\">Add your project</a> <span class=\"quick-action-separator\" aria-hidden=\"true\">·</span> <a href=\"https://github.com/AbdelStark/awesome-typesafe-jev\">Star on GitHub</a></p>"
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "Its support-ticket example illustrates Choice, Score and Noul, while application code retains routing and escalation policy.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 21,
+          "end": 28,
+          "quote": "> **One call, three typed answers.** [TypeSafe's documented support-ticket example](https://docs.typesafe.ai/introduction/quickstart) shows the saved `jev-1.13.0` response below. This is a published example, not a live model call. Application code still decides when to route or escalate.\n\n| Input or answer | Documented value |\n| :--- | :--- |\n| State | `Hi, I've been trying to connect my Stripe account for 3 days and the integration keeps failing. I'm losing sales. Please help ASAP.` |\n| Choice | `technical` · 0.85 selected probability |\n| Score | `1` on a 0–2 frustration rubric (`Frustrated but civil`) |\n| Noul | `1.0` urgency probability |"
+        },
+        {
+          "source": "source-1",
+          "start": 99,
+          "end": 107,
+          "quote": "In a support workflow, separate the work before choosing a model. This is a practical design rule based on the TypeSafe introduction linked above, not a performance claim:\n\n| What the step needs | Use | Example |\n| :--- | :--- | :--- |\n| Apply an explicit rule to known fields | **Code** | Check an account flag or enforce a routing threshold. |\n| Judge messy context with a bounded answer | **Jev** | Choose billing, technical, or other for a ticket, with probabilities. |\n| Produce prose or work through an open-ended task | **Text LLM** | Draft the reply after the route is chosen. |\n\nCode still validates the answer and owns the action. Measure Jev's error and abstention rates on your own cases before automating a consequential step."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Use the first-call path, shape a bounded question, or download resources.json to explore the directory programmatically.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 48,
+          "end": 55,
+          "quote": "| I want to… | Go here |\n| :--- | :--- |\n| Understand the idea in 2 minutes | See [where Jev fits](#choose-the-right-tool), [try the policy threshold](#try-a-policy-threshold), then read [the introduction](https://docs.typesafe.ai/introduction) and [the three primitives](https://docs.typesafe.ai/primitives) |\n| Make my first typed call | [Copy the runnable example](#make-your-first-decision), [shape your own question](#shape-a-typed-question), then explore the [official SDKs](#sdks-and-developer-tools) |\n| See it work live | [Explore the featured builds](#see-jev-at-work), then browse [more applications](#applications-and-workflows) |\n| Test the claims | [Read what independent tests found](#before-you-trust-a-decision), inspect [JevBench's cross-model results](https://github.com/fstandhartinger/jevbench/blob/main/RESULTS-v1.2.md), then browse [independent evaluations](#evaluations-and-independent-research) and [TypeSafe's own evals](https://evals.typesafe.ai/) |\n\n**[Download the JSON directory](resources.json)** · **[Use with a coding agent](https://github.com/AbdelStark/awesome-typesafe-jev/blob/main/skills/awesome-jev/SKILL.md)** · **[Suggest a resource](https://github.com/AbdelStark/awesome-typesafe-jev/blob/main/CONTRIBUTING.md)** · **[Follow updates](https://github.com/AbdelStark/awesome-typesafe-jev/releases)** · **[Join the builder community](https://discord.gg/typesafe)**"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "The project is independent of TypeSafe. Inclusion does not mean TypeSafe reviewed or endorsed an entry, and links and descriptions can become stale.",
+      "kind": "source-limitation",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 57,
+          "end": 59,
+          "quote": "**Independent community project.** This repository is not affiliated with or endorsed by TypeSafe AI. Community entries are labeled by section; inclusion is not a claim that TypeSafe has reviewed or approved them.\n\nLast updated: 2026-09-23. Links and project descriptions change; please [report a stale entry](https://github.com/AbdelStark/awesome-typesafe-jev/issues/new?template=report-stale.yml)."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "awesome-typesafe-jev — Jev decision guide",
+      "h1": "awesome-typesafe-jev — A practical field guide to typed Jev decisions",
+      "description": "awesome-typesafe-jev: This community guide links live builds, starter examples and independent evaluations to help readers design a concrete Jev decision.",
+      "summary": "This community guide links live builds, starter examples and independent evaluations to help readers design a concrete Jev decision. Use the first-call path, shape a bounded question, or download resources.json to explore the directory programmatically.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "What it does",
+          "text": "This community guide links live builds, starter examples and independent evaluations to help readers design a concrete Jev decision.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "Its support-ticket example illustrates Choice, Score and Noul, while application code retains routing and escalation policy.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Getting started",
+          "text": "Use the first-call path, shape a bounded question, or download resources.json to explore the directory programmatically.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "The project is independent of TypeSafe. Inclusion does not mean TypeSafe reviewed or endorsed an entry, and links and descriptions can become stale.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "awesome-typesafe-jev — Jev 类型化决策实践指南",
+      "h1": "awesome-typesafe-jev — Jev 类型化决策实践指南",
+      "description": "awesome-typesafe-jev: 这份社区指南连接在线应用、入门示例和独立评估，帮助读者设计具体的 Jev 决策。",
+      "summary": "这份社区指南连接在线应用、入门示例和独立评估，帮助读者设计具体的 Jev 决策。 可沿首次调用路线入门、设计有界问题，或下载 resources.json 以程序方式浏览目录。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "这份社区指南连接在线应用、入门示例和独立评估，帮助读者设计具体的 Jev 决策。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "支持工单示例展示 Choice、Score 和 Noul，而路由与升级策略仍由应用代码掌控。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "可沿首次调用路线入门、设计有界问题，或下载 resources.json 以程序方式浏览目录。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "项目独立于 TypeSafe，收录不代表 TypeSafe 审核或背书，链接和描述也可能过时。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "awesome-typesafe-jev — Jev 型別化決策實務指南",
+      "h1": "awesome-typesafe-jev — Jev 型別化決策實務指南",
+      "description": "awesome-typesafe-jev: 這份社群指南連結線上應用、入門範例和獨立評估，協助讀者設計具體的 Jev 決策。",
+      "summary": "這份社群指南連結線上應用、入門範例和獨立評估，協助讀者設計具體的 Jev 決策。 可沿首次呼叫路線入門、設計有界問題，或下載 resources.json 以程式方式瀏覽目錄。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "這份社群指南連結線上應用、入門範例和獨立評估，協助讀者設計具體的 Jev 決策。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "客服工單範例展示 Choice、Score 和 Noul，而路由與升級處理策略仍由應用程式碼掌控。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "可沿首次呼叫路線入門、設計有界問題，或下載 resources.json 以程式方式瀏覽目錄。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "專案獨立於 TypeSafe，收錄不代表 TypeSafe 審核或背書，連結與描述也可能過時。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "awesome-typesafe-jev — 型付き Jev 判断の実践ガイド",
+      "h1": "awesome-typesafe-jev — 型付き Jev 判断の実践ガイド",
+      "description": "awesome-typesafe-jev: 公開アプリ、導入例、独立評価へのリンクを集め、具体的な Jev の判断を設計するためのコミュニティガイドです。",
+      "summary": "公開アプリ、導入例、独立評価へのリンクを集め、具体的な Jev の判断を設計するためのコミュニティガイドです。 初回呼び出しの手順や質問設計を読み、resources.json を取得してプログラムから一覧を利用できます。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "できること",
+          "text": "公開アプリ、導入例、独立評価へのリンクを集め、具体的な Jev の判断を設計するためのコミュニティガイドです。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "サポートチケットの例で Choice、Score、Noul を示し、振り分けやエスカレーションの方針はアプリ側のコードに委ねます。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い始めるには",
+          "text": "初回呼び出しの手順や質問設計を読み、resources.json を取得してプログラムから一覧を利用できます。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "対象範囲と制約",
+          "text": "TypeSafe とは独立したプロジェクトです。掲載は TypeSafe の審査や承認を意味せず、リンクや説明が古くなることがあります。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "awesome-typesafe-jev — Jev 판단 실무 안내",
+      "h1": "awesome-typesafe-jev — 타입이 지정된 Jev 판단 실무 안내",
+      "description": "awesome-typesafe-jev: 실제 서비스, 시작 예제, 독립 평가를 연결해 구체적인 Jev 판단을 설계하도록 돕는 커뮤니티 안내서입니다.",
+      "summary": "실제 서비스, 시작 예제, 독립 평가를 연결해 구체적인 Jev 판단을 설계하도록 돕는 커뮤니티 안내서입니다. 첫 호출 안내와 질문 설계를 살펴보거나 resources.json을 내려받아 프로그램에서 목록을 활용할 수 있습니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "실제 서비스, 시작 예제, 독립 평가를 연결해 구체적인 Jev 판단을 설계하도록 돕는 커뮤니티 안내서입니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "지원 티켓 예제로 Choice, Score, Noul을 설명하며 라우팅과 상위 담당자 이관 정책은 애플리케이션 코드가 관리합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "첫 호출 안내와 질문 설계를 살펴보거나 resources.json을 내려받아 프로그램에서 목록을 활용할 수 있습니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 제약",
+          "text": "TypeSafe와 독립된 프로젝트입니다. 수록은 TypeSafe의 검토나 보증을 뜻하지 않으며 링크와 설명이 오래될 수 있습니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "awesome-typesafe-jev — Guía de decisiones con Jev",
+      "h1": "awesome-typesafe-jev — Guía práctica de decisiones tipadas con Jev",
+      "description": "awesome-typesafe-jev: Esta guía comunitaria enlaza aplicaciones, ejemplos iniciales y evaluaciones independientes para diseñar decisiones concretas con Jev.",
+      "summary": "Esta guía comunitaria enlaza aplicaciones, ejemplos iniciales y evaluaciones independientes para diseñar decisiones concretas con Jev. Sigue el recorrido de la primera llamada, diseña una pregunta acotada o descarga resources.json para consultar el directorio por código.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "Esta guía comunitaria enlaza aplicaciones, ejemplos iniciales y evaluaciones independientes para diseñar decisiones concretas con Jev.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "El ejemplo de soporte ilustra Choice, Score y Noul; el código de la aplicación conserva la política de enrutamiento y escalado.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo empezar",
+          "text": "Sigue el recorrido de la primera llamada, diseña una pregunta acotada o descarga resources.json para consultar el directorio por código.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "El proyecto es independiente de TypeSafe. La inclusión no supone revisión ni respaldo de TypeSafe, y los enlaces y descripciones pueden quedar obsoletos.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "awesome-typesafe-jev — Guide des décisions Jev",
+      "h1": "awesome-typesafe-jev — Guide pratique des décisions typées avec Jev",
+      "description": "awesome-typesafe-jev: Ce guide communautaire relie applications, exemples de départ et évaluations indépendantes pour concevoir une décision concrète avec Jev.",
+      "summary": "Ce guide communautaire relie applications, exemples de départ et évaluations indépendantes pour concevoir une décision concrète avec Jev. Suivez le parcours du premier appel, construisez une question bornée ou téléchargez resources.json pour exploiter l’annuaire par programme.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "Ce guide communautaire relie applications, exemples de départ et évaluations indépendantes pour concevoir une décision concrète avec Jev.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "L’exemple de ticket illustre Choice, Score et Noul, tandis que le code applicatif conserve la politique de routage et d’escalade.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Suivez le parcours du premier appel, construisez une question bornée ou téléchargez resources.json pour exploiter l’annuaire par programme.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "Le projet est indépendant de TypeSafe. Une fiche ne signifie ni examen ni approbation par TypeSafe ; liens et descriptions peuvent vieillir.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "awesome-typesafe-jev — Leitfaden für Jev-Entscheidungen",
+      "h1": "awesome-typesafe-jev — Praxisleitfaden für typisierte Jev-Entscheidungen",
+      "description": "awesome-typesafe-jev: Der Community-Leitfaden verknüpft Anwendungen, Einstiegsbeispiele und unabhängige Auswertungen zur Gestaltung konkreter Jev-Entscheidungen.",
+      "summary": "Der Community-Leitfaden verknüpft Anwendungen, Einstiegsbeispiele und unabhängige Auswertungen zur Gestaltung konkreter Jev-Entscheidungen. Den Weg zum ersten Aufruf verfolgen, eine eingegrenzte Frage entwerfen oder resources.json für die programmatische Nutzung herunterladen.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "Der Community-Leitfaden verknüpft Anwendungen, Einstiegsbeispiele und unabhängige Auswertungen zur Gestaltung konkreter Jev-Entscheidungen.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Ein Supportticket zeigt Choice, Score und Noul; Routing- und Eskalationsregeln bleiben im Anwendungscode.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Einstieg",
+          "text": "Den Weg zum ersten Aufruf verfolgen, eine eingegrenzte Frage entwerfen oder resources.json für die programmatische Nutzung herunterladen.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Das Projekt ist unabhängig von TypeSafe. Einträge bedeuten keine Prüfung oder Empfehlung durch TypeSafe; Links und Beschreibungen können veralten.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "awesome-typesafe-jev — Guia de decisões com Jev",
+      "h1": "awesome-typesafe-jev — Guia prático de decisões tipadas com Jev",
+      "description": "awesome-typesafe-jev: Este guia comunitário reúne aplicações, exemplos iniciais e avaliações independentes para ajudar a projetar decisões concretas com Jev.",
+      "summary": "Este guia comunitário reúne aplicações, exemplos iniciais e avaliações independentes para ajudar a projetar decisões concretas com Jev. Siga o roteiro da primeira chamada, formule uma pergunta delimitada ou baixe resources.json para consultar o diretório por código.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "Este guia comunitário reúne aplicações, exemplos iniciais e avaliações independentes para ajudar a projetar decisões concretas com Jev.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "O exemplo de atendimento mostra Choice, Score e Noul; o código da aplicação mantém a política de roteamento e escalonamento.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como começar",
+          "text": "Siga o roteiro da primeira chamada, formule uma pergunta delimitada ou baixe resources.json para consultar o diretório por código.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "O projeto é independente da TypeSafe. Uma entrada não significa revisão ou endosso da TypeSafe, e links e descrições podem ficar desatualizados.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "awesome-typesafe-jev — Руководство по решениям Jev",
+      "h1": "awesome-typesafe-jev — Практическое руководство по типизированным решениям Jev",
+      "description": "awesome-typesafe-jev: Руководство сообщества объединяет приложения, стартовые примеры и независимые оценки для проектирования конкретных решений Jev.",
+      "summary": "Руководство сообщества объединяет приложения, стартовые примеры и независимые оценки для проектирования конкретных решений Jev. Изучите путь к первому вызову, сформулируйте ограниченный вопрос или скачайте resources.json для программной работы с каталогом.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Руководство сообщества объединяет приложения, стартовые примеры и независимые оценки для проектирования конкретных решений Jev.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Пример заявки в поддержку показывает Choice, Score и Noul, а правила маршрутизации и эскалации остаются в коде приложения.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Начало работы",
+          "text": "Изучите путь к первому вызову, сформулируйте ограниченный вопрос или скачайте resources.json для программной работы с каталогом.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Проект независим от TypeSafe. Включение не означает проверку или одобрение TypeSafe; ссылки и описания могут устаревать.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "awesome-typesafe-jev — Jev निर्णय मार्गदर्शिका",
+      "h1": "awesome-typesafe-jev — Jev के निर्धारित प्रकार वाले निर्णयों की व्यावहारिक मार्गदर्शिका",
+      "description": "awesome-typesafe-jev: यह सामुदायिक मार्गदर्शिका चलती सेवाओं, शुरुआती उदाहरणों और स्वतंत्र मूल्यांकनों से ठोस Jev निर्णय बनाने में मदद करती है।",
+      "summary": "यह सामुदायिक मार्गदर्शिका चलती सेवाओं, शुरुआती उदाहरणों और स्वतंत्र मूल्यांकनों से ठोस Jev निर्णय बनाने में मदद करती है। पहली कॉल का मार्ग पढ़ें, सीमित प्रश्न बनाएँ या प्रोग्राम से सूची देखने के लिए resources.json डाउनलोड करें।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "परियोजना का काम",
+          "text": "यह सामुदायिक मार्गदर्शिका चलती सेवाओं, शुरुआती उदाहरणों और स्वतंत्र मूल्यांकनों से ठोस Jev निर्णय बनाने में मदद करती है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "सहायता टिकट का उदाहरण Choice, Score और Noul दिखाता है; रूटिंग और आगे भेजने की नीति अनुप्रयोग कोड तय करता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "शुरुआत कैसे करें",
+          "text": "पहली कॉल का मार्ग पढ़ें, सीमित प्रश्न बनाएँ या प्रोग्राम से सूची देखने के लिए resources.json डाउनलोड करें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "परियोजना TypeSafe से स्वतंत्र है। सूची में होना TypeSafe की समीक्षा या समर्थन नहीं दर्शाता; लिंक और विवरण पुराने हो सकते हैं।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "awesome-typesafe-jev — Panduan keputusan Jev",
+      "h1": "awesome-typesafe-jev — Panduan praktis keputusan bertipe Jev",
+      "description": "awesome-typesafe-jev: Panduan komunitas ini menautkan aplikasi, contoh awal, dan evaluasi independen untuk merancang keputusan Jev yang konkret.",
+      "summary": "Panduan komunitas ini menautkan aplikasi, contoh awal, dan evaluasi independen untuk merancang keputusan Jev yang konkret. Ikuti jalur panggilan pertama, rancang pertanyaan terbatas, atau unduh resources.json untuk memakai direktori secara terprogram.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "Panduan komunitas ini menautkan aplikasi, contoh awal, dan evaluasi independen untuk merancang keputusan Jev yang konkret.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Contoh tiket dukungan menjelaskan Choice, Score, dan Noul, sementara kode aplikasi memegang kebijakan perutean dan eskalasi.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara memulai",
+          "text": "Ikuti jalur panggilan pertama, rancang pertanyaan terbatas, atau unduh resources.json untuk memakai direktori secara terprogram.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Proyek ini independen dari TypeSafe. Pencantuman bukan berarti peninjauan atau dukungan TypeSafe; tautan dan deskripsi dapat kedaluwarsa.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "awesome-typesafe-jev — Hướng dẫn quyết định Jev",
+      "h1": "awesome-typesafe-jev — Hướng dẫn thực hành quyết định có kiểu với Jev",
+      "description": "awesome-typesafe-jev: Hướng dẫn cộng đồng liên kết ứng dụng, ví dụ khởi đầu và đánh giá độc lập để giúp thiết kế quyết định Jev cụ thể.",
+      "summary": "Hướng dẫn cộng đồng liên kết ứng dụng, ví dụ khởi đầu và đánh giá độc lập để giúp thiết kế quyết định Jev cụ thể. Theo lộ trình gọi lần đầu, xây dựng câu hỏi có giới hạn hoặc tải resources.json để khai thác danh mục bằng chương trình.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Công dụng",
+          "text": "Hướng dẫn cộng đồng liên kết ứng dụng, ví dụ khởi đầu và đánh giá độc lập để giúp thiết kế quyết định Jev cụ thể.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Ví dụ phiếu hỗ trợ minh họa Choice, Score và Noul; chính sách định tuyến và chuyển cấp vẫn do mã ứng dụng quản lý.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách bắt đầu",
+          "text": "Theo lộ trình gọi lần đầu, xây dựng câu hỏi có giới hạn hoặc tải resources.json để khai thác danh mục bằng chương trình.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Dự án độc lập với TypeSafe. Việc được liệt kê không có nghĩa TypeSafe đã kiểm tra hay bảo chứng; liên kết và mô tả có thể lỗi thời.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "awesome-typesafe-jev — Jev karar rehberi",
+      "h1": "awesome-typesafe-jev — Türleri belirlenmiş Jev kararlarına uygulamalı rehber",
+      "description": "awesome-typesafe-jev: Bu topluluk rehberi somut Jev kararları tasarlamak için uygulamaları, başlangıç örneklerini ve bağımsız değerlendirmeleri bir araya getirir.",
+      "summary": "Bu topluluk rehberi somut Jev kararları tasarlamak için uygulamaları, başlangıç örneklerini ve bağımsız değerlendirmeleri bir araya getirir. İlk çağrı yolunu izleyin, sınırları belli bir soru tasarlayın veya dizini kodla kullanmak için resources.json dosyasını indirin.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "Bu topluluk rehberi somut Jev kararları tasarlamak için uygulamaları, başlangıç örneklerini ve bağımsız değerlendirmeleri bir araya getirir.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Destek kaydı örneği Choice, Score ve Noul’u gösterir; yönlendirme ve üst kademeye aktarma politikası uygulama kodunda kalır.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Başlangıç",
+          "text": "İlk çağrı yolunu izleyin, sınırları belli bir soru tasarlayın veya dizini kodla kullanmak için resources.json dosyasını indirin.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Proje TypeSafe’ten bağımsızdır. Listelenmek TypeSafe incelemesi veya onayı anlamına gelmez; bağlantılar ve açıklamalar eskiyebilir.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "awesome-typesafe-jev — Guida alle decisioni Jev",
+      "h1": "awesome-typesafe-jev — Guida pratica alle decisioni tipizzate con Jev",
+      "description": "awesome-typesafe-jev: Questa guida della comunità collega applicazioni, esempi iniziali e valutazioni indipendenti per progettare decisioni concrete con Jev.",
+      "summary": "Questa guida della comunità collega applicazioni, esempi iniziali e valutazioni indipendenti per progettare decisioni concrete con Jev. Segui il percorso della prima chiamata, formula una domanda circoscritta o scarica resources.json per consultare il catalogo da codice.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "Questa guida della comunità collega applicazioni, esempi iniziali e valutazioni indipendenti per progettare decisioni concrete con Jev.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "L’esempio di assistenza illustra Choice, Score e Noul; il codice applicativo mantiene le regole di instradamento ed escalation.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come iniziare",
+          "text": "Segui il percorso della prima chiamata, formula una domanda circoscritta o scarica resources.json per consultare il catalogo da codice.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "Il progetto è indipendente da TypeSafe. L’inclusione non implica verifica o approvazione di TypeSafe; collegamenti e descrizioni possono diventare obsoleti.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

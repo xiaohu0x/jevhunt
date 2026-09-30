@@ -1,0 +1,769 @@
+{
+  "version": "source-content-v1",
+  "repo": "milind-soni/tiptour-macos",
+  "repositoryId": 1204984760,
+  "relationship": "jev-app",
+  "category": "browser",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "52582467c883d66484542f3be8e259340eb524f1",
+      "url": "https://github.com/milind-soni/tiptour-macos/blob/52582467c883d66484542f3be8e259340eb524f1/README.md",
+      "sha256": "8a00ecfcd3dcd46e3f950f441871e31083091ee3c349f20cd40e5e96d62e1402",
+      "accessedAt": "2026-09-30T07:33:49.198Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "kind": "documented",
+      "text": "TipTour is a macOS menu-bar companion with Jev text tasks and a separate Gemini voice mode.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 14,
+          "end": 23,
+          "quote": "A macOS menu bar companion with two modes, powered by your own API keys.\n\n| Mode | Shortcut | What it does |\n| --- | --- | --- |\n| Gemini realtime | Ctrl+Option | Talk about your screen and ask for one desktop action per turn. Press again to stop. |\n| JEV text | Ctrl+K | Type a click-based task. JEV chooses from locally detected controls, then TipTour executes and validates each action. |\n\n**JEV is selected by default.** On first launch, choose JEV or Gemini, save that mode’s API key, then grant its permissions. JEV does not require microphone access. You can switch later in **Settings → Models**, which shows only the selected mode’s key field. Keys stay in macOS Keychain. There are no shared keys, hosted key proxies, or keys loaded from other projects.\n\nShortcuts activate only the selected mode. The primary menu-bar button and welcome hint follow your selection."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "kind": "documented",
+      "text": "Jev chooses locally detected controls; TipTour executes and validates clicks while screenshots stay local.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 19,
+          "end": 19,
+          "quote": "| JEV text | Ctrl+K | Type a click-based task. JEV chooses from locally detected controls, then TipTour executes and validates each action. |"
+        },
+        {
+          "source": "source-1",
+          "start": 28,
+          "end": 29,
+          "quote": "- JEV supports single, double, and right clicks. It reads screen labels and locations from local detection; it cannot see images or generate replacement text. Use Gemini for writing or keyboard actions.\n- Press **Escape** in the text panel or click **Stop** to cancel JEV. JEV acts on its top-ranked target without a confidence cutoff. The loop stops when JEV chooses none or reports completion, on an execution pause/failure, or at its 12-action limit."
+        },
+        {
+          "source": "source-1",
+          "start": 38,
+          "end": 38,
+          "quote": "Gemini receives microphone audio and, when enabled, screenshots. JEV receives your typed task, locally detected labels/locations, and recent action history; screenshots stay local. Both modes use the shared local grounding and action engine."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "kind": "documented",
+      "text": "Select a mode, supply its API key and grant permissions; building requires macOS 14.2+ and Xcode.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 21,
+          "end": 21,
+          "quote": "**JEV is selected by default.** On first launch, choose JEV or Gemini, save that mode’s API key, then grant its permissions. JEV does not require microphone access. You can switch later in **Settings → Models**, which shows only the selected mode’s key field. Keys stay in macOS Keychain. There are no shared keys, hosted key proxies, or keys loaded from other projects."
+        },
+        {
+          "source": "source-1",
+          "start": 40,
+          "end": 44,
+          "quote": "Accessibility permission is needed to inspect and control apps. macOS Screen Recording / Screen Content permission enables screenshots and local screen detection; it does **not** mean TipTour records videos. Microphone access is only needed for Gemini voice.\n\n## Build\n\nRequires macOS 14.2+ and a current Xcode with Swift support. Open `tiptour-macos.xcodeproj`, select the TipTour scheme, set your signing team, and build/run in Xcode. Package dependencies resolve through Xcode."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "kind": "documented",
+      "text": "Jev cannot type or interpret images. Its auto-click loop has no confidence cutoff and stops after at most 12 actions.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 28,
+          "end": 32,
+          "quote": "- JEV supports single, double, and right clicks. It reads screen labels and locations from local detection; it cannot see images or generate replacement text. Use Gemini for writing or keyboard actions.\n- Press **Escape** in the text panel or click **Stop** to cancel JEV. JEV acts on its top-ranked target without a confidence cutoff. The loop stops when JEV chooses none or reports completion, on an execution pause/failure, or at its 12-action limit.\n- Hold **Ctrl+Shift** and paint over an area to give Gemini focus context.\n- Hold **Ctrl+Option+Command** for the Speak / Type / Highlight shortcut chooser.\n- **Auto-click** lets TipTour act. **Point only** lets Gemini indicate where you should click. JEV requires auto-click."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "TipTour: Jev desktop clicks from the macOS menu bar",
+      "h1": "TipTour: Jev desktop clicks from the macOS menu bar",
+      "description": "TipTour offers Jev click tasks from the macOS menu bar alongside Gemini voice. Jev picks locally detected controls; the app executes and validates each click.",
+      "summary": "TipTour is a macOS menu-bar companion with Jev text tasks and a separate Gemini voice mode. Jev chooses locally detected controls; TipTour executes and validates clicks while screenshots stay local. Select a mode, supply its API key and grant permissions; building requires macOS 14.2+ and Xcode.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose",
+          "text": "TipTour is a macOS menu-bar companion with Jev text tasks and a separate Gemini voice mode.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’s role",
+          "text": "Jev chooses locally detected controls; TipTour executes and validates clicks while screenshots stay local.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "How to use it",
+          "text": "Select a mode, supply its API key and grant permissions; building requires macOS 14.2+ and Xcode.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limits to consider",
+          "text": "Jev cannot type or interpret images. Its auto-click loop has no confidence cutoff and stops after at most 12 actions.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "TipTour：从 macOS 菜单栏用 Jev 点击桌面",
+      "h1": "TipTour：从 macOS 菜单栏用 Jev 点击桌面",
+      "description": "TipTour 从 macOS 菜单栏提供 Jev 文字点击任务和独立 Gemini 语音模式；Jev 选择本地检测控件，应用执行并验证点击，截图保留本地，最多连续操作 12 次。",
+      "summary": "TipTour 是 macOS 菜单栏助手，提供 Jev 文字任务和独立的 Gemini 语音模式。 Jev 选择本地检测到的控件，TipTour 执行并验证点击；截图保留在本机。 选择模式、提供相应 API 密钥并授予权限；构建需要 macOS 14.2+ 和 Xcode。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "TipTour 是 macOS 菜单栏助手，提供 Jev 文字任务和独立的 Gemini 语音模式。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "Jev 选择本地检测到的控件，TipTour 执行并验证点击；截图保留在本机。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "选择模式、提供相应 API 密钥并授予权限；构建需要 macOS 14.2+ 和 Xcode。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用边界",
+          "text": "Jev 不能输入文字或理解图像；自动点击没有置信度门槛，最多执行 12 个动作。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "TipTour：從 macOS 選單列以 Jev 點擊桌面",
+      "h1": "TipTour：從 macOS 選單列以 Jev 點擊桌面",
+      "description": "TipTour 從 macOS 選單列提供 Jev 文字點擊任務與獨立 Gemini 語音模式；Jev 選擇本地偵測控制項，應用執行並驗證點擊，截圖留在本機，最多連續操作 12 次。",
+      "summary": "TipTour 是 macOS 選單列助手，提供 Jev 文字任務與獨立的 Gemini 語音模式。 Jev 選擇本地偵測到的控制項，TipTour 執行並驗證點擊；截圖留在本機。 選擇模式、提供對應 API 金鑰並授予權限；建置需要 macOS 14.2+ 與 Xcode。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "TipTour 是 macOS 選單列助手，提供 Jev 文字任務與獨立的 Gemini 語音模式。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "Jev 選擇本地偵測到的控制項，TipTour 執行並驗證點擊；截圖留在本機。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "選擇模式、提供對應 API 金鑰並授予權限；建置需要 macOS 14.2+ 與 Xcode。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用限制",
+          "text": "Jev 不能輸入文字或理解影像；自動點擊沒有信心門檻，最多執行 12 個動作。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "TipTour：macOS メニューバーから Jev でクリック",
+      "h1": "TipTour：macOS メニューバーから Jev でクリック",
+      "description": "TipTour は macOS メニューバーから Jev のクリック操作と Gemini 音声を提供します。Jev がローカル検出した対象を選び、アプリが実行・検証します。",
+      "summary": "TipTour は Jev のテキスト指示と、別の Gemini 音声モードを備える macOS メニューバーアプリです。 Jev が端末内で検出したコントロールを選び、TipTour がクリックを実行・確認します。画像は端末内に残ります。 モードと API キーを設定し、権限を許可します。ビルドには macOS 14.2 以降と Xcode が必要です。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "何ができるか",
+          "text": "TipTour は Jev のテキスト指示と、別の Gemini 音声モードを備える macOS メニューバーアプリです。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "Jev が端末内で検出したコントロールを選び、TipTour がクリックを実行・確認します。画像は端末内に残ります。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "モードと API キーを設定し、権限を許可します。ビルドには macOS 14.2 以降と Xcode が必要です。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "制約と注意点",
+          "text": "Jev は入力や画像理解に対応しません。自動クリックには確信度の足切りがなく、最大 12 操作で停止します。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "TipTour: macOS 메뉴 막대에서 Jev로 클릭",
+      "h1": "TipTour: macOS 메뉴 막대에서 Jev로 클릭",
+      "description": "TipTour는 macOS 메뉴 막대에서 Jev 클릭 작업과 Gemini 음성 모드를 제공합니다. Jev가 로컬 컨트롤을 고르고 앱이 클릭을 실행·검증합니다.",
+      "summary": "TipTour는 Jev 텍스트 작업과 별도의 Gemini 음성 모드가 있는 macOS 메뉴 막대 도우미입니다. Jev가 로컬에서 탐지한 컨트롤을 선택하면 TipTour가 클릭을 실행하고 검증합니다. 스크린샷은 로컬에 남습니다. 모드를 고르고 해당 API 키와 권한을 설정합니다. 빌드에는 macOS 14.2+와 Xcode가 필요합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "TipTour는 Jev 텍스트 작업과 별도의 Gemini 음성 모드가 있는 macOS 메뉴 막대 도우미입니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Jev가 로컬에서 탐지한 컨트롤을 선택하면 TipTour가 클릭을 실행하고 검증합니다. 스크린샷은 로컬에 남습니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "모드를 고르고 해당 API 키와 권한을 설정합니다. 빌드에는 macOS 14.2+와 Xcode가 필요합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "제약 사항",
+          "text": "Jev는 타이핑이나 이미지 이해를 못합니다. 자동 클릭에는 신뢰도 임계값이 없고 최대 12개 동작 후 멈춥니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "TipTour: clics con Jev desde la barra de macOS",
+      "h1": "TipTour: clics con Jev desde la barra de macOS",
+      "description": "TipTour ofrece tareas de clic Jev y voz Gemini desde macOS. Jev elige controles detectados localmente; la app ejecuta y valida cada clic.",
+      "summary": "TipTour es un asistente de barra de menú macOS con tareas de texto Jev y un modo de voz Gemini separado. Jev elige controles detectados localmente; TipTour ejecuta y valida clics, manteniendo las capturas en el equipo. Selecciona modo, aporta su clave API y concede permisos; compilar requiere macOS 14.2+ y Xcode.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "TipTour es un asistente de barra de menú macOS con tareas de texto Jev y un modo de voz Gemini separado.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "El papel de Jev",
+          "text": "Jev elige controles detectados localmente; TipTour ejecuta y valida clics, manteniendo las capturas en el equipo.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo usarlo",
+          "text": "Selecciona modo, aporta su clave API y concede permisos; compilar requiere macOS 14.2+ y Xcode.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Límites a considerar",
+          "text": "Jev no escribe ni interpreta imágenes. El bucle de clic automático carece de umbral de confianza y admite como máximo 12 acciones.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "TipTour : clics Jev depuis la barre de menus macOS",
+      "h1": "TipTour : clics Jev depuis la barre de menus macOS",
+      "description": "TipTour propose clics Jev et voix Gemini depuis macOS. Jev choisit les contrôles détectés localement ; l’application exécute et valide chaque clic.",
+      "summary": "TipTour est un assistant macOS proposant des tâches écrites Jev et un mode vocal Gemini distinct. Jev sélectionne les contrôles détectés localement ; TipTour exécute et vérifie les clics, en gardant les captures sur l’appareil. Choisissez un mode, fournissez sa clé API et accordez les permissions ; la compilation nécessite macOS 14.2+ et Xcode.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "TipTour est un assistant macOS proposant des tâches écrites Jev et un mode vocal Gemini distinct.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Le rôle de Jev",
+          "text": "Jev sélectionne les contrôles détectés localement ; TipTour exécute et vérifie les clics, en gardant les captures sur l’appareil.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Utilisation",
+          "text": "Choisissez un mode, fournissez sa clé API et accordez les permissions ; la compilation nécessite macOS 14.2+ et Xcode.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limites à connaître",
+          "text": "Jev ne saisit pas de texte et n’interprète pas d’images. Les clics automatiques n’ont aucun seuil de confiance et sont limités à 12 actions.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "TipTour: Jev-Klicks aus der macOS-Menüleiste",
+      "h1": "TipTour: Jev-Klicks aus der macOS-Menüleiste",
+      "description": "TipTour bietet Jev-Klickaufgaben und Gemini-Sprache aus der macOS-Menüleiste. Jev wählt lokale Steuerelemente; die App führt Klicks aus und prüft sie.",
+      "summary": "TipTour ist ein macOS-Menüleistenassistent mit Jev-Textaufgaben und einem separaten Gemini-Sprachmodus. Jev wählt lokal erkannte Steuerelemente; TipTour führt Klicks aus und prüft sie. Screenshots bleiben lokal. Modus wählen, API-Schlüssel hinterlegen und Rechte erteilen; zum Bauen sind macOS 14.2+ und Xcode nötig.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "TipTour ist ein macOS-Menüleistenassistent mit Jev-Textaufgaben und einem separaten Gemini-Sprachmodus.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Die Rolle von Jev",
+          "text": "Jev wählt lokal erkannte Steuerelemente; TipTour führt Klicks aus und prüft sie. Screenshots bleiben lokal.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Nutzung",
+          "text": "Modus wählen, API-Schlüssel hinterlegen und Rechte erteilen; zum Bauen sind macOS 14.2+ und Xcode nötig.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Grenzen",
+          "text": "Jev kann weder tippen noch Bilder verstehen. Automatische Klicks haben keine Konfidenzschwelle und enden nach höchstens 12 Aktionen.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "TipTour: cliques com Jev pela barra do macOS",
+      "h1": "TipTour: cliques com Jev pela barra do macOS",
+      "description": "TipTour oferece cliques Jev e voz Gemini pela barra do macOS. Jev escolhe controles detectados localmente; o app executa e valida cada clique.",
+      "summary": "TipTour é um assistente na barra de menus do macOS com tarefas de texto Jev e modo de voz Gemini separado. Jev escolhe controles detectados localmente; TipTour executa e valida cliques, mantendo capturas na máquina. Selecione o modo, forneça sua chave API e conceda permissões; compilar exige macOS 14.2+ e Xcode.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "TipTour é um assistente na barra de menus do macOS com tarefas de texto Jev e modo de voz Gemini separado.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "O papel do Jev",
+          "text": "Jev escolhe controles detectados localmente; TipTour executa e valida cliques, mantendo capturas na máquina.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Selecione o modo, forneça sua chave API e conceda permissões; compilar exige macOS 14.2+ e Xcode.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limitações",
+          "text": "Jev não digita nem interpreta imagens. O clique automático não tem corte por confiança e limita-se a 12 ações.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "TipTour: клики Jev из строки меню macOS",
+      "h1": "TipTour: клики Jev из строки меню macOS",
+      "description": "TipTour предлагает клики Jev и голос Gemini из строки меню macOS. Jev выбирает локальные элементы; приложение выполняет и проверяет клики.",
+      "summary": "TipTour — помощник в строке меню macOS с текстовыми задачами Jev и отдельным голосовым режимом Gemini. Jev выбирает локально обнаруженные элементы; TipTour выполняет и проверяет клики. Скриншоты остаются на устройстве. Выберите режим, укажите его API-ключ и разрешения; для сборки нужны macOS 14.2+ и Xcode.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "TipTour — помощник в строке меню macOS с текстовыми задачами Jev и отдельным голосовым режимом Gemini.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Jev выбирает локально обнаруженные элементы; TipTour выполняет и проверяет клики. Скриншоты остаются на устройстве.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Выберите режим, укажите его API-ключ и разрешения; для сборки нужны macOS 14.2+ и Xcode.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ограничения",
+          "text": "Jev не вводит текст и не понимает изображения. Автоклики не ограничены порогом уверенности; цикл прекращается максимум после 12 действий.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "TipTour: macOS मेन्यू बार से Jev क्लिक",
+      "h1": "TipTour: macOS मेन्यू बार से Jev क्लिक",
+      "description": "TipTour macOS मेन्यू बार से Jev क्लिक और Gemini आवाज़ मोड देता है। Jev स्थानीय कंट्रोल चुनता है; ऐप क्लिक चलाता और जाँचता है।",
+      "summary": "TipTour macOS मेन्यू बार सहायक है, जिसमें Jev पाठ-आधारित काम और अलग Gemini आवाज़ मोड है। Jev स्थानीय रूप से मिले कंट्रोल चुनता है; TipTour क्लिक करता और जाँचता है। स्क्रीनशॉट स्थानीय रहते हैं। मोड चुनें, उसकी API कुंजी दें और अनुमतियाँ दें; बिल्ड के लिए macOS 14.2+ और Xcode चाहिए।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "किस काम आता है",
+          "text": "TipTour macOS मेन्यू बार सहायक है, जिसमें Jev पाठ-आधारित काम और अलग Gemini आवाज़ मोड है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "Jev स्थानीय रूप से मिले कंट्रोल चुनता है; TipTour क्लिक करता और जाँचता है। स्क्रीनशॉट स्थानीय रहते हैं।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल कैसे करें",
+          "text": "मोड चुनें, उसकी API कुंजी दें और अनुमतियाँ दें; बिल्ड के लिए macOS 14.2+ और Xcode चाहिए।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "सीमाएँ",
+          "text": "Jev न तो पाठ टाइप कर सकता है, न चित्रों को समझ सकता है। स्वचालित क्लिक में विश्वास सीमा नहीं है और अधिकतम 12 कार्रवाइयाँ होती हैं।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "TipTour: klik Jev dari bilah menu macOS",
+      "h1": "TipTour: klik Jev dari bilah menu macOS",
+      "description": "TipTour menyediakan klik Jev dan suara Gemini dari menu macOS. Jev memilih kontrol lokal; aplikasi menjalankan dan memverifikasi tiap klik.",
+      "summary": "TipTour adalah pendamping bilah menu macOS dengan tugas teks Jev dan mode suara Gemini yang terpisah. Jev memilih kontrol yang terdeteksi lokal; TipTour menjalankan dan memverifikasi klik, sementara tangkapan layar tetap lokal. Pilih mode, masukkan kunci API-nya, dan berikan izin; pembuatan aplikasi memerlukan macOS 14.2+ dan Xcode.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "TipTour adalah pendamping bilah menu macOS dengan tugas teks Jev dan mode suara Gemini yang terpisah.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Jev memilih kontrol yang terdeteksi lokal; TipTour menjalankan dan memverifikasi klik, sementara tangkapan layar tetap lokal.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Pilih mode, masukkan kunci API-nya, dan berikan izin; pembuatan aplikasi memerlukan macOS 14.2+ dan Xcode.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Batasan",
+          "text": "Jev tidak dapat mengetik atau memahami gambar. Klik otomatis tanpa ambang keyakinan dibatasi hingga 12 tindakan.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "TipTour: nhấp bằng Jev từ thanh menu macOS",
+      "h1": "TipTour: nhấp bằng Jev từ thanh menu macOS",
+      "description": "TipTour cung cấp nhấp Jev và giọng nói Gemini từ thanh menu macOS. Jev chọn điều khiển cục bộ; ứng dụng thực thi và xác minh từng cú nhấp.",
+      "summary": "TipTour là trợ lý trên thanh menu macOS với tác vụ văn bản Jev và chế độ giọng nói Gemini riêng. Jev chọn điều khiển được phát hiện cục bộ; TipTour thực thi và xác minh cú nhấp, giữ ảnh chụp tại máy. Chọn chế độ, nhập khóa API tương ứng và cấp quyền; cần macOS 14.2+ cùng Xcode để dựng ứng dụng.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích",
+          "text": "TipTour là trợ lý trên thanh menu macOS với tác vụ văn bản Jev và chế độ giọng nói Gemini riêng.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Jev chọn điều khiển được phát hiện cục bộ; TipTour thực thi và xác minh cú nhấp, giữ ảnh chụp tại máy.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Chọn chế độ, nhập khóa API tương ứng và cấp quyền; cần macOS 14.2+ cùng Xcode để dựng ứng dụng.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Giới hạn",
+          "text": "Jev không gõ chữ hay hiểu hình ảnh. Vòng lặp tự nhấp không có ngưỡng tin cậy và dừng sau tối đa 12 hành động.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "TipTour: macOS menü çubuğundan Jev tıklamaları",
+      "h1": "TipTour: macOS menü çubuğundan Jev tıklamaları",
+      "description": "TipTour macOS menüsünden Jev tıklama görevleri ve Gemini sesi sunar. Jev yerel kontrolleri seçer; uygulama her tıklamayı yürütüp doğrular.",
+      "summary": "TipTour, Jev metin görevleri ve ayrı Gemini ses modu sunan macOS menü çubuğu yardımcısıdır. Jev yerelde algılanan kontrolleri seçer; TipTour tıklayıp doğrular, ekran görüntüleri yerelde kalır. Modu seçin, API anahtarını girip izin verin; derleme için macOS 14.2+ ve Xcode gerekir.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "TipTour, Jev metin görevleri ve ayrı Gemini ses modu sunan macOS menü çubuğu yardımcısıdır.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Jev yerelde algılanan kontrolleri seçer; TipTour tıklayıp doğrular, ekran görüntüleri yerelde kalır.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Modu seçin, API anahtarını girip izin verin; derleme için macOS 14.2+ ve Xcode gerekir.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Sınırlamalar",
+          "text": "Jev yazı yazamaz veya görüntü yorumlayamaz. Otomatik tıklamada güven eşiği yoktur; döngü en çok 12 eylemden sonra durur.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "TipTour: clic Jev dalla barra dei menu macOS",
+      "h1": "TipTour: clic Jev dalla barra dei menu macOS",
+      "description": "TipTour offre clic Jev e voce Gemini dalla barra macOS. Jev sceglie controlli rilevati localmente; l’app esegue e verifica ogni clic.",
+      "summary": "TipTour è un assistente macOS con compiti testuali Jev e una modalità vocale Gemini separata. Jev sceglie controlli rilevati localmente; TipTour esegue e verifica i clic, mantenendo gli screenshot sul dispositivo. Scegli modalità, chiave API e permessi; la compilazione richiede macOS 14.2+ e Xcode.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "TipTour è un assistente macOS con compiti testuali Jev e una modalità vocale Gemini separata.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Il ruolo di Jev",
+          "text": "Jev sceglie controlli rilevati localmente; TipTour esegue e verifica i clic, mantenendo gli screenshot sul dispositivo.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come usarlo",
+          "text": "Scegli modalità, chiave API e permessi; la compilazione richiede macOS 14.2+ e Xcode.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limiti",
+          "text": "Jev non digita né interpreta immagini. I clic automatici non hanno soglia di confidenza e terminano dopo massimo 12 azioni.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  },
+  "displayName": "TipTour"
+}

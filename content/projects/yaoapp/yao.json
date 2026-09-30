@@ -1,0 +1,763 @@
+{
+  "version": "source-content-v1",
+  "repo": "YaoApp/yao",
+  "repositoryId": 403559729,
+  "relationship": "integration",
+  "category": "agents",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "path": "README.md",
+      "commit": "3f5c74468213351118b2463921735f7186d51841",
+      "url": "https://github.com/YaoApp/yao/blob/3f5c74468213351118b2463921735f7186d51841/README.md",
+      "sha256": "2036289a12ca08b81fe0035f55dd76d205eaac77a8ebc32d06ad778d6e6b6317",
+      "accessedAt": "2026-09-30T07:33:45.194Z",
+      "id": "s1"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "The self-hosted platform organizes agents, isolated workspaces and task boards across your own computers.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 1,
+          "end": 3,
+          "quote": "# Yao Agents\n\n✨ **All your agents and workspaces in one place, on every device you own. Track tasks on a board, accessible from desktop, mobile, browser, or API. Self-hosted.**"
+        },
+        {
+          "source": "s1",
+          "start": 25,
+          "end": 31,
+          "quote": "Agents run on your own devices. Every machine you add is another place for them to work, all managed from one place.\n\n## Workspaces\n\nEvery workspace is isolated. Work stays separate, managed across all your computers, and accumulates into documents that become your knowledge base.\n\nWhile working, agents can read what they need from any node."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "The README lists TypeSafe's Jev as an available model that returns typed decisions with confidence rather than generated text.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 17,
+          "end": 17,
+          "quote": "🧠 Jev is TypeSafe AI's System One model: it doesn't write text, it returns typed decisions with confidence. Now available in Yao Agents. [Learn more →](https://yaoagents.com/blog/en-us/2026/release/jev)"
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Create tasks through conversation, track them on the board, or connect agents to applications through APIs supporting SSE and WebSocket.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 35,
+          "end": 47,
+          "quote": "## Task Board\n\nSay what you need in a conversation, and it becomes a task on your board.\n\nKeep the conversation going, keep it running, and it improves with use, growing into an agent purpose-built for this kind of work.\n\nConnect task agents to your apps, or share them with others.\n\n![Task Board](https://assets.yaoagents.com/en/kanban/09-kanban-daily-en-dark.png)\n\n## Open API\n\nExpert and task agents integrate into your own apps and workflows. They're built on standard APIs, with both SSE and WebSocket support."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "Agents run on your devices, so the platform is self-hosted. The linked Android client is explicitly labeled beta.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 3,
+          "end": 13,
+          "quote": "✨ **All your agents and workspaces in one place, on every device you own. Track tasks on a board, accessible from desktop, mobile, browser, or API. Self-hosted.**\n\n![How it works](docs/how-it-works.png)\n\n**🏠 Homepage:** [https://yaoagents.com](https://yaoagents.com)\n\n**📚 Docs:** [https://yaoagents.com/docs](https://yaoagents.com/docs)\n\n**🖥️ Yao Desktop:** [https://yaoagents.com/download](https://yaoagents.com/download)\n\n**📱 Android (Beta):** [https://yaoagents.com/download/yaoagents](https://yaoagents.com/download/yaoagents)"
+        },
+        {
+          "source": "s1",
+          "start": 25,
+          "end": 25,
+          "quote": "Agents run on your own devices. Every machine you add is another place for them to work, all managed from one place."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "Yao Agents: shared workspaces with Jev decisions",
+      "h1": "Yao Agents: shared workspaces with Jev decisions",
+      "description": "Yao Agents manages agents across your devices and includes Jev for typed decisions with confidence.",
+      "summary": "The self-hosted platform organizes agents, isolated workspaces and task boards across your own computers. The README lists TypeSafe's Jev as an available model that returns typed decisions with confidence rather than generated text.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose and audience",
+          "text": "The self-hosted platform organizes agents, isolated workspaces and task boards across your own computers.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "The README lists TypeSafe's Jev as an available model that returns typed decisions with confidence rather than generated text.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Using the project",
+          "text": "Create tasks through conversation, track them on the board, or connect agents to applications through APIs supporting SSE and WebSocket.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "Agents run on your devices, so the platform is self-hosted. The linked Android client is explicitly labeled beta.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "Yao Agents：结合 Jev 决策的跨设备工作空间",
+      "h1": "Yao Agents：结合 Jev 决策的跨设备工作空间",
+      "description": "Yao Agents 管理多设备上的智能体，并接入 Jev 提供带置信度的类型化决策。",
+      "summary": "这套自托管平台在用户自己的计算机之间组织智能体、隔离工作空间和任务看板。 README 将 TypeSafe 的 Jev 列为可用模型，其输出为带置信度的类型化决策，而非生成文本。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途与适用对象",
+          "text": "这套自托管平台在用户自己的计算机之间组织智能体、隔离工作空间和任务看板。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "README 将 TypeSafe 的 Jev 列为可用模型，其输出为带置信度的类型化决策，而非生成文本。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "通过对话创建任务，在看板中跟踪，或用支持 SSE 和 WebSocket 的 API 将智能体接入应用。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "智能体在用户自己的设备上运行，需要自行托管；链接中的 Android 客户端明确标注为测试版。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "Yao Agents：結合 Jev 決策的跨裝置工作空間",
+      "h1": "Yao Agents：結合 Jev 決策的跨裝置工作空間",
+      "description": "Yao Agents 管理多部裝置上的代理，並接入 Jev 提供具信心值的型別化決策。",
+      "summary": "這套自架平台在使用者自己的電腦之間整合代理、隔離工作空間及任務看板。 README 將 TypeSafe 的 Jev 列為可用模型，輸出具信心值的型別化決策，而非生成文字。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途與適用對象",
+          "text": "這套自架平台在使用者自己的電腦之間整合代理、隔離工作空間及任務看板。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "README 將 TypeSafe 的 Jev 列為可用模型，輸出具信心值的型別化決策，而非生成文字。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "透過對話建立任務並在看板追蹤，或以支援 SSE 和 WebSocket 的 API 將代理接入應用。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "代理在使用者自己的裝置執行，需要自行架設；連結中的 Android 用戶端明確標為測試版。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "Yao Agents：Jev の判断を使える共有ワークスペース",
+      "h1": "Yao Agents：Jev の判断を使える共有ワークスペース",
+      "description": "Yao Agents は複数の端末でエージェントを管理し、Jev の型付き判断と信頼度を利用できます。",
+      "summary": "自前のコンピューター上でエージェント、分離されたワークスペース、タスクボードをまとめて管理します。 README は TypeSafe の Jev を対応モデルとして紹介し、文章ではなく型付きの判断と信頼度を返すと説明しています。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途と対象",
+          "text": "自前のコンピューター上でエージェント、分離されたワークスペース、タスクボードをまとめて管理します。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev との関係",
+          "text": "README は TypeSafe の Jev を対応モデルとして紹介し、文章ではなく型付きの判断と信頼度を返すと説明しています。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "会話からタスクを作ってボードで追跡するほか、SSE と WebSocket 対応 API でアプリに接続できます。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範囲と制約",
+          "text": "エージェントは利用者の端末で動く自前運用方式です。案内されている Android クライアントはベータ版です。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "Yao Agents: Jev 판단을 지원하는 공유 작업 공간",
+      "h1": "Yao Agents: Jev 판단을 지원하는 공유 작업 공간",
+      "description": "Yao Agents는 여러 기기의 에이전트를 관리하며 Jev의 형식화된 판단과 신뢰도를 활용할 수 있습니다.",
+      "summary": "자체 호스팅 플랫폼으로 사용자 컴퓨터의 에이전트, 격리된 작업 공간, 작업 보드를 통합 관리합니다. README는 TypeSafe의 Jev를 지원 모델로 소개하며, 생성 텍스트 대신 형식화된 판단과 신뢰도를 반환한다고 설명합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "용도와 대상",
+          "text": "자체 호스팅 플랫폼으로 사용자 컴퓨터의 에이전트, 격리된 작업 공간, 작업 보드를 통합 관리합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "README는 TypeSafe의 Jev를 지원 모델로 소개하며, 생성 텍스트 대신 형식화된 판단과 신뢰도를 반환한다고 설명합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "대화로 작업을 만들고 보드에서 추적하거나 SSE와 WebSocket 지원 API로 에이전트를 앱에 연결합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 한계",
+          "text": "에이전트는 사용자의 기기에서 실행하므로 직접 호스팅해야 합니다. 연결된 Android 클라이언트는 베타로 표시됩니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "Yao Agents: espacios de trabajo con decisiones Jev",
+      "h1": "Yao Agents: espacios de trabajo con decisiones Jev",
+      "description": "Yao Agents gestiona agentes entre dispositivos e incorpora Jev para decisiones tipadas con confianza.",
+      "summary": "La plataforma autohospedada organiza agentes, espacios aislados y tableros de tareas en sus propios equipos. El README presenta Jev de TypeSafe como modelo disponible que devuelve decisiones tipadas y confianza, en lugar de texto generado.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "La plataforma autohospedada organiza agentes, espacios aislados y tableros de tareas en sus propios equipos.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "El README presenta Jev de TypeSafe como modelo disponible que devuelve decisiones tipadas y confianza, en lugar de texto generado.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo se usa",
+          "text": "Cree tareas conversando, sígalas en el tablero o integre agentes mediante APIs con SSE y WebSocket.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "Los agentes se ejecutan en dispositivos propios y requieren alojamiento propio. El cliente Android enlazado está marcado como beta.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "Yao Agents : espaces de travail avec décisions Jev",
+      "h1": "Yao Agents : espaces de travail avec décisions Jev",
+      "description": "Yao Agents gère les agents sur plusieurs appareils et intègre Jev pour des décisions typées avec confiance.",
+      "summary": "La plateforme autohébergée organise agents, espaces isolés et tableaux de tâches sur vos propres ordinateurs. Le README présente Jev de TypeSafe comme modèle disponible produisant des décisions typées avec confiance plutôt que du texte généré.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Usage et public visé",
+          "text": "La plateforme autohébergée organise agents, espaces isolés et tableaux de tâches sur vos propres ordinateurs.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Le README présente Jev de TypeSafe comme modèle disponible produisant des décisions typées avec confiance plutôt que du texte généré.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Créez des tâches par conversation, suivez-les sur le tableau ou reliez les agents aux applications via des API SSE et WebSocket.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "Les agents tournent sur vos appareils dans une installation autohébergée. Le client Android proposé est explicitement en bêta.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "Yao Agents: Arbeitsbereiche mit Jev-Entscheidungen",
+      "h1": "Yao Agents: Arbeitsbereiche mit Jev-Entscheidungen",
+      "description": "Yao Agents verwaltet Agenten auf mehreren Geräten und bietet Jev für typisierte Entscheidungen mit Konfidenz.",
+      "summary": "Die selbst betriebene Plattform organisiert Agenten, isolierte Arbeitsbereiche und Aufgabenboards auf den eigenen Computern. Das README nennt TypeSafes Jev als verfügbares Modell für typisierte Entscheidungen mit Konfidenz statt generiertem Text.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Zweck und Zielgruppe",
+          "text": "Die selbst betriebene Plattform organisiert Agenten, isolierte Arbeitsbereiche und Aufgabenboards auf den eigenen Computern.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Das README nennt TypeSafes Jev als verfügbares Modell für typisierte Entscheidungen mit Konfidenz statt generiertem Text.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Verwendung",
+          "text": "Aufgaben entstehen im Gespräch und werden auf dem Board verfolgt; APIs mit SSE und WebSocket verbinden Agenten mit Anwendungen.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Agenten laufen auf den eigenen Geräten und erfordern Eigenbetrieb. Der verlinkte Android-Client ist ausdrücklich als Beta markiert.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "Yao Agents: espaços de trabalho com decisões Jev",
+      "h1": "Yao Agents: espaços de trabalho com decisões Jev",
+      "description": "Yao Agents gerencia agentes entre dispositivos e inclui Jev para decisões tipadas com confiança.",
+      "summary": "A plataforma auto-hospedada organiza agentes, espaços isolados e quadros de tarefas nos próprios computadores. O README apresenta Jev da TypeSafe como modelo disponível que retorna decisões tipadas com confiança, em vez de texto gerado.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Finalidade e público",
+          "text": "A plataforma auto-hospedada organiza agentes, espaços isolados e quadros de tarefas nos próprios computadores.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "O README apresenta Jev da TypeSafe como modelo disponível que retorna decisões tipadas com confiança, em vez de texto gerado.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Crie tarefas por conversa, acompanhe-as no quadro ou conecte agentes a aplicativos por APIs com SSE e WebSocket.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "Os agentes rodam em dispositivos próprios, exigindo hospedagem própria. O cliente Android indicado está explicitamente em beta.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "Yao Agents: рабочие пространства с решениями Jev",
+      "h1": "Yao Agents: рабочие пространства с решениями Jev",
+      "description": "Yao Agents управляет агентами на разных устройствах и поддерживает типизированные решения Jev с оценкой уверенности.",
+      "summary": "Платформа для самостоятельного размещения объединяет агентов, изолированные рабочие пространства и доски задач на ваших компьютерах. README называет TypeSafe Jev доступной моделью, которая возвращает типизированные решения с уверенностью вместо генерируемого текста.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Платформа для самостоятельного размещения объединяет агентов, изолированные рабочие пространства и доски задач на ваших компьютерах.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "README называет TypeSafe Jev доступной моделью, которая возвращает типизированные решения с уверенностью вместо генерируемого текста.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Создавайте задачи в разговоре, отслеживайте их на доске или подключайте агентов через API с SSE и WebSocket.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Агенты работают на ваших устройствах, поэтому требуется собственное размещение. Указанный Android-клиент явно помечен как бета-версия.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "Yao Agents: Jev निर्णयों वाले साझा कार्यक्षेत्र",
+      "h1": "Yao Agents: Jev निर्णयों वाले साझा कार्यक्षेत्र",
+      "description": "Yao Agents अलग-अलग डिवाइस पर एजेंट सँभालता है और विश्वास मान सहित निश्चित प्रकार के Jev निर्णय उपलब्ध कराता है।",
+      "summary": "स्वयं होस्ट किया गया प्लेटफ़ॉर्म अपने कंप्यूटरों पर एजेंट, अलग कार्यक्षेत्र और टास्क बोर्ड व्यवस्थित करता है। README में TypeSafe का Jev उपलब्ध मॉडल है, जो टेक्स्ट बनाने के बजाय विश्वास मान सहित निश्चित प्रकार के निर्णय देता है।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "उद्देश्य और उपयोगकर्ता",
+          "text": "स्वयं होस्ट किया गया प्लेटफ़ॉर्म अपने कंप्यूटरों पर एजेंट, अलग कार्यक्षेत्र और टास्क बोर्ड व्यवस्थित करता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "README में TypeSafe का Jev उपलब्ध मॉडल है, जो टेक्स्ट बनाने के बजाय विश्वास मान सहित निश्चित प्रकार के निर्णय देता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल का तरीका",
+          "text": "बातचीत से कार्य बनाएँ, बोर्ड पर देखें या SSE और WebSocket समर्थित API से एजेंट को ऐप से जोड़ें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "एजेंट आपके डिवाइस पर चलते हैं, इसलिए स्वयं होस्ट करना होता है। लिंक किया गया Android क्लाइंट स्पष्ट रूप से बीटा है।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "Yao Agents: ruang kerja dengan keputusan Jev",
+      "h1": "Yao Agents: ruang kerja dengan keputusan Jev",
+      "description": "Yao Agents mengelola agen lintas perangkat dan menyediakan Jev untuk keputusan bertipe dengan tingkat keyakinan.",
+      "summary": "Platform yang dihosting sendiri mengatur agen, ruang kerja terisolasi, dan papan tugas pada komputer milik pengguna. README menyebut Jev dari TypeSafe sebagai model tersedia yang mengembalikan keputusan bertipe beserta keyakinan, bukan teks hasil generasi.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Tujuan dan pengguna",
+          "text": "Platform yang dihosting sendiri mengatur agen, ruang kerja terisolasi, dan papan tugas pada komputer milik pengguna.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "README menyebut Jev dari TypeSafe sebagai model tersedia yang mengembalikan keputusan bertipe beserta keyakinan, bukan teks hasil generasi.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Buat tugas melalui percakapan, pantau di papan, atau hubungkan agen ke aplikasi melalui API dengan SSE dan WebSocket.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Agen berjalan pada perangkat sendiri sehingga memerlukan hosting sendiri. Klien Android yang ditautkan secara eksplisit berstatus beta.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "Yao Agents: không gian làm việc với quyết định Jev",
+      "h1": "Yao Agents: không gian làm việc với quyết định Jev",
+      "description": "Yao Agents quản lý tác tử trên nhiều thiết bị và tích hợp Jev cho quyết định có kiểu kèm độ tin cậy.",
+      "summary": "Nền tảng tự lưu trữ tổ chức tác tử, không gian làm việc cách ly và bảng nhiệm vụ trên máy tính của người dùng. README giới thiệu Jev của TypeSafe là mô hình có sẵn, trả quyết định có kiểu và độ tin cậy thay vì sinh văn bản.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích và đối tượng",
+          "text": "Nền tảng tự lưu trữ tổ chức tác tử, không gian làm việc cách ly và bảng nhiệm vụ trên máy tính của người dùng.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "README giới thiệu Jev của TypeSafe là mô hình có sẵn, trả quyết định có kiểu và độ tin cậy thay vì sinh văn bản.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Tạo nhiệm vụ qua hội thoại, theo dõi trên bảng hoặc nối tác tử với ứng dụng qua API hỗ trợ SSE và WebSocket.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Tác tử chạy trên thiết bị của người dùng nên cần tự lưu trữ. Ứng dụng Android được liên kết có nhãn beta rõ ràng.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "Yao Agents: Jev kararlarıyla ortak çalışma alanları",
+      "h1": "Yao Agents: Jev kararlarıyla ortak çalışma alanları",
+      "description": "Yao Agents farklı cihazlardaki ajanları yönetir; Jev ile türü belirli kararlar ve güven değerleri sunar.",
+      "summary": "Kendi sunucunuzda çalışan platform, bilgisayarlarınızdaki ajanları, yalıtılmış çalışma alanlarını ve görev panolarını düzenler. README, TypeSafe Jev’i metin üretmek yerine güven değerli, türü belirli kararlar döndüren kullanılabilir bir model olarak tanıtır.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Amaç ve hedef kitle",
+          "text": "Kendi sunucunuzda çalışan platform, bilgisayarlarınızdaki ajanları, yalıtılmış çalışma alanlarını ve görev panolarını düzenler.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "README, TypeSafe Jev’i metin üretmek yerine güven değerli, türü belirli kararlar döndüren kullanılabilir bir model olarak tanıtır.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Sohbetten görev oluşturulur, panoda izlenir veya SSE ve WebSocket destekli API’lerle ajanlar uygulamalara bağlanır.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Ajanlar kendi cihazlarınızda çalışır; barındırmayı siz sağlarsınız. Bağlantısı verilen Android istemcisi açıkça beta olarak işaretlenmiştir.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "Yao Agents: spazi di lavoro con decisioni Jev",
+      "h1": "Yao Agents: spazi di lavoro con decisioni Jev",
+      "description": "Yao Agents gestisce agenti su più dispositivi e include Jev per decisioni tipizzate con confidenza.",
+      "summary": "La piattaforma autogestita organizza agenti, spazi isolati e bacheche delle attività sui propri computer. Il README presenta Jev di TypeSafe come modello disponibile che restituisce decisioni tipizzate con confidenza anziché testo generato.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Scopo e destinatari",
+          "text": "La piattaforma autogestita organizza agenti, spazi isolati e bacheche delle attività sui propri computer.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Il README presenta Jev di TypeSafe come modello disponibile che restituisce decisioni tipizzate con confidenza anziché testo generato.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come si usa",
+          "text": "Si creano attività conversando, le si segue sulla bacheca o si collegano gli agenti alle app tramite API con SSE e WebSocket.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "Gli agenti girano sui propri dispositivi, richiedendo hosting autonomo. Il client Android indicato è esplicitamente in beta.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  },
+  "displayName": "Yao Agents"
+}

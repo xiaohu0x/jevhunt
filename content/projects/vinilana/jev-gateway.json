@@ -1,0 +1,756 @@
+{
+  "version": "source-content-v1",
+  "repo": "vinilana/jev-gateway",
+  "repositoryId": 1376284519,
+  "relationship": "integration",
+  "category": "agents",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "38f2923dc388a5bf7b1b3bb7308f30477256cd8c",
+      "url": "https://github.com/vinilana/jev-gateway/blob/38f2923dc388a5bf7b1b3bb7308f30477256cd8c/README.md",
+      "sha256": "27f180348dd8c4dcdf5d562c8a167f3ac12dfb0ab2265128e21962132fa765cb",
+      "accessedAt": "2026-09-30T07:33:52.353Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "jev-gateway routes tool decisions for coding agents through Jev while the usual language model handles other work.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 3,
+          "end": 13,
+          "quote": "A local LLM gateway for coding agents. When your agent is about to decide **which tool to call**,\nthe gateway asks [Jev](https://docs.typesafe.ai/introduction), TypeSafe's fast decision model,\ninstead of leaving that choice to the expensive reasoning model. Everything else goes to your usual\nLLM untouched.\n\nIt works with **Codex**, **Claude Code**, **OpenCode** and **Kilo** out of the box, including on\nChatGPT and claude.ai subscriptions, with Gemini API clients, and with any client that speaks the\nOpenAI, Anthropic or Google Gemini APIs.\n\n> Independent project, not affiliated with or endorsed by TypeSafe. \"Jev\" is TypeSafe's model and\n> this gateway is a client of its public API."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "Jev chooses tools and closed-set arguments; the gateway can construct a complete bounded call or ask the LLM for open-ended arguments.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 513,
+          "end": 531,
+          "quote": "| Decision | Who makes it |\n| --- | --- |\n| Which tool, or no tool at all | **Jev** |\n| Arguments that are enums, booleans, or constants | **Jev**, in the same call |\n| Open-ended arguments such as free text, numbers, and dates | The LLM, already pointed at Jev's tool |\n| Plain text replies, and any request without tools | The LLM, untouched |\n\nA request that carries tools triggers one Jev call. The conversation becomes the state, and the\nquestions are: which tool (or none), whether a tool is needed at all (an independent cross-check),\nand the value of every closed-set argument. The answer selects a mode, which is reported in the\n`x-jev-gateway-mode` response header:\n\n| Mode | When | What happens |\n| --- | --- | --- |\n| `direct` | Jev is confident about the tool and every argument is an enum, boolean, or constant | The gateway builds the tool call itself, streaming included. **No LLM call.** Never with extended thinking on (Claude Code): the next turn would replay a tool call with no thinking block, which the API rejects, so such a request gets `hint` instead |\n| `forced` | Jev is confident about the tool, but some arguments are open-ended | Forwarded with `tool_choice` set to that tool, so the LLM only fills in arguments. `ARGS_MODEL` can send these to a cheaper model |\n| `hint` | Jev is confident, but `tool_choice` cannot be changed (Anthropic with thinking on, or a cached conversation) | Forwarded with a one-line suggestion added after the client's last block, so cached prefixes stay valid |\n| `none` | Jev is confident that no tool is needed | Forwarded with `tool_choice: \"none\"` |\n| `passthrough` | Low confidence, the two checks disagree, Jev failed, there are no tools, or the caller already chose | Forwarded byte for byte. `x-jev-gateway-reason` says why |"
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Install the npm package and start an existing authenticated agent with its jev- launcher, then configure the Jev provider once.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 17,
+          "end": 42,
+          "quote": "You need Node.js 22.15 or newer, a key for Jev (from TypeSafe, OpenRouter, Vercel AI Gateway or\nOpenCode, see [Where Jev runs](#where-jev-runs)), and Codex, Claude Code, OpenCode, Kilo and/or\nDevin already installed and logged in.\n\n**1. Install**\n\n```bash\nnpm install -g jev-gateway\n```\n\n**2. Run your agent through the gateway**\n\n```bash\njev-codex      # use it exactly like `codex`\njev-claude     # use it exactly like `claude`\njev-opencode   # use it exactly like `opencode` (stable v1)\njev-kilo       # Kilo CLI, on free models unless KILO_API_KEY is set\njev-gemini     # Gemini CLI, with a Gemini API key\njev-devin      # use it exactly like `devin`\n```\n\n**3. Answer two questions, once**\n\nThe first time, the launcher asks where you want to reach Jev and for the key. It checks the key\nwith one real call, saves it to `~/.jev-gateway/.env` (readable only by you), and carries on into\nyour agent. Every `jev-` command shares that file, so you are asked once for all of them."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "Low confidence or Jev failure uses passthrough. Codex conversations containing agent_message stay unrouted, and forced routing permits only one tool type per turn.",
+      "kind": "source-limitation",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 531,
+          "end": 540,
+          "quote": "| `passthrough` | Low confidence, the two checks disagree, Jev failed, there are no tools, or the caller already chose | Forwarded byte for byte. `x-jev-gateway-reason` says why |\n\nResponses requests containing Codex `agent_message` items pass through without consulting Jev,\nwith reason `agent_message`. These carry delegated tasks or replies that the router cannot\ninterpret and may contain encrypted content, so the model keeps control of tool selection.\nOnce an `agent_message` item is in the input, every later request in the same conversation carries\nit. Passthrough therefore lasts for the rest of that conversation, so a subagent session is never\nrouted by Jev.\n\nTool lists longer than 120 entries (Claude Code sends about 280) take two Jev calls. The first ranks"
+        },
+        {
+          "source": "source-1",
+          "start": 566,
+          "end": 575,
+          "quote": "- Jev adds a network call to every turn that carries tools. Expect roughly half a second to a second.\n- Jev picks **one** tool per turn. In `forced` mode the LLM can still call that tool several times\n  in parallel, but it cannot mix different tools in the same turn.\n- A wrong forced tool can derail a turn. If the model had nothing left to do and is forced to call\n  a tool anyway, it may produce an incomplete reply and the agent will retry. Raise\n  `JEV_MIN_CONFIDENCE` if you see this.\n- In `hint` mode the LLM still does its own reasoning, so the gain is accuracy, not cost.\n- Jev reads text only and has a 32k-token window. Images become placeholders and long conversations\n  keep their newest turns. It is most accurate in English.\n- The default confidence thresholds are starting points. Use the dashboard and baseline mode to tune"
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "jev-gateway — Local gateway for Jev tool selection",
+      "h1": "jev-gateway — A local gateway lets Jev choose agent tools",
+      "description": "jev-gateway: jev-gateway routes tool decisions for coding agents through Jev while the usual language model handles other work.",
+      "summary": "jev-gateway routes tool decisions for coding agents through Jev while the usual language model handles other work. Install the npm package and start an existing authenticated agent with its jev- launcher, then configure the Jev provider once.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "What it does",
+          "text": "jev-gateway routes tool decisions for coding agents through Jev while the usual language model handles other work.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "Jev chooses tools and closed-set arguments; the gateway can construct a complete bounded call or ask the LLM for open-ended arguments.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Getting started",
+          "text": "Install the npm package and start an existing authenticated agent with its jev- launcher, then configure the Jev provider once.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "Low confidence or Jev failure uses passthrough. Codex conversations containing agent_message stay unrouted, and forced routing permits only one tool type per turn.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "jev-gateway — 让 Jev 选择智能体工具的本地网关",
+      "h1": "jev-gateway — 让 Jev 选择智能体工具的本地网关",
+      "description": "jev-gateway: jev-gateway 将编程智能体的工具决策交给 Jev，其余工作由原语言模型处理。",
+      "summary": "jev-gateway 将编程智能体的工具决策交给 Jev，其余工作由原语言模型处理。 安装 npm 包，用对应 jev- 启动器运行已登录的智能体，首次配置 Jev 服务商。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "jev-gateway 将编程智能体的工具决策交给 Jev，其余工作由原语言模型处理。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "Jev 选择工具和封闭选项参数；网关可构造完整有界调用，或让语言模型补充开放参数。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "安装 npm 包，用对应 jev- 启动器运行已登录的智能体，首次配置 Jev 服务商。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "低置信度或 Jev 失败时透传。含 agent_message 的 Codex 会话不再路由，强制路由每轮仅允许一种工具。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "jev-gateway — 讓 Jev 選擇代理工具的本機閘道",
+      "h1": "jev-gateway — 讓 Jev 選擇代理工具的本機閘道",
+      "description": "jev-gateway: jev-gateway 將程式代理的工具決策交給 Jev，其餘工作由原語言模型處理。",
+      "summary": "jev-gateway 將程式代理的工具決策交給 Jev，其餘工作由原語言模型處理。 安裝 npm 套件，用對應 jev- 啟動器執行已登入的代理，首次設定 Jev 服務商。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "jev-gateway 將程式代理的工具決策交給 Jev，其餘工作由原語言模型處理。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "Jev 選擇工具與封閉選項參數；閘道可建立完整有界呼叫，或讓語言模型補充開放參數。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "安裝 npm 套件，用對應 jev- 啟動器執行已登入的代理，首次設定 Jev 服務商。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "低信心或 Jev 失敗時直接轉送。含 agent_message 的 Codex 工作階段不再路由，強制路由每回合僅容許一種工具。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "jev-gateway — ローカルゲートウェイで Jev がツール選択",
+      "h1": "jev-gateway — Jev がエージェントのツールを選ぶローカルゲートウェイ",
+      "description": "jev-gateway: jev-gateway はコーディングエージェントのツール判断を Jev に送り、その他の仕事は元の言語モデルに任せます。",
+      "summary": "jev-gateway はコーディングエージェントのツール判断を Jev に送り、その他の仕事は元の言語モデルに任せます。 npm パッケージを入れ、認証済みエージェントを対応する jev- コマンドで起動して提供元を設定します。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "できること",
+          "text": "jev-gateway はコーディングエージェントのツール判断を Jev に送り、その他の仕事は元の言語モデルに任せます。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "Jev はツールと選択肢が決まった引数を選び、ゲートウェイが呼び出しを構築するか LLM に自由記述引数を求めます。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い始めるには",
+          "text": "npm パッケージを入れ、認証済みエージェントを対応する jev- コマンドで起動して提供元を設定します。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "対象範囲と制約",
+          "text": "低信頼度や Jev の失敗時は素通しです。agent_message を含む Codex 会話は以降振り分けず、強制時は1ターン1種類のツールです。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "jev-gateway — 로컬 게이트웨이의 Jev 도구 선택",
+      "h1": "jev-gateway — Jev가 에이전트 도구를 고르는 로컬 게이트웨이",
+      "description": "jev-gateway: jev-gateway는 코딩 에이전트의 도구 판단을 Jev로 보내고 나머지는 원래 언어 모델이 처리합니다.",
+      "summary": "jev-gateway는 코딩 에이전트의 도구 판단을 Jev로 보내고 나머지는 원래 언어 모델이 처리합니다. npm 패키지를 설치하고 인증된 에이전트를 해당 jev- 실행기로 열어 제공자를 설정합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "jev-gateway는 코딩 에이전트의 도구 판단을 Jev로 보내고 나머지는 원래 언어 모델이 처리합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Jev가 도구와 정해진 선택지의 인수를 고르면 게이트웨이가 호출을 구성하거나 LLM에 개방형 인수를 요청합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "npm 패키지를 설치하고 인증된 에이전트를 해당 jev- 실행기로 열어 제공자를 설정합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 제약",
+          "text": "신뢰도가 낮거나 Jev가 실패하면 그대로 전달합니다. agent_message가 있는 Codex 대화는 이후 라우팅하지 않으며 강제 모드는 턴당 한 도구 유형만 허용합니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "jev-gateway — Pasarela local: Jev elige herramientas",
+      "h1": "jev-gateway — Pasarela local para que Jev elija herramientas",
+      "description": "jev-gateway: jev-gateway envía las decisiones de herramientas a Jev y deja el resto del trabajo al modelo habitual.",
+      "summary": "jev-gateway envía las decisiones de herramientas a Jev y deja el resto del trabajo al modelo habitual. Instala el paquete npm y abre el agente autenticado con su lanzador jev-; configura el proveedor una vez.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "jev-gateway envía las decisiones de herramientas a Jev y deja el resto del trabajo al modelo habitual.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Jev elige herramientas y argumentos cerrados; la pasarela construye la llamada o pide al LLM los argumentos abiertos.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo empezar",
+          "text": "Instala el paquete npm y abre el agente autenticado con su lanzador jev-; configura el proveedor una vez.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "Baja confianza o fallo Jev deja pasar la petición. Las conversaciones Codex con agent_message no se enrutan; el modo forzado permite un tipo de herramienta por turno.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "jev-gateway — Passerelle locale de choix d’outils Jev",
+      "h1": "jev-gateway — Passerelle locale où Jev choisit les outils",
+      "description": "jev-gateway: jev-gateway transmet les choix d’outils à Jev et laisse le reste du travail au modèle habituel.",
+      "summary": "jev-gateway transmet les choix d’outils à Jev et laisse le reste du travail au modèle habituel. Installez le paquet npm puis lancez l’agent authentifié avec sa commande jev- et configurez le fournisseur une fois.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "jev-gateway transmet les choix d’outils à Jev et laisse le reste du travail au modèle habituel.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Jev choisit outils et paramètres bornés ; la passerelle construit l’appel ou demande les paramètres libres au LLM.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Installez le paquet npm puis lancez l’agent authentifié avec sa commande jev- et configurez le fournisseur une fois.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "Faible confiance ou erreur Jev laisse passer la requête. Les conversations Codex avec agent_message ne sont pas routées ; le mode forcé autorise un type d’outil par tour.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "jev-gateway — Lokales Gateway für Jevs Werkzeugauswahl",
+      "h1": "jev-gateway — Lokales Gateway für Jevs Werkzeugauswahl",
+      "description": "jev-gateway: jev-gateway leitet Werkzeugentscheidungen an Jev weiter; die übrige Arbeit erledigt das übliche Sprachmodell.",
+      "summary": "jev-gateway leitet Werkzeugentscheidungen an Jev weiter; die übrige Arbeit erledigt das übliche Sprachmodell. npm-Paket installieren und den angemeldeten Agenten über seinen jev-Launcher starten; den Anbieter einmal konfigurieren.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "jev-gateway leitet Werkzeugentscheidungen an Jev weiter; die übrige Arbeit erledigt das übliche Sprachmodell.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Jev wählt Werkzeuge und geschlossene Argumente; das Gateway erstellt den Aufruf oder lässt offene Argumente vom LLM ausfüllen.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Einstieg",
+          "text": "npm-Paket installieren und den angemeldeten Agenten über seinen jev-Launcher starten; den Anbieter einmal konfigurieren.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Geringe Konfidenz oder Jev-Ausfall führt zum Durchreichen. Codex-Gespräche mit agent_message werden nicht geroutet; erzwungene Auswahl erlaubt einen Werkzeugtyp pro Turn.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "jev-gateway — Gateway local: Jev escolhe ferramentas",
+      "h1": "jev-gateway — Gateway local para Jev escolher ferramentas",
+      "description": "jev-gateway: O jev-gateway encaminha decisões de ferramentas ao Jev e mantém o restante com o modelo habitual.",
+      "summary": "O jev-gateway encaminha decisões de ferramentas ao Jev e mantém o restante com o modelo habitual. Instale o pacote npm e abra o agente autenticado pelo lançador jev-, configurando o provedor uma vez.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "O jev-gateway encaminha decisões de ferramentas ao Jev e mantém o restante com o modelo habitual.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "Jev escolhe ferramentas e argumentos fechados; o gateway monta a chamada ou pede argumentos abertos ao LLM.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como começar",
+          "text": "Instale o pacote npm e abra o agente autenticado pelo lançador jev-, configurando o provedor uma vez.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "Baixa confiança ou falha Jev usa passagem direta. Conversas Codex com agent_message não são roteadas; o modo forçado admite um tipo de ferramenta por turno.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "jev-gateway — Локальный шлюз выбора инструментов Jev",
+      "h1": "jev-gateway — Локальный шлюз для выбора инструментов через Jev",
+      "description": "jev-gateway: jev-gateway передаёт выбор инструментов Jev, оставляя остальную работу обычной языковой модели.",
+      "summary": "jev-gateway передаёт выбор инструментов Jev, оставляя остальную работу обычной языковой модели. Установите npm-пакет, запустите авторизованного агента через его jev-команду и один раз настройте провайдера.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "jev-gateway передаёт выбор инструментов Jev, оставляя остальную работу обычной языковой модели.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Jev выбирает инструменты и замкнутые аргументы; шлюз строит вызов либо просит LLM заполнить открытые аргументы.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Начало работы",
+          "text": "Установите npm-пакет, запустите авторизованного агента через его jev-команду и один раз настройте провайдера.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Низкая уверенность или сбой Jev включает прямую передачу. Беседы Codex с agent_message не маршрутизируются; принудительный режим допускает один тип инструмента на ход.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "jev-gateway — स्थानीय गेटवे से Jev टूल चयन",
+      "h1": "jev-gateway — स्थानीय गेटवे से Jev टूल चयन",
+      "description": "jev-gateway: jev-gateway कोडिंग एजेंट के टूल निर्णय Jev को देता है और बाकी काम सामान्य भाषा मॉडल करता है।",
+      "summary": "jev-gateway कोडिंग एजेंट के टूल निर्णय Jev को देता है और बाकी काम सामान्य भाषा मॉडल करता है। npm पैकेज स्थापित करके प्रमाणित एजेंट को jev- लॉन्चर से खोलें और प्रदाता एक बार सेट करें।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "परियोजना का काम",
+          "text": "jev-gateway कोडिंग एजेंट के टूल निर्णय Jev को देता है और बाकी काम सामान्य भाषा मॉडल करता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "Jev टूल और तय विकल्पों वाले पैरामीटर चुनता है; गेटवे कॉल बनाता है या खुले मान वाले पैरामीटर LLM से भरवाता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "शुरुआत कैसे करें",
+          "text": "npm पैकेज स्थापित करके प्रमाणित एजेंट को jev- लॉन्चर से खोलें और प्रदाता एक बार सेट करें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "कम विश्वास या Jev त्रुटि पर अनुरोध सीधे जाता है। agent_message वाली Codex बातचीत रूट नहीं होती; forced मोड प्रति टर्न एक टूल प्रकार देता है।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "jev-gateway — Gateway lokal pemilihan alat Jev",
+      "h1": "jev-gateway — Gateway lokal untuk pemilihan alat oleh Jev",
+      "description": "jev-gateway: jev-gateway meneruskan keputusan alat ke Jev, sementara model bahasa biasa menangani pekerjaan lainnya.",
+      "summary": "jev-gateway meneruskan keputusan alat ke Jev, sementara model bahasa biasa menangani pekerjaan lainnya. Pasang paket npm lalu buka agen terautentikasi dengan peluncur jev- dan atur penyedia sekali.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "jev-gateway meneruskan keputusan alat ke Jev, sementara model bahasa biasa menangani pekerjaan lainnya.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Jev memilih alat dan argumen pilihan tetap; gateway menyusun panggilan atau meminta argumen terbuka dari LLM.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara memulai",
+          "text": "Pasang paket npm lalu buka agen terautentikasi dengan peluncur jev- dan atur penyedia sekali.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Keyakinan rendah atau galat Jev melewatkan permintaan langsung. Percakapan Codex dengan agent_message tidak dirutekan; mode paksa memakai satu jenis alat per giliran.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "jev-gateway — Cổng cục bộ để Jev chọn công cụ tác tử",
+      "h1": "jev-gateway — Cổng cục bộ để Jev chọn công cụ tác tử",
+      "description": "jev-gateway: jev-gateway chuyển quyết định công cụ sang Jev, còn mô hình ngôn ngữ thường dùng xử lý việc khác.",
+      "summary": "jev-gateway chuyển quyết định công cụ sang Jev, còn mô hình ngôn ngữ thường dùng xử lý việc khác. Cài gói npm rồi mở tác tử đã xác thực bằng trình khởi chạy jev- và cấu hình nhà cung cấp một lần.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Công dụng",
+          "text": "jev-gateway chuyển quyết định công cụ sang Jev, còn mô hình ngôn ngữ thường dùng xử lý việc khác.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Jev chọn công cụ và tham số tập đóng; cổng tạo lệnh gọi hoặc nhờ LLM điền tham số mở.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách bắt đầu",
+          "text": "Cài gói npm rồi mở tác tử đã xác thực bằng trình khởi chạy jev- và cấu hình nhà cung cấp một lần.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Thiếu tin cậy hoặc lỗi Jev sẽ chuyển thẳng yêu cầu. Hội thoại Codex chứa agent_message không được định tuyến; chế độ ép chỉ cho một loại công cụ mỗi lượt.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "jev-gateway — Jev’in araç seçtiği yerel ağ geçidi",
+      "h1": "jev-gateway — Jev’in araç seçtiği yerel ağ geçidi",
+      "description": "jev-gateway: jev-gateway araç kararlarını Jev’e yönlendirir, diğer işleri olağan dil modeli yürütür.",
+      "summary": "jev-gateway araç kararlarını Jev’e yönlendirir, diğer işleri olağan dil modeli yürütür. npm paketini kurun, doğrulanmış ajanı jev- başlatıcısıyla açın ve sağlayıcıyı bir kez yapılandırın.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "jev-gateway araç kararlarını Jev’e yönlendirir, diğer işleri olağan dil modeli yürütür.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Jev araçları ve kapalı seçenekli parametreleri seçer; geçit çağrıyı kurar veya açık parametreleri LLM’ye doldurtur.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Başlangıç",
+          "text": "npm paketini kurun, doğrulanmış ajanı jev- başlatıcısıyla açın ve sağlayıcıyı bir kez yapılandırın.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Düşük güven veya Jev hatasında istek doğrudan geçer. agent_message içeren Codex konuşmaları yönlendirilmez; zorunlu mod tur başına tek araç türü seçer.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "jev-gateway — Gateway locale: Jev sceglie strumenti",
+      "h1": "jev-gateway — Gateway locale per la scelta degli strumenti con Jev",
+      "description": "jev-gateway: jev-gateway inoltra a Jev le decisioni sugli strumenti e lascia gli altri compiti al modello abituale.",
+      "summary": "jev-gateway inoltra a Jev le decisioni sugli strumenti e lascia gli altri compiti al modello abituale. Installa il pacchetto npm, avvia l’agente autenticato con il launcher jev- e configura il fornitore una volta.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "jev-gateway inoltra a Jev le decisioni sugli strumenti e lascia gli altri compiti al modello abituale.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Jev sceglie strumenti e argomenti chiusi; il gateway costruisce la chiamata o chiede gli argomenti aperti al LLM.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come iniziare",
+          "text": "Installa il pacchetto npm, avvia l’agente autenticato con il launcher jev- e configura il fornitore una volta.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "Bassa confidenza o errore Jev lascia passare la richiesta. Le conversazioni Codex con agent_message non vengono instradate; la modalità forzata usa un tipo di strumento per turno.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

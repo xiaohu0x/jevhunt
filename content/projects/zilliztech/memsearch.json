@@ -1,0 +1,762 @@
+{
+  "version": "source-content-v1",
+  "repo": "zilliztech/memsearch",
+  "repositoryId": 1153190876,
+  "relationship": "integration",
+  "category": "agents",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "path": "README.md",
+      "commit": "2a4652fa086fbd45e92bfd8da7781ebe1642baa7",
+      "url": "https://github.com/zilliztech/memsearch/blob/2a4652fa086fbd45e92bfd8da7781ebe1642baa7/README.md",
+      "sha256": "c52b5f0576aa0460b0b80abf0f1f59ed8285ebac91607acf27cab3e66f56236a",
+      "accessedAt": "2026-09-30T07:33:47.600Z",
+      "id": "s1"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "Searchable memory helps recover past decisions, debugging context and feature history across supported coding agents; Markdown remains the source of truth.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 41,
+          "end": 46,
+          "quote": "### Why memsearch?\n\n- 🌐 **All Platforms, One Memory** — memories flow across [Claude Code](plugins/claude-code/README.md), [Codex](plugins/codex/README.md), [DeepSeek Harness](plugins/dsh/README.md), [OpenClaw](plugins/openclaw/README.md), and [OpenCode](plugins/opencode/README.md). A conversation in one agent becomes searchable context in all others — no extra setup\n- 👥 **For Agent Users**, install a plugin and get persistent memory with zero effort; **for Agent Developers**, use the full [CLI](https://zilliztech.github.io/memsearch/cli/) and [Python API](https://zilliztech.github.io/memsearch/python-api/) to build memory and harness engineering into your own agents\n- 📄 **Markdown is the source of truth** — inspired by [OpenClaw](https://github.com/openclaw/openclaw). Your memories are just `.md` files — human-readable, editable, version-controllable. Milvus is a \"shadow index\": a derived, rebuildable cache\n- 🔍 **Progressive retrieval, hybrid search, smart dedup, live sync** — 3-layer recall (search → expand → transcript); dense vector + BM25 sparse + RRF reranking; SHA-256 content hashing skips unchanged content; file watcher auto-indexes in real time"
+        },
+        {
+          "source": "s1",
+          "start": 318,
+          "end": 323,
+          "quote": "- **Resume debugging threads** — ask how a similar Redis, Docker, database, or deployment issue was fixed last time.\n- **Recover decision rationale** — find why the project chose one architecture, library, migration path, or API design over another.\n- **Trace feature history** — understand how a feature evolved across sessions, including the files changed and tradeoffs discussed.\n- **Do code archaeology** — ask when and why a module, config, or workflow was changed before touching it again.\n- **Find the right session to resume** — ask which previous conversation covered a topic, recover the relevant context, and continue from there.\n- **Carry context across agents** — keep Claude Code, Codex, DeepSeek Harness, OpenClaw, and OpenCode working from the same project memory."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "Optional Jev reranking uses the remote TypeSafe API to reorder memory search results without downloading a local reranker model.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 33,
+          "end": 33,
+          "quote": "- **Optional Jev reranking** — rerank memory search results with Jev through the TypeSafe API, with no local model download. See [configuration](docs/home/configuration.md#optional-remote-reranking) and the [Chinese/English evaluation](evaluation/reranking-evaluation.md)."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Use a platform plugin for conversation capture, or the CLI and Python API to index, search and expand memories.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 43,
+          "end": 46,
+          "quote": "- 🌐 **All Platforms, One Memory** — memories flow across [Claude Code](plugins/claude-code/README.md), [Codex](plugins/codex/README.md), [DeepSeek Harness](plugins/dsh/README.md), [OpenClaw](plugins/openclaw/README.md), and [OpenCode](plugins/opencode/README.md). A conversation in one agent becomes searchable context in all others — no extra setup\n- 👥 **For Agent Users**, install a plugin and get persistent memory with zero effort; **for Agent Developers**, use the full [CLI](https://zilliztech.github.io/memsearch/cli/) and [Python API](https://zilliztech.github.io/memsearch/python-api/) to build memory and harness engineering into your own agents\n- 📄 **Markdown is the source of truth** — inspired by [OpenClaw](https://github.com/openclaw/openclaw). Your memories are just `.md` files — human-readable, editable, version-controllable. Milvus is a \"shadow index\": a derived, rebuildable cache\n- 🔍 **Progressive retrieval, hybrid search, smart dedup, live sync** — 3-layer recall (search → expand → transcript); dense vector + BM25 sparse + RRF reranking; SHA-256 content hashing skips unchanged content; file watcher auto-indexes in real time"
+        },
+        {
+          "source": "s1",
+          "start": 327,
+          "end": 354,
+          "quote": "## 🛠️ For Agent Developers\n\nBeyond ready-to-use plugins, memsearch provides a complete **CLI and Python API** for building memory into your own agents. Whether you're adding persistent context to a custom agent, building a memory-augmented RAG pipeline, or doing harness engineering — the same core engine that powers the plugins is available as a library.\n\n### 🏗️ Architecture Overview\n\n```\n┌──────────────────────────────────────────────────────────────┐\n│                  🧑‍💻 For Agent Users (Plugins)                │\n│ Claude Code · Codex · DSH · OpenClaw · OpenCode · Your App   │\n│                              │                               │\n├────────────────────────────┬─────────────────────────────────┤\n│  🛠️ For Agent Developers   │  Build your own with ↓          │\n│  ┌─────────────────────────┴──────────────────────────────┐  │\n│  │           memsearch CLI / Python API                   │  │\n│  │      index · search · expand · watch · compact         │  │\n│  └─────────────────────────┬──────────────────────────────┘  │\n│  ┌─────────────────────────┴──────────────────────────────┐  │\n│  │           Core: Chunker → Embedder → Milvus            │  │\n│  │        Hybrid Search (BM25 + Dense + RRF)              │  │\n│  └────────────────────────────────────────────────────────┘  │\n├──────────────────────────────────────────────────────────────┤\n│  📄 Markdown Files (Source of Truth)                         │\n│  memory/2026-03-27.md · memory/2026-03-26.md · ...           │\n└──────────────────────────────────────────────────────────────┘\n```\n\nPlugins sit on top of the CLI/API layer. The API handles indexing, searching, and Milvus sync. Markdown files are always the source of truth — Milvus is a rebuildable shadow index. Everything below the plugin layer is what you use as an agent developer."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "Skill distillation is off by default; generated skill candidates remain inactive until you choose to install them.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 312,
+          "end": 314,
+          "quote": "Under the hood, candidates live in a git-tracked `.memsearch/skill-candidates/` store — diffable and revertible, and **inert until you install one** (that step is always yours). An optional background pass can also mine recurring workflows from your history on its own. Distilled skills follow the [Agent Skills](https://agentskills.io) open standard, so one capture is portable across Claude Code, Codex, DSH, OpenClaw, OpenCode, and other compatible agents.\n\n**Turning it on is also just a sentence:** ask your agent *\"enable MemSearch skill distillation\"* (or *\"make it more eager\"*) and it configures things through the `memory-config` skill — it's off by default. Prefer editing files? The same settings live under `[plugins.<agent>.memory_to_skill]` in your MemSearch config. Full guide: **[Skills from Memory](https://zilliztech.github.io/memsearch/home/skills-from-memory/)**."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "memsearch: shared agent memory with optional Jev reranking",
+      "h1": "memsearch: shared agent memory with optional Jev reranking",
+      "description": "memsearch preserves coding-agent memory in Markdown and optionally reranks search results with Jev through TypeSafe.",
+      "summary": "Searchable memory helps recover past decisions, debugging context and feature history across supported coding agents; Markdown remains the source of truth. Optional Jev reranking uses the remote TypeSafe API to reorder memory search results without downloading a local reranker model.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose and audience",
+          "text": "Searchable memory helps recover past decisions, debugging context and feature history across supported coding agents; Markdown remains the source of truth.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "Optional Jev reranking uses the remote TypeSafe API to reorder memory search results without downloading a local reranker model.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Using the project",
+          "text": "Use a platform plugin for conversation capture, or the CLI and Python API to index, search and expand memories.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "Skill distillation is off by default; generated skill candidates remain inactive until you choose to install them.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "memsearch：可选 Jev 重排的共享智能体记忆",
+      "h1": "memsearch：可选 Jev 重排的共享智能体记忆",
+      "description": "memsearch 用 Markdown 保存编程智能体记忆，并可通过 TypeSafe 调用 Jev 重排搜索结果。",
+      "summary": "可搜索记忆帮助跨智能体找回决策原因、调试背景和功能历史，Markdown 始终是事实源。 可选的 Jev 重排通过远程 TypeSafe API 调整记忆搜索结果顺序，无需下载本地重排模型。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途与适用对象",
+          "text": "可搜索记忆帮助跨智能体找回决策原因、调试背景和功能历史，Markdown 始终是事实源。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "可选的 Jev 重排通过远程 TypeSafe API 调整记忆搜索结果顺序，无需下载本地重排模型。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "可用平台插件捕获对话，或通过 CLI 与 Python API 索引、搜索并展开记忆。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "技能提炼默认关闭；生成的候选技能在用户选择安装前不会生效。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "memsearch：可選 Jev 重排的共享代理記憶",
+      "h1": "memsearch：可選 Jev 重排的共享代理記憶",
+      "description": "memsearch 以 Markdown 保存程式開發代理記憶，並可透過 TypeSafe 呼叫 Jev 重排搜尋結果。",
+      "summary": "可搜尋的記憶協助跨代理找回決策理由、除錯背景和功能歷程，Markdown 始終是主要資料來源。 選用的 Jev 重排透過遠端 TypeSafe API 調整記憶搜尋結果順序，不需下載本機重排模型。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途與適用對象",
+          "text": "可搜尋的記憶協助跨代理找回決策理由、除錯背景和功能歷程，Markdown 始終是主要資料來源。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "選用的 Jev 重排透過遠端 TypeSafe API 調整記憶搜尋結果順序，不需下載本機重排模型。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "可用平台外掛擷取對話，或透過 CLI 和 Python API 建立索引、搜尋及展開記憶。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "技能萃取預設關閉；產生的候選技能在使用者選擇安裝前不會啟用。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "memsearch：任意の Jev 再ランキングで記憶を共有",
+      "h1": "memsearch：任意の Jev 再ランキングで記憶を共有",
+      "description": "memsearch は開発エージェントの記憶を Markdown に保存し、任意で TypeSafe 経由の Jev 再ランキングを使います。",
+      "summary": "複数の対応エージェントから過去の判断、デバッグの経緯、機能の履歴を検索でき、正本は Markdown に置かれます。 任意の Jev 再ランキングはリモートの TypeSafe API で検索結果を並べ替え、ローカルモデルのダウンロードは不要です。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途と対象",
+          "text": "複数の対応エージェントから過去の判断、デバッグの経緯、機能の履歴を検索でき、正本は Markdown に置かれます。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev との関係",
+          "text": "任意の Jev 再ランキングはリモートの TypeSafe API で検索結果を並べ替え、ローカルモデルのダウンロードは不要です。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "プラグインで会話を記録するか、CLI と Python API で記憶の索引作成、検索、詳細表示を行います。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範囲と制約",
+          "text": "スキル抽出は既定で無効です。生成された候補も、利用者がインストールするまで動作しません。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "memsearch: 선택적 Jev 재정렬을 지원하는 공유 기억",
+      "h1": "memsearch: 선택적 Jev 재정렬을 지원하는 공유 기억",
+      "description": "memsearch는 코딩 에이전트 기억을 Markdown에 저장하고 TypeSafe를 통해 Jev로 검색 결과를 선택적으로 재정렬합니다.",
+      "summary": "지원되는 에이전트 간에 과거 결정, 디버깅 맥락, 기능 이력을 검색하며 Markdown을 원본으로 유지합니다. 선택적 Jev 재정렬은 원격 TypeSafe API를 사용하므로 로컬 재정렬 모델을 내려받지 않습니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "용도와 대상",
+          "text": "지원되는 에이전트 간에 과거 결정, 디버깅 맥락, 기능 이력을 검색하며 Markdown을 원본으로 유지합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "선택적 Jev 재정렬은 원격 TypeSafe API를 사용하므로 로컬 재정렬 모델을 내려받지 않습니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "플랫폼 플러그인으로 대화를 기록하거나 CLI와 Python API로 기억을 색인, 검색하고 자세히 펼쳐 볼 수 있습니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 한계",
+          "text": "스킬 추출은 기본적으로 꺼져 있으며 생성된 후보도 사용자가 설치하기 전까지 활성화되지 않습니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "memsearch: memoria compartida con reranking Jev opcional",
+      "h1": "memsearch: memoria compartida con reranking Jev opcional",
+      "description": "memsearch guarda memoria de agentes en Markdown y permite reordenar resultados con Jev mediante TypeSafe.",
+      "summary": "La memoria consultable recupera decisiones, depuración e historia de funciones entre agentes compatibles; Markdown es la fuente principal. El reranking Jev opcional usa la API remota de TypeSafe para reordenar resultados sin descargar un modelo local.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "La memoria consultable recupera decisiones, depuración e historia de funciones entre agentes compatibles; Markdown es la fuente principal.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "El reranking Jev opcional usa la API remota de TypeSafe para reordenar resultados sin descargar un modelo local.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo se usa",
+          "text": "Use un plugin para capturar conversaciones o la CLI y API Python para indexar, buscar y ampliar recuerdos.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "La extracción de habilidades está desactivada por defecto; los candidatos generados permanecen inactivos hasta su instalación voluntaria.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "memsearch : mémoire partagée avec reclassement Jev facultatif",
+      "h1": "memsearch : mémoire partagée avec reclassement Jev facultatif",
+      "description": "memsearch conserve la mémoire des agents en Markdown et peut reclasser les résultats avec Jev via TypeSafe.",
+      "summary": "La mémoire consultable restitue décisions, contexte de débogage et historique des fonctionnalités entre agents compatibles ; Markdown fait référence. Le reclassement Jev facultatif utilise l'API distante TypeSafe sans télécharger de modèle local de reclassement.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Usage et public visé",
+          "text": "La mémoire consultable restitue décisions, contexte de débogage et historique des fonctionnalités entre agents compatibles ; Markdown fait référence.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Le reclassement Jev facultatif utilise l'API distante TypeSafe sans télécharger de modèle local de reclassement.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Utilisez un plugin pour capturer les conversations, ou la CLI et l'API Python pour indexer, rechercher et approfondir les souvenirs.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "L'extraction de compétences est désactivée par défaut ; les propositions restent inactives jusqu'à leur installation volontaire.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "memsearch: gemeinsamer Agentenspeicher mit optionalem Jev-Reranking",
+      "h1": "memsearch: gemeinsamer Agentenspeicher mit optionalem Jev-Reranking",
+      "description": "memsearch speichert Agentenerinnerungen in Markdown und ordnet Suchergebnisse optional mit Jev über TypeSafe neu.",
+      "summary": "Der durchsuchbare Speicher erschließt frühere Entscheidungen, Debugging-Kontext und Funktionshistorie über unterstützte Agenten hinweg; Markdown bleibt die maßgebliche Quelle. Optionales Jev-Reranking sortiert Suchergebnisse über die entfernte TypeSafe-API ohne Download eines lokalen Reranker-Modells.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Zweck und Zielgruppe",
+          "text": "Der durchsuchbare Speicher erschließt frühere Entscheidungen, Debugging-Kontext und Funktionshistorie über unterstützte Agenten hinweg; Markdown bleibt die maßgebliche Quelle.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Optionales Jev-Reranking sortiert Suchergebnisse über die entfernte TypeSafe-API ohne Download eines lokalen Reranker-Modells.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Verwendung",
+          "text": "Plattform-Plugins erfassen Gespräche; CLI und Python-API ermöglichen Indizierung, Suche und Vertiefung von Erinnerungen.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Die Skill-Ableitung ist standardmäßig deaktiviert; erzeugte Kandidaten bleiben bis zur gewählten Installation inaktiv.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "memsearch: memória compartilhada com reordenação Jev opcional",
+      "h1": "memsearch: memória compartilhada com reordenação Jev opcional",
+      "description": "memsearch guarda memória de agentes em Markdown e pode reordenar resultados com Jev pela TypeSafe.",
+      "summary": "A memória pesquisável recupera decisões, contexto de depuração e histórico de funcionalidades entre agentes compatíveis; Markdown é a fonte principal. A reordenação Jev opcional usa a API remota TypeSafe sem baixar um modelo local de reordenação.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Finalidade e público",
+          "text": "A memória pesquisável recupera decisões, contexto de depuração e histórico de funcionalidades entre agentes compatíveis; Markdown é a fonte principal.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "A reordenação Jev opcional usa a API remota TypeSafe sem baixar um modelo local de reordenação.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Use um plugin para capturar conversas ou a CLI e API Python para indexar, pesquisar e expandir memórias.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "A extração de habilidades vem desativada; candidatos gerados ficam inativos até que você escolha instalá-los.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "memsearch: общая память агентов с ранжированием Jev",
+      "h1": "memsearch: общая память агентов с ранжированием Jev",
+      "description": "memsearch хранит память агентов в Markdown и при желании переранжирует результаты через Jev и TypeSafe.",
+      "summary": "Поиск памяти восстанавливает решения, контекст отладки и историю функций между поддерживаемыми агентами; Markdown остаётся первичным источником. Необязательное ранжирование Jev обращается к удалённому TypeSafe API без загрузки локальной модели ранжирования.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Поиск памяти восстанавливает решения, контекст отладки и историю функций между поддерживаемыми агентами; Markdown остаётся первичным источником.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Необязательное ранжирование Jev обращается к удалённому TypeSafe API без загрузки локальной модели ранжирования.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Используйте плагин для записи разговоров либо CLI и Python API для индексации, поиска и раскрытия воспоминаний.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Извлечение навыков по умолчанию отключено; созданные кандидаты неактивны, пока пользователь не решит их установить.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "memsearch: वैकल्पिक Jev रैंकिंग के साथ साझा एजेंट मेमोरी",
+      "h1": "memsearch: वैकल्पिक Jev रैंकिंग के साथ साझा एजेंट मेमोरी",
+      "description": "memsearch एजेंट मेमोरी Markdown में रखता है और TypeSafe के ज़रिए Jev से खोज परिणाम दोबारा क्रमबद्ध कर सकता है।",
+      "summary": "खोज योग्य मेमोरी समर्थित एजेंटों में पुराने निर्णय, डीबगिंग संदर्भ और फ़ीचर इतिहास लौटाती है; Markdown मूल स्रोत रहता है। वैकल्पिक Jev रैंकिंग दूरस्थ TypeSafe API से परिणामों का क्रम बदलती है, बिना स्थानीय रैंकिंग मॉडल डाउनलोड किए।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "उद्देश्य और उपयोगकर्ता",
+          "text": "खोज योग्य मेमोरी समर्थित एजेंटों में पुराने निर्णय, डीबगिंग संदर्भ और फ़ीचर इतिहास लौटाती है; Markdown मूल स्रोत रहता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "वैकल्पिक Jev रैंकिंग दूरस्थ TypeSafe API से परिणामों का क्रम बदलती है, बिना स्थानीय रैंकिंग मॉडल डाउनलोड किए।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल का तरीका",
+          "text": "बातचीत रिकॉर्ड करने के लिए प्लगइन या मेमोरी इंडेक्स, खोज और विस्तार के लिए CLI तथा Python API इस्तेमाल करें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "स्किल निकालना डिफ़ॉल्ट रूप से बंद है; बने हुए उम्मीदवार उपयोगकर्ता के इंस्टॉल करने तक निष्क्रिय रहते हैं।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "memsearch: memori bersama dengan pemeringkatan Jev opsional",
+      "h1": "memsearch: memori bersama dengan pemeringkatan Jev opsional",
+      "description": "memsearch menyimpan memori agen dalam Markdown dan dapat mengurutkan ulang hasil pencarian dengan Jev melalui TypeSafe.",
+      "summary": "Memori yang dapat dicari memulihkan keputusan, konteks debugging, dan riwayat fitur antaragen yang didukung; Markdown tetap sumber utama. Pemeringkatan Jev opsional memakai API TypeSafe jarak jauh tanpa mengunduh model pemeringkat lokal.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Tujuan dan pengguna",
+          "text": "Memori yang dapat dicari memulihkan keputusan, konteks debugging, dan riwayat fitur antaragen yang didukung; Markdown tetap sumber utama.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Pemeringkatan Jev opsional memakai API TypeSafe jarak jauh tanpa mengunduh model pemeringkat lokal.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Gunakan plugin untuk merekam percakapan atau CLI dan API Python untuk mengindeks, mencari, serta memperluas ingatan.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Ekstraksi keterampilan dinonaktifkan secara bawaan; kandidat yang dihasilkan tetap tidak aktif sampai dipilih untuk dipasang.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "memsearch: bộ nhớ chung với xếp hạng Jev tùy chọn",
+      "h1": "memsearch: bộ nhớ chung với xếp hạng Jev tùy chọn",
+      "description": "memsearch lưu bộ nhớ tác tử bằng Markdown và có thể xếp hạng lại kết quả với Jev qua TypeSafe.",
+      "summary": "Bộ nhớ tìm kiếm được giúp khôi phục quyết định, ngữ cảnh gỡ lỗi và lịch sử tính năng giữa các tác tử hỗ trợ; Markdown là nguồn gốc. Xếp hạng Jev tùy chọn dùng API TypeSafe từ xa, không cần tải mô hình xếp hạng cục bộ.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích và đối tượng",
+          "text": "Bộ nhớ tìm kiếm được giúp khôi phục quyết định, ngữ cảnh gỡ lỗi và lịch sử tính năng giữa các tác tử hỗ trợ; Markdown là nguồn gốc.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Xếp hạng Jev tùy chọn dùng API TypeSafe từ xa, không cần tải mô hình xếp hạng cục bộ.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Dùng plugin để ghi hội thoại hoặc CLI và API Python để lập chỉ mục, tìm kiếm và mở rộng ký ức.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Trích xuất kỹ năng mặc định tắt; các kỹ năng ứng viên vẫn bất hoạt cho đến khi người dùng chọn cài đặt.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "memsearch: isteğe bağlı Jev sıralamasıyla ortak ajan belleği",
+      "h1": "memsearch: isteğe bağlı Jev sıralamasıyla ortak ajan belleği",
+      "description": "memsearch ajan belleğini Markdown’da saklar ve TypeSafe üzerinden Jev ile arama sonuçlarını isteğe bağlı yeniden sıralar.",
+      "summary": "Aranabilir bellek, desteklenen ajanlar arasında eski kararları, hata ayıklama bağlamını ve özellik geçmişini bulur; esas kaynak Markdown’dır. İsteğe bağlı Jev sıralaması, yerel sıralama modeli indirmeden uzak TypeSafe API üzerinden sonuçları düzenler.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Amaç ve hedef kitle",
+          "text": "Aranabilir bellek, desteklenen ajanlar arasında eski kararları, hata ayıklama bağlamını ve özellik geçmişini bulur; esas kaynak Markdown’dır.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "İsteğe bağlı Jev sıralaması, yerel sıralama modeli indirmeden uzak TypeSafe API üzerinden sonuçları düzenler.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Konuşma kaydı için platform eklentisi; indeksleme, arama ve belleği ayrıntılandırma için CLI ile Python API kullanılır.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Beceri çıkarımı varsayılan olarak kapalıdır; üretilen adaylar siz kurmayı seçene kadar etkinleşmez.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "memsearch: memoria condivisa con riordino Jev facoltativo",
+      "h1": "memsearch: memoria condivisa con riordino Jev facoltativo",
+      "description": "memsearch conserva la memoria degli agenti in Markdown e può riordinare i risultati con Jev tramite TypeSafe.",
+      "summary": "La memoria ricercabile recupera decisioni, contesto di debug e cronologia delle funzioni tra agenti supportati; Markdown resta la fonte primaria. Il riordino Jev facoltativo usa l'API remota TypeSafe senza scaricare un modello locale di ranking.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Scopo e destinatari",
+          "text": "La memoria ricercabile recupera decisioni, contesto di debug e cronologia delle funzioni tra agenti supportati; Markdown resta la fonte primaria.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Il riordino Jev facoltativo usa l'API remota TypeSafe senza scaricare un modello locale di ranking.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come si usa",
+          "text": "Si usa un plugin per registrare conversazioni oppure CLI e API Python per indicizzare, cercare ed espandere ricordi.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "L'estrazione di skill è disattivata per impostazione predefinita; i candidati generati restano inattivi finché non si sceglie di installarli.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

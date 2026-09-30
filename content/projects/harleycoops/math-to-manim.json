@@ -1,0 +1,763 @@
+{
+  "version": "source-content-v1",
+  "repo": "HarleyCoops/Math-To-Manim",
+  "repositoryId": 919420364,
+  "relationship": "jev-app",
+  "category": "apps",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "path": "README.md",
+      "commit": "5e5f370e9f7d2f753463ba599bf6986ac9b2607d",
+      "url": "https://github.com/HarleyCoops/Math-To-Manim/blob/5e5f370e9f7d2f753463ba599bf6986ac9b2607d/README.md",
+      "sha256": "47cd9c517a2e62d6a357b2468162f8464fc98d8a359da1505e27629163403202",
+      "accessedAt": "2026-09-30T07:33:47.603Z",
+      "id": "s1"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "The pipeline develops a learning brief, mathematics, visual plan and Manim scene, then reviews the rendered result.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 20,
+          "end": 30,
+          "quote": "### A question becomes a mathematical world you can move through.\n\n**GPT-6 Astra builds the explanation. Jev challenges every step. Manim makes it visible.**\n\nThe primary pipeline now uses the official **Codex SDK**, your **Codex ChatGPT\nlogin**, and `gpt-6-astra` for authors and evidence auditors. Real **TypeSafe Jev\n(`jev-1.13.0`)** evaluates each checkpoint through its separate API. Astra develops the\nlearning brief, verifies the mathematics, directs the visual argument, writes\nthe scene, and reviews the actual render. Jev reviews are **advisory by default**:\ntheir scores are retained, but do not trigger regeneration or extra investigations.\nStrict gates remain available with `--review-mode gated`."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "Jev evaluates candidate artifacts and Astra's text audits through typed Score, Noul and Choice answers; it does not receive the images.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 185,
+          "end": 188,
+          "quote": "Each gate has two parts: a fresh **Astra evidence audit**, followed by a real\n**TypeSafe Jev** request. Jev receives the candidate and the audit as text and\nreturns typed **Score**, **Noul**, and **Choice** answers. It does not receive\nimages: Astra inspects the rendered frames and supplies explicit observations."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "The documented workflow uses Codex login, TYPESAFE_API_KEY, Python, Node.js, Manim dependencies, FFmpeg and LaTeX.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 266,
+          "end": 279,
+          "quote": "## Installation\n\nInstall Python 3.10+, Node.js 18+, Manim's system dependencies, FFmpeg and LaTeX.\nThen, in the repository:\n\n```bash\npython -m venv .venv\n# Activate .venv with the command for your shell.\npip install -e \".[dev,render]\"\nnpm ci\nnpx codex login\n# Save TYPESAFE_API_KEY=your-key in the git-ignored .env.local file.\nmath-to-manim doctor\nmath-to-manim run \"Explain a new mathematical or physical idea\" -q h"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "Jev review is advisory unless gated mode is selected and is not a mathematical proof. Local rendering does not sandbox arbitrary Python.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 28,
+          "end": 30,
+          "quote": "the scene, and reviews the actual render. Jev reviews are **advisory by default**:\ntheir scores are retained, but do not trigger regeneration or extra investigations.\nStrict gates remain available with `--review-mode gated`."
+        },
+        {
+          "source": "s1",
+          "start": 196,
+          "end": 198,
+          "quote": "These are initial engineering thresholds, not calibrated correctness guarantees\nor formal proofs. Jev evaluates supplied evidence; it does not independently\nprove the mathematics. API failures stop the run without an Astra substitute."
+        },
+        {
+          "source": "s1",
+          "start": 296,
+          "end": 298,
+          "quote": "and launches the local renderer. **Local rendering is not a container security\nboundary.** Static checks reduce accidental misuse but do not make arbitrary\nPython safe. See [the architecture](docs/ASTRA_PIPELINE.md)."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "Math To Manim: mathematical animation with Jev review",
+      "h1": "Math To Manim: mathematical animation with Jev review",
+      "description": "Math To Manim combines Astra-authored explanations, Manim rendering and Jev checkpoints that are advisory by default.",
+      "summary": "The pipeline develops a learning brief, mathematics, visual plan and Manim scene, then reviews the rendered result. Jev evaluates candidate artifacts and Astra's text audits through typed Score, Noul and Choice answers; it does not receive the images.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose and audience",
+          "text": "The pipeline develops a learning brief, mathematics, visual plan and Manim scene, then reviews the rendered result.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "Jev evaluates candidate artifacts and Astra's text audits through typed Score, Noul and Choice answers; it does not receive the images.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Using the project",
+          "text": "The documented workflow uses Codex login, TYPESAFE_API_KEY, Python, Node.js, Manim dependencies, FFmpeg and LaTeX.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "Jev review is advisory unless gated mode is selected and is not a mathematical proof. Local rendering does not sandbox arbitrary Python.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "Math To Manim：带 Jev 审核的数学动画流程",
+      "h1": "Math To Manim：带 Jev 审核的数学动画流程",
+      "description": "Math To Manim 结合 Astra 撰写、Manim 渲染与 Jev 检查点，默认以建议模式审核。",
+      "summary": "流程依次形成学习目标、数学内容、视觉方案和 Manim 场景，再检查实际渲染结果。 Jev 读取候选产物及 Astra 的文字审查，通过 Score、Noul 和 Choice 返回判断，不直接接收图像。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途与适用对象",
+          "text": "流程依次形成学习目标、数学内容、视觉方案和 Manim 场景，再检查实际渲染结果。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "Jev 读取候选产物及 Astra 的文字审查，通过 Score、Noul 和 Choice 返回判断，不直接接收图像。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "文档流程需要 Codex 登录、TYPESAFE_API_KEY、Python、Node.js、Manim 系统依赖、FFmpeg 与 LaTeX。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "未选择门控模式时 Jev 审核仅作建议，不构成数学证明；本地渲染也不为任意 Python 提供安全沙箱。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "Math To Manim：結合 Jev 審查的數學動畫流程",
+      "h1": "Math To Manim：結合 Jev 審查的數學動畫流程",
+      "description": "Math To Manim 結合 Astra 撰寫、Manim 算繪與 Jev 檢查點，預設採建議式審查。",
+      "summary": "流程建立學習目標、數學內容、視覺規劃與 Manim 場景，再檢查實際算繪結果。 Jev 讀取候選產物及 Astra 的文字稽核，以 Score、Noul 和 Choice 回傳判斷，不直接接收影像。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途與適用對象",
+          "text": "流程建立學習目標、數學內容、視覺規劃與 Manim 場景，再檢查實際算繪結果。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "Jev 讀取候選產物及 Astra 的文字稽核，以 Score、Noul 和 Choice 回傳判斷，不直接接收影像。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "文件流程需要 Codex 登入、TYPESAFE_API_KEY、Python、Node.js、Manim 系統相依套件、FFmpeg 及 LaTeX。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "未選擇閘控模式時 Jev 審查僅提供建議，並非數學證明；本機算繪也不會隔離任意 Python 程式碼。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "Math To Manim：Jev 審査付きの数学アニメーション",
+      "h1": "Math To Manim：Jev 審査付きの数学アニメーション",
+      "description": "Math To Manim は Astra による説明、Manim 描画、既定では助言扱いの Jev チェックを組み合わせます。",
+      "summary": "学習概要、数学的内容、映像計画、Manim シーンを作り、実際の描画結果を確認するパイプラインです。 Jev は成果物と Astra の文章による監査を Score、Noul、Choice で評価し、画像自体は受け取りません。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途と対象",
+          "text": "学習概要、数学的内容、映像計画、Manim シーンを作り、実際の描画結果を確認するパイプラインです。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev との関係",
+          "text": "Jev は成果物と Astra の文章による監査を Score、Noul、Choice で評価し、画像自体は受け取りません。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "文書化された構成には Codex ログイン、TYPESAFE_API_KEY、Python、Node.js、Manim 依存関係、FFmpeg、LaTeX が必要です。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範囲と制約",
+          "text": "ゲートモードを選ばない限り Jev は助言にとどまり、数学の証明ではありません。ローカル描画は任意の Python を隔離しません。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "Math To Manim: Jev 검토가 있는 수학 애니메이션",
+      "h1": "Math To Manim: Jev 검토가 있는 수학 애니메이션",
+      "description": "Math To Manim은 Astra의 설명 작성, Manim 렌더링, 기본적으로 권고 방식인 Jev 검토를 결합합니다.",
+      "summary": "학습 개요, 수학 내용, 시각 계획, Manim 장면을 만든 후 실제 렌더링 결과를 검토하는 파이프라인입니다. Jev는 결과물과 Astra의 텍스트 감사를 Score, Noul, Choice로 평가하며 이미지 자체는 받지 않습니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "용도와 대상",
+          "text": "학습 개요, 수학 내용, 시각 계획, Manim 장면을 만든 후 실제 렌더링 결과를 검토하는 파이프라인입니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Jev는 결과물과 Astra의 텍스트 감사를 Score, Noul, Choice로 평가하며 이미지 자체는 받지 않습니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "문서상 구성에는 Codex 로그인, TYPESAFE_API_KEY, Python, Node.js, Manim 의존성, FFmpeg, LaTeX가 필요합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 한계",
+          "text": "게이트 모드를 선택하지 않으면 Jev 검토는 권고이며 수학적 증명이 아닙니다. 로컬 렌더링도 임의 Python을 격리하지 않습니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "Math To Manim: animación matemática con revisión Jev",
+      "h1": "Math To Manim: animación matemática con revisión Jev",
+      "description": "Math To Manim combina explicaciones de Astra, renderizado Manim y controles Jev consultivos por defecto.",
+      "summary": "El flujo desarrolla objetivos de aprendizaje, contenido matemático, planificación visual y escenas Manim, y revisa el renderizado real. Jev evalúa los artefactos y auditorías textuales de Astra con Score, Noul y Choice; no recibe imágenes.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "El flujo desarrolla objetivos de aprendizaje, contenido matemático, planificación visual y escenas Manim, y revisa el renderizado real.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Jev evalúa los artefactos y auditorías textuales de Astra con Score, Noul y Choice; no recibe imágenes.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo se usa",
+          "text": "El flujo documentado usa inicio de sesión Codex, TYPESAFE_API_KEY, Python, Node.js, dependencias Manim, FFmpeg y LaTeX.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "La revisión Jev es consultiva salvo en modo gated y no constituye una prueba matemática. El renderizado local no aísla Python arbitrario.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "Math To Manim : animation mathématique avec revue Jev",
+      "h1": "Math To Manim : animation mathématique avec revue Jev",
+      "description": "Math To Manim associe explications d'Astra, rendu Manim et contrôles Jev consultatifs par défaut.",
+      "summary": "Le pipeline produit objectifs pédagogiques, contenu mathématique, plan visuel et scène Manim, puis inspecte le rendu réel. Jev évalue les artefacts et audits textuels d'Astra avec Score, Noul et Choice ; il ne reçoit pas les images.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Usage et public visé",
+          "text": "Le pipeline produit objectifs pédagogiques, contenu mathématique, plan visuel et scène Manim, puis inspecte le rendu réel.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Jev évalue les artefacts et audits textuels d'Astra avec Score, Noul et Choice ; il ne reçoit pas les images.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Le flux documenté utilise une connexion Codex, TYPESAFE_API_KEY, Python, Node.js, les dépendances Manim, FFmpeg et LaTeX.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "La revue Jev reste consultative hors mode gated et ne constitue pas une preuve mathématique. Le rendu local n'isole pas le Python arbitraire.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "Math To Manim: mathematische Animationen mit Jev-Prüfung",
+      "h1": "Math To Manim: mathematische Animationen mit Jev-Prüfung",
+      "description": "Math To Manim verbindet Astra-Erklärungen, Manim-Rendering und standardmäßig beratende Jev-Prüfschritte.",
+      "summary": "Die Pipeline erstellt Lernziele, mathematische Inhalte, Bildplanung und Manim-Szenen und prüft anschließend das tatsächliche Rendering. Jev bewertet Artefakte und Astras textliche Prüfberichte mit Score, Noul und Choice; Bilder erhält es nicht.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Zweck und Zielgruppe",
+          "text": "Die Pipeline erstellt Lernziele, mathematische Inhalte, Bildplanung und Manim-Szenen und prüft anschließend das tatsächliche Rendering.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Jev bewertet Artefakte und Astras textliche Prüfberichte mit Score, Noul und Choice; Bilder erhält es nicht.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Verwendung",
+          "text": "Der dokumentierte Ablauf benötigt Codex-Anmeldung, TYPESAFE_API_KEY, Python, Node.js, Manim-Abhängigkeiten, FFmpeg und LaTeX.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Jev berät, solange gated mode nicht gewählt wird, und liefert keinen mathematischen Beweis. Lokales Rendering isoliert beliebigen Python-Code nicht.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "Math To Manim: animação matemática com revisão Jev",
+      "h1": "Math To Manim: animação matemática com revisão Jev",
+      "description": "Math To Manim combina explicações de Astra, renderização Manim e verificações Jev consultivas por padrão.",
+      "summary": "O fluxo produz objetivos de aprendizagem, matemática, planejamento visual e cenas Manim, depois revisa o resultado renderizado. Jev avalia artefatos e auditorias textuais de Astra com Score, Noul e Choice; não recebe imagens.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Finalidade e público",
+          "text": "O fluxo produz objetivos de aprendizagem, matemática, planejamento visual e cenas Manim, depois revisa o resultado renderizado.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "Jev avalia artefatos e auditorias textuais de Astra com Score, Noul e Choice; não recebe imagens.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "O fluxo documentado usa login Codex, TYPESAFE_API_KEY, Python, Node.js, dependências Manim, FFmpeg e LaTeX.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "A revisão Jev é consultiva fora do modo gated e não é prova matemática. A renderização local não isola código Python arbitrário.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "Math To Manim: математическая анимация с проверками Jev",
+      "h1": "Math To Manim: математическая анимация с проверками Jev",
+      "description": "Math To Manim объединяет объяснения Astra, рендеринг Manim и проверки Jev, по умолчанию рекомендательные.",
+      "summary": "Конвейер создаёт учебный план, математический материал, визуальную схему и сцену Manim, затем проверяет реальный рендер. Jev оценивает артефакты и текстовые аудиты Astra через Score, Noul и Choice; изображения ему не передаются.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Конвейер создаёт учебный план, математический материал, визуальную схему и сцену Manim, затем проверяет реальный рендер.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Jev оценивает артефакты и текстовые аудиты Astra через Score, Noul и Choice; изображения ему не передаются.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Описанный процесс использует вход Codex, TYPESAFE_API_KEY, Python, Node.js, зависимости Manim, FFmpeg и LaTeX.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Вне режима gated проверки Jev носят рекомендательный характер и не доказывают математику. Локальный рендеринг не изолирует произвольный Python.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "Math To Manim: Jev समीक्षा के साथ गणितीय एनीमेशन",
+      "h1": "Math To Manim: Jev समीक्षा के साथ गणितीय एनीमेशन",
+      "description": "Math To Manim, Astra के स्पष्टीकरण, Manim रेंडरिंग और डिफ़ॉल्ट सलाहकारी Jev जाँच को जोड़ता है।",
+      "summary": "पाइपलाइन सीखने की रूपरेखा, गणित, दृश्य योजना और Manim दृश्य बनाकर वास्तविक रेंडर की समीक्षा करती है। Jev सामग्री और Astra की लिखित जाँच का Score, Noul और Choice से मूल्यांकन करता है; उसे चित्र नहीं मिलते।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "उद्देश्य और उपयोगकर्ता",
+          "text": "पाइपलाइन सीखने की रूपरेखा, गणित, दृश्य योजना और Manim दृश्य बनाकर वास्तविक रेंडर की समीक्षा करती है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "Jev सामग्री और Astra की लिखित जाँच का Score, Noul और Choice से मूल्यांकन करता है; उसे चित्र नहीं मिलते।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल का तरीका",
+          "text": "दस्तावेज़ वाला प्रवाह Codex लॉगिन, TYPESAFE_API_KEY, Python, Node.js, Manim निर्भरताएँ, FFmpeg और LaTeX इस्तेमाल करता है।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "gated मोड के बिना Jev समीक्षा सलाह है, गणितीय प्रमाण नहीं। स्थानीय रेंडरिंग मनमाने Python को सैंडबॉक्स में नहीं रखती।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "Math To Manim: animasi matematika dengan tinjauan Jev",
+      "h1": "Math To Manim: animasi matematika dengan tinjauan Jev",
+      "description": "Math To Manim menggabungkan penjelasan Astra, rendering Manim, dan pemeriksaan Jev yang secara bawaan bersifat saran.",
+      "summary": "Alur membuat tujuan belajar, materi matematika, rencana visual, dan adegan Manim, lalu meninjau hasil render sebenarnya. Jev menilai artefak dan audit teks Astra melalui Score, Noul, serta Choice; gambar tidak dikirim kepadanya.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Tujuan dan pengguna",
+          "text": "Alur membuat tujuan belajar, materi matematika, rencana visual, dan adegan Manim, lalu meninjau hasil render sebenarnya.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Jev menilai artefak dan audit teks Astra melalui Score, Noul, serta Choice; gambar tidak dikirim kepadanya.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Alur terdokumentasi memakai login Codex, TYPESAFE_API_KEY, Python, Node.js, dependensi Manim, FFmpeg, dan LaTeX.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Tinjauan Jev hanya saran kecuali mode gated dipilih, bukan bukti matematika. Rendering lokal tidak mengisolasi Python sembarang.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "Math To Manim: hoạt họa toán học với kiểm duyệt Jev",
+      "h1": "Math To Manim: hoạt họa toán học với kiểm duyệt Jev",
+      "description": "Math To Manim kết hợp lời giải thích của Astra, kết xuất Manim và kiểm tra Jev mặc định mang tính tư vấn.",
+      "summary": "Quy trình tạo mục tiêu học tập, nội dung toán, kế hoạch hình ảnh và cảnh Manim rồi kiểm tra bản kết xuất thực. Jev đánh giá sản phẩm và bản kiểm tra bằng văn bản của Astra qua Score, Noul và Choice; nó không nhận hình ảnh.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích và đối tượng",
+          "text": "Quy trình tạo mục tiêu học tập, nội dung toán, kế hoạch hình ảnh và cảnh Manim rồi kiểm tra bản kết xuất thực.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Jev đánh giá sản phẩm và bản kiểm tra bằng văn bản của Astra qua Score, Noul và Choice; nó không nhận hình ảnh.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Quy trình được mô tả dùng đăng nhập Codex, TYPESAFE_API_KEY, Python, Node.js, phụ thuộc Manim, FFmpeg và LaTeX.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Ngoài chế độ gated, kiểm duyệt Jev chỉ là tư vấn, không phải chứng minh toán học. Kết xuất cục bộ không cô lập Python tùy ý.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "Math To Manim: Jev incelemeli matematik animasyonu",
+      "h1": "Math To Manim: Jev incelemeli matematik animasyonu",
+      "description": "Math To Manim, Astra açıklamalarını, Manim görüntülemeyi ve varsayılan olarak tavsiye niteliğindeki Jev kontrollerini birleştirir.",
+      "summary": "Akış öğrenme özeti, matematik içeriği, görsel plan ve Manim sahnesi üretip gerçek çıktıyı inceler. Jev ürünleri ve Astra’nın yazılı denetimlerini Score, Noul ve Choice ile değerlendirir; görüntüleri almaz.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Amaç ve hedef kitle",
+          "text": "Akış öğrenme özeti, matematik içeriği, görsel plan ve Manim sahnesi üretip gerçek çıktıyı inceler.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Jev ürünleri ve Astra’nın yazılı denetimlerini Score, Noul ve Choice ile değerlendirir; görüntüleri almaz.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Belgelenen akış Codex oturumu, TYPESAFE_API_KEY, Python, Node.js, Manim bağımlılıkları, FFmpeg ve LaTeX kullanır.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "gated modu dışında Jev incelemesi tavsiyedir, matematiksel kanıt değildir. Yerel görüntüleme keyfî Python kodunu yalıtmaz.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "Math To Manim: animazioni matematiche con revisione Jev",
+      "h1": "Math To Manim: animazioni matematiche con revisione Jev",
+      "description": "Math To Manim combina spiegazioni di Astra, rendering Manim e controlli Jev consultivi per impostazione predefinita.",
+      "summary": "Il flusso crea obiettivi didattici, contenuto matematico, piano visivo e scena Manim, poi esamina il rendering reale. Jev valuta artefatti e audit testuali di Astra tramite Score, Noul e Choice; non riceve immagini.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Scopo e destinatari",
+          "text": "Il flusso crea obiettivi didattici, contenuto matematico, piano visivo e scena Manim, poi esamina il rendering reale.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Jev valuta artefatti e audit testuali di Astra tramite Score, Noul e Choice; non riceve immagini.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come si usa",
+          "text": "Il flusso documentato usa login Codex, TYPESAFE_API_KEY, Python, Node.js, dipendenze Manim, FFmpeg e LaTeX.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "Fuori dalla modalità gated, la revisione Jev è consultiva e non è una prova matematica. Il rendering locale non isola Python arbitrario.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  },
+  "displayName": "Math To Manim"
+}

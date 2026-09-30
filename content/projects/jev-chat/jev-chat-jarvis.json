@@ -1,0 +1,768 @@
+{
+  "version": "source-content-v1",
+  "repo": "jev-chat/jev-chat-jarvis",
+  "repositoryId": 1379574728,
+  "relationship": "jev-app",
+  "category": "apps",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "path": "README.md",
+      "commit": "5feeb8ead9cf9956ec25f112f15dd8b7b369fa41",
+      "url": "https://github.com/jev-chat/jev-chat-jarvis/blob/5feeb8ead9cf9956ec25f112f15dd8b7b369fa41/README.md",
+      "sha256": "f6303a813ba1189e5692a59523f930158e7995c2f34599257c8d7e0660a3b13a",
+      "accessedAt": "2026-09-30T07:33:45.197Z",
+      "id": "s1"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "The Android assistant reads visible conversations through accessibility and local OCR, displaying analysis and reply suggestions in an overlay.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 64,
+          "end": 70,
+          "quote": "- **它先判断，再写字。** 大多数工具直接让模型编一句回复。Jev 先用判断模型给出对方真实意图、危险等级、该不该马上回，再据此起草回复。\n- **不动你的聊天软件。** 不 hook、不改包、不走任何 App 的接口或账号、不读数据库，只用系统无障碍服务读「屏幕上正在显示的对话」。\n- **发送权永远在你手里。** 程序只把回复填进输入框，从不自动发送，不碰转账 / 红包 / 收款。\n- **一套内核，多平台。** QQ、X 真机跑通，飞书靠 OCR 补正文。新增一个 App 只需写一个几十行的适配器；微信 Android 版已全面下架，不再采集或处理微信内容。\n- **它认识你的人和事。** 本地知识库与联系人档案，分析时自动带上命中的笔记和这个人的历史，回复不会和你的设定打架。\n- **接口自己配。** 判断 / 回复 / 视觉三路分别可填。分析时，聊天文字和你启用的背景信息会发给你配置的模型服务商；作者不运营中转服务器。\n- **本机存储可控。** 密钥、知识库和可选历史存 App 私有空间；截图只在本机 OCR，不上传。第三方服务商如何处理收到的内容，以其隐私政策为准。"
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "Jev judges intent and response choices; a generative model drafts three candidates and Jev ranks them.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 195,
+          "end": 198,
+          "quote": "- **采集**：一个 App 一个适配器，服务按前台包名分发。适配器只负责把当前窗口变成「标题 + 消息列表（谁说的、说了什么）」，下游全部通用；树里没有正文时走截屏 + 离线 OCR 兜底（限频、失败退避，不会每秒连拍）。\n- **判断**：[Jev](https://docs.typesafe.ai/) 只回答选择 / 打分 / 是非，一次请求发全部题目，约 1 秒返回；命中知识库时 state 里会带 `background`（关系 + 联系人备注 + 命中笔记）和 `history`（历史消息）。\n- **回复**：生成模型起草 3 条候选，Jev 排序；提示词要求回复必须与知识库一致，不编造知识库没有的事实。\n- **回填**：`ACTION_SET_TEXT`，失败则剪贴板 + `ACTION_PASTE`，不发送。"
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "On Android 11+ ARM64, configure the model interfaces, then copy or insert a suggested reply; sending remains manual.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 87,
+          "end": 93,
+          "quote": "**1. 装包。** 仓库里有签好名的 release 包：[下载 Jev Android v1.4 APK](https://raw.githubusercontent.com/jev-chat/jev-chat-jarvis/main/apk/jev-assistant-v1.4-release.apk)（Android 11+，仅支持 ARM64 / `arm64-v8a`）。[Releases](https://github.com/jev-chat/jev-chat-jarvis/releases)可查看历史版本的发布说明。\n\n```bash\nadb install -r apk/jev-assistant-v1.4-release.apk\n```\n\n**2. 填密钥。** 打开 App → 设置 →「接口」分三张卡：判断接口 / 回复接口 / 视觉接口。最简单只填「判断接口」一栏的 [OpenRouter](https://openrouter.ai/) API Key，其余两栏留空会自动继承这把密钥就能用。想换回复模型（默认 `deepseek/deepseek-chat-v3.1`，国内 Gemini / OpenAI 会被区域限制）就在「回复接口」选预设（OpenRouter / DeepSeek 官方 / 通义兼容）或自填地址，每张卡都有独立的一键连通测试。"
+        },
+        {
+          "source": "s1",
+          "start": 107,
+          "end": 109,
+          "quote": "- 判断模型一次给出：对方真实意图、危险等级（1–9）、对方要什么、该不该马上回、最佳动作。约 1 秒，带把握度。\n- 生成模型起草 3 条口语化候选，判断模型按「最合适」排序并给出占比。\n- 悬浮窗里点一下复制或填入，填入用 `ACTION_SET_TEXT`，失败自动退到剪贴板粘贴，**任何情况下都不发送**。"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "Analysis sends chat text and enabled background information to your configured provider. Android WeChat support is removed and no web version exists.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 69,
+          "end": 70,
+          "quote": "- **接口自己配。** 判断 / 回复 / 视觉三路分别可填。分析时，聊天文字和你启用的背景信息会发给你配置的模型服务商；作者不运营中转服务器。\n- **本机存储可控。** 密钥、知识库和可选历史存 App 私有空间；截图只在本机 OCR，不上传。第三方服务商如何处理收到的内容，以其隐私政策为准。"
+        },
+        {
+          "source": "s1",
+          "start": 81,
+          "end": 83,
+          "quote": "| 网页 | ⏳ 规划 | — | 尚无网页版 |\n\n本项目只读你自己设备上、你自己有权查看且当前版本支持的聊天；微信 Android 版已全面下架，不提供微信采集与分析。"
+        },
+        {
+          "source": "s1",
+          "start": 252,
+          "end": 252,
+          "quote": "- **微信 Android 版已全面下架**：当前版本不再采集、OCR、分析或填入微信内容。"
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "jev-chat-jarvis: Jev-assisted replies on Android",
+      "h1": "jev-chat-jarvis: Jev-assisted replies on Android",
+      "description": "jev-chat-jarvis analyzes supported chat screens with Jev and suggests replies that the user chooses to send.",
+      "summary": "The Android assistant reads visible conversations through accessibility and local OCR, displaying analysis and reply suggestions in an overlay. Jev judges intent and response choices; a generative model drafts three candidates and Jev ranks them.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose and audience",
+          "text": "The Android assistant reads visible conversations through accessibility and local OCR, displaying analysis and reply suggestions in an overlay.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "Jev judges intent and response choices; a generative model drafts three candidates and Jev ranks them.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Using the project",
+          "text": "On Android 11+ ARM64, configure the model interfaces, then copy or insert a suggested reply; sending remains manual.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "Analysis sends chat text and enabled background information to your configured provider. Android WeChat support is removed and no web version exists.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "jev-chat-jarvis：用 Jev 辅助 Android 聊天回复",
+      "h1": "jev-chat-jarvis：用 Jev 辅助 Android 聊天回复",
+      "description": "jev-chat-jarvis 用 Jev 分析支持的聊天界面并建议回复，发送由用户决定。",
+      "summary": "Android 助手通过无障碍服务与本地 OCR 读取可见对话，在悬浮窗显示分析及回复建议。 Jev 判断意图与回复选项，生成模型起草三条候选，再由 Jev 排序。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途与适用对象",
+          "text": "Android 助手通过无障碍服务与本地 OCR 读取可见对话，在悬浮窗显示分析及回复建议。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "Jev 判断意图与回复选项，生成模型起草三条候选，再由 Jev 排序。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "在 Android 11+ ARM64 设备配置模型接口后，可复制或填入建议回复，发送始终由用户手动完成。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "分析会将聊天文字和启用的背景信息发给所配置服务商。Android 微信支持已移除，项目尚无网页版。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "jev-chat-jarvis：以 Jev 輔助 Android 聊天回覆",
+      "h1": "jev-chat-jarvis：以 Jev 輔助 Android 聊天回覆",
+      "description": "jev-chat-jarvis 用 Jev 分析支援的聊天畫面並建議回覆，由使用者決定是否送出。",
+      "summary": "Android 助手透過無障礙服務及本機 OCR 讀取可見對話，在浮動視窗顯示分析與回覆建議。 Jev 判斷意圖及回覆選項，生成模型草擬三個候選，再交由 Jev 排序。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途與適用對象",
+          "text": "Android 助手透過無障礙服務及本機 OCR 讀取可見對話，在浮動視窗顯示分析與回覆建議。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "Jev 判斷意圖及回覆選項，生成模型草擬三個候選，再交由 Jev 排序。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "在 Android 11+ ARM64 裝置設定模型介面後，可複製或填入建議回覆，傳送仍須手動進行。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "分析時會將聊天文字與啟用的背景資訊傳給設定的服務商。Android 微信支援已移除，目前沒有網頁版。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "jev-chat-jarvis：Jev で Android の返信を支援",
+      "h1": "jev-chat-jarvis：Jev で Android の返信を支援",
+      "description": "jev-chat-jarvis は対応チャット画面を Jev で分析し、利用者が送信を判断する返信候補を提示します。",
+      "summary": "Android のアクセシビリティとローカル OCR で表示中の会話を読み、重ね合わせ画面に分析と返信案を表示します。 Jev が意図や返信の選択を判断し、生成モデルが作る三つの候補を順位付けします。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途と対象",
+          "text": "Android のアクセシビリティとローカル OCR で表示中の会話を読み、重ね合わせ画面に分析と返信案を表示します。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev との関係",
+          "text": "Jev が意図や返信の選択を判断し、生成モデルが作る三つの候補を順位付けします。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "Android 11 以降の ARM64 端末でモデル接続を設定し、候補をコピーまたは入力します。送信は手動です。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範囲と制約",
+          "text": "分析時は会話文と有効な背景情報が設定先の事業者に送られます。Android の WeChat 対応は削除済みで、ウェブ版はありません。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "jev-chat-jarvis: Jev로 Android 답장 지원",
+      "h1": "jev-chat-jarvis: Jev로 Android 답장 지원",
+      "description": "jev-chat-jarvis는 지원되는 채팅 화면을 Jev로 분석하고 사용자가 직접 전송할 답장을 제안합니다.",
+      "summary": "Android 접근성 서비스와 로컬 OCR로 보이는 대화를 읽고 오버레이에 분석과 답장 제안을 표시합니다. Jev가 의도와 응답 선택을 판단하고 생성 모델이 작성한 후보 세 개의 순위를 매깁니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "용도와 대상",
+          "text": "Android 접근성 서비스와 로컬 OCR로 보이는 대화를 읽고 오버레이에 분석과 답장 제안을 표시합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Jev가 의도와 응답 선택을 판단하고 생성 모델이 작성한 후보 세 개의 순위를 매깁니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "Android 11 이상 ARM64 기기에서 모델 인터페이스를 설정한 뒤 제안을 복사하거나 입력합니다. 전송은 수동입니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 한계",
+          "text": "분석 시 대화 텍스트와 활성화한 배경 정보가 설정된 제공자에게 전송됩니다. Android WeChat 지원은 제거됐으며 웹 버전은 없습니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "jev-chat-jarvis: respuestas Android asistidas por Jev",
+      "h1": "jev-chat-jarvis: respuestas Android asistidas por Jev",
+      "description": "jev-chat-jarvis analiza chats compatibles con Jev y propone respuestas cuyo envío decide el usuario.",
+      "summary": "El asistente Android lee conversaciones visibles mediante accesibilidad y OCR local y muestra análisis y sugerencias en una superposición. Jev evalúa intención y opciones de respuesta; un modelo generativo redacta tres candidatos y Jev los ordena.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "El asistente Android lee conversaciones visibles mediante accesibilidad y OCR local y muestra análisis y sugerencias en una superposición.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Jev evalúa intención y opciones de respuesta; un modelo generativo redacta tres candidatos y Jev los ordena.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo se usa",
+          "text": "En Android 11+ ARM64, configure las interfaces de modelos y copie o inserte una sugerencia; el envío sigue siendo manual.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "El análisis envía texto y contexto habilitado al proveedor configurado. Se eliminó el soporte de WeChat en Android y no hay versión web.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "jev-chat-jarvis : aide aux réponses Android avec Jev",
+      "h1": "jev-chat-jarvis : aide aux réponses Android avec Jev",
+      "description": "jev-chat-jarvis analyse les conversations compatibles avec Jev et propose des réponses que l'utilisateur décide d'envoyer.",
+      "summary": "L'assistant Android lit les conversations visibles via l'accessibilité et l'OCR local, puis affiche analyses et suggestions en surimpression. Jev évalue l'intention et les choix de réponse ; un modèle génératif rédige trois propositions que Jev classe.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Usage et public visé",
+          "text": "L'assistant Android lit les conversations visibles via l'accessibilité et l'OCR local, puis affiche analyses et suggestions en surimpression.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Jev évalue l'intention et les choix de réponse ; un modèle génératif rédige trois propositions que Jev classe.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Sur Android 11+ ARM64, configurez les interfaces des modèles, puis copiez ou insérez une suggestion ; l'envoi reste manuel.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "L'analyse transmet texte et contexte activé au fournisseur configuré. Le support Android de WeChat a été supprimé et aucune version web n'existe.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "jev-chat-jarvis: Android-Antworten mit Jev unterstützen",
+      "h1": "jev-chat-jarvis: Android-Antworten mit Jev unterstützen",
+      "description": "jev-chat-jarvis analysiert unterstützte Chats mit Jev und schlägt Antworten vor, deren Versand der Nutzer bestimmt.",
+      "summary": "Der Android-Assistent liest sichtbare Gespräche über Bedienungshilfen und lokale OCR und zeigt Analyse sowie Antwortvorschläge als Overlay. Jev bewertet Absicht und Antwortmöglichkeiten; ein generatives Modell erstellt drei Vorschläge, die Jev anschließend ordnet.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Zweck und Zielgruppe",
+          "text": "Der Android-Assistent liest sichtbare Gespräche über Bedienungshilfen und lokale OCR und zeigt Analyse sowie Antwortvorschläge als Overlay.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Jev bewertet Absicht und Antwortmöglichkeiten; ein generatives Modell erstellt drei Vorschläge, die Jev anschließend ordnet.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Verwendung",
+          "text": "Auf Android 11+ ARM64 werden Modellschnittstellen eingerichtet und Vorschläge kopiert oder eingefügt; gesendet wird weiterhin manuell.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Die Analyse sendet Chattext und aktivierte Hintergrunddaten zum gewählten Anbieter. Android-WeChat wird nicht mehr unterstützt; eine Webversion gibt es nicht.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "jev-chat-jarvis: respostas Android com ajuda do Jev",
+      "h1": "jev-chat-jarvis: respostas Android com ajuda do Jev",
+      "description": "jev-chat-jarvis analisa conversas compatíveis com Jev e sugere respostas que o usuário decide enviar.",
+      "summary": "O assistente Android lê conversas visíveis por acessibilidade e OCR local, exibindo análise e sugestões em uma janela sobreposta. Jev avalia intenção e opções de resposta; um modelo generativo redige três candidatos e Jev os ordena.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Finalidade e público",
+          "text": "O assistente Android lê conversas visíveis por acessibilidade e OCR local, exibindo análise e sugestões em uma janela sobreposta.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "Jev avalia intenção e opções de resposta; um modelo generativo redige três candidatos e Jev os ordena.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "No Android 11+ ARM64, configure as interfaces de modelos e copie ou insira uma sugestão; o envio continua manual.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "A análise envia texto e contexto habilitado ao provedor configurado. O suporte ao WeChat Android foi removido e não existe versão web.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "jev-chat-jarvis: помощь с ответами Android через Jev",
+      "h1": "jev-chat-jarvis: помощь с ответами Android через Jev",
+      "description": "jev-chat-jarvis анализирует поддерживаемые чаты через Jev и предлагает ответы, отправку которых решает пользователь.",
+      "summary": "Android-помощник читает видимые разговоры через специальные возможности и локальный OCR, показывая анализ и ответы поверх приложения. Jev оценивает намерение и варианты ответа; генеративная модель пишет три предложения, а Jev ранжирует их.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Android-помощник читает видимые разговоры через специальные возможности и локальный OCR, показывая анализ и ответы поверх приложения.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Jev оценивает намерение и варианты ответа; генеративная модель пишет три предложения, а Jev ранжирует их.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "На Android 11+ ARM64 настройте интерфейсы моделей и копируйте либо вставляйте ответ; отправка остаётся ручной.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Анализ передаёт текст чата и включённый контекст выбранному провайдеру. Поддержка WeChat Android удалена, веб-версии нет.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "jev-chat-jarvis: Jev से Android चैट उत्तरों में मदद",
+      "h1": "jev-chat-jarvis: Jev से Android चैट उत्तरों में मदद",
+      "description": "jev-chat-jarvis समर्थित चैट स्क्रीन का Jev से विश्लेषण करके उत्तर सुझाता है; भेजने का निर्णय उपयोगकर्ता करता है।",
+      "summary": "Android सहायक एक्सेसिबिलिटी और स्थानीय OCR से दिखाई देती बातचीत पढ़कर ओवरले में विश्लेषण और सुझाव दिखाता है। Jev मंशा और उत्तर विकल्प पर निर्णय देता है; जनरेटिव मॉडल तीन उत्तर लिखता है और Jev उन्हें क्रम देता है।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "उद्देश्य और उपयोगकर्ता",
+          "text": "Android सहायक एक्सेसिबिलिटी और स्थानीय OCR से दिखाई देती बातचीत पढ़कर ओवरले में विश्लेषण और सुझाव दिखाता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "Jev मंशा और उत्तर विकल्प पर निर्णय देता है; जनरेटिव मॉडल तीन उत्तर लिखता है और Jev उन्हें क्रम देता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल का तरीका",
+          "text": "Android 11+ ARM64 पर मॉडल इंटरफ़ेस सेट करके सुझाव कॉपी या भरें; भेजना हमेशा मैन्युअल रहता है।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "विश्लेषण में चैट टेक्स्ट और चालू पृष्ठभूमि जानकारी चुने गए प्रदाता को जाती है। Android WeChat समर्थन हटा दिया गया है और वेब संस्करण नहीं है।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "jev-chat-jarvis: balasan Android berbantuan Jev",
+      "h1": "jev-chat-jarvis: balasan Android berbantuan Jev",
+      "description": "jev-chat-jarvis menganalisis chat yang didukung dengan Jev dan menyarankan balasan yang dikirim atas pilihan pengguna.",
+      "summary": "Asisten Android membaca percakapan terlihat melalui aksesibilitas dan OCR lokal, lalu menampilkan analisis serta saran dalam overlay. Jev menilai maksud dan pilihan respons; model generatif menulis tiga kandidat dan Jev mengurutkannya.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Tujuan dan pengguna",
+          "text": "Asisten Android membaca percakapan terlihat melalui aksesibilitas dan OCR lokal, lalu menampilkan analisis serta saran dalam overlay.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Jev menilai maksud dan pilihan respons; model generatif menulis tiga kandidat dan Jev mengurutkannya.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Pada Android 11+ ARM64, atur antarmuka model lalu salin atau masukkan saran; pengiriman tetap manual.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Analisis mengirim teks chat dan konteks aktif ke penyedia yang dikonfigurasi. Dukungan WeChat Android telah dihapus dan versi web belum tersedia.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "jev-chat-jarvis: hỗ trợ trả lời Android bằng Jev",
+      "h1": "jev-chat-jarvis: hỗ trợ trả lời Android bằng Jev",
+      "description": "jev-chat-jarvis dùng Jev phân tích màn hình chat được hỗ trợ và đề xuất câu trả lời do người dùng quyết định gửi.",
+      "summary": "Trợ lý Android đọc hội thoại đang hiển thị qua tính năng trợ năng và OCR cục bộ, rồi hiện phân tích cùng gợi ý trên lớp phủ. Jev đánh giá ý định và lựa chọn trả lời; mô hình sinh viết ba phương án và Jev xếp hạng chúng.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích và đối tượng",
+          "text": "Trợ lý Android đọc hội thoại đang hiển thị qua tính năng trợ năng và OCR cục bộ, rồi hiện phân tích cùng gợi ý trên lớp phủ.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Jev đánh giá ý định và lựa chọn trả lời; mô hình sinh viết ba phương án và Jev xếp hạng chúng.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Trên Android 11+ ARM64, cấu hình giao diện mô hình rồi sao chép hoặc điền gợi ý; thao tác gửi vẫn là thủ công.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Phân tích gửi văn bản chat và thông tin nền đã bật đến nhà cung cấp cấu hình. Hỗ trợ WeChat Android đã bị gỡ và chưa có bản web.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "jev-chat-jarvis: Jev destekli Android yanıtları",
+      "h1": "jev-chat-jarvis: Jev destekli Android yanıtları",
+      "description": "jev-chat-jarvis desteklenen sohbetleri Jev ile inceler ve gönderimine kullanıcının karar verdiği yanıtlar önerir.",
+      "summary": "Android asistanı görünür konuşmaları erişilebilirlik ve yerel OCR ile okuyup analizi ve önerileri kayan pencerede gösterir. Jev niyeti ve yanıt seçeneklerini değerlendirir; üretken model üç aday yazar, Jev bunları sıralar.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Amaç ve hedef kitle",
+          "text": "Android asistanı görünür konuşmaları erişilebilirlik ve yerel OCR ile okuyup analizi ve önerileri kayan pencerede gösterir.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Jev niyeti ve yanıt seçeneklerini değerlendirir; üretken model üç aday yazar, Jev bunları sıralar.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Android 11+ ARM64 üzerinde model arayüzleri ayarlanır; öneriler kopyalanabilir veya girilebilir, gönderme işlemi elle yapılır.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Analiz, sohbet metnini ve etkin arka plan bilgisini yapılandırılan sağlayıcıya gönderir. Android WeChat desteği kaldırılmıştır; web sürümü yoktur.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "jev-chat-jarvis: risposte Android assistite da Jev",
+      "h1": "jev-chat-jarvis: risposte Android assistite da Jev",
+      "description": "jev-chat-jarvis analizza le chat supportate con Jev e propone risposte che l'utente decide di inviare.",
+      "summary": "L'assistente Android legge conversazioni visibili tramite accessibilità e OCR locale, mostrando analisi e suggerimenti in sovrimpressione. Jev valuta intento e opzioni di risposta; un modello generativo scrive tre candidati e Jev li ordina.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Scopo e destinatari",
+          "text": "L'assistente Android legge conversazioni visibili tramite accessibilità e OCR locale, mostrando analisi e suggerimenti in sovrimpressione.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Jev valuta intento e opzioni di risposta; un modello generativo scrive tre candidati e Jev li ordina.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come si usa",
+          "text": "Su Android 11+ ARM64 si configurano le interfacce dei modelli e si copia o inserisce un suggerimento; l'invio resta manuale.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "L'analisi invia testo e contesto attivato al provider configurato. Il supporto WeChat Android è stato rimosso e non esiste una versione web.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

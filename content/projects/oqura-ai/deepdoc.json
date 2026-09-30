@@ -1,0 +1,781 @@
+{
+  "version": "source-content-v1",
+  "repo": "Oqura-ai/deepdoc",
+  "repositoryId": 1038357256,
+  "relationship": "jev-app",
+  "category": "apps",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "path": "README.md",
+      "commit": "42c8758292cacb619680bde23f77826f0419c4f2",
+      "url": "https://github.com/Oqura-ai/deepdoc/blob/42c8758292cacb619680bde23f77826f0419c4f2/README.md",
+      "sha256": "d0428ab3eb6120b1ca506f14c97b42c5d7859e3ab719ee0bd885f58cf611f4cf",
+      "accessedAt": "2026-09-30T07:33:51.970Z",
+      "id": "s1"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "The tool extracts and indexes document content in Qdrant, plans an outline and researches each section against the local collection.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 36,
+          "end": 39,
+          "quote": "Oqura's deepdoc is a local deep-research tool that turns your own files into a\nstructured Markdown report. It extracts and indexes the content, plans the report,\nresearches every section against the local collection, and combines the results into\none final document."
+        },
+        {
+          "source": "s1",
+          "start": 50,
+          "end": 64,
+          "quote": "- Provide a directory containing PDF, DOCX, PPTX, image, TXT, or Markdown resources.\n- DeepDoc extracts the text, keeps page and source metadata, and creates searchable\n  chunks in Qdrant.\n- A report planner creates the initial structure from your topic and outline. You can\n  approve it or request changes before research starts.\n- One research agent runs for every report section. Each agent:\n  - Generates focused research queries.\n  - Retrieves a shortlist of candidate chunks from Qdrant.\n  - Uses Jev to judge relevance, usable evidence, contradiction, and\n    prompt-injection-like content.\n  - Filters and reranks the candidates before evidence reaches the writing LLM.\n  - Uses Jev reflection scores to find subsections that still lack evidence.\n  - Generates new queries for missing coverage, up to the configured reflection limit.\n  - Writes the completed section from the accepted local evidence.\n- The final report writer combines all completed sections and exports a Markdown file."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "Jev judges and reranks retrieved chunks and scores missing coverage; a separate LLM plans, queries and writes while Python controls retries.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 41,
+          "end": 45,
+          "quote": "DeepDoc uses TypeSafe's Jev model to improve the research process without replacing\nthe generative LLM. Jev checks and reranks the chunks returned by Qdrant, then checks\nwhether the collected evidence covers every required subsection. The configured LLM\nstill handles planning, query generation, synthesis, and report writing, while Python\nuses Jev's probabilities to make explicit filtering and retry decisions."
+        },
+        {
+          "source": "s1",
+          "start": 55,
+          "end": 62,
+          "quote": "- One research agent runs for every report section. Each agent:\n  - Generates focused research queries.\n  - Retrieves a shortlist of candidate chunks from Qdrant.\n  - Uses Jev to judge relevance, usable evidence, contradiction, and\n    prompt-injection-like content.\n  - Filters and reranks the candidates before evidence reaches the writing LLM.\n  - Uses Jev reflection scores to find subsections that still lack evidence.\n  - Generates new queries for missing coverage, up to the configured reflection limit."
+        },
+        {
+          "source": "s1",
+          "start": 85,
+          "end": 86,
+          "quote": "Jev returns typed probabilities; thresholds, ranking, retry limits, and graph routing\nremain ordinary Python logic in the application."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Supply a topic, outline and resource directory through the CLI; default configuration needs OpenAI and TypeSafe keys and saves reports in output_folder.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 138,
+          "end": 139,
+          "quote": "Open the `.env` file in a text editor and fill in the keys used by your configuration.\n`OPENAI_API_KEY` and `TYPESAFE_API_KEY` are required for the default setup:"
+        },
+        {
+          "source": "s1",
+          "start": 191,
+          "end": 197,
+          "quote": "The CLI will ask for a topic, an outline or goal, and the local resource directory.\nCompleted reports are saved in `output_folder`.\n\n### Optional: `configuration.py`\n\nYou can customize model behavior, parallelism, retrieval size, reflection limits, and\nJev thresholds in `configuration.py`."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "Jev thresholds are starting points to validate on your documents. Section writing can begin when the configured retry limit is reached.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 75,
+          "end": 82,
+          "quote": "```text\nQuery generation\n  -> Qdrant retrieval\n  -> Jev evidence gate and reranker\n  -> Evidence accumulator\n  -> Jev subsection coverage reflection\n       -> Query generation again when coverage is missing and retries remain\n       -> Section writer when coverage is sufficient or the retry limit is reached"
+        },
+        {
+          "source": "s1",
+          "start": 229,
+          "end": 233,
+          "quote": "The Jev thresholds are starting points rather than universal constants. Evaluate them\non representative local documents before changing them. Increasing `n_points` can\nimprove candidate recall, but it also creates more Jev evaluations because every\nquery/chunk pair is judged independently. `evidence_keep_per_query` controls how many\nof those candidates continue to the evidence accumulator."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "DeepDoc: local-file research with Jev evidence checks",
+      "h1": "DeepDoc: local-file research with Jev evidence checks",
+      "description": "DeepDoc turns local files into Markdown research reports, using Jev to filter evidence and check subsection coverage.",
+      "summary": "The tool extracts and indexes document content in Qdrant, plans an outline and researches each section against the local collection. Jev judges and reranks retrieved chunks and scores missing coverage; a separate LLM plans, queries and writes while Python controls retries.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose and audience",
+          "text": "The tool extracts and indexes document content in Qdrant, plans an outline and researches each section against the local collection.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "Jev judges and reranks retrieved chunks and scores missing coverage; a separate LLM plans, queries and writes while Python controls retries.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Using the project",
+          "text": "Supply a topic, outline and resource directory through the CLI; default configuration needs OpenAI and TypeSafe keys and saves reports in output_folder.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "Jev thresholds are starting points to validate on your documents. Section writing can begin when the configured retry limit is reached.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "DeepDoc：用 Jev 核验证据的本地文件研究",
+      "h1": "DeepDoc：用 Jev 核验证据的本地文件研究",
+      "description": "DeepDoc 将本地文件整理为 Markdown 研究报告，用 Jev 筛选证据并检查小节覆盖情况。",
+      "summary": "工具提取文档内容并在 Qdrant 建索引，规划提纲后根据本地资料逐节研究。 Jev 判断并重排检索片段、评估证据缺口；独立大语言模型负责规划、查询和写作，Python 控制重试。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途与适用对象",
+          "text": "工具提取文档内容并在 Qdrant 建索引，规划提纲后根据本地资料逐节研究。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "Jev 判断并重排检索片段、评估证据缺口；独立大语言模型负责规划、查询和写作，Python 控制重试。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "在 CLI 提供主题、提纲和资料目录；默认配置需要 OpenAI 与 TypeSafe 密钥，报告保存在 output_folder。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "Jev 阈值是需要用自己的文档验证的起点；达到配置的重试上限时，流程也会进入小节写作。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "DeepDoc：以 Jev 檢查證據的本機文件研究",
+      "h1": "DeepDoc：以 Jev 檢查證據的本機文件研究",
+      "description": "DeepDoc 將本機檔案整理成 Markdown 研究報告，以 Jev 篩選證據並檢查小節涵蓋程度。",
+      "summary": "工具擷取文件內容並在 Qdrant 建立索引，規劃大綱後依本機資料逐節研究。 Jev 判斷並重排檢索片段、評估證據缺口；另由語言模型規劃、查詢及寫作，Python 控制重試。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途與適用對象",
+          "text": "工具擷取文件內容並在 Qdrant 建立索引，規劃大綱後依本機資料逐節研究。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "Jev 判斷並重排檢索片段、評估證據缺口；另由語言模型規劃、查詢及寫作，Python 控制重試。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "在 CLI 提供主題、大綱及資料目錄；預設設定需要 OpenAI 和 TypeSafe 金鑰，報告存入 output_folder。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "Jev 門檻是需用自己的文件驗證的起點；達到設定的重試上限時，流程也會開始撰寫小節。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "DeepDoc：Jev で証拠を確認するローカル資料調査",
+      "h1": "DeepDoc：Jev で証拠を確認するローカル資料調査",
+      "description": "DeepDoc はローカル資料を Markdown 報告にまとめ、Jev で証拠を選別し各小節の充足度を確認します。",
+      "summary": "文書を抽出して Qdrant に索引化し、構成を計画してローカル資料から各節を調査します。 Jev は取得断片を判断・再順位付けし、証拠の不足を評価します。別の LLM が計画・検索・執筆し、Python が再試行を制御します。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途と対象",
+          "text": "文書を抽出して Qdrant に索引化し、構成を計画してローカル資料から各節を調査します。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev との関係",
+          "text": "Jev は取得断片を判断・再順位付けし、証拠の不足を評価します。別の LLM が計画・検索・執筆し、Python が再試行を制御します。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "CLI に主題、構成、資料ディレクトリを指定します。既定構成は OpenAI と TypeSafe のキーを使い、output_folder に報告を保存します。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範囲と制約",
+          "text": "Jev のしきい値は手元の資料で検証する初期値です。再試行上限に達した場合も節の執筆へ進みます。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "DeepDoc: Jev 근거 검토를 통한 로컬 문서 연구",
+      "h1": "DeepDoc: Jev 근거 검토를 통한 로컬 문서 연구",
+      "description": "DeepDoc는 로컬 파일을 Markdown 보고서로 만들며 Jev로 근거를 선별하고 소절별 충족도를 확인합니다.",
+      "summary": "문서를 추출해 Qdrant에 색인하고 개요를 계획한 뒤 로컬 자료에서 각 절을 조사합니다. Jev가 검색 조각을 판단·재정렬하고 부족한 근거를 평가합니다. 별도 LLM이 계획, 질의, 작성을 맡고 Python이 재시도를 제어합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "용도와 대상",
+          "text": "문서를 추출해 Qdrant에 색인하고 개요를 계획한 뒤 로컬 자료에서 각 절을 조사합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Jev가 검색 조각을 판단·재정렬하고 부족한 근거를 평가합니다. 별도 LLM이 계획, 질의, 작성을 맡고 Python이 재시도를 제어합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "CLI에 주제, 개요, 자료 디렉터리를 지정합니다. 기본 구성에는 OpenAI·TypeSafe 키가 필요하며 보고서는 output_folder에 저장됩니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 한계",
+          "text": "Jev 임계값은 자체 문서로 검증할 시작값입니다. 재시도 제한에 도달해도 절 작성 단계로 넘어갑니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "DeepDoc: investigación local con revisión de evidencias Jev",
+      "h1": "DeepDoc: investigación local con revisión de evidencias Jev",
+      "description": "DeepDoc convierte archivos locales en informes Markdown, usando Jev para filtrar evidencia y comprobar la cobertura de subsecciones.",
+      "summary": "Extrae documentos, los indexa en Qdrant, planifica un esquema e investiga cada sección en la colección local. Jev juzga y reordena fragmentos y puntúa carencias; otro LLM planifica, consulta y escribe, mientras Python controla reintentos.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "Extrae documentos, los indexa en Qdrant, planifica un esquema e investiga cada sección en la colección local.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Jev juzga y reordena fragmentos y puntúa carencias; otro LLM planifica, consulta y escribe, mientras Python controla reintentos.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo se usa",
+          "text": "Proporcione tema, esquema y directorio en la CLI; la configuración predeterminada usa claves OpenAI y TypeSafe y guarda en output_folder.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "Los umbrales Jev son puntos de partida que deben validarse con sus documentos. También se empieza a redactar al alcanzar el límite de reintentos.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "DeepDoc : recherche locale avec contrôle des preuves Jev",
+      "h1": "DeepDoc : recherche locale avec contrôle des preuves Jev",
+      "description": "DeepDoc transforme les fichiers locaux en rapports Markdown, avec Jev pour filtrer les preuves et vérifier la couverture des sous-sections.",
+      "summary": "Il extrait les documents, les indexe dans Qdrant, prépare un plan et recherche chaque section dans la collection locale. Jev évalue et reclasse les fragments et les lacunes ; un autre LLM planifie, interroge et rédige, tandis que Python gère les reprises.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Usage et public visé",
+          "text": "Il extrait les documents, les indexe dans Qdrant, prépare un plan et recherche chaque section dans la collection locale.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Jev évalue et reclasse les fragments et les lacunes ; un autre LLM planifie, interroge et rédige, tandis que Python gère les reprises.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Fournissez sujet, plan et dossier dans la CLI ; la configuration par défaut exige les clés OpenAI et TypeSafe et enregistre dans output_folder.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "Les seuils Jev sont des valeurs initiales à valider sur vos documents. La rédaction commence aussi lorsque la limite de reprises est atteinte.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "DeepDoc: lokale Dokumentenrecherche mit Jev-Evidenzprüfung",
+      "h1": "DeepDoc: lokale Dokumentenrecherche mit Jev-Evidenzprüfung",
+      "description": "DeepDoc erstellt Markdown-Berichte aus lokalen Dateien und nutzt Jev zur Belegauswahl und Prüfung der Unterabschnitte.",
+      "summary": "Dokumente werden extrahiert, in Qdrant indiziert und anhand einer geplanten Gliederung abschnittsweise untersucht. Jev bewertet und ordnet Fundstellen und erkennt Beleglücken; ein anderes LLM plant, sucht und schreibt, während Python Wiederholungen steuert.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Zweck und Zielgruppe",
+          "text": "Dokumente werden extrahiert, in Qdrant indiziert und anhand einer geplanten Gliederung abschnittsweise untersucht.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Jev bewertet und ordnet Fundstellen und erkennt Beleglücken; ein anderes LLM plant, sucht und schreibt, während Python Wiederholungen steuert.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Verwendung",
+          "text": "Thema, Gliederung und Verzeichnis werden in der CLI angegeben; die Standardkonfiguration nutzt OpenAI- und TypeSafe-Schlüssel und speichert in output_folder.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Jev-Schwellen sind Startwerte für die Prüfung an eigenen Dokumenten. Auch beim Erreichen der Wiederholungsgrenze beginnt die Abschnittserstellung.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "DeepDoc: pesquisa local com verificação de evidências Jev",
+      "h1": "DeepDoc: pesquisa local com verificação de evidências Jev",
+      "description": "DeepDoc transforma arquivos locais em relatórios Markdown, usando Jev para filtrar evidências e verificar cobertura de subseções.",
+      "summary": "Extrai documentos, indexa em Qdrant, planeja um roteiro e pesquisa cada seção na coleção local. Jev avalia e reordena trechos e pontua lacunas; outro LLM planeja, consulta e escreve, enquanto Python controla novas tentativas.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Finalidade e público",
+          "text": "Extrai documentos, indexa em Qdrant, planeja um roteiro e pesquisa cada seção na coleção local.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "Jev avalia e reordena trechos e pontua lacunas; outro LLM planeja, consulta e escreve, enquanto Python controla novas tentativas.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Informe tema, roteiro e diretório na CLI; a configuração padrão exige chaves OpenAI e TypeSafe e salva em output_folder.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "Os limiares Jev são pontos de partida para validar nos seus documentos. A redação também começa quando se atinge o limite de tentativas.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "DeepDoc: исследование локальных файлов с проверками Jev",
+      "h1": "DeepDoc: исследование локальных файлов с проверками Jev",
+      "description": "DeepDoc превращает локальные файлы в Markdown-отчёты, используя Jev для отбора свидетельств и проверки полноты подразделов.",
+      "summary": "Инструмент извлекает документы, индексирует их в Qdrant, планирует структуру и исследует каждый раздел по локальной коллекции. Jev оценивает и ранжирует фрагменты и пробелы в свидетельствах; другая LLM планирует, ищет и пишет, а Python управляет повторами.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Инструмент извлекает документы, индексирует их в Qdrant, планирует структуру и исследует каждый раздел по локальной коллекции.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Jev оценивает и ранжирует фрагменты и пробелы в свидетельствах; другая LLM планирует, ищет и пишет, а Python управляет повторами.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Задайте тему, план и каталог в CLI; стандартной конфигурации нужны ключи OpenAI и TypeSafe, отчёты сохраняются в output_folder.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Пороги Jev — исходные значения для проверки на ваших документах. Написание раздела начинается также при исчерпании лимита повторов.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "DeepDoc: Jev साक्ष्य जाँच के साथ स्थानीय दस्तावेज़ शोध",
+      "h1": "DeepDoc: Jev साक्ष्य जाँच के साथ स्थानीय दस्तावेज़ शोध",
+      "description": "DeepDoc स्थानीय फ़ाइलों से Markdown रिपोर्ट बनाता है और Jev से साक्ष्य छाँटकर उपखंडों की कवरेज जाँचता है।",
+      "summary": "यह दस्तावेज़ निकालकर Qdrant में इंडेक्स करता है, रूपरेखा बनाता है और स्थानीय संग्रह से हर खंड पर शोध करता है। Jev अंशों का मूल्यांकन और क्रम बदलकर साक्ष्य की कमी आँकता है; अलग LLM योजना, प्रश्न और लेखन करता है, Python पुनःप्रयास नियंत्रित करता है।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "उद्देश्य और उपयोगकर्ता",
+          "text": "यह दस्तावेज़ निकालकर Qdrant में इंडेक्स करता है, रूपरेखा बनाता है और स्थानीय संग्रह से हर खंड पर शोध करता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "Jev अंशों का मूल्यांकन और क्रम बदलकर साक्ष्य की कमी आँकता है; अलग LLM योजना, प्रश्न और लेखन करता है, Python पुनःप्रयास नियंत्रित करता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल का तरीका",
+          "text": "CLI में विषय, रूपरेखा और फ़ोल्डर दें; डिफ़ॉल्ट सेटअप को OpenAI तथा TypeSafe कुंजियाँ चाहिए और रिपोर्ट output_folder में जाती है।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "Jev के थ्रेशोल्ड अपने दस्तावेज़ों पर जाँचने के शुरुआती मान हैं। पुनःप्रयास सीमा पूरी होने पर भी खंड लेखन शुरू हो सकता है।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "DeepDoc: riset berkas lokal dengan pemeriksaan bukti Jev",
+      "h1": "DeepDoc: riset berkas lokal dengan pemeriksaan bukti Jev",
+      "description": "DeepDoc mengubah berkas lokal menjadi laporan Markdown, memakai Jev untuk menyaring bukti dan memeriksa cakupan subbagian.",
+      "summary": "Dokumen diekstrak dan diindeks di Qdrant, kerangka direncanakan, lalu tiap bagian diteliti dari koleksi lokal. Jev menilai dan mengurutkan fragmen serta kekurangan bukti; LLM lain merencanakan, mencari, dan menulis, sementara Python mengatur percobaan ulang.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Tujuan dan pengguna",
+          "text": "Dokumen diekstrak dan diindeks di Qdrant, kerangka direncanakan, lalu tiap bagian diteliti dari koleksi lokal.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Jev menilai dan mengurutkan fragmen serta kekurangan bukti; LLM lain merencanakan, mencari, dan menulis, sementara Python mengatur percobaan ulang.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Berikan topik, kerangka, dan direktori lewat CLI; konfigurasi bawaan memerlukan kunci OpenAI serta TypeSafe dan menyimpan di output_folder.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Ambang Jev adalah titik awal yang perlu divalidasi pada dokumen sendiri. Penulisan juga dimulai ketika batas percobaan ulang tercapai.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "DeepDoc: nghiên cứu tệp cục bộ với kiểm tra bằng chứng Jev",
+      "h1": "DeepDoc: nghiên cứu tệp cục bộ với kiểm tra bằng chứng Jev",
+      "description": "DeepDoc chuyển tệp cục bộ thành báo cáo Markdown, dùng Jev lọc bằng chứng và kiểm tra độ bao phủ của tiểu mục.",
+      "summary": "Công cụ trích xuất tài liệu, lập chỉ mục Qdrant, lên dàn ý rồi nghiên cứu từng phần từ bộ sưu tập cục bộ. Jev đánh giá, xếp lại đoạn và chấm khoảng trống bằng chứng; LLM khác lên kế hoạch, truy vấn, viết, còn Python điều khiển thử lại.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích và đối tượng",
+          "text": "Công cụ trích xuất tài liệu, lập chỉ mục Qdrant, lên dàn ý rồi nghiên cứu từng phần từ bộ sưu tập cục bộ.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Jev đánh giá, xếp lại đoạn và chấm khoảng trống bằng chứng; LLM khác lên kế hoạch, truy vấn, viết, còn Python điều khiển thử lại.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Nhập chủ đề, dàn ý và thư mục qua CLI; cấu hình mặc định cần khóa OpenAI, TypeSafe và lưu vào output_folder.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Ngưỡng Jev là giá trị khởi đầu cần kiểm chứng trên tài liệu riêng. Việc viết cũng bắt đầu khi đạt giới hạn thử lại.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "DeepDoc: Jev kanıt kontrolüyle yerel belge araştırması",
+      "h1": "DeepDoc: Jev kanıt kontrolüyle yerel belge araştırması",
+      "description": "DeepDoc yerel dosyaları Markdown raporlarına dönüştürür; Jev ile kanıtları süzer ve alt bölüm kapsamını denetler.",
+      "summary": "Belgeleri çıkarıp Qdrant’ta indeksler, taslak planlar ve her bölümü yerel koleksiyondan araştırır. Jev parçaları değerlendirip sıralar ve kanıt eksiklerini puanlar; ayrı LLM planlar, sorgular, yazar, Python yeniden denemeleri yönetir.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Amaç ve hedef kitle",
+          "text": "Belgeleri çıkarıp Qdrant’ta indeksler, taslak planlar ve her bölümü yerel koleksiyondan araştırır.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Jev parçaları değerlendirip sıralar ve kanıt eksiklerini puanlar; ayrı LLM planlar, sorgular, yazar, Python yeniden denemeleri yönetir.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "CLI üzerinden konu, taslak ve dizin verilir; varsayılan yapı OpenAI ile TypeSafe anahtarları ister, raporları output_folder içine kaydeder.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Jev eşikleri kendi belgelerinizle doğrulanacak başlangıç değerleridir. Yeniden deneme sınırına ulaşıldığında da bölüm yazımı başlar.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "DeepDoc: ricerca locale con controlli delle prove Jev",
+      "h1": "DeepDoc: ricerca locale con controlli delle prove Jev",
+      "description": "DeepDoc trasforma file locali in rapporti Markdown, usando Jev per filtrare prove e verificare la copertura delle sottosezioni.",
+      "summary": "Estrae documenti, li indicizza in Qdrant, pianifica una scaletta e ricerca ogni sezione nella raccolta locale. Jev valuta e riordina frammenti e lacune; un altro LLM pianifica, interroga e scrive, mentre Python gestisce i tentativi.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Scopo e destinatari",
+          "text": "Estrae documenti, li indicizza in Qdrant, pianifica una scaletta e ricerca ogni sezione nella raccolta locale.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Jev valuta e riordina frammenti e lacune; un altro LLM pianifica, interroga e scrive, mentre Python gestisce i tentativi.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come si usa",
+          "text": "Si indicano tema, scaletta e directory nella CLI; la configurazione predefinita richiede chiavi OpenAI e TypeSafe e salva in output_folder.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "Le soglie Jev sono valori iniziali da validare sui propri documenti. La stesura inizia anche al raggiungimento del limite di tentativi.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  },
+  "displayName": "DeepDoc"
+}

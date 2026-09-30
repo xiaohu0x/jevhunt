@@ -1,0 +1,774 @@
+{
+  "version": "source-content-v1",
+  "repo": "reticlehq/reticle",
+  "repositoryId": 1265947881,
+  "relationship": "integration",
+  "category": "agents",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "34dcdceb02dd218c631f8b074d272979dd92dd80",
+      "url": "https://github.com/reticlehq/reticle/blob/34dcdceb02dd218c631f8b074d272979dd92dd80/README.md",
+      "sha256": "7f122570f67be1c8a88b7aded302552976f2f62ce009a3eb6277ad72e7dc4985",
+      "accessedAt": "2026-09-30T07:33:48.350Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "kind": "documented",
+      "text": "Reticle checks running apps using network, console and state evidence, returning pass, fail or unknown.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 10,
+          "end": 12,
+          "quote": "**Your AI agent says \"done.\" Reticle checks whether that's true.**\n\nIt drives your real running app, reads what actually happened, and hands back **pass · fail · couldn't tell** with the `file:line` to fix."
+        },
+        {
+          "source": "source-1",
+          "start": 165,
+          "end": 165,
+          "quote": "Reticle answers with evidence: the request that fired, the state that changed, the console line, and the file to open."
+        },
+        {
+          "source": "source-1",
+          "start": 310,
+          "end": 310,
+          "quote": "**When Reticle can't see something, it says so.** A verdict is `yes`, `no`, or `unknown`, where `unknown` means the evidence couldn't decide. Never a quiet pass."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "kind": "documented",
+      "text": "The optional Jev exploration driver selects DOM candidates; internal verification-flow routing remains planned.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 329,
+          "end": 333,
+          "quote": "## On the roadmap\n\n**Routing verification flows with [TypeSafe AI](https://typesafe.ai)'s [Jev](https://typesafe.ai/blog/introducing-system-one-models-and-jev).** A verification run makes a lot of small decisions — is this page settled, is this finding worth chasing, does this failure warrant a full capture — and today an LLM answers each one at LLM latency and LLM cost. Jev is a System One model: it returns a typed, probabilistic choice from a fixed set instead of prose, in 70–500ms. That is the exact shape of a routing decision inside Reticle's infra, so when we build that layer, Jev is what decides which flow a run takes. That layer is the roadmap item; it does not ship yet.\n\nWhat DOES ship, since 3.2.0, is Jev driving the app rather than routing inside it: `reticle_verify { action: \"explore\", driver: \"jev\" }` explores a page by selecting from candidates Reticle enumerated off the DOM, so the model chooses and never composes. See [docs/autodrive.md](docs/autodrive.md)."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "kind": "documented",
+      "text": "Connect a development app through MCP, describe expected behavior and save flows for deterministic replay.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 76,
+          "end": 76,
+          "quote": "Like `npm init` or `git init`, this is the per-project step. It installs the dev-only SDK, wires your build config, restarts your dev server, and then **opens your app and proves a session connected.** A config file is not an install, so `init` doesn't stop until it has seen your app."
+        },
+        {
+          "source": "source-1",
+          "start": 138,
+          "end": 159,
+          "quote": "You never write test syntax. You say what should be true, in plain English.\n\n<p align=\"center\">\n  <img src=\"assets/readme/hero.gif\" width=\"760\"\n       alt=\"An agent driving a real app through Reticle: it clicks, reads what actually happened, and returns a verdict.\" />\n</p>\n\n**Verify what you just built**\n\n> \"I changed checkout. Verify it with Reticle before you tell me it's done.\"\n\n**Find what the screen is hiding**\n\n> \"The page looks fine but something's off. Use Reticle to check what's happening underneath.\"\n\n**Prove a bug is fixed**\n\n> \"Reproduce the bug with Reticle, fix it, then prove the fix with the same steps.\"\n\n**Lock a flow so it can't break**\n\n> \"Record the login flow with Reticle, then re-verify it after every change.\""
+        },
+        {
+          "source": "source-1",
+          "start": 239,
+          "end": 239,
+          "quote": "One call checks many things at once. Say _\"save that as a flow\"_ and it replays on every later edit with no model in the loop, so today's fix can't quietly break last week's feature."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "kind": "documented",
+      "text": "It excludes visual regression testing and third-party sites, and cannot inspect closed shadow roots or cross-origin iframes.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 303,
+          "end": 310,
+          "quote": "|  |  |\n| --- | --- |\n| **Strong** | silent failed requests, state that disagrees with the screen, stale caches, double-submits, a write that failed while the UI moved on |\n| **Partial** | races around a single action. It detects `request-never-settled` and `duplicate-request`; it is not a scheduler-level race analyser |\n| **Not the tool** | cross-browser rendering, visual regressions, sites you don't own. That's Playwright |\n| **Can't see yet** | IndexedDB, Web Workers, closed shadow roots, cross-origin iframes |\n\n**When Reticle can't see something, it says so.** A verdict is `yes`, `no`, or `unknown`, where `unknown` means the evidence couldn't decide. Never a quiet pass."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "Reticle: app verification with optional Jev exploration",
+      "h1": "Reticle: app verification with optional Jev exploration",
+      "description": "Reticle verifies running apps from network, console and state evidence. Its optional Jev driver explores DOM candidates; internal routing remains planned.",
+      "summary": "Reticle checks running apps using network, console and state evidence, returning pass, fail or unknown. The optional Jev exploration driver selects DOM candidates; internal verification-flow routing remains planned. Connect a development app through MCP, describe expected behavior and save flows for deterministic replay.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose",
+          "text": "Reticle checks running apps using network, console and state evidence, returning pass, fail or unknown.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’s role",
+          "text": "The optional Jev exploration driver selects DOM candidates; internal verification-flow routing remains planned.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "How to use it",
+          "text": "Connect a development app through MCP, describe expected behavior and save flows for deterministic replay.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limits to consider",
+          "text": "It excludes visual regression testing and third-party sites, and cannot inspect closed shadow roots or cross-origin iframes.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "Reticle：应用验证与可选 Jev 探索",
+      "h1": "Reticle：应用验证与可选 Jev 探索",
+      "description": "Reticle 根据网络、控制台和状态证据验证运行中的应用；可选 Jev 驱动从 DOM 候选项中选择探索动作，内部验证流程路由仍在规划中。",
+      "summary": "Reticle 根据网络、控制台和状态证据检查运行中的应用，返回通过、失败或无法判断。 可选的 Jev 探索驱动从 DOM 候选项中选择；内部验证流程路由仍在规划中。 通过 MCP 连接开发中的应用，描述预期行为，并保存流程以便确定性回放。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "Reticle 根据网络、控制台和状态证据检查运行中的应用，返回通过、失败或无法判断。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "可选的 Jev 探索驱动从 DOM 候选项中选择；内部验证流程路由仍在规划中。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "通过 MCP 连接开发中的应用，描述预期行为，并保存流程以便确定性回放。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用边界",
+          "text": "不覆盖视觉回归测试或第三方网站，也无法检查封闭的影子根节点和跨域 iframe。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "Reticle：應用驗證與選用 Jev 探索",
+      "h1": "Reticle：應用驗證與選用 Jev 探索",
+      "description": "Reticle 依網路、主控台與狀態證據驗證執行中的應用；選用 Jev 驅動從 DOM 候選項中挑選探索動作，內部驗證流程路由仍在規劃中。",
+      "summary": "Reticle 根據網路、主控台與狀態證據檢查執行中的應用，回傳通過、失敗或無法判斷。 可選用的 Jev 探索驅動從 DOM 候選項中選擇；內部驗證流程路由仍在規劃中。 透過 MCP 連接開發中的應用，描述預期行為，並儲存流程以便確定性重播。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "Reticle 根據網路、主控台與狀態證據檢查執行中的應用，回傳通過、失敗或無法判斷。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "可選用的 Jev 探索驅動從 DOM 候選項中選擇；內部驗證流程路由仍在規劃中。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "透過 MCP 連接開發中的應用，描述預期行為，並儲存流程以便確定性重播。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用限制",
+          "text": "不涵蓋視覺迴歸測試或第三方網站，也無法檢查封閉的影子根節點與跨來源 iframe。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "Reticle：アプリ検証と任意の Jev 探索",
+      "h1": "Reticle：アプリ検証と任意の Jev 探索",
+      "description": "Reticle はネットワーク・コンソール・状態からアプリを検証します。任意の Jev が DOM 探索を担い、内部ルーティングは計画段階です。",
+      "summary": "Reticle はネットワーク、コンソール、状態の証拠から動作中のアプリを検証し、合格・失敗・不明を返します。 任意の Jev 探索ドライバーが DOM の候補を選択します。検証フロー内部のルーティングは計画段階です。 開発中のアプリを MCP で接続し、期待する動作を伝え、フローを保存して決定論的に再実行します。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "何ができるか",
+          "text": "Reticle はネットワーク、コンソール、状態の証拠から動作中のアプリを検証し、合格・失敗・不明を返します。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "任意の Jev 探索ドライバーが DOM の候補を選択します。検証フロー内部のルーティングは計画段階です。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "開発中のアプリを MCP で接続し、期待する動作を伝え、フローを保存して決定論的に再実行します。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "制約と注意点",
+          "text": "見た目の回帰テストや第三者サイトは対象外です。閉じたシャドウルートやクロスオリジン iframe も検査できません。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "Reticle: 앱 검증과 선택적 Jev 탐색",
+      "h1": "Reticle: 앱 검증과 선택적 Jev 탐색",
+      "description": "Reticle은 네트워크·콘솔·상태로 앱을 검증합니다. 선택적 Jev 드라이버는 DOM 후보를 탐색하며 내부 검증 라우팅은 계획 단계입니다.",
+      "summary": "Reticle은 네트워크, 콘솔, 상태 증거로 실행 중인 앱을 검증하고 통과, 실패, 판단 불가를 반환합니다. 선택적 Jev 탐색 드라이버가 DOM 후보를 고릅니다. 내부 검증 흐름 라우팅은 아직 계획 단계입니다. 개발 앱을 MCP로 연결하고 기대 동작을 설명한 뒤 흐름을 저장해 결정론적으로 재생합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "Reticle은 네트워크, 콘솔, 상태 증거로 실행 중인 앱을 검증하고 통과, 실패, 판단 불가를 반환합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "선택적 Jev 탐색 드라이버가 DOM 후보를 고릅니다. 내부 검증 흐름 라우팅은 아직 계획 단계입니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "개발 앱을 MCP로 연결하고 기대 동작을 설명한 뒤 흐름을 저장해 결정론적으로 재생합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "제약 사항",
+          "text": "시각적 회귀 테스트와 타사 사이트는 대상이 아니며 닫힌 섀도 루트와 교차 출처 iframe은 검사할 수 없습니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "Reticle: verificación de aplicaciones con Jev opcional",
+      "h1": "Reticle: verificación de aplicaciones con Jev opcional",
+      "description": "Reticle verifica aplicaciones mediante red, consola y estado. Jev es un explorador DOM opcional; el enrutamiento interno sigue planificado.",
+      "summary": "Reticle verifica aplicaciones en ejecución mediante datos de red, consola y estado; devuelve aprobado, fallido o desconocido. Su controlador opcional Jev selecciona candidatos del DOM; el enrutamiento interno de verificaciones sigue previsto para el futuro. Conecta una aplicación en desarrollo por MCP, describe el comportamiento esperado y guarda recorridos para reproducirlos de forma determinista.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "Reticle verifica aplicaciones en ejecución mediante datos de red, consola y estado; devuelve aprobado, fallido o desconocido.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "El papel de Jev",
+          "text": "Su controlador opcional Jev selecciona candidatos del DOM; el enrutamiento interno de verificaciones sigue previsto para el futuro.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo usarlo",
+          "text": "Conecta una aplicación en desarrollo por MCP, describe el comportamiento esperado y guarda recorridos para reproducirlos de forma determinista.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Límites a considerar",
+          "text": "No cubre regresiones visuales ni sitios ajenos; tampoco inspecciona raíces de sombra cerradas o iframes de otro origen.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "Reticle : vérifier une application avec Jev en option",
+      "h1": "Reticle : vérifier une application avec Jev en option",
+      "description": "Reticle vérifie les applications via réseau, console et état. Jev explore le DOM en option ; le routage interne reste prévu pour plus tard.",
+      "summary": "Reticle vérifie une application en cours d’exécution à partir du réseau, de la console et de l’état, avec trois verdicts possibles. Le pilote Jev facultatif sélectionne des candidats du DOM ; le routage interne des vérifications reste prévu pour plus tard. Connectez l’application de développement par MCP, décrivez le comportement attendu et enregistrez des parcours pour une relecture déterministe.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "Reticle vérifie une application en cours d’exécution à partir du réseau, de la console et de l’état, avec trois verdicts possibles.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Le rôle de Jev",
+          "text": "Le pilote Jev facultatif sélectionne des candidats du DOM ; le routage interne des vérifications reste prévu pour plus tard.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Utilisation",
+          "text": "Connectez l’application de développement par MCP, décrivez le comportement attendu et enregistrez des parcours pour une relecture déterministe.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limites à connaître",
+          "text": "Les régressions visuelles et sites tiers sont exclus ; les racines shadow fermées et iframes d’autres origines restent invisibles.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "Reticle: App-Prüfung mit optionaler Jev-Erkundung",
+      "h1": "Reticle: App-Prüfung mit optionaler Jev-Erkundung",
+      "description": "Reticle prüft Apps über Netzwerk, Konsole und Zustand. Jev erkundet optional DOM-Kandidaten; internes Routing ist weiterhin geplant.",
+      "summary": "Reticle prüft laufende Apps anhand von Netzwerk-, Konsolen- und Zustandsdaten und meldet bestanden, fehlgeschlagen oder unklar. Der optionale Jev-Treiber wählt DOM-Kandidaten zur Erkundung; internes Routing von Prüfabläufen ist weiterhin geplant. Eine Entwicklungs-App per MCP verbinden, erwartetes Verhalten beschreiben und Abläufe zur deterministischen Wiedergabe speichern.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "Reticle prüft laufende Apps anhand von Netzwerk-, Konsolen- und Zustandsdaten und meldet bestanden, fehlgeschlagen oder unklar.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Die Rolle von Jev",
+          "text": "Der optionale Jev-Treiber wählt DOM-Kandidaten zur Erkundung; internes Routing von Prüfabläufen ist weiterhin geplant.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Nutzung",
+          "text": "Eine Entwicklungs-App per MCP verbinden, erwartetes Verhalten beschreiben und Abläufe zur deterministischen Wiedergabe speichern.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Grenzen",
+          "text": "Visuelle Regressionstests und fremde Websites sind ausgeschlossen. Geschlossene Shadow Roots und fremde iframe-Ursprünge kann Reticle nicht untersuchen.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "Reticle: verificação de apps com Jev opcional",
+      "h1": "Reticle: verificação de apps com Jev opcional",
+      "description": "Reticle verifica apps pela rede, console e estado. Jev explora candidatos DOM opcionalmente; o roteamento interno permanece planejado.",
+      "summary": "Reticle verifica apps em execução com evidências de rede, console e estado, retornando aprovação, falha ou resultado inconclusivo. O controlador opcional Jev seleciona candidatos do DOM; o roteamento interno de verificações continua no planejamento. Conecte o app em desenvolvimento via MCP, descreva o comportamento esperado e salve fluxos para reprodução determinística.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "Reticle verifica apps em execução com evidências de rede, console e estado, retornando aprovação, falha ou resultado inconclusivo.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "O papel do Jev",
+          "text": "O controlador opcional Jev seleciona candidatos do DOM; o roteamento interno de verificações continua no planejamento.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Conecte o app em desenvolvimento via MCP, descreva o comportamento esperado e salve fluxos para reprodução determinística.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limitações",
+          "text": "Não cobre regressões visuais nem sites de terceiros; também não inspeciona raízes shadow fechadas ou iframes de outra origem.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "Reticle: проверка приложений с необязательным Jev",
+      "h1": "Reticle: проверка приложений с необязательным Jev",
+      "description": "Reticle проверяет приложения по сети, консоли и состоянию. Jev опционально исследует DOM; внутренняя маршрутизация пока запланирована.",
+      "summary": "Reticle проверяет работающие приложения по сетевым событиям, консоли и состоянию, возвращая успех, ошибку или неопределённость. Необязательный драйвер Jev выбирает кандидатов из DOM; внутренняя маршрутизация проверок пока только запланирована. Подключите разрабатываемое приложение через MCP, опишите ожидаемое поведение и сохраните сценарии для детерминированного воспроизведения.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Reticle проверяет работающие приложения по сетевым событиям, консоли и состоянию, возвращая успех, ошибку или неопределённость.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Необязательный драйвер Jev выбирает кандидатов из DOM; внутренняя маршрутизация проверок пока только запланирована.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Подключите разрабатываемое приложение через MCP, опишите ожидаемое поведение и сохраните сценарии для детерминированного воспроизведения.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ограничения",
+          "text": "Визуальные регрессии и чужие сайты вне его задач; закрытые теневые корни и междоменные iframe недоступны для проверки.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "Reticle: वैकल्पिक Jev के साथ ऐप की जाँच",
+      "h1": "Reticle: वैकल्पिक Jev के साथ ऐप की जाँच",
+      "description": "Reticle नेटवर्क, कंसोल और स्थिति से ऐप जाँचता है। वैकल्पिक Jev DOM उम्मीदवार चुनता है; आंतरिक रूटिंग अभी योजना है।",
+      "summary": "Reticle नेटवर्क, कंसोल और स्थिति के साक्ष्य से चलते ऐप जाँचता है; परिणाम पास, फेल या अनिश्चित होता है। वैकल्पिक Jev ड्राइवर DOM उम्मीदवार चुनता है; आंतरिक सत्यापन प्रवाह की रूटिंग अभी योजना में है। विकास वाले ऐप को MCP से जोड़ें, अपेक्षित व्यवहार बताएँ और निश्चित पुनरावृत्ति के लिए प्रवाह सहेजें।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "किस काम आता है",
+          "text": "Reticle नेटवर्क, कंसोल और स्थिति के साक्ष्य से चलते ऐप जाँचता है; परिणाम पास, फेल या अनिश्चित होता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "वैकल्पिक Jev ड्राइवर DOM उम्मीदवार चुनता है; आंतरिक सत्यापन प्रवाह की रूटिंग अभी योजना में है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल कैसे करें",
+          "text": "विकास वाले ऐप को MCP से जोड़ें, अपेक्षित व्यवहार बताएँ और निश्चित पुनरावृत्ति के लिए प्रवाह सहेजें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "सीमाएँ",
+          "text": "दृश्य रिग्रेशन और बाहरी साइटों की जाँच शामिल नहीं है; बंद शैडो रूट और दूसरे ओरिजिन के iframe भी नहीं दिखते।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "Reticle: verifikasi aplikasi dengan Jev opsional",
+      "h1": "Reticle: verifikasi aplikasi dengan Jev opsional",
+      "description": "Reticle memverifikasi aplikasi lewat jaringan, konsol, dan status. Jev opsional menjelajahi DOM; perutean internal masih direncanakan.",
+      "summary": "Reticle memeriksa aplikasi berjalan memakai bukti jaringan, konsol, dan status, lalu menyatakan lulus, gagal, atau belum dapat dipastikan. Penggerak eksplorasi Jev opsional memilih kandidat DOM; perutean internal alur verifikasi masih direncanakan. Hubungkan aplikasi pengembangan lewat MCP, jelaskan perilaku yang diharapkan, lalu simpan alur untuk pemutaran ulang deterministik.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "Reticle memeriksa aplikasi berjalan memakai bukti jaringan, konsol, dan status, lalu menyatakan lulus, gagal, atau belum dapat dipastikan.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Penggerak eksplorasi Jev opsional memilih kandidat DOM; perutean internal alur verifikasi masih direncanakan.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Hubungkan aplikasi pengembangan lewat MCP, jelaskan perilaku yang diharapkan, lalu simpan alur untuk pemutaran ulang deterministik.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Batasan",
+          "text": "Pengujian regresi visual dan situs pihak lain tidak tercakup; shadow root tertutup dan iframe lintas asal tidak dapat diperiksa.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "Reticle: kiểm tra ứng dụng với Jev tùy chọn",
+      "h1": "Reticle: kiểm tra ứng dụng với Jev tùy chọn",
+      "description": "Reticle kiểm tra ứng dụng qua mạng, bảng điều khiển và trạng thái. Jev tùy chọn khám phá DOM; định tuyến nội bộ vẫn là kế hoạch.",
+      "summary": "Reticle kiểm tra ứng dụng đang chạy bằng bằng chứng mạng, bảng điều khiển và trạng thái, trả về đạt, lỗi hoặc chưa rõ. Trình khám phá Jev tùy chọn chọn ứng viên từ DOM; định tuyến nội bộ luồng kiểm tra vẫn mới là kế hoạch. Kết nối ứng dụng phát triển qua MCP, mô tả hành vi mong đợi và lưu luồng để chạy lại theo cách xác định.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích",
+          "text": "Reticle kiểm tra ứng dụng đang chạy bằng bằng chứng mạng, bảng điều khiển và trạng thái, trả về đạt, lỗi hoặc chưa rõ.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Trình khám phá Jev tùy chọn chọn ứng viên từ DOM; định tuyến nội bộ luồng kiểm tra vẫn mới là kế hoạch.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Kết nối ứng dụng phát triển qua MCP, mô tả hành vi mong đợi và lưu luồng để chạy lại theo cách xác định.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Giới hạn",
+          "text": "Không dành cho kiểm thử hồi quy giao diện hay trang bên ngoài; không đọc được shadow root đóng hoặc iframe khác nguồn.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "Reticle: isteğe bağlı Jev ile uygulama doğrulama",
+      "h1": "Reticle: isteğe bağlı Jev ile uygulama doğrulama",
+      "description": "Reticle ağı, konsolu ve durumu inceleyerek uygulamayı doğrular. Jev isteğe bağlı DOM keşfi yapar; iç yönlendirme henüz plan aşamasındadır.",
+      "summary": "Reticle çalışan uygulamayı ağ, konsol ve durum kanıtlarıyla inceler; başarılı, başarısız veya belirsiz sonucu döndürür. İsteğe bağlı Jev keşif sürücüsü DOM adaylarını seçer; iç doğrulama akışlarının yönlendirilmesi hâlâ plan aşamasındadır. Geliştirme uygulamasını MCP üzerinden bağlayın, beklenen davranışı tarif edin ve deterministik tekrar için akışları kaydedin.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "Reticle çalışan uygulamayı ağ, konsol ve durum kanıtlarıyla inceler; başarılı, başarısız veya belirsiz sonucu döndürür.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "İsteğe bağlı Jev keşif sürücüsü DOM adaylarını seçer; iç doğrulama akışlarının yönlendirilmesi hâlâ plan aşamasındadır.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Geliştirme uygulamasını MCP üzerinden bağlayın, beklenen davranışı tarif edin ve deterministik tekrar için akışları kaydedin.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Sınırlamalar",
+          "text": "Görsel regresyonlar ve üçüncü taraf siteler kapsam dışıdır; kapalı shadow root ve farklı kökenli iframe öğeleri incelenemez.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "Reticle: verifica delle app con Jev facoltativo",
+      "h1": "Reticle: verifica delle app con Jev facoltativo",
+      "description": "Reticle verifica app tramite rete, console e stato. Jev esplora facoltativamente il DOM; l’instradamento interno resta pianificato.",
+      "summary": "Reticle verifica app in esecuzione tramite rete, console e stato, restituendo esito positivo, negativo o indeterminato. Il driver Jev facoltativo sceglie candidati dal DOM; l’instradamento interno delle verifiche resta pianificato. Collega l’app in sviluppo tramite MCP, descrivi il comportamento atteso e salva i percorsi per riprodurli deterministicamente.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "Reticle verifica app in esecuzione tramite rete, console e stato, restituendo esito positivo, negativo o indeterminato.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Il ruolo di Jev",
+          "text": "Il driver Jev facoltativo sceglie candidati dal DOM; l’instradamento interno delle verifiche resta pianificato.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come usarlo",
+          "text": "Collega l’app in sviluppo tramite MCP, descrivi il comportamento atteso e salva i percorsi per riprodurli deterministicamente.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limiti",
+          "text": "Non copre regressioni visive o siti altrui; non ispeziona radici shadow chiuse né iframe di origine diversa.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

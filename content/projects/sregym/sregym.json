@@ -1,0 +1,762 @@
+{
+  "version": "source-content-v1",
+  "repo": "SREGym/SREGym",
+  "repositoryId": 986527564,
+  "relationship": "integration",
+  "category": "research",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "path": "README.md",
+      "commit": "1e9aa6b3367a3066b0142a4693315181ee8007c8",
+      "url": "https://github.com/SREGym/SREGym/blob/1e9aa6b3367a3066b0142a4693315181ee8007c8/README.md",
+      "sha256": "b85aa0499eba29b44e785059b4e36e3e76afefec5e681635c8355f05e0711c1c",
+      "accessedAt": "2026-09-30T07:33:51.968Z",
+      "id": "s1"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "The platform supports developing and evaluating SRE agents against live system environments containing operational failure scenarios.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 16,
+          "end": 22,
+          "quote": "<h2 id=\"overview\">🔍 Overview</h2>\nSREGym is an AI-native platform to enable the design, development, and evaluation of AI agents for Site Reliability Engineering (SRE). The core idea is to create live system environments for SRE agents to solve real-world SRE problems. SREGym provides a comprehensive SRE benchmark suite with a wide variety of problems for evaluating SRE agents and also for training next-generation AI agents.\n<br><br>\n\n![SREGym Overview](/assets/overview.png)\n\nSREGym is inspired by our prior work on AIOpsLab and ITBench. It is architectured with AI-native usability and extensibility as first-class principles. The SREGym benchmark suites contain 90 different SRE problems. It supports all the problems from AIOpsLab and ITBench, and includes new problems such as OS-level faults, metastable failures, and concurrent failures. See our [problem set](https://sregym.com/problems) for a complete list of problems."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "Jev support is disabled by default; when enabled for Codex, it reviews diagnostic tests and submissions from evidence sent to TypeSafe.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 186,
+          "end": 195,
+          "quote": "#### Optional Jev decision support\n\nJev is disabled by default. To enable it for Codex, set `TYPESAFE_API_KEY` and run:\n\n```bash\nuv run main.py --agent codex --model gpt-5.6-luna --reasoning-effort medium \\\n  --problem <problem-id> --jev-model jev-latest --force-build\n```\n\nJev reviews diagnostic tests and submissions using evidence sent to TypeSafe."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Select the agent and problem, choose the deployment profile, and enable Jev with TYPESAFE_API_KEY plus --jev-model.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 188,
+          "end": 192,
+          "quote": "Jev is disabled by default. To enable it for Codex, set `TYPESAFE_API_KEY` and run:\n\n```bash\nuv run main.py --agent codex --model gpt-5.6-luna --reasoning-effort medium \\\n  --problem <problem-id> --jev-model jev-latest --force-build"
+        },
+        {
+          "source": "s1",
+          "start": 199,
+          "end": 205,
+          "quote": "`--profile` controls how much infrastructure SREGym stands up. It is independent of\n`--suite` — the profile selects *what gets deployed*, the suite selects *which problems run*.\n\n| Profile | Behaviour |\n|---------|-----------|\n| `full` (default) | The standard stack. Use this for results you intend to compare against the leaderboard. |\n| `svelte` | Additionally drops components that nothing in SREGym reads, and shortens metric retention. |"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "Local Kind environments do not support every problem. The README recommends the full deployment profile for leaderboard comparisons.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 70,
+          "end": 73,
+          "quote": "SREGym can be run on an emulated cluster using [kind](https://kind.sigs.k8s.io/) on your local machine. However, not all problems are supported.\n\nFor an experimental Docker-in-Docker environment with a private cluster per run,\nincluding parallel problem execution, see the [DinD guide](./docker/dind/README.md)."
+        },
+        {
+          "source": "s1",
+          "start": 204,
+          "end": 205,
+          "quote": "| `full` (default) | The standard stack. Use this for results you intend to compare against the leaderboard. |\n| `svelte` | Additionally drops components that nothing in SREGym reads, and shortens metric retention. |"
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "SREGym: SRE benchmarks with optional Jev review",
+      "h1": "SREGym: SRE benchmarks with optional Jev review",
+      "description": "SREGym benchmarks reliability agents in live test environments; Codex runs can optionally use Jev to review diagnostics and submissions.",
+      "summary": "The platform supports developing and evaluating SRE agents against live system environments containing operational failure scenarios. Jev support is disabled by default; when enabled for Codex, it reviews diagnostic tests and submissions from evidence sent to TypeSafe.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose and audience",
+          "text": "The platform supports developing and evaluating SRE agents against live system environments containing operational failure scenarios.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "Jev support is disabled by default; when enabled for Codex, it reviews diagnostic tests and submissions from evidence sent to TypeSafe.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Using the project",
+          "text": "Select the agent and problem, choose the deployment profile, and enable Jev with TYPESAFE_API_KEY plus --jev-model.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "Local Kind environments do not support every problem. The README recommends the full deployment profile for leaderboard comparisons.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "SREGym：带可选 Jev 审核的 SRE 基准平台",
+      "h1": "SREGym：带可选 Jev 审核的 SRE 基准平台",
+      "description": "SREGym 在真实运行的测试环境中评估可靠性智能体，Codex 可选用 Jev 审核诊断和提交。",
+      "summary": "平台在包含运维故障场景的运行环境中，支持 SRE 智能体的开发与评估。 Jev 支持默认关闭；为 Codex 启用后，会将证据发送到 TypeSafe，审核诊断测试与提交。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途与适用对象",
+          "text": "平台在包含运维故障场景的运行环境中，支持 SRE 智能体的开发与评估。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "Jev 支持默认关闭；为 Codex 启用后，会将证据发送到 TypeSafe，审核诊断测试与提交。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "选择智能体、问题和部署配置，并通过 TYPESAFE_API_KEY 与 --jev-model 开启 Jev。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "本地 Kind 环境并不支持全部问题。README 建议排行榜对比使用 full 部署配置。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "SREGym：可選 Jev 審查的 SRE 基準平台",
+      "h1": "SREGym：可選 Jev 審查的 SRE 基準平台",
+      "description": "SREGym 在實際運作的測試環境中評估可靠性代理，Codex 可選用 Jev 審查診斷及提交。",
+      "summary": "平台在包含維運故障情境的執行環境中，支援 SRE 代理的開發與評估。 Jev 支援預設關閉；為 Codex 啟用後，會將證據送往 TypeSafe，審查診斷測試及提交。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途與適用對象",
+          "text": "平台在包含維運故障情境的執行環境中，支援 SRE 代理的開發與評估。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "Jev 支援預設關閉；為 Codex 啟用後，會將證據送往 TypeSafe，審查診斷測試及提交。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "選擇代理、問題與部署設定，並透過 TYPESAFE_API_KEY 及 --jev-model 啟用 Jev。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "本機 Kind 環境不支援所有問題。README 建議排行榜比較採用 full 部署設定。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "SREGym：任意の Jev 審査を備えた SRE ベンチマーク",
+      "h1": "SREGym：任意の Jev 審査を備えた SRE ベンチマーク",
+      "description": "SREGym は稼働するテスト環境で信頼性エージェントを評価し、Codex では任意で Jev の診断・提出審査を使えます。",
+      "summary": "運用障害を含む実行環境で、SRE エージェントの開発と評価を支援する基盤です。 Jev は既定で無効です。Codex で有効にすると TypeSafe に証拠を送り、診断テストと提出内容を審査します。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途と対象",
+          "text": "運用障害を含む実行環境で、SRE エージェントの開発と評価を支援する基盤です。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev との関係",
+          "text": "Jev は既定で無効です。Codex で有効にすると TypeSafe に証拠を送り、診断テストと提出内容を審査します。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "エージェント、問題、展開プロファイルを選び、TYPESAFE_API_KEY と --jev-model で Jev を有効にします。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範囲と制約",
+          "text": "ローカルの Kind は全問題に対応しません。README はリーダーボードとの比較に full プロファイルを推奨しています。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "SREGym: 선택적 Jev 검토가 있는 SRE 벤치마크",
+      "h1": "SREGym: 선택적 Jev 검토가 있는 SRE 벤치마크",
+      "description": "SREGym은 실행 중인 테스트 환경에서 신뢰성 에이전트를 평가하며 Codex에서 Jev로 진단과 제출을 선택적으로 검토할 수 있습니다.",
+      "summary": "운영 장애 시나리오가 있는 실제 실행 환경에서 SRE 에이전트 개발과 평가를 지원합니다. Jev는 기본적으로 꺼져 있으며 Codex에서 활성화하면 TypeSafe로 보낸 근거를 이용해 진단 테스트와 제출을 검토합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "용도와 대상",
+          "text": "운영 장애 시나리오가 있는 실제 실행 환경에서 SRE 에이전트 개발과 평가를 지원합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Jev는 기본적으로 꺼져 있으며 Codex에서 활성화하면 TypeSafe로 보낸 근거를 이용해 진단 테스트와 제출을 검토합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "에이전트, 문제, 배포 프로필을 선택하고 TYPESAFE_API_KEY와 --jev-model로 Jev를 활성화합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 한계",
+          "text": "로컬 Kind 환경은 모든 문제를 지원하지 않습니다. README는 리더보드 비교에 full 배포 프로필을 권장합니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "SREGym: pruebas SRE con revisión Jev opcional",
+      "h1": "SREGym: pruebas SRE con revisión Jev opcional",
+      "description": "SREGym evalúa agentes de fiabilidad en entornos activos; Codex puede usar Jev para revisar diagnósticos y entregas.",
+      "summary": "La plataforma permite desarrollar y evaluar agentes SRE en sistemas en ejecución con escenarios de fallos operativos. Jev está desactivado por defecto; al habilitarlo para Codex revisa pruebas diagnósticas y entregas con evidencia enviada a TypeSafe.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "La plataforma permite desarrollar y evaluar agentes SRE en sistemas en ejecución con escenarios de fallos operativos.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Jev está desactivado por defecto; al habilitarlo para Codex revisa pruebas diagnósticas y entregas con evidencia enviada a TypeSafe.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo se usa",
+          "text": "Seleccione agente, problema y perfil de despliegue; active Jev con TYPESAFE_API_KEY y --jev-model.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "Kind local no admite todos los problemas. El README recomienda el perfil full para comparaciones con la clasificación.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "SREGym : benchmark SRE avec revue Jev facultative",
+      "h1": "SREGym : benchmark SRE avec revue Jev facultative",
+      "description": "SREGym évalue des agents de fiabilité dans des systèmes actifs ; Codex peut utiliser Jev pour examiner diagnostics et soumissions.",
+      "summary": "La plateforme aide à développer et évaluer des agents SRE dans des environnements opérationnels avec scénarios de panne. Jev est désactivé par défaut ; activé pour Codex, il examine tests diagnostiques et soumissions à partir de preuves envoyées à TypeSafe.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Usage et public visé",
+          "text": "La plateforme aide à développer et évaluer des agents SRE dans des environnements opérationnels avec scénarios de panne.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Jev est désactivé par défaut ; activé pour Codex, il examine tests diagnostiques et soumissions à partir de preuves envoyées à TypeSafe.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Choisissez agent, problème et profil de déploiement, puis activez Jev avec TYPESAFE_API_KEY et --jev-model.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "Kind en local ne couvre pas tous les problèmes. Le README recommande le profil full pour comparer les résultats au classement.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "SREGym: SRE-Benchmarks mit optionaler Jev-Prüfung",
+      "h1": "SREGym: SRE-Benchmarks mit optionaler Jev-Prüfung",
+      "description": "SREGym bewertet Zuverlässigkeitsagenten in laufenden Testsystemen; Codex kann Diagnose und Einreichungen optional durch Jev prüfen lassen.",
+      "summary": "Die Plattform unterstützt Entwicklung und Bewertung von SRE-Agenten in laufenden Systemumgebungen mit betrieblichen Fehlerfällen. Jev ist standardmäßig deaktiviert; für Codex aktiviert prüft es Diagnosetests und Einreichungen anhand an TypeSafe gesendeter Belege.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Zweck und Zielgruppe",
+          "text": "Die Plattform unterstützt Entwicklung und Bewertung von SRE-Agenten in laufenden Systemumgebungen mit betrieblichen Fehlerfällen.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Jev ist standardmäßig deaktiviert; für Codex aktiviert prüft es Diagnosetests und Einreichungen anhand an TypeSafe gesendeter Belege.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Verwendung",
+          "text": "Wählen Sie Agent, Problem und Bereitstellungsprofil und aktivieren Sie Jev mit TYPESAFE_API_KEY sowie --jev-model.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Lokales Kind unterstützt nicht alle Probleme. Das README empfiehlt das Profil full für Vergleiche mit der Rangliste.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "SREGym: benchmarks SRE com revisão Jev opcional",
+      "h1": "SREGym: benchmarks SRE com revisão Jev opcional",
+      "description": "SREGym avalia agentes de confiabilidade em ambientes ativos; Codex pode usar Jev para revisar diagnósticos e submissões.",
+      "summary": "A plataforma apoia desenvolvimento e avaliação de agentes SRE em sistemas em execução com cenários de falhas operacionais. Jev vem desativado; quando habilitado para Codex, revisa testes diagnósticos e submissões com evidências enviadas à TypeSafe.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Finalidade e público",
+          "text": "A plataforma apoia desenvolvimento e avaliação de agentes SRE em sistemas em execução com cenários de falhas operacionais.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "Jev vem desativado; quando habilitado para Codex, revisa testes diagnósticos e submissões com evidências enviadas à TypeSafe.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Escolha agente, problema e perfil de implantação; ative Jev com TYPESAFE_API_KEY e --jev-model.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "Kind local não suporta todos os problemas. O README recomenda o perfil full para comparações com o ranking.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "SREGym: SRE-бенчмарки с необязательной проверкой Jev",
+      "h1": "SREGym: SRE-бенчмарки с необязательной проверкой Jev",
+      "description": "SREGym оценивает агентов надёжности в работающих тестовых системах; Codex может использовать Jev для проверки диагностики и решений.",
+      "summary": "Платформа поддерживает разработку и оценку SRE-агентов в работающих окружениях со сценариями эксплуатационных сбоев. Jev по умолчанию отключён; при включении для Codex он проверяет диагностические тесты и отправленные решения по свидетельствам, переданным TypeSafe.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Платформа поддерживает разработку и оценку SRE-агентов в работающих окружениях со сценариями эксплуатационных сбоев.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Jev по умолчанию отключён; при включении для Codex он проверяет диагностические тесты и отправленные решения по свидетельствам, переданным TypeSafe.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Выберите агента, задачу и профиль развёртывания, затем включите Jev через TYPESAFE_API_KEY и --jev-model.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Локальный Kind поддерживает не все задачи. Для сравнения с рейтингом README рекомендует профиль full.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "SREGym: वैकल्पिक Jev समीक्षा वाले SRE बेंचमार्क",
+      "h1": "SREGym: वैकल्पिक Jev समीक्षा वाले SRE बेंचमार्क",
+      "description": "SREGym चलते परीक्षण वातावरणों में विश्वसनीयता एजेंट आँकता है; Codex में Jev से निदान और सबमिशन की वैकल्पिक समीक्षा होती है।",
+      "summary": "प्लेटफ़ॉर्म परिचालन विफलता वाले वास्तविक चल रहे सिस्टम वातावरणों में SRE एजेंट विकसित करने और आँकने देता है। Jev डिफ़ॉल्ट बंद है; Codex के लिए चालू करने पर TypeSafe को भेजे साक्ष्य से निदान परीक्षण और सबमिशन जाँचता है।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "उद्देश्य और उपयोगकर्ता",
+          "text": "प्लेटफ़ॉर्म परिचालन विफलता वाले वास्तविक चल रहे सिस्टम वातावरणों में SRE एजेंट विकसित करने और आँकने देता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "Jev डिफ़ॉल्ट बंद है; Codex के लिए चालू करने पर TypeSafe को भेजे साक्ष्य से निदान परीक्षण और सबमिशन जाँचता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल का तरीका",
+          "text": "एजेंट, समस्या और तैनाती प्रोफ़ाइल चुनें; TYPESAFE_API_KEY और --jev-model से Jev सक्रिय करें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "स्थानीय Kind सभी समस्याएँ नहीं चलाता। लीडरबोर्ड तुलना के लिए README में full प्रोफ़ाइल सुझाई गई है।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "SREGym: benchmark SRE dengan tinjauan Jev opsional",
+      "h1": "SREGym: benchmark SRE dengan tinjauan Jev opsional",
+      "description": "SREGym menilai agen keandalan dalam lingkungan aktif; Codex dapat memakai Jev untuk meninjau diagnosis dan pengajuan.",
+      "summary": "Platform mendukung pengembangan dan evaluasi agen SRE dalam sistem berjalan yang memuat skenario kegagalan operasional. Jev dinonaktifkan secara bawaan; saat diaktifkan untuk Codex, ia meninjau tes diagnostik dan pengajuan dari bukti yang dikirim ke TypeSafe.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Tujuan dan pengguna",
+          "text": "Platform mendukung pengembangan dan evaluasi agen SRE dalam sistem berjalan yang memuat skenario kegagalan operasional.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Jev dinonaktifkan secara bawaan; saat diaktifkan untuk Codex, ia meninjau tes diagnostik dan pengajuan dari bukti yang dikirim ke TypeSafe.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Pilih agen, masalah, dan profil penerapan, lalu aktifkan Jev dengan TYPESAFE_API_KEY serta --jev-model.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Kind lokal tidak mendukung semua masalah. README menyarankan profil full untuk perbandingan papan peringkat.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "SREGym: benchmark SRE với kiểm duyệt Jev tùy chọn",
+      "h1": "SREGym: benchmark SRE với kiểm duyệt Jev tùy chọn",
+      "description": "SREGym đánh giá tác tử độ tin cậy trong môi trường đang chạy; Codex có thể dùng Jev kiểm tra chẩn đoán và bài nộp.",
+      "summary": "Nền tảng hỗ trợ phát triển và đánh giá tác tử SRE trên hệ thống đang hoạt động với kịch bản lỗi vận hành. Jev mặc định tắt; khi bật cho Codex, nó kiểm tra thử nghiệm chẩn đoán và bài nộp từ bằng chứng gửi đến TypeSafe.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích và đối tượng",
+          "text": "Nền tảng hỗ trợ phát triển và đánh giá tác tử SRE trên hệ thống đang hoạt động với kịch bản lỗi vận hành.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Jev mặc định tắt; khi bật cho Codex, nó kiểm tra thử nghiệm chẩn đoán và bài nộp từ bằng chứng gửi đến TypeSafe.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Chọn tác tử, vấn đề và hồ sơ triển khai, rồi bật Jev bằng TYPESAFE_API_KEY cùng --jev-model.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Kind cục bộ không hỗ trợ mọi vấn đề. README khuyến nghị hồ sơ full khi so sánh bảng xếp hạng.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "SREGym: isteğe bağlı Jev incelemeli SRE benchmarkları",
+      "h1": "SREGym: isteğe bağlı Jev incelemeli SRE benchmarkları",
+      "description": "SREGym çalışan test ortamlarında güvenilirlik ajanlarını değerlendirir; Codex, tanı ve gönderimleri Jev ile isteğe bağlı inceleyebilir.",
+      "summary": "Platform, operasyonel hata senaryoları içeren çalışan sistem ortamlarında SRE ajanlarının geliştirilmesini ve değerlendirilmesini destekler. Jev varsayılan olarak kapalıdır; Codex için açıldığında TypeSafe’e gönderilen kanıtlarla tanı testlerini ve gönderimleri inceler.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Amaç ve hedef kitle",
+          "text": "Platform, operasyonel hata senaryoları içeren çalışan sistem ortamlarında SRE ajanlarının geliştirilmesini ve değerlendirilmesini destekler.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Jev varsayılan olarak kapalıdır; Codex için açıldığında TypeSafe’e gönderilen kanıtlarla tanı testlerini ve gönderimleri inceler.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Ajan, problem ve dağıtım profili seçilip TYPESAFE_API_KEY ve --jev-model ile Jev etkinleştirilir.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Yerel Kind tüm problemleri desteklemez. README, sıralama karşılaştırmalarında full profilini önerir.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "SREGym: benchmark SRE con revisione Jev facoltativa",
+      "h1": "SREGym: benchmark SRE con revisione Jev facoltativa",
+      "description": "SREGym valuta agenti di affidabilità in ambienti attivi; Codex può usare Jev per rivedere diagnosi e invii.",
+      "summary": "La piattaforma supporta sviluppo e valutazione di agenti SRE in sistemi funzionanti con scenari di guasti operativi. Jev è disattivato per impostazione predefinita; attivato per Codex, esamina test diagnostici e invii tramite prove mandate a TypeSafe.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Scopo e destinatari",
+          "text": "La piattaforma supporta sviluppo e valutazione di agenti SRE in sistemi funzionanti con scenari di guasti operativi.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Jev è disattivato per impostazione predefinita; attivato per Codex, esamina test diagnostici e invii tramite prove mandate a TypeSafe.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come si usa",
+          "text": "Si scelgono agente, problema e profilo di distribuzione, poi si abilita Jev con TYPESAFE_API_KEY e --jev-model.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "Kind locale non supporta tutti i problemi. Il README consiglia il profilo full per confronti con la classifica.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

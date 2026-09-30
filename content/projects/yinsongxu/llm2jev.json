@@ -1,0 +1,774 @@
+{
+  "version": "source-content-v1",
+  "repo": "Yinsongxu/LLM2Jev",
+  "repositoryId": 1377047791,
+  "relationship": "local-alternative",
+  "category": "research",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "a4aafa85e1aba95329db36e085373d1572ab6917",
+      "url": "https://github.com/Yinsongxu/LLM2Jev/blob/a4aafa85e1aba95329db36e085373d1572ab6917/README.md",
+      "sha256": "7072a86751c75c5dffa8fa39c592779153c2de7863486dd1a7ee316260c1169b",
+      "accessedAt": "2026-09-30T07:33:51.442Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "kind": "documented",
+      "text": "LLM2Jev scores candidates from local language and vision models using prefill logits without token-by-token generation.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 17,
+          "end": 17,
+          "quote": "**Turn local language models into Jev-style structured decision models. Get results from text and images with prefill alone—no token-by-token decoding required.**"
+        },
+        {
+          "source": "source-1",
+          "start": 35,
+          "end": 40,
+          "quote": "- **Broad backend support:** run local text and vision language models with SGLang, Transformers, or MLX on Apple Silicon through the Python API or HTTP service.\n- **Prefill only:** compute probabilities from logits during prefill and assemble results directly, without token-by-token decoding.\n- **Multimodal inputs:** combine text and images in `state` or `instructions`, with support for SGLang, Transformers and MLX-VLM.\n- **Prefix reuse on cold requests:** stage candidate submissions to reuse SGLang's Radix Cache within a single request, including a first request with no relevant cached prefix.\n\nCandidates share `state`, and candidates for the same question also share its `instructions`. The SGLang backend first scores a real `criteria` candidate to establish the prefix cache, then submits candidates that can reuse it. Each candidate is scored once, reducing repeated computation for long inputs with many candidates. The MLX backend explicitly prefills shared prefixes before scoring candidate suffixes."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "kind": "documented",
+      "text": "It provides an independent Jev-style implementation with a compatible System One HTTP endpoint.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 21,
+          "end": 21,
+          "quote": "> LLM2Jev is an independent open-source project. It is not affiliated with or endorsed by Jev or TypeSafe."
+        },
+        {
+          "source": "source-1",
+          "start": 31,
+          "end": 31,
+          "quote": "- **September 20** - **SGLang and System One API:** added the SGLang scoring backend and a compatible [`POST /v1/systemone`](docs/usage.md#online-http-service) endpoint."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "kind": "documented",
+      "text": "Use Python or HTTP with SGLang, Transformers or MLX, including supported text-and-image inputs.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 35,
+          "end": 37,
+          "quote": "- **Broad backend support:** run local text and vision language models with SGLang, Transformers, or MLX on Apple Silicon through the Python API or HTTP service.\n- **Prefill only:** compute probabilities from logits during prefill and assemble results directly, without token-by-token decoding.\n- **Multimodal inputs:** combine text and images in `state` or `instructions`, with support for SGLang, Transformers and MLX-VLM."
+        },
+        {
+          "source": "source-1",
+          "start": 71,
+          "end": 77,
+          "quote": "See the [Usage guide](docs/usage.md) for complete examples:\n\n- [Offline: Python API](docs/usage.md#offline-python-api)\n- [MLX backend on Apple Silicon](docs/usage.md#offline-python-api)\n- [Online: HTTP service](docs/usage.md#online-http-service)\n- [Choosing between `staged` and `all`](docs/usage.md#choosing-between-staged-and-all)\n- [Multimodal inputs](docs/multimodal.md)"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "kind": "documented",
+      "text": "Cache benefits depend on input length and candidate count; the cited JevBench comparison covers 231 public items.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 101,
+          "end": 109,
+          "quote": "See [Performance benchmarks](docs/shared-prefix-benchmarks.md) for the Qwen3-1.7B / RTX 5090 measurements, test conditions, and comparison of `staged` and `all` across cold and warm caches. Gains depend on input length, candidate count, and cache state.\n\n### JevBench public accuracy\n\nThis test covers 231 public JevBench items. LLM2Jev with Qwen3.5-4B measured **76.2%** accuracy.\n\n![JevBench public accuracy comparison](assets/jevbench-accuracy.png)\n\nThe recorded LLM2Jev latency is **P50 48 ms / P95 346 ms**, while the Jev 1.13.0 values are **P50 652 ms / P95 722 ms**. See the [JevBench report](docs/jevbench.md) for the data and reproduction commands."
+        },
+        {
+          "source": "source-1",
+          "start": 113,
+          "end": 116,
+          "quote": "- [ ] More benchmarks across model sizes, datasets, and workloads, covering decision quality, latency, and throughput.\n- [x] An interactive web demo for submitting questions and inspecting probabilities.\n- [x] Initial local-image support for Transformers and SGLang.\n- [ ] More multimodal tasks and demos."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "LLM2Jev: local text and image decisions",
+      "h1": "LLM2Jev: local text and image decisions",
+      "description": "LLM2Jev turns local text and vision models into Jev-style decision services through prefill scoring, with SGLang, Transformers and MLX backends.",
+      "summary": "LLM2Jev scores candidates from local language and vision models using prefill logits without token-by-token generation. It provides an independent Jev-style implementation with a compatible System One HTTP endpoint. Use Python or HTTP with SGLang, Transformers or MLX, including supported text-and-image inputs.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose",
+          "text": "LLM2Jev scores candidates from local language and vision models using prefill logits without token-by-token generation.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’s role",
+          "text": "It provides an independent Jev-style implementation with a compatible System One HTTP endpoint.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "How to use it",
+          "text": "Use Python or HTTP with SGLang, Transformers or MLX, including supported text-and-image inputs.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limits to consider",
+          "text": "Cache benefits depend on input length and candidate count; the cited JevBench comparison covers 231 public items.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "LLM2Jev：本地文本与图像决策",
+      "h1": "LLM2Jev：本地文本与图像决策",
+      "description": "LLM2Jev 用预填充评分将本地语言及视觉模型变成 Jev 风格决策服务，支持 SGLang、Transformers、MLX 和兼容 HTTP 接口，是独立实现。",
+      "summary": "LLM2Jev 使用本地语言及视觉模型的预填充 logits 为候选评分，不逐 token 生成回答。 它提供独立的 Jev 风格实现，以及兼容的 System One HTTP 端点。 可通过 Python 或 HTTP 使用 SGLang、Transformers、MLX，并传入支持的文本与图像。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "LLM2Jev 使用本地语言及视觉模型的预填充 logits 为候选评分，不逐 token 生成回答。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "它提供独立的 Jev 风格实现，以及兼容的 System One HTTP 端点。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "可通过 Python 或 HTTP 使用 SGLang、Transformers、MLX，并传入支持的文本与图像。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用边界",
+          "text": "缓存收益取决于输入长度和候选数量；所引 JevBench 对比仅覆盖 231 道公开题。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "LLM2Jev：本地文字與影像決策",
+      "h1": "LLM2Jev：本地文字與影像決策",
+      "description": "LLM2Jev 以預填充評分將本地語言及視覺模型變成 Jev 風格決策服務，支援 SGLang、Transformers、MLX 與相容 HTTP 介面，屬獨立實作。",
+      "summary": "LLM2Jev 使用本地語言及視覺模型的預填充 logits 為候選評分，不逐 token 產生答案。 它提供獨立的 Jev 風格實作，以及相容的 System One HTTP 端點。 可透過 Python 或 HTTP 使用 SGLang、Transformers、MLX，並傳入支援的文字與影像。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "LLM2Jev 使用本地語言及視覺模型的預填充 logits 為候選評分，不逐 token 產生答案。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "它提供獨立的 Jev 風格實作，以及相容的 System One HTTP 端點。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "可透過 Python 或 HTTP 使用 SGLang、Transformers、MLX，並傳入支援的文字與影像。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用限制",
+          "text": "快取效益取決於輸入長度及候選數量；所引 JevBench 比較僅涵蓋 231 道公開題。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "LLM2Jev：ローカルのテキスト・画像判断",
+      "h1": "LLM2Jev：ローカルのテキスト・画像判断",
+      "description": "LLM2Jev は prefill 評価でローカルの言語・視覚モデルを Jev 風の決定サービスに変え、SGLang、Transformers、MLX に対応します。",
+      "summary": "LLM2Jev はローカル言語・視覚モデルの prefill logits で候補を評価し、トークン単位の生成を行いません。 独立した Jev 風の実装で、System One 互換 HTTP エンドポイントを備えます。 SGLang、Transformers、MLX を Python または HTTP から利用し、対応するテキスト・画像を入力できます。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "何ができるか",
+          "text": "LLM2Jev はローカル言語・視覚モデルの prefill logits で候補を評価し、トークン単位の生成を行いません。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "独立した Jev 風の実装で、System One 互換 HTTP エンドポイントを備えます。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "SGLang、Transformers、MLX を Python または HTTP から利用し、対応するテキスト・画像を入力できます。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "制約と注意点",
+          "text": "キャッシュ効果は入力長と候補数に依存します。引用された JevBench 比較は公開 231 問が対象です。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "LLM2Jev: 로컬 텍스트·이미지 판단",
+      "h1": "LLM2Jev: 로컬 텍스트·이미지 판단",
+      "description": "LLM2Jev는 프리필 평가로 로컬 언어·시각 모델을 Jev 방식 결정 서비스로 바꾸며 SGLang, Transformers, MLX를 지원합니다.",
+      "summary": "LLM2Jev는 로컬 언어·시각 모델의 프리필 logits로 후보를 평가하며 토큰별 답변을 생성하지 않습니다. 독립적인 Jev 방식 구현이며 System One 호환 HTTP 엔드포인트를 제공합니다. SGLang, Transformers, MLX를 Python이나 HTTP로 사용하고 지원되는 텍스트·이미지를 입력합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "LLM2Jev는 로컬 언어·시각 모델의 프리필 logits로 후보를 평가하며 토큰별 답변을 생성하지 않습니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "독립적인 Jev 방식 구현이며 System One 호환 HTTP 엔드포인트를 제공합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "SGLang, Transformers, MLX를 Python이나 HTTP로 사용하고 지원되는 텍스트·이미지를 입력합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "제약 사항",
+          "text": "캐시 효과는 입력 길이와 후보 수에 달려 있습니다. 인용된 JevBench 비교는 공개 231개 문제 범위입니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "LLM2Jev: decisiones locales sobre texto e imágenes",
+      "h1": "LLM2Jev: decisiones locales sobre texto e imágenes",
+      "description": "LLM2Jev convierte modelos locales de texto e imagen en servicios tipo Jev mediante prefill, con backends SGLang, Transformers y MLX.",
+      "summary": "LLM2Jev puntúa candidatos con logits de prefill de modelos locales de lenguaje y visión, sin generación token a token. Es una implementación independiente al estilo Jev con endpoint HTTP compatible con System One. Usa Python o HTTP con SGLang, Transformers o MLX y entradas de texto e imagen compatibles.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "LLM2Jev puntúa candidatos con logits de prefill de modelos locales de lenguaje y visión, sin generación token a token.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "El papel de Jev",
+          "text": "Es una implementación independiente al estilo Jev con endpoint HTTP compatible con System One.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo usarlo",
+          "text": "Usa Python o HTTP con SGLang, Transformers o MLX y entradas de texto e imagen compatibles.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Límites a considerar",
+          "text": "La ventaja de caché depende de longitud y candidatos; la comparación JevBench citada cubre 231 preguntas públicas.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "LLM2Jev : décisions locales sur texte et image",
+      "h1": "LLM2Jev : décisions locales sur texte et image",
+      "description": "LLM2Jev transforme des modèles locaux textuels et visuels en services de décision de type Jev, via prefill et SGLang, Transformers ou MLX.",
+      "summary": "LLM2Jev évalue les candidats avec les logits de prefill de modèles locaux, sans génération token par token. C’est une implémentation indépendante de type Jev, avec un point d’accès HTTP compatible System One. Utilisez Python ou HTTP avec SGLang, Transformers ou MLX et leurs entrées textuelles et visuelles prises en charge.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "LLM2Jev évalue les candidats avec les logits de prefill de modèles locaux, sans génération token par token.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Le rôle de Jev",
+          "text": "C’est une implémentation indépendante de type Jev, avec un point d’accès HTTP compatible System One.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Utilisation",
+          "text": "Utilisez Python ou HTTP avec SGLang, Transformers ou MLX et leurs entrées textuelles et visuelles prises en charge.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limites à connaître",
+          "text": "Le gain du cache dépend de la longueur et des candidats ; la comparaison JevBench citée porte sur 231 questions publiques.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "LLM2Jev: lokale Text- und Bildentscheidungen",
+      "h1": "LLM2Jev: lokale Text- und Bildentscheidungen",
+      "description": "LLM2Jev macht lokale Sprach- und Bildmodelle per Prefill-Auswertung zu Jev-artigen Entscheidungsdiensten mit SGLang, Transformers und MLX.",
+      "summary": "LLM2Jev bewertet Kandidaten mit Prefill-Logits lokaler Sprach- und Bildmodelle, ohne tokenweise Antworten zu erzeugen. Es ist eine unabhängige Jev-artige Implementierung mit System-One-kompatiblem HTTP-Endpunkt. Python oder HTTP mit SGLang, Transformers oder MLX und unterstützten Text-/Bildeingaben verwenden.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "LLM2Jev bewertet Kandidaten mit Prefill-Logits lokaler Sprach- und Bildmodelle, ohne tokenweise Antworten zu erzeugen.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Die Rolle von Jev",
+          "text": "Es ist eine unabhängige Jev-artige Implementierung mit System-One-kompatiblem HTTP-Endpunkt.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Nutzung",
+          "text": "Python oder HTTP mit SGLang, Transformers oder MLX und unterstützten Text-/Bildeingaben verwenden.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Grenzen",
+          "text": "Cache-Vorteile hängen von Eingabelänge und Kandidatenzahl ab; der zitierte JevBench-Vergleich umfasst 231 öffentliche Aufgaben.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "LLM2Jev: decisões locais de texto e imagem",
+      "h1": "LLM2Jev: decisões locais de texto e imagem",
+      "description": "LLM2Jev transforma modelos locais de texto e visão em serviços no estilo Jev por prefill, com SGLang, Transformers e MLX.",
+      "summary": "LLM2Jev pontua candidatos com logits de prefill de modelos locais de linguagem e visão, sem geração token a token. É uma implementação independente no estilo Jev, com endpoint HTTP compatível com System One. Use Python ou HTTP com SGLang, Transformers ou MLX e entradas compatíveis de texto e imagem.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "LLM2Jev pontua candidatos com logits de prefill de modelos locais de linguagem e visão, sem geração token a token.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "O papel do Jev",
+          "text": "É uma implementação independente no estilo Jev, com endpoint HTTP compatível com System One.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Use Python ou HTTP com SGLang, Transformers ou MLX e entradas compatíveis de texto e imagem.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limitações",
+          "text": "O ganho de cache depende do comprimento e dos candidatos; a comparação JevBench citada cobre 231 questões públicas.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "LLM2Jev: локальные решения по тексту и изображениям",
+      "h1": "LLM2Jev: локальные решения по тексту и изображениям",
+      "description": "LLM2Jev превращает локальные текстовые и визуальные модели в службы решений по образцу Jev через prefill, SGLang, Transformers и MLX.",
+      "summary": "LLM2Jev оценивает варианты по prefill-логитам локальных языковых и визуальных моделей без поэтапной генерации токенов. Это независимая реализация по образцу Jev с совместимой HTTP-точкой System One. Используйте Python или HTTP с SGLang, Transformers либо MLX и поддерживаемыми текстовыми и визуальными входами.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "LLM2Jev оценивает варианты по prefill-логитам локальных языковых и визуальных моделей без поэтапной генерации токенов.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Это независимая реализация по образцу Jev с совместимой HTTP-точкой System One.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Используйте Python или HTTP с SGLang, Transformers либо MLX и поддерживаемыми текстовыми и визуальными входами.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ограничения",
+          "text": "Польза кеша зависит от длины и числа вариантов; приведённое сравнение JevBench охватывает 231 открытую задачу.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "LLM2Jev: स्थानीय पाठ और चित्र निर्णय",
+      "h1": "LLM2Jev: स्थानीय पाठ और चित्र निर्णय",
+      "description": "LLM2Jev prefill मूल्यांकन से स्थानीय भाषा और चित्र मॉडल को Jev-जैसी निर्णय सेवा बनाता है; SGLang, Transformers और MLX समर्थित हैं।",
+      "summary": "LLM2Jev स्थानीय भाषा और विज़न मॉडल के prefill logits से उम्मीदवार आँकता है, बिना टोकन-दर-टोकन उत्तर बनाए। यह स्वतंत्र Jev-जैसा कार्यान्वयन है, जिसमें System One-संगत HTTP एंडपॉइंट है। SGLang, Transformers या MLX को Python अथवा HTTP से समर्थित पाठ और चित्र इनपुट के साथ उपयोग करें।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "किस काम आता है",
+          "text": "LLM2Jev स्थानीय भाषा और विज़न मॉडल के prefill logits से उम्मीदवार आँकता है, बिना टोकन-दर-टोकन उत्तर बनाए।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "यह स्वतंत्र Jev-जैसा कार्यान्वयन है, जिसमें System One-संगत HTTP एंडपॉइंट है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल कैसे करें",
+          "text": "SGLang, Transformers या MLX को Python अथवा HTTP से समर्थित पाठ और चित्र इनपुट के साथ उपयोग करें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "सीमाएँ",
+          "text": "कैश लाभ इनपुट लंबाई और उम्मीदवार संख्या पर निर्भर है; दिए JevBench परीक्षण में 231 सार्वजनिक प्रश्न हैं।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "LLM2Jev: keputusan teks dan gambar lokal",
+      "h1": "LLM2Jev: keputusan teks dan gambar lokal",
+      "description": "LLM2Jev mengubah model teks dan visual lokal menjadi layanan keputusan bergaya Jev lewat prefill, dengan SGLang, Transformers, dan MLX.",
+      "summary": "LLM2Jev menilai kandidat memakai logits prefill model bahasa dan visual lokal tanpa generasi token demi token. Ini implementasi independen bergaya Jev dengan endpoint HTTP kompatibel System One. Gunakan Python atau HTTP dengan SGLang, Transformers, atau MLX serta masukan teks dan gambar yang didukung.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "LLM2Jev menilai kandidat memakai logits prefill model bahasa dan visual lokal tanpa generasi token demi token.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Ini implementasi independen bergaya Jev dengan endpoint HTTP kompatibel System One.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Gunakan Python atau HTTP dengan SGLang, Transformers, atau MLX serta masukan teks dan gambar yang didukung.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Batasan",
+          "text": "Manfaat cache bergantung pada panjang masukan dan jumlah kandidat; perbandingan JevBench mencakup 231 soal publik.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "LLM2Jev: quyết định văn bản và hình ảnh cục bộ",
+      "h1": "LLM2Jev: quyết định văn bản và hình ảnh cục bộ",
+      "description": "LLM2Jev biến mô hình ngôn ngữ và thị giác cục bộ thành dịch vụ quyết định kiểu Jev bằng prefill, qua SGLang, Transformers và MLX.",
+      "summary": "LLM2Jev chấm ứng viên bằng logits prefill của mô hình ngôn ngữ và thị giác cục bộ, không sinh từng token. Đây là triển khai độc lập theo hướng Jev với điểm cuối HTTP tương thích System One. Dùng Python hoặc HTTP cùng SGLang, Transformers hay MLX với đầu vào văn bản và ảnh được hỗ trợ.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích",
+          "text": "LLM2Jev chấm ứng viên bằng logits prefill của mô hình ngôn ngữ và thị giác cục bộ, không sinh từng token.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Đây là triển khai độc lập theo hướng Jev với điểm cuối HTTP tương thích System One.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Dùng Python hoặc HTTP cùng SGLang, Transformers hay MLX với đầu vào văn bản và ảnh được hỗ trợ.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Giới hạn",
+          "text": "Lợi ích bộ nhớ đệm phụ thuộc độ dài và số ứng viên; so sánh JevBench được dẫn chỉ gồm 231 câu công khai.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "LLM2Jev: yerel metin ve görüntü kararları",
+      "h1": "LLM2Jev: yerel metin ve görüntü kararları",
+      "description": "LLM2Jev, prefill puanlamasıyla yerel dil ve görüntü modellerini Jev benzeri hizmetlere çevirir; SGLang, Transformers ve MLX kullanır.",
+      "summary": "LLM2Jev, token token üretim yapmadan yerel dil ve görüntü modellerinin prefill logitleriyle adayları puanlar. System One uyumlu HTTP uç noktası sağlayan bağımsız Jev benzeri uygulamadır. Desteklenen metin ve görüntülerle SGLang, Transformers veya MLX’i Python ya da HTTP üzerinden kullanın.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "LLM2Jev, token token üretim yapmadan yerel dil ve görüntü modellerinin prefill logitleriyle adayları puanlar.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "System One uyumlu HTTP uç noktası sağlayan bağımsız Jev benzeri uygulamadır.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Desteklenen metin ve görüntülerle SGLang, Transformers veya MLX’i Python ya da HTTP üzerinden kullanın.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Sınırlamalar",
+          "text": "Önbellek yararı girdi uzunluğu ve aday sayısına bağlıdır; aktarılan JevBench karşılaştırması 231 açık soruyu kapsar.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "LLM2Jev: decisioni locali su testo e immagini",
+      "h1": "LLM2Jev: decisioni locali su testo e immagini",
+      "description": "LLM2Jev trasforma modelli locali testuali e visivi in servizi decisionali in stile Jev tramite prefill, con SGLang, Transformers e MLX.",
+      "summary": "LLM2Jev valuta candidati con logits di prefill di modelli locali linguistici e visivi, senza generazione token per token. È un’implementazione indipendente in stile Jev con endpoint HTTP compatibile System One. Usa Python o HTTP con SGLang, Transformers o MLX e input testuali e visivi supportati.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "LLM2Jev valuta candidati con logits di prefill di modelli locali linguistici e visivi, senza generazione token per token.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Il ruolo di Jev",
+          "text": "È un’implementazione indipendente in stile Jev con endpoint HTTP compatibile System One.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come usarlo",
+          "text": "Usa Python o HTTP con SGLang, Transformers o MLX e input testuali e visivi supportati.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limiti",
+          "text": "I vantaggi della cache dipendono da lunghezza e candidati; il confronto JevBench citato copre 231 domande pubbliche.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

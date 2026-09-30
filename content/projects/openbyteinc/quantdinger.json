@@ -1,0 +1,762 @@
+{
+  "version": "source-content-v1",
+  "repo": "OpenByteInc/QuantDinger",
+  "repositoryId": 1124295269,
+  "relationship": "integration",
+  "category": "agents",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "path": "README.md",
+      "commit": "709521ffd6df8460dc7bfaba0451258b0f1743da",
+      "url": "https://github.com/OpenByteInc/QuantDinger/blob/709521ffd6df8460dc7bfaba0451258b0f1743da/README.md",
+      "sha256": "7447abad4f71c8fa7a61d42ad3709961e1b3f6ae6f68f1c5b29ba7430d2522bc",
+      "accessedAt": "2026-09-30T07:33:45.193Z",
+      "id": "s1"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "This self-hosted trading stack covers Python strategies, backtests, paper trading, live execution and monitoring.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 6,
+          "end": 10,
+          "quote": "  <h1>QuantDinger</h1>\n  <p><strong>Open-source AI Trading OS</strong></p>\n  <p>Turn trading ideas into Python strategies, backtests, paper trading, live execution, and monitoring — all in one self-hosted stack.</p>\n  <p><strong>QuantDinger is a product of Open Byte Inc.</strong></p>\n  <p><em>AI research → Strategy code → Backtest → Paper/Live execution → Monitoring</em></p>"
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "Jev evaluates order, strategy, exposure, position and budget context, returning typed choices with probabilities for the entry filter.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 410,
+          "end": 417,
+          "quote": "QuantDinger can place a structured AI decision gate directly in front of live\nentry orders. Enable **AI Decision Filter** when creating a regular live\nstrategy, or turn it on in Quick Trade. Before an entry reaches the exchange,\nQuantDinger sends the order, strategy context, exposure, positions, and budget\nstate to [TypeSafe Jev](https://docs.typesafe.ai/introduction). Jev returns typed\nChoice results, probabilities, and confidence instead of prose that must be\nparsed. The app shows the provider, checks, result, confidence, latency, and\nreason in an auditable decision timeline."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Enable AI Decision Filter for a regular live strategy or Quick Trade, then configure Jev in System Settings → AI / LLM.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 410,
+          "end": 412,
+          "quote": "QuantDinger can place a structured AI decision gate directly in front of live\nentry orders. Enable **AI Decision Filter** when creating a regular live\nstrategy, or turn it on in Quick Trade. Before an entry reaches the exchange,"
+        },
+        {
+          "source": "s1",
+          "start": 490,
+          "end": 492,
+          "quote": "Configure `JEV_API_KEY`, `JEV_BASE_URL`, `JEV_MODEL`, and\n`JEV_TIMEOUT_SECONDS` in **System Settings → AI / LLM**. TypeSafe documents the\nHTTP contract at [`POST /v1/systemone`](https://docs.typesafe.ai/introduction/quickstart)."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "Exits bypass AI; grid, DCA and martingale are excluded. With no available AI provider, entries fail open. Live mode can submit real orders.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 75,
+          "end": 79,
+          "quote": "\n> QuantDinger can submit real orders when live trading is explicitly enabled.\n> Start with paper trading, use restricted API keys, and review the risk and\n> compliance requirements for your jurisdiction. This project does not provide\n> investment advice."
+        },
+        {
+          "source": "s1",
+          "start": 425,
+          "end": 430,
+          "quote": "The execution policy stays in QuantDinger code: rejected entries never reach\nthe exchange; exits, stop-loss, take-profit, and emergency actions bypass the\nfilter. Grid, DCA, and martingale runtimes are excluded from this first version.\nWhen Jev is not configured, QuantDinger tries the configured LLM. If no AI\nprovider is available, the order is allowed and the fail-open result is logged,\nso an AI outage cannot trap an existing position."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "QuantDinger: trading workflows with an optional Jev entry gate",
+      "h1": "QuantDinger: trading workflows with an optional Jev entry gate",
+      "description": "QuantDinger connects strategy research and execution, with an optional Jev decision filter for live entry orders.",
+      "summary": "This self-hosted trading stack covers Python strategies, backtests, paper trading, live execution and monitoring. Jev evaluates order, strategy, exposure, position and budget context, returning typed choices with probabilities for the entry filter.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose and audience",
+          "text": "This self-hosted trading stack covers Python strategies, backtests, paper trading, live execution and monitoring.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "Jev evaluates order, strategy, exposure, position and budget context, returning typed choices with probabilities for the entry filter.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Using the project",
+          "text": "Enable AI Decision Filter for a regular live strategy or Quick Trade, then configure Jev in System Settings → AI / LLM.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "Exits bypass AI; grid, DCA and martingale are excluded. With no available AI provider, entries fail open. Live mode can submit real orders.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "QuantDinger：带可选 Jev 入场过滤的交易流程",
+      "h1": "QuantDinger：带可选 Jev 入场过滤的交易流程",
+      "description": "QuantDinger 连接策略研究与执行，可用 Jev 决策过滤器审核实盘入场订单。",
+      "summary": "这套自托管交易系统涵盖 Python 策略、回测、模拟交易、实盘执行与监控。 Jev 评估订单、策略、风险敞口、持仓和预算上下文，为入场过滤返回类型化选择及概率。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途与适用对象",
+          "text": "这套自托管交易系统涵盖 Python 策略、回测、模拟交易、实盘执行与监控。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "Jev 评估订单、策略、风险敞口、持仓和预算上下文，为入场过滤返回类型化选择及概率。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "为常规实盘策略或 Quick Trade 启用 AI Decision Filter，再在 System Settings → AI / LLM 配置 Jev。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "离场绕过 AI，网格、DCA 和马丁格尔不在范围内。所有 AI 服务不可用时入场订单仍放行；实盘模式可提交真实订单。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "QuantDinger：提供可選 Jev 進場篩選的交易流程",
+      "h1": "QuantDinger：提供可選 Jev 進場篩選的交易流程",
+      "description": "QuantDinger 串接策略研究與執行，可用 Jev 決策篩選器審核實盤進場訂單。",
+      "summary": "這套自架交易系統涵蓋 Python 策略、回測、模擬交易、實盤執行與監控。 Jev 評估訂單、策略、曝險、部位及預算資訊，為進場篩選傳回具型別的選擇與機率。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途與適用對象",
+          "text": "這套自架交易系統涵蓋 Python 策略、回測、模擬交易、實盤執行與監控。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "Jev 評估訂單、策略、曝險、部位及預算資訊，為進場篩選傳回具型別的選擇與機率。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "在一般實盤策略或 Quick Trade 啟用 AI Decision Filter，再到 System Settings → AI / LLM 設定 Jev。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "出場繞過 AI，網格、DCA 和馬丁格爾不在範圍內。所有 AI 服務不可用時仍放行進場；實盤模式可送出真實訂單。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "QuantDinger：任意の Jev 判断で新規注文を選別",
+      "h1": "QuantDinger：任意の Jev 判断で新規注文を選別",
+      "description": "QuantDinger は戦略研究から実行までをつなぎ、任意で Jev による実取引の新規注文フィルターを利用できます。",
+      "summary": "自前で運用するシステムで、Python 戦略、バックテスト、模擬取引、実取引、監視を扱います。 Jev は注文、戦略、エクスポージャー、保有ポジション、予算を評価し、型付きの選択結果と確率を返します。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途と対象",
+          "text": "自前で運用するシステムで、Python 戦略、バックテスト、模擬取引、実取引、監視を扱います。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev との関係",
+          "text": "Jev は注文、戦略、エクスポージャー、保有ポジション、予算を評価し、型付きの選択結果と確率を返します。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "通常の実取引戦略か Quick Trade で AI Decision Filter を有効にし、System Settings → AI / LLM で Jev を設定します。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範囲と制約",
+          "text": "決済は AI を経由せず、グリッド、DCA、マーチンゲールも対象外です。全 AI が使えない場合は注文を通します。実取引では本物の注文が送信されます。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "QuantDinger: 선택적 Jev 진입 필터를 쓰는 거래 시스템",
+      "h1": "QuantDinger: 선택적 Jev 진입 필터를 쓰는 거래 시스템",
+      "description": "QuantDinger는 전략 연구와 실행을 연결하며 실거래 진입 주문에 Jev 판단 필터를 선택적으로 적용합니다.",
+      "summary": "자체 호스팅 시스템으로 Python 전략, 백테스트, 모의 거래, 실거래 실행과 모니터링을 지원합니다. Jev가 주문, 전략, 노출, 포지션, 예산 정보를 평가해 진입 필터용 선택 결과와 확률을 반환합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "용도와 대상",
+          "text": "자체 호스팅 시스템으로 Python 전략, 백테스트, 모의 거래, 실거래 실행과 모니터링을 지원합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Jev가 주문, 전략, 노출, 포지션, 예산 정보를 평가해 진입 필터용 선택 결과와 확률을 반환합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "일반 실거래 전략이나 Quick Trade에서 AI Decision Filter를 켜고 System Settings → AI / LLM에 Jev를 설정합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 한계",
+          "text": "청산은 AI를 우회하며 그리드, DCA, 마틴게일은 제외됩니다. 모든 AI 제공자가 사용 불가하면 진입을 허용합니다. 실거래 모드는 실제 주문을 제출할 수 있습니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "QuantDinger: operaciones con filtro Jev opcional",
+      "h1": "QuantDinger: operaciones con filtro Jev opcional",
+      "description": "QuantDinger une investigación y ejecución de estrategias con un filtro Jev opcional para órdenes de apertura reales.",
+      "summary": "La plataforma autohospedada cubre estrategias Python, backtesting, simulación, ejecución real y seguimiento. Jev evalúa orden, estrategia, exposición, posiciones y presupuesto, devolviendo elecciones tipadas y probabilidades para filtrar entradas.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "La plataforma autohospedada cubre estrategias Python, backtesting, simulación, ejecución real y seguimiento.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Jev evalúa orden, estrategia, exposición, posiciones y presupuesto, devolviendo elecciones tipadas y probabilidades para filtrar entradas.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo se usa",
+          "text": "Active AI Decision Filter en una estrategia real convencional o Quick Trade y configure Jev en System Settings → AI / LLM.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "Las salidas evitan la IA; grid, DCA y martingala quedan excluidos. Sin proveedor de IA disponible se permiten entradas. El modo real puede enviar órdenes efectivas.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "QuantDinger : trading avec filtre Jev facultatif",
+      "h1": "QuantDinger : trading avec filtre Jev facultatif",
+      "description": "QuantDinger relie recherche et exécution de stratégies, avec un filtre Jev facultatif sur les ordres d'entrée réels.",
+      "summary": "Cette plateforme autohébergée couvre stratégies Python, backtests, simulation, exécution réelle et suivi. Jev évalue ordre, stratégie, exposition, positions et budget, puis renvoie des choix typés et leurs probabilités pour filtrer les entrées.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Usage et public visé",
+          "text": "Cette plateforme autohébergée couvre stratégies Python, backtests, simulation, exécution réelle et suivi.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Jev évalue ordre, stratégie, exposition, positions et budget, puis renvoie des choix typés et leurs probabilités pour filtrer les entrées.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Activez AI Decision Filter sur une stratégie réelle classique ou Quick Trade, puis configurez Jev dans System Settings → AI / LLM.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "Les sorties contournent l'IA ; grille, DCA et martingale sont exclus. Sans fournisseur d'IA disponible, les entrées sont autorisées. Le mode réel peut envoyer de vrais ordres.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "QuantDinger: Handelsabläufe mit optionalem Jev-Einstiegsfilter",
+      "h1": "QuantDinger: Handelsabläufe mit optionalem Jev-Einstiegsfilter",
+      "description": "QuantDinger verbindet Strategieforschung und Ausführung mit einem optionalen Jev-Filter für reale Einstiegsorders.",
+      "summary": "Die selbst betriebene Plattform umfasst Python-Strategien, Backtests, simulierten Handel, reale Ausführung und Überwachung. Jev bewertet Order, Strategie, Exposition, Positionen und Budget und liefert typisierte Entscheidungen samt Wahrscheinlichkeiten für den Einstiegsfilter.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Zweck und Zielgruppe",
+          "text": "Die selbst betriebene Plattform umfasst Python-Strategien, Backtests, simulierten Handel, reale Ausführung und Überwachung.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Jev bewertet Order, Strategie, Exposition, Positionen und Budget und liefert typisierte Entscheidungen samt Wahrscheinlichkeiten für den Einstiegsfilter.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Verwendung",
+          "text": "Aktivieren Sie AI Decision Filter für eine reguläre Live-Strategie oder Quick Trade und konfigurieren Sie Jev unter System Settings → AI / LLM.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Ausstiege umgehen KI; Grid, DCA und Martingale sind ausgeschlossen. Ohne verfügbaren KI-Anbieter werden Einstiege zugelassen. Live-Betrieb kann echte Orders senden.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "QuantDinger: negociação com filtro Jev opcional",
+      "h1": "QuantDinger: negociação com filtro Jev opcional",
+      "description": "QuantDinger conecta pesquisa e execução de estratégias, com filtro Jev opcional para ordens reais de entrada.",
+      "summary": "A plataforma auto-hospedada cobre estratégias Python, backtests, simulação, execução real e monitoramento. Jev avalia ordem, estratégia, exposição, posições e orçamento, retornando escolhas tipadas e probabilidades para filtrar entradas.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Finalidade e público",
+          "text": "A plataforma auto-hospedada cobre estratégias Python, backtests, simulação, execução real e monitoramento.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "Jev avalia ordem, estratégia, exposição, posições e orçamento, retornando escolhas tipadas e probabilidades para filtrar entradas.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Ative AI Decision Filter em uma estratégia real convencional ou no Quick Trade e configure Jev em System Settings → AI / LLM.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "Saídas ignoram a IA; grid, DCA e martingale estão excluídos. Sem provedor de IA disponível, entradas são permitidas. O modo real pode enviar ordens efetivas.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "QuantDinger: торговля с необязательным фильтром Jev",
+      "h1": "QuantDinger: торговля с необязательным фильтром Jev",
+      "description": "QuantDinger связывает исследование и исполнение стратегий, предлагая необязательный фильтр Jev для реальных ордеров на открытие позиций.",
+      "summary": "Самостоятельно размещаемая платформа объединяет Python-стратегии, бэктесты, симуляцию, реальное исполнение и мониторинг. Jev оценивает ордер, стратегию, экспозицию, позиции и бюджет, возвращая типизированные варианты и вероятности для фильтра входа.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Самостоятельно размещаемая платформа объединяет Python-стратегии, бэктесты, симуляцию, реальное исполнение и мониторинг.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Jev оценивает ордер, стратегию, экспозицию, позиции и бюджет, возвращая типизированные варианты и вероятности для фильтра входа.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Включите AI Decision Filter для обычной реальной стратегии или Quick Trade и настройте Jev в System Settings → AI / LLM.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Выходы обходят ИИ; grid, DCA и мартингейл исключены. Без доступного ИИ-провайдера входы разрешаются. Реальный режим может отправлять настоящие ордера.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "QuantDinger: वैकल्पिक Jev प्रवेश फ़िल्टर के साथ ट्रेडिंग",
+      "h1": "QuantDinger: वैकल्पिक Jev प्रवेश फ़िल्टर के साथ ट्रेडिंग",
+      "description": "QuantDinger रणनीति शोध और निष्पादन जोड़ता है, जिसमें वास्तविक प्रवेश ऑर्डर के लिए वैकल्पिक Jev फ़िल्टर है।",
+      "summary": "स्वयं होस्ट किया गया प्लेटफ़ॉर्म Python रणनीति, बैकटेस्ट, पेपर ट्रेडिंग, वास्तविक निष्पादन और निगरानी उपलब्ध कराता है। Jev ऑर्डर, रणनीति, एक्सपोज़र, पोज़िशन और बजट जाँचकर प्रवेश फ़िल्टर को निश्चित प्रकार के विकल्प और संभावनाएँ देता है।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "उद्देश्य और उपयोगकर्ता",
+          "text": "स्वयं होस्ट किया गया प्लेटफ़ॉर्म Python रणनीति, बैकटेस्ट, पेपर ट्रेडिंग, वास्तविक निष्पादन और निगरानी उपलब्ध कराता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "Jev ऑर्डर, रणनीति, एक्सपोज़र, पोज़िशन और बजट जाँचकर प्रवेश फ़िल्टर को निश्चित प्रकार के विकल्प और संभावनाएँ देता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल का तरीका",
+          "text": "सामान्य लाइव रणनीति या Quick Trade में AI Decision Filter चालू करें और System Settings → AI / LLM में Jev सेट करें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "निकास AI को छोड़कर चलते हैं; ग्रिड, DCA और मार्टिंगेल शामिल नहीं हैं। कोई AI सेवा उपलब्ध न हो तो प्रवेश स्वीकार होता है। लाइव मोड वास्तविक ऑर्डर भेज सकता है।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "QuantDinger: perdagangan dengan filter masuk Jev opsional",
+      "h1": "QuantDinger: perdagangan dengan filter masuk Jev opsional",
+      "description": "QuantDinger menghubungkan riset dan eksekusi strategi dengan filter Jev opsional untuk order masuk nyata.",
+      "summary": "Platform yang dihosting sendiri mencakup strategi Python, backtest, simulasi perdagangan, eksekusi nyata, dan pemantauan. Jev menilai order, strategi, eksposur, posisi, serta anggaran dan mengembalikan pilihan bertipe beserta probabilitas untuk filter masuk.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Tujuan dan pengguna",
+          "text": "Platform yang dihosting sendiri mencakup strategi Python, backtest, simulasi perdagangan, eksekusi nyata, dan pemantauan.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Jev menilai order, strategi, eksposur, posisi, serta anggaran dan mengembalikan pilihan bertipe beserta probabilitas untuk filter masuk.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Aktifkan AI Decision Filter pada strategi nyata biasa atau Quick Trade, lalu atur Jev di System Settings → AI / LLM.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Order keluar melewati AI; grid, DCA, dan martingale dikecualikan. Jika semua penyedia AI tidak tersedia, order masuk diizinkan. Mode nyata dapat mengirim order sungguhan.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "QuantDinger: giao dịch với bộ lọc vào lệnh Jev tùy chọn",
+      "h1": "QuantDinger: giao dịch với bộ lọc vào lệnh Jev tùy chọn",
+      "description": "QuantDinger nối nghiên cứu và thực thi chiến lược, với bộ lọc Jev tùy chọn cho lệnh mở vị thế thực.",
+      "summary": "Nền tảng tự lưu trữ bao gồm chiến lược Python, kiểm thử quá khứ, giao dịch mô phỏng, thực thi thật và giám sát. Jev đánh giá lệnh, chiến lược, mức phơi nhiễm, vị thế và ngân sách rồi trả lựa chọn có kiểu cùng xác suất.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích và đối tượng",
+          "text": "Nền tảng tự lưu trữ bao gồm chiến lược Python, kiểm thử quá khứ, giao dịch mô phỏng, thực thi thật và giám sát.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Jev đánh giá lệnh, chiến lược, mức phơi nhiễm, vị thế và ngân sách rồi trả lựa chọn có kiểu cùng xác suất.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Bật AI Decision Filter cho chiến lược giao dịch thật thông thường hoặc Quick Trade, rồi cấu hình Jev trong System Settings → AI / LLM.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Lệnh thoát bỏ qua AI; grid, DCA và martingale bị loại trừ. Khi không có dịch vụ AI khả dụng, lệnh vào vẫn được phép. Chế độ thật có thể gửi lệnh thực.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "QuantDinger: isteğe bağlı Jev giriş filtresiyle işlem akışı",
+      "h1": "QuantDinger: isteğe bağlı Jev giriş filtresiyle işlem akışı",
+      "description": "QuantDinger strateji araştırması ve yürütmesini birleştirir; gerçek giriş emirleri için isteğe bağlı Jev filtresi sunar.",
+      "summary": "Kendi sunucunuzda çalışan platform Python stratejileri, geçmiş veri testleri, sanal işlemler, gerçek yürütme ve izlemeyi kapsar. Jev emir, strateji, risk maruziyeti, pozisyon ve bütçeyi değerlendirerek giriş filtresine türü belirli seçimler ve olasılıklar döndürür.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Amaç ve hedef kitle",
+          "text": "Kendi sunucunuzda çalışan platform Python stratejileri, geçmiş veri testleri, sanal işlemler, gerçek yürütme ve izlemeyi kapsar.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Jev emir, strateji, risk maruziyeti, pozisyon ve bütçeyi değerlendirerek giriş filtresine türü belirli seçimler ve olasılıklar döndürür.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Normal canlı stratejide veya Quick Trade’de AI Decision Filter açılır; Jev, System Settings → AI / LLM bölümünde yapılandırılır.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Çıkışlar AI’ı atlar; grid, DCA ve martingale kapsam dışıdır. Kullanılabilir AI yoksa girişlere izin verilir. Canlı mod gerçek emir gönderebilir.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "QuantDinger: trading con filtro Jev facoltativo",
+      "h1": "QuantDinger: trading con filtro Jev facoltativo",
+      "description": "QuantDinger collega ricerca ed esecuzione delle strategie con un filtro Jev facoltativo per gli ordini reali di apertura.",
+      "summary": "La piattaforma autogestita copre strategie Python, backtest, simulazione, esecuzione reale e monitoraggio. Jev valuta ordine, strategia, esposizione, posizioni e budget, restituendo scelte tipizzate e probabilità per filtrare gli ingressi.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Scopo e destinatari",
+          "text": "La piattaforma autogestita copre strategie Python, backtest, simulazione, esecuzione reale e monitoraggio.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Jev valuta ordine, strategia, esposizione, posizioni e budget, restituendo scelte tipizzate e probabilità per filtrare gli ingressi.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come si usa",
+          "text": "Si attiva AI Decision Filter per una strategia reale ordinaria o Quick Trade e si configura Jev in System Settings → AI / LLM.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "Le uscite saltano l'IA; grid, DCA e martingala sono esclusi. Senza provider IA disponibile gli ingressi sono consentiti. La modalità reale può inviare ordini effettivi.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

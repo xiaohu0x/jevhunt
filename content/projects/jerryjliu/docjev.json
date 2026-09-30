@@ -1,0 +1,762 @@
+{
+  "version": "source-content-v1",
+  "repo": "jerryjliu/docjev",
+  "repositoryId": 1377427328,
+  "relationship": "jev-app",
+  "category": "apps",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "c7abe276a970605feb9cb8b27513365b6c10726e",
+      "url": "https://github.com/jerryjliu/docjev/blob/c7abe276a970605feb9cb8b27513365b6c10726e/README.md",
+      "sha256": "37542a56c3059e81ac3fb7d26cb1cc82e892f97ebc568df98c3ba3e89057c9a7",
+      "accessedAt": "2026-09-30T07:33:50.732Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "DocJev classifies PDF, DOCX and PPTX documents or splits packets into categorized page ranges, with optional PDF exports.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 3,
+          "end": 15,
+          "quote": "**Document classification and splitting with Jev, LiteParse, and optional LlamaParse.**\n\n**Maintenance:** This project is maintained entirely by Codex, including issue triage, pull request reviews, and merges. Maintenance prioritizes correctness, backward compatibility, and keeping the codebase small.\n\nGive the Python library, CLI, or local app a PDF, DOCX, or PPTX and natural-language category rules. LiteParse extracts complete page text locally; Jev predicts the document category or the boundaries between its component documents. Optional LlamaParse tiers provide cloud OCR for difficult inputs.\n\nThe real-document demo uses original IRS, Treasury, BEA, and SEC publications. Its 15-page packet contains two adjacent Treasury auction results with the same category. The splitter identifies them as separate documents and keeps a ten-page BEA release—including its dense statistical tables—together.\n\n- **Classify:** one document → one category, probabilities, and review flags.\n- **Split:** one packet → ordered categories and page ranges, with optional per-document PDF export.\n- **Measure:** separate OCR and decision timing, provider usage, and a small-LLM comparison.\n\nThis is an independent open-source implementation. It does not call LlamaIndex's hosted Classify or Split APIs or use their implementation. LlamaParse is used only for optional OCR. Jev is a hosted service; local OCR does not make inference offline."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "LiteParse extracts text locally; hosted Jev decides categories and boundaries, with optional LlamaParse cloud OCR for difficult inputs.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 7,
+          "end": 15,
+          "quote": "Give the Python library, CLI, or local app a PDF, DOCX, or PPTX and natural-language category rules. LiteParse extracts complete page text locally; Jev predicts the document category or the boundaries between its component documents. Optional LlamaParse tiers provide cloud OCR for difficult inputs.\n\nThe real-document demo uses original IRS, Treasury, BEA, and SEC publications. Its 15-page packet contains two adjacent Treasury auction results with the same category. The splitter identifies them as separate documents and keeps a ten-page BEA release—including its dense statistical tables—together.\n\n- **Classify:** one document → one category, probabilities, and review flags.\n- **Split:** one packet → ordered categories and page ranges, with optional per-document PDF export.\n- **Measure:** separate OCR and decision timing, provider usage, and a small-LLM comparison.\n\nThis is an independent open-source implementation. It does not call LlamaIndex's hosted Classify or Split APIs or use their implementation. LlamaParse is used only for optional OCR. Jev is a hosted service; local OCR does not make inference offline."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Install the Python package with uv, export TYPESAFE_API_KEY, and run docjev classify or split with category rules. Office formats require LibreOffice.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 23,
+          "end": 55,
+          "quote": "Requires Python 3.11+ and a [TypeSafe API key](https://console.typesafe.ai/). Clone [DocJev](https://github.com/jerryjliu/docjev) and install it:\n\n```sh\ngit clone https://github.com/jerryjliu/docjev.git\ncd docjev\nuv sync\nuv run docjev doctor --smoke\n```\n\nThe package and primary CLI are named `docjev`; `jev-docs` remains a compatibility alias. Python imports (`jev_docs`), environment variables (`JEV_DOCS_*`), and the `.jev-docs/` cache retain their existing names.\n\nExport `TYPESAFE_API_KEY` in your shell before running a Jev decision. [`.env.example`](.env.example) lists the supported environment variables with deliberately empty values; the CLI does not automatically load `.env` files. `LLAMA_CLOUD_API_KEY` and `OPENAI_API_KEY` are optional, for cloud OCR and the baseline respectively. Keep actual values outside version control and recordings.\n\n```sh\n# Classify an original ten-page BEA release.\nuv run docjev classify examples/real/originals/r04.pdf \\\n  --rules examples/real/classify/rules.yaml\n\n# Classify the complete five-document public-finance inbox; output is JSONL.\nuv run docjev classify examples/real/originals \\\n  --rules examples/real/classify/rules.yaml \\\n  --output output/real-inbox.jsonl\n\n# Split the assembled packet and export each original publication.\nuv run docjev split examples/real/public-finance-packet.pdf \\\n  --rules examples/real/split/rules.yaml \\\n  --export-dir output/real-segments \\\n  --output output/real-split.json\n```\n\nOutput files are preserved by default; use `--overwrite` explicitly to replace them. Results go to stdout and progress/errors to stderr. Directory classification writes one success/error record per supported file and returns a nonzero exit status if any file fails.\n\nDOCX and PPTX require [LibreOffice](https://www.libreoffice.org/). Their page numbers refer to a retained PDF rendering: DOCX pagination follows that rendering and PPTX uses one page per slide. Native PDF input does not need LibreOffice. The first scanned LiteParse parse may download English OCR language data; `doctor --smoke` checks a raster-only PDF. See [compatibility and page contracts](docs/compatibility.md)."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "Local parsing does not mean offline inference: normalized text reaches the decision provider. Category probability and provider confidence are distinct and are not claimed to be calibrated.",
+      "kind": "source-limitation",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 15,
+          "end": 15,
+          "quote": "This is an independent open-source implementation. It does not call LlamaIndex's hosted Classify or Split APIs or use their implementation. LlamaParse is used only for optional OCR. Jev is a hosted service; local OCR does not make inference offline."
+        },
+        {
+          "source": "source-1",
+          "start": 111,
+          "end": 111,
+          "quote": "Jev's selected-category probability and provider confidence are different values. Neither is claimed to be calibrated. A segment's mean category probability is an average of page scores, not a joint probability. Jev supplies decisions and distributions, so the package does not invent explanatory rationales."
+        },
+        {
+          "source": "source-1",
+          "start": 156,
+          "end": 156,
+          "quote": "PDF bytes are uploaded only when LlamaParse is selected. Normalized page text is sent to the selected decision engine—TypeSafe by default, or OpenAI for the optional baseline. LiteParse has no OCR API fee; compute resources and hosted decision calls still have costs."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "docjev — Classify and split documents with Jev",
+      "h1": "docjev — Classify and split documents with Jev",
+      "description": "docjev: LiteParse extracts text locally; hosted Jev decides categories and boundaries, with optional LlamaParse cloud OCR for difficult inputs.",
+      "summary": "DocJev classifies PDF, DOCX and PPTX documents or splits packets into categorized page ranges, with optional PDF exports. Install the Python package with uv, export TYPESAFE_API_KEY, and run docjev classify or split with category rules. Office formats require LibreOffice.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "What it does",
+          "text": "DocJev classifies PDF, DOCX and PPTX documents or splits packets into categorized page ranges, with optional PDF exports.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "LiteParse extracts text locally; hosted Jev decides categories and boundaries, with optional LlamaParse cloud OCR for difficult inputs.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Getting started",
+          "text": "Install the Python package with uv, export TYPESAFE_API_KEY, and run docjev classify or split with category rules. Office formats require LibreOffice.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "Local parsing does not mean offline inference: normalized text reaches the decision provider. Category probability and provider confidence are distinct and are not claimed to be calibrated.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "docjev — 用 Jev 分类与拆分文档",
+      "h1": "docjev — 用 Jev 分类与拆分文档",
+      "description": "docjev: LiteParse 在本地提取文本，托管的 Jev 判断类别与边界；复杂输入可选用 LlamaParse 云端 OCR。",
+      "summary": "DocJev 可分类 PDF、DOCX 和 PPTX，或把合并文档拆为带类别的页码范围，并可导出 PDF。 用 uv 安装 Python 包，导出 TYPESAFE_API_KEY，再提供分类规则运行 docjev classify 或 split。Office 格式需要 LibreOffice。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "DocJev 可分类 PDF、DOCX 和 PPTX，或把合并文档拆为带类别的页码范围，并可导出 PDF。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "LiteParse 在本地提取文本，托管的 Jev 判断类别与边界；复杂输入可选用 LlamaParse 云端 OCR。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "用 uv 安装 Python 包，导出 TYPESAFE_API_KEY，再提供分类规则运行 docjev classify 或 split。Office 格式需要 LibreOffice。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "本地解析并不等于离线推理，规范化文本会发送给决策服务商。类别概率和服务商置信度是不同值，项目不宣称它们经过校准。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "docjev — 以 Jev 分類與拆分文件",
+      "h1": "docjev — 以 Jev 分類與拆分文件",
+      "description": "docjev: LiteParse 在本機擷取文字，代管的 Jev 判斷類別與邊界；困難輸入可選用 LlamaParse 雲端 OCR。",
+      "summary": "DocJev 可分類 PDF、DOCX 和 PPTX，或將合併文件拆成帶類別的頁碼範圍，並可匯出 PDF。 以 uv 安裝 Python 套件，匯出 TYPESAFE_API_KEY，再提供分類規則執行 docjev classify 或 split。Office 格式需要 LibreOffice。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "DocJev 可分類 PDF、DOCX 和 PPTX，或將合併文件拆成帶類別的頁碼範圍，並可匯出 PDF。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "LiteParse 在本機擷取文字，代管的 Jev 判斷類別與邊界；困難輸入可選用 LlamaParse 雲端 OCR。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "以 uv 安裝 Python 套件，匯出 TYPESAFE_API_KEY，再提供分類規則執行 docjev classify 或 split。Office 格式需要 LibreOffice。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "本機解析不等於離線推論，正規化文字會傳給決策服務商。類別機率和服務商信心值不同，專案不宣稱它們已校準。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "docjev — Jev による文書の分類と分割",
+      "h1": "docjev — Jev による文書の分類と分割",
+      "description": "docjev: LiteParse がローカルでテキストを抽出し、ホストされた Jev がカテゴリと境界を判断します。難しい入力には LlamaParse のクラウド OCR も選べます。",
+      "summary": "DocJev は PDF、DOCX、PPTX を分類し、文書束をカテゴリ付きページ範囲に分割して PDF として書き出せます。 uv で Python パッケージを導入し、TYPESAFE_API_KEY を設定して分類規則とともに docjev classify または split を実行します。Office 形式には LibreOffice が必要です。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "できること",
+          "text": "DocJev は PDF、DOCX、PPTX を分類し、文書束をカテゴリ付きページ範囲に分割して PDF として書き出せます。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "LiteParse がローカルでテキストを抽出し、ホストされた Jev がカテゴリと境界を判断します。難しい入力には LlamaParse のクラウド OCR も選べます。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い始めるには",
+          "text": "uv で Python パッケージを導入し、TYPESAFE_API_KEY を設定して分類規則とともに docjev classify または split を実行します。Office 形式には LibreOffice が必要です。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "対象範囲と制約",
+          "text": "ローカル解析でも推論はオフラインではなく、正規化テキストが判断サービスへ送られます。カテゴリ確率と提供元の信頼度は別の値で、校正済みとはされていません。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "docjev — Jev로 문서 분류와 분할",
+      "h1": "docjev — Jev로 문서 분류와 분할",
+      "description": "docjev: LiteParse가 로컬에서 텍스트를 추출하고 호스팅된 Jev가 범주와 경계를 판단합니다. 어려운 입력에는 LlamaParse 클라우드 OCR을 선택할 수 있습니다.",
+      "summary": "DocJev는 PDF, DOCX, PPTX를 분류하거나 묶음 문서를 범주별 페이지 구간으로 나누고 선택적으로 PDF를 내보냅니다. uv로 Python 패키지를 설치하고 TYPESAFE_API_KEY를 설정한 뒤 분류 규칙으로 docjev classify 또는 split을 실행합니다. Office 형식에는 LibreOffice가 필요합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "DocJev는 PDF, DOCX, PPTX를 분류하거나 묶음 문서를 범주별 페이지 구간으로 나누고 선택적으로 PDF를 내보냅니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "LiteParse가 로컬에서 텍스트를 추출하고 호스팅된 Jev가 범주와 경계를 판단합니다. 어려운 입력에는 LlamaParse 클라우드 OCR을 선택할 수 있습니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "uv로 Python 패키지를 설치하고 TYPESAFE_API_KEY를 설정한 뒤 분류 규칙으로 docjev classify 또는 split을 실행합니다. Office 형식에는 LibreOffice가 필요합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 제약",
+          "text": "로컬 파싱이어도 오프라인 추론은 아니며 정규화된 텍스트가 판단 제공자에게 전송됩니다. 범주 확률과 제공자 신뢰도는 서로 다르며 보정됐다고 주장하지 않습니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "docjev — Clasificar y dividir documentos con Jev",
+      "h1": "docjev — Clasificar y dividir documentos con Jev",
+      "description": "docjev: LiteParse extrae texto localmente; Jev alojado decide categorías y límites, con OCR de LlamaParse opcional para entradas difíciles.",
+      "summary": "DocJev clasifica PDF, DOCX y PPTX o divide paquetes en intervalos de páginas categorizados, con exportación PDF opcional. Instala con uv, exporta TYPESAFE_API_KEY y ejecuta docjev classify o split con reglas de categorías. Los formatos Office necesitan LibreOffice.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "DocJev clasifica PDF, DOCX y PPTX o divide paquetes en intervalos de páginas categorizados, con exportación PDF opcional.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "LiteParse extrae texto localmente; Jev alojado decide categorías y límites, con OCR de LlamaParse opcional para entradas difíciles.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo empezar",
+          "text": "Instala con uv, exporta TYPESAFE_API_KEY y ejecuta docjev classify o split con reglas de categorías. Los formatos Office necesitan LibreOffice.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "La extracción local no implica inferencia offline: el texto normalizado llega al proveedor. Probabilidad de categoría y confianza del proveedor son distintas y no se presentan como calibradas.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "docjev — Classer et découper des documents avec Jev",
+      "h1": "docjev — Classer et découper des documents avec Jev",
+      "description": "docjev: LiteParse extrait le texte localement ; Jev hébergé décide catégories et frontières, avec OCR LlamaParse facultatif pour les entrées difficiles.",
+      "summary": "DocJev classe PDF, DOCX et PPTX ou découpe des lots en plages de pages catégorisées, avec export PDF facultatif. Installez avec uv, exportez TYPESAFE_API_KEY et lancez docjev classify ou split avec des règles. Les formats Office nécessitent LibreOffice.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "DocJev classe PDF, DOCX et PPTX ou découpe des lots en plages de pages catégorisées, avec export PDF facultatif.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "LiteParse extrait le texte localement ; Jev hébergé décide catégories et frontières, avec OCR LlamaParse facultatif pour les entrées difficiles.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Installez avec uv, exportez TYPESAFE_API_KEY et lancez docjev classify ou split avec des règles. Les formats Office nécessitent LibreOffice.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "L’analyse locale ne rend pas l’inférence hors ligne : le texte normalisé est transmis au fournisseur. Probabilité de catégorie et confiance du fournisseur sont distinctes et ne sont pas présentées comme calibrées.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "docjev — Dokumente mit Jev klassifizieren und aufteilen",
+      "h1": "docjev — Dokumente mit Jev klassifizieren und aufteilen",
+      "description": "docjev: LiteParse extrahiert lokal Text; gehostetes Jev bestimmt Kategorien und Grenzen. Für schwierige Eingaben ist LlamaParse-Cloud-OCR optional.",
+      "summary": "DocJev klassifiziert PDF, DOCX und PPTX oder zerlegt Dokumentpakete in kategorisierte Seitenbereiche mit optionalem PDF-Export. Mit uv installieren, TYPESAFE_API_KEY setzen und docjev classify oder split mit Kategorienregeln ausführen. Office-Formate benötigen LibreOffice.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "DocJev klassifiziert PDF, DOCX und PPTX oder zerlegt Dokumentpakete in kategorisierte Seitenbereiche mit optionalem PDF-Export.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "LiteParse extrahiert lokal Text; gehostetes Jev bestimmt Kategorien und Grenzen. Für schwierige Eingaben ist LlamaParse-Cloud-OCR optional.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Einstieg",
+          "text": "Mit uv installieren, TYPESAFE_API_KEY setzen und docjev classify oder split mit Kategorienregeln ausführen. Office-Formate benötigen LibreOffice.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Lokales Parsen bedeutet keine Offline-Inferenz: Normalisierter Text geht an den Entscheidungsanbieter. Kategoriewahrscheinlichkeit und Anbieter-Konfidenz sind verschieden und werden nicht als kalibriert bezeichnet.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "docjev — Classificar e dividir documentos com Jev",
+      "h1": "docjev — Classificar e dividir documentos com Jev",
+      "description": "docjev: O LiteParse extrai texto localmente; o Jev hospedado decide categorias e limites, com OCR LlamaParse opcional para entradas difíceis.",
+      "summary": "O DocJev classifica PDF, DOCX e PPTX ou divide pacotes em intervalos de páginas categorizados, com exportação PDF opcional. Instale com uv, exporte TYPESAFE_API_KEY e execute docjev classify ou split com regras de categorias. Formatos Office exigem LibreOffice.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "O DocJev classifica PDF, DOCX e PPTX ou divide pacotes em intervalos de páginas categorizados, com exportação PDF opcional.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "O LiteParse extrai texto localmente; o Jev hospedado decide categorias e limites, com OCR LlamaParse opcional para entradas difíceis.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como começar",
+          "text": "Instale com uv, exporte TYPESAFE_API_KEY e execute docjev classify ou split com regras de categorias. Formatos Office exigem LibreOffice.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "Análise local não significa inferência offline: o texto normalizado chega ao provedor. Probabilidade da categoria e confiança do provedor são distintas e não são apresentadas como calibradas.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "docjev — Классификация и разделение документов с Jev",
+      "h1": "docjev — Классификация и разделение документов с Jev",
+      "description": "docjev: LiteParse извлекает текст локально; облачный Jev определяет категории и границы. Для сложных входов доступен необязательный OCR LlamaParse.",
+      "summary": "DocJev классифицирует PDF, DOCX и PPTX или делит пакеты на диапазоны страниц с категориями и необязательным экспортом PDF. Установите пакет через uv, задайте TYPESAFE_API_KEY и запустите docjev classify или split с правилами категорий. Форматы Office требуют LibreOffice.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "DocJev классифицирует PDF, DOCX и PPTX или делит пакеты на диапазоны страниц с категориями и необязательным экспортом PDF.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "LiteParse извлекает текст локально; облачный Jev определяет категории и границы. Для сложных входов доступен необязательный OCR LlamaParse.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Начало работы",
+          "text": "Установите пакет через uv, задайте TYPESAFE_API_KEY и запустите docjev classify или split с правилами категорий. Форматы Office требуют LibreOffice.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Локальный разбор не означает офлайн-инференс: нормализованный текст передаётся провайдеру. Вероятность категории и уверенность провайдера различаются и не заявлены как калиброванные.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "docjev — Jev से दस्तावेज़ वर्गीकृत और विभाजित करें",
+      "h1": "docjev — Jev से दस्तावेज़ वर्गीकृत और विभाजित करें",
+      "description": "docjev: LiteParse स्थानीय पाठ निकालता है; होस्टेड Jev श्रेणी और सीमा तय करता है। कठिन इनपुट के लिए LlamaParse क्लाउड OCR वैकल्पिक है।",
+      "summary": "DocJev PDF, DOCX और PPTX वर्गीकृत करता है या दस्तावेज़ समूह को श्रेणीबद्ध पृष्ठ सीमाओं में बाँटता है; PDF निर्यात वैकल्पिक है। uv से पैकेज स्थापित करें, TYPESAFE_API_KEY सेट करें और श्रेणी नियमों के साथ docjev classify या split चलाएँ। Office प्रारूपों को LibreOffice चाहिए।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "परियोजना का काम",
+          "text": "DocJev PDF, DOCX और PPTX वर्गीकृत करता है या दस्तावेज़ समूह को श्रेणीबद्ध पृष्ठ सीमाओं में बाँटता है; PDF निर्यात वैकल्पिक है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "LiteParse स्थानीय पाठ निकालता है; होस्टेड Jev श्रेणी और सीमा तय करता है। कठिन इनपुट के लिए LlamaParse क्लाउड OCR वैकल्पिक है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "शुरुआत कैसे करें",
+          "text": "uv से पैकेज स्थापित करें, TYPESAFE_API_KEY सेट करें और श्रेणी नियमों के साथ docjev classify या split चलाएँ। Office प्रारूपों को LibreOffice चाहिए।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "स्थानीय पार्सिंग का अर्थ ऑफलाइन अनुमान नहीं है; सामान्यीकृत पाठ प्रदाता को जाता है। श्रेणी संभावना और प्रदाता विश्वास अलग हैं तथा कैलिब्रेशन का दावा नहीं है।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "docjev — Klasifikasi dan pemisahan dokumen dengan Jev",
+      "h1": "docjev — Klasifikasi dan pemisahan dokumen dengan Jev",
+      "description": "docjev: LiteParse mengekstrak teks lokal; Jev terhosting menentukan kategori dan batas, dengan OCR LlamaParse opsional untuk masukan sulit.",
+      "summary": "DocJev mengklasifikasi PDF, DOCX, dan PPTX atau memisahkan paket menjadi rentang halaman berkategori, dengan ekspor PDF opsional. Pasang dengan uv, tetapkan TYPESAFE_API_KEY, lalu jalankan docjev classify atau split dengan aturan kategori. Format Office memerlukan LibreOffice.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "DocJev mengklasifikasi PDF, DOCX, dan PPTX atau memisahkan paket menjadi rentang halaman berkategori, dengan ekspor PDF opsional.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "LiteParse mengekstrak teks lokal; Jev terhosting menentukan kategori dan batas, dengan OCR LlamaParse opsional untuk masukan sulit.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara memulai",
+          "text": "Pasang dengan uv, tetapkan TYPESAFE_API_KEY, lalu jalankan docjev classify atau split dengan aturan kategori. Format Office memerlukan LibreOffice.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Penguraian lokal bukan inferensi luring: teks yang dinormalisasi dikirim ke penyedia. Probabilitas kategori berbeda dari keyakinan penyedia, dan keduanya tidak diklaim terkalibrasi.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "docjev — Phân loại và tách tài liệu bằng Jev",
+      "h1": "docjev — Phân loại và tách tài liệu bằng Jev",
+      "description": "docjev: LiteParse trích văn bản cục bộ; Jev trên dịch vụ xác định loại và ranh giới, với OCR LlamaParse tùy chọn cho đầu vào khó.",
+      "summary": "DocJev phân loại PDF, DOCX và PPTX hoặc chia tập hồ sơ thành các khoảng trang có nhãn, tùy chọn xuất PDF. Cài bằng uv, đặt TYPESAFE_API_KEY rồi chạy docjev classify hoặc split cùng quy tắc phân loại. Định dạng Office cần LibreOffice.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Công dụng",
+          "text": "DocJev phân loại PDF, DOCX và PPTX hoặc chia tập hồ sơ thành các khoảng trang có nhãn, tùy chọn xuất PDF.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "LiteParse trích văn bản cục bộ; Jev trên dịch vụ xác định loại và ranh giới, với OCR LlamaParse tùy chọn cho đầu vào khó.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách bắt đầu",
+          "text": "Cài bằng uv, đặt TYPESAFE_API_KEY rồi chạy docjev classify hoặc split cùng quy tắc phân loại. Định dạng Office cần LibreOffice.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Phân tích cục bộ không có nghĩa suy luận ngoại tuyến: văn bản chuẩn hóa được gửi tới nhà cung cấp. Xác suất loại và độ tin cậy nhà cung cấp khác nhau, không được tuyên bố đã hiệu chỉnh.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "docjev — Jev ile belgeleri sınıflandırma ve bölme",
+      "h1": "docjev — Jev ile belgeleri sınıflandırma ve bölme",
+      "description": "docjev: LiteParse metni yerelde çıkarır; barındırılan Jev kategori ve sınırları seçer. Zor girdilerde LlamaParse bulut OCR isteğe bağlıdır.",
+      "summary": "DocJev PDF, DOCX ve PPTX belgelerini sınıflandırır veya paketleri kategorili sayfa aralıklarına böler; PDF dışa aktarma isteğe bağlıdır. uv ile kurun, TYPESAFE_API_KEY tanımlayın ve kategori kurallarıyla docjev classify veya split çalıştırın. Office biçimleri LibreOffice gerektirir.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "DocJev PDF, DOCX ve PPTX belgelerini sınıflandırır veya paketleri kategorili sayfa aralıklarına böler; PDF dışa aktarma isteğe bağlıdır.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "LiteParse metni yerelde çıkarır; barındırılan Jev kategori ve sınırları seçer. Zor girdilerde LlamaParse bulut OCR isteğe bağlıdır.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Başlangıç",
+          "text": "uv ile kurun, TYPESAFE_API_KEY tanımlayın ve kategori kurallarıyla docjev classify veya split çalıştırın. Office biçimleri LibreOffice gerektirir.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Yerel ayrıştırma çevrimdışı çıkarım anlamına gelmez; normalleştirilmiş metin sağlayıcıya gider. Kategori olasılığı ve sağlayıcı güveni farklıdır ve kalibre oldukları ileri sürülmez.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "docjev — Classificare e dividere documenti con Jev",
+      "h1": "docjev — Classificare e dividere documenti con Jev",
+      "description": "docjev: LiteParse estrae il testo localmente; Jev ospitato decide categorie e confini, con OCR LlamaParse facoltativo per input difficili.",
+      "summary": "DocJev classifica PDF, DOCX e PPTX o divide fascicoli in intervalli di pagine categorizzati, con esportazione PDF facoltativa. Installa con uv, esporta TYPESAFE_API_KEY ed esegui docjev classify o split con regole di categoria. I formati Office richiedono LibreOffice.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "DocJev classifica PDF, DOCX e PPTX o divide fascicoli in intervalli di pagine categorizzati, con esportazione PDF facoltativa.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "LiteParse estrae il testo localmente; Jev ospitato decide categorie e confini, con OCR LlamaParse facoltativo per input difficili.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come iniziare",
+          "text": "Installa con uv, esporta TYPESAFE_API_KEY ed esegui docjev classify o split con regole di categoria. I formati Office richiedono LibreOffice.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "L’analisi locale non rende l’inferenza offline: il testo normalizzato arriva al fornitore. Probabilità della categoria e confidenza del fornitore sono distinte e non dichiarate calibrate.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

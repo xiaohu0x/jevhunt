@@ -1,0 +1,762 @@
+{
+  "version": "source-content-v1",
+  "repo": "wfzyx/von",
+  "repositoryId": 1375397100,
+  "relationship": "local-alternative",
+  "category": "research",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "fb6e7a937e4fc6b6e72b2ce5035edd56bc370e54",
+      "url": "https://github.com/wfzyx/von/blob/fb6e7a937e4fc6b6e72b2ce5035edd56bc370e54/README.md",
+      "sha256": "0148776dca4a5ceddf036bf966ef0e5178020ebfa1ccf10f232a768d00c68fba",
+      "accessedAt": "2026-09-30T07:33:48.974Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "kind": "documented",
+      "text": "Von scores independent questions in one forward pass for classification, yes/no checks and ordered ratings.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 58,
+          "end": 61,
+          "quote": "**Von** implements the **System One** computational paradigm: reflexive, parallel, deterministic, and statistically calibrated decision-making. Operating entirely in-process or via an HTTP server, Von evaluates arbitrary discrete and continuous criteria directly over input state in a single forward pass without autoregressive text generation.\n\n### Key Capabilities\n- **Non-Autoregressive Parallelism:** Evaluates multiple independent questions across state simultaneously in a single forward pass."
+        },
+        {
+          "source": "source-1",
+          "start": 111,
+          "end": 138,
+          "quote": "## The Decision Primitives\n\nVon formalizes decision problems into three mathematically grounded primitives:\n\n### 1. Choice: Categorical Decision\nComputes a normalized probability distribution over a set of $K$ mutually exclusive candidate hypotheses $\\{c_1, c_2, \\dots, c_K\\}$:\n\n$$P(c_k \\mid S, Q) = \\frac{\\exp(z_k / T)}{\\sum_{j=1}^K \\exp(z_j / T)}$$\n\nWhere $S$ is the observed state, $Q$ is the question specification, $z_k$ is the logit assigned to hypothesis $c_k$, and $T = 1.1692$ is the calibration temperature. The confidence metric corresponds to the difference between the top two probabilities:\n\n$$\\text{Confidence} = P(c_{(1)}) - P(c_{(2)})$$\n\n### 2. Noul: Binary Probability Verification\nEstimates the calibrated posterior probability that a specific condition holds true given the evidence:\n\n$$P(y = 1 \\mid S, Q) \\in [0.0, 1.0]$$\n\nUnlike standard binary classifiers, Noul leverages dual positive and negative criteria framing to counteract lexical negation biases.\n\n### 3. Score: Ordinal Continuous Rating\nComputes the expected value across an ordered sequence of severity or quality levels $\\{0, 1, \\dots, K-1\\}$:\n\n$$\\mathbb{E}[L \\mid S, Q] = \\sum_{l=0}^{K-1} l \\cdot P(l \\mid S, Q)$$\n\nThis produces a continuous rating on the scale $[0, K-1]$ that natively respects ordinal hierarchy without prompt distortion.\n\n---"
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "kind": "documented",
+      "text": "It is a separate System One model with a TypeSafe-compatible API, running in-process or through HTTP.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 58,
+          "end": 65,
+          "quote": "**Von** implements the **System One** computational paradigm: reflexive, parallel, deterministic, and statistically calibrated decision-making. Operating entirely in-process or via an HTTP server, Von evaluates arbitrary discrete and continuous criteria directly over input state in a single forward pass without autoregressive text generation.\n\n### Key Capabilities\n- **Non-Autoregressive Parallelism:** Evaluates multiple independent questions across state simultaneously in a single forward pass.\n- **SOTA Empirical Accuracy:** **91.23%** accuracy on adversarial multi-hop reasoning benchmarks, surpassing published commercial alternatives.\n- **Calibrated Uncertainty:** Post-trained with joint Cross-Entropy and Brier Score loss ($T = 1.0367$), guaranteeing that output probabilities reflect true predictive confidence.\n- **Hardware Agnostic Acceleration:** Native kernel optimization across NVIDIA CUDA, AMD ROCm (Linux), Apple Silicon Metal Performance Shaders (MPS), Intel GPUs via OpenVINO, and multithreaded CPU.\n- **Protocol Parity:** Fully compatible with the TypeSafe `/v1/systemone` specification."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "kind": "documented",
+      "text": "Use the Python or TypeScript SDK, or expose the local model with von serve.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 168,
+          "end": 186,
+          "quote": "## Installation\n\n### Python\n```bash\npip install von-sdk\n# or with uv\nuv add von-sdk\n\n# or directly from GitHub:\npip install git+https://github.com/wfzyx/von.git\n```\n\n### TypeScript / JavaScript (Node.js & Bun)\n```bash\nbun add von-sdk\n# or npm install von-sdk\n```\n\n---"
+        },
+        {
+          "source": "source-1",
+          "start": 365,
+          "end": 371,
+          "quote": "## Server Deployment (`von serve`)\n\nStart the production-ready HTTP server compatible with the `/v1/systemone` specification:\n\n```bash\n# Launch server on port 8000\nvon serve --host 0.0.0.0 --port 8000"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "kind": "documented",
+      "text": "Specialized domains need explicit criteria; bare labels can leave the model relying on generic language priors.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 408,
+          "end": 423,
+          "quote": "### Domain Generalization & Out-of-Domain Tasks (e.g. Education, Academia)\n\n- **How Von reasons:** Unlike generative LLMs that synthesize paragraphs, Von is an **in-context semantic verifier**. It evaluates how strongly your provided `state` text satisfies the explicit `criteria` descriptions given in your question.\n- **Why domain gaps occur:** If a domain relies on specialized jargon, grading rubrics, or academic standards (such as Bloom's taxonomy, K-12 curriculum frameworks, or pedagogical reading levels) without clear criteria, the model's calibrated decision boundary will default to generic language priors.\n- **Fixing out-of-domain performance:** Provide **explicit, descriptive criteria** rather than bare labels. For example, instead of asking for `[\"beginner\", \"advanced\"]`, provide concrete operational definitions:\n  ```python\n  von.choice(\n      instructions=\"Classify student essay reading grade level.\",\n      criteria={\n          \"elementary\": \"Short sentences under 10 words, basic phonetic vocabulary, simple declarative syntax.\",\n          \"intermediate\": \"Compound sentences, transitions, multi-clause syntax with topical domain terms.\",\n          \"advanced\": \"Complex rhetorical structures, abstract conceptual synthesis, discipline-specific academic vocabulary.\",\n      }\n  )\n  ```\n  Providing descriptive anchors lets the bidirectional attention head accurately match premise evidence against option semantics regardless of domain."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "Von: local decisions with a Jev-compatible API",
+      "h1": "Von: local decisions with a Jev-compatible API",
+      "description": "Von is a local System One model for Choice, Noul and Score decisions, accessible through Python, TypeScript and a Jev-compatible HTTP interface.",
+      "summary": "Von scores independent questions in one forward pass for classification, yes/no checks and ordered ratings. It is a separate System One model with a TypeSafe-compatible API, running in-process or through HTTP. Use the Python or TypeScript SDK, or expose the local model with von serve.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose",
+          "text": "Von scores independent questions in one forward pass for classification, yes/no checks and ordered ratings.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’s role",
+          "text": "It is a separate System One model with a TypeSafe-compatible API, running in-process or through HTTP.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "How to use it",
+          "text": "Use the Python or TypeScript SDK, or expose the local model with von serve.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limits to consider",
+          "text": "Specialized domains need explicit criteria; bare labels can leave the model relying on generic language priors.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "Von：提供 Jev 兼容 API 的本地决策模型",
+      "h1": "Von：提供 Jev 兼容 API 的本地决策模型",
+      "description": "Von 是本地 System One 决策模型，可回答 Choice、Noul 和 Score 问题，提供 Python、TypeScript 与兼容 Jev 的 HTTP 接口；专业领域应给出明确标准。",
+      "summary": "Von 在一次前向计算中处理独立问题，用于分类、是非判断和有序评分。 它是独立的 System One 模型，提供兼容 TypeSafe 的 API，可在进程内或通过 HTTP 运行。 可用 Python、TypeScript SDK，或通过 von serve 提供本地模型服务。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "Von 在一次前向计算中处理独立问题，用于分类、是非判断和有序评分。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "它是独立的 System One 模型，提供兼容 TypeSafe 的 API，可在进程内或通过 HTTP 运行。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "可用 Python、TypeScript SDK，或通过 von serve 提供本地模型服务。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用边界",
+          "text": "专业领域需要明确的判定标准；仅给标签可能让模型依赖通用语言先验。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "Von：提供 Jev 相容 API 的本地決策模型",
+      "h1": "Von：提供 Jev 相容 API 的本地決策模型",
+      "description": "Von 是本地 System One 決策模型，可回答 Choice、Noul 與 Score 問題，提供 Python、TypeScript 及相容 Jev 的 HTTP 介面；專業領域應提供明確標準。",
+      "summary": "Von 在一次前向運算中處理獨立問題，用於分類、是非判斷與有序評分。 它是獨立的 System One 模型，提供相容 TypeSafe 的 API，可在程序內或透過 HTTP 執行。 可用 Python、TypeScript SDK，或透過 von serve 提供本地模型服務。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "Von 在一次前向運算中處理獨立問題，用於分類、是非判斷與有序評分。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "它是獨立的 System One 模型，提供相容 TypeSafe 的 API，可在程序內或透過 HTTP 執行。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "可用 Python、TypeScript SDK，或透過 von serve 提供本地模型服務。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用限制",
+          "text": "專業領域需要明確的判定標準；僅提供標籤可能讓模型依賴一般語言先驗。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "Von：Jev 互換 API を備えたローカル判断モデル",
+      "h1": "Von：Jev 互換 API を備えたローカル判断モデル",
+      "description": "Von は Choice、Noul、Score を扱うローカル System One モデルです。Python、TypeScript、Jev 互換 HTTP API から利用できます。",
+      "summary": "Von は独立した質問を 1 回の順伝播で評価し、分類、真偽判定、段階評価に使えます。 TypeSafe 互換 API を持つ別の System One モデルで、プロセス内または HTTP 経由で動作します。 Python・TypeScript SDK を使うか、von serve でローカルモデルを公開します。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "何ができるか",
+          "text": "Von は独立した質問を 1 回の順伝播で評価し、分類、真偽判定、段階評価に使えます。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "TypeSafe 互換 API を持つ別の System One モデルで、プロセス内または HTTP 経由で動作します。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "Python・TypeScript SDK を使うか、von serve でローカルモデルを公開します。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "制約と注意点",
+          "text": "専門分野では具体的な基準が必要です。ラベルだけでは一般的な言語知識に基づく判断になり得ます。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "Von: Jev 호환 API를 갖춘 로컬 판단 모델",
+      "h1": "Von: Jev 호환 API를 갖춘 로컬 판단 모델",
+      "description": "Von은 Choice, Noul, Score를 처리하는 로컬 System One 모델입니다. Python, TypeScript, Jev 호환 HTTP 인터페이스를 제공합니다.",
+      "summary": "Von은 한 번의 순전파로 독립 질문을 평가해 분류, 참거짓 확인, 순서형 점수 산정에 사용합니다. TypeSafe 호환 API가 있는 별도의 System One 모델이며 프로세스 내부나 HTTP로 실행합니다. Python 또는 TypeScript SDK를 쓰거나 von serve로 로컬 모델을 서비스합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "Von은 한 번의 순전파로 독립 질문을 평가해 분류, 참거짓 확인, 순서형 점수 산정에 사용합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "TypeSafe 호환 API가 있는 별도의 System One 모델이며 프로세스 내부나 HTTP로 실행합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "Python 또는 TypeScript SDK를 쓰거나 von serve로 로컬 모델을 서비스합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "제약 사항",
+          "text": "전문 분야에는 명확한 기준이 필요합니다. 단순 라벨만 주면 일반적인 언어 사전 지식에 의존할 수 있습니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "Von: decisiones locales con API compatible con Jev",
+      "h1": "Von: decisiones locales con API compatible con Jev",
+      "description": "Von es un modelo System One local para Choice, Noul y Score, accesible mediante Python, TypeScript y HTTP compatible con Jev.",
+      "summary": "Von evalúa preguntas independientes en una pasada para clasificar, comprobar sí/no y asignar puntuaciones ordenadas. Es otro modelo System One con API compatible con TypeSafe, ejecutable en el proceso o por HTTP. Usa el SDK Python o TypeScript, o publica el modelo local mediante von serve.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "Von evalúa preguntas independientes en una pasada para clasificar, comprobar sí/no y asignar puntuaciones ordenadas.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "El papel de Jev",
+          "text": "Es otro modelo System One con API compatible con TypeSafe, ejecutable en el proceso o por HTTP.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo usarlo",
+          "text": "Usa el SDK Python o TypeScript, o publica el modelo local mediante von serve.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Límites a considerar",
+          "text": "Los dominios especializados necesitan criterios explícitos; etiquetas solas pueden hacer que el modelo recurra a patrones lingüísticos generales.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "Von : décisions locales avec API compatible Jev",
+      "h1": "Von : décisions locales avec API compatible Jev",
+      "description": "Von est un modèle System One local pour Choice, Noul et Score, accessible en Python, TypeScript et via HTTP compatible Jev.",
+      "summary": "Von évalue des questions indépendantes en une passe pour classer, vérifier des conditions et attribuer des notes ordonnées. Ce modèle System One distinct possède une API compatible TypeSafe, utilisable en processus ou par HTTP. Utilisez le SDK Python ou TypeScript, ou exposez le modèle local avec von serve.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "Von évalue des questions indépendantes en une passe pour classer, vérifier des conditions et attribuer des notes ordonnées.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Le rôle de Jev",
+          "text": "Ce modèle System One distinct possède une API compatible TypeSafe, utilisable en processus ou par HTTP.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Utilisation",
+          "text": "Utilisez le SDK Python ou TypeScript, ou exposez le modèle local avec von serve.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limites à connaître",
+          "text": "Les domaines spécialisés exigent des critères explicites ; de simples étiquettes peuvent laisser le modèle se fier aux usages linguistiques généraux.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "Von: lokale Entscheidungen mit Jev-kompatibler API",
+      "h1": "Von: lokale Entscheidungen mit Jev-kompatibler API",
+      "description": "Von ist ein lokales System-One-Modell für Choice, Noul und Score, zugänglich per Python, TypeScript und Jev-kompatibler HTTP-Schnittstelle.",
+      "summary": "Von bewertet unabhängige Fragen in einem Durchlauf für Klassifikation, Ja/Nein-Prüfungen und geordnete Bewertungen. Es ist ein eigenständiges System-One-Modell mit TypeSafe-kompatibler API, im Prozess oder über HTTP nutzbar. Python- oder TypeScript-SDK verwenden oder das lokale Modell mit von serve bereitstellen.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "Von bewertet unabhängige Fragen in einem Durchlauf für Klassifikation, Ja/Nein-Prüfungen und geordnete Bewertungen.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Die Rolle von Jev",
+          "text": "Es ist ein eigenständiges System-One-Modell mit TypeSafe-kompatibler API, im Prozess oder über HTTP nutzbar.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Nutzung",
+          "text": "Python- oder TypeScript-SDK verwenden oder das lokale Modell mit von serve bereitstellen.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Grenzen",
+          "text": "Spezialgebiete benötigen konkrete Kriterien; bloße Labels können das Modell auf allgemeine Sprachmuster zurückfallen lassen.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "Von: decisões locais com API compatível com Jev",
+      "h1": "Von: decisões locais com API compatível com Jev",
+      "description": "Von é um modelo System One local para Choice, Noul e Score, acessível por Python, TypeScript e HTTP compatível com Jev.",
+      "summary": "Von avalia perguntas independentes em uma passagem para classificação, verificações de sim/não e pontuações ordenadas. É um modelo System One separado, com API compatível com TypeSafe, executado no processo ou via HTTP. Use o SDK Python ou TypeScript, ou disponibilize o modelo local com von serve.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "Von avalia perguntas independentes em uma passagem para classificação, verificações de sim/não e pontuações ordenadas.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "O papel do Jev",
+          "text": "É um modelo System One separado, com API compatível com TypeSafe, executado no processo ou via HTTP.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Use o SDK Python ou TypeScript, ou disponibilize o modelo local com von serve.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limitações",
+          "text": "Domínios especializados exigem critérios explícitos; rótulos isolados podem levar o modelo a depender de padrões gerais da linguagem.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "Von: локальные решения с API, совместимым с Jev",
+      "h1": "Von: локальные решения с API, совместимым с Jev",
+      "description": "Von — локальная модель System One для Choice, Noul и Score с Python, TypeScript и совместимым с Jev HTTP-интерфейсом.",
+      "summary": "Von оценивает независимые вопросы за один проход для классификации, проверок да/нет и упорядоченных оценок. Это отдельная модель System One с совместимым с TypeSafe API, работающая внутри процесса или через HTTP. Используйте Python- или TypeScript-SDK либо запустите локальный сервер командой von serve.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Von оценивает независимые вопросы за один проход для классификации, проверок да/нет и упорядоченных оценок.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Это отдельная модель System One с совместимым с TypeSafe API, работающая внутри процесса или через HTTP.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Используйте Python- или TypeScript-SDK либо запустите локальный сервер командой von serve.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ограничения",
+          "text": "Специализированным областям нужны явные критерии; одни названия категорий могут заставить модель опираться на общие языковые закономерности.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "Von: Jev-संगत API वाला स्थानीय निर्णय मॉडल",
+      "h1": "Von: Jev-संगत API वाला स्थानीय निर्णय मॉडल",
+      "description": "Von Choice, Noul और Score निर्णयों का स्थानीय System One मॉडल है, जो Python, TypeScript और Jev-संगत HTTP से उपलब्ध है।",
+      "summary": "Von एक फॉरवर्ड पास में स्वतंत्र प्रश्न जाँचकर वर्गीकरण, हाँ/नहीं और क्रमबद्ध स्कोर देता है। यह TypeSafe-संगत API वाला अलग System One मॉडल है, जो प्रक्रिया के भीतर या HTTP से चलता है। Python या TypeScript SDK इस्तेमाल करें, या von serve से स्थानीय मॉडल सेवा चलाएँ।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "किस काम आता है",
+          "text": "Von एक फॉरवर्ड पास में स्वतंत्र प्रश्न जाँचकर वर्गीकरण, हाँ/नहीं और क्रमबद्ध स्कोर देता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "यह TypeSafe-संगत API वाला अलग System One मॉडल है, जो प्रक्रिया के भीतर या HTTP से चलता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल कैसे करें",
+          "text": "Python या TypeScript SDK इस्तेमाल करें, या von serve से स्थानीय मॉडल सेवा चलाएँ।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "सीमाएँ",
+          "text": "विशेषज्ञ क्षेत्रों में स्पष्ट मानदंड चाहिए; केवल लेबल देने से मॉडल सामान्य भाषाई धारणाओं पर निर्भर हो सकता है।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "Von: keputusan lokal dengan API kompatibel Jev",
+      "h1": "Von: keputusan lokal dengan API kompatibel Jev",
+      "description": "Von adalah model System One lokal untuk Choice, Noul, dan Score, tersedia melalui Python, TypeScript, serta HTTP kompatibel Jev.",
+      "summary": "Von menilai pertanyaan independen dalam satu lintasan untuk klasifikasi, pemeriksaan ya/tidak, dan penilaian berurutan. Model System One terpisah ini memiliki API kompatibel TypeSafe, berjalan dalam proses atau lewat HTTP. Gunakan SDK Python atau TypeScript, atau sajikan model lokal dengan von serve.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "Von menilai pertanyaan independen dalam satu lintasan untuk klasifikasi, pemeriksaan ya/tidak, dan penilaian berurutan.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Model System One terpisah ini memiliki API kompatibel TypeSafe, berjalan dalam proses atau lewat HTTP.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Gunakan SDK Python atau TypeScript, atau sajikan model lokal dengan von serve.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Batasan",
+          "text": "Bidang khusus membutuhkan kriteria jelas; label saja dapat membuat model mengandalkan pola bahasa umum.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "Von: quyết định cục bộ với API tương thích Jev",
+      "h1": "Von: quyết định cục bộ với API tương thích Jev",
+      "description": "Von là mô hình System One cục bộ cho Choice, Noul và Score, dùng qua Python, TypeScript và HTTP tương thích Jev.",
+      "summary": "Von đánh giá các câu hỏi độc lập trong một lượt cho phân loại, kiểm tra có/không và chấm điểm có thứ tự. Đây là mô hình System One riêng với API tương thích TypeSafe, chạy trong tiến trình hoặc qua HTTP. Dùng SDK Python hay TypeScript, hoặc cung cấp mô hình cục bộ bằng von serve.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích",
+          "text": "Von đánh giá các câu hỏi độc lập trong một lượt cho phân loại, kiểm tra có/không và chấm điểm có thứ tự.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Đây là mô hình System One riêng với API tương thích TypeSafe, chạy trong tiến trình hoặc qua HTTP.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Dùng SDK Python hay TypeScript, hoặc cung cấp mô hình cục bộ bằng von serve.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Giới hạn",
+          "text": "Lĩnh vực chuyên môn cần tiêu chí rõ ràng; nhãn đơn thuần có thể khiến mô hình dựa vào kiến thức ngôn ngữ chung.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "Von: Jev uyumlu API ile yerel kararlar",
+      "h1": "Von: Jev uyumlu API ile yerel kararlar",
+      "description": "Von, Choice, Noul ve Score kararları için Python, TypeScript ve Jev uyumlu HTTP arayüzü sunan yerel System One modelidir.",
+      "summary": "Von bağımsız soruları tek geçişte değerlendirerek sınıflandırma, evet/hayır kontrolü ve sıralı puanlama yapar. TypeSafe uyumlu API sunan ayrı bir System One modelidir; süreç içinde veya HTTP üzerinden çalışır. Python ya da TypeScript SDK’sını kullanın veya von serve ile yerel modeli sunun.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "Von bağımsız soruları tek geçişte değerlendirerek sınıflandırma, evet/hayır kontrolü ve sıralı puanlama yapar.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "TypeSafe uyumlu API sunan ayrı bir System One modelidir; süreç içinde veya HTTP üzerinden çalışır.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Python ya da TypeScript SDK’sını kullanın veya von serve ile yerel modeli sunun.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Sınırlamalar",
+          "text": "Uzmanlık alanları açık ölçütler gerektirir; yalın etiketler modeli genel dil önkabullerine dayanmaya yöneltebilir.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "Von: decisioni locali con API compatibile Jev",
+      "h1": "Von: decisioni locali con API compatibile Jev",
+      "description": "Von è un modello System One locale per Choice, Noul e Score, disponibile via Python, TypeScript e HTTP compatibile Jev.",
+      "summary": "Von valuta domande indipendenti in un passaggio per classificazione, verifiche sì/no e punteggi ordinati. È un modello System One distinto con API compatibile TypeSafe, eseguibile nel processo o tramite HTTP. Usa l’SDK Python o TypeScript, oppure esponi il modello locale con von serve.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "Von valuta domande indipendenti in un passaggio per classificazione, verifiche sì/no e punteggi ordinati.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Il ruolo di Jev",
+          "text": "È un modello System One distinto con API compatibile TypeSafe, eseguibile nel processo o tramite HTTP.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come usarlo",
+          "text": "Usa l’SDK Python o TypeScript, oppure esponi il modello locale con von serve.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limiti",
+          "text": "I settori specialistici richiedono criteri espliciti; semplici etichette possono far dipendere il modello da schemi linguistici generici.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

@@ -1,0 +1,768 @@
+{
+  "version": "source-content-v1",
+  "repo": "chainreactors/fingers",
+  "repositoryId": 766231554,
+  "relationship": "integration",
+  "category": "integrations",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "e870395e898422e43e271ec08f47ff2ccb4003ee",
+      "url": "https://github.com/chainreactors/fingers/blob/e870395e898422e43e271ec08f47ff2ccb4003ee/README.md",
+      "sha256": "b7e3a493c241f4fd1dc2ce34ebf5eeba86ee27ea0347b87914698d21e741a35e",
+      "accessedAt": "2026-09-30T07:33:52.167Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "fingers combines several web fingerprint databases and can use Jev to review rule matches, deduplicate findings and refine versions.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 4,
+          "end": 6,
+          "quote": "多指纹库聚合识别引擎.  当前支持`fingers(主指纹库)` `wappalyzer`, `fingerprinthub`, `ehole`, `goby` 指纹\n\n不用再挑选指纹识别的工具, AllInOne一站式实现"
+        },
+        {
+          "source": "source-1",
+          "start": 18,
+          "end": 27,
+          "quote": "* 支持多指纹库聚合识别\n  * ✅ fingers 原生指纹库\n  * ✅ [wappalyzer](https://github.com/projectdiscovery/wappalyzergo)\n  * ✅ [fingerprinthub](https://github.com/0x727/FingerprintHub)\n  * ✅ [ehole](https://github.com/EdgeSecurityTeam/EHole)\n  * ✅ goby\n* 支持多指纹源favicon识别\n* 超强性能, 单个站点识别 <100ms. 重写了各指纹库的引擎, 并极大优化了性能\n* 聚合输出, 多指纹库的结果将会自动整合\n* 支持CPE的URI, FSB, WFN格式输出"
+        },
+        {
+          "source": "source-1",
+          "start": 93,
+          "end": 112,
+          "quote": "## 用 Jev 提升识别效果\n\n规则引擎召回能力强，但会有误报、多个引擎的同名重复，版本号也难以拿准。配置一个 [TypeSafe Jev](https://docs.typesafe.ai/api.md) key，引擎就会审查每一次 Web 匹配的规则结果，只返回证据支持的结果：去掉误报和重复，补全版本。调用方式不变。\n\n```golang\nengine, _ := fingers.NewEngine()\nengine.EnableJudge(\"\")                 // 空字符串读取 TYPESAFE_API_KEY\nframes, _ := engine.DetectContent(raw) // WebMatch、Match、DetectResponse 同样生效\n```\n\n命令行：`engine -u https://example.com --jev-key <KEY>`。\n\n- **只审查，不识别**：Jev 只判断规则给出的结论是否成立，从不说出产品名，因此不会凭空多出结果。\n- **失败时退回规则结果**：请求失败或 key 无效时，返回的就是纯规则结果。\n- **每条结果都带依据**：保留下来的结果带有 `Framework.Judge`（选项、Outcome、置信度、证据），随现有输出一起序列化。\n- **代价**：每个有命中的页面约 1～2 个请求，相同页面命中缓存。\n\n漏报不在扫描时处理，因为 Jev 不说出产品名。维护者用 `judge/maintain` 离线发现规则漏掉的产品，交给人命名后用 `judge/gen` 生成规则，更新到指纹库后所有用户受益。\n\n需要自定义 Provider、阈值或查看被剔除条目及原因时，直接使用 `judge` 包，或给 `engine.Judge` 赋值，见 [judge/README.md](judge/README.md)。判定机制只有一个 Claim：代码提出断言并附上证据，Provider 选出证据支持的选项，选项的 Outcome（holds / refuted / insufficient）驱动固定动作。Claim 合约、缓存和 Jev 客户端在 [`github.com/chainreactors/utils/jev`](https://github.com/chainreactors/utils/tree/master/jev)。"
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "Jev judges claims proposed by rules; it never supplies new product names, and retained findings include judgment evidence.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 93,
+          "end": 112,
+          "quote": "## 用 Jev 提升识别效果\n\n规则引擎召回能力强，但会有误报、多个引擎的同名重复，版本号也难以拿准。配置一个 [TypeSafe Jev](https://docs.typesafe.ai/api.md) key，引擎就会审查每一次 Web 匹配的规则结果，只返回证据支持的结果：去掉误报和重复，补全版本。调用方式不变。\n\n```golang\nengine, _ := fingers.NewEngine()\nengine.EnableJudge(\"\")                 // 空字符串读取 TYPESAFE_API_KEY\nframes, _ := engine.DetectContent(raw) // WebMatch、Match、DetectResponse 同样生效\n```\n\n命令行：`engine -u https://example.com --jev-key <KEY>`。\n\n- **只审查，不识别**：Jev 只判断规则给出的结论是否成立，从不说出产品名，因此不会凭空多出结果。\n- **失败时退回规则结果**：请求失败或 key 无效时，返回的就是纯规则结果。\n- **每条结果都带依据**：保留下来的结果带有 `Framework.Judge`（选项、Outcome、置信度、证据），随现有输出一起序列化。\n- **代价**：每个有命中的页面约 1～2 个请求，相同页面命中缓存。\n\n漏报不在扫描时处理，因为 Jev 不说出产品名。维护者用 `judge/maintain` 离线发现规则漏掉的产品，交给人命名后用 `judge/gen` 生成规则，更新到指纹库后所有用户受益。\n\n需要自定义 Provider、阈值或查看被剔除条目及原因时，直接使用 `judge` 包，或给 `engine.Judge` 赋值，见 [judge/README.md](judge/README.md)。判定机制只有一个 Claim：代码提出断言并附上证据，Provider 选出证据支持的选项，选项的 Outcome（holds / refuted / insufficient）驱动固定动作。Claim 合约、缓存和 Jev 客户端在 [`github.com/chainreactors/utils/jev`](https://github.com/chainreactors/utils/tree/master/jev)。"
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Install the Go library and enable the judge with EnableJudge and a TypeSafe key, or use the CLI’s jev-key option.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 37,
+          "end": 41,
+          "quote": "## QuickStart\n\n`go get github.com/chainreactors/fingers@master`\n\n支持 Go 1.17 及以上。规则正则默认使用标准库；在 Go 1.24 及以上可以换成更快的 RE2，只需额外引入一行："
+        },
+        {
+          "source": "source-1",
+          "start": 97,
+          "end": 103,
+          "quote": "```golang\nengine, _ := fingers.NewEngine()\nengine.EnableJudge(\"\")                 // 空字符串读取 TYPESAFE_API_KEY\nframes, _ := engine.DetectContent(raw) // WebMatch、Match、DetectResponse 同样生效\n```\n\n命令行：`engine -u https://example.com --jev-key <KEY>`。"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "Provider failure returns the original rule results. Review sends a reduced HTTP response view externally, and products missed by rules require a separate maintenance process.",
+      "kind": "source-limitation",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 105,
+          "end": 114,
+          "quote": "- **只审查，不识别**：Jev 只判断规则给出的结论是否成立，从不说出产品名，因此不会凭空多出结果。\n- **失败时退回规则结果**：请求失败或 key 无效时，返回的就是纯规则结果。\n- **每条结果都带依据**：保留下来的结果带有 `Framework.Judge`（选项、Outcome、置信度、证据），随现有输出一起序列化。\n- **代价**：每个有命中的页面约 1～2 个请求，相同页面命中缓存。\n\n漏报不在扫描时处理，因为 Jev 不说出产品名。维护者用 `judge/maintain` 离线发现规则漏掉的产品，交给人命名后用 `judge/gen` 生成规则，更新到指纹库后所有用户受益。\n\n需要自定义 Provider、阈值或查看被剔除条目及原因时，直接使用 `judge` 包，或给 `engine.Judge` 赋值，见 [judge/README.md](judge/README.md)。判定机制只有一个 Claim：代码提出断言并附上证据，Provider 选出证据支持的选项，选项的 Outcome（holds / refuted / insufficient）驱动固定动作。Claim 合约、缓存和 Jev 客户端在 [`github.com/chainreactors/utils/jev`](https://github.com/chainreactors/utils/tree/master/jev)。\n\n**数据外发**：判定时会把响应的精简视图发给 Provider，包括响应头（去掉 Date、Set-Cookie 值等无关头）、Cookie 名、标题、generator/description、脚本和样式路径、内联脚本开头、HTML 注释、表单字段名，以及正文前 1500 字。扫描授权范围内的目标前，请确认允许把这些内容发送给第三方服务。"
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "fingers — Web fingerprints with optional Jev review",
+      "h1": "fingers — Web fingerprints with optional Jev review",
+      "description": "fingers: fingers combines several web fingerprint databases and can use Jev to review rule matches, deduplicate findings and refine versions.",
+      "summary": "fingers combines several web fingerprint databases and can use Jev to review rule matches, deduplicate findings and refine versions. Install the Go library and enable the judge with EnableJudge and a TypeSafe key, or use the CLI’s jev-key option.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "What it does",
+          "text": "fingers combines several web fingerprint databases and can use Jev to review rule matches, deduplicate findings and refine versions.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "Jev judges claims proposed by rules; it never supplies new product names, and retained findings include judgment evidence.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Getting started",
+          "text": "Install the Go library and enable the judge with EnableJudge and a TypeSafe key, or use the CLI’s jev-key option.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "Provider failure returns the original rule results. Review sends a reduced HTTP response view externally, and products missed by rules require a separate maintenance process.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "fingers — 可选 Jev 审查的网页指纹识别",
+      "h1": "fingers — 可选 Jev 审查的网页指纹识别",
+      "description": "fingers: fingers 聚合多个网页指纹库，可用 Jev 审查规则命中、去重并完善版本信息。",
+      "summary": "fingers 聚合多个网页指纹库，可用 Jev 审查规则命中、去重并完善版本信息。 安装 Go 库，通过 EnableJudge 和 TypeSafe 密钥启用，或使用 CLI 的 jev-key 选项。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "fingers 聚合多个网页指纹库，可用 Jev 审查规则命中、去重并完善版本信息。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "Jev 判断规则提出的断言，不提供新产品名；保留结果附带判断依据。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "安装 Go 库，通过 EnableJudge 和 TypeSafe 密钥启用，或使用 CLI 的 jev-key 选项。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "服务失败时返回原规则结果。审查会外发精简 HTTP 响应，规则漏掉的产品需走独立维护流程。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "fingers — 可選 Jev 審查的網頁指紋辨識",
+      "h1": "fingers — 可選 Jev 審查的網頁指紋辨識",
+      "description": "fingers: fingers 整合多個網頁指紋庫，可用 Jev 審查規則命中、去重及補充版本資訊。",
+      "summary": "fingers 整合多個網頁指紋庫，可用 Jev 審查規則命中、去重及補充版本資訊。 安裝 Go 函式庫，以 EnableJudge 和 TypeSafe 金鑰啟用，或使用 CLI 的 jev-key 選項。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "fingers 整合多個網頁指紋庫，可用 Jev 審查規則命中、去重及補充版本資訊。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "Jev 判斷規則提出的主張，不提供新產品名稱；保留結果附有判斷依據。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "安裝 Go 函式庫，以 EnableJudge 和 TypeSafe 金鑰啟用，或使用 CLI 的 jev-key 選項。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "服務失敗時回傳原規則結果。審查會外傳精簡 HTTP 回應，規則漏掉的產品須經獨立維護流程。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "fingers — 任意の Jev レビュー付きウェブ指紋識別",
+      "h1": "fingers — 任意の Jev レビュー付きウェブ指紋識別",
+      "description": "fingers: fingers は複数のウェブ指紋データベースを統合し、Jev で一致結果の確認、重複除去、バージョン補完を行えます。",
+      "summary": "fingers は複数のウェブ指紋データベースを統合し、Jev で一致結果の確認、重複除去、バージョン補完を行えます。 Go ライブラリの EnableJudge と TypeSafe キー、または CLI の jev-key で有効化します。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "できること",
+          "text": "fingers は複数のウェブ指紋データベースを統合し、Jev で一致結果の確認、重複除去、バージョン補完を行えます。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "Jev はルールの主張を判定し、新しい製品名は出しません。残した結果には判断の根拠が付きます。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い始めるには",
+          "text": "Go ライブラリの EnableJudge と TypeSafe キー、または CLI の jev-key で有効化します。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "対象範囲と制約",
+          "text": "提供元の失敗時は元のルール結果を返します。縮約 HTTP 応答を外部へ送り、未検出製品には別の保守手順が必要です。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "fingers — 선택적 Jev 검토를 갖춘 웹 지문 식별",
+      "h1": "fingers — 선택적 Jev 검토를 갖춘 웹 지문 식별",
+      "description": "fingers: fingers는 여러 웹 지문 데이터베이스를 통합하고 Jev로 규칙 결과 검토, 중복 제거, 버전 보완을 수행할 수 있습니다.",
+      "summary": "fingers는 여러 웹 지문 데이터베이스를 통합하고 Jev로 규칙 결과 검토, 중복 제거, 버전 보완을 수행할 수 있습니다. Go 라이브러리의 EnableJudge와 TypeSafe 키 또는 CLI의 jev-key 옵션으로 활성화합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "fingers는 여러 웹 지문 데이터베이스를 통합하고 Jev로 규칙 결과 검토, 중복 제거, 버전 보완을 수행할 수 있습니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Jev는 규칙의 주장을 판단하며 새 제품명을 만들지 않습니다. 유지한 결과에는 판단 근거가 포함됩니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "Go 라이브러리의 EnableJudge와 TypeSafe 키 또는 CLI의 jev-key 옵션으로 활성화합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 제약",
+          "text": "제공자 실패 시 원래 규칙 결과를 반환합니다. 축약 HTTP 응답이 외부로 전송되며 누락 제품은 별도 유지보수 절차가 필요합니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "fingers — Huellas web con revisión Jev opcional",
+      "h1": "fingers — Huellas web con revisión Jev opcional",
+      "description": "fingers: fingers combina bases de huellas web y puede usar Jev para revisar coincidencias, eliminar duplicados y precisar versiones.",
+      "summary": "fingers combina bases de huellas web y puede usar Jev para revisar coincidencias, eliminar duplicados y precisar versiones. Instala la biblioteca Go y activa EnableJudge con clave TypeSafe, o usa la opción CLI jev-key.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "fingers combina bases de huellas web y puede usar Jev para revisar coincidencias, eliminar duplicados y precisar versiones.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Jev juzga afirmaciones de reglas, nunca inventa nombres de productos; los resultados retenidos incluyen pruebas.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo empezar",
+          "text": "Instala la biblioteca Go y activa EnableJudge con clave TypeSafe, o usa la opción CLI jev-key.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "Si falla el proveedor, vuelven los resultados originales. Se envía una vista HTTP reducida al exterior; productos omitidos requieren mantenimiento aparte.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "fingers — Empreintes web avec revue Jev facultative",
+      "h1": "fingers — Empreintes web avec revue Jev facultative",
+      "description": "fingers: fingers combine plusieurs bases d’empreintes et peut utiliser Jev pour revoir les correspondances, dédupliquer et préciser les versions.",
+      "summary": "fingers combine plusieurs bases d’empreintes et peut utiliser Jev pour revoir les correspondances, dédupliquer et préciser les versions. Installez la bibliothèque Go et activez EnableJudge avec une clé TypeSafe, ou utilisez jev-key en CLI.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "fingers combine plusieurs bases d’empreintes et peut utiliser Jev pour revoir les correspondances, dédupliquer et préciser les versions.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Jev juge les affirmations des règles sans proposer de nouveaux produits ; les résultats retenus portent leurs preuves.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Installez la bibliothèque Go et activez EnableJudge avec une clé TypeSafe, ou utilisez jev-key en CLI.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "Une panne renvoie les résultats initiaux. Une vue HTTP réduite part à l’extérieur ; les produits manqués nécessitent une maintenance distincte.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "fingers — Web-Fingerprints mit optionaler Jev-Prüfung",
+      "h1": "fingers — Web-Fingerprints mit optionaler Jev-Prüfung",
+      "description": "fingers: fingers kombiniert mehrere Fingerprint-Datenbanken und kann Jev zur Trefferprüfung, Deduplizierung und Versionspräzisierung nutzen.",
+      "summary": "fingers kombiniert mehrere Fingerprint-Datenbanken und kann Jev zur Trefferprüfung, Deduplizierung und Versionspräzisierung nutzen. Die Go-Bibliothek installieren und EnableJudge mit TypeSafe-Schlüssel aktivieren oder die CLI-Option jev-key verwenden.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "fingers kombiniert mehrere Fingerprint-Datenbanken und kann Jev zur Trefferprüfung, Deduplizierung und Versionspräzisierung nutzen.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Jev bewertet Regelbehauptungen und nennt keine neuen Produkte; erhaltene Ergebnisse tragen Entscheidungsbelege.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Einstieg",
+          "text": "Die Go-Bibliothek installieren und EnableJudge mit TypeSafe-Schlüssel aktivieren oder die CLI-Option jev-key verwenden.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Bei Anbieterausfall gelten die ursprünglichen Ergebnisse. Eine reduzierte HTTP-Ansicht wird extern übertragen; übersehene Produkte benötigen separate Regelpflege.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "fingers — Identificação de tecnologias web com revisão Jev opcional",
+      "h1": "fingers — Identificação de tecnologias web com revisão Jev opcional",
+      "description": "fingers: O fingers combina bases de identificação web e pode usar Jev para revisar correspondências, remover duplicatas e refinar versões.",
+      "summary": "O fingers combina bases de identificação web e pode usar Jev para revisar correspondências, remover duplicatas e refinar versões. Instale a biblioteca Go e ative EnableJudge com chave TypeSafe, ou use jev-key na CLI.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "O fingers combina bases de identificação web e pode usar Jev para revisar correspondências, remover duplicatas e refinar versões.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "Jev julga afirmações das regras sem criar nomes de produtos; resultados mantidos incluem evidências.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como começar",
+          "text": "Instale a biblioteca Go e ative EnableJudge com chave TypeSafe, ou use jev-key na CLI.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "Falha do provedor devolve resultados originais. Uma visão HTTP reduzida é enviada externamente; produtos omitidos exigem manutenção separada.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "fingers — Веб-отпечатки с необязательной проверкой Jev",
+      "h1": "fingers — Веб-отпечатки с необязательной проверкой Jev",
+      "description": "fingers: fingers объединяет базы веб-отпечатков и может через Jev проверять совпадения, удалять дубли и уточнять версии.",
+      "summary": "fingers объединяет базы веб-отпечатков и может через Jev проверять совпадения, удалять дубли и уточнять версии. Установите Go-библиотеку и включите EnableJudge с ключом TypeSafe либо опцию CLI jev-key.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "fingers объединяет базы веб-отпечатков и может через Jev проверять совпадения, удалять дубли и уточнять версии.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Jev оценивает утверждения правил, не придумывает названия продуктов; сохранённые результаты содержат доказательства.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Начало работы",
+          "text": "Установите Go-библиотеку и включите EnableJudge с ключом TypeSafe либо опцию CLI jev-key.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "При сбое провайдера возвращаются исходные результаты. Сокращённый HTTP-ответ передаётся наружу; пропущенные продукты требуют отдельного обслуживания правил.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "fingers — वैकल्पिक Jev समीक्षा के साथ वेब फ़िंगरप्रिंट",
+      "h1": "fingers — वैकल्पिक Jev समीक्षा के साथ वेब फ़िंगरप्रिंट",
+      "description": "fingers: fingers कई वेब फ़िंगरप्रिंट डेटाबेस जोड़ता है और Jev से मिलान जाँचने, डुप्लिकेट हटाने तथा संस्करण की जानकारी पूरी करने में मदद ले सकता है।",
+      "summary": "fingers कई वेब फ़िंगरप्रिंट डेटाबेस जोड़ता है और Jev से मिलान जाँचने, डुप्लिकेट हटाने तथा संस्करण की जानकारी पूरी करने में मदद ले सकता है। Go लाइब्रेरी स्थापित करके EnableJudge और TypeSafe कुंजी से चालू करें, या CLI का jev-key लें।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "परियोजना का काम",
+          "text": "fingers कई वेब फ़िंगरप्रिंट डेटाबेस जोड़ता है और Jev से मिलान जाँचने, डुप्लिकेट हटाने तथा संस्करण की जानकारी पूरी करने में मदद ले सकता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "Jev नियमों के दावे जाँचता है, नए उत्पाद नाम नहीं बनाता; रखे परिणामों में प्रमाण होते हैं।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "शुरुआत कैसे करें",
+          "text": "Go लाइब्रेरी स्थापित करके EnableJudge और TypeSafe कुंजी से चालू करें, या CLI का jev-key लें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "प्रदाता विफल होने पर मूल नियम परिणाम मिलते हैं। छोटा HTTP दृश्य बाहर भेजा जाता है; छूटे उत्पाद अलग रखरखाव माँगते हैं।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "fingers — Sidik web dengan tinjauan Jev opsional",
+      "h1": "fingers — Sidik web dengan tinjauan Jev opsional",
+      "description": "fingers: fingers menggabungkan basis sidik web dan dapat memakai Jev untuk meninjau kecocokan, menghapus duplikat, serta memperjelas versi.",
+      "summary": "fingers menggabungkan basis sidik web dan dapat memakai Jev untuk meninjau kecocokan, menghapus duplikat, serta memperjelas versi. Pasang pustaka Go dan aktifkan EnableJudge dengan kunci TypeSafe, atau gunakan opsi CLI jev-key.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "fingers menggabungkan basis sidik web dan dapat memakai Jev untuk meninjau kecocokan, menghapus duplikat, serta memperjelas versi.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Jev menilai klaim aturan tanpa membuat nama produk baru; hasil yang dipertahankan menyertakan bukti.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara memulai",
+          "text": "Pasang pustaka Go dan aktifkan EnableJudge dengan kunci TypeSafe, atau gunakan opsi CLI jev-key.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Kegagalan penyedia mengembalikan hasil awal. Tampilan HTTP ringkas dikirim keluar; produk terlewat memerlukan pemeliharaan terpisah.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "fingers — Dấu vân tay web với kiểm tra Jev tùy chọn",
+      "h1": "fingers — Dấu vân tay web với kiểm tra Jev tùy chọn",
+      "description": "fingers: fingers gộp nhiều cơ sở dấu vân tay web, có thể dùng Jev kiểm tra khớp quy tắc, loại trùng và làm rõ phiên bản.",
+      "summary": "fingers gộp nhiều cơ sở dấu vân tay web, có thể dùng Jev kiểm tra khớp quy tắc, loại trùng và làm rõ phiên bản. Cài thư viện Go rồi bật EnableJudge với khóa TypeSafe, hoặc dùng tùy chọn CLI jev-key.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Công dụng",
+          "text": "fingers gộp nhiều cơ sở dấu vân tay web, có thể dùng Jev kiểm tra khớp quy tắc, loại trùng và làm rõ phiên bản.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Jev xét nhận định từ quy tắc, không tạo tên sản phẩm mới; kết quả giữ lại có bằng chứng đánh giá.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách bắt đầu",
+          "text": "Cài thư viện Go rồi bật EnableJudge với khóa TypeSafe, hoặc dùng tùy chọn CLI jev-key.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Lỗi nhà cung cấp trả kết quả gốc. Bản rút gọn phản hồi HTTP được gửi ra ngoài; sản phẩm bỏ sót cần quy trình bảo trì riêng.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "fingers — İsteğe bağlı Jev incelemeli web parmak izleri",
+      "h1": "fingers — İsteğe bağlı Jev incelemeli web parmak izleri",
+      "description": "fingers: fingers web parmak izi veritabanlarını birleştirir; Jev ile eşleşmeleri inceleyip tekrarları kaldırabilir ve sürümleri netleştirebilir.",
+      "summary": "fingers web parmak izi veritabanlarını birleştirir; Jev ile eşleşmeleri inceleyip tekrarları kaldırabilir ve sürümleri netleştirebilir. Go kütüphanesinde EnableJudge ve TypeSafe anahtarını veya CLI jev-key seçeneğini kullanın.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "fingers web parmak izi veritabanlarını birleştirir; Jev ile eşleşmeleri inceleyip tekrarları kaldırabilir ve sürümleri netleştirebilir.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Jev kural iddialarını değerlendirir, yeni ürün adı üretmez; tutulan sonuçlarda karar kanıtı bulunur.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Başlangıç",
+          "text": "Go kütüphanesinde EnableJudge ve TypeSafe anahtarını veya CLI jev-key seçeneğini kullanın.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Sağlayıcı hatasında asıl sonuçlar döner. Azaltılmış HTTP görünümü dışarı gönderilir; kaçırılan ürünler ayrı bakım gerektirir.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "fingers — Impronte web con revisione Jev facoltativa",
+      "h1": "fingers — Impronte web con revisione Jev facoltativa",
+      "description": "fingers: fingers combina basi di impronte web e può usare Jev per verificare corrispondenze, deduplicare e precisare versioni.",
+      "summary": "fingers combina basi di impronte web e può usare Jev per verificare corrispondenze, deduplicare e precisare versioni. Installa la libreria Go e attiva EnableJudge con chiave TypeSafe, oppure usa jev-key nella CLI.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "fingers combina basi di impronte web e può usare Jev per verificare corrispondenze, deduplicare e precisare versioni.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Jev valuta affermazioni delle regole senza creare nomi di prodotti; i risultati mantenuti includono prove.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come iniziare",
+          "text": "Installa la libreria Go e attiva EnableJudge con chiave TypeSafe, oppure usa jev-key nella CLI.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "Un errore del fornitore restituisce i risultati originali. Una vista HTTP ridotta viene inviata fuori; prodotti mancati richiedono manutenzione separata.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

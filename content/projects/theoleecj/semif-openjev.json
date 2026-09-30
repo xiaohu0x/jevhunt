@@ -1,0 +1,769 @@
+{
+  "version": "source-content-v1",
+  "repo": "TheoLeeCJ/SemIf-OpenJev",
+  "repositoryId": 1372482979,
+  "relationship": "local-alternative",
+  "category": "research",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "path": "README.md",
+      "commit": "23cf1f39fc9534fe81437200959b6dfc7106e45a",
+      "url": "https://github.com/TheoLeeCJ/SemIf-OpenJev/blob/23cf1f39fc9534fe81437200959b6dfc7106e45a/README.md",
+      "sha256": "89f00284285ea0dac7b0e10ff04ebe643e37fb1a3165ab7dbd13686e97d65f62",
+      "accessedAt": "2026-09-30T07:33:47.594Z",
+      "id": "s1"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "SemIf handles small semantic decisions such as routing, retries and evidence checks by reading option probabilities without generating an answer sentence.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 21,
+          "end": 25,
+          "quote": "Most agent decisions are small: *route this*, *retry that*, *does the evidence support X?* A chat model can answer them, but it spends time generating text that software immediately parses back into an `if` statement.\n\nJev is TypeSafe's closed service for runtime-defined semantic decisions. This project reproduces that **interface pattern** with open models; it does not reproduce Jev's undisclosed model or training.\n\nThis baseline reads typed option probabilities directly from a model. No answer sentence, JSON repair, or decoding loop."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "It reproduces Jev's interface pattern with open models, not Jev's undisclosed model or training, and has no TypeSafe affiliation.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 17,
+          "end": 25,
+          "quote": "> **Independent research project.** SemIf was formerly called OpenJev. It is not affiliated with or endorsed by TypeSafe. Jev, TypeSafe, and other names and marks are the property of their respective owners. No infringement is intended.\n\n![Some AI company asks you to join a waitlist; SemIf runs in your browser today](assets/semif-no-waitlist.png)\n\nMost agent decisions are small: *route this*, *retry that*, *does the evidence support X?* A chat model can answer them, but it spends time generating text that software immediately parses back into an `if` statement.\n\nJev is TypeSafe's closed service for runtime-defined semantic decisions. This project reproduces that **interface pattern** with open models; it does not reproduce Jev's undisclosed model or training.\n\nThis baseline reads typed option probabilities directly from a model. No answer sentence, JSON repair, or decoding loop."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Explore the browser demo or use documented CUDA, Apple Silicon and CPU scoring backends with separately obtained model weights.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 40,
+          "end": 69,
+          "quote": "## Quick start\n\n**Apple Silicon:** use the native [MLX backend](docs/MLX.md) for direct scoring,\nserial prefix reuse, and parallel shared-state decisions on macOS arm64.\nInstall `pip install -e '.[test,mlx]'` and add `--backend mlx` to the scorer command.\nPyTorch/MPS (`--device mps`) is also supported for direct, serial, and shared modes — see\n[Apple Silicon](docs/APPLE_SILICON.md).\n\nPython 3.10+, CUDA, and a GPU that can hold a 4B BF16 model:\n\n```bash\npython -m venv .venv\n. .venv/bin/activate\nexport HF_HOME=/path/to/large-drive/huggingface\npip install -e '.[test]'\n```\n\n**CPU only:** the llama.cpp backend scores the same prompts from a local GGUF\ncheckpoint with no CUDA device. Install `pip install -e '.[test,llamacpp]'`,\nfetch a GGUF (for example `Qwen_Qwen3.5-4B-Q4_K_M.gguf` from\n`bartowski/Qwen_Qwen3.5-4B-GGUF`), and add `--backend llamacpp --gguf\n/path/to/model.gguf`; `--llama-threads` caps the CPU threads. Prompt\nconstruction stays on the pinned reference tokenizer, so `prompt_sha256`\nmatches the Torch backend row for row; scores carry the GGUF checksum and are\nconditional on the quantized weights. Direct and prefix-cached execution can\nhave small numerical differences from different llama.cpp evaluation paths;\ncompare decisions or probabilities with a tolerance rather than raw logits\nbit for bit. One loaded backend owns one stateful scoring context. For a much\nslower full-precision Torch reference path, explicitly pass\n`--device cpu --dtype float32` to the standard scorer command."
+        },
+        {
+          "source": "s1",
+          "start": 196,
+          "end": 196,
+          "quote": "- [Browser-only WebGPU demo](webgpu-demo/index.html) — no waitlist; use it today"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "Fast reuse paths are experimental. Jev comparisons use published records rather than live calls, and upstream model licenses still apply.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 125,
+          "end": 125,
+          "quote": "The owned [37×21 fixture](benchmarks/data/shape777.jsonl), [direct/reuse runner](benchmarks/shape777.py), [reranker runner](benchmarks/shape777_reranker.py), [raw timings](results/raw/shape777-direct.json), and [row-level predictions](results/raw/shape777-direct.predictions.jsonl) are included. The fast reuse paths are experimental: BF16 execution changed 5–6 of 777 argmaxes relative to fresh scoring."
+        },
+        {
+          "source": "s1",
+          "start": 154,
+          "end": 156,
+          "quote": "The Jev number is read from TypeSafe's published records; we did not run a live Jev endpoint. The comparison covers the 102 rows that could be aligned from public artifacts, not TypeSafe's reported 711-row aggregate.\n\nThe [Qwen3.8-27B EXL3 bridge](exl3-bridge/) uses the same 144 authored rows, matching prompt hashes, options, direct-logit readout, and metric as the 4B baseline. It is a system-level quality comparison rather than a controlled model-size or quantization ablation: model family, size, quantization, and runtime all differ. It has not yet been run on the other quality workloads. Across the 777-decision shared-state fixture, its choices agree with the pinned 4B model on 84.43% of rows."
+        },
+        {
+          "source": "s1",
+          "start": 213,
+          "end": 213,
+          "quote": "Model weights and third-party source records are not included. Upstream models retain their licenses. Project code is released under the [MIT License](LICENSE)."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "SemIf: open-model decisions inspired by Jev",
+      "h1": "SemIf: open-model decisions inspired by Jev",
+      "description": "SemIf, formerly OpenJev, reads typed option probabilities from open models as an independent decision-model research project.",
+      "summary": "SemIf handles small semantic decisions such as routing, retries and evidence checks by reading option probabilities without generating an answer sentence. It reproduces Jev's interface pattern with open models, not Jev's undisclosed model or training, and has no TypeSafe affiliation.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose and audience",
+          "text": "SemIf handles small semantic decisions such as routing, retries and evidence checks by reading option probabilities without generating an answer sentence.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "It reproduces Jev's interface pattern with open models, not Jev's undisclosed model or training, and has no TypeSafe affiliation.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Using the project",
+          "text": "Explore the browser demo or use documented CUDA, Apple Silicon and CPU scoring backends with separately obtained model weights.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "Fast reuse paths are experimental. Jev comparisons use published records rather than live calls, and upstream model licenses still apply.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "SemIf：借鉴 Jev 接口思路的开放模型决策",
+      "h1": "SemIf：借鉴 Jev 接口思路的开放模型决策",
+      "description": "SemIf 原名 OpenJev，是从开放模型读取类型化选项概率的独立研究项目。",
+      "summary": "SemIf 直接读取选项概率，处理路由、重试、证据判断等小型语义决策，无需生成回答句子。 它借鉴 Jev 的接口模式，不复现其未公开的模型或训练，也不隶属于 TypeSafe。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途与适用对象",
+          "text": "SemIf 直接读取选项概率，处理路由、重试、证据判断等小型语义决策，无需生成回答句子。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "它借鉴 Jev 的接口模式，不复现其未公开的模型或训练，也不隶属于 TypeSafe。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "可体验浏览器演示，或使用文档中的 CUDA、Apple Silicon 和 CPU 评分后端；模型权重需要另行获取。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "快速复用路径仍属实验性功能。Jev 对比来自公开记录而非实时调用，上游模型许可证仍然适用。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "SemIf：借鏡 Jev 介面模式的開放模型決策",
+      "h1": "SemIf：借鏡 Jev 介面模式的開放模型決策",
+      "description": "SemIf 原名 OpenJev，是從開放模型讀取型別化選項機率的獨立研究專案。",
+      "summary": "SemIf 直接讀取選項機率，處理路由、重試與證據判斷等小型語意決策，無須產生回答句子。 它借鏡 Jev 的介面模式，並未重現未公開的模型或訓練，也與 TypeSafe 無隸屬關係。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途與適用對象",
+          "text": "SemIf 直接讀取選項機率，處理路由、重試與證據判斷等小型語意決策，無須產生回答句子。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "它借鏡 Jev 的介面模式，並未重現未公開的模型或訓練，也與 TypeSafe 無隸屬關係。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "可探索瀏覽器示範，或使用文件所述的 CUDA、Apple Silicon 及 CPU 評分後端；模型權重須另外取得。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "快速重用流程仍屬實驗功能。Jev 比較使用公開紀錄而非即時呼叫，上游模型授權條款仍適用。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "SemIf：Jev の設計に着想を得た公開モデルの判断",
+      "h1": "SemIf：Jev の設計に着想を得た公開モデルの判断",
+      "description": "旧 OpenJev の SemIf は、公開モデルから型付き選択肢の確率を読む独立した研究プロジェクトです。",
+      "summary": "文章を生成せず選択肢の確率を読み、ルーティング、再試行、証拠確認などの小さな意味判断を扱います。 Jev のインターフェース設計を公開モデルで再現しますが、非公開のモデルや学習を再現するものではなく、TypeSafe とは無関係です。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途と対象",
+          "text": "文章を生成せず選択肢の確率を読み、ルーティング、再試行、証拠確認などの小さな意味判断を扱います。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev との関係",
+          "text": "Jev のインターフェース設計を公開モデルで再現しますが、非公開のモデルや学習を再現するものではなく、TypeSafe とは無関係です。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "ブラウザーデモか CUDA、Apple Silicon、CPU の評価バックエンドを利用し、モデル重みは別途取得します。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範囲と制約",
+          "text": "高速な再利用処理は実験段階です。Jev との比較は公開記録に基づき、実 API は呼び出していません。モデル固有のライセンスも適用されます。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "SemIf: Jev에서 착안한 공개 모델 판단",
+      "h1": "SemIf: Jev에서 착안한 공개 모델 판단",
+      "description": "이전 이름이 OpenJev인 SemIf는 공개 모델의 형식화된 선택지 확률을 읽는 독립 연구 프로젝트입니다.",
+      "summary": "답변 문장을 생성하지 않고 선택지 확률을 읽어 라우팅, 재시도, 근거 확인 같은 작은 의미 판단을 처리합니다. Jev의 인터페이스 패턴을 재현하지만 비공개 모델이나 학습을 복제하지 않으며 TypeSafe와 제휴하지 않습니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "용도와 대상",
+          "text": "답변 문장을 생성하지 않고 선택지 확률을 읽어 라우팅, 재시도, 근거 확인 같은 작은 의미 판단을 처리합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Jev의 인터페이스 패턴을 재현하지만 비공개 모델이나 학습을 복제하지 않으며 TypeSafe와 제휴하지 않습니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "브라우저 데모나 문서화된 CUDA, Apple Silicon, CPU 평가 백엔드를 이용하며 모델 가중치는 별도로 구합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 한계",
+          "text": "빠른 재사용 경로는 실험 단계입니다. Jev 비교는 실시간 호출이 아닌 공개 기록을 사용하고 원본 모델 라이선스가 적용됩니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "SemIf: decisiones con modelos abiertos inspiradas en Jev",
+      "h1": "SemIf: decisiones con modelos abiertos inspiradas en Jev",
+      "description": "SemIf, antes OpenJev, es un proyecto independiente que lee probabilidades de opciones tipadas en modelos abiertos.",
+      "summary": "Resuelve pequeñas decisiones semánticas de enrutamiento, reintento y evidencia leyendo probabilidades sin generar frases de respuesta. Reproduce el patrón de interfaz de Jev, no su modelo ni entrenamiento no publicados, y no está afiliado a TypeSafe.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "Resuelve pequeñas decisiones semánticas de enrutamiento, reintento y evidencia leyendo probabilidades sin generar frases de respuesta.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Reproduce el patrón de interfaz de Jev, no su modelo ni entrenamiento no publicados, y no está afiliado a TypeSafe.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo se usa",
+          "text": "Explore la demo web o los backends CUDA, Apple Silicon y CPU documentados; los pesos se obtienen por separado.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "Las vías rápidas de reutilización son experimentales. Las comparaciones Jev usan registros publicados, no llamadas en vivo; se aplican las licencias de los modelos.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "SemIf : décisions sur modèles ouverts inspirées de Jev",
+      "h1": "SemIf : décisions sur modèles ouverts inspirées de Jev",
+      "description": "SemIf, anciennement OpenJev, est un projet indépendant qui lit les probabilités d'options typées dans des modèles ouverts.",
+      "summary": "Il traite routage, nouvelles tentatives et vérification de preuves en lisant les probabilités, sans générer de phrase de réponse. Il reprend le motif d'interface de Jev, sans reproduire son modèle ni son entraînement non publics, et sans affiliation TypeSafe.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Usage et public visé",
+          "text": "Il traite routage, nouvelles tentatives et vérification de preuves en lisant les probabilités, sans générer de phrase de réponse.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Il reprend le motif d'interface de Jev, sans reproduire son modèle ni son entraînement non publics, et sans affiliation TypeSafe.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Explorez la démo web ou les moteurs documentés CUDA, Apple Silicon et CPU ; les poids s'obtiennent séparément.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "Les voies rapides de réutilisation sont expérimentales. Les comparaisons Jev reposent sur des résultats publiés, sans appels en direct ; les licences des modèles s'appliquent.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "SemIf: offene Entscheidungsmodelle nach Jevs Schnittstellenmuster",
+      "h1": "SemIf: offene Entscheidungsmodelle nach Jevs Schnittstellenmuster",
+      "description": "SemIf, früher OpenJev, ist ein unabhängiges Forschungsprojekt für typisierte Auswahlwahrscheinlichkeiten aus offenen Modellen.",
+      "summary": "Es behandelt Routing, Wiederholungen und Evidenzprüfungen durch direkt gelesene Auswahlwahrscheinlichkeiten, ohne Antwortsätze zu erzeugen. Nachgebildet wird Jevs Schnittstellenmuster, nicht das unveröffentlichte Modell oder Training; es besteht keine Verbindung zu TypeSafe.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Zweck und Zielgruppe",
+          "text": "Es behandelt Routing, Wiederholungen und Evidenzprüfungen durch direkt gelesene Auswahlwahrscheinlichkeiten, ohne Antwortsätze zu erzeugen.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Nachgebildet wird Jevs Schnittstellenmuster, nicht das unveröffentlichte Modell oder Training; es besteht keine Verbindung zu TypeSafe.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Verwendung",
+          "text": "Nutzen Sie die Browserdemo oder dokumentierte CUDA-, Apple-Silicon- und CPU-Backends; Modellgewichte werden separat bezogen.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Schnelle Wiederverwendungspfade sind experimentell. Jev-Vergleiche nutzen veröffentlichte Daten statt Live-Aufrufe; die jeweiligen Modelllizenzen gelten weiter.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "SemIf: decisões com modelos abertos inspiradas no Jev",
+      "h1": "SemIf: decisões com modelos abertos inspiradas no Jev",
+      "description": "SemIf, antes OpenJev, é um projeto independente que lê probabilidades de opções tipadas em modelos abertos.",
+      "summary": "Resolve pequenas decisões semânticas de roteamento, repetição e evidência lendo probabilidades, sem gerar frases de resposta. Reproduz o padrão de interface do Jev, não seu modelo ou treinamento não publicados, e não tem vínculo com a TypeSafe.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Finalidade e público",
+          "text": "Resolve pequenas decisões semânticas de roteamento, repetição e evidência lendo probabilidades, sem gerar frases de resposta.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "Reproduz o padrão de interface do Jev, não seu modelo ou treinamento não publicados, e não tem vínculo com a TypeSafe.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Explore a demonstração web ou os backends documentados CUDA, Apple Silicon e CPU; os pesos são obtidos separadamente.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "Os caminhos rápidos de reutilização são experimentais. As comparações Jev usam registros publicados, sem chamadas ao vivo; as licenças dos modelos continuam válidas.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "SemIf: решения открытых моделей по образцу Jev",
+      "h1": "SemIf: решения открытых моделей по образцу Jev",
+      "description": "SemIf, ранее OpenJev, — независимый исследовательский проект, читающий вероятности типизированных вариантов из открытых моделей.",
+      "summary": "Он решает небольшие задачи маршрутизации, повторов и проверки свидетельств по вероятностям вариантов, не генерируя текст ответа. Проект воспроизводит шаблон интерфейса Jev, а не закрытую модель или обучение, и не связан с TypeSafe.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Он решает небольшие задачи маршрутизации, повторов и проверки свидетельств по вероятностям вариантов, не генерируя текст ответа.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Проект воспроизводит шаблон интерфейса Jev, а не закрытую модель или обучение, и не связан с TypeSafe.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Изучите браузерную демонстрацию или описанные бэкенды CUDA, Apple Silicon и CPU; веса моделей получают отдельно.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Быстрые пути повторного использования экспериментальны. Сравнения Jev основаны на опубликованных записях, а не живых вызовах; действуют лицензии исходных моделей.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "SemIf: Jev से प्रेरित खुले मॉडल के निर्णय",
+      "h1": "SemIf: Jev से प्रेरित खुले मॉडल के निर्णय",
+      "description": "SemIf, जिसका पुराना नाम OpenJev था, खुले मॉडल से निश्चित प्रकार के विकल्पों की संभावनाएँ पढ़ने वाला स्वतंत्र शोध प्रोजेक्ट है।",
+      "summary": "यह उत्तर वाक्य बनाए बिना संभावनाएँ पढ़कर रूटिंग, दोबारा प्रयास और साक्ष्य जाँच जैसे छोटे अर्थ-संबंधी निर्णय लेता है। यह Jev का इंटरफ़ेस पैटर्न दोहराता है, उसके अप्रकाशित मॉडल या प्रशिक्षण को नहीं; इसका TypeSafe से संबंध नहीं है।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "उद्देश्य और उपयोगकर्ता",
+          "text": "यह उत्तर वाक्य बनाए बिना संभावनाएँ पढ़कर रूटिंग, दोबारा प्रयास और साक्ष्य जाँच जैसे छोटे अर्थ-संबंधी निर्णय लेता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "यह Jev का इंटरफ़ेस पैटर्न दोहराता है, उसके अप्रकाशित मॉडल या प्रशिक्षण को नहीं; इसका TypeSafe से संबंध नहीं है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल का तरीका",
+          "text": "ब्राउज़र डेमो या दस्तावेज़ों में दिए CUDA, Apple Silicon और CPU बैकएंड आज़माएँ; मॉडल वेट अलग से लेने होते हैं।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "तेज़ पुनःउपयोग पथ प्रायोगिक हैं। Jev तुलना प्रकाशित रिकॉर्ड से है, लाइव कॉल से नहीं; मूल मॉडल के लाइसेंस लागू रहते हैं।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "SemIf: keputusan model terbuka terinspirasi Jev",
+      "h1": "SemIf: keputusan model terbuka terinspirasi Jev",
+      "description": "SemIf, sebelumnya OpenJev, adalah riset independen yang membaca probabilitas opsi bertipe dari model terbuka.",
+      "summary": "Proyek ini menangani keputusan semantik kecil seperti perutean, percobaan ulang, dan pemeriksaan bukti tanpa menghasilkan kalimat jawaban. Yang ditiru adalah pola antarmuka Jev, bukan model atau pelatihannya yang tidak dipublikasikan; proyek tidak berafiliasi dengan TypeSafe.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Tujuan dan pengguna",
+          "text": "Proyek ini menangani keputusan semantik kecil seperti perutean, percobaan ulang, dan pemeriksaan bukti tanpa menghasilkan kalimat jawaban.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Yang ditiru adalah pola antarmuka Jev, bukan model atau pelatihannya yang tidak dipublikasikan; proyek tidak berafiliasi dengan TypeSafe.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Jelajahi demo browser atau backend CUDA, Apple Silicon, dan CPU yang terdokumentasi; bobot model diperoleh terpisah.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Jalur penggunaan ulang cepat bersifat eksperimental. Perbandingan Jev memakai catatan terbitan, bukan panggilan langsung; lisensi model asal tetap berlaku.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "SemIf: quyết định từ mô hình mở theo ý tưởng Jev",
+      "h1": "SemIf: quyết định từ mô hình mở theo ý tưởng Jev",
+      "description": "SemIf, trước đây là OpenJev, là nghiên cứu độc lập đọc xác suất lựa chọn có kiểu từ mô hình mở.",
+      "summary": "Công cụ xử lý quyết định ngữ nghĩa nhỏ như định tuyến, thử lại và kiểm tra bằng chứng bằng xác suất, không sinh câu trả lời. Nó tái hiện mẫu giao diện Jev, không sao chép mô hình hoặc quá trình huấn luyện chưa công bố và không liên kết với TypeSafe.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích và đối tượng",
+          "text": "Công cụ xử lý quyết định ngữ nghĩa nhỏ như định tuyến, thử lại và kiểm tra bằng chứng bằng xác suất, không sinh câu trả lời.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Nó tái hiện mẫu giao diện Jev, không sao chép mô hình hoặc quá trình huấn luyện chưa công bố và không liên kết với TypeSafe.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Khám phá demo trình duyệt hoặc backend CUDA, Apple Silicon và CPU được mô tả; trọng số mô hình cần lấy riêng.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Các đường tái sử dụng nhanh còn thử nghiệm. So sánh Jev dùng hồ sơ công bố thay vì gọi trực tiếp; giấy phép mô hình gốc vẫn áp dụng.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "SemIf: Jev’den esinlenen açık model kararları",
+      "h1": "SemIf: Jev’den esinlenen açık model kararları",
+      "description": "Eski adı OpenJev olan SemIf, açık modellerden türü belirli seçenek olasılıkları okuyan bağımsız bir araştırma projesidir.",
+      "summary": "Yanıt cümlesi üretmeden olasılıkları okuyarak yönlendirme, yeniden deneme ve kanıt kontrolü gibi küçük anlamsal kararları işler. Jev’in arayüz desenini yeniden kurar; açıklanmamış modelini veya eğitimini kopyalamaz ve TypeSafe ile bağlantılı değildir.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Amaç ve hedef kitle",
+          "text": "Yanıt cümlesi üretmeden olasılıkları okuyarak yönlendirme, yeniden deneme ve kanıt kontrolü gibi küçük anlamsal kararları işler.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Jev’in arayüz desenini yeniden kurar; açıklanmamış modelini veya eğitimini kopyalamaz ve TypeSafe ile bağlantılı değildir.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Tarayıcı demosu veya belgelenen CUDA, Apple Silicon ve CPU arka uçları kullanılabilir; model ağırlıkları ayrı edinilir.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Hızlı yeniden kullanım yolları deneyseldir. Jev karşılaştırmaları canlı çağrılara değil yayımlanan kayıtlara dayanır; kaynak modellerin lisansları geçerlidir.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "SemIf: decisioni con modelli aperti ispirate a Jev",
+      "h1": "SemIf: decisioni con modelli aperti ispirate a Jev",
+      "description": "SemIf, già OpenJev, è un progetto indipendente che legge probabilità di opzioni tipizzate da modelli aperti.",
+      "summary": "Gestisce piccole decisioni semantiche di instradamento, nuovi tentativi e verifica delle prove senza generare frasi di risposta. Riproduce il modello d'interfaccia Jev, non il modello o l'addestramento non pubblici, e non è affiliato a TypeSafe.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Scopo e destinatari",
+          "text": "Gestisce piccole decisioni semantiche di instradamento, nuovi tentativi e verifica delle prove senza generare frasi di risposta.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Riproduce il modello d'interfaccia Jev, non il modello o l'addestramento non pubblici, e non è affiliato a TypeSafe.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come si usa",
+          "text": "Si esplora la demo web o si usano i backend documentati CUDA, Apple Silicon e CPU; i pesi si ottengono separatamente.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "I percorsi rapidi di riuso sono sperimentali. I confronti Jev usano risultati pubblicati, non chiamate dal vivo; restano valide le licenze dei modelli.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  },
+  "displayName": "SemIf"
+}

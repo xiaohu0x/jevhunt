@@ -1,0 +1,762 @@
+{
+  "version": "source-content-v1",
+  "repo": "jarrodwatts/jev-trader",
+  "repositoryId": 1373659194,
+  "relationship": "jev-app",
+  "category": "apps",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "path": "README.md",
+      "commit": "b587759e459ea049590102e54a0b07800864cdc3",
+      "url": "https://github.com/jarrodwatts/jev-trader/blob/b587759e459ea049590102e54a0b07800864cdc3/README.md",
+      "sha256": "f84691a188a7380ed35ae315b7ab18ff4a19c9408de1f6b755f6690296091861",
+      "accessedAt": "2026-09-30T07:33:47.606Z",
+      "id": "s1"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "The bot replaces post-only limit quotes on Monad blocks and streams book, order and fill events to a dashboard.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 3,
+          "end": 3,
+          "quote": "One decision every Monad block. A TypeSafe Jev model watches the Kuru MON-USDC order book and answers buy or sell every ~300 ms. Every block posts a real post-only limit order on that side, one tick inside the touch, replacing the last one. Fills happen when a taker hits it, so the bot earns the spread instead of paying it. A small server streams every block to the dashboard."
+        },
+        {
+          "source": "s1",
+          "start": 17,
+          "end": 19,
+          "quote": "- `GET /` snapshot: model, wallet, dryRun, latest block event\n- `GET /history` last 1000 block events\n- `GET /events` SSE: `snapshot` on connect, then one `block` event per block, plus a `fill` event whenever a live order's receipt lands"
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "With MODEL=jev and TYPESAFE_AI_API_KEY, Jev chooses buy or sell; the default mock model is a momentum heuristic.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 11,
+          "end": 11,
+          "quote": "With no `PRIVATE_KEY` it dry-runs: real book, real decisions, simulated fills. Set `MODEL=jev` and `TYPESAFE_AI_API_KEY` to use Jev; the default `mock` is a momentum heuristic stand-in."
+        },
+        {
+          "source": "s1",
+          "start": 34,
+          "end": 34,
+          "quote": "Every block the model is asked about the move over `HORIZON_BLOCKS` (default 100, ~30 s) and answers `buy` or `sell`. `quote` is the order that block put on the book: a post-only limit order of `TRADE_SIZE_MON` on that side, `QUOTE_INSIDE_TICKS` inside the touch (clamped to the touch when the spread is too tight), in one `batchUpdate` that also cancels everything we had resting (`cancel`). `hold` appears only with `decision.late: true`, when the model missed the block and nothing was posted. When the position cap (or, live, margin funds) blocks a side, the quote goes on the other side with `capped: true` and `probabilities` still show the model's call. `resting` is our size known to be on the book after this block. `upIn10` equals the buy probability."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "The Bun workflow reads .env settings. Without PRIVATE_KEY it uses the live order book but simulates fills.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 5,
+          "end": 11,
+          "quote": "## Run\n\n    cp .env.example .env\n    bun install\n    bun run start\n\nWith no `PRIVATE_KEY` it dry-runs: real book, real decisions, simulated fills. Set `MODEL=jev` and `TYPESAFE_AI_API_KEY` to use Jev; the default `mock` is a momentum heuristic stand-in."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "Live mode can place real orders; late decisions skip posting, and position or margin limits may reverse the quoted side from the model's choice.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 34,
+          "end": 41,
+          "quote": "Every block the model is asked about the move over `HORIZON_BLOCKS` (default 100, ~30 s) and answers `buy` or `sell`. `quote` is the order that block put on the book: a post-only limit order of `TRADE_SIZE_MON` on that side, `QUOTE_INSIDE_TICKS` inside the touch (clamped to the touch when the spread is too tight), in one `batchUpdate` that also cancels everything we had resting (`cancel`). `hold` appears only with `decision.late: true`, when the model missed the block and nothing was posted. When the position cap (or, live, margin funds) blocks a side, the quote goes on the other side with `capped: true` and `probabilities` still show the model's call. `resting` is our size known to be on the book after this block. `upIn10` equals the buy probability.\n\nLive sends are fired and forgotten, so the `block` event carries the **intent**: `status: \"sent\"`, `gasMon` is `gasLimit x (last known base fee + priority)`. Monad charges the gas limit, so that is the real cost whether the order lands or not. The receipt arrives a block or two later as its own SSE event:\n\n    event: quote\n    data: { \"block\": 105488269, \"quote\": { …, \"status\": \"placed\", \"orderId\": 100295812, \"gasMon\": 0.0357 } }\n\n`status` becomes `placed` (with the order id) or `reverted` (the book moved through the price before the tx landed, or a cancelled order had already filled). No receipt after 10 blocks gives `lost`. Fills are not in our own transactions: someone else's taker order hits our resting one, and the Trade log for it arrives via the same `eth_getLogs` poll that feeds the model. Each block with fills gets its own SSE event, and `position`, `realizedUsd` and `fills` update then:"
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "jev-trader: Jev-directed quotes on Kuru and Monad",
+      "h1": "jev-trader: Jev-directed quotes on Kuru and Monad",
+      "description": "jev-trader uses Jev for buy-or-sell decisions on the Kuru MON-USDC book, with a mock model and dry-run defaults.",
+      "summary": "The bot replaces post-only limit quotes on Monad blocks and streams book, order and fill events to a dashboard. With MODEL=jev and TYPESAFE_AI_API_KEY, Jev chooses buy or sell; the default mock model is a momentum heuristic.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose and audience",
+          "text": "The bot replaces post-only limit quotes on Monad blocks and streams book, order and fill events to a dashboard.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "With MODEL=jev and TYPESAFE_AI_API_KEY, Jev chooses buy or sell; the default mock model is a momentum heuristic.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Using the project",
+          "text": "The Bun workflow reads .env settings. Without PRIVATE_KEY it uses the live order book but simulates fills.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "Live mode can place real orders; late decisions skip posting, and position or margin limits may reverse the quoted side from the model's choice.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "jev-trader：用 Jev 决定 Kuru 与 Monad 报价",
+      "h1": "jev-trader：用 Jev 决定 Kuru 与 Monad 报价",
+      "description": "jev-trader 用 Jev 判断 Kuru MON-USDC 买卖方向，默认采用模拟模型和试运行模式。",
+      "summary": "机器人随 Monad 区块更新仅挂单限价报价，并将盘口、订单与成交事件推送到仪表盘。 配置 MODEL=jev 和 TYPESAFE_AI_API_KEY 后由 Jev 选择买或卖；默认 mock 模型只是动量启发式。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途与适用对象",
+          "text": "机器人随 Monad 区块更新仅挂单限价报价，并将盘口、订单与成交事件推送到仪表盘。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "配置 MODEL=jev 和 TYPESAFE_AI_API_KEY 后由 Jev 选择买或卖；默认 mock 模型只是动量启发式。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "Bun 工作流读取 .env 配置，未设置 PRIVATE_KEY 时使用真实盘口但模拟成交。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "实盘模式可提交真实订单；迟到的决策不会下单，持仓或保证金限制可能让实际报价方向与模型选择相反。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "jev-trader：以 Jev 決定 Kuru 與 Monad 報價",
+      "h1": "jev-trader：以 Jev 決定 Kuru 與 Monad 報價",
+      "description": "jev-trader 用 Jev 判斷 Kuru MON-USDC 買賣方向，預設採模擬模型與試跑模式。",
+      "summary": "機器人隨 Monad 區塊更新只掛單限價報價，並把委託簿、訂單及成交事件串流至儀表板。 設定 MODEL=jev 和 TYPESAFE_AI_API_KEY 後，由 Jev 選擇買或賣；預設 mock 模型僅是動量啟發式。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途與適用對象",
+          "text": "機器人隨 Monad 區塊更新只掛單限價報價，並把委託簿、訂單及成交事件串流至儀表板。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "設定 MODEL=jev 和 TYPESAFE_AI_API_KEY 後，由 Jev 選擇買或賣；預設 mock 模型僅是動量啟發式。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "Bun 流程讀取 .env 設定；未設定 PRIVATE_KEY 時使用真實委託簿，但成交為模擬。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "實盤模式可送出真實訂單；延遲決策不下單，部位或保證金限制可能使報價方向與模型選擇相反。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "jev-trader：Jev で Kuru・Monad の注文方向を選択",
+      "h1": "jev-trader：Jev で Kuru・Monad の注文方向を選択",
+      "description": "jev-trader は Kuru MON-USDC の売買方向を Jev で判断し、既定では模擬モデルとドライランを使います。",
+      "summary": "Monad の各ブロックで post-only 指値注文を更新し、板・注文・約定イベントを画面へ配信します。 MODEL=jev と TYPESAFE_AI_API_KEY を設定すると Jev が売買を選び、既定の mock はモメンタム則を使います。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途と対象",
+          "text": "Monad の各ブロックで post-only 指値注文を更新し、板・注文・約定イベントを画面へ配信します。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev との関係",
+          "text": "MODEL=jev と TYPESAFE_AI_API_KEY を設定すると Jev が売買を選び、既定の mock はモメンタム則を使います。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "Bun の処理は .env を読みます。PRIVATE_KEY がなければ実際の板を参照して約定を模擬します。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範囲と制約",
+          "text": "実運用は本物の注文を出します。判断が遅れた場合は発注せず、ポジションや証拠金制限によりモデルと逆方向になる場合があります。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "jev-trader: Jev로 Kuru·Monad 주문 방향 선택",
+      "h1": "jev-trader: Jev로 Kuru·Monad 주문 방향 선택",
+      "description": "jev-trader는 Kuru MON-USDC 매수·매도를 Jev로 판단하며 기본적으로 모의 모델과 드라이런을 사용합니다.",
+      "summary": "Monad 블록마다 post-only 지정가 주문을 교체하고 호가창, 주문, 체결 이벤트를 대시보드로 전송합니다. MODEL=jev와 TYPESAFE_AI_API_KEY를 설정하면 Jev가 매수·매도를 고르며 기본 mock은 모멘텀 휴리스틱입니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "용도와 대상",
+          "text": "Monad 블록마다 post-only 지정가 주문을 교체하고 호가창, 주문, 체결 이벤트를 대시보드로 전송합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "MODEL=jev와 TYPESAFE_AI_API_KEY를 설정하면 Jev가 매수·매도를 고르며 기본 mock은 모멘텀 휴리스틱입니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "Bun 흐름이 .env 설정을 읽습니다. PRIVATE_KEY가 없으면 실제 호가창을 사용하지만 체결은 모의 처리합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 한계",
+          "text": "실거래 모드는 실제 주문을 낼 수 있습니다. 늦은 판단은 주문을 건너뛰고 포지션이나 증거금 제한이 모델과 반대 방향의 주문을 만들 수 있습니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "jev-trader: cotizaciones Kuru y Monad guiadas por Jev",
+      "h1": "jev-trader: cotizaciones Kuru y Monad guiadas por Jev",
+      "description": "jev-trader usa Jev para decidir compra o venta en Kuru MON-USDC, con modelo simulado y ejecución de prueba por defecto.",
+      "summary": "El bot renueva órdenes limitadas post-only por bloque Monad y transmite eventos del libro, órdenes y ejecuciones al panel. Con MODEL=jev y TYPESAFE_AI_API_KEY, Jev elige comprar o vender; el modelo mock predeterminado aplica una heurística de impulso.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "El bot renueva órdenes limitadas post-only por bloque Monad y transmite eventos del libro, órdenes y ejecuciones al panel.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Con MODEL=jev y TYPESAFE_AI_API_KEY, Jev elige comprar o vender; el modelo mock predeterminado aplica una heurística de impulso.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo se usa",
+          "text": "El flujo Bun lee .env. Sin PRIVATE_KEY utiliza el libro real, pero simula las ejecuciones.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "El modo real puede enviar órdenes efectivas; decisiones tardías no publican y los límites de posición o margen pueden invertir el lado elegido.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "jev-trader : cotations Kuru et Monad décidées par Jev",
+      "h1": "jev-trader : cotations Kuru et Monad décidées par Jev",
+      "description": "jev-trader utilise Jev pour choisir achat ou vente sur Kuru MON-USDC, avec modèle simulé et mode test par défaut.",
+      "summary": "Le bot renouvelle des ordres limités post-only à chaque bloc Monad et transmet carnet, ordres et exécutions au tableau de bord. Avec MODEL=jev et TYPESAFE_AI_API_KEY, Jev choisit achat ou vente ; le modèle mock applique par défaut une heuristique de momentum.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Usage et public visé",
+          "text": "Le bot renouvelle des ordres limités post-only à chaque bloc Monad et transmet carnet, ordres et exécutions au tableau de bord.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Avec MODEL=jev et TYPESAFE_AI_API_KEY, Jev choisit achat ou vente ; le modèle mock applique par défaut une heuristique de momentum.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Le flux Bun lit .env. Sans PRIVATE_KEY, il utilise le carnet réel mais simule les exécutions.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "Le mode réel peut envoyer de vrais ordres ; les décisions tardives ne publient rien et les limites de position ou marge peuvent inverser le côté choisi.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "jev-trader: Kuru- und Monad-Orders nach Jev-Entscheidungen",
+      "h1": "jev-trader: Kuru- und Monad-Orders nach Jev-Entscheidungen",
+      "description": "jev-trader nutzt Jev für Kauf- oder Verkaufsentscheidungen im Kuru-MON-USDC-Orderbuch; Standard sind Mock-Modell und Testlauf.",
+      "summary": "Der Bot ersetzt Post-only-Limitorders je Monad-Block und überträgt Orderbuch-, Order- und Ausführungsereignisse an ein Dashboard. Mit MODEL=jev und TYPESAFE_AI_API_KEY entscheidet Jev über Kauf oder Verkauf; das Standardmodell mock nutzt eine Momentum-Heuristik.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Zweck und Zielgruppe",
+          "text": "Der Bot ersetzt Post-only-Limitorders je Monad-Block und überträgt Orderbuch-, Order- und Ausführungsereignisse an ein Dashboard.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Mit MODEL=jev und TYPESAFE_AI_API_KEY entscheidet Jev über Kauf oder Verkauf; das Standardmodell mock nutzt eine Momentum-Heuristik.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Verwendung",
+          "text": "Der Bun-Ablauf liest .env. Ohne PRIVATE_KEY verwendet er das echte Orderbuch, simuliert aber Ausführungen.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Live-Betrieb kann echte Orders senden; verspätete Entscheidungen setzen aus, und Positions- oder Margenlimits können die gewählte Orderseite umkehren.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "jev-trader: cotações Kuru e Monad orientadas por Jev",
+      "h1": "jev-trader: cotações Kuru e Monad orientadas por Jev",
+      "description": "jev-trader usa Jev para decidir compra ou venda no Kuru MON-USDC, com modelo simulado e teste por padrão.",
+      "summary": "O bot substitui ordens limitadas post-only por bloco Monad e transmite eventos do livro, ordens e execuções ao painel. Com MODEL=jev e TYPESAFE_AI_API_KEY, Jev escolhe compra ou venda; o modelo mock padrão usa uma heurística de momentum.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Finalidade e público",
+          "text": "O bot substitui ordens limitadas post-only por bloco Monad e transmite eventos do livro, ordens e execuções ao painel.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "Com MODEL=jev e TYPESAFE_AI_API_KEY, Jev escolhe compra ou venda; o modelo mock padrão usa uma heurística de momentum.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "O fluxo Bun lê .env. Sem PRIVATE_KEY, usa o livro real, mas simula as execuções.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "O modo real pode enviar ordens efetivas; decisões atrasadas não geram ordens e limites de posição ou margem podem inverter o lado escolhido.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "jev-trader: котировки Kuru и Monad по решениям Jev",
+      "h1": "jev-trader: котировки Kuru и Monad по решениям Jev",
+      "description": "jev-trader использует Jev для выбора покупки или продажи в Kuru MON-USDC; по умолчанию работают mock-модель и пробный режим.",
+      "summary": "Бот заменяет post-only лимитные заявки на блоках Monad и передаёт события стакана, заявок и исполнений в панель. При MODEL=jev и TYPESAFE_AI_API_KEY Jev выбирает покупку или продажу; стандартный mock использует эвристику импульса.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Бот заменяет post-only лимитные заявки на блоках Monad и передаёт события стакана, заявок и исполнений в панель.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "При MODEL=jev и TYPESAFE_AI_API_KEY Jev выбирает покупку или продажу; стандартный mock использует эвристику импульса.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Процесс Bun читает .env. Без PRIVATE_KEY используется реальный стакан, но исполнения симулируются.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Реальный режим может отправлять настоящие заявки; поздние решения пропускают размещение, а лимиты позиции или маржи могут поменять сторону относительно выбора модели.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "jev-trader: Jev के निर्णयों से Kuru और Monad कोटेशन",
+      "h1": "jev-trader: Jev के निर्णयों से Kuru और Monad कोटेशन",
+      "description": "jev-trader, Kuru MON-USDC पर खरीद या बिक्री के लिए Jev इस्तेमाल करता है; डिफ़ॉल्ट मोड mock और ड्राई-रन हैं।",
+      "summary": "बॉट हर Monad ब्लॉक पर post-only लिमिट ऑर्डर बदलता है और ऑर्डर बुक, ऑर्डर तथा फ़िल इवेंट डैशबोर्ड पर भेजता है। MODEL=jev और TYPESAFE_AI_API_KEY होने पर Jev खरीद या बिक्री चुनता है; डिफ़ॉल्ट mock मॉडल मोमेंटम नियम है।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "उद्देश्य और उपयोगकर्ता",
+          "text": "बॉट हर Monad ब्लॉक पर post-only लिमिट ऑर्डर बदलता है और ऑर्डर बुक, ऑर्डर तथा फ़िल इवेंट डैशबोर्ड पर भेजता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "MODEL=jev और TYPESAFE_AI_API_KEY होने पर Jev खरीद या बिक्री चुनता है; डिफ़ॉल्ट mock मॉडल मोमेंटम नियम है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल का तरीका",
+          "text": "Bun प्रवाह .env पढ़ता है। PRIVATE_KEY के बिना वास्तविक ऑर्डर बुक इस्तेमाल होती है, लेकिन फ़िल सिमुलेट होते हैं।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "लाइव मोड वास्तविक ऑर्डर भेज सकता है; देर से आए निर्णय पर ऑर्डर नहीं लगता और पोज़िशन या मार्जिन सीमा चुनी दिशा पलट सकती है।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "jev-trader: kuotasi Kuru dan Monad dengan keputusan Jev",
+      "h1": "jev-trader: kuotasi Kuru dan Monad dengan keputusan Jev",
+      "description": "jev-trader memakai Jev untuk memilih beli atau jual di Kuru MON-USDC, dengan model mock dan mode uji sebagai bawaan.",
+      "summary": "Bot mengganti order limit post-only pada blok Monad dan mengalirkan peristiwa buku order, order, serta eksekusi ke dasbor. Dengan MODEL=jev dan TYPESAFE_AI_API_KEY, Jev memilih beli atau jual; model mock bawaan memakai heuristik momentum.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Tujuan dan pengguna",
+          "text": "Bot mengganti order limit post-only pada blok Monad dan mengalirkan peristiwa buku order, order, serta eksekusi ke dasbor.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Dengan MODEL=jev dan TYPESAFE_AI_API_KEY, Jev memilih beli atau jual; model mock bawaan memakai heuristik momentum.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Alur Bun membaca .env. Tanpa PRIVATE_KEY, buku order nyata dipakai tetapi eksekusi disimulasikan.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Mode nyata dapat mengirim order sungguhan; keputusan terlambat melewati pemasangan, dan batas posisi atau margin bisa membalik sisi pilihan model.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "jev-trader: báo giá Kuru và Monad theo quyết định Jev",
+      "h1": "jev-trader: báo giá Kuru và Monad theo quyết định Jev",
+      "description": "jev-trader dùng Jev chọn mua hoặc bán trên Kuru MON-USDC, mặc định chạy thử với mô hình mock.",
+      "summary": "Bot thay lệnh giới hạn post-only theo khối Monad và truyền sự kiện sổ lệnh, lệnh, khớp lệnh đến bảng điều khiển. Với MODEL=jev và TYPESAFE_AI_API_KEY, Jev chọn mua hoặc bán; mô hình mock mặc định dùng quy tắc động lượng.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích và đối tượng",
+          "text": "Bot thay lệnh giới hạn post-only theo khối Monad và truyền sự kiện sổ lệnh, lệnh, khớp lệnh đến bảng điều khiển.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Với MODEL=jev và TYPESAFE_AI_API_KEY, Jev chọn mua hoặc bán; mô hình mock mặc định dùng quy tắc động lượng.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Quy trình Bun đọc .env. Không có PRIVATE_KEY thì dùng sổ lệnh thật nhưng mô phỏng khớp lệnh.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Chế độ thật có thể gửi lệnh thực; quyết định trễ bỏ qua đặt lệnh, còn giới hạn vị thế hoặc ký quỹ có thể đảo chiều so với mô hình.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "jev-trader: Jev kararlarıyla Kuru ve Monad kotasyonları",
+      "h1": "jev-trader: Jev kararlarıyla Kuru ve Monad kotasyonları",
+      "description": "jev-trader Kuru MON-USDC için Jev ile alım veya satım seçer; varsayılanları mock model ve deneme modudur.",
+      "summary": "Bot her Monad bloğunda post-only limit emirlerini yeniler; emir defteri, emir ve gerçekleşme olaylarını panele iletir. MODEL=jev ve TYPESAFE_AI_API_KEY ile Jev alım veya satım seçer; varsayılan mock model momentum sezgiseli kullanır.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Amaç ve hedef kitle",
+          "text": "Bot her Monad bloğunda post-only limit emirlerini yeniler; emir defteri, emir ve gerçekleşme olaylarını panele iletir.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "MODEL=jev ve TYPESAFE_AI_API_KEY ile Jev alım veya satım seçer; varsayılan mock model momentum sezgiseli kullanır.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Bun akışı .env okur. PRIVATE_KEY yoksa gerçek emir defteri kullanılır ancak gerçekleşmeler simüle edilir.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Canlı mod gerçek emir gönderebilir; geç kararlar emir üretmez, pozisyon veya teminat sınırları modelin seçtiği yönü tersine çevirebilir.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "jev-trader: quotazioni Kuru e Monad guidate da Jev",
+      "h1": "jev-trader: quotazioni Kuru e Monad guidate da Jev",
+      "description": "jev-trader usa Jev per scegliere acquisto o vendita su Kuru MON-USDC, con modello mock e prova come impostazioni predefinite.",
+      "summary": "Il bot sostituisce ordini limite post-only a ogni blocco Monad e invia eventi di libro, ordini ed esecuzioni al pannello. Con MODEL=jev e TYPESAFE_AI_API_KEY, Jev sceglie acquisto o vendita; il modello mock predefinito usa un'euristica momentum.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Scopo e destinatari",
+          "text": "Il bot sostituisce ordini limite post-only a ogni blocco Monad e invia eventi di libro, ordini ed esecuzioni al pannello.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Con MODEL=jev e TYPESAFE_AI_API_KEY, Jev sceglie acquisto o vendita; il modello mock predefinito usa un'euristica momentum.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come si usa",
+          "text": "Il flusso Bun legge .env. Senza PRIVATE_KEY usa il libro reale ma simula le esecuzioni.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "La modalità reale può inviare ordini effettivi; decisioni tardive saltano l'invio e limiti di posizione o margine possono invertire il lato scelto.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

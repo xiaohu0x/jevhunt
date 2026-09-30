@@ -1,0 +1,756 @@
+{
+  "version": "source-content-v1",
+  "repo": "Anil-matcha/awesome-jev-by-typesafe",
+  "repositoryId": 642065600,
+  "relationship": "resource",
+  "category": "lists",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "68d934eb0b2f2e1c37ea1e701ffcfb4cc5221e7f",
+      "url": "https://github.com/Anil-matcha/awesome-jev-by-typesafe/blob/68d934eb0b2f2e1c37ea1e701ffcfb4cc5221e7f/README.md",
+      "sha256": "388e4f5a69c167d12e5f41d1a30fd46127b4a3866f27942da7b08f7af49ae24a",
+      "accessedAt": "2026-09-30T07:33:48.865Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "kind": "documented",
+      "text": "awesome-jev-by-typesafe collects sourced Jev use cases, prompts, patterns and starter code as an independent community resource.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 11,
+          "end": 26,
+          "quote": "# Awesome Jev by TypeSafe\n\n<p align=\"center\"><a href=\"https://youtu.be/BOn4OMC8O9c\"><img src=\"https://i.ytimg.com/vi/BOn4OMC8O9c/maxresdefault.jpg\" width=\"720\"></a></p>\n<p align=\"center\"><a href=\"https://youtu.be/BOn4OMC8O9c\"><b>▶ Watch: Jev: 8 Wild Things People Already Built With TypeSafe's New AI Model </b></a></p>\n\nAn evidence-backed, practical collection of use cases, patterns, prompts, and starter code for **Jev**, TypeSafe AI’s first **System One Model**.\n\nJev is built for software that needs a judgment, not a paragraph:\n\n```text\ntext or JSON state + typed questions → constrained answers + probabilities → your code\n```\n\nUse it to classify, route, score, detect, rank, extract, verify, and gate automation. Keep the final control flow, thresholds, and side effects in code.\n\n> This is an independent community collection. It is not an official TypeSafe AI repository. Product behavior, prices, limits, and model aliases can change."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "kind": "documented",
+      "text": "It explains Choice, Score and Noul for classification, routing and verification while keeping control flow in code.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 54,
+          "end": 64,
+          "quote": "Most LLMs produce strings for people. Jev evaluates a state against questions whose answer spaces you define in advance. It returns typed values and probability distributions that ordinary software can branch on.\n\nThat makes Jev a good fit for the fuzzy middle between brittle rules and expensive generative workflows:\n\n| If your application needs to… | Reach for… |\n|---|---|\n| Pick one value from a known set | `Choice` |\n| Measure a position on an ordered rubric | `Score` |\n| Estimate whether a condition is true | `Noul` |\n| Decide whether to act, review, or fall back | probabilities + confidence + code |\n| Write an explanation, code, or a reply | an LLM, optionally after Jev routes or verifies it |"
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "kind": "documented",
+      "text": "Explore Python and TypeScript examples; offline policy tests need no key, while live examples require TYPESAFE_API_KEY.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 661,
+          "end": 679,
+          "quote": "## Included examples\n\n| Path | What it demonstrates |\n|---|---|\n| [`examples/python/quickstart.py`](examples/python/quickstart.py) | One request mixing Choice, Noul, and Score |\n| [`examples/python/workflows.py`](examples/python/workflows.py) | Support triage, guardrail questions, semantic re-ranking, and composite scoring |\n| [`examples/python/decision_policies.py`](examples/python/decision_policies.py) | Pure policy code for confidence gates and weighted scores |\n| [`examples/typescript/quickstart.ts`](examples/typescript/quickstart.ts) | TypeScript SDK usage |\n| [`tests/test_decision_policies.py`](tests/test_decision_policies.py) | Offline tests that need no API key |\n| [`docs/jev-use-case-playbook.md`](docs/jev-use-case-playbook.md) | Detailed, implementation-oriented case studies |\n| [`docs/coding-agent-use-cases.md`](docs/coding-agent-use-cases.md) | Agent harness and coding-agent patterns |\n\nRun the offline checks:\n\n```bash\npython -m unittest discover -s tests -v\n```\n\nRun a live example only after setting `TYPESAFE_API_KEY`:"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "kind": "documented",
+      "text": "Its guidance keeps authorization and side effects outside model judgment; probabilities do not guarantee a correct individual decision.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 640,
+          "end": 643,
+          "quote": "- It is not a chatbot, copywriter, code generator, or explanation engine.\n- It does not return arbitrary strings. The answer space comes from the question you define.\n- It is not a guarantee that a semantic judgment is correct. Calibration describes groups of predictions, not any individual answer.\n- It is not a replacement for authorization, deterministic validation, policy enforcement, or human review in high-impact workflows."
+        },
+        {
+          "source": "source-1",
+          "start": 650,
+          "end": 659,
+          "quote": "- Keep API keys server-side and restrict which services may call the endpoint.\n- Include an `other`, `unknown`, or `review` option whenever the option list can be incomplete.\n- Set thresholds per action and risk level; do not copy one global threshold across the system.\n- Treat low confidence as a first-class branch: ask for clarification, use a fallback, or involve a person.\n- Version state schemas, question instructions, criteria, and policy code together.\n- Log the versioned model returned in the response, not only the alias sent in the request.\n- Store probability distributions for audit and calibration, not just the winning label.\n- Use the SDK’s default retry behavior for `429` and `529`, or implement exponential backoff for direct HTTP calls.\n- Make side effects an explicit second step after inspection and approval.\n- Evaluate with your own representative cases, including ambiguity, adversarial text, missing fields, and out-of-domain inputs."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "awesome-jev-by-typesafe: Jev patterns and starter code",
+      "h1": "awesome-jev-by-typesafe: Jev patterns and starter code",
+      "description": "awesome-jev-by-typesafe is an independent collection of Jev decision patterns, sourced use cases and Python/TypeScript examples with explicit policy boundaries.",
+      "summary": "awesome-jev-by-typesafe collects sourced Jev use cases, prompts, patterns and starter code as an independent community resource. It explains Choice, Score and Noul for classification, routing and verification while keeping control flow in code. Explore Python and TypeScript examples; offline policy tests need no key, while live examples require TYPESAFE_API_KEY.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose",
+          "text": "awesome-jev-by-typesafe collects sourced Jev use cases, prompts, patterns and starter code as an independent community resource.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’s role",
+          "text": "It explains Choice, Score and Noul for classification, routing and verification while keeping control flow in code.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "How to use it",
+          "text": "Explore Python and TypeScript examples; offline policy tests need no key, while live examples require TYPESAFE_API_KEY.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limits to consider",
+          "text": "Its guidance keeps authorization and side effects outside model judgment; probabilities do not guarantee a correct individual decision.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "awesome-jev-by-typesafe：Jev 模式与入门代码",
+      "h1": "awesome-jev-by-typesafe：Jev 模式与入门代码",
+      "description": "awesome-jev-by-typesafe 汇集有来源的 Jev 用例、决策模式和 Python、TypeScript 示例，讲解分类、路由与验证；属于独立社区资源，强调策略边界由代码控制。",
+      "summary": "awesome-jev-by-typesafe 是独立社区资源，汇集有来源的 Jev 用例、提示词、模式和入门代码。 它讲解用 Choice、Score 和 Noul 分类、路由与验证，并将控制流程保留在代码中。 可查看 Python、TypeScript 示例；离线策略测试无需密钥，在线示例需要 TYPESAFE_API_KEY。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "awesome-jev-by-typesafe 是独立社区资源，汇集有来源的 Jev 用例、提示词、模式和入门代码。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "它讲解用 Choice、Score 和 Noul 分类、路由与验证，并将控制流程保留在代码中。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "可查看 Python、TypeScript 示例；离线策略测试无需密钥，在线示例需要 TYPESAFE_API_KEY。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用边界",
+          "text": "指南要求授权和副作用由模型判断之外的机制控制；概率不能保证单次决策正确。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "awesome-jev-by-typesafe：Jev 模式與入門程式碼",
+      "h1": "awesome-jev-by-typesafe：Jev 模式與入門程式碼",
+      "description": "awesome-jev-by-typesafe 彙整有來源的 Jev 用例、決策模式及 Python、TypeScript 範例，介紹分類、路由與驗證；屬於獨立社群資源，強調策略邊界由程式控制。",
+      "summary": "awesome-jev-by-typesafe 是獨立社群資源，彙整有來源的 Jev 用例、提示詞、模式與入門程式碼。 它介紹用 Choice、Score 與 Noul 分類、路由及驗證，並將控制流程留在程式碼中。 可參考 Python、TypeScript 範例；離線策略測試不需金鑰，線上範例需要 TYPESAFE_API_KEY。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "awesome-jev-by-typesafe 是獨立社群資源，彙整有來源的 Jev 用例、提示詞、模式與入門程式碼。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "它介紹用 Choice、Score 與 Noul 分類、路由及驗證，並將控制流程留在程式碼中。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "可參考 Python、TypeScript 範例；離線策略測試不需金鑰，線上範例需要 TYPESAFE_API_KEY。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用限制",
+          "text": "指南要求授權與副作用由模型判斷以外的機制控制；機率無法保證單次決策正確。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "awesome-jev-by-typesafe：Jev の設計パターンと入門コード",
+      "h1": "awesome-jev-by-typesafe：Jev の設計パターンと入門コード",
+      "description": "awesome-jev-by-typesafe は Jev の判断パターン、出典付き活用例、Python・TypeScript コードを集め、ポリシーをコードで守る独立資料です。",
+      "summary": "awesome-jev-by-typesafe は、出典付きの Jev 活用例、プロンプト、設計パターン、入門コードを集める独立コミュニティ資料です。 Choice、Score、Noul による分類・振り分け・検証を解説し、制御フローはコードに任せます。 Python と TypeScript の例を参照できます。オフラインのポリシーテストはキー不要で、実 API の例には TYPESAFE_API_KEY が必要です。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "何ができるか",
+          "text": "awesome-jev-by-typesafe は、出典付きの Jev 活用例、プロンプト、設計パターン、入門コードを集める独立コミュニティ資料です。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "Choice、Score、Noul による分類・振り分け・検証を解説し、制御フローはコードに任せます。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "Python と TypeScript の例を参照できます。オフラインのポリシーテストはキー不要で、実 API の例には TYPESAFE_API_KEY が必要です。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "制約と注意点",
+          "text": "認可と副作用をモデル判断から分離する指針です。確率は個々の判断の正しさを保証しません。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "awesome-jev-by-typesafe: Jev 패턴과 시작 코드",
+      "h1": "awesome-jev-by-typesafe: Jev 패턴과 시작 코드",
+      "description": "awesome-jev-by-typesafe는 Jev 판단 패턴, 출처가 있는 활용 사례, Python·TypeScript 예제와 명확한 정책 경계를 다루는 독립 자료입니다.",
+      "summary": "awesome-jev-by-typesafe는 출처가 있는 Jev 활용 사례, 프롬프트, 패턴, 시작 코드를 모은 독립 커뮤니티 자료입니다. Choice, Score, Noul로 분류, 라우팅, 검증하는 방법을 설명하며 제어 흐름은 코드에 둡니다. Python과 TypeScript 예제를 살펴볼 수 있습니다. 오프라인 정책 테스트는 키가 필요 없고 실제 호출에는 TYPESAFE_API_KEY가 필요합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "awesome-jev-by-typesafe는 출처가 있는 Jev 활용 사례, 프롬프트, 패턴, 시작 코드를 모은 독립 커뮤니티 자료입니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Choice, Score, Noul로 분류, 라우팅, 검증하는 방법을 설명하며 제어 흐름은 코드에 둡니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "Python과 TypeScript 예제를 살펴볼 수 있습니다. 오프라인 정책 테스트는 키가 필요 없고 실제 호출에는 TYPESAFE_API_KEY가 필요합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "제약 사항",
+          "text": "권한 부여와 부수 효과는 모델 판단 밖에서 관리하도록 안내합니다. 확률이 개별 판단의 정확성을 보장하지는 않습니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "awesome-jev-by-typesafe: patrones y ejemplos de Jev",
+      "h1": "awesome-jev-by-typesafe: patrones y ejemplos de Jev",
+      "description": "awesome-jev-by-typesafe reúne patrones Jev, casos documentados y ejemplos Python/TypeScript con límites de política explícitos; es independiente.",
+      "summary": "awesome-jev-by-typesafe reúne casos, instrucciones, patrones y código inicial con fuentes como recurso comunitario independiente. Explica Choice, Score y Noul para clasificar, enrutar y verificar, dejando el control del flujo al código. Incluye ejemplos Python y TypeScript; las pruebas locales no necesitan clave, pero los ejemplos en vivo requieren TYPESAFE_API_KEY.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "awesome-jev-by-typesafe reúne casos, instrucciones, patrones y código inicial con fuentes como recurso comunitario independiente.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "El papel de Jev",
+          "text": "Explica Choice, Score y Noul para clasificar, enrutar y verificar, dejando el control del flujo al código.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo usarlo",
+          "text": "Incluye ejemplos Python y TypeScript; las pruebas locales no necesitan clave, pero los ejemplos en vivo requieren TYPESAFE_API_KEY.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Límites a considerar",
+          "text": "La autorización y los efectos externos deben controlarse fuera del modelo; una probabilidad no garantiza acertar cada decisión.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "awesome-jev-by-typesafe : modèles d’usage et exemples Jev",
+      "h1": "awesome-jev-by-typesafe : modèles d’usage et exemples Jev",
+      "description": "awesome-jev-by-typesafe rassemble usages sourcés, schémas Jev et exemples Python/TypeScript avec des règles explicites, comme ressource indépendante.",
+      "summary": "awesome-jev-by-typesafe rassemble des usages sourcés, prompts, schémas et exemples de code dans une ressource communautaire indépendante. Il explique Choice, Score et Noul pour classer, router et vérifier, tout en laissant le contrôle au code. Consultez les exemples Python et TypeScript ; les tests hors ligne sont sans clé, les appels réels nécessitent TYPESAFE_API_KEY.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "awesome-jev-by-typesafe rassemble des usages sourcés, prompts, schémas et exemples de code dans une ressource communautaire indépendante.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Le rôle de Jev",
+          "text": "Il explique Choice, Score et Noul pour classer, router et vérifier, tout en laissant le contrôle au code.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Utilisation",
+          "text": "Consultez les exemples Python et TypeScript ; les tests hors ligne sont sans clé, les appels réels nécessitent TYPESAFE_API_KEY.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limites à connaître",
+          "text": "L’autorisation et les effets externes restent hors du jugement du modèle ; une probabilité ne garantit pas chaque décision.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "awesome-jev-by-typesafe: Jev-Muster und Beispielcode",
+      "h1": "awesome-jev-by-typesafe: Jev-Muster und Beispielcode",
+      "description": "awesome-jev-by-typesafe sammelt unabhängig Jev-Entscheidungsmuster, belegte Anwendungsfälle und Python-/TypeScript-Beispiele mit klaren Regeln.",
+      "summary": "awesome-jev-by-typesafe sammelt belegte Anwendungsfälle, Prompts, Muster und Einstiegscode als unabhängige Community-Ressource. Es erklärt Choice, Score und Noul für Klassifikation, Routing und Prüfung; der Code behält die Ablaufkontrolle. Python- und TypeScript-Beispiele stehen bereit. Offline-Policytests benötigen keinen Schlüssel; Live-Beispiele erfordern TYPESAFE_API_KEY.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "awesome-jev-by-typesafe sammelt belegte Anwendungsfälle, Prompts, Muster und Einstiegscode als unabhängige Community-Ressource.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Die Rolle von Jev",
+          "text": "Es erklärt Choice, Score und Noul für Klassifikation, Routing und Prüfung; der Code behält die Ablaufkontrolle.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Nutzung",
+          "text": "Python- und TypeScript-Beispiele stehen bereit. Offline-Policytests benötigen keinen Schlüssel; Live-Beispiele erfordern TYPESAFE_API_KEY.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Grenzen",
+          "text": "Autorisierung und Seiteneffekte sollen außerhalb des Modellurteils kontrolliert werden; Wahrscheinlichkeiten garantieren keine einzelne richtige Entscheidung.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "awesome-jev-by-typesafe: padrões e exemplos Jev",
+      "h1": "awesome-jev-by-typesafe: padrões e exemplos Jev",
+      "description": "awesome-jev-by-typesafe reúne padrões Jev, casos com fontes e exemplos Python/TypeScript com limites de política explícitos, de forma independente.",
+      "summary": "awesome-jev-by-typesafe reúne casos, prompts, padrões e código inicial com fontes, como recurso comunitário independente. Explica Choice, Score e Noul para classificação, roteamento e verificação, mantendo o controle do fluxo no código. Explore exemplos Python e TypeScript; testes offline dispensam chave, mas exemplos com chamadas reais exigem TYPESAFE_API_KEY.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "awesome-jev-by-typesafe reúne casos, prompts, padrões e código inicial com fontes, como recurso comunitário independente.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "O papel do Jev",
+          "text": "Explica Choice, Score e Noul para classificação, roteamento e verificação, mantendo o controle do fluxo no código.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Explore exemplos Python e TypeScript; testes offline dispensam chave, mas exemplos com chamadas reais exigem TYPESAFE_API_KEY.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limitações",
+          "text": "A orientação mantém autorização e efeitos externos fora do julgamento do modelo; probabilidades não garantem acerto em cada decisão.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "awesome-jev-by-typesafe: шаблоны и примеры Jev",
+      "h1": "awesome-jev-by-typesafe: шаблоны и примеры Jev",
+      "description": "awesome-jev-by-typesafe — независимый сборник сценариев Jev, источников и примеров Python/TypeScript с явными границами политик.",
+      "summary": "awesome-jev-by-typesafe — независимая подборка сценариев Jev, промптов, шаблонов и стартового кода с источниками. Она объясняет Choice, Score и Noul для классификации, маршрутизации и проверки, оставляя управление процессом коду. Есть примеры Python и TypeScript; офлайн-тесты политик не требуют ключа, реальные вызовы требуют TYPESAFE_API_KEY.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "awesome-jev-by-typesafe — независимая подборка сценариев Jev, промптов, шаблонов и стартового кода с источниками.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Она объясняет Choice, Score и Noul для классификации, маршрутизации и проверки, оставляя управление процессом коду.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Есть примеры Python и TypeScript; офлайн-тесты политик не требуют ключа, реальные вызовы требуют TYPESAFE_API_KEY.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ограничения",
+          "text": "Авторизация и внешние действия должны контролироваться вне модели; вероятность не гарантирует правильность отдельного решения.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "awesome-jev-by-typesafe: Jev पैटर्न और शुरुआती कोड",
+      "h1": "awesome-jev-by-typesafe: Jev पैटर्न और शुरुआती कोड",
+      "description": "awesome-jev-by-typesafe में Jev पैटर्न, स्रोतयुक्त उपयोग और Python/TypeScript उदाहरण हैं; यह स्पष्ट नीति सीमाओं वाला स्वतंत्र संग्रह है।",
+      "summary": "awesome-jev-by-typesafe स्रोतों सहित Jev उपयोग, प्रॉम्प्ट, पैटर्न और शुरुआती कोड का स्वतंत्र सामुदायिक संग्रह है। यह वर्गीकरण, रूटिंग और जाँच के लिए Choice, Score, Noul समझाता है; नियंत्रण प्रवाह कोड में रहता है। Python और TypeScript उदाहरण देखें; ऑफलाइन नीति परीक्षण बिना कुंजी चलते हैं, वास्तविक कॉल के लिए TYPESAFE_API_KEY चाहिए।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "किस काम आता है",
+          "text": "awesome-jev-by-typesafe स्रोतों सहित Jev उपयोग, प्रॉम्प्ट, पैटर्न और शुरुआती कोड का स्वतंत्र सामुदायिक संग्रह है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "यह वर्गीकरण, रूटिंग और जाँच के लिए Choice, Score, Noul समझाता है; नियंत्रण प्रवाह कोड में रहता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल कैसे करें",
+          "text": "Python और TypeScript उदाहरण देखें; ऑफलाइन नीति परीक्षण बिना कुंजी चलते हैं, वास्तविक कॉल के लिए TYPESAFE_API_KEY चाहिए।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "सीमाएँ",
+          "text": "मार्गदर्शन प्राधिकरण और बाहरी कार्रवाइयाँ मॉडल के निर्णय से अलग रखता है; संभावना हर निर्णय सही होने की गारंटी नहीं।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "awesome-jev-by-typesafe: pola dan contoh kode Jev",
+      "h1": "awesome-jev-by-typesafe: pola dan contoh kode Jev",
+      "description": "awesome-jev-by-typesafe menghimpun pola keputusan Jev, kasus bersumber, dan contoh Python/TypeScript dengan batas kebijakan yang jelas, secara independen.",
+      "summary": "awesome-jev-by-typesafe menghimpun kasus penggunaan, prompt, pola, dan kode awal bersumber sebagai referensi komunitas independen. Isinya menjelaskan Choice, Score, dan Noul untuk klasifikasi, perutean, dan verifikasi, dengan alur kontrol tetap di kode. Jelajahi contoh Python dan TypeScript; tes kebijakan offline tanpa kunci, sedangkan contoh langsung membutuhkan TYPESAFE_API_KEY.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "awesome-jev-by-typesafe menghimpun kasus penggunaan, prompt, pola, dan kode awal bersumber sebagai referensi komunitas independen.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Isinya menjelaskan Choice, Score, dan Noul untuk klasifikasi, perutean, dan verifikasi, dengan alur kontrol tetap di kode.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Jelajahi contoh Python dan TypeScript; tes kebijakan offline tanpa kunci, sedangkan contoh langsung membutuhkan TYPESAFE_API_KEY.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Batasan",
+          "text": "Otorisasi dan efek eksternal dikendalikan di luar penilaian model; probabilitas tidak menjamin kebenaran setiap keputusan.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "awesome-jev-by-typesafe: mẫu ứng dụng và mã khởi đầu Jev",
+      "h1": "awesome-jev-by-typesafe: mẫu ứng dụng và mã khởi đầu Jev",
+      "description": "awesome-jev-by-typesafe là tập hợp độc lập các mẫu Jev, trường hợp có nguồn và ví dụ Python/TypeScript với ranh giới chính sách rõ ràng.",
+      "summary": "awesome-jev-by-typesafe là tài nguyên cộng đồng độc lập, tập hợp ứng dụng, lời nhắc, mẫu và mã khởi đầu có nguồn. Tài liệu giải thích Choice, Score, Noul cho phân loại, định tuyến và kiểm tra, giữ luồng điều khiển trong mã. Có ví dụ Python và TypeScript; kiểm thử chính sách ngoại tuyến không cần khóa, ví dụ gọi thật cần TYPESAFE_API_KEY.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích",
+          "text": "awesome-jev-by-typesafe là tài nguyên cộng đồng độc lập, tập hợp ứng dụng, lời nhắc, mẫu và mã khởi đầu có nguồn.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Tài liệu giải thích Choice, Score, Noul cho phân loại, định tuyến và kiểm tra, giữ luồng điều khiển trong mã.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Có ví dụ Python và TypeScript; kiểm thử chính sách ngoại tuyến không cần khóa, ví dụ gọi thật cần TYPESAFE_API_KEY.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Giới hạn",
+          "text": "Hướng dẫn tách phân quyền và tác động bên ngoài khỏi phán đoán mô hình; xác suất không bảo đảm từng quyết định đúng.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "awesome-jev-by-typesafe: Jev kalıpları ve başlangıç kodu",
+      "h1": "awesome-jev-by-typesafe: Jev kalıpları ve başlangıç kodu",
+      "description": "awesome-jev-by-typesafe, açık politika sınırlarıyla Jev örüntüleri, kaynaklı kullanım örnekleri ve Python/TypeScript kodunu bağımsız olarak derler.",
+      "summary": "awesome-jev-by-typesafe, kaynaklı Jev kullanım örnekleri, istemler, kalıplar ve başlangıç kodunu derleyen bağımsız topluluk kaynağıdır. Sınıflandırma, yönlendirme ve doğrulama için Choice, Score ve Noul’u anlatır; akış kontrolü kodda kalır. Python ve TypeScript örneklerini inceleyin; çevrimdışı politika testleri anahtarsızdır, canlı örnekler TYPESAFE_API_KEY gerektirir.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "awesome-jev-by-typesafe, kaynaklı Jev kullanım örnekleri, istemler, kalıplar ve başlangıç kodunu derleyen bağımsız topluluk kaynağıdır.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Sınıflandırma, yönlendirme ve doğrulama için Choice, Score ve Noul’u anlatır; akış kontrolü kodda kalır.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Python ve TypeScript örneklerini inceleyin; çevrimdışı politika testleri anahtarsızdır, canlı örnekler TYPESAFE_API_KEY gerektirir.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Sınırlamalar",
+          "text": "Yetkilendirme ve dış etkiler model yargısı dışında denetlenir; olasılık, her kararın doğru olmasını garanti etmez.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "awesome-jev-by-typesafe: schemi ed esempi Jev",
+      "h1": "awesome-jev-by-typesafe: schemi ed esempi Jev",
+      "description": "awesome-jev-by-typesafe raccoglie autonomamente schemi Jev, casi documentati ed esempi Python/TypeScript con confini espliciti delle politiche.",
+      "summary": "awesome-jev-by-typesafe raccoglie casi, prompt, schemi e codice iniziale con fonti, come risorsa comunitaria indipendente. Spiega Choice, Score e Noul per classificare, instradare e verificare, lasciando il controllo del flusso al codice. Consulta esempi Python e TypeScript; i test offline non richiedono chiavi, gli esempi dal vivo richiedono TYPESAFE_API_KEY.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "awesome-jev-by-typesafe raccoglie casi, prompt, schemi e codice iniziale con fonti, come risorsa comunitaria indipendente.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Il ruolo di Jev",
+          "text": "Spiega Choice, Score e Noul per classificare, instradare e verificare, lasciando il controllo del flusso al codice.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come usarlo",
+          "text": "Consulta esempi Python e TypeScript; i test offline non richiedono chiavi, gli esempi dal vivo richiedono TYPESAFE_API_KEY.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limiti",
+          "text": "Autorizzazione ed effetti esterni vanno controllati fuori dal modello; le probabilità non garantiscono la correttezza di ogni decisione.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

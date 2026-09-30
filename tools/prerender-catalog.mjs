@@ -4,6 +4,7 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { runInNewContext } from "node:vm";
 import { fileURLToPath } from "node:url";
+import { loadProjectContents, localizedProjectPreview } from "./lib/project-content.mjs";
 
 export const PRERENDER_COUNT = 20;
 
@@ -17,6 +18,9 @@ const sandbox = { window: { JH: {} } };
 sandbox.JH = sandbox.window.JH;
 runInNewContext(readFileSync(dataPath, "utf8"), sandbox, { filename: dataPath });
 const snapshot = JSON.parse(readFileSync(resolve(root, "public/catalog.json"), "utf8"));
+const projectContents = loadProjectContents();
+snapshot.apps = snapshot.apps.map(project => localizedProjectPreview(project, projectContents));
+snapshot.meta.categoryCounts = Object.fromEntries([...new Set(snapshot.apps.map(project => project.cat))].map(category => [category, snapshot.apps.filter(project => project.cat === category).length]));
 sandbox.window.JH.apps = snapshot.apps; sandbox.window.JH.catalogMeta = snapshot.meta;
 
 runInNewContext(readFileSync(resolve(root, "public/assets/js/i18n.js"), "utf8"), sandbox);

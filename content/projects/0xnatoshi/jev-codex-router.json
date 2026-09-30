@@ -1,0 +1,762 @@
+{
+  "version": "source-content-v1",
+  "repo": "0xNatoshi/jev-codex-router",
+  "repositoryId": 1373914715,
+  "relationship": "integration",
+  "category": "agents",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "8701ef788aa8cb0948f299538747fb01029d32b8",
+      "url": "https://github.com/0xNatoshi/jev-codex-router/blob/8701ef788aa8cb0948f299538747fb01029d32b8/README.md",
+      "sha256": "064bd1347ed441cc7eae6e6f164ed4b0165191a134ef619cb54514d144576d77",
+      "accessedAt": "2026-09-30T07:33:52.164Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "Jev Codex Router chooses model capability and thinking effort for each Codex model call, including tool continuations.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 8,
+          "end": 12,
+          "quote": "**Per-call model routing for Codex, driven by [Jev](https://docs.typesafe.ai) (TypeSafe System One).**\n\nJev chooses a model and thinking effort together for each model call, including\ncontinuations after tools. Every route uses standard speed. The objective is\nsufficient capability for the next decision with no unnecessary quota consumption."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "Jev sees bounded decision state while the executor receives the full replay; code separately enforces the mandatory Astra policy.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 44,
+          "end": 46,
+          "quote": "- **Two independent projections** — Jev sees only the bounded decision state.\n  The executing model receives the complete canonical replay held by Codex:\n  instructions, history or compaction handoff, tool calls and tool results."
+        },
+        {
+          "source": "source-1",
+          "start": 61,
+          "end": 80,
+          "quote": "The shared contract in `server/routing_policy.py` gives Jev four independent\nChoice questions in one request: whether the next call falls under the mandatory\nAstra policy, the least expensive sufficient capability tier (Luna, Terra, Sol or\nAstra), the minimum sufficient thinking depth (low through max), and a bounded\nroute lease (`one_call`, `tool_chain` or `user_turn`). The first\nchoice covers project architecture, independent final code review and risk-focused\nreview (security, auth/permissions, concurrency, migrations, public API compatibility\nor material performance risks). Routine in-progress quality checkpoints, comparing\nscores and fixing established findings use ordinary capability routing; the word\n\"review\" alone does not force Astra. Code forces Astra when that policy choice is positive,\nregardless of the ordinary tier choice; the independently selected effort is\npreserved. Every pair uses standard speed, overriding an incoming Fast setting,\nincluding retries and bypass modes.\n\nThere is no target distribution, keyword-to-model rule, low-confidence fallback\nto Sol, mechanical-step exception, or compaction pin. Outside the explicit\nmandatory-Astra policy, a valid pair of tier and effort decisions is applied\nunchanged even when options are close. Jev's conservative combined confidence\nand all four choice distributions are logged separately; neither is a measured\nprobability that the selected model will successfully finish the task."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Use the documented macOS setup with Codex desktop, Node.js, Python and a TypeSafe key, then install the embedded stack and select its router.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 297,
+          "end": 338,
+          "quote": "## Quickstart\n\nPrerequisites: macOS with Codex desktop, Node.js 22.19+, Python 3.11+, and a\nTypeSafe API key for Jev. No separate Codex Router checkout is needed.\nSee the [support and required CI matrix](docs/SUPPORT.md) for the pinned Codex\ncontract, cross-platform fork coverage, and optional browser setup.\n\n**1. Give the server your TypeSafe key** — either\n`export TYPESAFE_API_KEY=...` in the service environment, or:\n\n```bash\necho 'TYPESAFE_API_KEY=your-key' >> ~/.hermes/.env   # default env file\n```\n\nSet `JEV_ENV_FILE=/absolute/path/to/custom.env` in the service environment to\nload a different env file first. If it is absent or contains no key, the server\nfalls back to `~/.hermes/.env`, then `~/.jev.env`, then `TYPESAFE_API_KEY` from\nthe process environment. A keyless startup emits a warning before routing\ncontinues in fail-open mode.\n\n**2. Install the complete stack from this checkout** in your Terminal:\n\n```bash\n./install.sh\n```\n\nThe installer uses `router/` as the service source, preserves configured\nproviders, idempotently adds `jev/auto`, provisions the protected loopback\ncredential, enables native ChatGPT sharing, installs both launchd services, and\nruns `server/smoke.py`. It never clones or updates another repository.\n\n**3. Quit and reopen Codex**, then pick **“Jev Codex Router”** in the model picker.\nCheck the transport as well as the picker: `jev/auto` must reach the local\nrouter, not OpenAI's native endpoint. A catalog entry or a\n`[model_providers.jev]` declaration alone does not select that transport.\nSee [transport troubleshooting](server/INSTALL.md#model-visible-but-rejected-by-chatgpt)\nif Codex reports that `jev/auto` is unsupported with a ChatGPT account.\n\nFor dependency preparation without touching services or local state:\n\n```bash\n./install.sh --prepare-only"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "The historical savings figure is simulated under an old policy, not measured quota savings. Jev errors use a logged Astra-medium fallback.",
+      "kind": "source-limitation",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 14,
+          "end": 16,
+          "quote": "**Historical simulation: ≈ −60 % vs full Astra** on 237 turns under the old\npolicy. This is not measured Codex quota saved, nor evidence for the current\npolicy — protocol and limitations in [BACKTEST.md](BACKTEST.md)."
+        },
+        {
+          "source": "source-1",
+          "start": 109,
+          "end": 115,
+          "quote": "The model descriptions are capability priors, not calibrated success rates.\nThe policy must be evaluated on completed tasks, corrections, tokens and quota,\nnot on a desired share of Luna calls or artificially high confidence. Schema\nchecks and synthetic routing samples establish wiring, not equal-quality savings.\nA missing/invalid Jev response or a provider error still uses the separately\nlogged technical fail-open route (Astra at medium); the manual kill switch and\nnative-quota exhaustion are operational bypasses, not Jev decisions."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "jev-codex-router — Codex model and effort per call",
+      "h1": "jev-codex-router — Jev routes Codex model and reasoning effort",
+      "description": "jev-codex-router: Jev Codex Router chooses model capability and thinking effort for each Codex model call, including tool continuations.",
+      "summary": "Jev Codex Router chooses model capability and thinking effort for each Codex model call, including tool continuations. Use the documented macOS setup with Codex desktop, Node.js, Python and a TypeSafe key, then install the embedded stack and select its router.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "What it does",
+          "text": "Jev Codex Router chooses model capability and thinking effort for each Codex model call, including tool continuations.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "Jev sees bounded decision state while the executor receives the full replay; code separately enforces the mandatory Astra policy.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Getting started",
+          "text": "Use the documented macOS setup with Codex desktop, Node.js, Python and a TypeSafe key, then install the embedded stack and select its router.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "The historical savings figure is simulated under an old policy, not measured quota savings. Jev errors use a logged Astra-medium fallback.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "jev-codex-router — Jev 为 Codex 选择模型与推理强度",
+      "h1": "jev-codex-router — Jev 为 Codex 选择模型与推理强度",
+      "description": "jev-codex-router: Jev Codex Router 为每次 Codex 模型调用选择能力档位和思考强度，包括工具后的续轮。",
+      "summary": "Jev Codex Router 为每次 Codex 模型调用选择能力档位和思考强度，包括工具后的续轮。 按文档在 macOS 准备 Codex 桌面端、Node.js、Python 和 TypeSafe 密钥，安装内置组件并选择路由器。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "Jev Codex Router 为每次 Codex 模型调用选择能力档位和思考强度，包括工具后的续轮。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "Jev 只查看有界决策状态，执行模型收到完整回放；代码单独执行必须使用 Astra 的策略。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "按文档在 macOS 准备 Codex 桌面端、Node.js、Python 和 TypeSafe 密钥，安装内置组件并选择路由器。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "历史节省数字来自旧策略模拟，并非实测配额节省。Jev 出错会使用并记录 Astra-medium 回退。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "jev-codex-router — Jev 為 Codex 選擇模型與推理強度",
+      "h1": "jev-codex-router — Jev 為 Codex 選擇模型與推理強度",
+      "description": "jev-codex-router: Jev Codex Router 為每次 Codex 模型呼叫選擇能力層級與思考強度，包括工具後的接續。",
+      "summary": "Jev Codex Router 為每次 Codex 模型呼叫選擇能力層級與思考強度，包括工具後的接續。 依文件在 macOS 準備 Codex 桌面版、Node.js、Python 和 TypeSafe 金鑰，安裝內建元件並選擇路由器。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "Jev Codex Router 為每次 Codex 模型呼叫選擇能力層級與思考強度，包括工具後的接續。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "Jev 只看有界決策狀態，執行模型收到完整回放；程式碼另行強制必須使用 Astra 的策略。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "依文件在 macOS 準備 Codex 桌面版、Node.js、Python 和 TypeSafe 金鑰，安裝內建元件並選擇路由器。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "歷史節省數字來自舊策略模擬，並非實測配額節省。Jev 錯誤會採用並記錄 Astra-medium 備援。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "jev-codex-router — Codex 呼び出し別のモデルと推論強度",
+      "h1": "jev-codex-router — Codex のモデルと推論強度を Jev で選択",
+      "description": "jev-codex-router: Jev Codex Router はツール後の継続を含む各モデル呼び出しで、能力階層と推論強度を選びます。",
+      "summary": "Jev Codex Router はツール後の継続を含む各モデル呼び出しで、能力階層と推論強度を選びます。 macOS の Codex デスクトップ、Node.js、Python、TypeSafe キーを用意し、内蔵構成を導入してルーターを選択します。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "できること",
+          "text": "Jev Codex Router はツール後の継続を含む各モデル呼び出しで、能力階層と推論強度を選びます。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "Jev は限定した判断状態を読み、実行モデルは完全な履歴を受け取ります。Astra 必須方針はコードが別に強制します。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い始めるには",
+          "text": "macOS の Codex デスクトップ、Node.js、Python、TypeSafe キーを用意し、内蔵構成を導入してルーターを選択します。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "対象範囲と制約",
+          "text": "過去の節約値は旧方針のシミュレーションで、実測利用枠ではありません。Jev エラー時は Astra-medium への代替を記録します。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "jev-codex-router — Jev로 Codex 모델과 추론 강도 선택",
+      "h1": "jev-codex-router — Jev로 Codex 모델과 추론 강도 선택",
+      "description": "jev-codex-router: Jev Codex Router는 도구 후속 실행을 포함한 모든 모델 호출에서 능력 등급과 사고 강도를 선택합니다.",
+      "summary": "Jev Codex Router는 도구 후속 실행을 포함한 모든 모델 호출에서 능력 등급과 사고 강도를 선택합니다. macOS에서 Codex 데스크톱, Node.js, Python, TypeSafe 키를 준비하고 내장 구성을 설치한 뒤 라우터를 선택합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "Jev Codex Router는 도구 후속 실행을 포함한 모든 모델 호출에서 능력 등급과 사고 강도를 선택합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Jev는 제한된 판단 상태를 보고 실행 모델은 전체 대화를 받습니다. Astra 필수 정책은 코드가 별도로 적용합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "macOS에서 Codex 데스크톱, Node.js, Python, TypeSafe 키를 준비하고 내장 구성을 설치한 뒤 라우터를 선택합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 제약",
+          "text": "과거 절감 수치는 이전 정책 시뮬레이션이며 실제 할당량 절감이 아닙니다. Jev 오류 시 Astra-medium 대체를 기록합니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "jev-codex-router — Modelo y esfuerzo por llamada",
+      "h1": "jev-codex-router — Jev selecciona modelo y esfuerzo de Codex",
+      "description": "jev-codex-router: Jev Codex Router elige capacidad y esfuerzo de razonamiento en cada llamada, incluidas continuaciones de herramientas.",
+      "summary": "Jev Codex Router elige capacidad y esfuerzo de razonamiento en cada llamada, incluidas continuaciones de herramientas. Prepara Codex desktop, Node.js, Python y clave TypeSafe en macOS; instala el sistema integrado y selecciona el router.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "Jev Codex Router elige capacidad y esfuerzo de razonamiento en cada llamada, incluidas continuaciones de herramientas.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Jev ve un estado acotado; el ejecutor recibe el historial completo y el código aplica aparte la política Astra obligatoria.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo empezar",
+          "text": "Prepara Codex desktop, Node.js, Python y clave TypeSafe en macOS; instala el sistema integrado y selecciona el router.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "El ahorro histórico es una simulación de una política antigua, no cuota ahorrada medida. Los errores Jev usan una alternativa Astra-medium registrada.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "jev-codex-router — Modèle et effort par appel",
+      "h1": "jev-codex-router — Jev choisit modèle et effort de raisonnement Codex",
+      "description": "jev-codex-router: Jev Codex Router choisit capacité et effort à chaque appel, y compris les suites d’outils.",
+      "summary": "Jev Codex Router choisit capacité et effort à chaque appel, y compris les suites d’outils. Préparez Codex desktop, Node.js, Python et une clé TypeSafe sur macOS ; installez la pile intégrée puis choisissez le routeur.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "Jev Codex Router choisit capacité et effort à chaque appel, y compris les suites d’outils.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Jev lit un état borné ; l’exécuteur reçoit l’historique complet et le code impose séparément la politique Astra obligatoire.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Préparez Codex desktop, Node.js, Python et une clé TypeSafe sur macOS ; installez la pile intégrée puis choisissez le routeur.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "L’économie historique est simulée sous une ancienne politique, pas mesurée en quota. Les erreurs Jev déclenchent un repli Astra-medium consigné.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "jev-codex-router — Codex-Modell und Aufwand pro Aufruf",
+      "h1": "jev-codex-router — Jev wählt Codex-Modell und Reasoning-Aufwand",
+      "description": "jev-codex-router: Jev Codex Router wählt Fähigkeit und Denkaufwand für jeden Modellaufruf, einschließlich Werkzeugfortsetzungen.",
+      "summary": "Jev Codex Router wählt Fähigkeit und Denkaufwand für jeden Modellaufruf, einschließlich Werkzeugfortsetzungen. Codex Desktop, Node.js, Python und TypeSafe-Schlüssel unter macOS vorbereiten, den integrierten Stack installieren und den Router wählen.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "Jev Codex Router wählt Fähigkeit und Denkaufwand für jeden Modellaufruf, einschließlich Werkzeugfortsetzungen.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Jev sieht begrenzten Entscheidungszustand; der Ausführer erhält die vollständige Historie und Code erzwingt separat die Astra-Pflichtregel.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Einstieg",
+          "text": "Codex Desktop, Node.js, Python und TypeSafe-Schlüssel unter macOS vorbereiten, den integrierten Stack installieren und den Router wählen.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Historische Einsparungen sind Simulationen alter Regeln, keine gemessene Kontingentersparnis. Jev-Fehler nutzen einen protokollierten Astra-medium-Fallback.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "jev-codex-router — Modelo e esforço por chamada",
+      "h1": "jev-codex-router — Jev escolhe modelo e esforço do Codex",
+      "description": "jev-codex-router: O Jev Codex Router escolhe capacidade e esforço de raciocínio em cada chamada, incluindo continuações de ferramentas.",
+      "summary": "O Jev Codex Router escolhe capacidade e esforço de raciocínio em cada chamada, incluindo continuações de ferramentas. Prepare Codex desktop, Node.js, Python e chave TypeSafe no macOS; instale a estrutura integrada e escolha o roteador.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "O Jev Codex Router escolhe capacidade e esforço de raciocínio em cada chamada, incluindo continuações de ferramentas.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "Jev vê estado delimitado; o executor recebe o histórico completo e o código aplica separadamente a política obrigatória Astra.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como começar",
+          "text": "Prepare Codex desktop, Node.js, Python e chave TypeSafe no macOS; instale a estrutura integrada e escolha o roteador.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "A economia histórica é simulada sob política antiga, não medida em cotas. Erros Jev usam alternativa Astra-medium registrada.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "jev-codex-router — Модель и глубина на вызов Codex",
+      "h1": "jev-codex-router — Jev выбирает модель и глубину рассуждений Codex",
+      "description": "jev-codex-router: Jev Codex Router выбирает возможности модели и глубину рассуждений на каждый вызов, включая продолжения после инструментов.",
+      "summary": "Jev Codex Router выбирает возможности модели и глубину рассуждений на каждый вызов, включая продолжения после инструментов. Подготовьте Codex desktop, Node.js, Python и ключ TypeSafe на macOS, установите встроенный стек и выберите маршрутизатор.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Jev Codex Router выбирает возможности модели и глубину рассуждений на каждый вызов, включая продолжения после инструментов.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Jev видит ограниченное состояние; исполнитель получает полный контекст, а код отдельно соблюдает обязательную политику Astra.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Начало работы",
+          "text": "Подготовьте Codex desktop, Node.js, Python и ключ TypeSafe на macOS, установите встроенный стек и выберите маршрутизатор.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Историческая экономия смоделирована по старой политике, а не измерена в квоте. При ошибках Jev используется записываемый резерв Astra-medium.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "jev-codex-router — Jev से Codex मॉडल और तर्क स्तर चुनें",
+      "h1": "jev-codex-router — Jev से Codex मॉडल और तर्क स्तर चुनें",
+      "description": "jev-codex-router: Jev Codex Router टूल के बाद जारी कॉल सहित हर मॉडल कॉल के लिए क्षमता और सोच की गहराई चुनता है।",
+      "summary": "Jev Codex Router टूल के बाद जारी कॉल सहित हर मॉडल कॉल के लिए क्षमता और सोच की गहराई चुनता है। macOS पर Codex desktop, Node.js, Python और TypeSafe कुंजी तैयार करके अंतर्निहित सेटअप स्थापित करें और राउटर चुनें।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "परियोजना का काम",
+          "text": "Jev Codex Router टूल के बाद जारी कॉल सहित हर मॉडल कॉल के लिए क्षमता और सोच की गहराई चुनता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "Jev सीमित निर्णय स्थिति देखता है; निष्पादक को पूरा इतिहास मिलता है और कोड अनिवार्य Astra नीति अलग लागू करता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "शुरुआत कैसे करें",
+          "text": "macOS पर Codex desktop, Node.js, Python और TypeSafe कुंजी तैयार करके अंतर्निहित सेटअप स्थापित करें और राउटर चुनें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "पुरानी बचत संख्या पुरानी नीति का सिमुलेशन है, मापा कोटा लाभ नहीं। Jev त्रुटि पर दर्ज Astra-medium विकल्प चलता है।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "jev-codex-router — Model dan penalaran per panggilan",
+      "h1": "jev-codex-router — Jev memilih model dan upaya penalaran Codex",
+      "description": "jev-codex-router: Jev Codex Router memilih kemampuan dan kedalaman berpikir setiap panggilan model, termasuk kelanjutan alat.",
+      "summary": "Jev Codex Router memilih kemampuan dan kedalaman berpikir setiap panggilan model, termasuk kelanjutan alat. Siapkan Codex desktop, Node.js, Python, dan kunci TypeSafe di macOS, pasang susunan bawaan, lalu pilih router.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "Jev Codex Router memilih kemampuan dan kedalaman berpikir setiap panggilan model, termasuk kelanjutan alat.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Jev melihat keadaan terbatas; pelaksana menerima riwayat lengkap, sementara kode menegakkan kebijakan wajib Astra secara terpisah.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara memulai",
+          "text": "Siapkan Codex desktop, Node.js, Python, dan kunci TypeSafe di macOS, pasang susunan bawaan, lalu pilih router.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Penghematan historis adalah simulasi kebijakan lama, bukan kuota terukur. Galat Jev memakai cadangan Astra-medium yang dicatat.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "jev-codex-router — Mô hình, mức suy luận mỗi lần gọi",
+      "h1": "jev-codex-router — Jev chọn mô hình và mức suy luận Codex",
+      "description": "jev-codex-router: Jev Codex Router chọn năng lực và mức suy nghĩ cho mỗi lần gọi mô hình, kể cả lượt tiếp nối công cụ.",
+      "summary": "Jev Codex Router chọn năng lực và mức suy nghĩ cho mỗi lần gọi mô hình, kể cả lượt tiếp nối công cụ. Chuẩn bị Codex desktop, Node.js, Python và khóa TypeSafe trên macOS, cài bộ tích hợp rồi chọn bộ định tuyến.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Công dụng",
+          "text": "Jev Codex Router chọn năng lực và mức suy nghĩ cho mỗi lần gọi mô hình, kể cả lượt tiếp nối công cụ.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Jev xem trạng thái giới hạn; mô hình thực thi nhận đầy đủ lịch sử, còn mã áp dụng riêng chính sách bắt buộc Astra.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách bắt đầu",
+          "text": "Chuẩn bị Codex desktop, Node.js, Python và khóa TypeSafe trên macOS, cài bộ tích hợp rồi chọn bộ định tuyến.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Mức tiết kiệm cũ là mô phỏng chính sách trước, không phải hạn ngạch đo được. Lỗi Jev dùng dự phòng Astra-medium được ghi lại.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "jev-codex-router — Her çağrıda model ve düşünme düzeyi",
+      "h1": "jev-codex-router — Jev, Codex modelini ve akıl yürütme düzeyini seçer",
+      "description": "jev-codex-router: Jev Codex Router, araç devamları dahil her model çağrısında kapasiteyi ve düşünme derinliğini seçer.",
+      "summary": "Jev Codex Router, araç devamları dahil her model çağrısında kapasiteyi ve düşünme derinliğini seçer. macOS’ta Codex desktop, Node.js, Python ve TypeSafe anahtarını hazırlayıp gömülü yapıyı kurun ve yönlendiriciyi seçin.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "Jev Codex Router, araç devamları dahil her model çağrısında kapasiteyi ve düşünme derinliğini seçer.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Jev sınırlı karar durumunu görür; yürütücü tam geçmişi alır ve kod zorunlu Astra politikasını ayrı uygular.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Başlangıç",
+          "text": "macOS’ta Codex desktop, Node.js, Python ve TypeSafe anahtarını hazırlayıp gömülü yapıyı kurun ve yönlendiriciyi seçin.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Geçmiş tasarruf eski politika simülasyonudur, ölçülmüş kota kazancı değildir. Jev hatasında kayıtlı Astra-medium yedeği kullanılır.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "jev-codex-router — Modello e sforzo per chiamata",
+      "h1": "jev-codex-router — Jev sceglie modello e ragionamento Codex",
+      "description": "jev-codex-router: Jev Codex Router sceglie capacità e profondità a ogni chiamata, incluse continuazioni degli strumenti.",
+      "summary": "Jev Codex Router sceglie capacità e profondità a ogni chiamata, incluse continuazioni degli strumenti. Prepara Codex desktop, Node.js, Python e chiave TypeSafe su macOS, installa lo stack integrato e scegli il router.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "Jev Codex Router sceglie capacità e profondità a ogni chiamata, incluse continuazioni degli strumenti.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Jev vede uno stato circoscritto; l’esecutore riceve l’intera cronologia e il codice applica separatamente la politica Astra obbligatoria.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come iniziare",
+          "text": "Prepara Codex desktop, Node.js, Python e chiave TypeSafe su macOS, installa lo stack integrato e scegli il router.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "Il risparmio storico è simulato con una vecchia politica, non misurato in quota. Gli errori Jev usano un ripiego Astra-medium registrato.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

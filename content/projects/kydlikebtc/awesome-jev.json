@@ -1,0 +1,762 @@
+{
+  "version": "source-content-v1",
+  "repo": "kydlikebtc/awesome-jev",
+  "repositoryId": 1380762959,
+  "relationship": "resource",
+  "category": "lists",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "9164541fd3888938e877fefc42b5a29665b1e98b",
+      "url": "https://github.com/kydlikebtc/awesome-jev/blob/9164541fd3888938e877fefc42b5a29665b1e98b/README.md",
+      "sha256": "d546ea3711850c9d27d17fc8dda9bfe703fe67a23809896be162b3733629d0b8",
+      "accessedAt": "2026-09-30T07:33:49.945Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "Jev Decision Atlas indexes public resources by the decision an agent makes, such as tool selection, routing or classification.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 50,
+          "end": 57,
+          "quote": "## What this is\n\n- **Jev** is a decision model from TypeSafe AI. It does not write text — you hand it state plus typed questions and it returns typed answers with calibrated confidence, fast and cheap enough to sit in an agent's inner loop.\n- **This repo** indexes public examples of using it, organised by the *decision* being made. The resource you read this week is disposable; the decision pattern is not.\n- **How to assess it:** every row names its source. Call-site citations, primitive claims and caveats are recorded where available, so you can inspect what was read and what remains untested.\n\n> [!NOTE]\n> Not the product, not an SDK, not affiliated with TypeSafe AI, and not a recommendation. Inclusion is a source record, not a runtime or performance endorsement. See [what is verified](#what-is-verified-and-what-is-not)."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "Each entry identifies its source and records available call-site citations, primitive claims and caveats; this is an independent resource catalog.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 53,
+          "end": 57,
+          "quote": "- **This repo** indexes public examples of using it, organised by the *decision* being made. The resource you read this week is disposable; the decision pattern is not.\n- **How to assess it:** every row names its source. Call-site citations, primitive claims and caveats are recorded where available, so you can inspect what was read and what remains untested.\n\n> [!NOTE]\n> Not the product, not an SDK, not affiliated with TypeSafe AI, and not a recommendation. Inclusion is a source record, not a runtime or performance endorsement. See [what is verified](#what-is-verified-and-what-is-not)."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Start with the reading path for a first API call, then browse decision patterns and inspect the linked implementation evidence.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 70,
+          "end": 84,
+          "quote": "## Start here\n\nSix things in reading order. Hand-picked, because \"most starred\" is not the same as \"read this first\".\n\n1. **[Quickstart](https://docs.typesafe.ai/introduction/quickstart)**\n\n   The canonical first call: one support ticket, one Choice, one Score and one Noul in a single request, in Python, JS and cURL.\n\n2. **[Jev 1.13 known limitations](https://docs.typesafe.ai/model-jaggedness/jev-1.13)**\n\n   The most useful page in the docs and the least linked. It explains, among other things, that a Choice over options and one Noul per option answer different questions.\n\n3. **[Example: three primitives in one request](https://github.com/kydlikebtc/awesome-jev/blob/main/examples/01-three-primitives/main.py)**\n\n   Written from the official API reference and checked field by field against it, but not executed against the live API."
+        },
+        {
+          "source": "source-1",
+          "start": 469,
+          "end": 469,
+          "quote": "The primary index. Each heading is a decision an agent has to make; the rows are examples of making it. Caveats appear as short tags — the full note for each row is in [`catalog.json`](catalog.json) and on [the site](https://kydlikebtc.github.io/awesome-jev/)."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "The included three-primitives example was checked against documentation but not run against the live API. Listed measurement reports were not independently reproduced by the catalog.",
+      "kind": "source-limitation",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 127,
+          "end": 127,
+          "quote": "Independent measurement reports in the catalogue, including **negative results** that help explain where an approach fails. These are the original authors' measurements; this repository has not independently reproduced them. Check each report's dataset, method and model version before comparing results."
+        },
+        {
+          "source": "source-1",
+          "start": 84,
+          "end": 84,
+          "quote": "   Written from the official API reference and checked field by field against it, but not executed against the live API."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "awesome-jev — Jev examples organized by decision pattern",
+      "h1": "awesome-jev — Jev examples organized by decision pattern",
+      "description": "awesome-jev: Explore Jev examples by decision pattern, with source citations, first-call reading paths and explicit limits on testing evidence.",
+      "summary": "Jev Decision Atlas indexes public resources by the decision an agent makes, such as tool selection, routing or classification. Start with the reading path for a first API call, then browse decision patterns and inspect the linked implementation evidence.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "What it does",
+          "text": "Jev Decision Atlas indexes public resources by the decision an agent makes, such as tool selection, routing or classification.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "Each entry identifies its source and records available call-site citations, primitive claims and caveats; this is an independent resource catalog.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Getting started",
+          "text": "Start with the reading path for a first API call, then browse decision patterns and inspect the linked implementation evidence.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "The included three-primitives example was checked against documentation but not run against the live API. Listed measurement reports were not independently reproduced by the catalog.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "awesome-jev — 按决策模式整理的 Jev 示例",
+      "h1": "awesome-jev — 按决策模式整理的 Jev 示例",
+      "description": "awesome-jev: 按决策模式浏览 Jev 示例，查看来源引用、首次调用阅读路线，以及文档核查与实际测试的区别。",
+      "summary": "Jev Decision Atlas 按智能体需要作出的决策整理公开资源，例如工具选择、路由和分类。 先沿首次 API 调用的阅读路线入门，再按决策模式浏览，查看链接中的实现证据。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "Jev Decision Atlas 按智能体需要作出的决策整理公开资源，例如工具选择、路由和分类。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "条目注明来源，并记录可用的调用点引用、原语说明和注意事项；这是独立的资源目录。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "先沿首次 API 调用的阅读路线入门，再按决策模式浏览，查看链接中的实现证据。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "目录内的三原语示例核对过文档，但未调用真实 API。收录的测量报告也没有由目录独立复现。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "awesome-jev — 依決策模式整理的 Jev 範例",
+      "h1": "awesome-jev — 依決策模式整理的 Jev 範例",
+      "description": "awesome-jev: 依決策模式瀏覽 Jev 範例，查看來源引用、首次呼叫閱讀路線，以及文件查核與實際測試的差別。",
+      "summary": "Jev Decision Atlas 依智慧代理需要作出的決策整理公開資源，例如工具選擇、路由和分類。 先沿首次 API 呼叫的閱讀路線入門，再依決策模式瀏覽，查看連結中的實作證據。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "Jev Decision Atlas 依智慧代理需要作出的決策整理公開資源，例如工具選擇、路由和分類。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "條目註明來源，並記錄可用的呼叫點引用、原語說明和注意事項；這是獨立的資源目錄。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "先沿首次 API 呼叫的閱讀路線入門，再依決策模式瀏覽，查看連結中的實作證據。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "目錄內的三原語範例核對過文件，但未呼叫實際 API。收錄的測量報告也未由目錄獨立重現。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "awesome-jev — 判断パターンから探す Jev の実例",
+      "h1": "awesome-jev — 判断パターンから探す Jev の実例",
+      "description": "awesome-jev: Jev の実例を判断パターン別に探せる資料集。出典、初回呼び出しの読む順序、テスト証拠の範囲を確認できます。",
+      "summary": "Jev Decision Atlas は、ツール選択、振り分け、分類など、エージェントが行う判断ごとに公開資料を整理します。 初回 API 呼び出し向けの読む順序から始め、判断パターン別の一覧で実装の根拠を確認できます。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "できること",
+          "text": "Jev Decision Atlas は、ツール選択、振り分け、分類など、エージェントが行う判断ごとに公開資料を整理します。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "各項目には出典があり、確認できた呼び出し箇所、プリミティブの説明、注意点を記録する独立した資料集です。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い始めるには",
+          "text": "初回 API 呼び出し向けの読む順序から始め、判断パターン別の一覧で実装の根拠を確認できます。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "対象範囲と制約",
+          "text": "付属の3プリミティブの例は文書と照合されていますが、実 API では未実行です。掲載された測定報告もこの資料集では独自に再現していません。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "awesome-jev — 의사결정 패턴별 Jev 예제",
+      "h1": "awesome-jev — 의사결정 패턴별 Jev 예제",
+      "description": "awesome-jev: Jev 예제를 결정 패턴별로 찾고 출처, 첫 호출 읽기 순서, 문서 검토와 실제 테스트의 차이를 확인하세요.",
+      "summary": "Jev Decision Atlas는 도구 선택, 라우팅, 분류처럼 에이전트가 내리는 결정에 따라 공개 자료를 정리합니다. 첫 API 호출을 위한 읽기 순서로 시작한 뒤 결정 패턴별 목록에서 구현 근거를 확인할 수 있습니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "Jev Decision Atlas는 도구 선택, 라우팅, 분류처럼 에이전트가 내리는 결정에 따라 공개 자료를 정리합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "각 항목은 출처와 확인 가능한 호출 지점, 기본 연산 설명, 주의사항을 기록하는 독립 자료 목록입니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "첫 API 호출을 위한 읽기 순서로 시작한 뒤 결정 패턴별 목록에서 구현 근거를 확인할 수 있습니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 제약",
+          "text": "포함된 세 기본 연산 예제는 문서와 대조했지만 실제 API로 실행하지 않았습니다. 수록된 측정 보고서도 목록 운영자가 독립 재현하지 않았습니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "awesome-jev — Ejemplos de Jev por patrón de decisión",
+      "h1": "awesome-jev — Ejemplos de Jev por patrón de decisión",
+      "description": "awesome-jev: Explora ejemplos Jev por patrón de decisión, con fuentes, recorridos de primera llamada y límites explícitos de las pruebas.",
+      "summary": "Jev Decision Atlas organiza recursos públicos según decisiones del agente, como seleccionar herramientas, enrutar o clasificar. Empieza por el itinerario para realizar una primera llamada a la API y después explora los patrones y las pruebas de implementación enlazadas.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "Jev Decision Atlas organiza recursos públicos según decisiones del agente, como seleccionar herramientas, enrutar o clasificar.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Cada entrada identifica su fuente y recoge citas del punto de llamada, primitivas y advertencias disponibles; es un catálogo independiente.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo empezar",
+          "text": "Empieza por el itinerario para realizar una primera llamada a la API y después explora los patrones y las pruebas de implementación enlazadas.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "El ejemplo de tres primitivas se contrastó con la documentación, pero no se ejecutó contra la API real. El catálogo tampoco reprodujo independientemente los informes de medición incluidos.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "awesome-jev — Exemples Jev classés par décision",
+      "h1": "awesome-jev — Exemples Jev classés par décision",
+      "description": "awesome-jev: Explorez les exemples Jev par type de décision, avec sources, parcours de premier appel et limites des preuves de test.",
+      "summary": "Jev Decision Atlas classe les ressources publiques selon les décisions de l’agent : choix d’outils, routage ou classification. Commencez par le parcours de lecture du premier appel API, puis explorez les types de décisions et les preuves d’implémentation liées.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "Jev Decision Atlas classe les ressources publiques selon les décisions de l’agent : choix d’outils, routage ou classification.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Chaque fiche indique sa source et consigne les appels cités, les primitives et les réserves disponibles ; il s’agit d’un catalogue indépendant.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Commencez par le parcours de lecture du premier appel API, puis explorez les types de décisions et les preuves d’implémentation liées.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "L’exemple des trois primitives a été comparé à la documentation, mais pas exécuté sur l’API réelle. Le catalogue n’a pas non plus reproduit les mesures des rapports répertoriés.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "awesome-jev — Jev-Beispiele nach Entscheidungsmuster",
+      "h1": "awesome-jev — Jev-Beispiele nach Entscheidungsmuster",
+      "description": "awesome-jev: Jev-Beispiele nach Entscheidungsmuster erkunden, mit Quellen, Einstiegspfaden und klaren Grenzen der Testbelege.",
+      "summary": "Jev Decision Atlas ordnet öffentliche Ressourcen nach Entscheidungen eines Agenten, etwa Werkzeugauswahl, Routing oder Klassifikation. Der Lesepfad zum ersten API-Aufruf bietet einen Einstieg. Danach lassen sich Entscheidungsmuster und verlinkte Implementierungsbelege untersuchen.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "Jev Decision Atlas ordnet öffentliche Ressourcen nach Entscheidungen eines Agenten, etwa Werkzeugauswahl, Routing oder Klassifikation.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Jeder Eintrag nennt seine Quelle und dokumentiert verfügbare Aufrufstellen, Primitive und Einschränkungen; es handelt sich um einen unabhängigen Katalog.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Einstieg",
+          "text": "Der Lesepfad zum ersten API-Aufruf bietet einen Einstieg. Danach lassen sich Entscheidungsmuster und verlinkte Implementierungsbelege untersuchen.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Das Beispiel mit drei Primitiven wurde mit der Dokumentation abgeglichen, aber nicht gegen die Live-API ausgeführt. Messberichte hat der Katalog nicht unabhängig reproduziert.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "awesome-jev — Exemplos de Jev por padrão de decisão",
+      "h1": "awesome-jev — Exemplos de Jev por padrão de decisão",
+      "description": "awesome-jev: Explore exemplos Jev por padrão de decisão, com fontes, roteiro da primeira chamada e limites das evidências de teste.",
+      "summary": "O Jev Decision Atlas organiza recursos públicos conforme decisões do agente, como escolher ferramentas, rotear ou classificar. Comece pelo roteiro da primeira chamada à API e depois explore os padrões de decisão e as evidências de implementação vinculadas.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "O Jev Decision Atlas organiza recursos públicos conforme decisões do agente, como escolher ferramentas, rotear ou classificar.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "Cada entrada informa a fonte e registra referências de chamadas, primitivas e ressalvas disponíveis; trata-se de um catálogo independente.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como começar",
+          "text": "Comece pelo roteiro da primeira chamada à API e depois explore os padrões de decisão e as evidências de implementação vinculadas.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "O exemplo de três primitivas foi conferido com a documentação, mas não executado na API real. O catálogo também não reproduziu independentemente as medições dos relatórios listados.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "awesome-jev — Примеры Jev по типам решений",
+      "h1": "awesome-jev — Примеры Jev по типам решений",
+      "description": "awesome-jev: Изучайте примеры Jev по типам решений, с источниками, маршрутом первого вызова и границами тестовых свидетельств.",
+      "summary": "Jev Decision Atlas группирует открытые материалы по решениям агента: выбору инструментов, маршрутизации и классификации. Начните с маршрута чтения для первого вызова API, затем изучайте типы решений и ссылки на подтверждающий код.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Jev Decision Atlas группирует открытые материалы по решениям агента: выбору инструментов, маршрутизации и классификации.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "У каждой записи есть источник, доступные ссылки на места вызова, сведения о примитивах и оговорки; это независимый каталог.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Начало работы",
+          "text": "Начните с маршрута чтения для первого вызова API, затем изучайте типы решений и ссылки на подтверждающий код.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Пример с тремя примитивами сверили с документацией, но не запускали через реальный API. Измерения из перечисленных отчётов каталог также независимо не воспроизводил.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "awesome-jev — निर्णय पैटर्न के अनुसार Jev उदाहरण",
+      "h1": "awesome-jev — निर्णय पैटर्न के अनुसार Jev उदाहरण",
+      "description": "awesome-jev: निर्णय पैटर्न से Jev उदाहरण देखें, स्रोत और पहली कॉल का मार्ग पढ़ें तथा परीक्षण प्रमाण की सीमाएँ समझें।",
+      "summary": "Jev Decision Atlas सार्वजनिक संसाधनों को एजेंट के निर्णयों के अनुसार रखता है, जैसे टूल चुनना, रूटिंग और वर्गीकरण। पहली API कॉल की पढ़ने की राह से शुरू करें, फिर निर्णय पैटर्न और जुड़े कार्यान्वयन प्रमाण देखें।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "परियोजना का काम",
+          "text": "Jev Decision Atlas सार्वजनिक संसाधनों को एजेंट के निर्णयों के अनुसार रखता है, जैसे टूल चुनना, रूटिंग और वर्गीकरण।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "हर प्रविष्टि स्रोत बताती है तथा उपलब्ध कॉल-साइट संदर्भ, मूल ऑपरेशन और सीमाएँ दर्ज करती है; यह स्वतंत्र संसाधन सूची है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "शुरुआत कैसे करें",
+          "text": "पहली API कॉल की पढ़ने की राह से शुरू करें, फिर निर्णय पैटर्न और जुड़े कार्यान्वयन प्रमाण देखें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "तीन मूल ऑपरेशन वाला उदाहरण दस्तावेज़ से जाँचा गया था, पर वास्तविक API पर चलाया नहीं गया। सूची ने शामिल मापन रिपोर्टों को स्वतंत्र रूप से दोहराया भी नहीं है।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "awesome-jev — Contoh Jev menurut pola keputusan",
+      "h1": "awesome-jev — Contoh Jev menurut pola keputusan",
+      "description": "awesome-jev: Jelajahi contoh Jev berdasarkan pola keputusan, dengan sumber, panduan panggilan pertama, dan batas bukti pengujian.",
+      "summary": "Jev Decision Atlas mengelompokkan sumber publik menurut keputusan agen, seperti pemilihan alat, perutean, dan klasifikasi. Mulai dari alur bacaan untuk panggilan API pertama, lalu telusuri pola keputusan dan bukti implementasi yang ditautkan.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "Jev Decision Atlas mengelompokkan sumber publik menurut keputusan agen, seperti pemilihan alat, perutean, dan klasifikasi.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Setiap entri menyebutkan sumber serta mencatat rujukan lokasi panggilan, primitif, dan catatan batasan yang tersedia; ini katalog independen.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara memulai",
+          "text": "Mulai dari alur bacaan untuk panggilan API pertama, lalu telusuri pola keputusan dan bukti implementasi yang ditautkan.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Contoh tiga primitif telah dicocokkan dengan dokumentasi, tetapi belum dijalankan pada API langsung. Katalog juga tidak mereproduksi sendiri laporan pengukuran yang dicantumkan.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "awesome-jev — Ví dụ Jev theo mẫu ra quyết định",
+      "h1": "awesome-jev — Ví dụ Jev theo mẫu ra quyết định",
+      "description": "awesome-jev: Khám phá ví dụ Jev theo mẫu quyết định, kèm nguồn, lộ trình gọi lần đầu và giới hạn bằng chứng thử nghiệm.",
+      "summary": "Jev Decision Atlas sắp xếp tài nguyên công khai theo quyết định của tác tử, như chọn công cụ, định tuyến hoặc phân loại. Bắt đầu với lộ trình đọc cho lần gọi API đầu tiên, rồi tìm theo mẫu quyết định và xem bằng chứng triển khai được liên kết.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Công dụng",
+          "text": "Jev Decision Atlas sắp xếp tài nguyên công khai theo quyết định của tác tử, như chọn công cụ, định tuyến hoặc phân loại.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Mỗi mục ghi nguồn cùng các trích dẫn vị trí gọi, phép toán cơ bản và lưu ý hiện có; đây là danh mục độc lập.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách bắt đầu",
+          "text": "Bắt đầu với lộ trình đọc cho lần gọi API đầu tiên, rồi tìm theo mẫu quyết định và xem bằng chứng triển khai được liên kết.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Ví dụ ba phép toán cơ bản đã được đối chiếu tài liệu nhưng chưa chạy với API thật. Danh mục cũng chưa tự tái lập các phép đo trong báo cáo được liệt kê.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "awesome-jev — Karar örüntülerine göre Jev örnekleri",
+      "h1": "awesome-jev — Karar örüntülerine göre Jev örnekleri",
+      "description": "awesome-jev: Jev örneklerini karar örüntüsüne göre inceleyin; kaynakları, ilk çağrı yolunu ve test kanıtının sınırlarını görün.",
+      "summary": "Jev Decision Atlas, açık kaynakları aracın seçimi, yönlendirme ve sınıflandırma gibi ajan kararlarına göre düzenler. İlk API çağrısına yönelik okuma yoluyla başlayıp karar örüntülerini ve bağlantı verilen uygulama kanıtlarını inceleyebilirsiniz.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "Jev Decision Atlas, açık kaynakları aracın seçimi, yönlendirme ve sınıflandırma gibi ajan kararlarına göre düzenler.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Her kayıt kaynağını, mevcut çağrı noktası atıflarını, temel işlemleri ve sınırlamaları belirtir; bağımsız bir kaynak kataloğudur.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Başlangıç",
+          "text": "İlk API çağrısına yönelik okuma yoluyla başlayıp karar örüntülerini ve bağlantı verilen uygulama kanıtlarını inceleyebilirsiniz.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Üç temel işlem örneği belgelerle karşılaştırılmış, ancak canlı API’de çalıştırılmamıştır. Katalog, listelenen ölçüm raporlarını bağımsız olarak yeniden üretmemiştir.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "awesome-jev — Esempi Jev per schema decisionale",
+      "h1": "awesome-jev — Esempi Jev per schema decisionale",
+      "description": "awesome-jev: Esplora esempi Jev per schema decisionale, con fonti, percorso della prima chiamata e limiti delle prove di test.",
+      "summary": "Jev Decision Atlas organizza risorse pubbliche in base alle decisioni dell’agente, come scelta degli strumenti, instradamento e classificazione. Inizia dal percorso di lettura per la prima chiamata API, poi esplora gli schemi decisionali e le prove di implementazione collegate.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "Jev Decision Atlas organizza risorse pubbliche in base alle decisioni dell’agente, come scelta degli strumenti, instradamento e classificazione.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Ogni voce indica la fonte e registra riferimenti alle chiamate, primitive e riserve disponibili; è un catalogo indipendente.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come iniziare",
+          "text": "Inizia dal percorso di lettura per la prima chiamata API, poi esplora gli schemi decisionali e le prove di implementazione collegate.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "L’esempio delle tre primitive è stato confrontato con la documentazione, ma non eseguito sull’API reale. Il catalogo non ha riprodotto autonomamente le misurazioni dei rapporti elencati.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

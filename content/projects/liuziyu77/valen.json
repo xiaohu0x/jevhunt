@@ -1,0 +1,768 @@
+{
+  "version": "source-content-v1",
+  "repo": "Liuziyu77/Valen",
+  "repositoryId": 1382625851,
+  "relationship": "local-alternative",
+  "category": "research",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "06251f9d9d3c06ea690be93b8696ccc66471f8c9",
+      "url": "https://github.com/Liuziyu77/Valen/blob/06251f9d9d3c06ea690be93b8696ccc66471f8c9/README.md",
+      "sha256": "db7856608284c9dc3227ea5c703bb95db0cd2085112fc534f19317fcd556a83f",
+      "accessedAt": "2026-09-30T07:33:51.448Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "kind": "documented",
+      "text": "Valen scores supplied candidates against text, images or video and returns decision probabilities without generating answer tokens.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 32,
+          "end": 32,
+          "quote": "Valen (万澜) brings visual perception to System One decision-making. Inspired by [Jev](https://typesafe.ai/blog/introducing-system-one-models-and-jev), it evaluates text, images and video against task instructions and returns probabilities over supplied candidates, giving software a structured decision interface. A Qwen3.5-0.8B or 2B backbone and a shared decision head score candidates without generating answer tokens. The repository includes the model implementation, data processing, SFT and experimental RLCD training, and inference and evaluation commands, with support for training on your own data."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "kind": "documented",
+      "text": "This Jev-inspired implementation uses a Qwen3.5 backbone and a shared decision head.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 32,
+          "end": 32,
+          "quote": "Valen (万澜) brings visual perception to System One decision-making. Inspired by [Jev](https://typesafe.ai/blog/introducing-system-one-models-and-jev), it evaluates text, images and video against task instructions and returns probabilities over supplied candidates, giving software a structured decision interface. A Qwen3.5-0.8B or 2B backbone and a shared decision head score candidates without generating answer tokens. The repository includes the model implementation, data processing, SFT and experimental RLCD training, and inference and evaluation commands, with support for training on your own data."
+        },
+        {
+          "source": "source-1",
+          "start": 176,
+          "end": 176,
+          "quote": "Built on [Qwen3.5](https://huggingface.co/Qwen/Qwen3.5-2B), with the decision interface inspired by [TypeSafe's Jev](https://typesafe.ai/blog/introducing-system-one-models-and-jev)."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "kind": "documented",
+      "text": "Run inference or evaluation with both the Valen checkpoint and its Qwen3.5-2B base model.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 70,
+          "end": 76,
+          "quote": "Running Valen requires both the **Valen checkpoint** and the **Qwen3.5-2B base model**.\n\n| Model | Role | Download |\n| --- | --- | --- |\n| Valen-Preview-0923 | Valen checkpoint | [🤗 Hugging Face](https://huggingface.co/Valen-Team/Valen-Preview-0923) |\n\nDatasets: [General 100k training](https://huggingface.co/datasets/Valen-Team/Valen-Training-General-100k) · [General 5k evaluation](https://huggingface.co/datasets/Valen-Team/Valen-Eval-General-5k) · [Sokoban training and evaluation](https://huggingface.co/datasets/Valen-Team/Valen-Eval-Game)."
+        },
+        {
+          "source": "source-1",
+          "start": 92,
+          "end": 100,
+          "quote": "## 🚀 Quick start\n\nInstall the dependencies listed in [requirements](docs/technical.md#环境要求), then download both the Preview checkpoint and its Qwen3.5-2B base model.\n\n```bash\n# Download the Valen-Preview-0923 checkpoint.\nhf download Valen-Team/Valen-Preview-0923 --local-dir models/Valen-Preview-0923\n\n# Download the Qwen3.5-2B base model."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "kind": "documented",
+      "text": "The released checkpoint is a preview and RLCD training is experimental; base models and datasets retain separate licenses.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 14,
+          "end": 16,
+          "quote": "  <a href=\"configs/train/\"><img src=\"https://img.shields.io/badge/Training-SFT_%7C_RLCD-8A63B8?style=flat&amp;labelColor=555555\" alt=\"SFT and experimental RLCD\"></a>\n  <br>\n  <a href=\"https://huggingface.co/Valen-Team/Valen-Preview-0923\"><img src=\"https://img.shields.io/badge/Model-Preview_0923-E88B23?style=flat&amp;logo=huggingface&amp;logoColor=FFD21E&amp;labelColor=555555\" alt=\"Model: Valen-Preview-0923\"></a>"
+        },
+        {
+          "source": "source-1",
+          "start": 174,
+          "end": 174,
+          "quote": "The code is released under [Apache 2.0](LICENSE). Base models and source datasets retain their respective licenses."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "Valen: Jev-inspired decisions from text, images and video",
+      "h1": "Valen: Jev-inspired decisions from text, images and video",
+      "description": "Valen brings text, image and video inputs to a Jev-inspired candidate-scoring model, with open training code and a preview checkpoint requiring Qwen3.5-2B.",
+      "summary": "Valen scores supplied candidates against text, images or video and returns decision probabilities without generating answer tokens. This Jev-inspired implementation uses a Qwen3.5 backbone and a shared decision head. Run inference or evaluation with both the Valen checkpoint and its Qwen3.5-2B base model.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose",
+          "text": "Valen scores supplied candidates against text, images or video and returns decision probabilities without generating answer tokens.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’s role",
+          "text": "This Jev-inspired implementation uses a Qwen3.5 backbone and a shared decision head.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "How to use it",
+          "text": "Run inference or evaluation with both the Valen checkpoint and its Qwen3.5-2B base model.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limits to consider",
+          "text": "The released checkpoint is a preview and RLCD training is experimental; base models and datasets retain separate licenses.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "Valen：受 Jev 启发的文本、图像与视频决策",
+      "h1": "Valen：受 Jev 启发的文本、图像与视频决策",
+      "description": "Valen 将文本、图像和视频接入受 Jev 启发的候选评分模型，提供训练代码与预览检查点；运行需要同时下载 Valen 权重和 Qwen3.5-2B 基础模型。",
+      "summary": "Valen 根据文本、图像或视频为给定候选评分，返回决策概率，不生成答案 token。 这个受 Jev 启发的实现使用 Qwen3.5 主干和共享决策头。 推理或评估需要同时准备 Valen 检查点及对应的 Qwen3.5-2B 基础模型。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "Valen 根据文本、图像或视频为给定候选评分，返回决策概率，不生成答案 token。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "这个受 Jev 启发的实现使用 Qwen3.5 主干和共享决策头。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "推理或评估需要同时准备 Valen 检查点及对应的 Qwen3.5-2B 基础模型。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用边界",
+          "text": "已发布检查点为预览版，RLCD 训练仍属实验；基础模型和数据集保留各自许可证。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "Valen：受 Jev 啟發的文字、影像與影片決策",
+      "h1": "Valen：受 Jev 啟發的文字、影像與影片決策",
+      "description": "Valen 將文字、影像及影片接入受 Jev 啟發的候選評分模型，提供訓練程式與預覽檢查點；執行需要同時下載 Valen 權重和 Qwen3.5-2B 基礎模型。",
+      "summary": "Valen 根據文字、影像或影片為指定候選評分，回傳決策機率，不產生答案 token。 這個受 Jev 啟發的實作使用 Qwen3.5 主幹與共用決策頭。 推論或評估需要同時準備 Valen 檢查點及對應的 Qwen3.5-2B 基礎模型。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "Valen 根據文字、影像或影片為指定候選評分，回傳決策機率，不產生答案 token。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "這個受 Jev 啟發的實作使用 Qwen3.5 主幹與共用決策頭。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "推論或評估需要同時準備 Valen 檢查點及對應的 Qwen3.5-2B 基礎模型。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用限制",
+          "text": "已發布檢查點為預覽版，RLCD 訓練仍屬實驗；基礎模型與資料集保留各自授權。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "Valen：テキスト・画像・動画から Jev 風判断",
+      "h1": "Valen：テキスト・画像・動画から Jev 風判断",
+      "description": "Valen はテキスト・画像・動画から候補を評価する Jev 風モデルです。学習コードとプレビューを公開し、実行には Qwen3.5-2B も必要です。",
+      "summary": "Valen はテキスト、画像、動画に対して候補を評価し、回答トークンを生成せず判断確率を返します。 Jev に着想を得た実装で、Qwen3.5 基盤と共通の決定ヘッドを使います。 推論・評価には Valen チェックポイントと Qwen3.5-2B 基盤モデルの両方が必要です。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "何ができるか",
+          "text": "Valen はテキスト、画像、動画に対して候補を評価し、回答トークンを生成せず判断確率を返します。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "Jev に着想を得た実装で、Qwen3.5 基盤と共通の決定ヘッドを使います。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "推論・評価には Valen チェックポイントと Qwen3.5-2B 基盤モデルの両方が必要です。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "制約と注意点",
+          "text": "公開モデルはプレビューで、RLCD 学習は実験段階です。基盤モデルとデータセットには各ライセンスが適用されます。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "Valen: 텍스트·이미지·영상의 Jev 방식 판단",
+      "h1": "Valen: 텍스트·이미지·영상의 Jev 방식 판단",
+      "description": "Valen은 텍스트·이미지·영상에서 후보를 평가하는 Jev 방식 모델입니다. 학습 코드와 미리보기 체크포인트를 제공하며 Qwen3.5-2B도 필요합니다.",
+      "summary": "Valen은 텍스트, 이미지, 영상에 대해 주어진 후보를 평가하고 답변 토큰 없이 판단 확률을 반환합니다. Jev에서 영감을 받은 구현으로 Qwen3.5 기반 모델과 공유 결정 헤드를 사용합니다. 추론이나 평가에는 Valen 체크포인트와 Qwen3.5-2B 기반 모델을 모두 준비해야 합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "Valen은 텍스트, 이미지, 영상에 대해 주어진 후보를 평가하고 답변 토큰 없이 판단 확률을 반환합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Jev에서 영감을 받은 구현으로 Qwen3.5 기반 모델과 공유 결정 헤드를 사용합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "추론이나 평가에는 Valen 체크포인트와 Qwen3.5-2B 기반 모델을 모두 준비해야 합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "제약 사항",
+          "text": "공개 체크포인트는 미리보기이며 RLCD 학습은 실험 단계입니다. 기반 모델과 데이터셋에는 각자의 라이선스가 적용됩니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "Valen: decisiones inspiradas en Jev con texto, imágenes y vídeo",
+      "h1": "Valen: decisiones inspiradas en Jev con texto, imágenes y vídeo",
+      "description": "Valen aplica puntuación de candidatos inspirada en Jev a texto, imágenes y vídeo; ofrece código de entrenamiento y un checkpoint preliminar basado en Qwen3.5-2B.",
+      "summary": "Valen puntúa candidatos dados frente a texto, imágenes o vídeo y devuelve probabilidades sin generar tokens de respuesta. Esta implementación inspirada en Jev usa una base Qwen3.5 y una cabeza de decisión compartida. Ejecuta inferencia o evaluación con el checkpoint Valen y su modelo base Qwen3.5-2B.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "Valen puntúa candidatos dados frente a texto, imágenes o vídeo y devuelve probabilidades sin generar tokens de respuesta.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "El papel de Jev",
+          "text": "Esta implementación inspirada en Jev usa una base Qwen3.5 y una cabeza de decisión compartida.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo usarlo",
+          "text": "Ejecuta inferencia o evaluación con el checkpoint Valen y su modelo base Qwen3.5-2B.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Límites a considerar",
+          "text": "El checkpoint es preliminar y RLCD experimental; modelos base y datasets conservan sus propias licencias.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "Valen : décisions inspirées de Jev sur texte et images",
+      "h1": "Valen : décisions inspirées de Jev sur texte et images",
+      "description": "Valen évalue des candidats sur texte, images et vidéo selon une approche inspirée de Jev, avec code d’entraînement et préversion nécessitant Qwen3.5-2B.",
+      "summary": "Valen évalue des candidats sur texte, images ou vidéo et renvoie des probabilités sans générer de tokens de réponse. Cette implémentation inspirée de Jev utilise une base Qwen3.5 et une tête de décision partagée. Lancez inférence ou évaluation avec le checkpoint Valen et son modèle de base Qwen3.5-2B.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "Valen évalue des candidats sur texte, images ou vidéo et renvoie des probabilités sans générer de tokens de réponse.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Le rôle de Jev",
+          "text": "Cette implémentation inspirée de Jev utilise une base Qwen3.5 et une tête de décision partagée.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Utilisation",
+          "text": "Lancez inférence ou évaluation avec le checkpoint Valen et son modèle de base Qwen3.5-2B.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limites à connaître",
+          "text": "Le checkpoint est une préversion et RLCD reste expérimental ; modèles et datasets gardent leurs licences respectives.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "Valen: Jev-inspirierte Text-, Bild- und Videoentscheidungen",
+      "h1": "Valen: Jev-inspirierte Text-, Bild- und Videoentscheidungen",
+      "description": "Valen bewertet Kandidaten anhand von Text, Bildern und Videos nach Jev-Vorbild und bietet Trainingscode sowie einen Vorschau-Checkpoint, der Qwen3.5-2B benötigt.",
+      "summary": "Valen bewertet vorgegebene Kandidaten anhand von Text, Bildern oder Videos und liefert Wahrscheinlichkeiten ohne Antworttoken-Generierung. Die Jev-inspirierte Implementierung verwendet Qwen3.5 als Basis und einen gemeinsamen Entscheidungskopf. Inferenz oder Evaluation benötigt sowohl den Valen-Checkpoint als auch das Qwen3.5-2B-Basismodell.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "Valen bewertet vorgegebene Kandidaten anhand von Text, Bildern oder Videos und liefert Wahrscheinlichkeiten ohne Antworttoken-Generierung.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Die Rolle von Jev",
+          "text": "Die Jev-inspirierte Implementierung verwendet Qwen3.5 als Basis und einen gemeinsamen Entscheidungskopf.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Nutzung",
+          "text": "Inferenz oder Evaluation benötigt sowohl den Valen-Checkpoint als auch das Qwen3.5-2B-Basismodell.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Grenzen",
+          "text": "Der veröffentlichte Checkpoint ist eine Vorschau, RLCD experimentell; Basismodelle und Datensätze behalten eigene Lizenzen.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "Valen: decisões inspiradas no Jev com texto e imagem",
+      "h1": "Valen: decisões inspiradas no Jev com texto e imagem",
+      "description": "Valen pontua candidatos de texto, imagem e vídeo com inspiração no Jev; oferece código de treinamento e uma prévia que exige Qwen3.5-2B.",
+      "summary": "Valen pontua candidatos fornecidos com texto, imagens ou vídeo e retorna probabilidades sem gerar tokens de resposta. A implementação inspirada no Jev usa base Qwen3.5 e uma cabeça de decisão compartilhada. Execute inferência ou avaliação com o checkpoint Valen e seu modelo base Qwen3.5-2B.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "Valen pontua candidatos fornecidos com texto, imagens ou vídeo e retorna probabilidades sem gerar tokens de resposta.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "O papel do Jev",
+          "text": "A implementação inspirada no Jev usa base Qwen3.5 e uma cabeça de decisão compartilhada.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Execute inferência ou avaliação com o checkpoint Valen e seu modelo base Qwen3.5-2B.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limitações",
+          "text": "O checkpoint é uma prévia e RLCD é experimental; modelos base e conjuntos de dados mantêm suas licenças.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "Valen: решения по тексту, изображениям и видео",
+      "h1": "Valen: решения по тексту, изображениям и видео",
+      "description": "Valen оценивает варианты по тексту, изображениям и видео в духе Jev, предлагая код обучения и предварительный чекпойнт, которому нужен Qwen3.5-2B.",
+      "summary": "Valen оценивает заданные варианты по тексту, изображениям или видео и возвращает вероятности без генерации токенов ответа. Реализация вдохновлена Jev и использует основу Qwen3.5 с общей головой принятия решений. Для инференса или оценки нужны и чекпойнт Valen, и базовая модель Qwen3.5-2B.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Valen оценивает заданные варианты по тексту, изображениям или видео и возвращает вероятности без генерации токенов ответа.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Реализация вдохновлена Jev и использует основу Qwen3.5 с общей головой принятия решений.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Для инференса или оценки нужны и чекпойнт Valen, и базовая модель Qwen3.5-2B.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ограничения",
+          "text": "Чекпойнт предварительный, RLCD экспериментален; базовые модели и наборы данных сохраняют отдельные лицензии.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "Valen: पाठ, चित्र और वीडियो से Jev-जैसे निर्णय",
+      "h1": "Valen: पाठ, चित्र और वीडियो से Jev-जैसे निर्णय",
+      "description": "Valen Jev से प्रेरित उम्मीदवार मूल्यांकन में पाठ, चित्र और वीडियो लाता है; प्रशिक्षण कोड और Qwen3.5-2B पर निर्भर प्रीव्यू उपलब्ध हैं।",
+      "summary": "Valen पाठ, चित्र या वीडियो पर दिए उम्मीदवार आँककर उत्तर टोकन बनाए बिना निर्णय संभावनाएँ देता है। Jev से प्रेरित यह कार्यान्वयन Qwen3.5 आधार और साझा निर्णय हेड इस्तेमाल करता है। अनुमान या मूल्यांकन के लिए Valen चेकपॉइंट तथा Qwen3.5-2B मूल मॉडल दोनों चाहिए।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "किस काम आता है",
+          "text": "Valen पाठ, चित्र या वीडियो पर दिए उम्मीदवार आँककर उत्तर टोकन बनाए बिना निर्णय संभावनाएँ देता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "Jev से प्रेरित यह कार्यान्वयन Qwen3.5 आधार और साझा निर्णय हेड इस्तेमाल करता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल कैसे करें",
+          "text": "अनुमान या मूल्यांकन के लिए Valen चेकपॉइंट तथा Qwen3.5-2B मूल मॉडल दोनों चाहिए।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "सीमाएँ",
+          "text": "जारी चेकपॉइंट प्रीव्यू है और RLCD प्रशिक्षण प्रयोगात्मक; मूल मॉडल तथा डेटा अपने लाइसेंस रखते हैं।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "Valen: keputusan teks, gambar, dan video ala Jev",
+      "h1": "Valen: keputusan teks, gambar, dan video ala Jev",
+      "description": "Valen membawa teks, gambar, dan video ke penilaian kandidat bergaya Jev, dengan kode pelatihan dan checkpoint pratinjau yang membutuhkan Qwen3.5-2B.",
+      "summary": "Valen menilai kandidat terhadap teks, gambar, atau video lalu menghasilkan probabilitas tanpa membuat token jawaban. Implementasi terinspirasi Jev ini memakai basis Qwen3.5 dan head keputusan bersama. Jalankan inferensi atau evaluasi dengan checkpoint Valen serta model dasar Qwen3.5-2B.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "Valen menilai kandidat terhadap teks, gambar, atau video lalu menghasilkan probabilitas tanpa membuat token jawaban.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Implementasi terinspirasi Jev ini memakai basis Qwen3.5 dan head keputusan bersama.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Jalankan inferensi atau evaluasi dengan checkpoint Valen serta model dasar Qwen3.5-2B.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Batasan",
+          "text": "Checkpoint yang dirilis masih pratinjau dan RLCD eksperimental; model dasar serta dataset mempertahankan lisensi masing-masing.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "Valen: quyết định từ văn bản, ảnh và video theo Jev",
+      "h1": "Valen: quyết định từ văn bản, ảnh và video theo Jev",
+      "description": "Valen chấm ứng viên từ văn bản, ảnh và video theo cảm hứng Jev, có mã huấn luyện và checkpoint xem trước cần Qwen3.5-2B.",
+      "summary": "Valen chấm các ứng viên theo văn bản, ảnh hoặc video, trả xác suất mà không sinh token trả lời. Triển khai lấy cảm hứng từ Jev dùng nền Qwen3.5 cùng đầu quyết định chung. Suy luận hoặc đánh giá cần cả checkpoint Valen và mô hình nền Qwen3.5-2B.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích",
+          "text": "Valen chấm các ứng viên theo văn bản, ảnh hoặc video, trả xác suất mà không sinh token trả lời.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Triển khai lấy cảm hứng từ Jev dùng nền Qwen3.5 cùng đầu quyết định chung.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Suy luận hoặc đánh giá cần cả checkpoint Valen và mô hình nền Qwen3.5-2B.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Giới hạn",
+          "text": "Checkpoint phát hành là bản xem trước, RLCD còn thử nghiệm; mô hình nền và dữ liệu giữ giấy phép riêng.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "Valen: metin, görüntü ve videodan Jev benzeri kararlar",
+      "h1": "Valen: metin, görüntü ve videodan Jev benzeri kararlar",
+      "description": "Valen metin, görüntü ve videoyu Jev’den esinlenen aday puanlamasına taşır; eğitim kodu ve Qwen3.5-2B gerektiren önizleme modeli sunar.",
+      "summary": "Valen verilen adayları metin, görüntü veya videoyla değerlendirip yanıt tokeni üretmeden karar olasılıkları döndürür. Jev’den esinlenen uygulama Qwen3.5 temeli ve ortak karar başlığı kullanır. Çıkarım veya değerlendirme için Valen kontrol noktasıyla Qwen3.5-2B temel modelinin ikisi de gerekir.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "Valen verilen adayları metin, görüntü veya videoyla değerlendirip yanıt tokeni üretmeden karar olasılıkları döndürür.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Jev’den esinlenen uygulama Qwen3.5 temeli ve ortak karar başlığı kullanır.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Çıkarım veya değerlendirme için Valen kontrol noktasıyla Qwen3.5-2B temel modelinin ikisi de gerekir.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Sınırlamalar",
+          "text": "Yayımlanan model önizlemedir, RLCD eğitimi deneyseldir; temel modeller ve veriler ayrı lisanslarını korur.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "Valen: decisioni da testo, immagini e video ispirate a Jev",
+      "h1": "Valen: decisioni da testo, immagini e video ispirate a Jev",
+      "description": "Valen valuta candidati da testo, immagini e video secondo un approccio ispirato a Jev, con codice di training e anteprima che richiede Qwen3.5-2B.",
+      "summary": "Valen valuta candidati rispetto a testo, immagini o video e restituisce probabilità senza generare token di risposta. Questa implementazione ispirata a Jev usa una base Qwen3.5 e una testa decisionale condivisa. Inferenza e valutazione richiedono sia il checkpoint Valen sia il modello base Qwen3.5-2B.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "Valen valuta candidati rispetto a testo, immagini o video e restituisce probabilità senza generare token di risposta.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Il ruolo di Jev",
+          "text": "Questa implementazione ispirata a Jev usa una base Qwen3.5 e una testa decisionale condivisa.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come usarlo",
+          "text": "Inferenza e valutazione richiedono sia il checkpoint Valen sia il modello base Qwen3.5-2B.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limiti",
+          "text": "Il checkpoint è un’anteprima e RLCD è sperimentale; modelli base e dataset mantengono licenze proprie.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

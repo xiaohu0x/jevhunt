@@ -20,11 +20,12 @@ function scripts(dir = join(pub, "assets/js")) {
     ? scripts(join(dir, entry.name)) : entry.name.endsWith(".js") ? [join(dir, entry.name).slice(pub.length + 1)] : []);
 }
 // Hash the imported module too; it has the same long browser cache lifetime.
-const stateVersion = createHash("sha256").update(readFileSync(join(pub, "assets/js/catalog-state.js"))).digest("hex").slice(0, 10);
 const mainFile = join(pub, "assets/js/main.js");
-writeFileSync(mainFile, readFileSync(mainFile, "utf8").replace(/from "\.\/catalog-state\.js(?:\?v=[a-f0-9]+)?"/, `from "./catalog-state.js?v=${stateVersion}"`));
-const cardVersion = createHash("sha256").update(readFileSync(join(pub, "assets/js/project-card.js"))).digest("hex").slice(0, 10);
-writeFileSync(mainFile, readFileSync(mainFile, "utf8").replace(/from "\.\/project-card\.js(?:\?v=[a-f0-9]+)?"/, `from "./project-card.js?v=${cardVersion}"`));
+for (const name of ["catalog-state", "project-card", "catalog-locales"]) {
+  const version = createHash("sha256").update(readFileSync(join(pub, `assets/js/${name}.js`))).digest("hex").slice(0, 10);
+  const pattern = new RegExp(`from "\\./${name}\\.js(?:\\?v=[a-f0-9]+)?"`);
+  writeFileSync(mainFile, readFileSync(mainFile, "utf8").replace(pattern, `from "./${name}.js?v=${version}"`));
+}
 const ASSETS = ["assets/css/fonts.css", "assets/css/style.css", "assets/css/directory.css", "assets/css/editorial.css", ...scripts()];
 
 function htmlPages(dir = pub) {

@@ -1,0 +1,756 @@
+{
+  "version": "source-content-v1",
+  "repo": "logicrw/awesome-jev-projects",
+  "repositoryId": 1375482713,
+  "relationship": "resource",
+  "category": "lists",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "017b6d71f1311ee7838eb3ea96fcb07bbb8a5e90",
+      "url": "https://github.com/logicrw/awesome-jev-projects/blob/017b6d71f1311ee7838eb3ea96fcb07bbb8a5e90/README.md",
+      "sha256": "6d370f4d52855f7fa0600574ff1f9163ecff635d5d324c3acabbc623adca7bcd",
+      "accessedAt": "2026-09-30T07:33:49.681Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "A community directory helps readers find projects by their decision architecture and browse them with search and category filters.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 47,
+          "end": 57,
+          "quote": "### 🎮 Key Interactive Features\n\n- 🎰 **Tactile Gacha Dispatcher**: Discover discrete decision points with real-time streak counting and **10-draw fireworks celebrations (💥 BOOM!)**.\n- ⚡ **Sticky Search & Floating Popover Filter**: Filter tags and categories anytime while scrolling via the anchored toolbar popover.\n- 🔍 **100% Commit-Pinned Code Evidence**: Every listed project links to immutable source files and explicit decision points.\n\n> **[Search and filter ↗](https://logicrw.github.io/awesome-jev-projects/en/)** · **727 curated projects**\n\nA community-maintained directory and radar for Jev, highlighting open-source projects with verified code and clear decision architectures.\n\nEntries are linked to commit-pinned source code and specific decision points for easy reference. Compatible implementations clearly identify their underlying model."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "Entries link to pinned source files and specific Jev decision points; compatible implementations identify their underlying model.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 55,
+          "end": 57,
+          "quote": "A community-maintained directory and radar for Jev, highlighting open-source projects with verified code and clear decision architectures.\n\nEntries are linked to commit-pinned source code and specific decision points for easy reference. Compatible implementations clearly identify their underlying model."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Browse the radar website or install its agent skill with npx skills add logicrw/awesome-jev-projects to inspect projects by domain.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 69,
+          "end": 78,
+          "quote": "## Install the Agent Skill\n\nInstall the skill to query projects by domain and inspect pinned source evidence directly from your terminal or agent.\n\n```bash\nnpx skills add logicrw/awesome-jev-projects\nnpx skills add https://logicrw.github.io/awesome-jev-projects/\n```\n\n[Agent Skill](https://logicrw.github.io/awesome-jev-projects/skill.md) · [llms.txt](https://logicrw.github.io/awesome-jev-projects/llms.txt) · [llms-full.txt](https://logicrw.github.io/awesome-jev-projects/llms-full.txt)"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "Each linked project keeps its own license. Project submissions and updates go through GitHub Issues; this directory does not accept pull requests.",
+      "kind": "source-limitation",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 59,
+          "end": 59,
+          "quote": "Projects follow their respective open-source licenses; unstated licenses are noted individually."
+        },
+        {
+          "source": "source-1",
+          "start": 23,
+          "end": 24,
+          "quote": "> [!TIP]\n> **Project Submissions**: We welcome your Jev projects! All project submissions and updates are handled **exclusively via [GitHub Issues](https://github.com/logicrw/awesome-jev-projects/issues/new?template=project.yml)**. This repository **does not accept Pull Requests**. Simply fill out the issue template with your repository URL."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "awesome-jev-projects — Jev decision architecture directory",
+      "h1": "awesome-jev-projects — Jev decision architecture directory",
+      "description": "awesome-jev-projects: Find Jev projects by decision architecture, inspect pinned code references, or query the community directory through its agent skill.",
+      "summary": "A community directory helps readers find projects by their decision architecture and browse them with search and category filters. Browse the radar website or install its agent skill with npx skills add logicrw/awesome-jev-projects to inspect projects by domain.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "What it does",
+          "text": "A community directory helps readers find projects by their decision architecture and browse them with search and category filters.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "Entries link to pinned source files and specific Jev decision points; compatible implementations identify their underlying model.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Getting started",
+          "text": "Browse the radar website or install its agent skill with npx skills add logicrw/awesome-jev-projects to inspect projects by domain.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "Each linked project keeps its own license. Project submissions and updates go through GitHub Issues; this directory does not accept pull requests.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "awesome-jev-projects — Jev 决策架构项目目录",
+      "h1": "awesome-jev-projects — Jev 决策架构项目目录",
+      "description": "awesome-jev-projects: 按决策架构查找 Jev 项目，查看固定提交的源码依据，或用目录技能按领域查询。",
+      "summary": "这个社区目录按决策架构整理项目，并提供搜索与分类筛选，方便查找具体实现。 可浏览雷达网站，或运行 npx skills add logicrw/awesome-jev-projects 安装技能，按领域查询项目。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "这个社区目录按决策架构整理项目，并提供搜索与分类筛选，方便查找具体实现。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "条目链接到固定提交的源码和具体 Jev 决策点；兼容实现会注明底层模型。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "可浏览雷达网站，或运行 npx skills add logicrw/awesome-jev-projects 安装技能，按领域查询项目。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "被收录项目各自保留原许可证。项目提交和更新通过 GitHub Issues 处理，目录不接受拉取请求。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "awesome-jev-projects — Jev 決策架構專案目錄",
+      "h1": "awesome-jev-projects — Jev 決策架構專案目錄",
+      "description": "awesome-jev-projects: 依決策架構尋找 Jev 專案，查看固定提交的程式碼依據，或用目錄技能依領域查詢。",
+      "summary": "這個社群目錄依決策架構整理專案，並提供搜尋與分類篩選，方便尋找具體實作。 可瀏覽雷達網站，或執行 npx skills add logicrw/awesome-jev-projects 安裝技能，依領域查詢專案。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "這個社群目錄依決策架構整理專案，並提供搜尋與分類篩選，方便尋找具體實作。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "條目連結至固定提交的原始碼和具體 Jev 決策點；相容實作會註明底層模型。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "可瀏覽雷達網站，或執行 npx skills add logicrw/awesome-jev-projects 安裝技能，依領域查詢專案。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "收錄的專案各自保留原授權條款。專案提交和更新透過 GitHub Issues 處理，目錄不接受拉取請求。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "awesome-jev-projects — Jev の意思決定アーキテクチャを探す",
+      "h1": "awesome-jev-projects — Jev の意思決定アーキテクチャを探す",
+      "description": "awesome-jev-projects: 判断の仕組みから Jev プロジェクトを探し、固定コミットの根拠を確認。エージェント用スキルからも分野別に調べられます。",
+      "summary": "意思決定の仕組みに着目したコミュニティ運営のプロジェクト集で、検索とカテゴリ絞り込みができます。 レーダーのサイトを閲覧するか、npx skills add logicrw/awesome-jev-projects でスキルを追加し、分野別に調べられます。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "できること",
+          "text": "意思決定の仕組みに着目したコミュニティ運営のプロジェクト集で、検索とカテゴリ絞り込みができます。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "各項目はコミットを固定したソースと Jev の判断箇所を示し、互換実装には使用モデルを明記します。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い始めるには",
+          "text": "レーダーのサイトを閲覧するか、npx skills add logicrw/awesome-jev-projects でスキルを追加し、分野別に調べられます。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "対象範囲と制約",
+          "text": "掲載先には各プロジェクトのライセンスが適用されます。掲載申請や更新は GitHub Issues で受け付け、プルリクエストは受け付けません。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "awesome-jev-projects — Jev 의사결정 구조 프로젝트 목록",
+      "h1": "awesome-jev-projects — Jev 의사결정 구조 프로젝트 목록",
+      "description": "awesome-jev-projects: Jev 프로젝트를 의사결정 구조별로 찾고 고정 커밋 근거를 확인하세요. 디렉터리 스킬로 분야별 조회도 가능합니다.",
+      "summary": "의사결정 구조를 중심으로 프로젝트를 모은 커뮤니티 목록이며 검색과 분류 필터를 제공합니다. 웹사이트를 살펴보거나 npx skills add logicrw/awesome-jev-projects로 스킬을 설치해 분야별 프로젝트를 조회할 수 있습니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "의사결정 구조를 중심으로 프로젝트를 모은 커뮤니티 목록이며 검색과 분류 필터를 제공합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "각 항목은 커밋이 고정된 소스와 Jev 판단 지점을 연결하고, 호환 구현은 기반 모델을 밝힙니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "웹사이트를 살펴보거나 npx skills add logicrw/awesome-jev-projects로 스킬을 설치해 분야별 프로젝트를 조회할 수 있습니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 제약",
+          "text": "수록된 프로젝트마다 자체 라이선스가 적용됩니다. 등록과 수정은 GitHub Issues로 접수하며 풀 리퀘스트는 받지 않습니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "awesome-jev-projects — Directorio de arquitecturas de decisión con Jev",
+      "h1": "awesome-jev-projects — Directorio de arquitecturas de decisión con Jev",
+      "description": "awesome-jev-projects: Busca proyectos Jev por arquitectura de decisión y consulta sus fuentes fijadas a commits desde la web o la habilidad del catálogo.",
+      "summary": "Este directorio comunitario permite buscar proyectos por su arquitectura de decisión y filtrarlos por categorías. Explora la web o instala su habilidad con npx skills add logicrw/awesome-jev-projects para consultar proyectos por ámbito.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "Este directorio comunitario permite buscar proyectos por su arquitectura de decisión y filtrarlos por categorías.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Las entradas enlazan código fijado a un commit y puntos concretos de decisión de Jev; las implementaciones compatibles indican su modelo subyacente.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo empezar",
+          "text": "Explora la web o instala su habilidad con npx skills add logicrw/awesome-jev-projects para consultar proyectos por ámbito.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "Cada proyecto conserva su licencia. Las propuestas y actualizaciones se tramitan mediante GitHub Issues; el directorio no acepta pull requests.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "awesome-jev-projects — Annuaire des architectures de décision avec Jev",
+      "h1": "awesome-jev-projects — Annuaire des architectures de décision avec Jev",
+      "description": "awesome-jev-projects: Cherchez des projets Jev par architecture de décision et consultez leurs sources figées depuis le site ou sa compétence pour agents.",
+      "summary": "Cet annuaire communautaire permet de chercher des projets selon leur architecture de décision et de les filtrer par catégorie. Parcourez le site ou installez la compétence avec npx skills add logicrw/awesome-jev-projects pour interroger les projets par domaine.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "Cet annuaire communautaire permet de chercher des projets selon leur architecture de décision et de les filtrer par catégorie.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Les fiches renvoient à du code figé sur un commit et aux décisions de Jev ; les implémentations compatibles précisent leur modèle sous-jacent.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Parcourez le site ou installez la compétence avec npx skills add logicrw/awesome-jev-projects pour interroger les projets par domaine.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "Chaque projet conserve sa licence. Les propositions et mises à jour passent par GitHub Issues ; l’annuaire n’accepte pas les pull requests.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "awesome-jev-projects — Verzeichnis für Entscheidungsarchitekturen mit Jev",
+      "h1": "awesome-jev-projects — Verzeichnis für Entscheidungsarchitekturen mit Jev",
+      "description": "awesome-jev-projects: Jev-Projekte nach Entscheidungsarchitektur finden und feste Quellbelege über Website oder Agenten-Skill untersuchen.",
+      "summary": "Das Community-Verzeichnis erschließt Projekte nach ihrer Entscheidungsarchitektur und bietet Suche sowie Kategoriefilter. Die Website lässt sich direkt durchsuchen. Mit npx skills add logicrw/awesome-jev-projects wird ein Skill für die Abfrage nach Einsatzgebiet installiert.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "Das Community-Verzeichnis erschließt Projekte nach ihrer Entscheidungsarchitektur und bietet Suche sowie Kategoriefilter.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Einträge verlinken auf festgelegte Commits und konkrete Jev-Entscheidungsstellen; kompatible Implementierungen nennen das zugrunde liegende Modell.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Einstieg",
+          "text": "Die Website lässt sich direkt durchsuchen. Mit npx skills add logicrw/awesome-jev-projects wird ein Skill für die Abfrage nach Einsatzgebiet installiert.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Für verlinkte Projekte gelten deren eigene Lizenzen. Einreichungen und Änderungen laufen über GitHub Issues; Pull Requests werden nicht angenommen.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "awesome-jev-projects — Diretório de arquiteturas de decisão com Jev",
+      "h1": "awesome-jev-projects — Diretório de arquiteturas de decisão com Jev",
+      "description": "awesome-jev-projects: Encontre projetos Jev pela arquitetura de decisão e confira fontes fixadas em commits pela web ou pela habilidade do diretório.",
+      "summary": "Este diretório comunitário permite pesquisar projetos pela arquitetura de decisão e usar filtros de categoria. Explore o site ou instale a habilidade com npx skills add logicrw/awesome-jev-projects para consultar projetos por área.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "Este diretório comunitário permite pesquisar projetos pela arquitetura de decisão e usar filtros de categoria.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "As entradas apontam para código fixado em um commit e decisões específicas do Jev; implementações compatíveis identificam o modelo usado.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como começar",
+          "text": "Explore o site ou instale a habilidade com npx skills add logicrw/awesome-jev-projects para consultar projetos por área.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "Cada projeto mantém sua própria licença. Envios e atualizações passam pelo GitHub Issues; o diretório não aceita pull requests.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "awesome-jev-projects — Каталог архитектур принятия решений с Jev",
+      "h1": "awesome-jev-projects — Каталог архитектур принятия решений с Jev",
+      "description": "awesome-jev-projects: Находите проекты Jev по архитектуре решений и проверяйте код фиксированных коммитов через сайт или навык каталога.",
+      "summary": "Каталог сообщества помогает находить проекты по устройству их решений, используя поиск и фильтры категорий. Просматривайте сайт или установите навык командой npx skills add logicrw/awesome-jev-projects для поиска проектов по областям.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Каталог сообщества помогает находить проекты по устройству их решений, используя поиск и фильтры категорий.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Записи ссылаются на исходники с фиксированным коммитом и конкретные решения Jev; совместимые реализации указывают используемую модель.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Начало работы",
+          "text": "Просматривайте сайт или установите навык командой npx skills add logicrw/awesome-jev-projects для поиска проектов по областям.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "У каждого проекта своя лицензия. Предложения и обновления принимаются через GitHub Issues; запросы на слияние каталог не принимает.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "awesome-jev-projects — Jev निर्णय संरचनाओं की परियोजना सूची",
+      "h1": "awesome-jev-projects — Jev निर्णय संरचनाओं की परियोजना सूची",
+      "description": "awesome-jev-projects: निर्णय संरचना से Jev परियोजनाएँ खोजें और वेबसाइट या डायरेक्टरी स्किल से निश्चित कमिट के स्रोत देखें।",
+      "summary": "यह सामुदायिक सूची निर्णय संरचना के आधार पर परियोजनाएँ खोजने और श्रेणी के अनुसार छाँटने में मदद करती है। वेबसाइट देखें या npx skills add logicrw/awesome-jev-projects से स्किल जोड़कर क्षेत्र के अनुसार परियोजनाएँ खोजें।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "परियोजना का काम",
+          "text": "यह सामुदायिक सूची निर्णय संरचना के आधार पर परियोजनाएँ खोजने और श्रेणी के अनुसार छाँटने में मदद करती है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "हर प्रविष्टि निश्चित कमिट वाले स्रोत और Jev के निर्णय बिंदु से जुड़ती है; संगत कार्यान्वयन अपना आधार मॉडल बताते हैं।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "शुरुआत कैसे करें",
+          "text": "वेबसाइट देखें या npx skills add logicrw/awesome-jev-projects से स्किल जोड़कर क्षेत्र के अनुसार परियोजनाएँ खोजें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "हर परियोजना का अपना लाइसेंस लागू होता है। नई प्रविष्टियाँ और बदलाव GitHub Issues से भेजे जाते हैं; पुल अनुरोध स्वीकार नहीं होते।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "awesome-jev-projects — Direktori arsitektur keputusan Jev",
+      "h1": "awesome-jev-projects — Direktori arsitektur keputusan Jev",
+      "description": "awesome-jev-projects: Cari proyek Jev menurut arsitektur keputusan dan periksa sumber pada commit tetap melalui situs atau keterampilan direktori.",
+      "summary": "Direktori komunitas ini membantu pencarian proyek berdasarkan arsitektur keputusan, dengan pencarian dan filter kategori. Jelajahi situs atau pasang keterampilan lewat npx skills add logicrw/awesome-jev-projects untuk mencari proyek menurut bidang.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "Direktori komunitas ini membantu pencarian proyek berdasarkan arsitektur keputusan, dengan pencarian dan filter kategori.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Entri menautkan kode pada commit tertentu serta titik keputusan Jev; implementasi yang kompatibel menyebutkan model dasarnya.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara memulai",
+          "text": "Jelajahi situs atau pasang keterampilan lewat npx skills add logicrw/awesome-jev-projects untuk mencari proyek menurut bidang.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Setiap proyek tetap memakai lisensinya sendiri. Pengajuan dan pembaruan dilakukan melalui GitHub Issues; direktori tidak menerima pull request.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "awesome-jev-projects — Danh mục kiến trúc ra quyết định với Jev",
+      "h1": "awesome-jev-projects — Danh mục kiến trúc ra quyết định với Jev",
+      "description": "awesome-jev-projects: Tìm dự án Jev theo kiến trúc quyết định và xem mã tại commit cố định qua trang web hoặc kỹ năng danh mục.",
+      "summary": "Danh mục cộng đồng này giúp tìm dự án theo kiến trúc ra quyết định, với chức năng tìm kiếm và lọc theo nhóm. Duyệt trang web hoặc cài kỹ năng bằng npx skills add logicrw/awesome-jev-projects để tra cứu dự án theo lĩnh vực.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Công dụng",
+          "text": "Danh mục cộng đồng này giúp tìm dự án theo kiến trúc ra quyết định, với chức năng tìm kiếm và lọc theo nhóm.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Mỗi mục dẫn đến mã nguồn tại commit cố định và điểm Jev ra quyết định; bản triển khai tương thích ghi rõ mô hình nền.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách bắt đầu",
+          "text": "Duyệt trang web hoặc cài kỹ năng bằng npx skills add logicrw/awesome-jev-projects để tra cứu dự án theo lĩnh vực.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Mỗi dự án giữ giấy phép riêng. Đề xuất và cập nhật được gửi qua GitHub Issues; danh mục không nhận pull request.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "awesome-jev-projects — Jev karar mimarileri dizini",
+      "h1": "awesome-jev-projects — Jev karar mimarileri dizini",
+      "description": "awesome-jev-projects: Jev projelerini karar mimarisine göre bulun; sabit commit kaynaklarını siteden veya dizin becerisinden inceleyin.",
+      "summary": "Bu topluluk dizini, projeleri karar mimarilerine göre bulmak için arama ve kategori filtreleri sunar. Web sitesini inceleyin veya alan bazında sorgulama için npx skills add logicrw/awesome-jev-projects ile beceriyi yükleyin.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "Bu topluluk dizini, projeleri karar mimarilerine göre bulmak için arama ve kategori filtreleri sunar.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Kayıtlar belirli bir commit’teki kaynak koduna ve Jev karar noktalarına bağlanır; uyumlu uygulamalar kullandıkları modeli belirtir.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Başlangıç",
+          "text": "Web sitesini inceleyin veya alan bazında sorgulama için npx skills add logicrw/awesome-jev-projects ile beceriyi yükleyin.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Her projenin kendi lisansı geçerlidir. Başvurular ve güncellemeler GitHub Issues üzerinden alınır; dizin pull request kabul etmez.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "awesome-jev-projects — Catalogo di architetture decisionali con Jev",
+      "h1": "awesome-jev-projects — Catalogo di architetture decisionali con Jev",
+      "description": "awesome-jev-projects: Trova progetti Jev per architettura decisionale e consulta fonti fissate a commit dal sito o dalla competenza del catalogo.",
+      "summary": "Questo catalogo della comunità permette di trovare progetti per architettura decisionale, con ricerca e filtri per categoria. Esplora il sito oppure installa la competenza con npx skills add logicrw/awesome-jev-projects per cercare progetti per settore.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "Questo catalogo della comunità permette di trovare progetti per architettura decisionale, con ricerca e filtri per categoria.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Le voci collegano codice fissato a un commit e punti decisionali di Jev; le implementazioni compatibili dichiarano il modello sottostante.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come iniziare",
+          "text": "Esplora il sito oppure installa la competenza con npx skills add logicrw/awesome-jev-projects per cercare progetti per settore.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "Ogni progetto mantiene la propria licenza. Proposte e aggiornamenti passano da GitHub Issues; il catalogo non accetta pull request.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

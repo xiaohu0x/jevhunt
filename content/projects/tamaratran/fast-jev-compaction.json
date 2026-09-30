@@ -1,0 +1,768 @@
+{
+  "version": "source-content-v1",
+  "repo": "tamaratran/fast-jev-compaction",
+  "repositoryId": 1374005005,
+  "relationship": "integration",
+  "category": "agents",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "path": "README.md",
+      "commit": "e3f262a7f4d42bd8dd32ced30d26176f7cb545b0",
+      "url": "https://github.com/tamaratran/fast-jev-compaction/blob/e3f262a7f4d42bd8dd32ced30d26176f7cb545b0/README.md",
+      "sha256": "5499bdb4f3ec13ac9e228cb09ab2894fd1a4e3128db04722735dbfc794f27299",
+      "accessedAt": "2026-09-30T07:33:45.196Z",
+      "id": "s1"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "This npm library and Claude Code plugin compact history by pruning tool calls and results instead of rewriting conversation text.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 3,
+          "end": 19,
+          "quote": "Claude Code plugin that replaces the compaction summary with Jev decisions:\nevery tool call and result is scored in one fast request, stale ones are\ndropped or truncated, everything kept stays verbatim. Also usable as an npm\nlibrary.\n\n## What and why\n\nMost context compaction asks an LLM to summarize old turns. A summary is\nlossy: a file path, exact error, constraint, or command can disappear even when\nit matters later. This library never rewrites anything. It only deletes tool\ncalls and tool results Jev says are no longer needed, and it asks Jev while\nshowing it the whole conversation. User and assistant text stays verbatim and\nin order.\n\nThe repository is both an npm package (`src/`) and a Claude Code plugin\n(`hooks/`, `.claude-plugin/`) that uses the package to replace Claude Code's\nbuilt-in compaction summary with the original messages."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "Jev answers separate noul questions about retaining each call and result; thresholds determine whether to keep, shorten or remove the pair.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 23,
+          "end": 54,
+          "quote": "1. Every `tool_use` is paired with its `tool_result` by `tool_use_id`. Calls in\n   the first message or in the newest `preserveRecentMessages` messages are\n   pinned and never touched.\n2. The **state** sent to Jev is the whole conversation so far, oldest first,\n   with every tool result replaced by a short note (`ok, 4213 chars (omitted)`).\n   Tool inputs are included, texts are included, nothing is summarized.\n3. The state is fitted into `maxStateTokens` (25k by default) in stages, each\n   applied only if the previous one was not enough: tool inputs truncated to\n   1000, then 200, then 60 characters; long texts abridged to head + tail,\n   oldest non-pinned messages first; old non-pinned messages collapsed to a\n   `[… N chars omitted …]` note; old tool calls reduced to one line each\n   (`t12 Read file_path=src/a.ts → ok 480ch`); old call-less messages left\n   out; runs of old call-only messages folded into one entry. If it still\n   does not fit, compaction throws. Tokens are estimated without a tokenizer (a\n   word per six letters, half a token per digit, ~one per other symbol),\n   calibrated to land a little above the counts Jev reports.\n4. For every non-pinned call Jev gets two `noul` questions: should the **call**\n   stay (knowing it was made, with its input, still matters), and should the\n   **result** stay verbatim (its contents are still needed and re-running the\n   tool would not do).\n5. Questions are split into as many requests as needed so state plus questions\n   stays under `maxRequestTokens` (30k by default, under Jev's 32k request\n   limit). The same full state is resent with every request; requests run\n   concurrently and their answers are merged.\n6. Decisions per call, against `keepThreshold`:\n   - `keepResult ≥ threshold` → keep call and result;\n   - else `keepCall ≥ threshold` → keep the call, truncate the result to its\n     first `truncateHeadChars` characters plus a one-line note;\n   - else → remove the call together with its result.\n7. The message list is rebuilt: a message that loses all its content is\n   removed, untouched messages are returned as the same objects, and no result\n   is ever left without its call."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Use compactMessages from the package or the Claude Code function-hook plugin with TYPESAFE_API_KEY.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 61,
+          "end": 67,
+          "quote": "```sh\nnpm install fast-jev-compaction\nexport TYPESAFE_API_KEY=...\n```\n\n```ts\nimport { compactMessages, reductionRatio, type Message } from 'fast-jev-compaction';"
+        },
+        {
+          "source": "s1",
+          "start": 128,
+          "end": 134,
+          "quote": "## Claude Code plugin\n\nThe repository root is a Claude Code function-hook plugin: `hooks/fast-jev.ts`\nis a thin adapter that feeds `session.compact` transcripts through `src/` and\nfalls back to Claude Code's built-in summary on errors or insufficient\nreduction. See [`hooks/README.md`](hooks/README.md) for configuration and the\nClaude Code 2.1.274 type reference."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "Token counts are estimates and scores do not prove safe deletion. Library errors propagate; the plugin falls back to built-in summaries on failure or insufficient reduction.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 56,
+          "end": 57,
+          "quote": "Jev failures, malformed answers, a missing key, or a history that cannot be\nfitted throw; the caller (or the Claude Code hook) decides what to fall back to."
+        },
+        {
+          "source": "s1",
+          "start": 118,
+          "end": 126,
+          "quote": "## Limitations\n\n- Only tool calls and results are candidates; text messages are never removed\n  or shortened in the output (they are only abridged in the state Jev sees).\n- Token sizes are estimates from character counts, not a tokenizer.\n- Calibration is at the request level; a probability is not a proof that a\n  result is safe to delete. The assistant can always re-run the tool.\n- The full state is repeated with every request, so a history near the state\n  ceiling costs one request per handful of questions."
+        },
+        {
+          "source": "s1",
+          "start": 130,
+          "end": 133,
+          "quote": "The repository root is a Claude Code function-hook plugin: `hooks/fast-jev.ts`\nis a thin adapter that feeds `session.compact` transcripts through `src/` and\nfalls back to Claude Code's built-in summary on errors or insufficient\nreduction. See [`hooks/README.md`](hooks/README.md) for configuration and the"
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "fast-jev-compaction: prune tool history with Jev",
+      "h1": "fast-jev-compaction: prune tool history with Jev",
+      "description": "fast-jev-compaction uses Jev to keep, truncate or remove tool exchanges while preserving conversation text.",
+      "summary": "This npm library and Claude Code plugin compact history by pruning tool calls and results instead of rewriting conversation text. Jev answers separate noul questions about retaining each call and result; thresholds determine whether to keep, shorten or remove the pair.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose and audience",
+          "text": "This npm library and Claude Code plugin compact history by pruning tool calls and results instead of rewriting conversation text.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "Jev answers separate noul questions about retaining each call and result; thresholds determine whether to keep, shorten or remove the pair.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Using the project",
+          "text": "Use compactMessages from the package or the Claude Code function-hook plugin with TYPESAFE_API_KEY.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "Token counts are estimates and scores do not prove safe deletion. Library errors propagate; the plugin falls back to built-in summaries on failure or insufficient reduction.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "fast-jev-compaction：用 Jev 精简工具历史",
+      "h1": "fast-jev-compaction：用 Jev 精简工具历史",
+      "description": "fast-jev-compaction 用 Jev 决定保留、截短或移除工具交互，同时保留对话文本。",
+      "summary": "这个 npm 库和 Claude Code 插件通过精简工具调用及结果压缩历史，不改写对话文本。 Jev 分别用 noul 问题判断调用和结果是否应保留，再根据阈值保留、截短或移除配对记录。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途与适用对象",
+          "text": "这个 npm 库和 Claude Code 插件通过精简工具调用及结果压缩历史，不改写对话文本。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "Jev 分别用 noul 问题判断调用和结果是否应保留，再根据阈值保留、截短或移除配对记录。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "可调用包中的 compactMessages，或配置 TYPESAFE_API_KEY 使用 Claude Code 函数钩子插件。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "词元数是估算值，评分不保证删除安全。库会抛出错误；插件在失败或压缩不足时回退到内置摘要。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "fast-jev-compaction：用 Jev 精簡工具歷程",
+      "h1": "fast-jev-compaction：用 Jev 精簡工具歷程",
+      "description": "fast-jev-compaction 用 Jev 決定保留、截短或移除工具互動，同時保留對話文字。",
+      "summary": "這個 npm 套件與 Claude Code 外掛以精簡工具呼叫及結果壓縮歷程，不改寫對話文字。 Jev 以獨立 noul 問題判斷呼叫與結果是否需要保留，再依門檻保留、截短或移除配對紀錄。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途與適用對象",
+          "text": "這個 npm 套件與 Claude Code 外掛以精簡工具呼叫及結果壓縮歷程，不改寫對話文字。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "Jev 以獨立 noul 問題判斷呼叫與結果是否需要保留，再依門檻保留、截短或移除配對紀錄。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "可呼叫套件中的 compactMessages，或設定 TYPESAFE_API_KEY 使用 Claude Code 函式掛鉤外掛。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "詞元數為估算值，分數無法保證刪除安全。套件會拋出錯誤；外掛在失敗或縮減不足時改用內建摘要。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "fast-jev-compaction：Jev でツール履歴を整理",
+      "h1": "fast-jev-compaction：Jev でツール履歴を整理",
+      "description": "fast-jev-compaction は会話文を保持し、Jev でツールのやり取りを保持・短縮・削除します。",
+      "summary": "npm ライブラリ兼 Claude Code プラグインで、会話を書き換えずにツール呼び出しと結果を減らします。 Jev が呼び出しと結果それぞれの保持を noul で判断し、しきい値に応じて組を保持・短縮・削除します。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途と対象",
+          "text": "npm ライブラリ兼 Claude Code プラグインで、会話を書き換えずにツール呼び出しと結果を減らします。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev との関係",
+          "text": "Jev が呼び出しと結果それぞれの保持を noul で判断し、しきい値に応じて組を保持・短縮・削除します。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "compactMessages を呼び出すか、TYPESAFE_API_KEY を設定して Claude Code の関数フック型プラグインを使います。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範囲と制約",
+          "text": "トークン数は推定で、判断値は削除の安全性を保証しません。ライブラリはエラーを返し、プラグインは失敗や削減不足時に標準要約へ戻ります。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "fast-jev-compaction: Jev로 도구 기록 압축",
+      "h1": "fast-jev-compaction: Jev로 도구 기록 압축",
+      "description": "fast-jev-compaction은 대화 텍스트를 유지하며 Jev로 도구 교환을 보존, 축약 또는 제거합니다.",
+      "summary": "npm 라이브러리와 Claude Code 플러그인으로, 대화를 다시 쓰지 않고 도구 호출과 결과를 줄입니다. Jev가 호출과 결과의 보존 여부를 각각 noul로 판단하며 임계값에 따라 쌍을 보존, 축약하거나 제거합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "용도와 대상",
+          "text": "npm 라이브러리와 Claude Code 플러그인으로, 대화를 다시 쓰지 않고 도구 호출과 결과를 줄입니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Jev가 호출과 결과의 보존 여부를 각각 noul로 판단하며 임계값에 따라 쌍을 보존, 축약하거나 제거합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "패키지의 compactMessages를 호출하거나 TYPESAFE_API_KEY를 설정해 Claude Code 함수 훅 플러그인을 사용합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 한계",
+          "text": "토큰 수는 추정치이며 점수가 안전한 삭제를 보증하지 않습니다. 라이브러리는 오류를 전달하고 플러그인은 실패나 축소 부족 시 기본 요약으로 전환합니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "fast-jev-compaction: depurar historial de herramientas con Jev",
+      "h1": "fast-jev-compaction: depurar historial de herramientas con Jev",
+      "description": "fast-jev-compaction usa Jev para conservar, truncar o eliminar intercambios de herramientas, preservando el texto de la conversación.",
+      "summary": "La biblioteca npm y el plugin de Claude Code reducen llamadas y resultados sin reescribir la conversación. Jev responde preguntas noul separadas sobre cada llamada y resultado; los umbrales deciden qué conservar, acortar o eliminar.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "La biblioteca npm y el plugin de Claude Code reducen llamadas y resultados sin reescribir la conversación.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Jev responde preguntas noul separadas sobre cada llamada y resultado; los umbrales deciden qué conservar, acortar o eliminar.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo se usa",
+          "text": "Use compactMessages del paquete o el plugin de funciones de Claude Code con TYPESAFE_API_KEY.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "Los tokens se estiman y las puntuaciones no garantizan una eliminación segura. La biblioteca propaga errores; el plugin recurre al resumen integrado si falla o reduce poco.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "fast-jev-compaction : alléger l'historique des outils avec Jev",
+      "h1": "fast-jev-compaction : alléger l'historique des outils avec Jev",
+      "description": "fast-jev-compaction conserve le texte de conversation et utilise Jev pour garder, tronquer ou supprimer les échanges d'outils.",
+      "summary": "Cette bibliothèque npm et ce plugin Claude Code réduisent appels et résultats sans réécrire la conversation. Jev répond séparément à des questions noul sur chaque appel et résultat ; les seuils déterminent leur conservation, troncature ou suppression.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Usage et public visé",
+          "text": "Cette bibliothèque npm et ce plugin Claude Code réduisent appels et résultats sans réécrire la conversation.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Jev répond séparément à des questions noul sur chaque appel et résultat ; les seuils déterminent leur conservation, troncature ou suppression.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Utilisez compactMessages du paquet ou le plugin de hooks de fonctions Claude Code avec TYPESAFE_API_KEY.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "Le comptage des tokens est estimé et les scores ne garantissent pas une suppression sûre. La bibliothèque remonte les erreurs ; le plugin revient au résumé intégré si nécessaire.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "fast-jev-compaction: Werkzeughistorie mit Jev kürzen",
+      "h1": "fast-jev-compaction: Werkzeughistorie mit Jev kürzen",
+      "description": "fast-jev-compaction erhält Gesprächstext und lässt Jev Werkzeugaufrufe und Ergebnisse behalten, kürzen oder entfernen.",
+      "summary": "Die npm-Bibliothek und das Claude-Code-Plugin verdichten den Verlauf durch Entfernen von Werkzeugdaten, ohne Gesprächstext umzuschreiben. Jev beantwortet getrennte noul-Fragen für Aufruf und Ergebnis; Schwellenwerte bestimmen Beibehaltung, Kürzung oder Entfernung des Paars.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Zweck und Zielgruppe",
+          "text": "Die npm-Bibliothek und das Claude-Code-Plugin verdichten den Verlauf durch Entfernen von Werkzeugdaten, ohne Gesprächstext umzuschreiben.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Jev beantwortet getrennte noul-Fragen für Aufruf und Ergebnis; Schwellenwerte bestimmen Beibehaltung, Kürzung oder Entfernung des Paars.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Verwendung",
+          "text": "Verwenden Sie compactMessages oder das Claude-Code-Funktionshook-Plugin mit TYPESAFE_API_KEY.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Tokenzahlen sind Schätzungen und Bewertungen beweisen keine sichere Löschung. Die Bibliothek meldet Fehler; das Plugin nutzt bei Fehlern oder geringer Kürzung die Standardzusammenfassung.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "fast-jev-compaction: reduzir histórico de ferramentas com Jev",
+      "h1": "fast-jev-compaction: reduzir histórico de ferramentas com Jev",
+      "description": "fast-jev-compaction usa Jev para manter, truncar ou remover trocas de ferramentas sem reescrever a conversa.",
+      "summary": "A biblioteca npm e o plugin Claude Code compactam o histórico podando chamadas e resultados de ferramentas. Jev responde perguntas noul separadas sobre chamada e resultado; limiares determinam se o par será mantido, encurtado ou removido.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Finalidade e público",
+          "text": "A biblioteca npm e o plugin Claude Code compactam o histórico podando chamadas e resultados de ferramentas.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "Jev responde perguntas noul separadas sobre chamada e resultado; limiares determinam se o par será mantido, encurtado ou removido.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Use compactMessages do pacote ou o plugin de hooks de função do Claude Code com TYPESAFE_API_KEY.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "Tokens são estimados e pontuações não garantem exclusão segura. A biblioteca propaga erros; o plugin usa o resumo integrado se houver falha ou pouca redução.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "fast-jev-compaction: сокращение истории инструментов через Jev",
+      "h1": "fast-jev-compaction: сокращение истории инструментов через Jev",
+      "description": "fast-jev-compaction сохраняет текст разговора и использует Jev для сохранения, обрезки или удаления обменов с инструментами.",
+      "summary": "Библиотека npm и плагин Claude Code сжимают историю, сокращая вызовы и результаты без переписывания текста разговора. Jev отдельно отвечает на noul-вопросы о вызове и результате; пороги определяют сохранение, сокращение или удаление пары.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Библиотека npm и плагин Claude Code сжимают историю, сокращая вызовы и результаты без переписывания текста разговора.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Jev отдельно отвечает на noul-вопросы о вызове и результате; пороги определяют сохранение, сокращение или удаление пары.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Используйте compactMessages из пакета либо плагин функциональных хуков Claude Code с TYPESAFE_API_KEY.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Число токенов оценивается приблизительно, а оценки не доказывают безопасность удаления. Библиотека передаёт ошибки; плагин возвращается к встроенному резюме при сбое или слабом сокращении.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "fast-jev-compaction: Jev से टूल इतिहास घटाएँ",
+      "h1": "fast-jev-compaction: Jev से टूल इतिहास घटाएँ",
+      "description": "fast-jev-compaction संवाद का टेक्स्ट बनाए रखता है और Jev से टूल आदान-प्रदान रखने, छोटा करने या हटाने का निर्णय लेता है।",
+      "summary": "यह npm लाइब्रेरी और Claude Code प्लगइन बातचीत दोबारा लिखे बिना टूल कॉल और परिणाम घटाते हैं। Jev हर कॉल और परिणाम के लिए अलग noul प्रश्न का उत्तर देता है; तय सीमाएँ जोड़ी रखने, काटने या हटाने को नियंत्रित करती हैं।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "उद्देश्य और उपयोगकर्ता",
+          "text": "यह npm लाइब्रेरी और Claude Code प्लगइन बातचीत दोबारा लिखे बिना टूल कॉल और परिणाम घटाते हैं।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "Jev हर कॉल और परिणाम के लिए अलग noul प्रश्न का उत्तर देता है; तय सीमाएँ जोड़ी रखने, काटने या हटाने को नियंत्रित करती हैं।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल का तरीका",
+          "text": "पैकेज का compactMessages या TYPESAFE_API_KEY के साथ Claude Code फ़ंक्शन-हुक प्लगइन इस्तेमाल करें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "टोकन संख्या अनुमान है और स्कोर सुरक्षित हटाने का प्रमाण नहीं। लाइब्रेरी त्रुटि आगे भेजती है; प्लगइन विफलता या कम कटौती पर अंतर्निहित सारांश अपनाता है।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "fast-jev-compaction: pangkas riwayat alat dengan Jev",
+      "h1": "fast-jev-compaction: pangkas riwayat alat dengan Jev",
+      "description": "fast-jev-compaction mempertahankan teks percakapan dan memakai Jev untuk menyimpan, memotong, atau menghapus pertukaran alat.",
+      "summary": "Pustaka npm dan plugin Claude Code memadatkan riwayat dengan memangkas panggilan serta hasil alat tanpa menulis ulang percakapan. Jev menjawab pertanyaan noul terpisah untuk panggilan dan hasil; ambang menentukan apakah pasangan dipertahankan, dipotong, atau dihapus.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Tujuan dan pengguna",
+          "text": "Pustaka npm dan plugin Claude Code memadatkan riwayat dengan memangkas panggilan serta hasil alat tanpa menulis ulang percakapan.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Jev menjawab pertanyaan noul terpisah untuk panggilan dan hasil; ambang menentukan apakah pasangan dipertahankan, dipotong, atau dihapus.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Gunakan compactMessages atau plugin hook fungsi Claude Code dengan TYPESAFE_API_KEY.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Jumlah token berupa perkiraan dan skor bukan jaminan penghapusan aman. Pustaka meneruskan galat; plugin memakai ringkasan bawaan jika gagal atau pengurangan kurang memadai.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "fast-jev-compaction: rút gọn lịch sử công cụ bằng Jev",
+      "h1": "fast-jev-compaction: rút gọn lịch sử công cụ bằng Jev",
+      "description": "fast-jev-compaction giữ nguyên hội thoại và dùng Jev để giữ, cắt ngắn hoặc xóa các lượt trao đổi với công cụ.",
+      "summary": "Thư viện npm và plugin Claude Code nén lịch sử bằng cách lược bớt lời gọi và kết quả công cụ, không viết lại hội thoại. Jev trả lời câu hỏi noul riêng cho lời gọi và kết quả; ngưỡng quyết định giữ, cắt ngắn hay xóa cặp tương ứng.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích và đối tượng",
+          "text": "Thư viện npm và plugin Claude Code nén lịch sử bằng cách lược bớt lời gọi và kết quả công cụ, không viết lại hội thoại.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Jev trả lời câu hỏi noul riêng cho lời gọi và kết quả; ngưỡng quyết định giữ, cắt ngắn hay xóa cặp tương ứng.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Dùng compactMessages của gói hoặc plugin hook hàm Claude Code với TYPESAFE_API_KEY.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Số token là ước lượng, điểm số không chứng minh việc xóa an toàn. Thư viện báo lỗi; plugin quay về tóm tắt mặc định khi lỗi hoặc giảm chưa đủ.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "fast-jev-compaction: Jev ile araç geçmişini budama",
+      "h1": "fast-jev-compaction: Jev ile araç geçmişini budama",
+      "description": "fast-jev-compaction konuşma metnini korur; araç alışverişlerini tutmak, kısaltmak veya kaldırmak için Jev kullanır.",
+      "summary": "npm kitaplığı ve Claude Code eklentisi, konuşmayı yeniden yazmadan araç çağrılarını ve sonuçlarını azaltır. Jev her çağrı ve sonuç için ayrı noul sorularını yanıtlar; eşikler çiftin tutulmasını, kısaltılmasını veya kaldırılmasını belirler.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Amaç ve hedef kitle",
+          "text": "npm kitaplığı ve Claude Code eklentisi, konuşmayı yeniden yazmadan araç çağrılarını ve sonuçlarını azaltır.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Jev her çağrı ve sonuç için ayrı noul sorularını yanıtlar; eşikler çiftin tutulmasını, kısaltılmasını veya kaldırılmasını belirler.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Paketin compactMessages işlevi veya TYPESAFE_API_KEY ile Claude Code işlev kancası eklentisi kullanılır.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Token sayıları tahminidir, puanlar güvenli silmeyi kanıtlamaz. Kitaplık hatayı iletir; eklenti hata veya yetersiz azaltmada yerleşik özete döner.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "fast-jev-compaction: ridurre la cronologia degli strumenti con Jev",
+      "h1": "fast-jev-compaction: ridurre la cronologia degli strumenti con Jev",
+      "description": "fast-jev-compaction conserva il testo della conversazione e usa Jev per mantenere, troncare o eliminare gli scambi con strumenti.",
+      "summary": "La libreria npm e il plugin Claude Code riducono chiamate e risultati senza riscrivere la conversazione. Jev risponde a domande noul separate su chiamata e risultato; le soglie decidono se mantenere, abbreviare o eliminare la coppia.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Scopo e destinatari",
+          "text": "La libreria npm e il plugin Claude Code riducono chiamate e risultati senza riscrivere la conversazione.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Jev risponde a domande noul separate su chiamata e risultato; le soglie decidono se mantenere, abbreviare o eliminare la coppia.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come si usa",
+          "text": "Si usa compactMessages del pacchetto oppure il plugin di hook di funzioni Claude Code con TYPESAFE_API_KEY.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "I token sono stimati e i punteggi non garantiscono eliminazioni sicure. La libreria propaga gli errori; il plugin torna al riepilogo integrato in caso di errore o riduzione insufficiente.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

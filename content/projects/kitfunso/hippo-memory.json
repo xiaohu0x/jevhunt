@@ -1,0 +1,768 @@
+{
+  "version": "source-content-v1",
+  "repo": "kitfunso/hippo-memory",
+  "repositoryId": 1182306628,
+  "relationship": "integration",
+  "category": "agents",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "36bb86905d0d94dac43970c9b75779f738ec9d67",
+      "url": "https://github.com/kitfunso/hippo-memory/blob/36bb86905d0d94dac43970c9b75779f738ec9d67/README.md",
+      "sha256": "f4d12d480528206c5fe962c9630d1f6b623c92556b701b8f26e8812699508f1a",
+      "accessedAt": "2026-09-30T07:33:48.873Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "kind": "documented",
+      "text": "hippo-memory stores agent memories in SQLite, tracks provenance and lets feedback suppress incorrect memories.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 15,
+          "end": 15,
+          "quote": "A memory layer for AI agents. Mark a memory wrong and it stops coming back. A newer fact replaces the old one. Memories you use get stronger. Provenance on every memory. SQLite under the hood, zero runtime deps, works with every CLI agent you have."
+        },
+        {
+          "source": "source-1",
+          "start": 40,
+          "end": 42,
+          "quote": "Hippo learns from outcomes. When a recalled memory turns out wrong, mark it bad and it drops out of the top results. Memories you keep using get stronger. Those two are the parts we measured helping ([mechanism audit, round 2](https://github.com/kitfunso/hippo-memory/pull/232)). When a fact changes, the new version supersedes the old one; we have not measured whether that helps. The design borrows from the hippocampus (decay, three layers, sleep consolidation), but that is inspiration. We have not measured decay or sleep making recall better.\n\nIt also fixes the portability problem. Your ChatGPT memories don't travel to Claude. Your `.cursorrules` don't travel to Codex. Hippo is one process behind every agent. CLAUDE.md, Cursor rules, ChatGPT exports, Slack history, all in one SQLite store, all queryable from any tool that speaks MCP or HTTP."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "kind": "documented",
+      "text": "Its optional Jev reranker orders recalled memories and is disabled by default.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 55,
+          "end": 55,
+          "quote": "- **R@1 0.41 to 0.62 with `hippo recall \"<query>\" --reranker jev`** on a private 300-query developer store ([full eval](docs/evals/2026-09-19-jev-reranker.md)). The opt-in [TypeSafe Jev](https://typesafe.ai) reranker, off by default, about 0.0004 USD a recall. 2000-draw paired bootstrap; the margin held in 20 of 20 seeds and a permutation null reached it in 0 of 200 runs. Ranking only: three graded tests did **not** show a better answer rate than the free local cross-encoder, and that negative result is in the same doc. What it buys today is a shorter context, 2 memories ranked by Jev answering as well as 5 ranked by the cross-encoder."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "kind": "documented",
+      "text": "Agents can remember and recall through the CLI or MCP, sharing memory across coding tools.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 95,
+          "end": 99,
+          "quote": "```bash\n# Manual usage\nhippo remember \"FRED cache silently dropped the tips_10y series\" --tag error\nhippo recall \"data pipeline issues\" --budget 2000\n```"
+        },
+        {
+          "source": "source-1",
+          "start": 25,
+          "end": 29,
+          "quote": "```\nWorks with:    Claude Code, Codex, Cursor, OpenClaw, OpenCode, Pi, any MCP client\nImports from:  ChatGPT, Claude (CLAUDE.md), Cursor (.cursorrules), Slack, markdown\nStorage:       SQLite backbone with markdown mirrors. Git-trackable, human-readable.\nDependencies:  Zero runtime deps. Node.js 22.16+. Optional embeddings: bring-your-own local Transformers.js (`npm i @huggingface/transformers`, or legacy `@xenova/transformers`) or an opt-in API embedder (OpenAI/Voyage/Cohere). Nothing is auto-installed."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "kind": "documented",
+      "text": "Provider features can send memory text outside the machine; published retrieval results do not yet prove better agent task performance.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 1013,
+          "end": 1013,
+          "quote": "On your machine, in SQLite: `.hippo/hippo.db` in each project, plus a global store in `~/.hippo/` for lessons shared across projects, with markdown mirrors you can read and commit. Recall makes no network call by default. Text goes to an outside provider only through features that use one: an API embedder, the Jev or LLM reranker, `hippo refine`, and the fact extraction `hippo sleep` runs through Anthropic's API whenever `ANTHROPIC_API_KEY` is set in its environment. To turn that last one off, set `{\"extraction\":{\"enabled\":false}}` in `.hippo/config.json`."
+        },
+        {
+          "source": "source-1",
+          "start": 1023,
+          "end": 1025,
+          "quote": "### Has hippo been shown to make agents better at their work?\n\nNot yet. The published numbers measure retrieval: whether the right memory comes back, and whether a memory marked wrong stays out of the results. A paired test that runs real agent sessions with and without hippo is under way. Every measurement, including failed runs and one retracted claim, is indexed in [docs/evals](https://github.com/kitfunso/hippo-memory/blob/master/docs/evals/README.md)."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "hippo-memory: agent memory with optional Jev reranking",
+      "h1": "hippo-memory: agent memory with optional Jev reranking",
+      "description": "hippo-memory stores and corrects agent memories in SQLite. Its optional Jev reranker orders recalled passages and is disabled by default.",
+      "summary": "hippo-memory stores agent memories in SQLite, tracks provenance and lets feedback suppress incorrect memories. Its optional Jev reranker orders recalled memories and is disabled by default. Agents can remember and recall through the CLI or MCP, sharing memory across coding tools.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose",
+          "text": "hippo-memory stores agent memories in SQLite, tracks provenance and lets feedback suppress incorrect memories.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’s role",
+          "text": "Its optional Jev reranker orders recalled memories and is disabled by default.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "How to use it",
+          "text": "Agents can remember and recall through the CLI or MCP, sharing memory across coding tools.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limits to consider",
+          "text": "Provider features can send memory text outside the machine; published retrieval results do not yet prove better agent task performance.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "hippo-memory：支持可选 Jev 重排的智能体记忆",
+      "h1": "hippo-memory：支持可选 Jev 重排的智能体记忆",
+      "description": "hippo-memory 以 SQLite 保存智能体记忆，并通过反馈抑制错误内容；可选 Jev 重排器为检索片段排序，默认关闭，启用外部服务时文本可能离开本机。",
+      "summary": "hippo-memory 用 SQLite 保存智能体记忆、记录来源，并依据反馈抑制错误记忆。 可选的 Jev 重排器为召回记忆排序，默认关闭。 智能体可通过命令行或 MCP 存取记忆，在不同编程工具间共享。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "hippo-memory 用 SQLite 保存智能体记忆、记录来源，并依据反馈抑制错误记忆。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "可选的 Jev 重排器为召回记忆排序，默认关闭。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "智能体可通过命令行或 MCP 存取记忆，在不同编程工具间共享。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用边界",
+          "text": "外部服务功能可能将记忆文本发送出本机；已发表的检索结果尚不能证明智能体任务表现更好。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "hippo-memory：可選 Jev 重排的代理記憶",
+      "h1": "hippo-memory：可選 Jev 重排的代理記憶",
+      "description": "hippo-memory 以 SQLite 儲存代理記憶，並透過回饋抑制錯誤內容；可選用 Jev 重排器為檢索片段排序，預設關閉，使用外部服務時文字可能離開本機。",
+      "summary": "hippo-memory 用 SQLite 儲存代理記憶、記錄來源，並依回饋抑制錯誤記憶。 可選用的 Jev 重排器為取回的記憶排序，預設關閉。 代理可透過命令列或 MCP 存取記憶，在不同程式開發工具間共享。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "hippo-memory 用 SQLite 儲存代理記憶、記錄來源，並依回饋抑制錯誤記憶。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "可選用的 Jev 重排器為取回的記憶排序，預設關閉。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "代理可透過命令列或 MCP 存取記憶，在不同程式開發工具間共享。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用限制",
+          "text": "外部服務功能可能將記憶文字傳出本機；已發表的檢索結果尚不能證明代理任務表現更好。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "hippo-memory：任意の Jev 再ランキング付き記憶",
+      "h1": "hippo-memory：任意の Jev 再ランキング付き記憶",
+      "description": "hippo-memory は SQLite に記憶を保存し、誤りをフィードバックで修正します。任意の Jev 再ランキングは標準で無効です。",
+      "summary": "hippo-memory はエージェントの記憶を SQLite に保存し、出典とフィードバックから誤った記憶を抑制します。 任意の Jev 再ランキング機能が検索済み記憶を並べ替えます。初期設定では無効です。 CLI や MCP から記憶を保存・取得し、複数の開発ツールで共有できます。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "何ができるか",
+          "text": "hippo-memory はエージェントの記憶を SQLite に保存し、出典とフィードバックから誤った記憶を抑制します。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "任意の Jev 再ランキング機能が検索済み記憶を並べ替えます。初期設定では無効です。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "CLI や MCP から記憶を保存・取得し、複数の開発ツールで共有できます。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "制約と注意点",
+          "text": "外部サービス機能は記憶を端末外へ送信する場合があります。公開された検索評価だけではタスク成績の改善は未証明です。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "hippo-memory: 선택적 Jev 재순위화가 있는 메모리",
+      "h1": "hippo-memory: 선택적 Jev 재순위화가 있는 메모리",
+      "description": "hippo-memory는 SQLite에 기억을 저장하고 피드백으로 오류를 억제합니다. 검색된 기억을 정렬하는 선택적 Jev 기능은 기본적으로 꺼져 있습니다.",
+      "summary": "hippo-memory는 에이전트 메모리를 SQLite에 저장하고 출처를 기록하며 피드백으로 잘못된 기억을 억제합니다. 선택적 Jev 재순위화 기능은 검색된 기억을 정렬하며 기본적으로 꺼져 있습니다. CLI나 MCP로 기억을 저장하고 검색하여 여러 코딩 도구에서 공유할 수 있습니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "hippo-memory는 에이전트 메모리를 SQLite에 저장하고 출처를 기록하며 피드백으로 잘못된 기억을 억제합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "선택적 Jev 재순위화 기능은 검색된 기억을 정렬하며 기본적으로 꺼져 있습니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "CLI나 MCP로 기억을 저장하고 검색하여 여러 코딩 도구에서 공유할 수 있습니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "제약 사항",
+          "text": "외부 서비스 기능은 메모리 텍스트를 기기 밖으로 보낼 수 있습니다. 공개 검색 결과만으로 에이전트 작업 성능 개선이 입증되지는 않았습니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "hippo-memory: memoria con reordenación Jev opcional",
+      "h1": "hippo-memory: memoria con reordenación Jev opcional",
+      "description": "hippo-memory guarda y corrige recuerdos de agentes en SQLite. Su reordenador Jev opcional clasifica pasajes y viene desactivado.",
+      "summary": "hippo-memory guarda recuerdos en SQLite, registra su procedencia y permite suprimir recuerdos incorrectos mediante comentarios. Su reordenador Jev opcional clasifica los recuerdos recuperados y está desactivado por defecto. Los agentes guardan y recuperan recuerdos por CLI o MCP, compartiéndolos entre herramientas de programación.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "hippo-memory guarda recuerdos en SQLite, registra su procedencia y permite suprimir recuerdos incorrectos mediante comentarios.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "El papel de Jev",
+          "text": "Su reordenador Jev opcional clasifica los recuerdos recuperados y está desactivado por defecto.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo usarlo",
+          "text": "Los agentes guardan y recuperan recuerdos por CLI o MCP, compartiéndolos entre herramientas de programación.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Límites a considerar",
+          "text": "Algunas funciones envían texto a proveedores externos; los resultados de recuperación publicados aún no prueban mejores tareas del agente.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "hippo-memory : mémoire avec reclassement Jev facultatif",
+      "h1": "hippo-memory : mémoire avec reclassement Jev facultatif",
+      "description": "hippo-memory conserve et corrige la mémoire des agents dans SQLite. Son reclassement Jev facultatif ordonne les passages et reste désactivé par défaut.",
+      "summary": "hippo-memory conserve les souvenirs des agents dans SQLite, suit leur origine et réduit le rappel des souvenirs signalés incorrects. Son reclassement Jev facultatif ordonne les souvenirs retrouvés ; il est désactivé par défaut. CLI et MCP permettent de mémoriser et rappeler des informations partagées entre outils de développement.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "hippo-memory conserve les souvenirs des agents dans SQLite, suit leur origine et réduit le rappel des souvenirs signalés incorrects.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Le rôle de Jev",
+          "text": "Son reclassement Jev facultatif ordonne les souvenirs retrouvés ; il est désactivé par défaut.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Utilisation",
+          "text": "CLI et MCP permettent de mémoriser et rappeler des informations partagées entre outils de développement.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limites à connaître",
+          "text": "Certaines fonctions envoient du texte à des fournisseurs externes ; les mesures de recherche ne prouvent pas encore de meilleurs résultats opérationnels.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "hippo-memory: Agentengedächtnis mit optionalem Jev-Ranking",
+      "h1": "hippo-memory: Agentengedächtnis mit optionalem Jev-Ranking",
+      "description": "hippo-memory speichert Agentenerinnerungen in SQLite und korrigiert sie per Feedback. Optionales Jev-Reranking ist standardmäßig ausgeschaltet.",
+      "summary": "hippo-memory speichert Agentenerinnerungen in SQLite, dokumentiert ihre Herkunft und unterdrückt falsche Erinnerungen nach Rückmeldung. Der optionale Jev-Reranker sortiert abgerufene Erinnerungen und ist standardmäßig ausgeschaltet. Über CLI oder MCP lassen sich Erinnerungen speichern, abrufen und zwischen Entwicklungswerkzeugen teilen.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "hippo-memory speichert Agentenerinnerungen in SQLite, dokumentiert ihre Herkunft und unterdrückt falsche Erinnerungen nach Rückmeldung.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Die Rolle von Jev",
+          "text": "Der optionale Jev-Reranker sortiert abgerufene Erinnerungen und ist standardmäßig ausgeschaltet.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Nutzung",
+          "text": "Über CLI oder MCP lassen sich Erinnerungen speichern, abrufen und zwischen Entwicklungswerkzeugen teilen.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Grenzen",
+          "text": "Anbieterfunktionen können Erinnerungstext nach außen senden; veröffentlichte Suchergebnisse belegen noch keine bessere Aufgabenerfüllung durch Agenten.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "hippo-memory: memória com reordenação Jev opcional",
+      "h1": "hippo-memory: memória com reordenação Jev opcional",
+      "description": "hippo-memory guarda e corrige memórias em SQLite. O reordenador Jev opcional classifica trechos recuperados e vem desativado.",
+      "summary": "hippo-memory armazena memórias em SQLite, registra sua origem e permite suprimir lembranças incorretas com feedback. O reordenador Jev opcional classifica memórias recuperadas e vem desativado por padrão. Agentes podem guardar e recuperar memórias pela CLI ou MCP, compartilhando-as entre ferramentas de programação.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "hippo-memory armazena memórias em SQLite, registra sua origem e permite suprimir lembranças incorretas com feedback.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "O papel do Jev",
+          "text": "O reordenador Jev opcional classifica memórias recuperadas e vem desativado por padrão.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Agentes podem guardar e recuperar memórias pela CLI ou MCP, compartilhando-as entre ferramentas de programação.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limitações",
+          "text": "Recursos de provedores podem enviar texto para fora da máquina; resultados de recuperação ainda não comprovam melhor desempenho dos agentes nas tarefas.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "hippo-memory: память агента с необязательным Jev",
+      "h1": "hippo-memory: память агента с необязательным Jev",
+      "description": "hippo-memory хранит и исправляет память агентов в SQLite. Необязательный Jev-переранжировщик сортирует найденное и по умолчанию выключен.",
+      "summary": "hippo-memory хранит память агентов в SQLite, отслеживает происхождение и подавляет ошибочные воспоминания по обратной связи. Необязательный переранжировщик Jev сортирует найденные воспоминания и по умолчанию выключен. CLI и MCP позволяют сохранять и извлекать память, общую для разных инструментов программирования.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "hippo-memory хранит память агентов в SQLite, отслеживает происхождение и подавляет ошибочные воспоминания по обратной связи.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Необязательный переранжировщик Jev сортирует найденные воспоминания и по умолчанию выключен.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "CLI и MCP позволяют сохранять и извлекать память, общую для разных инструментов программирования.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ограничения",
+          "text": "Функции внешних провайдеров могут отправлять текст за пределы устройства; результаты поиска пока не доказывают улучшение выполнения задач агентом.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "hippo-memory: वैकल्पिक Jev पुनःक्रमण वाली मेमोरी",
+      "h1": "hippo-memory: वैकल्पिक Jev पुनःक्रमण वाली मेमोरी",
+      "description": "hippo-memory SQLite में एजेंट की यादें रखता और सुधारता है। वैकल्पिक Jev पुनःक्रमण मिली यादों को क्रम देता है और डिफ़ॉल्ट बंद है।",
+      "summary": "hippo-memory SQLite में एजेंट की यादें रखता है, स्रोत दर्ज करता है और प्रतिक्रिया से गलत यादें दबाता है। वैकल्पिक Jev पुनःक्रमण सुविधा मिली यादों को क्रम देती है और डिफ़ॉल्ट रूप से बंद है। एजेंट CLI या MCP से यादें सहेज और खोज सकते हैं, कई कोडिंग टूल में साझा करके।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "किस काम आता है",
+          "text": "hippo-memory SQLite में एजेंट की यादें रखता है, स्रोत दर्ज करता है और प्रतिक्रिया से गलत यादें दबाता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "वैकल्पिक Jev पुनःक्रमण सुविधा मिली यादों को क्रम देती है और डिफ़ॉल्ट रूप से बंद है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल कैसे करें",
+          "text": "एजेंट CLI या MCP से यादें सहेज और खोज सकते हैं, कई कोडिंग टूल में साझा करके।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "सीमाएँ",
+          "text": "बाहरी प्रदाता वाली सुविधाएँ मेमोरी पाठ बाहर भेज सकती हैं; प्रकाशित खोज नतीजे बेहतर एजेंट कार्य-प्रदर्शन का प्रमाण अभी नहीं हैं।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "hippo-memory: memori agen dengan Jev opsional",
+      "h1": "hippo-memory: memori agen dengan Jev opsional",
+      "description": "hippo-memory menyimpan dan memperbaiki memori agen di SQLite. Pemeringkat Jev opsional mengurutkan hasil dan dinonaktifkan secara bawaan.",
+      "summary": "hippo-memory menyimpan memori agen di SQLite, mencatat asalnya, dan menekan ingatan keliru berdasarkan umpan balik. Pemeringkat ulang Jev opsional mengurutkan memori yang ditemukan dan dinonaktifkan secara bawaan. Agen menyimpan dan mengambil ingatan melalui CLI atau MCP untuk berbagi memori antartool pemrograman.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "hippo-memory menyimpan memori agen di SQLite, mencatat asalnya, dan menekan ingatan keliru berdasarkan umpan balik.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Pemeringkat ulang Jev opsional mengurutkan memori yang ditemukan dan dinonaktifkan secara bawaan.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Agen menyimpan dan mengambil ingatan melalui CLI atau MCP untuk berbagi memori antartool pemrograman.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Batasan",
+          "text": "Fitur penyedia dapat mengirim teks memori keluar perangkat; hasil pencarian yang diterbitkan belum membuktikan peningkatan kinerja tugas agen.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "hippo-memory: bộ nhớ tác tử với Jev tùy chọn",
+      "h1": "hippo-memory: bộ nhớ tác tử với Jev tùy chọn",
+      "description": "hippo-memory lưu và sửa ký ức tác tử trong SQLite. Jev tùy chọn xếp hạng lại đoạn truy xuất và mặc định tắt.",
+      "summary": "hippo-memory lưu ký ức tác tử trong SQLite, theo dõi nguồn và giảm xuất hiện ký ức sai theo phản hồi. Bộ xếp hạng lại Jev tùy chọn sắp thứ tự ký ức truy xuất và mặc định tắt. Tác tử lưu và tìm ký ức qua CLI hoặc MCP, chia sẻ giữa các công cụ lập trình.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích",
+          "text": "hippo-memory lưu ký ức tác tử trong SQLite, theo dõi nguồn và giảm xuất hiện ký ức sai theo phản hồi.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Bộ xếp hạng lại Jev tùy chọn sắp thứ tự ký ức truy xuất và mặc định tắt.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Tác tử lưu và tìm ký ức qua CLI hoặc MCP, chia sẻ giữa các công cụ lập trình.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Giới hạn",
+          "text": "Tính năng dùng nhà cung cấp có thể gửi văn bản ra ngoài máy; kết quả truy xuất chưa chứng minh tác tử làm nhiệm vụ tốt hơn.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "hippo-memory: isteğe bağlı Jev ile ajan belleği",
+      "h1": "hippo-memory: isteğe bağlı Jev ile ajan belleği",
+      "description": "hippo-memory ajan anılarını SQLite’ta saklayıp düzeltir. İsteğe bağlı Jev sıralayıcısı getirilen pasajları sıralar; varsayılan olarak kapalıdır.",
+      "summary": "hippo-memory ajan anılarını SQLite’ta saklar, kaynağını izler ve geri bildirimle yanlış anıları bastırır. İsteğe bağlı Jev yeniden sıralayıcısı bulunan anıları sıralar; varsayılan olarak kapalıdır. Ajanlar CLI veya MCP üzerinden anıları kaydedip çağırarak kodlama araçları arasında paylaşabilir.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "hippo-memory ajan anılarını SQLite’ta saklar, kaynağını izler ve geri bildirimle yanlış anıları bastırır.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "İsteğe bağlı Jev yeniden sıralayıcısı bulunan anıları sıralar; varsayılan olarak kapalıdır.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Ajanlar CLI veya MCP üzerinden anıları kaydedip çağırarak kodlama araçları arasında paylaşabilir.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Sınırlamalar",
+          "text": "Sağlayıcı özellikleri bellek metnini makine dışına gönderebilir; yayımlanan erişim sonuçları henüz daha iyi ajan görev başarısını kanıtlamaz.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "hippo-memory: memoria con riordino Jev facoltativo",
+      "h1": "hippo-memory: memoria con riordino Jev facoltativo",
+      "description": "hippo-memory conserva e corregge ricordi in SQLite. Il riordinatore Jev facoltativo ordina i passaggi recuperati ed è disattivato di default.",
+      "summary": "hippo-memory conserva ricordi in SQLite, ne traccia l’origine e sopprime quelli errati in base al feedback. Il riordinatore Jev facoltativo ordina i ricordi recuperati ed è disattivato per impostazione predefinita. Gli agenti memorizzano e richiamano informazioni tramite CLI o MCP, condividendole fra strumenti di programmazione.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "hippo-memory conserva ricordi in SQLite, ne traccia l’origine e sopprime quelli errati in base al feedback.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Il ruolo di Jev",
+          "text": "Il riordinatore Jev facoltativo ordina i ricordi recuperati ed è disattivato per impostazione predefinita.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come usarlo",
+          "text": "Gli agenti memorizzano e richiamano informazioni tramite CLI o MCP, condividendole fra strumenti di programmazione.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limiti",
+          "text": "Alcune funzioni inviano testo a fornitori esterni; i risultati di recupero non dimostrano ancora migliori prestazioni degli agenti nei compiti.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

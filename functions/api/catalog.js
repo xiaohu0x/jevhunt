@@ -1,6 +1,7 @@
 import { catalogMeta, catalogRows } from "../../shared/catalog-data.js";
 import { readCatalogQuery, catalogCacheRequest, readCatalogPage } from "../../shared/catalog-query.js";
 import { ensureScheduler } from "../_lib/scheduler.js";
+import { localizeCatalogProjects } from "../../shared/project-content-store.js";
 
 async function queryMessages(env, url, query) {
   if (!query.q || query.locale === "en" || !env.ASSETS) return {};
@@ -25,7 +26,8 @@ export async function onRequestGet({ request, env, waitUntil }) {
     ? await readCatalogPage(env.DB, query, await queryMessages(env, url, query))
     : { rows: await catalogRows(env.DB, { limit: query.mode === "all" ? -1 : 20, full: query.full }) };
   const pagination = result.pagination ? `,"pagination":${JSON.stringify(result.pagination)}` : "";
-  const apps = result.apps ? JSON.stringify(result.apps) : `[${result.rows.map(row => row.data).join(",")}]`;
+  const apps = result.apps ? JSON.stringify(result.apps) : query.full ? `[${result.rows.map(row => row.data).join(",")}]`
+    : JSON.stringify(await localizeCatalogProjects(env.DB, result.rows.map(row => JSON.parse(row.data)), query.locale));
   const response = new Response(`{"meta":${JSON.stringify(meta)},"apps":${apps}${pagination}}`, {
     headers: { "content-type": "application/json; charset=utf-8", "cache-control": "public, max-age=60, s-maxage=120", "x-catalog-version": meta.catalogHash, "x-content-type-options": "nosniff" },
   });

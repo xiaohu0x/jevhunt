@@ -1,0 +1,756 @@
+{
+  "version": "source-content-v1",
+  "repo": "TauricResearch/TradingAgents",
+  "repositoryId": 909213664,
+  "relationship": "integration",
+  "category": "agents",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "path": "README.md",
+      "commit": "8b22d43d01d9ddda5d686d093d5385884622f3de",
+      "url": "https://github.com/TauricResearch/TradingAgents/blob/8b22d43d01d9ddda5d686d093d5385884622f3de/README.md",
+      "sha256": "c7bef0df9a7447fb5230dfdee87a17c6731f0ae6c2e543c9b285618eecdb856a",
+      "accessedAt": "2026-09-30T07:33:45.177Z",
+      "id": "s1"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "TradingAgents combines fundamental, sentiment, news and technical analysts with debating researchers, a trader and risk management roles.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 69,
+          "end": 107,
+          "quote": "TradingAgents is a multi-agent trading framework that mirrors the dynamics of real-world trading firms. By deploying specialized LLM-powered agents: from fundamental analysts, sentiment experts, and technical analysts, to trader, risk management team, the platform collaboratively evaluates market conditions and informs trading decisions. Moreover, these agents engage in dynamic discussions to pinpoint the optimal strategy.\n\n<p align=\"center\">\n  <img src=\"assets/schema.png\" style=\"width: 100%; height: auto;\">\n</p>\n\n> TradingAgents framework is designed for research purposes. Trading performance may vary based on many factors, including the chosen backbone language models, model temperature, trading periods, the quality of data, and other non-deterministic factors. [It is not intended as financial, investment, or trading advice.](https://tauric.ai/disclaimer/)\n\nOur framework decomposes complex trading tasks into specialized roles.\n\n### Analyst Team\n- Fundamentals Analyst: Evaluates company financials and performance metrics, identifying intrinsic values and potential red flags.\n- Sentiment Analyst: Aggregates news headlines, StockTwits, and Reddit chatter into a single sentiment read to gauge short-term market mood.\n- News Analyst: Monitors global news and macroeconomic indicators, interpreting the impact of events on market conditions.\n- Technical Analyst: Utilizes technical indicators (like MACD and RSI) to detect trading patterns and forecast price movements.\n\nThe selected analysts work at the same time, each on its own tools, and the research debate starts once all of their reports are in.\n\n<p align=\"center\">\n  <img src=\"assets/analyst.png\" width=\"100%\" style=\"display: inline-block; margin: 0 2%;\">\n</p>\n\n### Researcher Team\n- Comprises both bullish and bearish researchers who critically assess the insights provided by the Analyst Team. Through structured debates, they balance potential gains against inherent risks.\n\n<p align=\"center\">\n  <img src=\"assets/researcher.png\" width=\"70%\" style=\"display: inline-block; margin: 0 2%;\">\n</p>\n\n### Trader Agent\n- Composes reports from the analysts and researchers to make informed trading decisions, determining the timing and magnitude of trades.\n\n<p align=\"center\">\n  <img src=\"assets/trader.png\" width=\"70%\" style=\"display: inline-block; margin: 0 2%;\">\n</p>\n\n### Risk Management and Portfolio Manager\n- Continuously evaluates portfolio risk by assessing market volatility, liquidity, and other risk factors. The risk management team evaluates and adjusts trading strategies, providing assessment reports to the Portfolio Manager for final decision.\n- The Portfolio Manager approves/rejects the transaction proposal. If approved, the order will be sent to the simulated exchange and executed."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "With TYPESAFE_API_KEY, Jev removes unrelated StockTwits and Reddit posts and classifies stance; without the key, posts pass through unscreened.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 191,
+          "end": 191,
+          "quote": "With `TYPESAFE_API_KEY` set, the Sentiment Analyst screens StockTwits and Reddit posts with TypeSafe's Jev before reading them. Posts that are not about the company are dropped, and each source opens with a count of the remaining posts by stance: bullish, bearish, neutral, or unclear. Without the key, posts pass through unscreened. `jev-latest` moves with new releases; set `TYPESAFE_DEFAULT_MODEL` to a versioned ID such as `jev-1.13.0` to hold it fixed across runs."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Select a ticker and analysis date in the CLI, or call TradingAgentsGraph.propagate() from Python to obtain a decision.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 198,
+          "end": 212,
+          "quote": "### CLI Usage\n\nLaunch the interactive CLI:\n```bash\ntradingagents          # installed command\npython -m cli.main     # alternative: run directly from source\n```\nYou will see a screen where you can select your desired tickers, analysis date, LLM provider, research depth, and more. Your previous run's answers come back as the defaults, so pressing Enter accepts them. The `TRADINGAGENTS_*` variables in `.env` still skip their step entirely.\n\nTo run without questions, for a scheduled job or a script, answer the per-run steps with flags and the rest with `TRADINGAGENTS_*` variables:\n```bash\nexport TRADINGAGENTS_LLM_PROVIDER=openai TRADINGAGENTS_QUICK_THINK_LLM=gpt-6-luna TRADINGAGENTS_DEEP_THINK_LLM=gpt-6-sol\nexport TRADINGAGENTS_OUTPUT_LANGUAGE=English TRADINGAGENTS_MAX_DEBATE_ROUNDS=1 TRADINGAGENTS_MAX_RISK_ROUNDS=1\ntradingagents --ticker NVDA --date 2026-09-23 --analysts market,news,fundamentals --save --no-show\n```"
+        },
+        {
+          "source": "s1",
+          "start": 245,
+          "end": 260,
+          "quote": "### Python Usage\n\nTo use TradingAgents inside your code, you can import the `tradingagents` module and initialize a `TradingAgentsGraph()` object. The `.propagate()` function will return a decision. You can run `main.py`, here's also a quick example:\n\n```python\nfrom tradingagents.graph.trading_graph import TradingAgentsGraph\nfrom tradingagents.default_config import DEFAULT_CONFIG\n\nta = TradingAgentsGraph(debug=True, config=DEFAULT_CONFIG.copy())\n\n# forward propagate\nstate, decision = ta.propagate(\"NVDA\", \"2026-09-01\")\nprint(decision)\n\n# the same report tree the CLI saves, under results_dir/reports\nta.save_reports(state, \"NVDA\")"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "The authors position this as research, not investment advice; results depend on models, data quality, trading periods and other variable factors.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 75,
+          "end": 75,
+          "quote": "> TradingAgents framework is designed for research purposes. Trading performance may vary based on many factors, including the chosen backbone language models, model temperature, trading periods, the quality of data, and other non-deterministic factors. [It is not intended as financial, investment, or trading advice.](https://tauric.ai/disclaimer/)"
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "TradingAgents: trading research with optional Jev screening",
+      "h1": "TradingAgents: trading research with optional Jev screening",
+      "description": "TradingAgents coordinates trading research agents and can use Jev to filter company-related social posts before sentiment analysis.",
+      "summary": "TradingAgents combines fundamental, sentiment, news and technical analysts with debating researchers, a trader and risk management roles. With TYPESAFE_API_KEY, Jev removes unrelated StockTwits and Reddit posts and classifies stance; without the key, posts pass through unscreened.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose and audience",
+          "text": "TradingAgents combines fundamental, sentiment, news and technical analysts with debating researchers, a trader and risk management roles.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "With TYPESAFE_API_KEY, Jev removes unrelated StockTwits and Reddit posts and classifies stance; without the key, posts pass through unscreened.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Using the project",
+          "text": "Select a ticker and analysis date in the CLI, or call TradingAgentsGraph.propagate() from Python to obtain a decision.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "The authors position this as research, not investment advice; results depend on models, data quality, trading periods and other variable factors.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "TradingAgents：可选 Jev 筛选的交易研究框架",
+      "h1": "TradingAgents：可选 Jev 筛选的交易研究框架",
+      "description": "TradingAgents 协调多个交易研究智能体，可用 Jev 在情绪分析前筛选与公司相关的社交帖子。",
+      "summary": "TradingAgents 将基本面、情绪、新闻和技术分析与多空研究讨论、交易员及风险管理角色结合起来。 设置 TYPESAFE_API_KEY 后，Jev 会排除无关的 StockTwits 和 Reddit 帖子并判断立场；未设置时帖子不经筛选。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途与适用对象",
+          "text": "TradingAgents 将基本面、情绪、新闻和技术分析与多空研究讨论、交易员及风险管理角色结合起来。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "设置 TYPESAFE_API_KEY 后，Jev 会排除无关的 StockTwits 和 Reddit 帖子并判断立场；未设置时帖子不经筛选。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "可在 CLI 中选择股票代码和分析日期，也可通过 Python 调用 TradingAgentsGraph.propagate() 获取决策。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "作者将其定位为研究工具，不构成投资建议；结果受模型、数据质量、交易时段等因素影响。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "TradingAgents：可選用 Jev 篩選的交易研究框架",
+      "h1": "TradingAgents：可選用 Jev 篩選的交易研究框架",
+      "description": "TradingAgents 協調多個交易研究代理，可用 Jev 在情緒分析前篩選與公司相關的社群貼文。",
+      "summary": "TradingAgents 結合基本面、情緒、新聞及技術分析，並加入多空研究討論、交易員與風險管理角色。 設定 TYPESAFE_API_KEY 後，Jev 會移除無關的 StockTwits 和 Reddit 貼文並判斷立場；未設定時則直接傳入貼文。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途與適用對象",
+          "text": "TradingAgents 結合基本面、情緒、新聞及技術分析，並加入多空研究討論、交易員與風險管理角色。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "設定 TYPESAFE_API_KEY 後，Jev 會移除無關的 StockTwits 和 Reddit 貼文並判斷立場；未設定時則直接傳入貼文。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "可在 CLI 選擇股票代號及分析日期，或透過 Python 呼叫 TradingAgentsGraph.propagate() 取得決策。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "作者將其定位為研究工具，並非投資建議；結果受模型、資料品質、交易期間等因素影響。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "TradingAgents：Jev で投稿を選別する取引研究",
+      "h1": "TradingAgents：Jev で投稿を選別する取引研究",
+      "description": "TradingAgents は複数のエージェントで取引を研究し、任意で Jev を使って感情分析に必要な投稿を選別します。",
+      "summary": "ファンダメンタル、感情、ニュース、テクニカルの各分析に、研究者の議論とトレーダー、リスク管理の役割を組み合わせます。 TYPESAFE_API_KEY を設定すると、Jev が StockTwits と Reddit の無関係な投稿を除き、立場を分類します。キーがなければ選別しません。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途と対象",
+          "text": "ファンダメンタル、感情、ニュース、テクニカルの各分析に、研究者の議論とトレーダー、リスク管理の役割を組み合わせます。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev との関係",
+          "text": "TYPESAFE_API_KEY を設定すると、Jev が StockTwits と Reddit の無関係な投稿を除き、立場を分類します。キーがなければ選別しません。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "CLI で銘柄と分析日を選ぶか、Python の TradingAgentsGraph.propagate() を呼び出して判断結果を取得します。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範囲と制約",
+          "text": "研究用であり、投資助言ではありません。結果はモデル、データ品質、取引期間などの条件によって変わります。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "TradingAgents: 선택적 Jev 필터를 쓰는 거래 연구",
+      "h1": "TradingAgents: 선택적 Jev 필터를 쓰는 거래 연구",
+      "description": "TradingAgents는 여러 에이전트로 거래를 연구하며, Jev를 선택적으로 사용해 감정 분석에 필요한 소셜 게시물을 걸러냅니다.",
+      "summary": "기본적 분석, 감정, 뉴스, 기술적 분석 담당에 연구 토론, 트레이더, 위험 관리 역할을 결합합니다. TYPESAFE_API_KEY를 설정하면 Jev가 StockTwits와 Reddit의 무관한 게시물을 제외하고 입장을 분류합니다. 키가 없으면 그대로 전달합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "용도와 대상",
+          "text": "기본적 분석, 감정, 뉴스, 기술적 분석 담당에 연구 토론, 트레이더, 위험 관리 역할을 결합합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "TYPESAFE_API_KEY를 설정하면 Jev가 StockTwits와 Reddit의 무관한 게시물을 제외하고 입장을 분류합니다. 키가 없으면 그대로 전달합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "CLI에서 종목과 분석 날짜를 선택하거나 Python의 TradingAgentsGraph.propagate()를 호출해 판단 결과를 얻습니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 한계",
+          "text": "연구용 도구이며 투자 조언이 아닙니다. 결과는 모델, 데이터 품질, 거래 기간 등의 조건에 따라 달라집니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "TradingAgents: investigación bursátil con filtro Jev opcional",
+      "h1": "TradingAgents: investigación bursátil con filtro Jev opcional",
+      "description": "TradingAgents coordina agentes de análisis de mercados y puede usar Jev para filtrar publicaciones antes de analizar su sentimiento.",
+      "summary": "Combina análisis fundamental, técnico, de noticias y de sentimiento con debates entre investigadores, un operador y funciones de gestión del riesgo. Con TYPESAFE_API_KEY, Jev descarta publicaciones ajenas a la empresa en StockTwits y Reddit y clasifica su postura; sin clave pasan sin filtrar.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "Combina análisis fundamental, técnico, de noticias y de sentimiento con debates entre investigadores, un operador y funciones de gestión del riesgo.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Con TYPESAFE_API_KEY, Jev descarta publicaciones ajenas a la empresa en StockTwits y Reddit y clasifica su postura; sin clave pasan sin filtrar.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo se usa",
+          "text": "La CLI permite elegir símbolo y fecha; desde Python, TradingAgentsGraph.propagate() devuelve una decisión para ese análisis.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "Es un marco de investigación, no asesoramiento financiero. Los resultados dependen de los modelos, los datos, el período de negociación y otros factores.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "TradingAgents : recherche financière avec filtrage Jev facultatif",
+      "h1": "TradingAgents : recherche financière avec filtrage Jev facultatif",
+      "description": "TradingAgents coordonne des agents d'analyse financière et peut filtrer les publications avec Jev avant l'analyse du sentiment.",
+      "summary": "Le cadre réunit analyses fondamentale, technique, des actualités et du sentiment, débats entre chercheurs, rôle de trader et gestion du risque. Avec TYPESAFE_API_KEY, Jev écarte les messages StockTwits et Reddit sans rapport avec l'entreprise et classe leur position ; sans clé, aucun filtrage n'a lieu.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Usage et public visé",
+          "text": "Le cadre réunit analyses fondamentale, technique, des actualités et du sentiment, débats entre chercheurs, rôle de trader et gestion du risque.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Avec TYPESAFE_API_KEY, Jev écarte les messages StockTwits et Reddit sans rapport avec l'entreprise et classe leur position ; sans clé, aucun filtrage n'a lieu.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "La CLI permet de choisir un symbole et une date ; TradingAgentsGraph.propagate() fournit une décision depuis Python.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "Les auteurs le destinent à la recherche, sans conseil en investissement. Les résultats varient selon les modèles, les données et la période étudiée.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "TradingAgents: Handelsforschung mit optionalem Jev-Filter",
+      "h1": "TradingAgents: Handelsforschung mit optionalem Jev-Filter",
+      "description": "TradingAgents verbindet Analyseagenten für Handelsforschung und kann soziale Beiträge vor der Stimmungsanalyse mit Jev filtern.",
+      "summary": "Fundamentale, technische, Nachrichten- und Stimmungsanalysen werden mit Forschungsdebatten sowie Händler- und Risikomanagementrollen verbunden. Mit TYPESAFE_API_KEY entfernt Jev sachfremde StockTwits- und Reddit-Beiträge und ordnet deren Haltung ein; ohne Schlüssel werden sie ungefiltert weitergegeben.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Zweck und Zielgruppe",
+          "text": "Fundamentale, technische, Nachrichten- und Stimmungsanalysen werden mit Forschungsdebatten sowie Händler- und Risikomanagementrollen verbunden.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Mit TYPESAFE_API_KEY entfernt Jev sachfremde StockTwits- und Reddit-Beiträge und ordnet deren Haltung ein; ohne Schlüssel werden sie ungefiltert weitergegeben.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Verwendung",
+          "text": "In der CLI lassen sich Börsenkürzel und Analysedatum wählen; in Python liefert TradingAgentsGraph.propagate() eine Entscheidung.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Das Framework dient der Forschung und ist keine Anlageberatung. Ergebnisse hängen unter anderem von Modellen, Datenqualität und Handelszeitraum ab.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "TradingAgents: pesquisa de negociação com filtro Jev opcional",
+      "h1": "TradingAgents: pesquisa de negociação com filtro Jev opcional",
+      "description": "TradingAgents coordena agentes de análise financeira e pode usar Jev para filtrar publicações antes da análise de sentimento.",
+      "summary": "Reúne análises fundamentalista, técnica, de notícias e de sentimento com debates entre pesquisadores, um agente negociador e gestão de risco. Com TYPESAFE_API_KEY, Jev remove posts do StockTwits e Reddit sem relação com a empresa e classifica a posição; sem chave, passam sem filtro.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Finalidade e público",
+          "text": "Reúne análises fundamentalista, técnica, de notícias e de sentimento com debates entre pesquisadores, um agente negociador e gestão de risco.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "Com TYPESAFE_API_KEY, Jev remove posts do StockTwits e Reddit sem relação com a empresa e classifica a posição; sem chave, passam sem filtro.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "A CLI permite escolher o ativo e a data; em Python, TradingAgentsGraph.propagate() retorna uma decisão para a análise.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "Os autores o apresentam como ferramenta de pesquisa, sem aconselhamento financeiro. Os resultados variam conforme modelos, dados e período de negociação.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "TradingAgents: исследование торговли с необязательным фильтром Jev",
+      "h1": "TradingAgents: исследование торговли с необязательным фильтром Jev",
+      "description": "TradingAgents объединяет агентов финансового анализа и может отбирать социальные публикации через Jev перед анализом настроений.",
+      "summary": "Фундаментальный и технический анализ дополняются анализом новостей и настроений, дискуссиями исследователей, ролью трейдера и управлением риском. При заданном TYPESAFE_API_KEY Jev удаляет публикации StockTwits и Reddit, не относящиеся к компании, и классифицирует их позицию; без ключа фильтрация отсутствует.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Фундаментальный и технический анализ дополняются анализом новостей и настроений, дискуссиями исследователей, ролью трейдера и управлением риском.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "При заданном TYPESAFE_API_KEY Jev удаляет публикации StockTwits и Reddit, не относящиеся к компании, и классифицирует их позицию; без ключа фильтрация отсутствует.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "В CLI выбираются тикер и дата анализа; из Python решение можно получить вызовом TradingAgentsGraph.propagate().",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Это исследовательский инструмент, а не инвестиционная рекомендация. Результаты зависят от моделей, качества данных, периода торговли и других факторов.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "TradingAgents: वैकल्पिक Jev फ़िल्टर के साथ ट्रेडिंग शोध",
+      "h1": "TradingAgents: वैकल्पिक Jev फ़िल्टर के साथ ट्रेडिंग शोध",
+      "description": "TradingAgents कई वित्तीय विश्लेषण एजेंटों को जोड़ता है और भावना विश्लेषण से पहले Jev से सोशल पोस्ट छाँट सकता है।",
+      "summary": "इसमें बुनियादी, तकनीकी, समाचार और भावना विश्लेषण के साथ शोधकर्ताओं की बहस, ट्रेडर और जोखिम प्रबंधन की भूमिकाएँ शामिल हैं। TYPESAFE_API_KEY होने पर Jev, StockTwits और Reddit से कंपनी से असंबंधित पोस्ट हटाकर उनका रुख वर्गीकृत करता है; बिना कुंजी पोस्ट सीधे जाते हैं।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "उद्देश्य और उपयोगकर्ता",
+          "text": "इसमें बुनियादी, तकनीकी, समाचार और भावना विश्लेषण के साथ शोधकर्ताओं की बहस, ट्रेडर और जोखिम प्रबंधन की भूमिकाएँ शामिल हैं।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "TYPESAFE_API_KEY होने पर Jev, StockTwits और Reddit से कंपनी से असंबंधित पोस्ट हटाकर उनका रुख वर्गीकृत करता है; बिना कुंजी पोस्ट सीधे जाते हैं।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल का तरीका",
+          "text": "CLI में टिकर और विश्लेषण की तारीख चुनें, या Python में TradingAgentsGraph.propagate() से निर्णय प्राप्त करें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "यह शोध के लिए है, निवेश सलाह नहीं। परिणाम मॉडल, डेटा की गुणवत्ता, ट्रेडिंग अवधि और अन्य कारकों पर निर्भर करते हैं।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "TradingAgents: riset perdagangan dengan filter Jev opsional",
+      "h1": "TradingAgents: riset perdagangan dengan filter Jev opsional",
+      "description": "TradingAgents mengoordinasikan agen analisis pasar dan dapat memakai Jev untuk menyaring unggahan sebelum analisis sentimen.",
+      "summary": "Analisis fundamental, teknis, berita, dan sentimen digabungkan dengan diskusi peneliti, peran pedagang, serta pengelolaan risiko. Dengan TYPESAFE_API_KEY, Jev membuang unggahan StockTwits dan Reddit yang tidak terkait perusahaan dan mengelompokkan sikapnya; tanpa kunci, unggahan tidak disaring.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Tujuan dan pengguna",
+          "text": "Analisis fundamental, teknis, berita, dan sentimen digabungkan dengan diskusi peneliti, peran pedagang, serta pengelolaan risiko.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Dengan TYPESAFE_API_KEY, Jev membuang unggahan StockTwits dan Reddit yang tidak terkait perusahaan dan mengelompokkan sikapnya; tanpa kunci, unggahan tidak disaring.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Pilih simbol saham dan tanggal analisis melalui CLI, atau panggil TradingAgentsGraph.propagate() dari Python untuk mendapatkan keputusan.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Penulis menempatkannya sebagai alat riset, bukan nasihat investasi. Hasil bergantung pada model, kualitas data, periode perdagangan, dan faktor lain.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "TradingAgents: nghiên cứu giao dịch với bộ lọc Jev tùy chọn",
+      "h1": "TradingAgents: nghiên cứu giao dịch với bộ lọc Jev tùy chọn",
+      "description": "TradingAgents phối hợp các tác tử phân tích thị trường và có thể dùng Jev lọc bài đăng trước khi phân tích tâm lý.",
+      "summary": "Công cụ kết hợp phân tích cơ bản, kỹ thuật, tin tức và tâm lý với tranh luận nghiên cứu, vai trò giao dịch và quản lý rủi ro. Khi có TYPESAFE_API_KEY, Jev loại bài StockTwits và Reddit không liên quan đến công ty rồi phân loại quan điểm; thiếu khóa thì bài đi qua nguyên trạng.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích và đối tượng",
+          "text": "Công cụ kết hợp phân tích cơ bản, kỹ thuật, tin tức và tâm lý với tranh luận nghiên cứu, vai trò giao dịch và quản lý rủi ro.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Khi có TYPESAFE_API_KEY, Jev loại bài StockTwits và Reddit không liên quan đến công ty rồi phân loại quan điểm; thiếu khóa thì bài đi qua nguyên trạng.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Chọn mã chứng khoán và ngày phân tích trong CLI, hoặc gọi TradingAgentsGraph.propagate() từ Python để nhận quyết định.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Đây là công cụ nghiên cứu, không phải tư vấn đầu tư. Kết quả phụ thuộc vào mô hình, chất lượng dữ liệu, giai đoạn giao dịch và các yếu tố khác.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "TradingAgents: isteğe bağlı Jev filtresiyle alım satım araştırması",
+      "h1": "TradingAgents: isteğe bağlı Jev filtresiyle alım satım araştırması",
+      "description": "TradingAgents piyasa analizi ajanlarını birleştirir ve duygu analizinden önce sosyal paylaşımları Jev ile süzebilir.",
+      "summary": "Temel, teknik, haber ve duygu analizini araştırmacı tartışmaları, alım satım ve risk yönetimi rolleriyle bir araya getirir. TYPESAFE_API_KEY ayarlandığında Jev, şirketle ilgisiz StockTwits ve Reddit paylaşımlarını eler ve tutumlarını sınıflandırır; anahtar yoksa filtre uygulanmaz.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Amaç ve hedef kitle",
+          "text": "Temel, teknik, haber ve duygu analizini araştırmacı tartışmaları, alım satım ve risk yönetimi rolleriyle bir araya getirir.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "TYPESAFE_API_KEY ayarlandığında Jev, şirketle ilgisiz StockTwits ve Reddit paylaşımlarını eler ve tutumlarını sınıflandırır; anahtar yoksa filtre uygulanmaz.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "CLI üzerinden sembol ve analiz tarihi seçilir; Python tarafında TradingAgentsGraph.propagate() çağrısı bir karar döndürür.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Araştırma amaçlıdır, yatırım tavsiyesi değildir. Sonuçlar modellere, veri kalitesine, işlem dönemine ve başka etkenlere bağlıdır.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "TradingAgents: ricerca sul trading con filtro Jev facoltativo",
+      "h1": "TradingAgents: ricerca sul trading con filtro Jev facoltativo",
+      "description": "TradingAgents coordina agenti di analisi finanziaria e può usare Jev per filtrare i post prima dell'analisi del sentiment.",
+      "summary": "Combina analisi fondamentale, tecnica, delle notizie e del sentiment con dibattiti tra ricercatori, un ruolo di trader e gestione del rischio. Con TYPESAFE_API_KEY, Jev elimina i post di StockTwits e Reddit estranei all'azienda e ne classifica la posizione; senza chiave passano senza filtro.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Scopo e destinatari",
+          "text": "Combina analisi fondamentale, tecnica, delle notizie e del sentiment con dibattiti tra ricercatori, un ruolo di trader e gestione del rischio.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Con TYPESAFE_API_KEY, Jev elimina i post di StockTwits e Reddit estranei all'azienda e ne classifica la posizione; senza chiave passano senza filtro.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come si usa",
+          "text": "Nella CLI si scelgono simbolo e data di analisi; da Python, TradingAgentsGraph.propagate() restituisce una decisione.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "È un framework di ricerca, non una consulenza finanziaria. I risultati dipendono da modelli, qualità dei dati, periodo di trading e altri fattori.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

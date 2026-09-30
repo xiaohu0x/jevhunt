@@ -1,0 +1,762 @@
+{
+  "version": "source-content-v1",
+  "repo": "featherless-ai/simple-jev",
+  "repositoryId": 1375675343,
+  "relationship": "local-alternative",
+  "category": "apps",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "c5363e0a2a9d22cb503e8e226daf6d2d5794e415",
+      "url": "https://github.com/featherless-ai/simple-jev/blob/c5363e0a2a9d22cb503e8e226daf6d2d5794e415/README.md",
+      "sha256": "1cf1086ca6564b2ed323fafff5970930abe62c3884d8e1b989cb8be01423730f",
+      "accessedAt": "2026-09-30T07:33:50.088Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "Simple Jev uses compatible Hugging Face models to classify and score inputs, constructing JSON answers from next-token logits instead of generating a completion.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 5,
+          "end": 11,
+          "quote": "Use compatible open models from huggingface, for structured classification and scoring, without training a separate classifier head.\n\nExplore the demos, playground, and documentation at [simple-jev.featherless.ai](https://simple-jev.featherless.ai/).\n\nSend shared context and a set of questions. Simple Jev reads the model's next-token logits for each question and builds a JSON response containing choices, rubric scores, or truth/support judgments. The model does not generate a JSON completion: the server constructs the response from the scores.\n\nThe current implementation runs locally with Hugging Face Transformers and PyTorch. Shared request validation, versioned prompt instructions, and response scoring live in the plain Python `common/` folder so other inference implementations can use the same rules."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "It explores TypeSafe’s structured-decision interface with open models; it does not reproduce Jev’s architecture or training.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 213,
+          "end": 213,
+          "quote": "The API takes inspiration from TypeSafe's structured-decision interface and includes project-specific behavior. `/v1/systemone` is an alias of `/v1/classifier`; both run the same implementation. Use this repository's [API reference](hf-server/API_REFERENCE.md) as the contract for clients. `GET /v1/models` advertises the served ID (`--served-model-name`, defaulting to `--model`). Request model IDs are unchecked unless `--enforce-model-id` is set. Choice defaults to a 255-option cap; set `--max-choice-options` to lower it. Formats for 50 or fewer choices are unchanged."
+        },
+        {
+          "source": "source-1",
+          "start": 316,
+          "end": 316,
+          "quote": "TypeSafe uses “System One” to describe models designed for fast, structured decisions, drawing the name from the distinction between fast intuitive thinking and slower deliberate reasoning. Its [introduction to System One and Jev](https://typesafe.ai/blog/introducing-system-one-models-and-jev) explains that motivation. Simple Jev explores this style of interface using existing open language models. It does not reproduce TypeSafe's model architecture or training, or establish equivalent accuracy, calibration, or speed."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Send shared context as either state or messages, plus typed questions, to POST /v1/classifier on the configured server.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 208,
+          "end": 213,
+          "quote": "Send a non-streaming `POST /v1/classifier` request. With `--enforce-model-id`, the `model` value must exactly match the served ID. The examples below use Qwen; if you started Gemma, use `google/gemma-4-26B-A4B-it` instead. Supply exactly one of:\n\n- `state`: a string, JSON object, or JSON array containing the shared context.\n- `messages`: text chat history, rendered using the model's own chat template.\n\nThe API takes inspiration from TypeSafe's structured-decision interface and includes project-specific behavior. `/v1/systemone` is an alias of `/v1/classifier`; both run the same implementation. Use this repository's [API reference](hf-server/API_REFERENCE.md) as the contract for clients. `GET /v1/models` advertises the served ID (`--served-model-name`, defaulting to `--model`). Request model IDs are unchecked unless `--enforce-model-id` is set. Choice defaults to a 255-option cap; set `--max-choice-options` to lower it. Formats for 50 or fewer choices are unchanged."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "Its choice and score confidence values are not calibrated correctness probabilities. Matching the response format establishes neither Jev-equivalent quality nor speed.",
+      "kind": "source-limitation",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 273,
+          "end": 273,
+          "quote": "Choice and score confidence is the largest probability among their allowed labels. These distributions, and the Noul value, are not calibrated probabilities of correctness."
+        },
+        {
+          "source": "source-1",
+          "start": 316,
+          "end": 327,
+          "quote": "TypeSafe uses “System One” to describe models designed for fast, structured decisions, drawing the name from the distinction between fast intuitive thinking and slower deliberate reasoning. Its [introduction to System One and Jev](https://typesafe.ai/blog/introducing-system-one-models-and-jev) explains that motivation. Simple Jev explores this style of interface using existing open language models. It does not reproduce TypeSafe's model architecture or training, or establish equivalent accuracy, calibration, or speed.\n\nIn this implementation, the useful change is how the model is used:\n\n1. The shared prompt builder creates consistent classifier instructions and one scoring branch per question.\n2. The HF server renders those instructions and the context into the model's native chat format.\n3. It evaluates the exact common token prefix once and reuses that prefix's KV cache across batches of question suffixes.\n4. It reads the next-token logits for the allowed answer labels. Shared scoring code normalizes those scores and constructs the JSON response.\n\nThis avoids generating and parsing a prose or JSON answer token by token. Reusing the context can also reduce repeated computation when several questions refer to the same input. Actual latency depends on the model, hardware, context length, and number of questions. Cache reuse currently lasts only for a single request.\n\nA valid response structure does not guarantee a correct decision. Model capability and question wording still matter; evaluate answer quality on your own task separately from validating the server's inference and response pipeline."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "simple-jev — Decisions from open models",
+      "h1": "simple-jev — Structured decisions from open model logits",
+      "description": "simple-jev: Classify and score with open Hugging Face models using next-token logits and a Jev-inspired interface, without reproducing Jev’s model.",
+      "summary": "Simple Jev uses compatible Hugging Face models to classify and score inputs, constructing JSON answers from next-token logits instead of generating a completion. Send shared context as either state or messages, plus typed questions, to POST /v1/classifier on the configured server.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "What it does",
+          "text": "Simple Jev uses compatible Hugging Face models to classify and score inputs, constructing JSON answers from next-token logits instead of generating a completion.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "It explores TypeSafe’s structured-decision interface with open models; it does not reproduce Jev’s architecture or training.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Getting started",
+          "text": "Send shared context as either state or messages, plus typed questions, to POST /v1/classifier on the configured server.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "Its choice and score confidence values are not calibrated correctness probabilities. Matching the response format establishes neither Jev-equivalent quality nor speed.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "simple-jev — 用开放模型 logits 输出结构化决策",
+      "h1": "simple-jev — 用开放模型 logits 输出结构化决策",
+      "description": "simple-jev: 用开放 Hugging Face 模型的下一 token logits 分类和评分，接口受 Jev 启发，但并未复现 Jev 模型。",
+      "summary": "Simple Jev 用兼容的 Hugging Face 模型进行分类与评分，从下一个 token 的 logits 构建 JSON 答案，无需生成补全文本。 将共享上下文放入 state 或 messages，附上类型化问题，发送到已配置服务器的 POST /v1/classifier。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "Simple Jev 用兼容的 Hugging Face 模型进行分类与评分，从下一个 token 的 logits 构建 JSON 答案，无需生成补全文本。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "它以开放模型探索 TypeSafe 的结构化决策接口，并不复现 Jev 的架构或训练。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "将共享上下文放入 state 或 messages，附上类型化问题，发送到已配置服务器的 POST /v1/classifier。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "choice 和 score 的置信度不是经校准的正确率概率。响应格式兼容不代表质量或速度与 Jev 相同。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "simple-jev — 以開放模型 logits 產生結構化決策",
+      "h1": "simple-jev — 以開放模型 logits 產生結構化決策",
+      "description": "simple-jev: 以開放 Hugging Face 模型的下一 token logits 分類與評分，介面受 Jev 啟發，但未重現 Jev 模型。",
+      "summary": "Simple Jev 使用相容的 Hugging Face 模型分類與評分，從下一個 token 的 logits 組成 JSON 答案，無需生成補全文字。 將共用上下文放入 state 或 messages，附上具型別的問題，送至已設定伺服器的 POST /v1/classifier。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "Simple Jev 使用相容的 Hugging Face 模型分類與評分，從下一個 token 的 logits 組成 JSON 答案，無需生成補全文字。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "它以開放模型探索 TypeSafe 的結構化決策介面，並未重現 Jev 的架構或訓練。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "將共用上下文放入 state 或 messages，附上具型別的問題，送至已設定伺服器的 POST /v1/classifier。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "choice 與 score 的信心值不是經校準的正確率機率。回應格式相容不代表品質或速度與 Jev 相同。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "simple-jev — 公開モデルによる判断",
+      "h1": "simple-jev — 公開モデルの logits から構造化判断を作る",
+      "description": "simple-jev: 公開 Hugging Face モデルの次トークン logits で分類と採点を行います。Jev に着想を得たインターフェースの独立実装です。",
+      "summary": "Simple Jev は対応する Hugging Face モデルで分類と採点を行い、文章を生成せず次トークンの logits から JSON 回答を組み立てます。 共有コンテキストを state または messages の一方に入れ、型付き質問とともにサーバーの POST /v1/classifier に送ります。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "できること",
+          "text": "Simple Jev は対応する Hugging Face モデルで分類と採点を行い、文章を生成せず次トークンの logits から JSON 回答を組み立てます。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "公開モデルで TypeSafe の構造化判断インターフェースを探る実装で、Jev のモデル構造や学習を再現するものではありません。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い始めるには",
+          "text": "共有コンテキストを state または messages の一方に入れ、型付き質問とともにサーバーの POST /v1/classifier に送ります。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "対象範囲と制約",
+          "text": "choice と score の信頼度は、正答確率として校正された値ではありません。出力形式の一致は Jev と同等の品質や速度を意味しません。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "simple-jev — 공개 모델로 판단",
+      "h1": "simple-jev — 공개 모델 logits로 구조화된 판단 생성",
+      "description": "simple-jev: 공개 Hugging Face 모델의 다음 토큰 logits로 분류와 채점을 합니다. Jev 인터페이스에서 영감을 받았지만 모델 재현은 아닙니다.",
+      "summary": "Simple Jev는 호환 Hugging Face 모델로 분류와 점수 평가를 수행하고, 텍스트를 생성하는 대신 다음 토큰 logits로 JSON 답을 구성합니다. 공유 맥락을 state 또는 messages 중 하나에 넣고 타입이 지정된 질문과 함께 서버의 POST /v1/classifier로 보냅니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "Simple Jev는 호환 Hugging Face 모델로 분류와 점수 평가를 수행하고, 텍스트를 생성하는 대신 다음 토큰 logits로 JSON 답을 구성합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "공개 모델로 TypeSafe의 구조화된 판단 인터페이스를 구현해 보는 프로젝트이며 Jev의 구조나 학습을 재현하지 않습니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "공유 맥락을 state 또는 messages 중 하나에 넣고 타입이 지정된 질문과 함께 서버의 POST /v1/classifier로 보냅니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 제약",
+          "text": "choice와 score의 신뢰도는 보정된 정답 확률이 아닙니다. 응답 형식이 같다고 Jev와 같은 품질이나 속도가 보장되지는 않습니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "simple-jev — Decisiones con modelos abiertos",
+      "h1": "simple-jev — Decisiones estructuradas con logits de modelos abiertos",
+      "description": "simple-jev: Clasifica y puntúa con logits de modelos abiertos de Hugging Face mediante una interfaz inspirada en Jev, sin reproducir su modelo.",
+      "summary": "Simple Jev clasifica y puntúa con modelos compatibles de Hugging Face, construyendo respuestas JSON a partir de logits del siguiente token sin generar una respuesta textual. Envía el contexto compartido mediante state o messages, junto con preguntas tipadas, a POST /v1/classifier en el servidor configurado.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "Simple Jev clasifica y puntúa con modelos compatibles de Hugging Face, construyendo respuestas JSON a partir de logits del siguiente token sin generar una respuesta textual.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Explora la interfaz de decisiones estructuradas de TypeSafe con modelos abiertos; no reproduce la arquitectura ni el entrenamiento de Jev.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo empezar",
+          "text": "Envía el contexto compartido mediante state o messages, junto con preguntas tipadas, a POST /v1/classifier en el servidor configurado.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "La confianza de choice y score no es una probabilidad calibrada de acierto. Un formato compatible no demuestra calidad ni velocidad equivalentes a Jev.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "simple-jev — Décisions de modèles ouverts",
+      "h1": "simple-jev — Décisions structurées à partir de modèles ouverts",
+      "description": "simple-jev: Classez et notez avec les logits de modèles ouverts Hugging Face et une interface inspirée de Jev, sans reproduire son modèle.",
+      "summary": "Simple Jev classe et note avec des modèles Hugging Face compatibles, puis construit le JSON à partir des logits du prochain token sans générer de texte. Envoyez le contexte partagé dans state ou messages, accompagné de questions typées, à POST /v1/classifier sur le serveur configuré.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "Simple Jev classe et note avec des modèles Hugging Face compatibles, puis construit le JSON à partir des logits du prochain token sans générer de texte.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Il explore l’interface de décisions structurées de TypeSafe avec des modèles ouverts, sans reproduire l’architecture ni l’entraînement de Jev.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Envoyez le contexte partagé dans state ou messages, accompagné de questions typées, à POST /v1/classifier sur le serveur configuré.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "La confiance de choice et score n’est pas une probabilité de justesse calibrée. Un format compatible ne prouve ni une qualité ni une vitesse équivalentes à Jev.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "simple-jev — Entscheidungen mit offenen Modellen",
+      "h1": "simple-jev — Strukturierte Entscheidungen aus offenen Modell-Logits",
+      "description": "simple-jev: Mit Logits offener Hugging-Face-Modelle klassifizieren und bewerten, über eine Jev-inspirierte Schnittstelle ohne Modellnachbildung.",
+      "summary": "Simple Jev klassifiziert und bewertet mit kompatiblen Hugging-Face-Modellen und erstellt JSON-Antworten aus den Logits des nächsten Tokens ohne Textgenerierung. Gemeinsamen Kontext entweder als state oder messages zusammen mit typisierten Fragen an POST /v1/classifier des konfigurierten Servers senden.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "Simple Jev klassifiziert und bewertet mit kompatiblen Hugging-Face-Modellen und erstellt JSON-Antworten aus den Logits des nächsten Tokens ohne Textgenerierung.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Das Projekt erkundet TypeSafes Schnittstelle für strukturierte Entscheidungen mit offenen Modellen; Jevs Architektur und Training werden nicht nachgebildet.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Einstieg",
+          "text": "Gemeinsamen Kontext entweder als state oder messages zusammen mit typisierten Fragen an POST /v1/classifier des konfigurierten Servers senden.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Die Konfidenzwerte von choice und score sind keine kalibrierten Wahrscheinlichkeiten für richtige Antworten. Formatkompatibilität belegt weder Jev-gleiche Qualität noch Geschwindigkeit.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "simple-jev — Decisões com modelos abertos",
+      "h1": "simple-jev — Decisões estruturadas com logits de modelos abertos",
+      "description": "simple-jev: Classifique e pontue com logits de modelos abertos Hugging Face e uma interface inspirada no Jev, sem reproduzir seu modelo.",
+      "summary": "O Simple Jev classifica e pontua com modelos compatíveis do Hugging Face, montando respostas JSON a partir dos logits do próximo token sem gerar uma resposta textual. Envie o contexto compartilhado em state ou messages, com perguntas tipadas, para POST /v1/classifier no servidor configurado.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "O Simple Jev classifica e pontua com modelos compatíveis do Hugging Face, montando respostas JSON a partir dos logits do próximo token sem gerar uma resposta textual.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "Explora a interface de decisões estruturadas da TypeSafe com modelos abertos; não reproduz a arquitetura nem o treinamento do Jev.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como começar",
+          "text": "Envie o contexto compartilhado em state ou messages, com perguntas tipadas, para POST /v1/classifier no servidor configurado.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "A confiança de choice e score não é uma probabilidade calibrada de acerto. A compatibilidade do formato não comprova qualidade nem velocidade equivalentes às do Jev.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "simple-jev — Решения открытых моделей",
+      "h1": "simple-jev — Структурированные решения из логитов открытых моделей",
+      "description": "simple-jev: Классификация и оценка по логитам открытых моделей Hugging Face с интерфейсом по мотивам Jev, без воспроизведения его модели.",
+      "summary": "Simple Jev классифицирует и оценивает данные совместимыми моделями Hugging Face, формируя JSON из логитов следующего токена без генерации текстового ответа. Отправьте общий контекст в state либо messages вместе с типизированными вопросами на POST /v1/classifier настроенного сервера.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Simple Jev классифицирует и оценивает данные совместимыми моделями Hugging Face, формируя JSON из логитов следующего токена без генерации текстового ответа.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Проект исследует интерфейс структурированных решений TypeSafe на открытых моделях и не воспроизводит архитектуру или обучение Jev.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Начало работы",
+          "text": "Отправьте общий контекст в state либо messages вместе с типизированными вопросами на POST /v1/classifier настроенного сервера.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Уверенность choice и score не является калиброванной вероятностью правильности. Совпадение формата не доказывает равенства качества или скорости с Jev.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "simple-jev — खुले मॉडल के logits से संरचित निर्णय",
+      "h1": "simple-jev — खुले मॉडल के logits से संरचित निर्णय",
+      "description": "simple-jev: खुले Hugging Face मॉडल के अगले टोकन logits से वर्गीकरण और अंक पाएँ; इंटरफ़ेस Jev-प्रेरित है, उसका मॉडल नहीं।",
+      "summary": "Simple Jev संगत Hugging Face मॉडल से वर्गीकरण और अंक देता है तथा पूरा उत्तर उत्पन्न करने के बजाय अगले टोकन के logits से JSON बनाता है। साझा संदर्भ state या messages में से एक में रखें और निर्धारित प्रकार के प्रश्नों के साथ सर्वर के POST /v1/classifier पर भेजें।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "परियोजना का काम",
+          "text": "Simple Jev संगत Hugging Face मॉडल से वर्गीकरण और अंक देता है तथा पूरा उत्तर उत्पन्न करने के बजाय अगले टोकन के logits से JSON बनाता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "यह खुले मॉडलों के साथ TypeSafe के संरचित निर्णय इंटरफ़ेस को अपनाता है; Jev की वास्तुकला या प्रशिक्षण की नकल नहीं करता।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "शुरुआत कैसे करें",
+          "text": "साझा संदर्भ state या messages में से एक में रखें और निर्धारित प्रकार के प्रश्नों के साथ सर्वर के POST /v1/classifier पर भेजें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "choice और score के विश्वास मान सही उत्तर की कैलिब्रेट की गई संभावनाएँ नहीं हैं। समान उत्तर प्रारूप Jev जैसी गुणवत्ता या गति साबित नहीं करता।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "simple-jev — Keputusan model terbuka",
+      "h1": "simple-jev — Keputusan terstruktur dari logits model terbuka",
+      "description": "simple-jev: Klasifikasi dan penilaian dari logits model terbuka Hugging Face dengan antarmuka terinspirasi Jev, tanpa menyalin modelnya.",
+      "summary": "Simple Jev memakai model Hugging Face yang kompatibel untuk klasifikasi dan penilaian, lalu menyusun JSON dari logits token berikutnya tanpa menghasilkan jawaban teks. Kirim konteks bersama melalui salah satu dari state atau messages beserta pertanyaan bertipe ke POST /v1/classifier pada server yang dikonfigurasi.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "Simple Jev memakai model Hugging Face yang kompatibel untuk klasifikasi dan penilaian, lalu menyusun JSON dari logits token berikutnya tanpa menghasilkan jawaban teks.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Proyek ini mengeksplorasi antarmuka keputusan terstruktur TypeSafe dengan model terbuka, tanpa meniru arsitektur atau pelatihan Jev.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara memulai",
+          "text": "Kirim konteks bersama melalui salah satu dari state atau messages beserta pertanyaan bertipe ke POST /v1/classifier pada server yang dikonfigurasi.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Nilai keyakinan choice dan score bukan probabilitas kebenaran yang terkalibrasi. Kesamaan format tidak membuktikan kualitas atau kecepatan setara Jev.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "simple-jev — Quyết định từ mô hình mở",
+      "h1": "simple-jev — Quyết định có cấu trúc từ logits mô hình mở",
+      "description": "simple-jev: Phân loại và chấm điểm từ logits mô hình mở Hugging Face qua giao diện lấy cảm hứng Jev, không tái tạo mô hình Jev.",
+      "summary": "Simple Jev dùng mô hình Hugging Face tương thích để phân loại và chấm điểm, tạo JSON từ logits của token kế tiếp thay vì sinh câu trả lời văn bản. Gửi ngữ cảnh chung qua state hoặc messages, kèm câu hỏi có kiểu dữ liệu, đến POST /v1/classifier trên máy chủ đã cấu hình.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Công dụng",
+          "text": "Simple Jev dùng mô hình Hugging Face tương thích để phân loại và chấm điểm, tạo JSON từ logits của token kế tiếp thay vì sinh câu trả lời văn bản.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Dự án khám phá giao diện quyết định có cấu trúc của TypeSafe bằng mô hình mở, không tái tạo kiến trúc hay cách huấn luyện Jev.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách bắt đầu",
+          "text": "Gửi ngữ cảnh chung qua state hoặc messages, kèm câu hỏi có kiểu dữ liệu, đến POST /v1/classifier trên máy chủ đã cấu hình.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Độ tin cậy của choice và score không phải xác suất đúng đã hiệu chỉnh. Tương thích định dạng không chứng minh chất lượng hay tốc độ tương đương Jev.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "simple-jev — Açık modellerle kararlar",
+      "h1": "simple-jev — Açık model logits değerlerinden yapılandırılmış kararlar",
+      "description": "simple-jev: Açık Hugging Face modellerinin logits değerleriyle sınıflandırma ve puanlama; Jev’den esinlenen arayüz, bağımsız model uygulaması.",
+      "summary": "Simple Jev, uyumlu Hugging Face modelleriyle sınıflandırma ve puanlama yapar; metin üretmek yerine sonraki token’ın logits değerlerinden JSON yanıtı oluşturur. Ortak bağlamı state ya da messages alanlarından biriyle, türleri belirlenmiş sorularla birlikte sunucunun POST /v1/classifier uç noktasına gönderin.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "Simple Jev, uyumlu Hugging Face modelleriyle sınıflandırma ve puanlama yapar; metin üretmek yerine sonraki token’ın logits değerlerinden JSON yanıtı oluşturur.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Açık modellerle TypeSafe’in yapılandırılmış karar arayüzünü araştırır; Jev’in mimarisini veya eğitimini yeniden üretmez.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Başlangıç",
+          "text": "Ortak bağlamı state ya da messages alanlarından biriyle, türleri belirlenmiş sorularla birlikte sunucunun POST /v1/classifier uç noktasına gönderin.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "choice ve score güven değerleri, kalibre edilmiş doğruluk olasılıkları değildir. Aynı yanıt biçimi Jev’e eşdeğer kalite veya hızı kanıtlamaz.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "simple-jev — Decisioni con modelli aperti",
+      "h1": "simple-jev — Decisioni strutturate dai logits di modelli aperti",
+      "description": "simple-jev: Classifica e valuta con logits di modelli aperti Hugging Face e un’interfaccia ispirata a Jev, senza riprodurne il modello.",
+      "summary": "Simple Jev classifica e valuta con modelli Hugging Face compatibili, costruendo risposte JSON dai logits del token successivo senza generare una risposta testuale. Invia il contesto condiviso in state oppure messages, insieme a domande tipizzate, a POST /v1/classifier sul server configurato.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "Simple Jev classifica e valuta con modelli Hugging Face compatibili, costruendo risposte JSON dai logits del token successivo senza generare una risposta testuale.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Esplora l’interfaccia di decisioni strutturate di TypeSafe con modelli aperti; non riproduce l’architettura né l’addestramento di Jev.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come iniziare",
+          "text": "Invia il contesto condiviso in state oppure messages, insieme a domande tipizzate, a POST /v1/classifier sul server configurato.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "La confidenza di choice e score non è una probabilità calibrata di correttezza. La compatibilità del formato non dimostra qualità o velocità equivalenti a Jev.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

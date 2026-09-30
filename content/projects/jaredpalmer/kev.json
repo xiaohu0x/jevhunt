@@ -1,0 +1,757 @@
+{
+  "version": "source-content-v1",
+  "repo": "jaredpalmer/kev",
+  "repositoryId": 1375069862,
+  "relationship": "local-alternative",
+  "category": "research",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "path": "README.md",
+      "commit": "3e1cd3bb588a388a06827443380befece23e68c7",
+      "url": "https://github.com/jaredpalmer/kev/blob/3e1cd3bb588a388a06827443380befece23e68c7/README.md",
+      "sha256": "3119d863b4f2e24c273e2252cac8d8acaf3efc635f009bed988cacd9bbb64147",
+      "accessedAt": "2026-09-30T07:33:45.194Z",
+      "id": "s1"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "Kev provides pretrained decision models and fine-tuning for yes/no, multiple-choice and rating questions over shared text.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 13,
+          "end": 21,
+          "quote": "Kev is a family of small decision models built on Qwen3.5 and Qwen3.8 and based on the architecture described in [Jev's Architecture Unmasked](https://archerhume.com/posts/jevs-architecture-unmasked). You can use the pretrained weights or train your own. The API matches TypeSafe's [System One](https://docs.typesafe.ai/api), so you can point their Python SDK at your local server.\n\n## Highlights\n\n- Yes/no (`noul`), multiple-choice (`choice`) and rating (`score`) questions in one request. The questions share the text but can't read each other.\n- Calibrated probabilities by default: each checkpoint ships with a temperature fitted on held-out data.\n- Drop-in for Jev: the TypeSafe Python SDK works against a Kev server unchanged.\n- Four sizes, from a 0.8B that runs on a laptop to a 27B for a single data-centre GPU.\n- Fine-tune on your own labelled examples. A coding-agent skill runs the whole loop on Modal, from finding your questions to serving the result."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "Its API follows TypeSafe System One, allowing the TypeSafe Python SDK to target a local Kev server.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 13,
+          "end": 19,
+          "quote": "Kev is a family of small decision models built on Qwen3.5 and Qwen3.8 and based on the architecture described in [Jev's Architecture Unmasked](https://archerhume.com/posts/jevs-architecture-unmasked). You can use the pretrained weights or train your own. The API matches TypeSafe's [System One](https://docs.typesafe.ai/api), so you can point their Python SDK at your local server.\n\n## Highlights\n\n- Yes/no (`noul`), multiple-choice (`choice`) and rating (`score`) questions in one request. The questions share the text but can't read each other.\n- Calibrated probabilities by default: each checkpoint ships with a temperature fitted on held-out data.\n- Drop-in for Jev: the TypeSafe Python SDK works against a Kev server unchanged."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Run a released checkpoint locally with Python 3.12 or 3.13 and uv, then point the client at that server.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 49,
+          "end": 59,
+          "quote": "### Run It Locally\n\nYou'll need Python 3.12 or 3.13 and [uv](https://docs.astral.sh/uv/). The repo's `.python-version` makes `uv sync` use 3.13; torch has no wheels for 3.14 yet.\n\n```bash\ngit clone https://github.com/jaredpalmer/kev.git && cd kev\nuv sync --extra serve\nuv run --extra serve python -m kev.serve --run jaredpalmer/kev-4b --port 8009\n```\n\nThis starts Kev-4B on your machine: CUDA or ROCm if you have a GPU, MLX on Apple Silicon. The first run downloads the adapter and the base model. `--run` also accepts a local checkpoint directory or a Hub revision like `jaredpalmer/kev-4b@qwen3`."
+        },
+        {
+          "source": "s1",
+          "start": 98,
+          "end": 100,
+          "quote": "### Use It From Python\n\nIf you already call Jev, point your client at Kev and keep the rest of your code. The TypeSafe SDK is included in `uv sync --extra serve`:"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "Option order can change answers, long context exceeds the training regime, and confidence thresholds need validation on your own data.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 384,
+          "end": 391,
+          "quote": "## Limitations\n\n- Calibration is a single temperature fitted in distribution. It can't reorder confidences, so the share of decisions you can automate at a 5% error budget (0.45–0.57) is still below Jev's 0.70. Test a probability threshold on your own data before you rely on it.\n- Knowledge questions are set by the base model. MMLU is 0.74 for Kev-9B against Jev's 0.90, and MMLU-Pro 0.52 against 0.84.\n- Fine-tuning can make the base model worse at individual tasks. Date arithmetic was the clearest case ([issue #8](https://github.com/jaredpalmer/kev/issues/8)); training on stated day counts plus `KEV_DATE_FACTS=1` recovers it.\n- Changing option order can change an answer. Question isolation doesn't prevent this.\n- Training used at most 384 state tokens and 1,024 tokens for the state plus one question. Serving allows a 65,536-token state; longer context wasn't covered by training.\n- On a Mac, answers take hundreds of milliseconds, not tens. Kev-27B needs an 80 GB GPU and has no Mac path."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "Kev: self-hosted decision models compatible with Jev clients",
+      "h1": "Kev: self-hosted decision models compatible with Jev clients",
+      "description": "Kev offers trainable Qwen-based decision models behind a System One API usable by existing Jev clients.",
+      "summary": "Kev provides pretrained decision models and fine-tuning for yes/no, multiple-choice and rating questions over shared text. Its API follows TypeSafe System One, allowing the TypeSafe Python SDK to target a local Kev server.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose and audience",
+          "text": "Kev provides pretrained decision models and fine-tuning for yes/no, multiple-choice and rating questions over shared text.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "Its API follows TypeSafe System One, allowing the TypeSafe Python SDK to target a local Kev server.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Using the project",
+          "text": "Run a released checkpoint locally with Python 3.12 or 3.13 and uv, then point the client at that server.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "Option order can change answers, long context exceeds the training regime, and confidence thresholds need validation on your own data.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "Kev：兼容 Jev 客户端的自托管决策模型",
+      "h1": "Kev：兼容 Jev 客户端的自托管决策模型",
+      "description": "Kev 提供可训练的 Qwen 系决策模型，使用可供现有 Jev 客户端接入的 System One API。",
+      "summary": "Kev 提供预训练模型和微调功能，可针对共享文本回答是非、单项选择和评分问题。 API 遵循 TypeSafe System One，允许 TypeSafe Python SDK 连接本地 Kev 服务器。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途与适用对象",
+          "text": "Kev 提供预训练模型和微调功能，可针对共享文本回答是非、单项选择和评分问题。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "API 遵循 TypeSafe System One，允许 TypeSafe Python SDK 连接本地 Kev 服务器。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "使用 Python 3.12 或 3.13 与 uv 在本地运行已发布检查点，再将客户端指向该服务器。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "选项顺序可能改变答案，长上下文超出训练范围，置信度阈值需要在自己的数据上验证。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "Kev：相容 Jev 用戶端的自架決策模型",
+      "h1": "Kev：相容 Jev 用戶端的自架決策模型",
+      "description": "Kev 提供可訓練的 Qwen 系決策模型，透過 System One API 讓既有 Jev 用戶端接入。",
+      "summary": "Kev 提供預訓練模型和微調功能，可針對共用文字回答是非、選擇及評分問題。 API 遵循 TypeSafe System One，可讓 TypeSafe Python SDK 連至本機 Kev 伺服器。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途與適用對象",
+          "text": "Kev 提供預訓練模型和微調功能，可針對共用文字回答是非、選擇及評分問題。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "API 遵循 TypeSafe System One，可讓 TypeSafe Python SDK 連至本機 Kev 伺服器。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "使用 Python 3.12 或 3.13 與 uv 在本機執行已發布檢查點，再將用戶端指向該伺服器。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "選項順序可能改變答案，長上下文超出訓練範圍，信心值門檻須以自己的資料驗證。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "Kev：Jev クライアントで使える自前の判断モデル",
+      "h1": "Kev：Jev クライアントで使える自前の判断モデル",
+      "description": "Kev は Qwen ベースの学習可能な判断モデルを提供し、既存 Jev クライアントが使える System One API を備えます。",
+      "summary": "学習済みモデルと追加学習を利用し、同じ文章に対する二択、選択式、評価の問いを処理します。 TypeSafe System One に合わせた API により、TypeSafe Python SDK をローカルの Kev サーバーへ接続できます。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途と対象",
+          "text": "学習済みモデルと追加学習を利用し、同じ文章に対する二択、選択式、評価の問いを処理します。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev との関係",
+          "text": "TypeSafe System One に合わせた API により、TypeSafe Python SDK をローカルの Kev サーバーへ接続できます。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "Python 3.12 または 3.13 と uv で公開チェックポイントを動かし、クライアントの接続先を設定します。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範囲と制約",
+          "text": "選択肢の順序で答えが変わり得ます。長い文脈は学習範囲を超え、信頼度のしきい値は独自データで検証が必要です。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "Kev: Jev 클라이언트와 호환되는 자체 호스팅 판단 모델",
+      "h1": "Kev: Jev 클라이언트와 호환되는 자체 호스팅 판단 모델",
+      "description": "Kev는 학습 가능한 Qwen 기반 판단 모델과 기존 Jev 클라이언트용 System One API를 제공합니다.",
+      "summary": "사전 학습 모델과 미세 조정으로 같은 텍스트에 대한 예·아니요, 객관식, 평점 질문을 처리합니다. API가 TypeSafe System One을 따르므로 TypeSafe Python SDK를 로컬 Kev 서버에 연결할 수 있습니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "용도와 대상",
+          "text": "사전 학습 모델과 미세 조정으로 같은 텍스트에 대한 예·아니요, 객관식, 평점 질문을 처리합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "API가 TypeSafe System One을 따르므로 TypeSafe Python SDK를 로컬 Kev 서버에 연결할 수 있습니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "Python 3.12 또는 3.13과 uv로 공개 체크포인트를 실행한 뒤 클라이언트가 해당 서버를 가리키게 합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 한계",
+          "text": "선택지 순서가 답을 바꿀 수 있고 긴 컨텍스트는 학습 범위를 벗어납니다. 신뢰도 임계값은 자체 데이터로 검증해야 합니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "Kev: modelos locales compatibles con clientes Jev",
+      "h1": "Kev: modelos locales compatibles con clientes Jev",
+      "description": "Kev ofrece modelos de decisión Qwen que se pueden ajustar y una API System One compatible con los clientes Jev existentes.",
+      "summary": "Incluye modelos preentrenados y ajuste fino para preguntas binarias, de elección múltiple y de puntuación sobre texto compartido. Su API sigue TypeSafe System One, por lo que el SDK Python de TypeSafe puede apuntar al servidor Kev local.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "Incluye modelos preentrenados y ajuste fino para preguntas binarias, de elección múltiple y de puntuación sobre texto compartido.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Su API sigue TypeSafe System One, por lo que el SDK Python de TypeSafe puede apuntar al servidor Kev local.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo se usa",
+          "text": "Ejecute un checkpoint publicado con Python 3.12 o 3.13 y uv, y dirija el cliente a ese servidor.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "El orden de opciones puede cambiar respuestas; el contexto largo excede el entrenamiento y los umbrales requieren validación con datos propios.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "Kev : modèles locaux compatibles avec les clients Jev",
+      "h1": "Kev : modèles locaux compatibles avec les clients Jev",
+      "description": "Kev fournit des modèles de décision Qwen que l’on peut adapter, ainsi qu’une API System One compatible avec les clients Jev existants.",
+      "summary": "Des modèles préentraînés et leur ajustement permettent de répondre à des questions binaires, à choix et de notation sur un même texte. L'API suit TypeSafe System One : le SDK Python TypeSafe peut pointer vers un serveur Kev local.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Usage et public visé",
+          "text": "Des modèles préentraînés et leur ajustement permettent de répondre à des questions binaires, à choix et de notation sur un même texte.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "L'API suit TypeSafe System One : le SDK Python TypeSafe peut pointer vers un serveur Kev local.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Exécutez un checkpoint publié avec Python 3.12 ou 3.13 et uv, puis configurez l'adresse du serveur dans le client.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "L'ordre des options peut modifier les réponses ; les longs contextes dépassent l'entraînement et les seuils doivent être validés sur vos données.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "Kev: lokale Entscheidungsmodelle für Jev-Clients",
+      "h1": "Kev: lokale Entscheidungsmodelle für Jev-Clients",
+      "description": "Kev bietet trainierbare Qwen-Entscheidungsmodelle hinter einer System-One-API für bestehende Jev-Clients.",
+      "summary": "Vorgefertigte Modelle und Feinabstimmung ermöglichen Ja/Nein-, Auswahl- und Bewertungsfragen zu gemeinsamem Text. Die API folgt TypeSafe System One, sodass das TypeSafe Python SDK einen lokalen Kev-Server ansprechen kann.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Zweck und Zielgruppe",
+          "text": "Vorgefertigte Modelle und Feinabstimmung ermöglichen Ja/Nein-, Auswahl- und Bewertungsfragen zu gemeinsamem Text.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Die API folgt TypeSafe System One, sodass das TypeSafe Python SDK einen lokalen Kev-Server ansprechen kann.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Verwendung",
+          "text": "Ein veröffentlichter Checkpoint läuft mit Python 3.12 oder 3.13 und uv; anschließend wird der Client auf diesen Server gerichtet.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Die Optionsreihenfolge kann Antworten ändern; lange Kontexte überschreiten den Trainingsumfang. Konfidenzschwellen müssen an eigenen Daten geprüft werden.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "Kev: modelos locais compatíveis com clientes Jev",
+      "h1": "Kev: modelos locais compatíveis com clientes Jev",
+      "description": "Kev oferece modelos de decisão treináveis baseados em Qwen, com API System One compatível com clientes Jev.",
+      "summary": "Fornece modelos pré-treinados e ajuste fino para perguntas binárias, de múltipla escolha e de pontuação sobre o mesmo texto. A API segue TypeSafe System One, permitindo apontar o SDK Python da TypeSafe para um servidor Kev local.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Finalidade e público",
+          "text": "Fornece modelos pré-treinados e ajuste fino para perguntas binárias, de múltipla escolha e de pontuação sobre o mesmo texto.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "A API segue TypeSafe System One, permitindo apontar o SDK Python da TypeSafe para um servidor Kev local.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Execute um checkpoint publicado com Python 3.12 ou 3.13 e uv, depois aponte o cliente para esse servidor.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "A ordem das opções pode mudar respostas; contextos longos excedem o treinamento. Os limiares de confiança precisam ser validados com dados próprios.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "Kev: локальные модели решений для клиентов Jev",
+      "h1": "Kev: локальные модели решений для клиентов Jev",
+      "description": "Kev предоставляет обучаемые модели решений на Qwen и API System One, доступный существующим клиентам Jev.",
+      "summary": "Готовые модели и дообучение поддерживают бинарные вопросы, выбор варианта и оценку по общему тексту. API следует TypeSafe System One, поэтому TypeSafe Python SDK можно направить на локальный сервер Kev.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Готовые модели и дообучение поддерживают бинарные вопросы, выбор варианта и оценку по общему тексту.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "API следует TypeSafe System One, поэтому TypeSafe Python SDK можно направить на локальный сервер Kev.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Запустите опубликованный чекпойнт с Python 3.12 или 3.13 и uv, затем укажите сервер в клиенте.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Порядок вариантов может менять ответы; длинный контекст выходит за рамки обучения. Пороги уверенности следует проверять на собственных данных.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "Kev: Jev क्लाइंट के अनुकूल स्थानीय निर्णय मॉडल",
+      "h1": "Kev: Jev क्लाइंट के अनुकूल स्थानीय निर्णय मॉडल",
+      "description": "Kev, Qwen-आधारित प्रशिक्षण योग्य निर्णय मॉडल और मौजूदा Jev क्लाइंट के लिए System One API देता है।",
+      "summary": "पहले से प्रशिक्षित मॉडल और फ़ाइन-ट्यूनिंग साझा टेक्स्ट पर हाँ/नहीं, बहुविकल्पीय और रेटिंग प्रश्नों को संभालते हैं। API, TypeSafe System One का पालन करता है, इसलिए TypeSafe Python SDK स्थानीय Kev सर्वर से जुड़ सकता है।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "उद्देश्य और उपयोगकर्ता",
+          "text": "पहले से प्रशिक्षित मॉडल और फ़ाइन-ट्यूनिंग साझा टेक्स्ट पर हाँ/नहीं, बहुविकल्पीय और रेटिंग प्रश्नों को संभालते हैं।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "API, TypeSafe System One का पालन करता है, इसलिए TypeSafe Python SDK स्थानीय Kev सर्वर से जुड़ सकता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल का तरीका",
+          "text": "Python 3.12 या 3.13 और uv के साथ प्रकाशित चेकपॉइंट चलाएँ, फिर क्लाइंट को उस सर्वर पर सेट करें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "विकल्पों का क्रम उत्तर बदल सकता है; लंबा संदर्भ प्रशिक्षण सीमा से बाहर है। विश्वास मान की सीमा अपने डेटा पर जाँचें।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "Kev: model keputusan lokal untuk klien Jev",
+      "h1": "Kev: model keputusan lokal untuk klien Jev",
+      "description": "Kev menyediakan model keputusan berbasis Qwen yang dapat dilatih, dengan API System One bagi klien Jev.",
+      "summary": "Model pralatih dan penyetelan mendukung pertanyaan ya/tidak, pilihan, serta penilaian atas teks yang sama. API mengikuti TypeSafe System One sehingga SDK Python TypeSafe dapat diarahkan ke server Kev lokal.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Tujuan dan pengguna",
+          "text": "Model pralatih dan penyetelan mendukung pertanyaan ya/tidak, pilihan, serta penilaian atas teks yang sama.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "API mengikuti TypeSafe System One sehingga SDK Python TypeSafe dapat diarahkan ke server Kev lokal.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Jalankan checkpoint yang dirilis dengan Python 3.12 atau 3.13 dan uv, lalu arahkan klien ke server tersebut.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Urutan opsi dapat mengubah jawaban; konteks panjang melampaui cakupan pelatihan. Ambang keyakinan harus diperiksa pada data sendiri.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "Kev: mô hình quyết định cục bộ cho ứng dụng khách Jev",
+      "h1": "Kev: mô hình quyết định cục bộ cho ứng dụng khách Jev",
+      "description": "Kev cung cấp mô hình quyết định Qwen có thể huấn luyện và API System One dùng được với ứng dụng khách Jev.",
+      "summary": "Mô hình huấn luyện sẵn và tinh chỉnh hỗ trợ câu hỏi có/không, chọn đáp án và chấm điểm trên cùng văn bản. API tuân theo TypeSafe System One, cho phép SDK Python TypeSafe kết nối máy chủ Kev cục bộ.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích và đối tượng",
+          "text": "Mô hình huấn luyện sẵn và tinh chỉnh hỗ trợ câu hỏi có/không, chọn đáp án và chấm điểm trên cùng văn bản.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "API tuân theo TypeSafe System One, cho phép SDK Python TypeSafe kết nối máy chủ Kev cục bộ.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Chạy checkpoint đã phát hành với Python 3.12 hoặc 3.13 và uv, rồi trỏ ứng dụng khách đến máy chủ.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Thứ tự lựa chọn có thể đổi đáp án; ngữ cảnh dài vượt phạm vi huấn luyện. Cần kiểm chứng ngưỡng tin cậy bằng dữ liệu riêng.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "Kev: Jev istemcileri için yerel karar modelleri",
+      "h1": "Kev: Jev istemcileri için yerel karar modelleri",
+      "description": "Kev, eğitilebilir Qwen tabanlı karar modelleri ve mevcut Jev istemcilerinin kullanabileceği System One API sunar.",
+      "summary": "Hazır modeller ve ince ayar, ortak metin üzerinde evet/hayır, çoktan seçmeli ve puanlama sorularını destekler. API, TypeSafe System One yapısını izler; TypeSafe Python SDK yerel Kev sunucusuna yönlendirilebilir.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Amaç ve hedef kitle",
+          "text": "Hazır modeller ve ince ayar, ortak metin üzerinde evet/hayır, çoktan seçmeli ve puanlama sorularını destekler.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "API, TypeSafe System One yapısını izler; TypeSafe Python SDK yerel Kev sunucusuna yönlendirilebilir.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Yayımlanmış kontrol noktası Python 3.12 veya 3.13 ve uv ile çalıştırılır, istemci bu sunucuya bağlanır.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Seçenek sırası yanıtı değiştirebilir; uzun bağlam eğitim kapsamını aşar. Güven eşikleri kendi verinizle doğrulanmalıdır.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "Kev: modelli locali compatibili con client Jev",
+      "h1": "Kev: modelli locali compatibili con client Jev",
+      "description": "Kev offre modelli decisionali Qwen addestrabili e un'API System One utilizzabile dai client Jev esistenti.",
+      "summary": "Modelli preaddestrati e fine-tuning gestiscono domande binarie, a scelta e di valutazione sullo stesso testo. L'API segue TypeSafe System One, consentendo all'SDK Python TypeSafe di puntare a un server Kev locale.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Scopo e destinatari",
+          "text": "Modelli preaddestrati e fine-tuning gestiscono domande binarie, a scelta e di valutazione sullo stesso testo.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "L'API segue TypeSafe System One, consentendo all'SDK Python TypeSafe di puntare a un server Kev locale.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come si usa",
+          "text": "Si esegue un checkpoint pubblicato con Python 3.12 o 3.13 e uv, poi si configura il client per quel server.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "L'ordine delle opzioni può cambiare le risposte; i contesti lunghi superano l'addestramento. Le soglie di confidenza vanno validate sui propri dati.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  },
+  "displayName": "Kev"
+}

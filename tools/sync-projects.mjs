@@ -6,11 +6,14 @@ import { runInNewContext } from "node:vm";
 import { createHash } from "node:crypto";
 import { GitHub, mapLimit } from "./lib/github.mjs";
 import { inspectRepository, POLICY_VERSION, RELATIONSHIPS } from "./catalog-policy.mjs";
+import { loadProjectContents, authoredProject } from "./lib/project-content.mjs";
+import { publicPreview } from "../shared/catalog-data.js";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 process.chdir(root);
 const config = JSON.parse(readFileSync("catalog/sources.json", "utf8"));
 const overrides = JSON.parse(readFileSync("catalog/overrides.json", "utf8"));
+const projectContents = loadProjectContents();
 const github = new GitHub();
 const started = new Date().toISOString();
 const candidates = new Map(), sources = [], rejected = [], errors = [];
@@ -185,7 +188,7 @@ try {
   const unavailable = output.filter(p => p?.freshness === "unavailable");
   const apps = output.filter(p => p && p.freshness !== "unavailable").sort((a, b) => a.repo.toLowerCase().localeCompare(b.repo.toLowerCase()));
   // Deduplicate retained entries against canonical, renamed repositories too.
-  const unique = [...new Map(apps.map(p => [p.id || p.repo.toLowerCase(), p])).values()];
+  const unique = [...new Map(apps.map(p => [p.id || p.repo.toLowerCase(), authoredProject(p, projectContents)])).values()];
   const dataHash = createHash("sha256").update(JSON.stringify(unique)).digest("hex").slice(0, 20);
   const sourceDates = sources.map(s => s.sourceUpdatedAt).filter(Boolean).sort();
   const oldRepos = new Set(previous.apps.map(p => p.repo.toLowerCase())), newRepos = new Set(unique.map(p => p.repo.toLowerCase()));
@@ -201,7 +204,7 @@ try {
   if (errors.length > Math.max(20, input.length * 0.15)) throw new Error("Too many repository checks failed; retaining last published catalog.");
   const write = (path, value) => { writeFileSync(path + ".tmp", value); renameSync(path + ".tmp", path); };
   write("public/catalog.json", JSON.stringify({ meta, apps: unique, unavailable }) + "\n");
-  const browserProjects = unique.map(p => Object.fromEntries(["name","repo","desc","cat","language","stars","created","added","pushed","archived","fork","relationship","evidenceLevel","evidence","freshness"].map(key => [key, p[key]])));
+  const browserProjects = unique.map(publicPreview);
   const firstPage = [...browserProjects].sort((a,b) => b.stars - a.stars || (b.created || "").localeCompare(a.created || "") || a.name.localeCompare(b.name, "en", { sensitivity: "base" })).slice(0,20);
   meta.categoryCounts = Object.fromEntries([...categories].map(cat => [cat, unique.filter(p => p.cat === cat).length]));
   meta.languages = [...new Set(unique.map(p => p.language || "unknown"))].sort();

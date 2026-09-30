@@ -1,0 +1,768 @@
+{
+  "version": "source-content-v1",
+  "repo": "v-modal/awesome-jev-tools",
+  "repositoryId": 1377399471,
+  "relationship": "resource",
+  "category": "lists",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "0842b2ab149f014d44413a13d6ed5bd10bb1d3e1",
+      "url": "https://github.com/v-modal/awesome-jev-tools/blob/0842b2ab149f014d44413a13d6ed5bd10bb1d3e1/README.md",
+      "sha256": "55d672709ad780255a596cb8089328aad9aeeb9001e669c458a1fa420575052f",
+      "accessedAt": "2026-09-30T07:33:49.049Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "kind": "documented",
+      "text": "awesome-jev-tools catalogs public Jev projects and practices across routing, verification, ranking, agents and research.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 3,
+          "end": 7,
+          "quote": "A curated awesome list of public projects and practices built on [Jev](https://typesafe.ai/blog/introducing-system-one-models-and-jev), TypeSafe AI's System One model for typed decisions.\n\nThis README is the homepage aggregate of the current category files, so the latest accepted entries are visible here without drilling into subpages.\n\nA curated list of public projects and developer patterns built on Jev, TypeSafe AI's System One model for typed decisions."
+        },
+        {
+          "source": "source-1",
+          "start": 62,
+          "end": 76,
+          "quote": "## Current coverage\n\n- [Classification & Routing](categories/classification-routing.md) — 20 entries\n- [Verification & Guardrails](categories/verification-guardrails.md) — 20 entries\n- [Scoring & Ranking](categories/scoring-ranking.md) — 17 entries\n- [Agent Decisions](categories/agent-decisions.md) — 30 entries\n- [Data Labeling & Curation](categories/data-labeling-curation.md) — 2 entries\n- [Evaluation & Benchmarking](categories/evaluation-benchmarking.md) — 13 entries\n- [Calibration & Research](categories/calibration-research.md) — 21 entries\n- [Infra / SDKs / Integrations](categories/infra-sdks-integrations.md) — 37 entries\n- [Game & Simulation](categories/game-simulation.md) — 8 entries\n- [Finance & Trading](categories/finance-trading.md) — 3 entries\n- [Compliance & Legal](categories/compliance-legal.md) — 1 entry\n- [Content Moderation](categories/content-moderation.md) — 4 entries\n- [Related Practices / Discussions](categories/related-practices-discussions.md) — 50 entries"
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "kind": "documented",
+      "text": "Inclusion requires a concrete Jev practice; generic projects that merely resemble decision models are excluded.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 18,
+          "end": 22,
+          "quote": "Developers use it to handle classification, infrastructure routing, rubric scoring, verification gates, and autonomous agent guardrails.Goal of this ListMost discussions about Jev are scattered across launch threads, social media, and one-off prototypes. \n\nThis repository centralizes those pieces to answer two practical questions for developers:\n   - Production Validation: Where is Jev actively making real decisions in live production workflows? \n   - Transferable Patterns: Which decision architectures can be cleanly copied and applied across different industries?"
+        },
+        {
+          "source": "source-1",
+          "start": 34,
+          "end": 42,
+          "quote": "## Inclusion criteria\n\nWe do **not** include:\n\n- Generic classifiers, routers, or research agents that merely resemble the pattern without using Jev.\n- Pure theory or opinion without a concrete practice.\n- Launch-hype commentary with no working artifact or reproducible result.\n- Long write-ups inside the list itself.\n- Sources that are private, inaccessible, or too vague to classify."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "kind": "documented",
+      "text": "Browse application categories, then inspect API calls, runnable checks, metric sources and licenses in linked projects.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 50,
+          "end": 58,
+          "quote": "Before adopting an entry, check it yourself:\n\n| Check | Why it matters |\n| --- | --- |\n| Does the code actually call the Jev API? | An entry can read well on a README alone. Look for a real request carrying typed questions, and a parsed answer coming back. |\n| Is there a runnable check? | A test, an example with expected output, or a public demo. No check means no evidence that it works. |\n| Do the numbers have a source? | Any accuracy, latency, cost, or volume figure should be traceable to the linked page. We strip claims we cannot verify, but the project page itself may still carry them. |\n| How much of the repository is code? | Some projects are mostly prompt documents. That can be legitimate — just know which one you are getting. |\n| Is there a license? | A few entries have none, which limits reuse and redistribution. |"
+        },
+        {
+          "source": "source-1",
+          "start": 82,
+          "end": 98,
+          "quote": "Each entry lives in exactly one category. When a project could fit multiple categories, we choose the one closest to its direct application domain.\n\n## Browse by category\n\n- [Classification & Routing](#classification-routing) ([source](categories/classification-routing.md))\n- [Verification & Guardrails](#verification-guardrails) ([source](categories/verification-guardrails.md))\n- [Scoring & Ranking](#scoring-ranking) ([source](categories/scoring-ranking.md))\n- [Agent Decisions](#agent-decisions) ([source](categories/agent-decisions.md))\n- [Data Labeling & Curation](#data-labeling-curation) ([source](categories/data-labeling-curation.md))\n- [Evaluation & Benchmarking](#evaluation-benchmarking) ([source](categories/evaluation-benchmarking.md))\n- [Calibration & Research](#calibration-research) ([source](categories/calibration-research.md))\n- [Infra / SDKs / Integrations](#infra-sdks-integrations) ([source](categories/infra-sdks-integrations.md))\n- [Game & Simulation](#game-simulation) ([source](categories/game-simulation.md))\n- [Finance & Trading](#finance-trading) ([source](categories/finance-trading.md))\n- [Compliance & Legal](#compliance-legal) ([source](categories/compliance-legal.md))\n- [Content Moderation](#content-moderation) ([source](categories/content-moderation.md))\n- [Related Practices / Discussions](#related-practices-discussions) ([source](categories/related-practices-discussions.md))"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "kind": "documented",
+      "text": "Inclusion is not an audit or endorsement: the catalog does not verify builds, passing tests or reproduced benchmarks.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 44,
+          "end": 48,
+          "quote": "## Curation is not endorsement\n\nInclusion means one thing: the entry satisfies the inclusion rules above. It is not a quality review, a security audit, or a recommendation. We do not verify that a project compiles, that its tests pass, that its published numbers reproduce, or that its license permits your use.\n\nThis matters most for projects that arrive in bulk. When one author releases several repositories on the same day, they commonly share a single scaffold — the same `AGENTS.md`, `CLAUDE.md`, `STATE.md`, and `CHANGELOG.md` — land in one or two commits each, and may ship considerably more prose than code. Such projects can be entirely legitimate; they are simply **unproven**. Treat them as leads, not as validated tools."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "awesome-jev-tools: Jev projects by decision pattern",
+      "h1": "awesome-jev-tools: Jev projects by decision pattern",
+      "description": "awesome-jev-tools groups Jev projects by routing, verification, ranking and other decision patterns, with adoption checks and explicit non-endorsement caveats.",
+      "summary": "awesome-jev-tools catalogs public Jev projects and practices across routing, verification, ranking, agents and research. Inclusion requires a concrete Jev practice; generic projects that merely resemble decision models are excluded. Browse application categories, then inspect API calls, runnable checks, metric sources and licenses in linked projects.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose",
+          "text": "awesome-jev-tools catalogs public Jev projects and practices across routing, verification, ranking, agents and research.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’s role",
+          "text": "Inclusion requires a concrete Jev practice; generic projects that merely resemble decision models are excluded.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "How to use it",
+          "text": "Browse application categories, then inspect API calls, runnable checks, metric sources and licenses in linked projects.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limits to consider",
+          "text": "Inclusion is not an audit or endorsement: the catalog does not verify builds, passing tests or reproduced benchmarks.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "awesome-jev-tools：按决策模式整理 Jev 项目",
+      "h1": "awesome-jev-tools：按决策模式整理 Jev 项目",
+      "description": "awesome-jev-tools 按路由、验证、排序等决策模式整理 Jev 项目，提供采纳前检查要点；收录不意味着审计通过，也不保证构建、测试或基准结果可复现。",
+      "summary": "awesome-jev-tools 收集路由、验证、排序、智能体和研究等领域的公开 Jev 项目与实践。 收录需要具体的 Jev 实践；仅在形式上类似决策模型的通用项目不符合条件。 按应用类别浏览，再检查链接项目的 API 调用、可运行验证、指标来源和许可证。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "awesome-jev-tools 收集路由、验证、排序、智能体和研究等领域的公开 Jev 项目与实践。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "收录需要具体的 Jev 实践；仅在形式上类似决策模型的通用项目不符合条件。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "按应用类别浏览，再检查链接项目的 API 调用、可运行验证、指标来源和许可证。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用边界",
+          "text": "收录并非审计或背书：目录不验证构建、测试是否通过或基准能否复现。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "awesome-jev-tools：依決策模式整理 Jev 專案",
+      "h1": "awesome-jev-tools：依決策模式整理 Jev 專案",
+      "description": "awesome-jev-tools 依路由、驗證、排序等決策模式整理 Jev 專案，提供採用前檢查要點；收錄不代表通過稽核，也不保證建置、測試或基準結果可重現。",
+      "summary": "awesome-jev-tools 收集路由、驗證、排序、代理與研究等領域的公開 Jev 專案及實務。 收錄需要具體的 Jev 實務；僅在形式上類似決策模型的通用專案不符合條件。 依應用類別瀏覽，再檢查連結專案的 API 呼叫、可執行驗證、指標來源與授權。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "awesome-jev-tools 收集路由、驗證、排序、代理與研究等領域的公開 Jev 專案及實務。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "收錄需要具體的 Jev 實務；僅在形式上類似決策模型的通用專案不符合條件。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "依應用類別瀏覽，再檢查連結專案的 API 呼叫、可執行驗證、指標來源與授權。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用限制",
+          "text": "收錄並非稽核或背書：目錄不驗證建置、測試是否通過或基準能否重現。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "awesome-jev-tools：判断パターン別の Jev 一覧",
+      "h1": "awesome-jev-tools：判断パターン別の Jev 一覧",
+      "description": "awesome-jev-tools は振り分け、検証、順位付けなどの Jev 活用を分類します。採用前の確認項目を示し、掲載が推奨ではないことも明記します。",
+      "summary": "awesome-jev-tools は振り分け、検証、順位付け、エージェント、研究に関する公開 Jev プロジェクトを集めています。 具体的な Jev 利用が掲載条件で、決定モデルに似ているだけの一般的なプロジェクトは対象外です。 用途別に探し、リンク先で API 呼び出し、実行可能な検証、指標の出所、ライセンスを確認できます。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "何ができるか",
+          "text": "awesome-jev-tools は振り分け、検証、順位付け、エージェント、研究に関する公開 Jev プロジェクトを集めています。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "具体的な Jev 利用が掲載条件で、決定モデルに似ているだけの一般的なプロジェクトは対象外です。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "用途別に探し、リンク先で API 呼び出し、実行可能な検証、指標の出所、ライセンスを確認できます。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "制約と注意点",
+          "text": "掲載は監査や推奨ではありません。ビルド、テスト成功、ベンチマーク再現まで検証した一覧ではありません。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "awesome-jev-tools: 판단 패턴별 Jev 프로젝트 목록",
+      "h1": "awesome-jev-tools: 판단 패턴별 Jev 프로젝트 목록",
+      "description": "awesome-jev-tools는 라우팅, 검증, 순위화 등 Jev 활용을 분류하고 도입 전 확인 사항을 제공합니다. 등재는 감사나 보증이 아닙니다.",
+      "summary": "awesome-jev-tools는 라우팅, 검증, 순위화, 에이전트, 연구 분야의 공개 Jev 프로젝트와 사례를 모읍니다. 구체적인 Jev 활용이 있어야 하며 결정 모델과 겉으로만 비슷한 일반 프로젝트는 제외합니다. 용도별로 탐색한 뒤 원본 프로젝트의 API 호출, 실행 가능한 검증, 지표 출처와 라이선스를 살펴보세요.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "awesome-jev-tools는 라우팅, 검증, 순위화, 에이전트, 연구 분야의 공개 Jev 프로젝트와 사례를 모읍니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "구체적인 Jev 활용이 있어야 하며 결정 모델과 겉으로만 비슷한 일반 프로젝트는 제외합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "용도별로 탐색한 뒤 원본 프로젝트의 API 호출, 실행 가능한 검증, 지표 출처와 라이선스를 살펴보세요.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "제약 사항",
+          "text": "등재는 감사나 보증이 아닙니다. 빌드 성공, 테스트 통과, 벤치마크 재현을 확인하지는 않습니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "awesome-jev-tools: proyectos Jev por patrón de decisión",
+      "h1": "awesome-jev-tools: proyectos Jev por patrón de decisión",
+      "description": "awesome-jev-tools organiza proyectos Jev por enrutamiento, verificación y clasificación, con comprobaciones de adopción y límites del catálogo.",
+      "summary": "awesome-jev-tools cataloga proyectos y prácticas de Jev en enrutamiento, verificación, clasificación, agentes e investigación. Exige una práctica concreta con Jev; excluye proyectos genéricos que solo se parecen a modelos de decisión. Explora categorías y revisa llamadas API, comprobaciones ejecutables, fuentes de métricas y licencias de los proyectos enlazados.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "awesome-jev-tools cataloga proyectos y prácticas de Jev en enrutamiento, verificación, clasificación, agentes e investigación.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "El papel de Jev",
+          "text": "Exige una práctica concreta con Jev; excluye proyectos genéricos que solo se parecen a modelos de decisión.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo usarlo",
+          "text": "Explora categorías y revisa llamadas API, comprobaciones ejecutables, fuentes de métricas y licencias de los proyectos enlazados.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Límites a considerar",
+          "text": "La inclusión no es auditoría ni aval: no verifica compilaciones, pruebas superadas ni reproducción de benchmarks.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "awesome-jev-tools : projets Jev par type de décision",
+      "h1": "awesome-jev-tools : projets Jev par type de décision",
+      "description": "awesome-jev-tools classe les projets Jev par routage, vérification et classement, avec des contrôles avant adoption et une réserve sur l’inclusion.",
+      "summary": "awesome-jev-tools recense des projets et pratiques Jev pour le routage, la vérification, le classement, les agents et la recherche. Une pratique concrète de Jev est exigée ; les projets seulement similaires aux modèles de décision sont exclus. Parcourez les catégories, puis examinez appels API, vérifications exécutables, sources des mesures et licences des projets liés.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "awesome-jev-tools recense des projets et pratiques Jev pour le routage, la vérification, le classement, les agents et la recherche.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Le rôle de Jev",
+          "text": "Une pratique concrète de Jev est exigée ; les projets seulement similaires aux modèles de décision sont exclus.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Utilisation",
+          "text": "Parcourez les catégories, puis examinez appels API, vérifications exécutables, sources des mesures et licences des projets liés.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limites à connaître",
+          "text": "L’inclusion n’est ni audit ni recommandation : compilations, tests réussis et benchmarks reproduits ne sont pas vérifiés.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "awesome-jev-tools: Jev-Projekte nach Entscheidungsmuster",
+      "h1": "awesome-jev-tools: Jev-Projekte nach Entscheidungsmuster",
+      "description": "awesome-jev-tools ordnet Jev-Projekte nach Routing, Prüfung und Ranking, ergänzt Übernahmeprüfungen und weist ausdrücklich auf fehlende Empfehlungen hin.",
+      "summary": "awesome-jev-tools katalogisiert öffentliche Jev-Projekte zu Routing, Prüfung, Ranking, Agenten und Forschung. Die Aufnahme verlangt einen konkreten Jev-Einsatz; bloß ähnliche allgemeine Entscheidungsprojekte sind ausgeschlossen. Kategorien durchsuchen und API-Aufrufe, ausführbare Prüfungen, Messwertquellen sowie Lizenzen der verlinkten Projekte ansehen.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "awesome-jev-tools katalogisiert öffentliche Jev-Projekte zu Routing, Prüfung, Ranking, Agenten und Forschung.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Die Rolle von Jev",
+          "text": "Die Aufnahme verlangt einen konkreten Jev-Einsatz; bloß ähnliche allgemeine Entscheidungsprojekte sind ausgeschlossen.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Nutzung",
+          "text": "Kategorien durchsuchen und API-Aufrufe, ausführbare Prüfungen, Messwertquellen sowie Lizenzen der verlinkten Projekte ansehen.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Grenzen",
+          "text": "Aufnahme bedeutet weder Audit noch Empfehlung; Builds, bestandene Tests und reproduzierte Benchmarks werden nicht geprüft.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "awesome-jev-tools: projetos Jev por padrão de decisão",
+      "h1": "awesome-jev-tools: projetos Jev por padrão de decisão",
+      "description": "awesome-jev-tools organiza projetos Jev por roteamento, verificação e ordenação, com verificações antes da adoção e ressalvas sobre o catálogo.",
+      "summary": "awesome-jev-tools cataloga projetos e práticas Jev em roteamento, verificação, ordenação, agentes e pesquisa. Exige um uso concreto de Jev; exclui projetos genéricos que apenas se parecem com modelos de decisão. Explore categorias e confira chamadas API, verificações executáveis, fontes de métricas e licenças nos projetos vinculados.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "awesome-jev-tools cataloga projetos e práticas Jev em roteamento, verificação, ordenação, agentes e pesquisa.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "O papel do Jev",
+          "text": "Exige um uso concreto de Jev; exclui projetos genéricos que apenas se parecem com modelos de decisão.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Explore categorias e confira chamadas API, verificações executáveis, fontes de métricas e licenças nos projetos vinculados.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limitações",
+          "text": "Inclusão não é auditoria nem endosso: compilações, testes aprovados e reprodução de benchmarks não são verificados.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "awesome-jev-tools: проекты Jev по типам решений",
+      "h1": "awesome-jev-tools: проекты Jev по типам решений",
+      "description": "awesome-jev-tools группирует проекты Jev по маршрутизации, проверке и ранжированию, объясняя проверки перед внедрением и отсутствие одобрения.",
+      "summary": "awesome-jev-tools собирает проекты Jev по маршрутизации, проверке, ранжированию, агентам и исследованиям. Для включения нужно конкретное применение Jev; общие проекты, лишь похожие на модели решений, исключаются. Выбирайте категории и проверяйте вызовы API, запускаемые проверки, источники метрик и лицензии по ссылкам.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "awesome-jev-tools собирает проекты Jev по маршрутизации, проверке, ранжированию, агентам и исследованиям.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Для включения нужно конкретное применение Jev; общие проекты, лишь похожие на модели решений, исключаются.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Выбирайте категории и проверяйте вызовы API, запускаемые проверки, источники метрик и лицензии по ссылкам.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ограничения",
+          "text": "Включение не означает аудит или рекомендацию: сборки, успешные тесты и воспроизводимость бенчмарков не проверяются.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "awesome-jev-tools: निर्णय पैटर्न के अनुसार Jev परियोजनाएँ",
+      "h1": "awesome-jev-tools: निर्णय पैटर्न के अनुसार Jev परियोजनाएँ",
+      "description": "awesome-jev-tools Jev प्रोजेक्ट को रूटिंग, जाँच और रैंकिंग से बाँटता है; अपनाने से पहले की जाँच बताता है, सूची समर्थन नहीं है।",
+      "summary": "awesome-jev-tools रूटिंग, जाँच, रैंकिंग, एजेंट और शोध के सार्वजनिक Jev प्रोजेक्ट तथा अभ्यास सूचीबद्ध करता है। ठोस Jev उपयोग आवश्यक है; केवल निर्णय मॉडल जैसे दिखने वाले सामान्य प्रोजेक्ट शामिल नहीं होते। श्रेणियाँ देखें और लिंक किए प्रोजेक्ट में API कॉल, चलने योग्य जाँच, मापों के स्रोत और लाइसेंस परखें।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "किस काम आता है",
+          "text": "awesome-jev-tools रूटिंग, जाँच, रैंकिंग, एजेंट और शोध के सार्वजनिक Jev प्रोजेक्ट तथा अभ्यास सूचीबद्ध करता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "ठोस Jev उपयोग आवश्यक है; केवल निर्णय मॉडल जैसे दिखने वाले सामान्य प्रोजेक्ट शामिल नहीं होते।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल कैसे करें",
+          "text": "श्रेणियाँ देखें और लिंक किए प्रोजेक्ट में API कॉल, चलने योग्य जाँच, मापों के स्रोत और लाइसेंस परखें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "सीमाएँ",
+          "text": "सूची में होना ऑडिट या समर्थन नहीं है; बिल्ड, सफल टेस्ट और बेंचमार्क पुनरुत्पादन की पुष्टि नहीं की जाती।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "awesome-jev-tools: proyek Jev menurut pola keputusan",
+      "h1": "awesome-jev-tools: proyek Jev menurut pola keputusan",
+      "description": "awesome-jev-tools mengelompokkan proyek Jev berdasarkan perutean, verifikasi, dan peringkat, dengan pemeriksaan adopsi serta batasan pencantuman.",
+      "summary": "awesome-jev-tools mendata proyek dan praktik Jev untuk perutean, verifikasi, pemeringkatan, agen, dan penelitian. Entri harus menunjukkan praktik Jev konkret; proyek umum yang hanya menyerupai model keputusan dikecualikan. Telusuri kategori dan periksa panggilan API, pemeriksaan yang bisa dijalankan, sumber metrik, serta lisensi proyek tertaut.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "awesome-jev-tools mendata proyek dan praktik Jev untuk perutean, verifikasi, pemeringkatan, agen, dan penelitian.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Entri harus menunjukkan praktik Jev konkret; proyek umum yang hanya menyerupai model keputusan dikecualikan.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Telusuri kategori dan periksa panggilan API, pemeriksaan yang bisa dijalankan, sumber metrik, serta lisensi proyek tertaut.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Batasan",
+          "text": "Pencantuman bukan audit atau dukungan: keberhasilan build, tes, dan reproduksi tolok ukur tidak diverifikasi.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "awesome-jev-tools: dự án Jev theo mẫu quyết định",
+      "h1": "awesome-jev-tools: dự án Jev theo mẫu quyết định",
+      "description": "awesome-jev-tools chia dự án Jev theo định tuyến, kiểm tra, xếp hạng; có hướng dẫn kiểm tra trước khi dùng và lưu ý danh mục không bảo chứng.",
+      "summary": "awesome-jev-tools tập hợp dự án và thực hành Jev về định tuyến, kiểm tra, xếp hạng, tác tử và nghiên cứu. Mỗi mục cần có ứng dụng Jev cụ thể; dự án chung chỉ giống mô hình quyết định bị loại trừ. Duyệt nhóm ứng dụng rồi kiểm tra lời gọi API, phép thử chạy được, nguồn chỉ số và giấy phép ở dự án gốc.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích",
+          "text": "awesome-jev-tools tập hợp dự án và thực hành Jev về định tuyến, kiểm tra, xếp hạng, tác tử và nghiên cứu.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Mỗi mục cần có ứng dụng Jev cụ thể; dự án chung chỉ giống mô hình quyết định bị loại trừ.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Duyệt nhóm ứng dụng rồi kiểm tra lời gọi API, phép thử chạy được, nguồn chỉ số và giấy phép ở dự án gốc.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Giới hạn",
+          "text": "Được liệt kê không phải bảo chứng hay kiểm toán; danh mục không xác minh bản dựng, kiểm thử hay tái hiện benchmark.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "awesome-jev-tools: karar örüntülerine göre Jev projeleri",
+      "h1": "awesome-jev-tools: karar örüntülerine göre Jev projeleri",
+      "description": "awesome-jev-tools Jev projelerini yönlendirme, doğrulama ve sıralamaya göre düzenler; benimseme kontrollerini ve listelemenin onay olmadığını açıklar.",
+      "summary": "awesome-jev-tools yönlendirme, doğrulama, sıralama, ajan ve araştırma alanlarındaki açık Jev projelerini derler. Somut Jev kullanımı şarttır; yalnızca karar modellerine benzeyen genel projeler dışlanır. Kategorileri inceleyip bağlantılı projelerde API çağrılarını, çalıştırılabilir kontrolleri, ölçüm kaynaklarını ve lisansları değerlendirin.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "awesome-jev-tools yönlendirme, doğrulama, sıralama, ajan ve araştırma alanlarındaki açık Jev projelerini derler.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Somut Jev kullanımı şarttır; yalnızca karar modellerine benzeyen genel projeler dışlanır.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Kategorileri inceleyip bağlantılı projelerde API çağrılarını, çalıştırılabilir kontrolleri, ölçüm kaynaklarını ve lisansları değerlendirin.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Sınırlamalar",
+          "text": "Listelenmek denetim veya onay değildir; derlemeler, geçen testler ve ölçüm tekrarları doğrulanmaz.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "awesome-jev-tools: progetti Jev per schema decisionale",
+      "h1": "awesome-jev-tools: progetti Jev per schema decisionale",
+      "description": "awesome-jev-tools raggruppa progetti Jev per instradamento, verifica e ranking, con controlli prima dell’adozione e limiti espliciti del catalogo.",
+      "summary": "awesome-jev-tools cataloga progetti e pratiche Jev per instradamento, verifica, ordinamento, agenti e ricerca. Richiede un uso concreto di Jev; esclude progetti generici che somigliano soltanto a modelli decisionali. Esplora le categorie e controlla chiamate API, verifiche eseguibili, fonti delle metriche e licenze dei progetti collegati.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "awesome-jev-tools cataloga progetti e pratiche Jev per instradamento, verifica, ordinamento, agenti e ricerca.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Il ruolo di Jev",
+          "text": "Richiede un uso concreto di Jev; esclude progetti generici che somigliano soltanto a modelli decisionali.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come usarlo",
+          "text": "Esplora le categorie e controlla chiamate API, verifiche eseguibili, fonti delle metriche e licenze dei progetti collegati.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limiti",
+          "text": "L’inclusione non è audit né approvazione: compilazioni, test superati e benchmark riprodotti non vengono verificati.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

@@ -1,0 +1,768 @@
+{
+  "version": "source-content-v1",
+  "repo": "rmalde/minecraft-agent",
+  "repositoryId": 1377938409,
+  "relationship": "jev-app",
+  "category": "games",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "78b40ed59514e5e2abde33a05ce398ecb2c39e05",
+      "url": "https://github.com/rmalde/minecraft-agent/blob/78b40ed59514e5e2abde33a05ce398ecb2c39e05/README.md",
+      "sha256": "aa369ac2861544f4ccfb820df3ba7ce3630074b3f8a4fe69e7f16ca0b66dda04",
+      "accessedAt": "2026-09-30T07:33:50.087Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "The project controls a Minecraft Java 1.16.5 player through Mineflayer, using a separate model for planning and Jev for player actions.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 3,
+          "end": 3,
+          "quote": "This project uses GPT-6 Astra or GPT-5.6 Sol to plan and JEV to select player actions in Minecraft Java 1.16.5. It uses the official vanilla server and Mineflayer. A read-only Java sensor can report the exact dragon head position. It does not change game rules or entity state. Each selected action is sent to the game through the normal player protocol."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "Astra or Sol sets objectives and waypoints; Jev chooses an available action from structured game observations, while Mineflayer executes movement and protocol interactions.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 37,
+          "end": 44,
+          "quote": "## Model roles\n\nThe planner sets the current objective, item targets, and a travel waypoint. JEV selects one available action from current game observations. Actions include travel, mining one block, collecting a drop, crafting, opening a chest, eating, sleeping, and combat interactions. Mineflayer handles the movement path and game protocol. This is structured-state control, not control from screenshots or individual key presses. The models can see blocks in loaded chunks. Known seed coordinates are supplied.\n\nModel IDs:\n\n- `openai/gpt-6-astra` (default) or `openai/gpt-5.6-sol` (`PLANNER_MODEL`), through `/api/v1/chat/completions`\n- `typesafe/jev-1.13`, through `/api/alpha/decisions`"
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Configure the model relay and local runtime paths, install dependencies, start the vanilla server, and launch the documented nether-agent workflow.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 21,
+          "end": 23,
+          "quote": "Model calls obtain the OpenRouter key from Google Secret Manager and keep it in process memory. The current scripts refer to the original deployment's project and secret name; these names are not credentials. Configure those references for your own project in `model-relay.mjs` and `models.mjs`. For the relay, authenticate with Google application default credentials, grant access to the secret, and set `MODEL_RELAY=http://127.0.0.1:3099` when starting the agent. Do not place keys in source files or run logs.\n\nThe native renderer and launch scripts were developed on macOS. Runtime paths and local server settings must be configured for another machine. Historical review notes describe earlier versions; use the current code and the result above for the latest behavior."
+        },
+        {
+          "source": "source-1",
+          "start": 56,
+          "end": 71,
+          "quote": "## Start a run\n\nInstall dependencies with `npm install`. Start `server/server.jar` from the `server` directory with a compatible Java runtime. The installed Minecraft Java runtime works for this server.\n\nUse `./start-server.sh` to start the main server with its read-only sensor. For a fresh recording, first choose an unused world name in `server/server.properties`. Use a new log directory with the same name. Start the agent from this directory:\n\n```sh\nnode optimization/nether/freeze-run.mjs NEW_RUN\nPLANNER_MODEL=openai/gpt-6-astra RUN_ID=NEW_RUN \\\nNATIVE_VIEW=1 WAIT_NATIVE=1 NATIVE_RECORD=1 \\\nDRAGON_SENSOR_URL=http://127.0.0.1:3093 node nether-agent.mjs\n```\n\nWhen the local mirror is listening on port 25578, start `python3 native-client/launch.py`. The agent waits for the hidden client and recorder before the first action. The native client uses an isolated game directory. It does not change the user's Minecraft settings. The recorder stops after the exit portal event. To stop a test at an action boundary, create `runs/NEW_RUN/stop`. Wait for `full-playthrough.mp4.finished.json` before closing the native client.\n\nThe native client dependencies are installed with `python3 native-client/install.py`; build the display and capture adapter with `./native-client/build.sh`. The supplied launch script uses its local Java 17 runtime. Model access requires available OpenRouter credit."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "The route uses a known seed and supplied coordinates rather than screenshot control. Recordings and generated run evidence remain local and are excluded from Git.",
+      "kind": "source-limitation",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 17,
+          "end": 17,
+          "quote": "**Recordings and generated evidence remain local and are excluded from Git.** The local video is `runs/nether-final-08/full-playthrough-banner.mp4`. Its verification, timing comparison, and action log are in the same run directory. This repository contains the code, tests, build scripts, and route data. It does not include Minecraft binaries, downloaded runtimes, saved worlds, or credentials."
+        },
+        {
+          "source": "source-1",
+          "start": 35,
+          "end": 39,
+          "quote": "The selected seed has a village, three supply chests with 21 obsidian, and a naturally active End portal. The route uses the Nether as a travel shortcut and requires entry and exit before combat. It does not need blaze rods. This is a useful speedrun seed, not proof of the easiest possible seed. The route was surveyed in a separate test world. Final-run placements and movement use normal player interactions.\n\n## Model roles\n\nThe planner sets the current objective, item targets, and a travel waypoint. JEV selects one available action from current game observations. Actions include travel, mining one block, collecting a drop, crafting, opening a chest, eating, sleeping, and combat interactions. Mineflayer handles the movement path and game protocol. This is structured-state control, not control from screenshots or individual key presses. The models can see blocks in loaded chunks. Known seed coordinates are supplied."
+        },
+        {
+          "source": "source-1",
+          "start": 104,
+          "end": 104,
+          "quote": "The final route is fixed in `optimization/nether/config.json`. Astra receives game state and route observations; JEV selects bounded actions. Mineflayer performs pathfinding and timed block interactions. This is not screenshot-only or individual-key control. The native view mirrors the bot state. Its camera uses small turns, and its inventory screens show the current item and cursor state. The final run used no live operator guidance or repairs."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "minecraft-agent — Astra plans and Jev acts in Minecraft",
+      "h1": "minecraft-agent — Astra plans and Jev acts in Minecraft",
+      "description": "minecraft-agent: Control Minecraft Java with Astra or Sol planning and Jev selecting bounded actions from game state, executed through Mineflayer.",
+      "summary": "The project controls a Minecraft Java 1.16.5 player through Mineflayer, using a separate model for planning and Jev for player actions. Configure the model relay and local runtime paths, install dependencies, start the vanilla server, and launch the documented nether-agent workflow.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "What it does",
+          "text": "The project controls a Minecraft Java 1.16.5 player through Mineflayer, using a separate model for planning and Jev for player actions.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "Astra or Sol sets objectives and waypoints; Jev chooses an available action from structured game observations, while Mineflayer executes movement and protocol interactions.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Getting started",
+          "text": "Configure the model relay and local runtime paths, install dependencies, start the vanilla server, and launch the documented nether-agent workflow.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "The route uses a known seed and supplied coordinates rather than screenshot control. Recordings and generated run evidence remain local and are excluded from Git.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "minecraft-agent — Astra 规划、Jev 行动的 Minecraft 智能体",
+      "h1": "minecraft-agent — Astra 规划、Jev 行动的 Minecraft 智能体",
+      "description": "minecraft-agent: Astra 或 Sol 规划 Minecraft Java 目标，Jev 根据游戏状态选择有界动作，再由 Mineflayer 执行。",
+      "summary": "该项目通过 Mineflayer 控制 Minecraft Java 1.16.5 玩家，由独立模型负责规划，Jev 负责选择玩家动作。 配置模型中继与本地运行时路径，安装依赖、启动原版服务器，再按文档启动 nether-agent 工作流。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "该项目通过 Mineflayer 控制 Minecraft Java 1.16.5 玩家，由独立模型负责规划，Jev 负责选择玩家动作。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "Astra 或 Sol 设置目标与航点；Jev 根据结构化游戏观察选择可用动作，Mineflayer 执行移动及协议交互。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "配置模型中继与本地运行时路径，安装依赖、启动原版服务器，再按文档启动 nether-agent 工作流。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "路线使用已知种子和提供的坐标，并非截图控制。录像及生成的运行证据保留在本地，不纳入 Git。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "minecraft-agent — Astra 規劃、Jev 行動的 Minecraft 代理",
+      "h1": "minecraft-agent — Astra 規劃、Jev 行動的 Minecraft 代理",
+      "description": "minecraft-agent: Astra 或 Sol 規劃 Minecraft Java 目標，Jev 依遊戲狀態選擇有界動作，再由 Mineflayer 執行。",
+      "summary": "此專案透過 Mineflayer 控制 Minecraft Java 1.16.5 玩家，由獨立模型負責規劃，Jev 負責選擇玩家動作。 設定模型中繼與本機執行環境路徑，安裝相依套件、啟動原版伺服器，再依文件啟動 nether-agent 流程。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "此專案透過 Mineflayer 控制 Minecraft Java 1.16.5 玩家，由獨立模型負責規劃，Jev 負責選擇玩家動作。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "Astra 或 Sol 設定目標與航點；Jev 根據結構化遊戲觀察選擇可用動作，Mineflayer 執行移動及協定互動。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "設定模型中繼與本機執行環境路徑，安裝相依套件、啟動原版伺服器，再依文件啟動 nether-agent 流程。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "路線使用已知種子和提供的座標，並非螢幕截圖控制。錄影及產生的執行證據保留在本機，不納入 Git。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "minecraft-agent — Astra が計画し Jev が動く Minecraft エージェント",
+      "h1": "minecraft-agent — Astra が計画し Jev が動く Minecraft エージェント",
+      "description": "minecraft-agent: Minecraft Java で Astra または Sol が計画し、Jev がゲーム状態から行動を選び、Mineflayer が実行します。",
+      "summary": "Minecraft Java 1.16.5 のプレイヤーを Mineflayer で操作し、計画モデルと Jev の行動選択を組み合わせます。 モデル中継とローカル環境のパスを設定し、依存関係とバニラサーバーを準備して、文書の nether-agent 手順を起動します。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "できること",
+          "text": "Minecraft Java 1.16.5 のプレイヤーを Mineflayer で操作し、計画モデルと Jev の行動選択を組み合わせます。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "Astra または Sol が目標と経由点を決め、Jev が構造化された観測から可能な行動を選び、Mineflayer が移動と通信を実行します。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い始めるには",
+          "text": "モデル中継とローカル環境のパスを設定し、依存関係とバニラサーバーを準備して、文書の nether-agent 手順を起動します。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "対象範囲と制約",
+          "text": "既知のシードと指定座標を使う経路で、スクリーンショットによる操作ではありません。録画と実行時の証拠はローカルに残り、Git には含まれません。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "minecraft-agent — Astra의 계획과 Jev의 Minecraft 행동 선택",
+      "h1": "minecraft-agent — Astra의 계획과 Jev의 Minecraft 행동 선택",
+      "description": "minecraft-agent: Minecraft Java에서 Astra 또는 Sol이 계획하고 Jev가 상태에 따라 행동을 선택하며 Mineflayer가 실행합니다.",
+      "summary": "Mineflayer로 Minecraft Java 1.16.5 플레이어를 제어하며 별도 모델이 계획하고 Jev가 행동을 선택합니다. 모델 릴레이와 로컬 런타임 경로를 설정하고 의존성과 바닐라 서버를 준비한 뒤 문서의 nether-agent 절차를 실행합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "Mineflayer로 Minecraft Java 1.16.5 플레이어를 제어하며 별도 모델이 계획하고 Jev가 행동을 선택합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Astra 또는 Sol이 목표와 경유지를 정하면 Jev가 구조화된 게임 관찰에서 가능한 행동을 고르고 Mineflayer가 이동과 프로토콜 상호작용을 실행합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "모델 릴레이와 로컬 런타임 경로를 설정하고 의존성과 바닐라 서버를 준비한 뒤 문서의 nether-agent 절차를 실행합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 제약",
+          "text": "알려진 시드와 제공된 좌표를 쓰는 경로로, 스크린샷 기반 제어가 아닙니다. 녹화와 생성된 실행 증거는 로컬에만 보관하며 Git에서 제외합니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "minecraft-agent — Astra planifica y Jev actúa en Minecraft",
+      "h1": "minecraft-agent — Astra planifica y Jev actúa en Minecraft",
+      "description": "minecraft-agent: Astra o Sol planifica Minecraft Java; Jev elige acciones acotadas del estado del juego y Mineflayer las ejecuta.",
+      "summary": "El proyecto controla un jugador de Minecraft Java 1.16.5 mediante Mineflayer, separando el modelo planificador de la selección de acciones con Jev. Configura el relé de modelos y las rutas locales, instala dependencias, inicia el servidor vanilla y sigue el flujo documentado de nether-agent.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "El proyecto controla un jugador de Minecraft Java 1.16.5 mediante Mineflayer, separando el modelo planificador de la selección de acciones con Jev.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Astra o Sol fija objetivos y puntos de paso; Jev elige una acción disponible a partir del estado estructurado y Mineflayer ejecuta el movimiento y las interacciones.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo empezar",
+          "text": "Configura el relé de modelos y las rutas locales, instala dependencias, inicia el servidor vanilla y sigue el flujo documentado de nether-agent.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "La ruta usa una semilla conocida y coordenadas suministradas, no control por capturas de pantalla. Las grabaciones y pruebas generadas permanecen locales y fuera de Git.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "minecraft-agent — Astra planifie, Jev agit dans Minecraft",
+      "h1": "minecraft-agent — Astra planifie, Jev agit dans Minecraft",
+      "description": "minecraft-agent: Astra ou Sol planifie dans Minecraft Java ; Jev choisit des actions bornées dans l’état du jeu et Mineflayer les exécute.",
+      "summary": "Le projet pilote un joueur de Minecraft Java 1.16.5 via Mineflayer, avec un modèle de planification séparé et Jev pour choisir les actions. Configurez le relais des modèles et les chemins locaux, installez les dépendances, lancez le serveur vanilla puis le parcours nether-agent documenté.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "Le projet pilote un joueur de Minecraft Java 1.16.5 via Mineflayer, avec un modèle de planification séparé et Jev pour choisir les actions.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Astra ou Sol fixe objectifs et points de passage ; Jev choisit une action disponible dans les observations structurées, puis Mineflayer exécute les déplacements et interactions.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Configurez le relais des modèles et les chemins locaux, installez les dépendances, lancez le serveur vanilla puis le parcours nether-agent documenté.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "L’itinéraire utilise une seed connue et des coordonnées fournies, sans pilotage par captures d’écran. Les vidéos et preuves générées restent locales et sont exclues de Git.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "minecraft-agent — Astra plant, Jev handelt in Minecraft",
+      "h1": "minecraft-agent — Astra plant, Jev handelt in Minecraft",
+      "description": "minecraft-agent: Astra oder Sol plant in Minecraft Java; Jev wählt begrenzte Aktionen aus dem Spielzustand, Mineflayer führt sie aus.",
+      "summary": "Das Projekt steuert einen Spieler in Minecraft Java 1.16.5 über Mineflayer und trennt Modellplanung von der Aktionsauswahl durch Jev. Modellrelay und lokale Laufzeitpfade konfigurieren, Abhängigkeiten installieren, den Vanilla-Server starten und dem dokumentierten nether-agent-Ablauf folgen.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "Das Projekt steuert einen Spieler in Minecraft Java 1.16.5 über Mineflayer und trennt Modellplanung von der Aktionsauswahl durch Jev.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Astra oder Sol bestimmt Ziele und Wegpunkte; Jev wählt anhand strukturierter Beobachtungen eine verfügbare Aktion, die Mineflayer durch Bewegung und Protokollinteraktionen ausführt.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Einstieg",
+          "text": "Modellrelay und lokale Laufzeitpfade konfigurieren, Abhängigkeiten installieren, den Vanilla-Server starten und dem dokumentierten nether-agent-Ablauf folgen.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Die Route nutzt einen bekannten Seed und vorgegebene Koordinaten statt Bildschirmbildern zur Steuerung. Aufzeichnungen und erzeugte Laufbelege bleiben lokal und sind von Git ausgeschlossen.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "minecraft-agent — Astra planeja e Jev age no Minecraft",
+      "h1": "minecraft-agent — Astra planeja e Jev age no Minecraft",
+      "description": "minecraft-agent: Astra ou Sol planeja no Minecraft Java; Jev escolhe ações delimitadas pelo estado do jogo e Mineflayer executa.",
+      "summary": "O projeto controla um jogador de Minecraft Java 1.16.5 pelo Mineflayer, com um modelo separado para planejamento e o Jev escolhendo ações. Configure o relay dos modelos e os caminhos locais, instale dependências, inicie o servidor vanilla e siga o fluxo documentado do nether-agent.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "O projeto controla um jogador de Minecraft Java 1.16.5 pelo Mineflayer, com um modelo separado para planejamento e o Jev escolhendo ações.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "Astra ou Sol define objetivos e pontos de passagem; o Jev escolhe uma ação disponível a partir de observações estruturadas e o Mineflayer executa movimentos e interações.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como começar",
+          "text": "Configure o relay dos modelos e os caminhos locais, instale dependências, inicie o servidor vanilla e siga o fluxo documentado do nether-agent.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "A rota usa uma seed conhecida e coordenadas fornecidas, sem controle por capturas de tela. Gravações e evidências geradas ficam locais e fora do Git.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "minecraft-agent — Astra планирует, Jev действует в Minecraft",
+      "h1": "minecraft-agent — Astra планирует, Jev действует в Minecraft",
+      "description": "minecraft-agent: Astra или Sol планирует в Minecraft Java, Jev выбирает действия по состоянию игры, а Mineflayer выполняет их.",
+      "summary": "Проект управляет игроком Minecraft Java 1.16.5 через Mineflayer, отделяя модель планирования от выбора действий через Jev. Настройте ретранслятор моделей и локальные пути, установите зависимости, запустите ванильный сервер и описанный процесс nether-agent.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Проект управляет игроком Minecraft Java 1.16.5 через Mineflayer, отделяя модель планирования от выбора действий через Jev.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Astra или Sol задаёт цели и путевые точки; Jev выбирает доступное действие по структурированным наблюдениям, а Mineflayer выполняет перемещение и взаимодействие с протоколом.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Начало работы",
+          "text": "Настройте ретранслятор моделей и локальные пути, установите зависимости, запустите ванильный сервер и описанный процесс nether-agent.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Маршрут использует известный сид и заданные координаты, а не управление по скриншотам. Видеозаписи и полученные свидетельства прогонов хранятся локально и исключены из Git.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "minecraft-agent — Minecraft में Astra की योजना और Jev की कार्रवाई",
+      "h1": "minecraft-agent — Minecraft में Astra की योजना और Jev की कार्रवाई",
+      "description": "minecraft-agent: Minecraft Java में Astra या Sol योजना बनाता है, Jev स्थिति से सीमित कार्रवाई चुनता है और Mineflayer चलाता है।",
+      "summary": "यह परियोजना Mineflayer से Minecraft Java 1.16.5 का खिलाड़ी चलाती है; अलग मॉडल योजना बनाता है और Jev खिलाड़ी की कार्रवाई चुनता है। मॉडल रिले और स्थानीय रनटाइम पथ सेट करें, निर्भरताएँ स्थापित करें, वैनिला सर्वर शुरू करें और दस्तावेज़ वाला nether-agent क्रम चलाएँ।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "परियोजना का काम",
+          "text": "यह परियोजना Mineflayer से Minecraft Java 1.16.5 का खिलाड़ी चलाती है; अलग मॉडल योजना बनाता है और Jev खिलाड़ी की कार्रवाई चुनता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "Astra या Sol लक्ष्य और रास्ते के बिंदु तय करता है; Jev संरचित गेम स्थिति से उपलब्ध कार्रवाई चुनता है और Mineflayer उसे लागू करता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "शुरुआत कैसे करें",
+          "text": "मॉडल रिले और स्थानीय रनटाइम पथ सेट करें, निर्भरताएँ स्थापित करें, वैनिला सर्वर शुरू करें और दस्तावेज़ वाला nether-agent क्रम चलाएँ।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "रास्ता ज्ञात सीड और दिए गए निर्देशांकों पर आधारित है, स्क्रीनशॉट नियंत्रण पर नहीं। रिकॉर्डिंग और रन के प्रमाण स्थानीय रहते हैं और Git में शामिल नहीं हैं।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "minecraft-agent — Astra merencanakan, Jev bertindak di Minecraft",
+      "h1": "minecraft-agent — Astra merencanakan, Jev bertindak di Minecraft",
+      "description": "minecraft-agent: Astra atau Sol merencanakan Minecraft Java; Jev memilih tindakan dari keadaan gim dan Mineflayer menjalankannya.",
+      "summary": "Proyek ini mengendalikan pemain Minecraft Java 1.16.5 melalui Mineflayer, dengan model perencana terpisah dan Jev sebagai pemilih tindakan. Atur relay model dan jalur runtime lokal, pasang dependensi, mulai server vanilla, lalu ikuti alur nether-agent dalam dokumentasi.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "Proyek ini mengendalikan pemain Minecraft Java 1.16.5 melalui Mineflayer, dengan model perencana terpisah dan Jev sebagai pemilih tindakan.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Astra atau Sol menentukan tujuan dan titik rute; Jev memilih tindakan dari pengamatan terstruktur, lalu Mineflayer menjalankan gerakan dan interaksi protokol.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara memulai",
+          "text": "Atur relay model dan jalur runtime lokal, pasang dependensi, mulai server vanilla, lalu ikuti alur nether-agent dalam dokumentasi.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Rute memakai seed yang diketahui dan koordinat yang diberikan, bukan kontrol lewat tangkapan layar. Rekaman dan bukti proses yang dihasilkan disimpan lokal dan tidak masuk Git.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "minecraft-agent — Astra lập kế hoạch, Jev hành động trong Minecraft",
+      "h1": "minecraft-agent — Astra lập kế hoạch, Jev hành động trong Minecraft",
+      "description": "minecraft-agent: Astra hoặc Sol lập kế hoạch Minecraft Java; Jev chọn hành động từ trạng thái game rồi Mineflayer thực hiện.",
+      "summary": "Dự án điều khiển người chơi Minecraft Java 1.16.5 qua Mineflayer, dùng mô hình riêng để lập kế hoạch và Jev để chọn hành động. Cấu hình bộ chuyển tiếp mô hình và đường dẫn cục bộ, cài phụ thuộc, khởi động máy chủ vanilla rồi chạy quy trình nether-agent trong tài liệu.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Công dụng",
+          "text": "Dự án điều khiển người chơi Minecraft Java 1.16.5 qua Mineflayer, dùng mô hình riêng để lập kế hoạch và Jev để chọn hành động.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Astra hoặc Sol đặt mục tiêu và điểm đến; Jev chọn hành động khả dụng từ quan sát có cấu trúc, còn Mineflayer thực hiện di chuyển và tương tác giao thức.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách bắt đầu",
+          "text": "Cấu hình bộ chuyển tiếp mô hình và đường dẫn cục bộ, cài phụ thuộc, khởi động máy chủ vanilla rồi chạy quy trình nether-agent trong tài liệu.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Lộ trình dùng seed đã biết và tọa độ được cung cấp, không điều khiển qua ảnh chụp màn hình. Video và bằng chứng chạy được giữ cục bộ, không đưa vào Git.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "minecraft-agent — Minecraft’ta Astra planlar, Jev hareketi seçer",
+      "h1": "minecraft-agent — Minecraft’ta Astra planlar, Jev hareketi seçer",
+      "description": "minecraft-agent: Minecraft Java’da Astra veya Sol planlar, Jev oyun durumundan sınırlı eylemler seçer ve Mineflayer yürütür.",
+      "summary": "Proje, Minecraft Java 1.16.5 oyuncusunu Mineflayer ile yönetir; ayrı model planlama yaparken Jev oyuncu eylemlerini seçer. Model aktarımını ve yerel çalışma yollarını yapılandırın, bağımlılıkları kurun, vanilla sunucuyu başlatıp belgelenen nether-agent akışını çalıştırın.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "Proje, Minecraft Java 1.16.5 oyuncusunu Mineflayer ile yönetir; ayrı model planlama yaparken Jev oyuncu eylemlerini seçer.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Astra veya Sol hedefleri ve yol noktalarını belirler; Jev yapılandırılmış gözlemlerden uygun eylemi seçer, Mineflayer hareketi ve protokol etkileşimlerini yürütür.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Başlangıç",
+          "text": "Model aktarımını ve yerel çalışma yollarını yapılandırın, bağımlılıkları kurun, vanilla sunucuyu başlatıp belgelenen nether-agent akışını çalıştırın.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Rota, ekran görüntüsü kontrolü yerine bilinen seed ve verilen koordinatları kullanır. Kayıtlar ve oluşturulan çalışma kanıtları yerelde tutulur, Git’e dahil edilmez.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "minecraft-agent — Astra pianifica e Jev agisce in Minecraft",
+      "h1": "minecraft-agent — Astra pianifica e Jev agisce in Minecraft",
+      "description": "minecraft-agent: Astra o Sol pianifica in Minecraft Java; Jev sceglie azioni circoscritte dallo stato e Mineflayer le esegue.",
+      "summary": "Il progetto controlla un giocatore di Minecraft Java 1.16.5 tramite Mineflayer, separando il modello di pianificazione dalla scelta delle azioni con Jev. Configura il relay dei modelli e i percorsi locali, installa le dipendenze, avvia il server vanilla e segui il flusso nether-agent documentato.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "Il progetto controlla un giocatore di Minecraft Java 1.16.5 tramite Mineflayer, separando il modello di pianificazione dalla scelta delle azioni con Jev.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Astra o Sol imposta obiettivi e punti di passaggio; Jev sceglie un’azione disponibile dalle osservazioni strutturate e Mineflayer esegue movimenti e interazioni.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come iniziare",
+          "text": "Configura il relay dei modelli e i percorsi locali, installa le dipendenze, avvia il server vanilla e segui il flusso nether-agent documentato.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "Il percorso usa un seed noto e coordinate fornite, senza controllo tramite screenshot. Registrazioni e prove generate restano locali e sono escluse da Git.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

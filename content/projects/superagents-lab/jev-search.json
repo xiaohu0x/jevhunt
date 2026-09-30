@@ -1,0 +1,756 @@
+{
+  "version": "source-content-v1",
+  "repo": "superagents-lab/jev-search",
+  "repositoryId": 1374858514,
+  "relationship": "jev-app",
+  "category": "apps",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "67027d0185a9b22eb2a178f0eb15250d12ddabe6",
+      "url": "https://github.com/superagents-lab/jev-search/blob/67027d0185a9b22eb2a178f0eb15250d12ddabe6/README.md",
+      "sha256": "8bd1abc5cd46b888b5ac61d77fc5e67551e5a23de5c952a1e0b96244a5dd6f13",
+      "accessedAt": "2026-09-30T07:33:50.728Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "Jev Search turns plain-language requests into web links and snippets with editable filters and visible relevance scores.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 5,
+          "end": 11,
+          "quote": "Search the web in plain language. [TypeSafe's Jev](https://typesafe.ai) chooses sources, time ranges and search terms, then ranks the results returned through [Search1API](https://www.search1api.com). You get links and snippets, with visible relevance scores and editable filters. No generated answers.\n\n**[Try Jev Search](https://jev.s1.dev)**\n\nInstall it from the browser as an app (Add to Home Screen on iOS, Install app on Chrome and Edge). Searches still need a network connection; the installed app caches only an offline page, not results.\n\nBuilt by Search1API. This is an independent project, not an official TypeSafe product."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "Jev selects query terms, sources and time ranges, then judges results retrieved by Search1API; it does not generate an answer.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 15,
+          "end": 17,
+          "quote": "1. **Understand.** Jev answers typed questions about your request. The application uses those judgments to choose a query, sources and a time range. You can override the source and time chips.\n2. **Search.** Google, DuckDuckGo and Yandex search the open web. Hacker News, Reddit and GitHub each combine a Google site-restricted search with their dedicated engine (Hacker News uses the news endpoint). X, arXiv, YouTube, Wikipedia, IMDb and WeChat use vertical engines. Calls run concurrently; one failed engine does not discard another engine's results.\n3. **Rank.** Jev scores each result for relevance. Results are merged by URL, ordered by relevance, engine agreement and original rank, and streamed as each lane finishes. Lower-scoring results are grouped separately. A failed source shows a warning rather than a zero-result count."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "For local use, configure Search1API and a Jev provider in .dev.vars, install dependencies with pnpm, and run pnpm dev.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 27,
+          "end": 41,
+          "quote": "## Local development\n\nRequires Node.js 22.12+ and pnpm 10.8.0. Obtain an API key from [Search1API](https://www.search1api.com) and credentials for at least one Jev provider: [TypeSafe](https://typesafe.ai), [Cloudflare Workers AI](https://developers.cloudflare.com/ai/models/typesafe/jev/) or [Vercel AI Gateway](https://vercel.com/ai-gateway/models/jev); see [Jev providers](#jev-providers).\n\n```bash\ngit clone https://github.com/superagents-lab/jev-search.git\ncd jev-search\ncorepack enable\npnpm install --frozen-lockfile\ncp .dev.vars.example .dev.vars\n# Set SEARCH1API_API_KEY and at least one Jev provider key in .dev.vars.\npnpm dev\n```\n\nOpen http://localhost:3030. Local development uses local KV and rate-limit bindings; the Workers AI binding is remote and uses your `wrangler login` session. Keep `.dev.vars` private; it is ignored by Git. `.env.example` is provided as a variable reference, but `.dev.vars` is the documented local configuration."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "Requests and result snippets reach external providers. Installing the web app does not enable offline search; only an offline page is cached.",
+      "kind": "source-limitation",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 9,
+          "end": 9,
+          "quote": "Install it from the browser as an app (Add to Home Screen on iOS, Install app on Chrome and Edge). Searches still need a network connection; the installed app caches only an offline page, not results."
+        },
+        {
+          "source": "source-1",
+          "start": 129,
+          "end": 135,
+          "quote": "- Search requests go to Search1API and to the Jev provider that answers them: TypeSafe directly, or Cloudflare Workers AI or Vercel AI Gateway, which forward to TypeSafe. The Jev provider also receives result titles and snippets for relevance scoring. Search1API queries the selected engines.\n- Cloudflare KV stores query-derived cache keys and result snippets for the configured TTL. Removing `CACHE` disables this cache.\n- The application does not record search text, inferred queries or result clicks in its own analytics.\n- The hosted demo loads a [Cloudflare Web Analytics](https://developers.cloudflare.com/web-analytics/) beacon for page views, visits, referrers, country, browser and page-load metrics. It does not use cookies and does not record URL query strings, so search terms in `/search?q=` are not stored there. Self-hosters can remove the snippet in `src/routes/__root.tsx`.\n- The rate limiter uses the client IP. Cloudflare Workers request logging is enabled separately in the configuration; invocation logs include request URLs, which may contain the search query.\n- The page loads a font from Google Fonts. Result links lead to third-party sites.\n- Production builds register a service worker so the app can be installed. It intercepts only top-level navigations when the network fails, and never `/api/ask`. Local `pnpm dev` does not register it, so Vite's module reload keeps working."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "jev-search — Web links ranked by Jev judgments",
+      "h1": "jev-search — Web links ranked by Jev judgments",
+      "description": "jev-search: Jev selects query terms, sources and time ranges, then judges results retrieved by Search1API; it does not generate an answer.",
+      "summary": "Jev Search turns plain-language requests into web links and snippets with editable filters and visible relevance scores. For local use, configure Search1API and a Jev provider in .dev.vars, install dependencies with pnpm, and run pnpm dev.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "What it does",
+          "text": "Jev Search turns plain-language requests into web links and snippets with editable filters and visible relevance scores.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "Jev selects query terms, sources and time ranges, then judges results retrieved by Search1API; it does not generate an answer.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Getting started",
+          "text": "For local use, configure Search1API and a Jev provider in .dev.vars, install dependencies with pnpm, and run pnpm dev.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "Requests and result snippets reach external providers. Installing the web app does not enable offline search; only an offline page is cached.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "jev-search — 由 Jev 判断相关性的网页搜索",
+      "h1": "jev-search — 由 Jev 判断相关性的网页搜索",
+      "description": "jev-search: Jev 选择查询词、来源和时间范围，再判断 Search1API 返回的结果，不生成回答。",
+      "summary": "Jev Search 将自然语言请求转成网页链接和摘要，提供可编辑筛选与可见的相关性分数。 本地使用时，在 .dev.vars 配置 Search1API 与 Jev 服务商，用 pnpm 安装依赖后运行 pnpm dev。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "Jev Search 将自然语言请求转成网页链接和摘要，提供可编辑筛选与可见的相关性分数。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "Jev 选择查询词、来源和时间范围，再判断 Search1API 返回的结果，不生成回答。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "本地使用时，在 .dev.vars 配置 Search1API 与 Jev 服务商，用 pnpm 安装依赖后运行 pnpm dev。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "请求和结果摘要会发送给外部服务商。安装网页应用不会启用离线搜索，仅缓存离线提示页。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "jev-search — 由 Jev 判斷相關性的網頁搜尋",
+      "h1": "jev-search — 由 Jev 判斷相關性的網頁搜尋",
+      "description": "jev-search: Jev 選擇查詢詞、來源及時間範圍，再判斷 Search1API 傳回的結果，不生成回答。",
+      "summary": "Jev Search 將自然語言請求轉成網頁連結與摘要，提供可編輯篩選和可見的相關性分數。 本機使用時，在 .dev.vars 設定 Search1API 與 Jev 服務商，用 pnpm 安裝相依套件後執行 pnpm dev。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "Jev Search 將自然語言請求轉成網頁連結與摘要，提供可編輯篩選和可見的相關性分數。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "Jev 選擇查詢詞、來源及時間範圍，再判斷 Search1API 傳回的結果，不生成回答。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "本機使用時，在 .dev.vars 設定 Search1API 與 Jev 服務商，用 pnpm 安裝相依套件後執行 pnpm dev。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "請求及結果摘要會送至外部服務商。安裝網頁應用不會啟用離線搜尋，僅快取離線提示頁。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "jev-search — Jev の関連性判断で並べるウェブ検索",
+      "h1": "jev-search — Jev の関連性判断で並べるウェブ検索",
+      "description": "jev-search: Jev が検索語、検索先、期間を選び、Search1API の結果を評価します。回答文は生成しません。",
+      "summary": "Jev Search は自然言語の依頼からリンクと抜粋を返し、変更可能な絞り込み条件と関連性スコアを表示します。 ローカルでは .dev.vars に Search1API と Jev の接続情報を設定し、pnpm で依存関係を入れて pnpm dev を実行します。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "できること",
+          "text": "Jev Search は自然言語の依頼からリンクと抜粋を返し、変更可能な絞り込み条件と関連性スコアを表示します。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "Jev が検索語、検索先、期間を選び、Search1API の結果を評価します。回答文は生成しません。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い始めるには",
+          "text": "ローカルでは .dev.vars に Search1API と Jev の接続情報を設定し、pnpm で依存関係を入れて pnpm dev を実行します。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "対象範囲と制約",
+          "text": "依頼や検索結果の抜粋は外部サービスに渡ります。アプリをインストールしてもオフライン検索はできず、保存するのはオフライン案内ページだけです。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "jev-search — Jev가 순위를 매기는 웹 검색",
+      "h1": "jev-search — Jev 관련성 판단으로 정렬하는 웹 검색",
+      "description": "jev-search: Jev가 검색어, 출처, 기간을 선택하고 Search1API 결과를 평가합니다. 답변 문장을 생성하지 않습니다.",
+      "summary": "Jev Search는 자연어 요청을 웹 링크와 발췌문으로 바꾸고 수정 가능한 필터와 관련성 점수를 보여줍니다. 로컬에서는 .dev.vars에 Search1API와 Jev 제공자를 설정하고 pnpm으로 의존성을 설치한 뒤 pnpm dev를 실행합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "Jev Search는 자연어 요청을 웹 링크와 발췌문으로 바꾸고 수정 가능한 필터와 관련성 점수를 보여줍니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Jev가 검색어, 출처, 기간을 선택하고 Search1API 결과를 평가합니다. 답변 문장을 생성하지 않습니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "로컬에서는 .dev.vars에 Search1API와 Jev 제공자를 설정하고 pnpm으로 의존성을 설치한 뒤 pnpm dev를 실행합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 제약",
+          "text": "요청과 결과 발췌문이 외부 제공자에게 전달됩니다. 앱을 설치해도 오프라인 검색은 되지 않으며 오프라인 안내 페이지만 저장합니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "jev-search — Búsqueda web ordenada por Jev",
+      "h1": "jev-search — Búsqueda web ordenada por juicios de Jev",
+      "description": "jev-search: Jev elige términos, fuentes y fechas, y evalúa los resultados de Search1API; no genera una respuesta.",
+      "summary": "Jev Search convierte peticiones en lenguaje natural en enlaces y fragmentos, con filtros editables y puntuaciones de relevancia visibles. Para uso local, configura Search1API y un proveedor Jev en .dev.vars, instala con pnpm y ejecuta pnpm dev.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "Jev Search convierte peticiones en lenguaje natural en enlaces y fragmentos, con filtros editables y puntuaciones de relevancia visibles.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Jev elige términos, fuentes y fechas, y evalúa los resultados de Search1API; no genera una respuesta.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo empezar",
+          "text": "Para uso local, configura Search1API y un proveedor Jev en .dev.vars, instala con pnpm y ejecuta pnpm dev.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "Las peticiones y los fragmentos llegan a proveedores externos. Instalar la aplicación no permite buscar sin conexión: solo se guarda una página de aviso.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "jev-search — Recherche web classée par Jev",
+      "h1": "jev-search — Recherche web classée par les jugements de Jev",
+      "description": "jev-search: Jev choisit termes, sources et période, puis évalue les résultats de Search1API ; il ne rédige pas de réponse.",
+      "summary": "Jev Search transforme une demande en langage naturel en liens et extraits, avec filtres modifiables et scores de pertinence visibles. En local, configurez Search1API et un fournisseur Jev dans .dev.vars, installez avec pnpm puis lancez pnpm dev.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "Jev Search transforme une demande en langage naturel en liens et extraits, avec filtres modifiables et scores de pertinence visibles.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Jev choisit termes, sources et période, puis évalue les résultats de Search1API ; il ne rédige pas de réponse.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "En local, configurez Search1API et un fournisseur Jev dans .dev.vars, installez avec pnpm puis lancez pnpm dev.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "Demandes et extraits sont transmis à des fournisseurs externes. Installer l’application ne permet pas la recherche hors ligne : seule une page d’avertissement est conservée.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "jev-search — Websuche mit Jev-Ranking",
+      "h1": "jev-search — Websuche mit Relevanzurteilen von Jev",
+      "description": "jev-search: Jev wählt Suchbegriffe, Quellen und Zeitraum und bewertet Ergebnisse von Search1API; es erzeugt keinen Antworttext.",
+      "summary": "Jev Search macht aus natürlichsprachlichen Anfragen Links und Auszüge mit bearbeitbaren Filtern und sichtbaren Relevanzwerten. Lokal Search1API und einen Jev-Anbieter in .dev.vars konfigurieren, mit pnpm installieren und pnpm dev ausführen.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "Jev Search macht aus natürlichsprachlichen Anfragen Links und Auszüge mit bearbeitbaren Filtern und sichtbaren Relevanzwerten.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Jev wählt Suchbegriffe, Quellen und Zeitraum und bewertet Ergebnisse von Search1API; es erzeugt keinen Antworttext.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Einstieg",
+          "text": "Lokal Search1API und einen Jev-Anbieter in .dev.vars konfigurieren, mit pnpm installieren und pnpm dev ausführen.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Anfragen und Ergebnisauszüge gehen an externe Anbieter. Die installierte Web-App ermöglicht keine Offline-Suche; nur eine Hinweisseite wird gespeichert.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "jev-search — Busca web ordenada pelo Jev",
+      "h1": "jev-search — Busca web ordenada pelas avaliações do Jev",
+      "description": "jev-search: O Jev escolhe termos, fontes e período, depois avalia resultados do Search1API; não gera uma resposta.",
+      "summary": "O Jev Search transforma pedidos em linguagem natural em links e trechos, com filtros editáveis e notas de relevância visíveis. Para uso local, configure Search1API e um provedor Jev em .dev.vars, instale com pnpm e execute pnpm dev.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "O Jev Search transforma pedidos em linguagem natural em links e trechos, com filtros editáveis e notas de relevância visíveis.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "O Jev escolhe termos, fontes e período, depois avalia resultados do Search1API; não gera uma resposta.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como começar",
+          "text": "Para uso local, configure Search1API e um provedor Jev em .dev.vars, instale com pnpm e execute pnpm dev.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "Pedidos e trechos são enviados a provedores externos. Instalar o aplicativo não permite buscas offline: apenas uma página de aviso fica em cache.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "jev-search — Веб-поиск с ранжированием Jev",
+      "h1": "jev-search — Веб-поиск с оценкой релевантности Jev",
+      "description": "jev-search: Jev выбирает запрос, источники и период, затем оценивает результаты Search1API; текстовый ответ не генерируется.",
+      "summary": "Jev Search превращает запросы на обычном языке в ссылки и выдержки с изменяемыми фильтрами и видимыми оценками релевантности. Для локального запуска настройте Search1API и провайдера Jev в .dev.vars, установите зависимости через pnpm и запустите pnpm dev.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Jev Search превращает запросы на обычном языке в ссылки и выдержки с изменяемыми фильтрами и видимыми оценками релевантности.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Jev выбирает запрос, источники и период, затем оценивает результаты Search1API; текстовый ответ не генерируется.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Начало работы",
+          "text": "Для локального запуска настройте Search1API и провайдера Jev в .dev.vars, установите зависимости через pnpm и запустите pnpm dev.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Запросы и выдержки передаются внешним провайдерам. Установка приложения не даёт офлайн-поиска: сохраняется лишь страница уведомления.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "jev-search — Jev के प्रासंगिकता निर्णयों से वेब खोज",
+      "h1": "jev-search — Jev के प्रासंगिकता निर्णयों से वेब खोज",
+      "description": "jev-search: Jev खोज शब्द, स्रोत और अवधि चुनकर Search1API के नतीजे जाँचता है; उत्तर का पाठ नहीं बनाता।",
+      "summary": "Jev Search सामान्य भाषा के अनुरोधों से लिंक और अंश दिखाता है, साथ में बदलने योग्य फ़िल्टर और प्रासंगिकता अंक देता है। स्थानीय उपयोग के लिए .dev.vars में Search1API और Jev प्रदाता सेट करें, pnpm से स्थापित करें और pnpm dev चलाएँ।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "परियोजना का काम",
+          "text": "Jev Search सामान्य भाषा के अनुरोधों से लिंक और अंश दिखाता है, साथ में बदलने योग्य फ़िल्टर और प्रासंगिकता अंक देता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "Jev खोज शब्द, स्रोत और अवधि चुनकर Search1API के नतीजे जाँचता है; उत्तर का पाठ नहीं बनाता।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "शुरुआत कैसे करें",
+          "text": "स्थानीय उपयोग के लिए .dev.vars में Search1API और Jev प्रदाता सेट करें, pnpm से स्थापित करें और pnpm dev चलाएँ।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "अनुरोध और परिणाम के अंश बाहरी प्रदाताओं को जाते हैं। ऐप स्थापित करने से ऑफलाइन खोज नहीं मिलती; केवल ऑफलाइन सूचना पृष्ठ सहेजा जाता है।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "jev-search — Pencarian web diurutkan Jev",
+      "h1": "jev-search — Pencarian web yang diurutkan oleh Jev",
+      "description": "jev-search: Jev memilih istilah, sumber, dan rentang waktu, lalu menilai hasil Search1API; tidak ada jawaban yang dihasilkan.",
+      "summary": "Jev Search mengubah permintaan bahasa sehari-hari menjadi tautan dan cuplikan, dengan filter yang dapat diubah serta skor relevansi. Untuk penggunaan lokal, atur Search1API dan penyedia Jev di .dev.vars, pasang dependensi dengan pnpm, lalu jalankan pnpm dev.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "Jev Search mengubah permintaan bahasa sehari-hari menjadi tautan dan cuplikan, dengan filter yang dapat diubah serta skor relevansi.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Jev memilih istilah, sumber, dan rentang waktu, lalu menilai hasil Search1API; tidak ada jawaban yang dihasilkan.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara memulai",
+          "text": "Untuk penggunaan lokal, atur Search1API dan penyedia Jev di .dev.vars, pasang dependensi dengan pnpm, lalu jalankan pnpm dev.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Permintaan dan cuplikan hasil dikirim ke penyedia luar. Memasang aplikasi tidak mengaktifkan pencarian luring; hanya halaman pemberitahuan yang disimpan.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "jev-search — Tìm kiếm web xếp hạng bằng Jev",
+      "h1": "jev-search — Tìm kiếm web được Jev xếp theo độ liên quan",
+      "description": "jev-search: Jev chọn từ khóa, nguồn và khoảng thời gian rồi đánh giá kết quả Search1API; không sinh câu trả lời.",
+      "summary": "Jev Search biến yêu cầu ngôn ngữ tự nhiên thành liên kết và đoạn trích, với bộ lọc chỉnh sửa được và điểm liên quan hiển thị rõ. Để chạy cục bộ, cấu hình Search1API và nhà cung cấp Jev trong .dev.vars, cài bằng pnpm rồi chạy pnpm dev.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Công dụng",
+          "text": "Jev Search biến yêu cầu ngôn ngữ tự nhiên thành liên kết và đoạn trích, với bộ lọc chỉnh sửa được và điểm liên quan hiển thị rõ.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Jev chọn từ khóa, nguồn và khoảng thời gian rồi đánh giá kết quả Search1API; không sinh câu trả lời.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách bắt đầu",
+          "text": "Để chạy cục bộ, cấu hình Search1API và nhà cung cấp Jev trong .dev.vars, cài bằng pnpm rồi chạy pnpm dev.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Yêu cầu và đoạn trích được gửi tới nhà cung cấp bên ngoài. Cài ứng dụng không cho phép tìm kiếm ngoại tuyến; chỉ trang thông báo được lưu đệm.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "jev-search — Jev sıralamalı web araması",
+      "h1": "jev-search — Jev değerlendirmeleriyle sıralanan web araması",
+      "description": "jev-search: Jev terimleri, kaynakları ve zaman aralığını seçer, ardından Search1API sonuçlarını değerlendirir; yanıt metni üretmez.",
+      "summary": "Jev Search doğal dildeki istekleri düzenlenebilir filtreler ve görünür alaka puanlarıyla bağlantılara ve alıntılara dönüştürür. Yerel kullanım için .dev.vars içinde Search1API ve Jev sağlayıcısını ayarlayın, pnpm ile kurup pnpm dev çalıştırın.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "Jev Search doğal dildeki istekleri düzenlenebilir filtreler ve görünür alaka puanlarıyla bağlantılara ve alıntılara dönüştürür.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Jev terimleri, kaynakları ve zaman aralığını seçer, ardından Search1API sonuçlarını değerlendirir; yanıt metni üretmez.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Başlangıç",
+          "text": "Yerel kullanım için .dev.vars içinde Search1API ve Jev sağlayıcısını ayarlayın, pnpm ile kurup pnpm dev çalıştırın.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "İstekler ve sonuç alıntıları dış sağlayıcılara gönderilir. Uygulamayı yüklemek çevrimdışı arama sağlamaz; yalnızca çevrimdışı uyarı sayfası saklanır.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "jev-search — Ricerca web ordinata da Jev",
+      "h1": "jev-search — Ricerca web ordinata dai giudizi di Jev",
+      "description": "jev-search: Jev sceglie termini, fonti e periodo, poi valuta i risultati di Search1API; non genera una risposta.",
+      "summary": "Jev Search trasforma richieste in linguaggio naturale in link ed estratti, con filtri modificabili e punteggi di pertinenza visibili. In locale, configura Search1API e un fornitore Jev in .dev.vars, installa con pnpm ed esegui pnpm dev.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "Jev Search trasforma richieste in linguaggio naturale in link ed estratti, con filtri modificabili e punteggi di pertinenza visibili.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Jev sceglie termini, fonti e periodo, poi valuta i risultati di Search1API; non genera una risposta.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come iniziare",
+          "text": "In locale, configura Search1API e un fornitore Jev in .dev.vars, installa con pnpm ed esegui pnpm dev.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "Richieste ed estratti arrivano a fornitori esterni. Installare l’app non abilita ricerche offline: viene salvata solo una pagina di avviso.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

@@ -3,16 +3,19 @@ import test from "node:test";
 import { readFileSync } from "node:fs";
 import { JSDOM } from "jsdom";
 import * as stateHelpers from "../public/assets/js/catalog-state.js";
+import * as localeHelpers from "../public/assets/js/catalog-locales.js";
 import { renderProjectCard } from "../public/assets/js/project-card.js";
 import { readCatalogQuery } from "../shared/catalog-query.js";
+import { loadProjectContents } from "./lib/project-content.mjs";
+import { buildStaticCatalog, buildSummaryOverlay, summaryOverlayScript } from "./lib/static-catalog.mjs";
 
 const read = file => readFileSync(`public/${file}`, "utf8");
-async function boot(t, { storageBlocked = false, live = false, locale = "en", query = "", catalogHandler, pagedSeed = false, fastTimeout = false, mobile = false, theme } = {}) {
+async function boot(t, { storageBlocked = false, live = false, locale = "en", query = "", catalogHandler, pagedSeed = false, fastTimeout = false, mobile = false, theme, staticBuild, summaryOverlay } = {}) {
   const path = locale === "en" ? "/" : `/${locale}/`;
   const dom = new JSDOM(read(path.slice(1) + "index.html"), { url: "https://jevhunt.com" + path + query, runScripts: "outside-only", pretendToBeVisual: true });
   t.after(() => dom.window.close());
   const { window } = dom;
-  Object.assign(window, stateHelpers, { renderProjectCard });
+  Object.assign(window, stateHelpers, localeHelpers, { renderProjectCard });
   const mediaListeners = [];
   const mobileMedia = { matches: mobile, addEventListener: (_event, listener) => mediaListeners.push(listener) };
   window.matchMedia = query => query === "(max-width: 760px)" ? mobileMedia : { matches: true };
@@ -49,8 +52,10 @@ async function boot(t, { storageBlocked = false, live = false, locale = "en", qu
   if (theme) window.localStorage.setItem("jh-theme", theme);
   if (storageBlocked) Object.defineProperty(window, "localStorage", { get() { throw new Error("Storage blocked"); } });
   let catalogLoads = 0;
-  window.__loadCatalog = async () => { catalogLoads++; window.eval(read("assets/js/catalog-all.js")); };
-  for (const file of [`locales/${locale}`, "data", "projects"]) window.eval(read(`assets/js/${file}.js`));
+  window.__loadCatalog = async () => { catalogLoads++; window.eval(staticBuild?.fullScript || read("assets/js/catalog-all.js")); };
+  for (const file of [`locales/${locale}`, "data"]) window.eval(read(`assets/js/${file}.js`));
+  window.eval(staticBuild?.initialScript || read("assets/js/projects.js"));
+  if (summaryOverlay) window.eval(summaryOverlayScript(summaryOverlay));
   if (live) {
     const seed = pagedSeed ? await catalogResponse(path + query).json() : { meta: { ...window.JH.catalogMeta, mode: "live-d1" }, apps: window.JH.apps };
     if (pagedSeed) {
@@ -59,12 +64,55 @@ async function boot(t, { storageBlocked = false, live = false, locale = "en", qu
     window.document.getElementById("liveCatalogSeed").textContent = JSON.stringify(seed);
   }
   const script = read("assets/js/main.js").replace(/^import[^\n]+\n/gm, "")
-    .replace('import("./catalog-all.js?v=" + encodeURIComponent(window.JH.catalogMeta.catalogHash))', "window.__loadCatalog()");
+    .replace("import(staticCatalogIndexUrl(window.JH.catalogMeta))", "window.__loadCatalog()");
   window.eval(script);
   if (window.document.readyState === "loading") await new Promise(resolve => window.document.addEventListener("DOMContentLoaded", resolve, { once: true }));
   await new Promise(resolve => setImmediate(resolve));
   return { window, document: window.document, loads: () => catalogLoads, requests, scrolls, resize };
 }
+
+test("Chinese static cards and full-index search retain the reviewed summaries after hydration", async t => {
+  const catalog = JSON.parse(read("catalog.json"));
+  const records = loadProjectContents();
+  const staticBuild = buildStaticCatalog(catalog, records);
+  const summaryOverlay = buildSummaryOverlay(catalog.apps, records, "zh-cn");
+  const { document, window, loads } = await boot(t, { locale: "zh-cn", staticBuild, summaryOverlay });
+  const first = staticBuild.initial[0];
+  const firstCopy = records.get(first.repo.toLowerCase()).locales["zh-cn"].summary;
+  assert.equal(document.querySelector("#appGrid .card__desc").textContent, firstCopy);
+  assert.equal(loads(), 0);
+
+  const repo = "realzachi/pg-jev";
+  assert.ok(!staticBuild.initial.some(project => project.repo.toLowerCase() === repo));
+  const input = document.getElementById("dirSearch");
+  input.value = "自然语言 SQL 条件";
+  input.dispatchEvent(new window.Event("input", { bubbles: true }));
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(loads(), 1);
+  const card = document.querySelector(`#appGrid .card__name[href="/zh-cn/projects/${repo}/"]`)?.closest(".card");
+  assert.ok(card, "Chinese terms in a reviewed summary must find a project outside the initial page");
+  assert.equal(card.querySelector(".card__desc").textContent, records.get(repo).locales["zh-cn"].summary);
+  assert.equal(window.JH.catalogRemote, undefined);
+});
+
+test("static locale overlays and late static imports never replace live catalog descriptions", async t => {
+  const catalog = JSON.parse(read("catalog.json"));
+  const records = loadProjectContents();
+  const staticBuild = buildStaticCatalog(catalog, records);
+  const summaryOverlay = buildSummaryOverlay(catalog.apps, records, "zh-cn");
+  const { document, window } = await boot(t, { live: true, locale: "zh-cn", staticBuild, summaryOverlay });
+  const initialLiveApps = window.JH.apps;
+  const first = initialLiveApps[0];
+  assert.notEqual(first.desc, records.get(first.repo.toLowerCase()).locales["zh-cn"].summary);
+  assert.equal(document.querySelector("#appGrid .card__desc").textContent, first.desc);
+  await window.__loadCatalog();
+  assert.equal(window.JH.apps, initialLiveApps, "An in-flight fallback import must not overwrite a live seed");
+  document.querySelector('#directoryPagesBottom a[rel="next"]').click();
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(window.JH.catalogRemote, true);
+  const current = window.JH.apps[0];
+  assert.equal(document.querySelector("#appGrid .card__desc").textContent, current.desc, "API descriptions must remain authoritative");
+});
 
 test("directory initializes with blocked browser storage and only the first page", async t => {
   const { document, window, loads } = await boot(t, { storageBlocked: true });

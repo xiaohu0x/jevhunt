@@ -1,0 +1,775 @@
+{
+  "version": "source-content-v1",
+  "repo": "itsmostafa/system-one-connector",
+  "repositoryId": 1373977947,
+  "relationship": "integration",
+  "category": "agents",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "2124fe6aa247090b89e024261bbf9a69103bb1a4",
+      "url": "https://github.com/itsmostafa/system-one-connector/blob/2124fe6aa247090b89e024261bbf9a69103bb1a4/README.md",
+      "sha256": "d44758a46f5a03700f983ed77b4f63e1b8cceffa4fa31aec5f6c4de37167d1a0",
+      "accessedAt": "2026-09-30T07:33:51.632Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "kind": "documented",
+      "text": "System One Connector exposes typed decisions to coding agents through its evaluate command and MCP integration.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 10,
+          "end": 14,
+          "quote": "**Give your AI agent direct access to models like Jev, CLM, and Laya: quick decisions with real probabilities.**\n\n`evaluate` connects Claude Code, Claude Desktop, Codex, Hermes and [pi](https://pi.dev) to [TypeSafe](https://typesafe.ai)'s Jev model. Your agent asks a question like \"is this urgent?\" or \"which team owns this?\" and gets back a number or an option it can use in an `if` statement.\n\nNot tied to one provider: the same connector also runs open System One models you host yourself, such as [CLM](https://huggingface.co/Contrastive-LM/CLM-v0.1-8B) and Laya. See [running CLM locally](docs/configuration.md#running-clm-locally)."
+        },
+        {
+          "source": "source-1",
+          "start": 37,
+          "end": 43,
+          "quote": "**2. Connect your agents** ([get a key](https://console.typesafe.ai/)):\n\n```sh\nTYPESAFE_API_KEY=your-key evaluate setup mcp\n```\n\nThis finds Claude Code, Claude Desktop, Codex and Hermes and registers `evaluate` with each one. If you already have an [OpenRouter](https://openrouter.ai/~typesafe/jev-latest) account, set `OPENROUTER_API_KEY` instead. To run an open model such as Laya locally, point `TYPESAFE_BASE_URL` at your server and keep `TYPESAFE_API_KEY` set, since it selects that route; any non-empty value works if your server doesn't check keys, e.g. `TYPESAFE_API_KEY=local TYPESAFE_BASE_URL=http://127.0.0.1:8787 evaluate setup mcp` (see [custom hosts](docs/configuration.md#custom-typesafe-host)). [CLM-v0.1-8B](https://huggingface.co/Contrastive-LM/CLM-v0.1-8B) works the same way; add `TYPESAFE_MODEL=clm-latest` (see [running CLM](docs/configuration.md#running-clm-locally)). For pi, run `evaluate setup pi`."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "kind": "documented",
+      "text": "It connects to Jev or compatible self-hosted models such as CLM and Laya.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 12,
+          "end": 14,
+          "quote": "`evaluate` connects Claude Code, Claude Desktop, Codex, Hermes and [pi](https://pi.dev) to [TypeSafe](https://typesafe.ai)'s Jev model. Your agent asks a question like \"is this urgent?\" or \"which team owns this?\" and gets back a number or an option it can use in an `if` statement.\n\nNot tied to one provider: the same connector also runs open System One models you host yourself, such as [CLM](https://huggingface.co/Contrastive-LM/CLM-v0.1-8B) and Laya. See [running CLM locally](docs/configuration.md#running-clm-locally)."
+        },
+        {
+          "source": "source-1",
+          "start": 76,
+          "end": 80,
+          "quote": "- **Answers your agent can branch on.** Three question types cover most judgment calls: yes or no (`noul`), pick one option (`choice`), and rate on a scale (`score`). Each answer comes with probabilities.\n- **Confidence you can act on.** A 0.95 and a 0.55 lead to different actions. Your agent can proceed on confident answers and escalate unsure ones to you.\n- **Fast enough to call often.** Jev typically answers in under half a second.\n- **Many questions in one call.** Ask about urgency, ownership and sentiment together, and they run in parallel.\n- **Whole datasets in one call.** Pass up to 500 records as `items` and ask the same questions of each one. If one record fails, the rest still complete."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "kind": "documented",
+      "text": "Define Choice, Noul or Score questions; agent setup and batch evaluation are provided.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 37,
+          "end": 47,
+          "quote": "**2. Connect your agents** ([get a key](https://console.typesafe.ai/)):\n\n```sh\nTYPESAFE_API_KEY=your-key evaluate setup mcp\n```\n\nThis finds Claude Code, Claude Desktop, Codex and Hermes and registers `evaluate` with each one. If you already have an [OpenRouter](https://openrouter.ai/~typesafe/jev-latest) account, set `OPENROUTER_API_KEY` instead. To run an open model such as Laya locally, point `TYPESAFE_BASE_URL` at your server and keep `TYPESAFE_API_KEY` set, since it selects that route; any non-empty value works if your server doesn't check keys, e.g. `TYPESAFE_API_KEY=local TYPESAFE_BASE_URL=http://127.0.0.1:8787 evaluate setup mcp` (see [custom hosts](docs/configuration.md#custom-typesafe-host)). [CLM-v0.1-8B](https://huggingface.co/Contrastive-LM/CLM-v0.1-8B) works the same way; add `TYPESAFE_MODEL=clm-latest` (see [running CLM](docs/configuration.md#running-clm-locally)). For pi, run `evaluate setup pi`.\n\n**3. Ask a question:**\n\n> \"Use evaluate to decide whether this ticket is urgent and which team should own it: *Help! My payouts have been failing for 3 days.*\""
+        },
+        {
+          "source": "source-1",
+          "start": 76,
+          "end": 82,
+          "quote": "- **Answers your agent can branch on.** Three question types cover most judgment calls: yes or no (`noul`), pick one option (`choice`), and rate on a scale (`score`). Each answer comes with probabilities.\n- **Confidence you can act on.** A 0.95 and a 0.55 lead to different actions. Your agent can proceed on confident answers and escalate unsure ones to you.\n- **Fast enough to call often.** Jev typically answers in under half a second.\n- **Many questions in one call.** Ask about urgency, ownership and sentiment together, and they run in parallel.\n- **Whole datasets in one call.** Pass up to 500 records as `items` and ask the same questions of each one. If one record fails, the rest still complete.\n- **Agents that use it well without extra prompting.** The server tells your agent how to write good questions (narrow judgments, structured state, evidence rather than conclusions).\n- **Setup in one command.** `evaluate setup mcp` configures every supported client it finds. Run it again to update."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "kind": "documented",
+      "text": "Local models require your own compatible server; the documented installer targets macOS and Linux.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 31,
+          "end": 31,
+          "quote": "**1. Install** (macOS and Linux):"
+        },
+        {
+          "source": "source-1",
+          "start": 43,
+          "end": 43,
+          "quote": "This finds Claude Code, Claude Desktop, Codex and Hermes and registers `evaluate` with each one. If you already have an [OpenRouter](https://openrouter.ai/~typesafe/jev-latest) account, set `OPENROUTER_API_KEY` instead. To run an open model such as Laya locally, point `TYPESAFE_BASE_URL` at your server and keep `TYPESAFE_API_KEY` set, since it selects that route; any non-empty value works if your server doesn't check keys, e.g. `TYPESAFE_API_KEY=local TYPESAFE_BASE_URL=http://127.0.0.1:8787 evaluate setup mcp` (see [custom hosts](docs/configuration.md#custom-typesafe-host)). [CLM-v0.1-8B](https://huggingface.co/Contrastive-LM/CLM-v0.1-8B) works the same way; add `TYPESAFE_MODEL=clm-latest` (see [running CLM](docs/configuration.md#running-clm-locally)). For pi, run `evaluate setup pi`."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "System One Connector: Jev decisions for agents",
+      "h1": "System One Connector: Jev decisions for agents",
+      "description": "System One Connector gives agents typed Jev decisions through evaluate and MCP, with optional compatible local models such as CLM and Laya.",
+      "summary": "System One Connector exposes typed decisions to coding agents through its evaluate command and MCP integration. It connects to Jev or compatible self-hosted models such as CLM and Laya. Define Choice, Noul or Score questions; agent setup and batch evaluation are provided.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose",
+          "text": "System One Connector exposes typed decisions to coding agents through its evaluate command and MCP integration.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’s role",
+          "text": "It connects to Jev or compatible self-hosted models such as CLM and Laya.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "How to use it",
+          "text": "Define Choice, Noul or Score questions; agent setup and batch evaluation are provided.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limits to consider",
+          "text": "Local models require your own compatible server; the documented installer targets macOS and Linux.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "System One Connector：为智能体连接 Jev 决策",
+      "h1": "System One Connector：为智能体连接 Jev 决策",
+      "description": "System One Connector 通过 evaluate 与 MCP 向智能体提供 Jev 类型化判断，也可连接自托管 CLM、Laya 等兼容模型；本地运行需准备自己的模型服务。",
+      "summary": "System One Connector 通过 evaluate 命令和 MCP 集成向编程智能体提供类型化决策。 可连接 Jev，也可连接 CLM、Laya 等兼容的自托管模型。 定义 Choice、Noul 或 Score 问题，利用提供的智能体配置与批量评估功能。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "System One Connector 通过 evaluate 命令和 MCP 集成向编程智能体提供类型化决策。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "可连接 Jev，也可连接 CLM、Laya 等兼容的自托管模型。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "定义 Choice、Noul 或 Score 问题，利用提供的智能体配置与批量评估功能。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用边界",
+          "text": "本地模型需要自备兼容服务；文档中的安装器面向 macOS 和 Linux。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "System One Connector：為代理連接 Jev 決策",
+      "h1": "System One Connector：為代理連接 Jev 決策",
+      "description": "System One Connector 透過 evaluate 與 MCP 向代理提供 Jev 型別化判斷，也可接上自託管 CLM、Laya 等相容模型；本地執行需準備自己的模型服務。",
+      "summary": "System One Connector 透過 evaluate 命令與 MCP 整合向開發代理提供型別化決策。 可連接 Jev，也可連接 CLM、Laya 等相容的自託管模型。 定義 Choice、Noul 或 Score 問題，使用提供的代理設定與批次評估功能。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "System One Connector 透過 evaluate 命令與 MCP 整合向開發代理提供型別化決策。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "可連接 Jev，也可連接 CLM、Laya 等相容的自託管模型。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "定義 Choice、Noul 或 Score 問題，使用提供的代理設定與批次評估功能。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用限制",
+          "text": "本地模型需要自備相容服務；文件中的安裝器面向 macOS 與 Linux。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "System One Connector：エージェントに Jev 判断を接続",
+      "h1": "System One Connector：エージェントに Jev 判断を接続",
+      "description": "System One Connector は evaluate と MCP で Jev の型付き判断をエージェントへ提供し、CLM や Laya など互換ローカルモデルも選べます。",
+      "summary": "System One Connector は evaluate コマンドと MCP 連携で開発エージェントへ型付き判断を提供します。 Jev に加え、CLM や Laya などの互換セルフホストモデルへ接続できます。 Choice、Noul、Score の質問を定義し、エージェント設定やバッチ評価を利用します。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "何ができるか",
+          "text": "System One Connector は evaluate コマンドと MCP 連携で開発エージェントへ型付き判断を提供します。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "Jev に加え、CLM や Laya などの互換セルフホストモデルへ接続できます。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "Choice、Noul、Score の質問を定義し、エージェント設定やバッチ評価を利用します。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "制約と注意点",
+          "text": "ローカルモデルには自前の互換サーバーが必要です。文書のインストーラーは macOS と Linux 向けです。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "System One Connector: 에이전트에 Jev 판단 연결",
+      "h1": "System One Connector: 에이전트에 Jev 판단 연결",
+      "description": "System One Connector는 evaluate와 MCP로 Jev 판단을 에이전트에 연결하고 CLM, Laya 등 호환 로컬 모델도 선택할 수 있습니다.",
+      "summary": "System One Connector는 evaluate 명령과 MCP 통합으로 코딩 에이전트에 타입별 판단을 제공합니다. Jev 또는 CLM, Laya처럼 직접 호스팅하는 호환 모델에 연결합니다. Choice, Noul, Score 질문을 정의하며 에이전트 설정과 일괄 평가 기능을 사용할 수 있습니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "System One Connector는 evaluate 명령과 MCP 통합으로 코딩 에이전트에 타입별 판단을 제공합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Jev 또는 CLM, Laya처럼 직접 호스팅하는 호환 모델에 연결합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "Choice, Noul, Score 질문을 정의하며 에이전트 설정과 일괄 평가 기능을 사용할 수 있습니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "제약 사항",
+          "text": "로컬 모델에는 자체 호환 서버가 필요합니다. 문서의 설치기는 macOS와 Linux 대상입니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "System One Connector: decisiones Jev para agentes",
+      "h1": "System One Connector: decisiones Jev para agentes",
+      "description": "System One Connector da decisiones Jev tipadas a agentes mediante evaluate y MCP, con modelos locales compatibles opcionales como CLM y Laya.",
+      "summary": "System One Connector ofrece decisiones tipadas a agentes mediante evaluate e integración MCP. Conecta Jev o modelos compatibles autoalojados como CLM y Laya. Define preguntas Choice, Noul o Score; incluye configuración de agentes y evaluación por lotes.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "System One Connector ofrece decisiones tipadas a agentes mediante evaluate e integración MCP.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "El papel de Jev",
+          "text": "Conecta Jev o modelos compatibles autoalojados como CLM y Laya.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo usarlo",
+          "text": "Define preguntas Choice, Noul o Score; incluye configuración de agentes y evaluación por lotes.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Límites a considerar",
+          "text": "Los modelos locales necesitan un servidor compatible propio; el instalador documentado apunta a macOS y Linux.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "System One Connector : décisions Jev pour agents",
+      "h1": "System One Connector : décisions Jev pour agents",
+      "description": "System One Connector fournit des décisions Jev typées aux agents via evaluate et MCP, avec CLM et Laya comme modèles locaux compatibles facultatifs.",
+      "summary": "System One Connector expose des décisions typées aux agents via evaluate et l’intégration MCP. Il connecte Jev ou des modèles compatibles auto-hébergés comme CLM et Laya. Définissez des questions Choice, Noul ou Score ; configuration des agents et évaluation par lots sont fournies.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "System One Connector expose des décisions typées aux agents via evaluate et l’intégration MCP.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Le rôle de Jev",
+          "text": "Il connecte Jev ou des modèles compatibles auto-hébergés comme CLM et Laya.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Utilisation",
+          "text": "Définissez des questions Choice, Noul ou Score ; configuration des agents et évaluation par lots sont fournies.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limites à connaître",
+          "text": "Les modèles locaux nécessitent votre serveur compatible ; l’installateur documenté cible macOS et Linux.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "System One Connector: Jev-Entscheidungen für Agenten",
+      "h1": "System One Connector: Jev-Entscheidungen für Agenten",
+      "description": "System One Connector stellt Agenten Jev-Entscheidungen über evaluate und MCP bereit, wahlweise auch mit kompatiblen lokalen Modellen wie CLM und Laya.",
+      "summary": "System One Connector bietet Programmieragenten typisierte Entscheidungen über evaluate und MCP-Integration. Er verbindet Jev oder kompatible selbst gehostete Modelle wie CLM und Laya. Choice-, Noul- oder Score-Fragen definieren; Agenteneinrichtung und Stapelbewertung stehen bereit.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "System One Connector bietet Programmieragenten typisierte Entscheidungen über evaluate und MCP-Integration.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Die Rolle von Jev",
+          "text": "Er verbindet Jev oder kompatible selbst gehostete Modelle wie CLM und Laya.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Nutzung",
+          "text": "Choice-, Noul- oder Score-Fragen definieren; Agenteneinrichtung und Stapelbewertung stehen bereit.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Grenzen",
+          "text": "Lokale Modelle benötigen einen eigenen kompatiblen Server; der dokumentierte Installer richtet sich an macOS und Linux.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "System One Connector: decisões Jev para agentes",
+      "h1": "System One Connector: decisões Jev para agentes",
+      "description": "System One Connector fornece decisões Jev tipadas a agentes por evaluate e MCP, com modelos locais compatíveis opcionais como CLM e Laya.",
+      "summary": "System One Connector oferece decisões tipadas a agentes por evaluate e integração MCP. Conecta Jev ou modelos compatíveis hospedados por você, como CLM e Laya. Defina perguntas Choice, Noul ou Score; há configuração de agentes e avaliação em lote.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "System One Connector oferece decisões tipadas a agentes por evaluate e integração MCP.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "O papel do Jev",
+          "text": "Conecta Jev ou modelos compatíveis hospedados por você, como CLM e Laya.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Defina perguntas Choice, Noul ou Score; há configuração de agentes e avaliação em lote.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limitações",
+          "text": "Modelos locais exigem seu próprio servidor compatível; o instalador documentado atende macOS e Linux.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "System One Connector: решения Jev для агентов",
+      "h1": "System One Connector: решения Jev для агентов",
+      "description": "System One Connector даёт агентам типизированные решения Jev через evaluate и MCP, а также поддерживает собственные совместимые модели CLM и Laya.",
+      "summary": "System One Connector предоставляет агентам типизированные решения через команду evaluate и интеграцию MCP. Он подключает Jev либо совместимые самостоятельно размещённые модели, например CLM и Laya. Задайте вопросы Choice, Noul или Score; предусмотрены настройка агентов и пакетная оценка.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "System One Connector предоставляет агентам типизированные решения через команду evaluate и интеграцию MCP.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Он подключает Jev либо совместимые самостоятельно размещённые модели, например CLM и Laya.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Задайте вопросы Choice, Noul или Score; предусмотрены настройка агентов и пакетная оценка.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ограничения",
+          "text": "Локальным моделям нужен собственный совместимый сервер; описанный установщик рассчитан на macOS и Linux.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "System One Connector: एजेंटों के लिए Jev निर्णय",
+      "h1": "System One Connector: एजेंटों के लिए Jev निर्णय",
+      "description": "System One Connector evaluate और MCP से एजेंटों को Jev निर्णय देता है; CLM और Laya जैसे अपने संगत स्थानीय मॉडल भी जोड़े जा सकते हैं।",
+      "summary": "System One Connector evaluate कमांड और MCP से कोडिंग एजेंटों को निर्धारित प्रकार वाले निर्णय देता है। यह Jev या स्वयं होस्ट किए CLM और Laya जैसे संगत मॉडल से जुड़ता है। Choice, Noul या Score प्रश्न बनाएँ; एजेंट सेटअप और बैच मूल्यांकन उपलब्ध हैं।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "किस काम आता है",
+          "text": "System One Connector evaluate कमांड और MCP से कोडिंग एजेंटों को निर्धारित प्रकार वाले निर्णय देता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "यह Jev या स्वयं होस्ट किए CLM और Laya जैसे संगत मॉडल से जुड़ता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल कैसे करें",
+          "text": "Choice, Noul या Score प्रश्न बनाएँ; एजेंट सेटअप और बैच मूल्यांकन उपलब्ध हैं।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "सीमाएँ",
+          "text": "स्थानीय मॉडल के लिए अपना संगत सर्वर चाहिए; दस्तावेज़ित इंस्टॉलर macOS और Linux का है।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "System One Connector: keputusan Jev untuk agen",
+      "h1": "System One Connector: keputusan Jev untuk agen",
+      "description": "System One Connector memberi agen keputusan Jev bertipe lewat evaluate dan MCP, dengan model lokal kompatibel opsional seperti CLM dan Laya.",
+      "summary": "System One Connector menyediakan keputusan bertipe untuk agen lewat perintah evaluate dan integrasi MCP. Terhubung ke Jev atau model kompatibel yang dihosting sendiri seperti CLM dan Laya. Definisikan pertanyaan Choice, Noul, atau Score; tersedia pengaturan agen dan evaluasi berkelompok.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "System One Connector menyediakan keputusan bertipe untuk agen lewat perintah evaluate dan integrasi MCP.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Terhubung ke Jev atau model kompatibel yang dihosting sendiri seperti CLM dan Laya.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Definisikan pertanyaan Choice, Noul, atau Score; tersedia pengaturan agen dan evaluasi berkelompok.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Batasan",
+          "text": "Model lokal membutuhkan server kompatibel milik Anda; installer terdokumentasi menargetkan macOS dan Linux.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "System One Connector: quyết định Jev cho tác tử",
+      "h1": "System One Connector: quyết định Jev cho tác tử",
+      "description": "System One Connector đưa quyết định Jev có kiểu đến tác tử qua evaluate và MCP, có thể chọn mô hình cục bộ tương thích như CLM, Laya.",
+      "summary": "System One Connector cung cấp quyết định có kiểu cho tác tử qua lệnh evaluate và tích hợp MCP. Công cụ kết nối Jev hoặc mô hình tương thích tự lưu trữ như CLM và Laya. Định nghĩa câu hỏi Choice, Noul hay Score; có thiết lập tác tử và đánh giá theo lô.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích",
+          "text": "System One Connector cung cấp quyết định có kiểu cho tác tử qua lệnh evaluate và tích hợp MCP.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Công cụ kết nối Jev hoặc mô hình tương thích tự lưu trữ như CLM và Laya.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Định nghĩa câu hỏi Choice, Noul hay Score; có thiết lập tác tử và đánh giá theo lô.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Giới hạn",
+          "text": "Mô hình cục bộ cần máy chủ tương thích riêng; trình cài được mô tả dành cho macOS và Linux.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "System One Connector: ajanlar için Jev kararları",
+      "h1": "System One Connector: ajanlar için Jev kararları",
+      "description": "System One Connector evaluate ve MCP üzerinden ajanlara Jev kararları verir; CLM ve Laya gibi uyumlu yerel modeller de seçilebilir.",
+      "summary": "System One Connector evaluate komutu ve MCP entegrasyonuyla kodlama ajanlarına türlenmiş kararlar sunar. Jev’e veya CLM ve Laya gibi kendi barındırdığınız uyumlu modellere bağlanır. Choice, Noul veya Score soruları tanımlayın; ajan kurulumu ve toplu değerlendirme sağlanır.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "System One Connector evaluate komutu ve MCP entegrasyonuyla kodlama ajanlarına türlenmiş kararlar sunar.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Jev’e veya CLM ve Laya gibi kendi barındırdığınız uyumlu modellere bağlanır.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Choice, Noul veya Score soruları tanımlayın; ajan kurulumu ve toplu değerlendirme sağlanır.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Sınırlamalar",
+          "text": "Yerel modeller kendi uyumlu sunucunuzu gerektirir; belgelenen kurucu macOS ve Linux içindir.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "System One Connector: decisioni Jev per agenti",
+      "h1": "System One Connector: decisioni Jev per agenti",
+      "description": "System One Connector offre decisioni Jev tipizzate agli agenti tramite evaluate e MCP, con modelli locali compatibili facoltativi come CLM e Laya.",
+      "summary": "System One Connector espone decisioni tipizzate agli agenti tramite evaluate e integrazione MCP. Collega Jev o modelli compatibili ospitati autonomamente come CLM e Laya. Definisci domande Choice, Noul o Score; sono disponibili configurazione degli agenti e valutazione in lotti.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "System One Connector espone decisioni tipizzate agli agenti tramite evaluate e integrazione MCP.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Il ruolo di Jev",
+          "text": "Collega Jev o modelli compatibili ospitati autonomamente come CLM e Laya.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come usarlo",
+          "text": "Definisci domande Choice, Noul o Score; sono disponibili configurazione degli agenti e valutazione in lotti.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limiti",
+          "text": "I modelli locali richiedono un server compatibile proprio; l’installer documentato è per macOS e Linux.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  },
+  "displayName": "System One Connector"
+}

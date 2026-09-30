@@ -1,0 +1,769 @@
+{
+  "version": "source-content-v1",
+  "repo": "kerpopule/hermes-jev-skills",
+  "repositoryId": 1376380583,
+  "relationship": "integration",
+  "category": "agents",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "f9d61d8eebaae25a11483f2f3b373a9d78da6f89",
+      "url": "https://github.com/kerpopule/hermes-jev-skills/blob/f9d61d8eebaae25a11483f2f3b373a9d78da6f89/README.md",
+      "sha256": "3042584e38d9d8b7e8c2962730761e4b8b77d340dc2a9b50671b45e6660f18b2",
+      "accessedAt": "2026-09-30T07:33:48.432Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "kind": "documented",
+      "text": "Hermes Jev Skills provides reusable skills for model routing, search, memory filtering, triage and browser actions.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 15,
+          "end": 30,
+          "quote": "| Skill | What Jev decides | Measured |\n|---|---|---|\n| **Model routing** | Which model is good enough for this turn, from every model you can call | ~0.4 s per turn |\n| **Search** | Which of the results you fetched are worth opening, whether the evidence answers the question, and which of your candidate queries to run next. Jev never writes a query | ~1.9 s per round (median of five live runs, two requests: rank, then sufficiency and the pick) |\n| **Social research** | Which discovered posts are worth opening and, after a local evidence-floor check, whether a bounded projection answers the question. Depth and source linkage are enforced locally, not by Jev | Reuses `jev search`; no social-specific benchmark yet |\n| **Memory** | Which retrieved passages are worth reading, and which contain hidden instructions | 60 passages per request, up to 480 per call; an injection screen runs locally even when Jev is down |\n| **Web screening** (Hermes) | Which parts of a `web_search` / `web_extract` result carry instructions aimed at the agent, withheld before the agent reads them | In-distribution planted attacks in 80 real web results: 70 of 79 caught, against 11 for Hermes's own pattern scan; 0 of 1,520 clean chunks withheld; ~0.2 s per result. Not portable recall ([scorecard](evals/web-screen/SCORECARD-2026-09-26.md), [public transfer evidence](evals/web-screen/HELDOUT.md)) |\n| **Handoffs** | Nothing, by default. We measured it: a handoff written from Jev's keep / summarize / drop digest recalled less than one written from the plain transcript. What ships is the whole dialogue, 1,200 words and a way back to the old session | 58.7% recall alone, 75.0% with one search, against 37.5% and 68.3% before ([scorecard](evals/compaction/results/SCORECARD-2026-09-20.md)) |\n| **Choosing turns** | Which turns to keep when a transcript must be cut to a fixed size | 71 turns in 0.95 s; beat choosing by recency 11 questions to 4 |\n| **Skill selection** | Which installed skill this turn needs, or none | 377 skills in ~2.8 s; acknowledgements answered locally for free |\n| **Triage** | How urgent a message is, what kind it is, and whether a person must see it | ~0.4 s per message, $0.00006 |\n| **Mailbox sorting** | Which lane an inbox message belongs in — needs reply, updates, promotional, sales, spam — and whether it is worth a person's attention | ~0.44 s p50 per message, $0.00002 each |\n| **Computer use** | The next GUI action, from a table of actions you already judged safe. `--plan` splits a multi-step command once, up front | ~0.5 s per decision |\n| **Browser use** | The next page action, same contract | ~0.4 s per step |\n\nEleven skills ship as plain `SKILL.md` files, so they are not Hermes-only. The same folder works in Claude Code, Codex, or anything that reads a skill file."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "kind": "documented",
+      "text": "Jev makes bounded choices such as selecting a model or ranking retrieved passages; the host model handles prose.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 17,
+          "end": 28,
+          "quote": "| **Model routing** | Which model is good enough for this turn, from every model you can call | ~0.4 s per turn |\n| **Search** | Which of the results you fetched are worth opening, whether the evidence answers the question, and which of your candidate queries to run next. Jev never writes a query | ~1.9 s per round (median of five live runs, two requests: rank, then sufficiency and the pick) |\n| **Social research** | Which discovered posts are worth opening and, after a local evidence-floor check, whether a bounded projection answers the question. Depth and source linkage are enforced locally, not by Jev | Reuses `jev search`; no social-specific benchmark yet |\n| **Memory** | Which retrieved passages are worth reading, and which contain hidden instructions | 60 passages per request, up to 480 per call; an injection screen runs locally even when Jev is down |\n| **Web screening** (Hermes) | Which parts of a `web_search` / `web_extract` result carry instructions aimed at the agent, withheld before the agent reads them | In-distribution planted attacks in 80 real web results: 70 of 79 caught, against 11 for Hermes's own pattern scan; 0 of 1,520 clean chunks withheld; ~0.2 s per result. Not portable recall ([scorecard](evals/web-screen/SCORECARD-2026-09-26.md), [public transfer evidence](evals/web-screen/HELDOUT.md)) |\n| **Handoffs** | Nothing, by default. We measured it: a handoff written from Jev's keep / summarize / drop digest recalled less than one written from the plain transcript. What ships is the whole dialogue, 1,200 words and a way back to the old session | 58.7% recall alone, 75.0% with one search, against 37.5% and 68.3% before ([scorecard](evals/compaction/results/SCORECARD-2026-09-20.md)) |\n| **Choosing turns** | Which turns to keep when a transcript must be cut to a fixed size | 71 turns in 0.95 s; beat choosing by recency 11 questions to 4 |\n| **Skill selection** | Which installed skill this turn needs, or none | 377 skills in ~2.8 s; acknowledgements answered locally for free |\n| **Triage** | How urgent a message is, what kind it is, and whether a person must see it | ~0.4 s per message, $0.00006 |\n| **Mailbox sorting** | Which lane an inbox message belongs in — needs reply, updates, promotional, sales, spam — and whether it is worth a person's attention | ~0.44 s p50 per message, $0.00002 each |\n| **Computer use** | The next GUI action, from a table of actions you already judged safe. `--plan` splits a multi-step command once, up front | ~0.5 s per decision |\n| **Browser use** | The next page action, same contract | ~0.4 s per step |"
+        },
+        {
+          "source": "source-1",
+          "start": 3,
+          "end": 7,
+          "quote": "**Give your agent a fast, cheap second brain for the small decisions.**\n\nYour agent burns frontier-model tokens on things that are not thinking: which model should answer this turn, which of 377 skills to load, which retrieved passages matter, which turns survive a summary, which button comes next. Those are decisions, not prose. Hand them to something that costs a fraction of a cent and answers in about 0.4 seconds, and let the expensive model do the writing.\n\nThat is what [Jev](https://docs.typesafe.ai) is. It is TypeSafe's decision model. **It never writes text.** You give it a state and typed questions (pick one, score this, yes or no) and it answers with a calibrated confidence. This repo wires that into an agent's day."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "kind": "documented",
+      "text": "The skills work with Hermes, Claude Code and Codex. Shadow mode records routing decisions without switching models.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 47,
+          "end": 51,
+          "quote": "Python 3.9 or newer, no dependencies. Got it as a zip? Unzip it anywhere and run `python3 install.py` from that folder. Or point your agent at this repo and say *\"install Hermes Jev Skills\"*: it will follow [AGENTS.md](AGENTS.md).\n\nThe installer finds Hermes, Claude Code and Codex on the machine and installs for each one it finds. `python3 install.py --check` shows exactly what it would do without changing anything. `--uninstall` reverses it. For Claude Code it also adds four lane subagents (`jev-lane-small` … `jev-lane-escalate`, each with its own model and effort) and a short, delimited lanes block in `~/.claude/CLAUDE.md`, backed up first (`--no-claude-md` leaves that file alone). See [lanes.md](docs/lanes.md).\n\n**Not sure yet?** Run `jev models suggest --write` to draft routing pools from price bands, then `/jev routing shadow` for a day. Shadow mode decides and logs without switching anything, so a day of decisions costs almost nothing and risks nothing. Turn it on when the log looks right."
+        },
+        {
+          "source": "source-1",
+          "start": 57,
+          "end": 66,
+          "quote": "Start in shadow mode. It is the honest way to see what Jev would do before it does anything.\n\n```\n/jev                         status\n/jev routing shadow          decide and log, do not switch (start here)\n/jev routing on              switch models per turn\n/jev skills on               suggest the right skill per turn\n/jev notice on               show \"[Jev] hard · coding → kimi-k3 · confidence 0.92\" on routed replies\n/jev screen shadow           screen web_search / web_extract results for injected instructions, log only\n/jev screen on               withhold the parts that carry them, with a notice in their place"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "kind": "documented",
+      "text": "Jev uses a cloud API. Missing keys, low confidence or timeouts trigger feature-specific fallbacks rather than blocking the agent.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 96,
+          "end": 100,
+          "quote": "Jev is a cloud API, so this is spelled out rather than implied:\n\n- **Routing**: the user's turn, redacted (emails, phones, tokens, long hex masked), capped at 2,500 characters (`ask_chars`), read as the opening and, mostly, the end. Never history, tool results, files or memory. Turns that look like they hold a secret, and any profile you list in `private_profiles`, send only coarse features: length, whether code is present, whether risk words appear.\n- **Memory**: the query and up to 900 characters per passage, redacted. Your store's ids, paths and sources are replaced with `P0`, `P1`… and never sent. A passage that looks like a credential is not sent at all.\n- **Choosing turns** (`jev compact-select`, or handoffs with `HANDOFF_JEV=1`): the first and last 350 characters of each turn, redacted. Turns that look sensitive are skipped. A default handoff sends Jev nothing."
+        },
+        {
+          "source": "source-1",
+          "start": 113,
+          "end": 122,
+          "quote": "## Everything fails open\n\nNo key, timeout, rate limit, malformed reply, low confidence: routing keeps your current model, memory returns the original list, compaction drops nothing, skill selection suggests nothing, search returns the screened head of your list with the decision marked `unknown`, and computer use returns `reobserve`. A Jev outage costs you at most the time budget (2.5 s for routing) and never blocks a turn.\n\nSafety rails that do not depend on Jev being right:\n\n- Risk words (production, delete, migration, security, payment, legal…) never route to the cheapest tier.\n- A large context never switches to a cheaper model mid-session.\n- A transcript turn is only dropped on a confident answer.\n- Jev can only ever return an action id you put in the table."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "Hermes Jev Skills: routing and filtering for agents",
+      "h1": "Hermes Jev Skills: routing and filtering for agents",
+      "description": "Hermes Jev Skills adds bounded model routing, search and memory decisions to agents. Shadow mode logs Jev’s choices without changing models.",
+      "summary": "Hermes Jev Skills provides reusable skills for model routing, search, memory filtering, triage and browser actions. Jev makes bounded choices such as selecting a model or ranking retrieved passages; the host model handles prose. The skills work with Hermes, Claude Code and Codex. Shadow mode records routing decisions without switching models.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose",
+          "text": "Hermes Jev Skills provides reusable skills for model routing, search, memory filtering, triage and browser actions.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’s role",
+          "text": "Jev makes bounded choices such as selecting a model or ranking retrieved passages; the host model handles prose.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "How to use it",
+          "text": "The skills work with Hermes, Claude Code and Codex. Shadow mode records routing decisions without switching models.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limits to consider",
+          "text": "Jev uses a cloud API. Missing keys, low confidence or timeouts trigger feature-specific fallbacks rather than blocking the agent.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "Hermes Jev Skills：智能体路由与筛选",
+      "h1": "Hermes Jev Skills：智能体路由与筛选",
+      "description": "Hermes Jev Skills 为智能体提供模型路由、搜索和记忆筛选等有界决策；Jev 负责选择、宿主模型负责写作，影子模式可记录判断而不切换模型。",
+      "summary": "Hermes Jev Skills 提供模型路由、搜索、记忆筛选、消息分流和浏览器操作等可复用技能。 Jev 负责选择模型、排序检索片段等有界决策；宿主模型负责生成文字。 技能适用于 Hermes、Claude Code 和 Codex；影子模式只记录路由决策，不切换模型。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "Hermes Jev Skills 提供模型路由、搜索、记忆筛选、消息分流和浏览器操作等可复用技能。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "Jev 负责选择模型、排序检索片段等有界决策；宿主模型负责生成文字。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "技能适用于 Hermes、Claude Code 和 Codex；影子模式只记录路由决策，不切换模型。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用边界",
+          "text": "Jev 使用云端 API。缺少密钥、置信度不足或超时会触发各功能的回退，不阻塞智能体。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "Hermes Jev Skills：代理路由與篩選",
+      "h1": "Hermes Jev Skills：代理路由與篩選",
+      "description": "Hermes Jev Skills 為代理提供模型路由、搜尋與記憶篩選等有界決策；Jev 負責選擇、宿主模型負責寫作，影子模式只記錄判斷而不切換模型。",
+      "summary": "Hermes Jev Skills 提供模型路由、搜尋、記憶篩選、訊息分流與瀏覽器操作等可重用技能。 Jev 負責選擇模型、排序檢索片段等有界決策；宿主模型負責產生文字。 技能適用於 Hermes、Claude Code 與 Codex；影子模式只記錄路由決策，不切換模型。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "Hermes Jev Skills 提供模型路由、搜尋、記憶篩選、訊息分流與瀏覽器操作等可重用技能。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "Jev 負責選擇模型、排序檢索片段等有界決策；宿主模型負責產生文字。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "技能適用於 Hermes、Claude Code 與 Codex；影子模式只記錄路由決策，不切換模型。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用限制",
+          "text": "Jev 使用雲端 API。缺少金鑰、信心不足或逾時時，各功能會採取備援行為，不阻塞代理。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "Hermes Jev Skills：エージェントの振り分けと選別",
+      "h1": "Hermes Jev Skills：エージェントの振り分けと選別",
+      "description": "Hermes Jev Skills はモデル選択、検索、記憶選別の判断を Jev に任せます。シャドーモードではモデルを変えず判断を記録できます。",
+      "summary": "Hermes Jev Skills はモデル選択、検索、記憶の選別、メッセージ分類、ブラウザー操作のスキルを提供します。 Jev はモデル選択や検索結果の順位付けなど、範囲を限定した判断を担当し、文章はホストモデルが生成します。 Hermes、Claude Code、Codex で利用できます。シャドーモードはモデルを切り替えずに判断を記録します。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "何ができるか",
+          "text": "Hermes Jev Skills はモデル選択、検索、記憶の選別、メッセージ分類、ブラウザー操作のスキルを提供します。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "Jev はモデル選択や検索結果の順位付けなど、範囲を限定した判断を担当し、文章はホストモデルが生成します。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "Hermes、Claude Code、Codex で利用できます。シャドーモードはモデルを切り替えずに判断を記録します。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "制約と注意点",
+          "text": "Jev はクラウド API です。キー不足、低い確信度、タイムアウト時は機能別の代替処理へ戻り、エージェントを止めません。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "Hermes Jev Skills: 에이전트 라우팅과 필터링",
+      "h1": "Hermes Jev Skills: 에이전트 라우팅과 필터링",
+      "description": "Hermes Jev Skills는 모델 선택, 검색, 메모리 판단을 Jev에 맡깁니다. 섀도 모드는 모델을 바꾸지 않고 판단만 기록합니다.",
+      "summary": "Hermes Jev Skills는 모델 라우팅, 검색, 메모리 필터링, 메시지 분류, 브라우저 동작용 스킬을 제공합니다. Jev는 모델 선택이나 검색 문단 순위화처럼 범위가 정해진 판단을 맡고, 호스트 모델은 문장을 작성합니다. Hermes, Claude Code, Codex에서 사용할 수 있습니다. 섀도 모드는 모델을 바꾸지 않고 라우팅 판단만 기록합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "Hermes Jev Skills는 모델 라우팅, 검색, 메모리 필터링, 메시지 분류, 브라우저 동작용 스킬을 제공합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Jev는 모델 선택이나 검색 문단 순위화처럼 범위가 정해진 판단을 맡고, 호스트 모델은 문장을 작성합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "Hermes, Claude Code, Codex에서 사용할 수 있습니다. 섀도 모드는 모델을 바꾸지 않고 라우팅 판단만 기록합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "제약 사항",
+          "text": "Jev는 클라우드 API를 사용합니다. 키 누락, 낮은 신뢰도, 시간 초과 시 기능별 대체 처리로 돌아가 에이전트를 막지 않습니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "Hermes Jev Skills: enrutamiento y filtros para agentes",
+      "h1": "Hermes Jev Skills: enrutamiento y filtros para agentes",
+      "description": "Hermes Jev Skills delega selección de modelos, búsqueda y memoria a Jev. El modo sombra registra decisiones sin cambiar de modelo.",
+      "summary": "Hermes Jev Skills ofrece habilidades reutilizables de selección de modelos, búsqueda, filtrado de memoria, clasificación y acciones del navegador. Jev toma decisiones acotadas, como elegir modelos o ordenar pasajes recuperados; el modelo anfitrión redacta el texto. Funciona con Hermes, Claude Code y Codex. El modo sombra registra decisiones sin cambiar de modelo.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "Hermes Jev Skills ofrece habilidades reutilizables de selección de modelos, búsqueda, filtrado de memoria, clasificación y acciones del navegador.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "El papel de Jev",
+          "text": "Jev toma decisiones acotadas, como elegir modelos o ordenar pasajes recuperados; el modelo anfitrión redacta el texto.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo usarlo",
+          "text": "Funciona con Hermes, Claude Code y Codex. El modo sombra registra decisiones sin cambiar de modelo.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Límites a considerar",
+          "text": "Jev usa una API en la nube. Sin clave, con baja confianza o ante esperas agotadas, cada función aplica su alternativa.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "Hermes Jev Skills : routage et filtrage pour agents",
+      "h1": "Hermes Jev Skills : routage et filtrage pour agents",
+      "description": "Hermes Jev Skills confie à Jev le routage, la recherche et la mémoire. Le mode fantôme enregistre les choix sans changer de modèle.",
+      "summary": "Hermes Jev Skills fournit des compétences de routage, recherche, filtrage de mémoire, tri de messages et actions navigateur. Jev effectue des choix délimités, comme sélectionner un modèle ou classer des passages ; le modèle hôte rédige. Les compétences fonctionnent avec Hermes, Claude Code et Codex. Le mode fantôme journalise les décisions sans changer de modèle.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "Hermes Jev Skills fournit des compétences de routage, recherche, filtrage de mémoire, tri de messages et actions navigateur.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Le rôle de Jev",
+          "text": "Jev effectue des choix délimités, comme sélectionner un modèle ou classer des passages ; le modèle hôte rédige.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Utilisation",
+          "text": "Les compétences fonctionnent avec Hermes, Claude Code et Codex. Le mode fantôme journalise les décisions sans changer de modèle.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limites à connaître",
+          "text": "Jev utilise une API distante. Clé absente, faible confiance ou délai dépassé déclenchent un repli propre à chaque fonction.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "Hermes Jev Skills: Routing und Filter für Agenten",
+      "h1": "Hermes Jev Skills: Routing und Filter für Agenten",
+      "description": "Hermes Jev Skills ergänzt Agenten um Jev-Entscheidungen für Modelle, Suche und Gedächtnis. Der Schattenmodus protokolliert ohne Modellwechsel.",
+      "summary": "Hermes Jev Skills bietet wiederverwendbare Skills für Modellauswahl, Suche, Gedächtnisfilter, Nachrichtentriage und Browseraktionen. Jev trifft begrenzte Entscheidungen wie Modellauswahl oder Passage-Ranking; das Host-Modell schreibt den Text. Die Skills funktionieren mit Hermes, Claude Code und Codex. Der Schattenmodus protokolliert Entscheidungen ohne Modellwechsel.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "Hermes Jev Skills bietet wiederverwendbare Skills für Modellauswahl, Suche, Gedächtnisfilter, Nachrichtentriage und Browseraktionen.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Die Rolle von Jev",
+          "text": "Jev trifft begrenzte Entscheidungen wie Modellauswahl oder Passage-Ranking; das Host-Modell schreibt den Text.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Nutzung",
+          "text": "Die Skills funktionieren mit Hermes, Claude Code und Codex. Der Schattenmodus protokolliert Entscheidungen ohne Modellwechsel.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Grenzen",
+          "text": "Jev nutzt eine Cloud-API. Fehlende Schlüssel, geringe Konfidenz oder Zeitüberschreitungen führen zu funktionsspezifischen Ersatzabläufen statt einer Agentenblockade.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "Hermes Jev Skills: roteamento e filtros para agentes",
+      "h1": "Hermes Jev Skills: roteamento e filtros para agentes",
+      "description": "Hermes Jev Skills delega decisões de modelos, busca e memória ao Jev. O modo sombra registra escolhas sem trocar o modelo.",
+      "summary": "Hermes Jev Skills oferece habilidades reutilizáveis de seleção de modelos, busca, filtragem de memória, triagem e ações no navegador. Jev faz escolhas delimitadas, como selecionar modelos ou ordenar trechos recuperados; o modelo hospedeiro escreve o texto. Funciona com Hermes, Claude Code e Codex. O modo sombra registra decisões sem trocar o modelo.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "Hermes Jev Skills oferece habilidades reutilizáveis de seleção de modelos, busca, filtragem de memória, triagem e ações no navegador.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "O papel do Jev",
+          "text": "Jev faz escolhas delimitadas, como selecionar modelos ou ordenar trechos recuperados; o modelo hospedeiro escreve o texto.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Funciona com Hermes, Claude Code e Codex. O modo sombra registra decisões sem trocar o modelo.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limitações",
+          "text": "Jev usa uma API na nuvem. Chave ausente, baixa confiança ou tempo esgotado acionam alternativas específicas sem bloquear o agente.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "Hermes Jev Skills: маршрутизация и фильтры для агентов",
+      "h1": "Hermes Jev Skills: маршрутизация и фильтры для агентов",
+      "description": "Hermes Jev Skills передаёт Jev выбор моделей, поиск и фильтрацию памяти. Теневой режим записывает решения без переключения модели.",
+      "summary": "Hermes Jev Skills предоставляет навыки выбора моделей, поиска, фильтрации памяти, сортировки сообщений и действий в браузере. Jev принимает ограниченные решения: выбирает модель или ранжирует найденные фрагменты; текст пишет основная модель. Навыки работают с Hermes, Claude Code и Codex. Теневой режим записывает решения, не переключая модели.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Hermes Jev Skills предоставляет навыки выбора моделей, поиска, фильтрации памяти, сортировки сообщений и действий в браузере.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Jev принимает ограниченные решения: выбирает модель или ранжирует найденные фрагменты; текст пишет основная модель.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Навыки работают с Hermes, Claude Code и Codex. Теневой режим записывает решения, не переключая модели.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ограничения",
+          "text": "Jev использует облачный API. При отсутствии ключа, низкой уверенности или тайм-ауте включается резервное поведение соответствующей функции.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "Hermes Jev Skills: एजेंट रूटिंग और फ़िल्टरिंग",
+      "h1": "Hermes Jev Skills: एजेंट रूटिंग और फ़िल्टरिंग",
+      "description": "Hermes Jev Skills में Jev मॉडल, खोज और मेमोरी संबंधी सीमित निर्णय लेता है। शैडो मोड मॉडल बदले बिना विकल्प दर्ज करता है।",
+      "summary": "Hermes Jev Skills मॉडल चयन, खोज, मेमोरी फ़िल्टरिंग, संदेश वर्गीकरण और ब्राउज़र कार्रवाइयों के पुनःप्रयोग योग्य स्किल देता है। Jev मॉडल चुनने या मिले अंशों को क्रम देने जैसे सीमित निर्णय लेता है; मुख्य मॉडल पाठ लिखता है। स्किल Hermes, Claude Code और Codex के साथ चलते हैं। शैडो मोड मॉडल बदले बिना निर्णय दर्ज करता है।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "किस काम आता है",
+          "text": "Hermes Jev Skills मॉडल चयन, खोज, मेमोरी फ़िल्टरिंग, संदेश वर्गीकरण और ब्राउज़र कार्रवाइयों के पुनःप्रयोग योग्य स्किल देता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "Jev मॉडल चुनने या मिले अंशों को क्रम देने जैसे सीमित निर्णय लेता है; मुख्य मॉडल पाठ लिखता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल कैसे करें",
+          "text": "स्किल Hermes, Claude Code और Codex के साथ चलते हैं। शैडो मोड मॉडल बदले बिना निर्णय दर्ज करता है।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "सीमाएँ",
+          "text": "Jev क्लाउड API इस्तेमाल करता है। कुंजी न होने, कम विश्वास या टाइमआउट पर हर सुविधा अपनी वैकल्पिक प्रक्रिया अपनाती है।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "Hermes Jev Skills: perutean dan filter agen",
+      "h1": "Hermes Jev Skills: perutean dan filter agen",
+      "description": "Hermes Jev Skills menambahkan keputusan model, pencarian, dan memori melalui Jev. Mode bayangan mencatat pilihan tanpa mengganti model.",
+      "summary": "Hermes Jev Skills menyediakan keterampilan pemilihan model, pencarian, penyaringan memori, triase pesan, dan tindakan browser. Jev mengambil keputusan terbatas seperti memilih model atau mengurutkan kutipan hasil pencarian; model utama menulis teks. Keterampilan ini mendukung Hermes, Claude Code, dan Codex. Mode bayangan mencatat keputusan tanpa mengganti model.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "Hermes Jev Skills menyediakan keterampilan pemilihan model, pencarian, penyaringan memori, triase pesan, dan tindakan browser.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Jev mengambil keputusan terbatas seperti memilih model atau mengurutkan kutipan hasil pencarian; model utama menulis teks.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Keterampilan ini mendukung Hermes, Claude Code, dan Codex. Mode bayangan mencatat keputusan tanpa mengganti model.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Batasan",
+          "text": "Jev memakai API cloud. Kunci tidak tersedia, keyakinan rendah, atau waktu habis memicu perilaku cadangan sesuai fitur.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "Hermes Jev Skills: định tuyến và lọc cho tác tử",
+      "h1": "Hermes Jev Skills: định tuyến và lọc cho tác tử",
+      "description": "Hermes Jev Skills giao quyết định mô hình, tìm kiếm và bộ nhớ cho Jev. Chế độ theo dõi ghi lựa chọn mà không đổi mô hình.",
+      "summary": "Hermes Jev Skills cung cấp kỹ năng chọn mô hình, tìm kiếm, lọc bộ nhớ, phân loại tin và thao tác trình duyệt. Jev quyết định trong phạm vi xác định như chọn mô hình hoặc xếp hạng đoạn truy xuất; mô hình chủ viết văn bản. Các kỹ năng dùng được với Hermes, Claude Code và Codex. Chế độ theo dõi ghi quyết định mà không đổi mô hình.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích",
+          "text": "Hermes Jev Skills cung cấp kỹ năng chọn mô hình, tìm kiếm, lọc bộ nhớ, phân loại tin và thao tác trình duyệt.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Jev quyết định trong phạm vi xác định như chọn mô hình hoặc xếp hạng đoạn truy xuất; mô hình chủ viết văn bản.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Các kỹ năng dùng được với Hermes, Claude Code và Codex. Chế độ theo dõi ghi quyết định mà không đổi mô hình.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Giới hạn",
+          "text": "Jev dùng API đám mây. Thiếu khóa, độ tin cậy thấp hoặc hết thời gian sẽ kích hoạt phương án dự phòng theo từng tính năng.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "Hermes Jev Skills: ajanlar için yönlendirme ve filtreleme",
+      "h1": "Hermes Jev Skills: ajanlar için yönlendirme ve filtreleme",
+      "description": "Hermes Jev Skills model, arama ve bellek kararlarını Jev’e devreder. Gölge modu model değiştirmeden seçimleri kaydeder.",
+      "summary": "Hermes Jev Skills model seçimi, arama, bellek filtreleme, mesaj sınıflandırma ve tarayıcı eylemleri için beceriler sunar. Jev model seçme veya bulunan pasajları sıralama gibi sınırlı kararlar verir; metni ana model yazar. Beceriler Hermes, Claude Code ve Codex ile çalışır. Gölge modu model değiştirmeden kararları kaydeder.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "Hermes Jev Skills model seçimi, arama, bellek filtreleme, mesaj sınıflandırma ve tarayıcı eylemleri için beceriler sunar.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Jev model seçme veya bulunan pasajları sıralama gibi sınırlı kararlar verir; metni ana model yazar.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Beceriler Hermes, Claude Code ve Codex ile çalışır. Gölge modu model değiştirmeden kararları kaydeder.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Sınırlamalar",
+          "text": "Jev bulut API’si kullanır. Eksik anahtar, düşük güven veya zaman aşımı, ajanı durdurmadan özelliğe uygun yedek davranışı tetikler.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "Hermes Jev Skills: instradamento e filtri per agenti",
+      "h1": "Hermes Jev Skills: instradamento e filtri per agenti",
+      "description": "Hermes Jev Skills affida a Jev scelte su modelli, ricerca e memoria. La modalità ombra registra decisioni senza cambiare modello.",
+      "summary": "Hermes Jev Skills offre abilità per scelta dei modelli, ricerca, filtraggio della memoria, smistamento e azioni nel browser. Jev prende decisioni circoscritte, come scegliere modelli o ordinare passaggi recuperati; il modello principale scrive il testo. Le abilità funzionano con Hermes, Claude Code e Codex. La modalità ombra registra decisioni senza cambiare modello.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "Hermes Jev Skills offre abilità per scelta dei modelli, ricerca, filtraggio della memoria, smistamento e azioni nel browser.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Il ruolo di Jev",
+          "text": "Jev prende decisioni circoscritte, come scegliere modelli o ordinare passaggi recuperati; il modello principale scrive il testo.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come usarlo",
+          "text": "Le abilità funzionano con Hermes, Claude Code e Codex. La modalità ombra registra decisioni senza cambiare modello.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limiti",
+          "text": "Jev usa un’API cloud. Chiavi mancanti, bassa confidenza o timeout attivano alternative specifiche senza bloccare l’agente.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  },
+  "displayName": "Hermes Jev Skills"
+}

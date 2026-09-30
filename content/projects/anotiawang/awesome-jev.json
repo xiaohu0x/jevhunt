@@ -1,0 +1,768 @@
+{
+  "version": "source-content-v1",
+  "repo": "AnotiaWang/awesome-jev",
+  "repositoryId": 1374404623,
+  "relationship": "resource",
+  "category": "lists",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "613df4e51a15ae7cf19f642e285fc491ee603e2a",
+      "url": "https://github.com/AnotiaWang/awesome-jev/blob/613df4e51a15ae7cf19f642e285fc491ee603e2a/README.md",
+      "sha256": "159d8251fab47d6d65bafd29f48ff610edb8dbaf8cf624f7580fe2b996bb8383",
+      "accessedAt": "2026-09-30T07:33:50.468Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "The English and Simplified Chinese list collects Jev applications, clients, agent tools, games and research links.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 3,
+          "end": 18,
+          "quote": "A curated list of applications, libraries, tools, and research built with [Jev](https://docs.typesafe.ai/introduction).\n\n**[English](README.md)** | **[简体中文](README_zh.md)**\n\nUnofficial, not affiliated with [TypeSafe AI](https://typesafe.ai). Public access opened 21 September 2026 — keys from the [console](https://console.typesafe.ai/settings/keys). Pull requests welcome.\n\n## Contents\n\n- [Official](#official)\n- [Community](#community)\n- [SDKs & Clients](#sdks--clients)\n- [Applications](#applications)\n- [Demos & Games](#demos--games)\n- [Agent Tools](#agent-tools)\n- [Research & Open Models](#research--open-models)\n- [Articles](#articles)"
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "It separates official and community clients and gives Jev-inspired open models their own research section.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 36,
+          "end": 43,
+          "quote": "## SDKs & Clients\n\nOfficial first, then community clients. Community packages are not affiliated with TypeSafe unless noted.\n\n- [Python SDK](https://github.com/typesafe-ai/typesafe-sdk-python) - Official client. `pip install typesafe-sdk`. Docs: [Python SDK](https://docs.typesafe.ai/sdk/python).\n- [JavaScript / TypeScript SDK](https://github.com/typesafe-ai/typesafe-sdk-js) - Official client. `npm install @typesafe-ai/sdk`. Docs: [JavaScript SDK](https://docs.typesafe.ai/sdk/javascript).\n- [System One adapter (Python)](https://github.com/typesafe-ai/system-one-adapter-python) - Official drop-in `TypeSafeClient` replacement backed by LLM APIs, for comparing Jev against chat models on the same questions. `pip install system-one-adapter`.\n- [Vercel AI SDK provider](https://ai-sdk.dev/providers/ai-sdk-providers/typesafe-ai) - `@ai-sdk/typesafe-ai` plus `experimental_evaluate`. Use `typeSafeAi.evaluationModel('jev-latest')` or the Gateway id `typesafe-ai/jev`."
+        },
+        {
+          "source": "source-1",
+          "start": 214,
+          "end": 216,
+          "quote": "## Research & Open Models\n\nIndependent work inspired by Jev's interface. These are not TypeSafe models."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Start from the official documentation and known-failures links, then use the SDK or application sections to find an implementation.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 21,
+          "end": 28,
+          "quote": "## Official\n\n- [Documentation](https://docs.typesafe.ai/introduction) - API, SDKs, [cookbooks](https://docs.typesafe.ai/llms.txt), and [patterns](https://docs.typesafe.ai/patterns)\n- [Playground](https://console.typesafe.ai/playground)\n- [Console](https://console.typesafe.ai) - Keys and usage\n- [GitHub](https://github.com/typesafe-ai)\n- [Workflow evals](https://evals.typesafe.ai)\n- [Jev 1.13 jaggedness](https://docs.typesafe.ai/model-jaggedness/jev-1.13) - Known failure modes"
+        },
+        {
+          "source": "source-1",
+          "start": 36,
+          "end": 41,
+          "quote": "## SDKs & Clients\n\nOfficial first, then community clients. Community packages are not affiliated with TypeSafe unless noted.\n\n- [Python SDK](https://github.com/typesafe-ai/typesafe-sdk-python) - Official client. `pip install typesafe-sdk`. Docs: [Python SDK](https://docs.typesafe.ai/sdk/python).\n- [JavaScript / TypeScript SDK](https://github.com/typesafe-ai/typesafe-sdk-js) - Official client. `npm install @typesafe-ai/sdk`. Docs: [JavaScript SDK](https://docs.typesafe.ai/sdk/javascript)."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "This is an unofficial list. Open models in its research section are independent implementations, not TypeSafe’s model.",
+      "kind": "source-limitation",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 7,
+          "end": 7,
+          "quote": "Unofficial, not affiliated with [TypeSafe AI](https://typesafe.ai). Public access opened 21 September 2026 — keys from the [console](https://console.typesafe.ai/settings/keys). Pull requests welcome."
+        },
+        {
+          "source": "source-1",
+          "start": 216,
+          "end": 230,
+          "quote": "Independent work inspired by Jev's interface. These are not TypeSafe models.\n\n- [Kev](https://github.com/jaredpalmer/kev) - Unofficial Qwen3.5 decision models (0.8B, 4B, 9B) you can train and serve yourself. Choice, Score, and Noul in one forward pass, with published weights and frozen eval suites, and a local server that speaks `/v1/systemone`. Not TypeSafe's model\n- [Von](https://github.com/wfzyx/von) - Unofficial local non-autoregressive System One model with a `/v1/systemone`-compatible server and a Doom demo where each move is one forward pass. Not TypeSafe's model\n- [Laya](https://github.com/NandhaKishorM/laya) - Unofficial multilingual non-autoregressive decision model: Choice, Score, and Noul in one forward pass, with published weights, a PyPI package, and a router that picks a checkpoint per request. Not TypeSafe's model\n- [NanoJev](https://github.com/TianyuCodings/NanoJev) - Unofficial 0.6B parallel decision model: state and questions in, a full distribution out, no decoded text. Published weights and one checkpoint for ViZDoom, Maze, and Snake; on the author's ViZDoom Basic split, 128/128 against 56/128 for Jev. Not TypeSafe's model\n- [jevlike](https://github.com/vinnylarouge/jevlike) - Train a small one-pass scorer that maps context + N text options to a probability per option. Includes Doom / chess vision demos and a Wikispeedia next-click example. Explicitly *not* a reproduction of TypeSafe's architecture or RLCD.\n- [SemIf](https://github.com/TheoLeeCJ/SemIf-OpenJev) - Formerly OpenJev. Unofficial typed decisions from open models on a home RTX 3090 and in the browser: reads option logits instead of generating text. Not TypeSafe's model\n- [PocketJev](https://github.com/NullPo-jp/PocketJev) - On-device iPhone visual decisions with MLX + Qwen3-VL option logits. Camera + 3-choice, no text generation, ~1s, no photo saved.\n- [jev-visual](https://github.com/hr98w/jev-visual) - Educational Jev-like visual inference on Apple Silicon: shared multimodal context, candidate scoring, sorting-factory / Breakout / gesture demos. Not TypeSafe's model\n- [jevmlx](https://github.com/bnsd55/jevmlx) - Jev-style parallel constrained decisions for any MLX model on Apple Silicon: schema-valid JSON in one forward pass\n- [JEVfire](https://github.com/kikoncuo/jevfire) - Jev-inspired parallel decisions for CUDA LLMs via vLLM, with a browser Mario demo (~71 ms/action locally)\n- [decider](https://github.com/Mapika/decider) - Qwen3.5-2B fine-tune that emits typed decisions with calibrated probabilities in one pass. Unofficial; not TypeSafe's architecture.\n- [RSI-Jev](https://github.com/Shanghua-Gao/RSI-Jev) - Unofficial Jev-like model trained by a recursively self-improving (RSI) AI research system that publishes every experiment, failures included. 2B Qwen3.5, with Choice, Score, and Noul in one forward pass, open weights, and a `/v1/systemone`-compatible server. Not TypeSafe's model\n- [jev-style](https://github.com/lawrence3699/jev-style) - Unofficial 0.8B Qwen3.5 decision model you install with `pip install \"jev-style[torch]\"` (or `[mlx]` on Apple silicon) and run locally (PyTorch, MLX, or llama.cpp with a separately built scorer) behind a `/v1/systemone`-compatible server: Choice, Score, and Noul in one pass, plus an MCP server and a Claude Code guard hook. Not TypeSafe's model"
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "awesome-jev — A bilingual Jev ecosystem reading list",
+      "h1": "awesome-jev — A bilingual Jev ecosystem reading list",
+      "description": "awesome-jev: The English and Simplified Chinese list collects Jev applications, clients, agent tools, games and research links.",
+      "summary": "The English and Simplified Chinese list collects Jev applications, clients, agent tools, games and research links. Start from the official documentation and known-failures links, then use the SDK or application sections to find an implementation.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "What it does",
+          "text": "The English and Simplified Chinese list collects Jev applications, clients, agent tools, games and research links.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "It separates official and community clients and gives Jev-inspired open models their own research section.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Getting started",
+          "text": "Start from the official documentation and known-failures links, then use the SDK or application sections to find an implementation.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "This is an unofficial list. Open models in its research section are independent implementations, not TypeSafe’s model.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "awesome-jev — 中英双语 Jev 生态资源清单",
+      "h1": "awesome-jev — 中英双语 Jev 生态资源清单",
+      "description": "awesome-jev: 这份英文与简体中文清单汇集 Jev 应用、客户端、智能体工具、游戏和研究链接。",
+      "summary": "这份英文与简体中文清单汇集 Jev 应用、客户端、智能体工具、游戏和研究链接。 先查看官方文档和已知失效模式链接，再从 SDK 或应用板块寻找实现。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "这份英文与简体中文清单汇集 Jev 应用、客户端、智能体工具、游戏和研究链接。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "它区分官方与社区客户端，并单独设置研究板块收录受 Jev 启发的开放模型。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "先查看官方文档和已知失效模式链接，再从 SDK 或应用板块寻找实现。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "这是非官方清单。研究板块中的开放模型是独立实现，并非 TypeSafe 的模型。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "awesome-jev — 中英雙語 Jev 生態資源清單",
+      "h1": "awesome-jev — 中英雙語 Jev 生態資源清單",
+      "description": "awesome-jev: 這份英文與簡體中文清單彙整 Jev 應用、用戶端、代理工具、遊戲及研究連結。",
+      "summary": "這份英文與簡體中文清單彙整 Jev 應用、用戶端、代理工具、遊戲及研究連結。 先查看官方文件與已知失敗模式，再從 SDK 或應用章節尋找實作。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "這份英文與簡體中文清單彙整 Jev 應用、用戶端、代理工具、遊戲及研究連結。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "它區分官方與社群用戶端，並以獨立研究章節收錄受 Jev 啟發的開放模型。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "先查看官方文件與已知失敗模式，再從 SDK 或應用章節尋找實作。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "這是非官方清單。研究章節中的開放模型為獨立實作，並非 TypeSafe 的模型。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "awesome-jev — 英語・簡体字中国語の Jev 資料集",
+      "h1": "awesome-jev — 英語・簡体字中国語の Jev 資料集",
+      "description": "awesome-jev: Jev のアプリ、クライアント、エージェント用ツール、ゲーム、研究を英語と簡体字中国語でまとめたリストです。",
+      "summary": "Jev のアプリ、クライアント、エージェント用ツール、ゲーム、研究を英語と簡体字中国語でまとめたリストです。 公式文書と既知の失敗例から読み始め、SDK やアプリの節で実装を探せます。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "できること",
+          "text": "Jev のアプリ、クライアント、エージェント用ツール、ゲーム、研究を英語と簡体字中国語でまとめたリストです。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "公式とコミュニティのクライアントを分け、Jev に着想を得た公開モデルは研究の節にまとめています。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い始めるには",
+          "text": "公式文書と既知の失敗例から読み始め、SDK やアプリの節で実装を探せます。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "対象範囲と制約",
+          "text": "非公式のリストです。研究の節にある公開モデルは独立実装であり、TypeSafe のモデルではありません。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "awesome-jev — 영어·간체 중국어 Jev 생태계 자료 목록",
+      "h1": "awesome-jev — 영어·간체 중국어 Jev 생태계 자료 목록",
+      "description": "awesome-jev: Jev 애플리케이션, 클라이언트, 에이전트 도구, 게임, 연구 링크를 영어와 간체 중국어로 모은 목록입니다.",
+      "summary": "Jev 애플리케이션, 클라이언트, 에이전트 도구, 게임, 연구 링크를 영어와 간체 중국어로 모은 목록입니다. 공식 문서와 알려진 실패 유형을 먼저 읽고 SDK 또는 애플리케이션 항목에서 구현을 찾을 수 있습니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "Jev 애플리케이션, 클라이언트, 에이전트 도구, 게임, 연구 링크를 영어와 간체 중국어로 모은 목록입니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "공식·커뮤니티 클라이언트를 구분하고 Jev에서 영감을 받은 공개 모델을 별도 연구 항목으로 정리합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "공식 문서와 알려진 실패 유형을 먼저 읽고 SDK 또는 애플리케이션 항목에서 구현을 찾을 수 있습니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 제약",
+          "text": "비공식 목록입니다. 연구 항목의 공개 모델은 독립 구현이며 TypeSafe의 모델이 아닙니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "awesome-jev — Lista bilingüe del ecosistema Jev",
+      "h1": "awesome-jev — Lista bilingüe del ecosistema Jev",
+      "description": "awesome-jev: La lista en inglés y chino simplificado reúne aplicaciones, clientes, herramientas para agentes, juegos e investigaciones sobre Jev.",
+      "summary": "La lista en inglés y chino simplificado reúne aplicaciones, clientes, herramientas para agentes, juegos e investigaciones sobre Jev. Empieza por la documentación oficial y los fallos conocidos; después busca una implementación en SDK o aplicaciones.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "La lista en inglés y chino simplificado reúne aplicaciones, clientes, herramientas para agentes, juegos e investigaciones sobre Jev.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Distingue clientes oficiales y comunitarios, y dedica una sección de investigación a modelos abiertos inspirados en Jev.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo empezar",
+          "text": "Empieza por la documentación oficial y los fallos conocidos; después busca una implementación en SDK o aplicaciones.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "Es una lista no oficial. Los modelos abiertos de investigación son implementaciones independientes, no el modelo de TypeSafe.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "awesome-jev — Liste bilingue de l’écosystème Jev",
+      "h1": "awesome-jev — Liste bilingue de l’écosystème Jev",
+      "description": "awesome-jev: La liste en anglais et chinois simplifié rassemble applications, clients, outils d’agents, jeux et recherches autour de Jev.",
+      "summary": "La liste en anglais et chinois simplifié rassemble applications, clients, outils d’agents, jeux et recherches autour de Jev. Commencez par la documentation officielle et les échecs connus, puis cherchez une implémentation dans les SDK ou applications.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "La liste en anglais et chinois simplifié rassemble applications, clients, outils d’agents, jeux et recherches autour de Jev.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Elle distingue les clients officiels et communautaires, et réserve une section aux modèles ouverts inspirés de Jev.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Commencez par la documentation officielle et les échecs connus, puis cherchez une implémentation dans les SDK ou applications.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "Cette liste est non officielle. Les modèles ouverts de la section recherche sont indépendants, et ne sont pas le modèle de TypeSafe.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "awesome-jev — Zweisprachige Ressourcenliste zum Jev-Ökosystem",
+      "h1": "awesome-jev — Zweisprachige Ressourcenliste zum Jev-Ökosystem",
+      "description": "awesome-jev: Die Liste in Englisch und vereinfachtem Chinesisch sammelt Jev-Anwendungen, Clients, Agentenwerkzeuge, Spiele und Forschung.",
+      "summary": "Die Liste in Englisch und vereinfachtem Chinesisch sammelt Jev-Anwendungen, Clients, Agentenwerkzeuge, Spiele und Forschung. Mit offizieller Dokumentation und bekannten Fehlermustern beginnen, dann in den SDK- oder Anwendungsabschnitten nach Implementierungen suchen.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "Die Liste in Englisch und vereinfachtem Chinesisch sammelt Jev-Anwendungen, Clients, Agentenwerkzeuge, Spiele und Forschung.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Offizielle und Community-Clients werden getrennt; offene Modelle nach Jevs Vorbild stehen in einem eigenen Forschungsabschnitt.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Einstieg",
+          "text": "Mit offizieller Dokumentation und bekannten Fehlermustern beginnen, dann in den SDK- oder Anwendungsabschnitten nach Implementierungen suchen.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Die Liste ist inoffiziell. Offene Modelle im Forschungsbereich sind unabhängige Implementierungen und nicht das Modell von TypeSafe.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "awesome-jev — Lista bilíngue do ecossistema Jev",
+      "h1": "awesome-jev — Lista bilíngue do ecossistema Jev",
+      "description": "awesome-jev: A lista em inglês e chinês simplificado reúne aplicações, clientes, ferramentas para agentes, jogos e pesquisas sobre Jev.",
+      "summary": "A lista em inglês e chinês simplificado reúne aplicações, clientes, ferramentas para agentes, jogos e pesquisas sobre Jev. Comece pela documentação oficial e pelas falhas conhecidas; depois procure uma implementação em SDKs ou aplicações.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "A lista em inglês e chinês simplificado reúne aplicações, clientes, ferramentas para agentes, jogos e pesquisas sobre Jev.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "Separa clientes oficiais dos comunitários e dedica uma seção de pesquisa a modelos abertos inspirados no Jev.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como começar",
+          "text": "Comece pela documentação oficial e pelas falhas conhecidas; depois procure uma implementação em SDKs ou aplicações.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "É uma lista não oficial. Os modelos abertos de pesquisa são implementações independentes, não o modelo da TypeSafe.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "awesome-jev — Двуязычный список ресурсов экосистемы Jev",
+      "h1": "awesome-jev — Двуязычный список ресурсов экосистемы Jev",
+      "description": "awesome-jev: Список на английском и упрощённом китайском объединяет приложения, клиенты, инструменты агентов, игры и исследования Jev.",
+      "summary": "Список на английском и упрощённом китайском объединяет приложения, клиенты, инструменты агентов, игры и исследования Jev. Начните с официальной документации и известных ошибок, затем ищите реализацию в разделах SDK или приложений.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Список на английском и упрощённом китайском объединяет приложения, клиенты, инструменты агентов, игры и исследования Jev.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Официальные и сторонние клиенты разделены; открытым моделям по мотивам Jev отведён исследовательский раздел.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Начало работы",
+          "text": "Начните с официальной документации и известных ошибок, затем ищите реализацию в разделах SDK или приложений.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Список неофициальный. Открытые модели в исследовательском разделе — независимые реализации, а не модель TypeSafe.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "awesome-jev — Jev पारिस्थितिकी की द्विभाषी संसाधन सूची",
+      "h1": "awesome-jev — Jev पारिस्थितिकी की द्विभाषी संसाधन सूची",
+      "description": "awesome-jev: अंग्रेज़ी और सरलीकृत चीनी की यह सूची Jev अनुप्रयोग, क्लाइंट, एजेंट टूल, गेम और शोध जोड़ती है।",
+      "summary": "अंग्रेज़ी और सरलीकृत चीनी की यह सूची Jev अनुप्रयोग, क्लाइंट, एजेंट टूल, गेम और शोध जोड़ती है। आधिकारिक दस्तावेज़ और ज्ञात विफलताओं से शुरू करें, फिर SDK या अनुप्रयोग खंड में कार्यान्वयन खोजें।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "परियोजना का काम",
+          "text": "अंग्रेज़ी और सरलीकृत चीनी की यह सूची Jev अनुप्रयोग, क्लाइंट, एजेंट टूल, गेम और शोध जोड़ती है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "यह आधिकारिक और सामुदायिक क्लाइंट अलग रखती है तथा Jev से प्रेरित खुले मॉडलों को शोध खंड में रखती है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "शुरुआत कैसे करें",
+          "text": "आधिकारिक दस्तावेज़ और ज्ञात विफलताओं से शुरू करें, फिर SDK या अनुप्रयोग खंड में कार्यान्वयन खोजें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "यह अनाधिकारिक सूची है। शोध खंड के खुले मॉडल स्वतंत्र कार्यान्वयन हैं, TypeSafe का मॉडल नहीं।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "awesome-jev — Daftar dwibahasa ekosistem Jev",
+      "h1": "awesome-jev — Daftar dwibahasa ekosistem Jev",
+      "description": "awesome-jev: Daftar berbahasa Inggris dan Tionghoa sederhana ini menghimpun aplikasi, klien, alat agen, permainan, dan riset Jev.",
+      "summary": "Daftar berbahasa Inggris dan Tionghoa sederhana ini menghimpun aplikasi, klien, alat agen, permainan, dan riset Jev. Mulai dari dokumentasi resmi dan kegagalan yang diketahui, lalu cari implementasi di bagian SDK atau aplikasi.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "Daftar berbahasa Inggris dan Tionghoa sederhana ini menghimpun aplikasi, klien, alat agen, permainan, dan riset Jev.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Klien resmi dipisahkan dari klien komunitas; model terbuka terinspirasi Jev memiliki bagian riset tersendiri.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara memulai",
+          "text": "Mulai dari dokumentasi resmi dan kegagalan yang diketahui, lalu cari implementasi di bagian SDK atau aplikasi.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Daftar ini tidak resmi. Model terbuka di bagian riset adalah implementasi independen, bukan model TypeSafe.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "awesome-jev — Danh sách song ngữ hệ sinh thái Jev",
+      "h1": "awesome-jev — Danh sách song ngữ hệ sinh thái Jev",
+      "description": "awesome-jev: Danh sách tiếng Anh và tiếng Trung giản thể tập hợp ứng dụng, thư viện khách, công cụ tác tử, trò chơi và nghiên cứu Jev.",
+      "summary": "Danh sách tiếng Anh và tiếng Trung giản thể tập hợp ứng dụng, thư viện khách, công cụ tác tử, trò chơi và nghiên cứu Jev. Bắt đầu từ tài liệu chính thức và các lỗi đã biết, rồi tìm bản triển khai ở mục SDK hoặc ứng dụng.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Công dụng",
+          "text": "Danh sách tiếng Anh và tiếng Trung giản thể tập hợp ứng dụng, thư viện khách, công cụ tác tử, trò chơi và nghiên cứu Jev.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Danh sách phân biệt thư viện khách chính thức với thư viện khách do cộng đồng phát triển, đồng thời dành mục nghiên cứu riêng cho mô hình mở lấy cảm hứng từ Jev.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách bắt đầu",
+          "text": "Bắt đầu từ tài liệu chính thức và các lỗi đã biết, rồi tìm bản triển khai ở mục SDK hoặc ứng dụng.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Đây là danh sách không chính thức. Các mô hình mở trong mục nghiên cứu là triển khai độc lập, không phải mô hình TypeSafe.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "awesome-jev — Jev ekosistemi için iki dilli kaynak listesi",
+      "h1": "awesome-jev — Jev ekosistemi için iki dilli kaynak listesi",
+      "description": "awesome-jev: İngilizce ve basitleştirilmiş Çince liste Jev uygulamalarını, istemcilerini, ajan araçlarını, oyunlarını ve araştırmalarını toplar.",
+      "summary": "İngilizce ve basitleştirilmiş Çince liste Jev uygulamalarını, istemcilerini, ajan araçlarını, oyunlarını ve araştırmalarını toplar. Resmî belgeler ve bilinen hata türleriyle başlayıp SDK veya uygulama bölümlerinden bir uygulama bulun.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "İngilizce ve basitleştirilmiş Çince liste Jev uygulamalarını, istemcilerini, ajan araçlarını, oyunlarını ve araştırmalarını toplar.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Resmî ve topluluk istemcilerini ayırır; Jev’den esinlenen açık modellere ayrı bir araştırma bölümü verir.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Başlangıç",
+          "text": "Resmî belgeler ve bilinen hata türleriyle başlayıp SDK veya uygulama bölümlerinden bir uygulama bulun.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Bu resmî olmayan bir listedir. Araştırma bölümündeki açık modeller bağımsız uygulamalardır; TypeSafe’in modeli değildir.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "awesome-jev — Elenco bilingue dell’ecosistema Jev",
+      "h1": "awesome-jev — Elenco bilingue dell’ecosistema Jev",
+      "description": "awesome-jev: L’elenco in inglese e cinese semplificato raccoglie applicazioni, client, strumenti per agenti, giochi e ricerche su Jev.",
+      "summary": "L’elenco in inglese e cinese semplificato raccoglie applicazioni, client, strumenti per agenti, giochi e ricerche su Jev. Parti dalla documentazione ufficiale e dai problemi noti, poi cerca un’implementazione nelle sezioni SDK o applicazioni.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "L’elenco in inglese e cinese semplificato raccoglie applicazioni, client, strumenti per agenti, giochi e ricerche su Jev.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Distingue client ufficiali e della comunità, dedicando una sezione di ricerca ai modelli aperti ispirati a Jev.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come iniziare",
+          "text": "Parti dalla documentazione ufficiale e dai problemi noti, poi cerca un’implementazione nelle sezioni SDK o applicazioni.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "L’elenco non è ufficiale. I modelli aperti di ricerca sono implementazioni indipendenti, non il modello di TypeSafe.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

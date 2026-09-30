@@ -8,9 +8,12 @@ import { LOCALES } from "../shared/locales.js";
 import { projectPath } from "../shared/render.js";
 import { loadData } from "./lib/site.mjs";
 import { CATEGORY_IDS, CATEGORY_NAMES } from "../shared/catalog-data.js";
+import { loadProjectContents, authoredProject } from "./lib/project-content.mjs";
 
 const { values } = parseArgs({ options: { catalog: { type: "string", default: "public/catalog.json" }, out: { type: "string", default: "reports/project-seo" }, static: { type: "boolean", default: false } } });
 const catalog = JSON.parse(readFileSync(values.catalog, "utf8"));
+const projectContents = loadProjectContents();
+catalog.apps = catalog.apps.map(project => authoredProject(project, projectContents));
 const { i18n } = loadData();
 const duplicateNames = duplicateProjectNames(catalog.apps);
 const output = resolve(values.out);
@@ -32,7 +35,7 @@ try {
     const titles = new Set(), descriptions = new Set();
     const counts = { pages: 0, genericFallbacks: 0, sourceRelationshipConflicts: 0, longTitles: 0, longDescriptions: 0 };
     for (const project of catalog.apps) {
-      const context = { localeKey, localeInfo, localePrefix: localeKey === "en" ? "" : `/${localeKey}`, duplicateName: duplicateNames.has(projectNameKey(project)) };
+      const context = { localeKey, localeInfo, localePrefix: localeKey === "en" ? "" : `/${localeKey}`, duplicateName: duplicateNames.has(projectNameKey(project)), content: projectContents.get(project.repo.toLowerCase()) };
       const seo = projectSeo(project, context);
       const path = projectPath(project.repo, context.localePrefix);
       const html = renderProject(project, catalog.meta || {}, [], [], i18n.locales[localeKey].messages, context);
@@ -43,7 +46,7 @@ try {
       check(title === seo.title + " | JevHunt", "Title changed during rendering");
       check(description === seo.description && description.length > 0, "Description missing or truncated");
       check(heading === seo.heading && (html.match(/<h1>/g) || []).length === 1, "H1 mismatch");
-      check(title.startsWith(seo.name), "Project name is not first");
+      check(title.toLowerCase().startsWith(seo.name.toLowerCase()), "Project name is not first");
       check(!titles.has(title.toLowerCase()), "Duplicate title");
       check(!descriptions.has(description.toLowerCase()), "Duplicate description");
       check(!/\{(?:name|topic|language|code|platform)\}/.test(title + description), "Unexpanded locale placeholder");

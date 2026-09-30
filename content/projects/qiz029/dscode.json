@@ -1,0 +1,764 @@
+{
+  "version": "source-content-v1",
+  "repo": "qiz029/dscode",
+  "repositoryId": 1365776373,
+  "relationship": "integration",
+  "category": "agents",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "2a94518ee0a50b6a63d70c4d5987c61efaf63988",
+      "url": "https://github.com/qiz029/dscode/blob/2a94518ee0a50b6a63d70c4d5987c61efaf63988/README.md",
+      "sha256": "7105062f16d19f739a9cbee98d5aed04e1bfe8babc6009a792f045b50fa6552b",
+      "accessedAt": "2026-09-30T07:33:49.042Z"
+    },
+    {
+      "id": "source-2",
+      "path": "plugins/jev/client.mjs",
+      "commit": "2a94518ee0a50b6a63d70c4d5987c61efaf63988",
+      "url": "https://github.com/qiz029/dscode/blob/2a94518ee0a50b6a63d70c4d5987c61efaf63988/plugins/jev/client.mjs",
+      "sha256": "b541b8a108433b822dbc921c26417888f9eab351e3aed3b46fde367b16780e66",
+      "accessedAt": "2026-09-30T07:33:49.676Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "kind": "documented",
+      "text": "DSCODE is a macOS coding agent whose terminal interface, CLI and scripts share a persistent session runtime.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 26,
+          "end": 28,
+          "quote": "DSCODE is a terminal coding agent for macOS, built on [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness). A persistent shell reads and writes code and runs tests; the TUI, the CLI and your scripts all share one session runtime instead of each starting their own. It installs as a pinned, reproducible harness—DSH dependencies, TUI and plugins are versioned and verified together.\n\nMost coding agents work alone. DSCODE is built on the opposite assumption: sessions on your machine are **visible to each other**, so one can hand a task over, another can review the diff, and an independent reviewer decides approvals from **your instruction** rather than from a rule table."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "kind": "documented",
+      "text": "The repository includes a separate Jev client for OpenRouter’s alpha Decisions endpoint, supporting Choice, Score and Noul.",
+      "evidence": [
+        {
+          "source": "source-2",
+          "start": 1,
+          "end": 7,
+          "quote": "// OpenRouter's alpha Decisions endpoint: one POST carries the state plus every\n// typed question, and the model answers them in a single pass. This is not the\n// chat-completions shape our llm provider uses, so it is a separate client.\nexport const DEFAULT_ENDPOINT = 'https://openrouter.ai';\nexport const DECISIONS_PATH = '/api/alpha/decisions';\nexport const DEFAULT_MODEL = '~typesafe/jev-latest';\nexport const QUESTION_TYPES = Object.freeze(['noul', 'choice', 'score']);"
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "kind": "documented",
+      "text": "Use sessions for editing, tests and agent handoffs; the Jev client requires an API key.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 44,
+          "end": 46,
+          "quote": "| **[Agentic coding loop](docs/dscode-ultra.md)** | A persistent shell that keeps cwd, environment and background jobs, plus file edits, search, patch application and tests. Project instructions, skills, plan, goal and hooks are wired in. |\n| **[Session bridge](docs/session-bridge.md)** | Start a task in the TUI, then add requirements, read output or subscribe to progress from another terminal (`dscode sessions`, `send`, `read`, `watch`). Every source enters the same runtime and context, and readers never take the session write lock. |\n| **[Agent-to-agent tasks](docs/session-communication.md)** | The agent finds, reads and messages other sessions with `list_sessions`, `read_session`, `send_session` and `reply_session`, choosing `queue`, `steer` or `defer`. A persisted mailbox, retry de-duplication and a finite budget bound message loss, double processing and wake-up loops. |"
+        },
+        {
+          "source": "source-2",
+          "start": 53,
+          "end": 57,
+          "quote": "export async function requestDecisions({\n  endpoint = DEFAULT_ENDPOINT, model = DEFAULT_MODEL, apiKey, state, questions, sessionId,\n  timeoutMs = 8000, signal, fetchImpl = globalThis.fetch,\n} = {}) {\n  if (!apiKey) throw new Error('jev: no API key resolved');"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "kind": "documented",
+      "text": "The documented prerequisites include macOS 14+, Node.js 22.x version 22.19 or newer or Node.js 24+, npm, Git and Google Chrome.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 80,
+          "end": 80,
+          "quote": "Requires **macOS 14+, Node 22.19+ (22.x) or 24+, npm, Git and Google Chrome**."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "DSCODE: terminal coding with a Jev decision client",
+      "h1": "DSCODE: terminal coding with a Jev decision client",
+      "description": "DSCODE shares coding sessions across terminal UI, CLI and scripts on macOS. Its separate Jev client uses OpenRouter’s typed Decisions endpoint.",
+      "summary": "DSCODE is a macOS coding agent whose terminal interface, CLI and scripts share a persistent session runtime. The repository includes a separate Jev client for OpenRouter’s alpha Decisions endpoint, supporting Choice, Score and Noul. Use sessions for editing, tests and agent handoffs; the Jev client requires an API key.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose",
+          "text": "DSCODE is a macOS coding agent whose terminal interface, CLI and scripts share a persistent session runtime.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’s role",
+          "text": "The repository includes a separate Jev client for OpenRouter’s alpha Decisions endpoint, supporting Choice, Score and Noul.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "How to use it",
+          "text": "Use sessions for editing, tests and agent handoffs; the Jev client requires an API key.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limits to consider",
+          "text": "The documented prerequisites include macOS 14+, Node.js 22.x version 22.19 or newer or Node.js 24+, npm, Git and Google Chrome.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "DSCODE：含 Jev 决策客户端的终端编程工具",
+      "h1": "DSCODE：含 Jev 决策客户端的终端编程工具",
+      "description": "DSCODE 让 macOS 上的终端界面、命令行和脚本共享编程会话，支持编辑、测试和任务交接；仓库附带通过 OpenRouter 类型化 Decisions 端点调用 Jev 的独立客户端。",
+      "summary": "DSCODE 是 macOS 编程智能体，终端界面、命令行和脚本共享持久会话运行时。 仓库包含独立的 Jev 客户端，连接 OpenRouter alpha Decisions 端点，支持 Choice、Score 和 Noul。 可在会话中编辑、测试和向其他智能体交接任务；Jev 客户端需要 API 密钥。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "DSCODE 是 macOS 编程智能体，终端界面、命令行和脚本共享持久会话运行时。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "仓库包含独立的 Jev 客户端，连接 OpenRouter alpha Decisions 端点，支持 Choice、Score 和 Noul。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "可在会话中编辑、测试和向其他智能体交接任务；Jev 客户端需要 API 密钥。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用边界",
+          "text": "文档要求 macOS 14+、Node.js 22.x（至少 22.19）或 Node.js 24+、npm、Git 和 Google Chrome。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "DSCODE：含 Jev 決策用戶端的終端開發工具",
+      "h1": "DSCODE：含 Jev 決策用戶端的終端開發工具",
+      "description": "DSCODE 讓 macOS 的終端介面、命令列與腳本共享開發工作階段，支援編輯、測試及交接；儲存庫附帶透過 OpenRouter 型別化 Decisions 端點呼叫 Jev 的獨立用戶端。",
+      "summary": "DSCODE 是 macOS 程式開發代理，終端介面、命令列與腳本共享持久工作階段執行環境。 儲存庫包含獨立的 Jev 用戶端，連接 OpenRouter alpha Decisions 端點，支援 Choice、Score 與 Noul。 可在工作階段中編輯、測試及向其他代理交接任務；Jev 用戶端需要 API 金鑰。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "DSCODE 是 macOS 程式開發代理，終端介面、命令列與腳本共享持久工作階段執行環境。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "儲存庫包含獨立的 Jev 用戶端，連接 OpenRouter alpha Decisions 端點，支援 Choice、Score 與 Noul。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "可在工作階段中編輯、測試及向其他代理交接任務；Jev 用戶端需要 API 金鑰。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用限制",
+          "text": "文件要求 macOS 14+、Node.js 22.x（至少 22.19）或 Node.js 24+、npm、Git 與 Google Chrome。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "DSCODE：Jev 判断クライアントを含む端末開発エージェント",
+      "h1": "DSCODE：Jev 判断クライアントを含む端末開発エージェント",
+      "description": "DSCODE は macOS の端末 UI、CLI、スクリプトで開発セッションを共有します。独立した Jev クライアントは OpenRouter Decisions を利用します。",
+      "summary": "DSCODE は macOS の開発エージェントで、端末 UI、CLI、スクリプトが永続セッションを共有します。 OpenRouter の alpha Decisions API 用 Jev クライアントを含み、Choice、Score、Noul に対応します。 セッション内で編集、テスト、他エージェントへの引き継ぎを行います。Jev クライアントには API キーが必要です。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "何ができるか",
+          "text": "DSCODE は macOS の開発エージェントで、端末 UI、CLI、スクリプトが永続セッションを共有します。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "OpenRouter の alpha Decisions API 用 Jev クライアントを含み、Choice、Score、Noul に対応します。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "セッション内で編集、テスト、他エージェントへの引き継ぎを行います。Jev クライアントには API キーが必要です。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "制約と注意点",
+          "text": "文書上の要件は macOS 14 以降、Node.js 22.x（22.19 以降）または Node.js 24 以降、npm、Git、Google Chrome です。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "DSCODE: Jev 결정 클라이언트를 포함한 터미널 코딩",
+      "h1": "DSCODE: Jev 결정 클라이언트를 포함한 터미널 코딩",
+      "description": "DSCODE는 macOS의 터미널 UI, CLI, 스크립트가 코딩 세션을 공유합니다. 별도 Jev 클라이언트는 OpenRouter Decisions를 사용합니다.",
+      "summary": "DSCODE는 터미널 UI, CLI, 스크립트가 영속 세션 런타임을 공유하는 macOS 코딩 에이전트입니다. 저장소에는 Choice, Score, Noul을 지원하는 OpenRouter alpha Decisions용 별도 Jev 클라이언트가 포함됩니다. 세션에서 편집, 테스트, 에이전트 간 작업 인계를 수행합니다. Jev 클라이언트에는 API 키가 필요합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "DSCODE는 터미널 UI, CLI, 스크립트가 영속 세션 런타임을 공유하는 macOS 코딩 에이전트입니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "저장소에는 Choice, Score, Noul을 지원하는 OpenRouter alpha Decisions용 별도 Jev 클라이언트가 포함됩니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "세션에서 편집, 테스트, 에이전트 간 작업 인계를 수행합니다. Jev 클라이언트에는 API 키가 필요합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "제약 사항",
+          "text": "문서상 요구 사항은 macOS 14+, Node.js 22.x 중 22.19 이상 또는 Node.js 24 이상, npm, Git, Google Chrome입니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "DSCODE: programación en terminal con cliente Jev",
+      "h1": "DSCODE: programación en terminal con cliente Jev",
+      "description": "DSCODE comparte sesiones entre terminal, CLI y scripts en macOS. Su cliente Jev separado utiliza el endpoint Decisions de OpenRouter.",
+      "summary": "DSCODE es un agente de programación para macOS que comparte sesiones persistentes entre interfaz de terminal, CLI y scripts. Incluye un cliente Jev separado para Decisions alpha de OpenRouter, con Choice, Score y Noul. Usa sesiones para editar, probar y delegar entre agentes; el cliente Jev requiere una clave API.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "DSCODE es un agente de programación para macOS que comparte sesiones persistentes entre interfaz de terminal, CLI y scripts.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "El papel de Jev",
+          "text": "Incluye un cliente Jev separado para Decisions alpha de OpenRouter, con Choice, Score y Noul.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo usarlo",
+          "text": "Usa sesiones para editar, probar y delegar entre agentes; el cliente Jev requiere una clave API.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Límites a considerar",
+          "text": "Los requisitos documentados incluyen macOS 14+, Node.js 22.x desde 22.19 o Node.js 24+, npm, Git y Google Chrome.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "DSCODE : programmation en terminal avec client Jev",
+      "h1": "DSCODE : programmation en terminal avec client Jev",
+      "description": "DSCODE partage les sessions entre terminal, CLI et scripts sur macOS. Son client Jev distinct utilise le point d’accès Decisions d’OpenRouter.",
+      "summary": "DSCODE est un agent de développement macOS dont l’interface, la CLI et les scripts partagent une session persistante. Il inclut un client Jev distinct pour Decisions alpha d’OpenRouter, avec Choice, Score et Noul. Les sessions servent à modifier, tester et transmettre des tâches entre agents ; le client Jev nécessite une clé API.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "DSCODE est un agent de développement macOS dont l’interface, la CLI et les scripts partagent une session persistante.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Le rôle de Jev",
+          "text": "Il inclut un client Jev distinct pour Decisions alpha d’OpenRouter, avec Choice, Score et Noul.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Utilisation",
+          "text": "Les sessions servent à modifier, tester et transmettre des tâches entre agents ; le client Jev nécessite une clé API.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limites à connaître",
+          "text": "Les prérequis documentés comprennent macOS 14+, Node.js 22.x à partir de 22.19 ou Node.js 24+, npm, Git et Google Chrome.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "DSCODE: Terminal-Entwicklung mit Jev-Client",
+      "h1": "DSCODE: Terminal-Entwicklung mit Jev-Client",
+      "description": "DSCODE teilt Programmiersitzungen zwischen Terminal, CLI und Skripten auf macOS. Der separate Jev-Client nutzt OpenRouters Decisions-Endpunkt.",
+      "summary": "DSCODE ist ein macOS-Programmieragent, dessen Terminaloberfläche, CLI und Skripte dieselbe dauerhafte Sitzung nutzen. Das Repository enthält einen separaten Jev-Client für OpenRouters Alpha-Decisions-Endpunkt mit Choice, Score und Noul. Sitzungen dienen zum Bearbeiten, Testen und Übergeben von Agentenaufgaben; der Jev-Client benötigt einen API-Schlüssel.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "DSCODE ist ein macOS-Programmieragent, dessen Terminaloberfläche, CLI und Skripte dieselbe dauerhafte Sitzung nutzen.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Die Rolle von Jev",
+          "text": "Das Repository enthält einen separaten Jev-Client für OpenRouters Alpha-Decisions-Endpunkt mit Choice, Score und Noul.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Nutzung",
+          "text": "Sitzungen dienen zum Bearbeiten, Testen und Übergeben von Agentenaufgaben; der Jev-Client benötigt einen API-Schlüssel.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Grenzen",
+          "text": "Dokumentierte Voraussetzungen sind macOS 14+, Node.js 22.x ab 22.19 oder Node.js 24+, npm, Git und Google Chrome.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "DSCODE: programação no terminal com cliente Jev",
+      "h1": "DSCODE: programação no terminal com cliente Jev",
+      "description": "DSCODE compartilha sessões entre terminal, CLI e scripts no macOS. Seu cliente Jev separado usa o endpoint Decisions do OpenRouter.",
+      "summary": "DSCODE é um agente de programação para macOS com sessões persistentes compartilhadas pela interface de terminal, CLI e scripts. Inclui um cliente Jev separado para Decisions alpha do OpenRouter, com Choice, Score e Noul. Use sessões para editar, testar e repassar tarefas entre agentes; o cliente Jev exige chave de API.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "DSCODE é um agente de programação para macOS com sessões persistentes compartilhadas pela interface de terminal, CLI e scripts.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "O papel do Jev",
+          "text": "Inclui um cliente Jev separado para Decisions alpha do OpenRouter, com Choice, Score e Noul.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Use sessões para editar, testar e repassar tarefas entre agentes; o cliente Jev exige chave de API.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limitações",
+          "text": "Os requisitos documentados incluem macOS 14+, Node.js 22.x a partir de 22.19 ou Node.js 24+, npm, Git e Google Chrome.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "DSCODE: разработка в терминале с клиентом Jev",
+      "h1": "DSCODE: разработка в терминале с клиентом Jev",
+      "description": "DSCODE объединяет сессии терминального интерфейса, CLI и скриптов на macOS. Отдельный Jev-клиент использует Decisions OpenRouter.",
+      "summary": "DSCODE — агент программирования для macOS с общими постоянными сессиями для терминального интерфейса, CLI и скриптов. Репозиторий содержит отдельный клиент Jev для alpha Decisions OpenRouter с поддержкой Choice, Score и Noul. Сессии используются для правок, тестов и передачи задач агентам; клиенту Jev нужен API-ключ.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "DSCODE — агент программирования для macOS с общими постоянными сессиями для терминального интерфейса, CLI и скриптов.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Репозиторий содержит отдельный клиент Jev для alpha Decisions OpenRouter с поддержкой Choice, Score и Noul.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Сессии используются для правок, тестов и передачи задач агентам; клиенту Jev нужен API-ключ.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ограничения",
+          "text": "Документированные требования: macOS 14+, Node.js 22.x начиная с 22.19 либо Node.js 24+, npm, Git и Google Chrome.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "DSCODE: Jev क्लाइंट के साथ टर्मिनल कोडिंग",
+      "h1": "DSCODE: Jev क्लाइंट के साथ टर्मिनल कोडिंग",
+      "description": "DSCODE macOS पर टर्मिनल, CLI और स्क्रिप्ट में कोडिंग सत्र साझा करता है। इसका अलग Jev क्लाइंट OpenRouter Decisions इस्तेमाल करता है।",
+      "summary": "DSCODE macOS का कोडिंग एजेंट है, जिसकी टर्मिनल स्क्रीन, CLI और स्क्रिप्ट एक स्थायी सत्र साझा करती हैं। रिपॉज़िटरी में OpenRouter alpha Decisions के लिए अलग Jev क्लाइंट है, जो Choice, Score और Noul सपोर्ट करता है। सत्र में संपादन, परीक्षण और एजेंटों को काम सौंपें; Jev क्लाइंट को API कुंजी चाहिए।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "किस काम आता है",
+          "text": "DSCODE macOS का कोडिंग एजेंट है, जिसकी टर्मिनल स्क्रीन, CLI और स्क्रिप्ट एक स्थायी सत्र साझा करती हैं।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "रिपॉज़िटरी में OpenRouter alpha Decisions के लिए अलग Jev क्लाइंट है, जो Choice, Score और Noul सपोर्ट करता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल कैसे करें",
+          "text": "सत्र में संपादन, परीक्षण और एजेंटों को काम सौंपें; Jev क्लाइंट को API कुंजी चाहिए।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "सीमाएँ",
+          "text": "दस्तावेज़ macOS 14+, Node.js 22.x में 22.19 या नया संस्करण अथवा Node.js 24+, npm, Git और Google Chrome की माँग करते हैं।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "DSCODE: pemrograman terminal dengan klien Jev",
+      "h1": "DSCODE: pemrograman terminal dengan klien Jev",
+      "description": "DSCODE berbagi sesi pemrograman antara terminal, CLI, dan skrip di macOS. Klien Jev terpisah memakai endpoint Decisions OpenRouter.",
+      "summary": "DSCODE adalah agen pemrograman macOS dengan sesi persisten yang dipakai bersama oleh antarmuka terminal, CLI, dan skrip. Repositori menyertakan klien Jev terpisah untuk Decisions alpha OpenRouter, dengan Choice, Score, dan Noul. Gunakan sesi untuk mengedit, menguji, dan menyerahkan tugas antaragen; klien Jev membutuhkan kunci API.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "DSCODE adalah agen pemrograman macOS dengan sesi persisten yang dipakai bersama oleh antarmuka terminal, CLI, dan skrip.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Repositori menyertakan klien Jev terpisah untuk Decisions alpha OpenRouter, dengan Choice, Score, dan Noul.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Gunakan sesi untuk mengedit, menguji, dan menyerahkan tugas antaragen; klien Jev membutuhkan kunci API.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Batasan",
+          "text": "Prasyarat terdokumentasi mencakup macOS 14+, Node.js 22.x mulai 22.19 atau Node.js 24+, npm, Git, dan Google Chrome.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "DSCODE: lập trình trong terminal với máy khách Jev",
+      "h1": "DSCODE: lập trình trong terminal với máy khách Jev",
+      "description": "DSCODE chia sẻ phiên lập trình giữa terminal, CLI và tập lệnh trên macOS. Máy khách Jev riêng dùng điểm cuối Decisions của OpenRouter.",
+      "summary": "DSCODE là tác tử lập trình macOS có giao diện terminal, CLI và tập lệnh dùng chung phiên bền vững. Kho mã có máy khách Jev riêng cho Decisions alpha của OpenRouter, hỗ trợ Choice, Score và Noul. Dùng phiên để sửa mã, kiểm thử và bàn giao việc giữa tác tử; máy khách Jev cần khóa API.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích",
+          "text": "DSCODE là tác tử lập trình macOS có giao diện terminal, CLI và tập lệnh dùng chung phiên bền vững.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Kho mã có máy khách Jev riêng cho Decisions alpha của OpenRouter, hỗ trợ Choice, Score và Noul.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Dùng phiên để sửa mã, kiểm thử và bàn giao việc giữa tác tử; máy khách Jev cần khóa API.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Giới hạn",
+          "text": "Tài liệu yêu cầu macOS 14+, Node.js 22.x từ 22.19 hoặc Node.js 24 trở lên, npm, Git và Google Chrome.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "DSCODE: Jev istemcisiyle terminalde kodlama",
+      "h1": "DSCODE: Jev istemcisiyle terminalde kodlama",
+      "description": "DSCODE macOS’ta kodlama oturumunu terminal, CLI ve betiklerle paylaşır. Ayrı Jev istemcisi OpenRouter Decisions uç noktasını kullanır.",
+      "summary": "DSCODE, terminal arayüzü, CLI ve betiklerin kalıcı oturumu paylaştığı bir macOS kodlama ajanıdır. Depo OpenRouter alpha Decisions uç noktası için Choice, Score ve Noul destekleyen ayrı Jev istemcisi içerir. Düzenleme, test ve ajanlar arası iş aktarımı için oturumları kullanın; Jev istemcisi API anahtarı gerektirir.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "DSCODE, terminal arayüzü, CLI ve betiklerin kalıcı oturumu paylaştığı bir macOS kodlama ajanıdır.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Depo OpenRouter alpha Decisions uç noktası için Choice, Score ve Noul destekleyen ayrı Jev istemcisi içerir.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Düzenleme, test ve ajanlar arası iş aktarımı için oturumları kullanın; Jev istemcisi API anahtarı gerektirir.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Sınırlamalar",
+          "text": "Belgelenen gereksinimler macOS 14+, Node.js 22.x içinde 22.19 veya üzeri ya da Node.js 24+, npm, Git ve Google Chrome’dur.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "DSCODE: sviluppo nel terminale con client Jev",
+      "h1": "DSCODE: sviluppo nel terminale con client Jev",
+      "description": "DSCODE condivide sessioni fra terminale, CLI e script su macOS. Il client Jev separato usa l’endpoint Decisions di OpenRouter.",
+      "summary": "DSCODE è un agente di programmazione macOS con sessioni persistenti condivise da interfaccia terminale, CLI e script. Include un client Jev separato per Decisions alpha di OpenRouter, con Choice, Score e Noul. Usa le sessioni per modifiche, test e passaggi di compiti fra agenti; il client Jev richiede una chiave API.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "DSCODE è un agente di programmazione macOS con sessioni persistenti condivise da interfaccia terminale, CLI e script.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Il ruolo di Jev",
+          "text": "Include un client Jev separato per Decisions alpha di OpenRouter, con Choice, Score e Noul.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come usarlo",
+          "text": "Usa le sessioni per modifiche, test e passaggi di compiti fra agenti; il client Jev richiede una chiave API.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limiti",
+          "text": "I requisiti documentati includono macOS 14+, Node.js 22.x dalla versione 22.19 oppure Node.js 24+, npm, Git e Google Chrome.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

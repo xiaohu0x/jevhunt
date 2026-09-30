@@ -1,0 +1,780 @@
+{
+  "version": "source-content-v1",
+  "repo": "OmniJev/awesome-jev-gallery",
+  "repositoryId": 1375039364,
+  "relationship": "resource",
+  "category": "lists",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "67c23ed920037612780a8da3296e4cd266cdc35c",
+      "url": "https://github.com/OmniJev/awesome-jev-gallery/blob/67c23ed920037612780a8da3296e4cd266cdc35c/README.md",
+      "sha256": "4bad6332371bd4e347b21c04f693e20653946f8450e44b48640c1566b77a76e2",
+      "accessedAt": "2026-09-30T07:33:50.803Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "Awesome JEV is a gallery of System One research, open models, applications and independent evaluations, with links to code and papers.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 7,
+          "end": 19,
+          "quote": "> Papers, open models and evaluations behind System One models and Jev.\n\n[![Website](https://img.shields.io/badge/website-omnijev.github.io-2F80ED?style=flat-square&logo=githubpages&logoColor=white)](https://omnijev.github.io/awesome-jev-gallery/)\n\n![Entries](https://img.shields.io/badge/entries-146-8A2BE2?style=flat-square&logo=bookstack&logoColor=white)\n![Papers](https://img.shields.io/badge/papers-22-B31B1B?style=flat-square&logo=arxiv&logoColor=white)\n![Open source](https://img.shields.io/badge/open%20source-43-0EA5E9?style=flat-square&logo=huggingface&logoColor=white)\n![Jev evals](https://img.shields.io/badge/Jev%20evals-23-F0545C?style=flat-square&logo=speedtest&logoColor=white)\n![With code](https://img.shields.io/badge/with%20code-107-181717?style=flat-square&logo=github&logoColor=white)\n![Daily Papers](https://img.shields.io/badge/%F0%9F%A4%97%20daily%20papers-19-FFD21E?style=flat-square)\n[![License](https://img.shields.io/badge/license-CC%20BY%204.0-10B981?style=flat-square&logo=creativecommons&logoColor=white)](LICENSE)\n\n⚡ System One & Jev · 🧪 Open Source · 📊 Evaluations · 📰 Commentary · 🧬 Lineage"
+        },
+        {
+          "source": "source-1",
+          "start": 25,
+          "end": 36,
+          "quote": "## Contents\n\n- [🔥 News](#-news)\n- [⚡ System One & Jev](#-system-one--jev) (8)\n- [🧪 Open Source](#-open-source) (43)\n- [🔧 Built with Jev](#-built-with-jev) (35)\n- [📊 Independent Evaluations](#-independent-evaluations) (24)\n- [📰 Commentary & Analysis](#-commentary--analysis) (7)\n- [🧬 The Shape Before Jev](#-the-shape-before-jev) (15)\n- [🧱 What Jev Is Sold Against](#-what-jev-is-sold-against) (9)\n- [🧠 Where the Name Comes From](#-where-the-name-comes-from) (5)\n- [🔗 Related Lists](#-related-lists) (2)"
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "It distinguishes TypeSafe’s published material, independent models rebuilding the interface, and software that actually uses Jev.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 52,
+          "end": 59,
+          "quote": "What TypeSafe has published, kept to the load-bearing pages: the launch post, the contract, the failure modes it admits to, and the code it ships.\n\n- [Introducing System One Models and Jev](https://typesafe.ai/blog/introducing-system-one-models-and-jev), The launch post: state in, typed probabilistic decisions out, RLCD training, 70 to 500 ms, $0.042 per MTok. [![TypeSafe](https://img.shields.io/badge/TypeSafe-blog-7C5CE6?style=flat-square&logo=rss&logoColor=white)](https://typesafe.ai/blog/introducing-system-one-models-and-jev)\n- [Primitives: Choice, Score, Noul](https://docs.typesafe.ai/primitives), The three typed question shapes and the probability-per-option answers they return. [![TypeSafe](https://img.shields.io/badge/TypeSafe-docs-2F80ED?style=flat-square&logo=readthedocs&logoColor=white)](https://docs.typesafe.ai/primitives)\n- [Jev 1.13 jaggedness](https://docs.typesafe.ai/model-jaggedness/jev-1.13), TypeSafe's documented failure modes: literal reading, counting, dates, indirection, distractor state, adversarial content. [![TypeSafe](https://img.shields.io/badge/TypeSafe-docs-2F80ED?style=flat-square&logo=readthedocs&logoColor=white)](https://docs.typesafe.ai/model-jaggedness/jev-1.13)\n- [System One Adapter](https://github.com/typesafe-ai/system-one-adapter-python), Official drop-in that serves the same typed interface from OpenAI or Anthropic models, the baseline for every comparison. [![Code](https://img.shields.io/github/stars/typesafe-ai/system-one-adapter-python?style=flat-square&logo=github&label=Code&color=181717)](https://github.com/typesafe-ai/system-one-adapter-python)\n- [Hacker News launch thread](https://news.ycombinator.com/item?id=49717558), 1,850 points and 485 comments; the CEO confirms the zero-shot classifier reading and the encoder-with-heads shape. [![Hacker News](https://img.shields.io/badge/Hacker_News-thread-FF6600?style=flat-square&logo=ycombinator&logoColor=white)](https://news.ycombinator.com/item?id=49717558)\n- [TypeSafe Agent Skills](https://github.com/typesafe-ai/skills), Skill files that teach Claude Code, Codex and similar agents to design System One workflows. [![Code](https://img.shields.io/github/stars/typesafe-ai/skills?style=flat-square&logo=github&label=Code&color=181717)](https://github.com/typesafe-ai/skills) [![Website](https://img.shields.io/badge/Website-2EA44F?style=flat-square&logo=googlechrome&logoColor=white)](https://docs.typesafe.ai/agent-skill)"
+        },
+        {
+          "source": "source-1",
+          "start": 65,
+          "end": 67,
+          "quote": "## 🧪 Open Source\n\nOpen weights and code that rebuild the System One shape from encoders, small decoders and constrained decoding."
+        },
+        {
+          "source": "source-1",
+          "start": 115,
+          "end": 117,
+          "quote": "## 🔧 Built with Jev\n\nOpen, licensed software that puts Jev inside something that runs: routers, agents, games and integrations. Each entry links code you can read and numbers its authors measured themselves."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Use the official primitives and known-failure links for orientation, then follow model or evaluation entries to their original sources.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 54,
+          "end": 59,
+          "quote": "- [Introducing System One Models and Jev](https://typesafe.ai/blog/introducing-system-one-models-and-jev), The launch post: state in, typed probabilistic decisions out, RLCD training, 70 to 500 ms, $0.042 per MTok. [![TypeSafe](https://img.shields.io/badge/TypeSafe-blog-7C5CE6?style=flat-square&logo=rss&logoColor=white)](https://typesafe.ai/blog/introducing-system-one-models-and-jev)\n- [Primitives: Choice, Score, Noul](https://docs.typesafe.ai/primitives), The three typed question shapes and the probability-per-option answers they return. [![TypeSafe](https://img.shields.io/badge/TypeSafe-docs-2F80ED?style=flat-square&logo=readthedocs&logoColor=white)](https://docs.typesafe.ai/primitives)\n- [Jev 1.13 jaggedness](https://docs.typesafe.ai/model-jaggedness/jev-1.13), TypeSafe's documented failure modes: literal reading, counting, dates, indirection, distractor state, adversarial content. [![TypeSafe](https://img.shields.io/badge/TypeSafe-docs-2F80ED?style=flat-square&logo=readthedocs&logoColor=white)](https://docs.typesafe.ai/model-jaggedness/jev-1.13)\n- [System One Adapter](https://github.com/typesafe-ai/system-one-adapter-python), Official drop-in that serves the same typed interface from OpenAI or Anthropic models, the baseline for every comparison. [![Code](https://img.shields.io/github/stars/typesafe-ai/system-one-adapter-python?style=flat-square&logo=github&label=Code&color=181717)](https://github.com/typesafe-ai/system-one-adapter-python)\n- [Hacker News launch thread](https://news.ycombinator.com/item?id=49717558), 1,850 points and 485 comments; the CEO confirms the zero-shot classifier reading and the encoder-with-heads shape. [![Hacker News](https://img.shields.io/badge/Hacker_News-thread-FF6600?style=flat-square&logo=ycombinator&logoColor=white)](https://news.ycombinator.com/item?id=49717558)\n- [TypeSafe Agent Skills](https://github.com/typesafe-ai/skills), Skill files that teach Claude Code, Codex and similar agents to design System One workflows. [![Code](https://img.shields.io/github/stars/typesafe-ai/skills?style=flat-square&logo=github&label=Code&color=181717)](https://github.com/typesafe-ai/skills) [![Website](https://img.shields.io/badge/Website-2EA44F?style=flat-square&logo=googlechrome&logoColor=white)](https://docs.typesafe.ai/agent-skill)"
+        },
+        {
+          "source": "source-1",
+          "start": 157,
+          "end": 159,
+          "quote": "## 📊 Independent Evaluations\n\nEvery independent test of Jev published so far, with the headline number where the source gives one. TypeSafe's own dashboard is listed and marked official."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "Performance figures belong to the linked authors and their test conditions. The gallery also lists TypeSafe’s evaluation dashboard with an official label.",
+      "kind": "source-limitation",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 117,
+          "end": 117,
+          "quote": "Open, licensed software that puts Jev inside something that runs: routers, agents, games and integrations. Each entry links code you can read and numbers its authors measured themselves."
+        },
+        {
+          "source": "source-1",
+          "start": 159,
+          "end": 159,
+          "quote": "Every independent test of Jev published so far, with the headline number where the source gives one. TypeSafe's own dashboard is listed and marked official."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "awesome-jev-gallery — Papers, open models and Jev evaluations",
+      "h1": "awesome-jev-gallery — Papers, open models and Jev evaluations",
+      "description": "awesome-jev-gallery: Awesome JEV is a gallery of System One research, open models, applications and independent evaluations, with links to code and papers.",
+      "summary": "Awesome JEV is a gallery of System One research, open models, applications and independent evaluations, with links to code and papers. Use the official primitives and known-failure links for orientation, then follow model or evaluation entries to their original sources.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "What it does",
+          "text": "Awesome JEV is a gallery of System One research, open models, applications and independent evaluations, with links to code and papers.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "It distinguishes TypeSafe’s published material, independent models rebuilding the interface, and software that actually uses Jev.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Getting started",
+          "text": "Use the official primitives and known-failure links for orientation, then follow model or evaluation entries to their original sources.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "Performance figures belong to the linked authors and their test conditions. The gallery also lists TypeSafe’s evaluation dashboard with an official label.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "awesome-jev-gallery — Jev 论文、开放模型与评估画廊",
+      "h1": "awesome-jev-gallery — Jev 论文、开放模型与评估画廊",
+      "description": "awesome-jev-gallery: Awesome JEV 汇集 System One 研究、开放模型、应用和独立评估，并链接代码与论文。",
+      "summary": "Awesome JEV 汇集 System One 研究、开放模型、应用和独立评估，并链接代码与论文。 先通过官方原语和已知失败模式了解背景，再从模型或评估条目追溯原始来源。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "Awesome JEV 汇集 System One 研究、开放模型、应用和独立评估，并链接代码与论文。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "它区分 TypeSafe 发布的资料、重建接口的独立模型，以及实际使用 Jev 的软件。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "先通过官方原语和已知失败模式了解背景，再从模型或评估条目追溯原始来源。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "性能数字来自链接作者及其测试条件。画廊也收录 TypeSafe 的评估看板，并标注为官方。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "awesome-jev-gallery — Jev 論文、開放模型與評估圖錄",
+      "h1": "awesome-jev-gallery — Jev 論文、開放模型與評估圖錄",
+      "description": "awesome-jev-gallery: Awesome JEV 彙集 System One 研究、開放模型、應用及獨立評估，並連結程式碼與論文。",
+      "summary": "Awesome JEV 彙集 System One 研究、開放模型、應用及獨立評估，並連結程式碼與論文。 先透過官方原語與已知失敗模式了解背景，再從模型或評估條目追溯原始來源。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "Awesome JEV 彙集 System One 研究、開放模型、應用及獨立評估，並連結程式碼與論文。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "它區分 TypeSafe 發布的資料、重建介面的獨立模型，以及實際使用 Jev 的軟體。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "先透過官方原語與已知失敗模式了解背景，再從模型或評估條目追溯原始來源。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "效能數字來自連結作者及其測試條件。圖錄也收錄 TypeSafe 評估儀表板，並標示為官方。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "awesome-jev-gallery — Jev の論文・公開モデル・評価を集めたギャラリー",
+      "h1": "awesome-jev-gallery — Jev の論文・公開モデル・評価を集めたギャラリー",
+      "description": "awesome-jev-gallery: Awesome JEV は System One の研究、公開モデル、アプリ、独立評価をコードや論文へのリンクとともに集めます。",
+      "summary": "Awesome JEV は System One の研究、公開モデル、アプリ、独立評価をコードや論文へのリンクとともに集めます。 公式プリミティブと既知の失敗例で背景をつかみ、モデルや評価の項目から一次資料へ進めます。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "できること",
+          "text": "Awesome JEV は System One の研究、公開モデル、アプリ、独立評価をコードや論文へのリンクとともに集めます。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "TypeSafe の公開資料、インターフェースを再構築する独立モデル、実際に Jev を使うソフトを分けています。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い始めるには",
+          "text": "公式プリミティブと既知の失敗例で背景をつかみ、モデルや評価の項目から一次資料へ進めます。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "対象範囲と制約",
+          "text": "性能値はリンク先の著者とその測定条件に属します。TypeSafe の評価ダッシュボードも公式と明記して掲載しています。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "awesome-jev-gallery — Jev 논문·공개 모델·평가 갤러리",
+      "h1": "awesome-jev-gallery — Jev 논문·공개 모델·평가 갤러리",
+      "description": "awesome-jev-gallery: Awesome JEV는 System One 연구, 공개 모델, 애플리케이션, 독립 평가를 코드와 논문 링크로 모읍니다.",
+      "summary": "Awesome JEV는 System One 연구, 공개 모델, 애플리케이션, 독립 평가를 코드와 논문 링크로 모읍니다. 공식 기본 연산과 알려진 실패 유형을 읽은 뒤 모델 또는 평가 항목에서 원출처로 이동할 수 있습니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "Awesome JEV는 System One 연구, 공개 모델, 애플리케이션, 독립 평가를 코드와 논문 링크로 모읍니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "TypeSafe의 공개 자료, 인터페이스를 재구현하는 독립 모델, 실제 Jev 사용 소프트웨어를 구분합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "공식 기본 연산과 알려진 실패 유형을 읽은 뒤 모델 또는 평가 항목에서 원출처로 이동할 수 있습니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 제약",
+          "text": "성능 수치는 연결된 저자와 해당 시험 조건에 속합니다. TypeSafe 평가 대시보드도 공식 표시와 함께 수록합니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "awesome-jev-gallery — Artículos, modelos y evaluaciones Jev",
+      "h1": "awesome-jev-gallery — Galería de artículos, modelos abiertos y evaluaciones Jev",
+      "description": "awesome-jev-gallery: Awesome JEV reúne investigación de System One, modelos abiertos, aplicaciones y evaluaciones independientes con enlaces a código y artículos.",
+      "summary": "Awesome JEV reúne investigación de System One, modelos abiertos, aplicaciones y evaluaciones independientes con enlaces a código y artículos. Oriéntate con las primitivas oficiales y los fallos conocidos; después sigue las entradas de modelos o evaluaciones hasta sus fuentes.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "Awesome JEV reúne investigación de System One, modelos abiertos, aplicaciones y evaluaciones independientes con enlaces a código y artículos.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Distingue publicaciones de TypeSafe, modelos independientes que reconstruyen la interfaz y programas que realmente usan Jev.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo empezar",
+          "text": "Oriéntate con las primitivas oficiales y los fallos conocidos; después sigue las entradas de modelos o evaluaciones hasta sus fuentes.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "Las cifras de rendimiento pertenecen a sus autores y condiciones de prueba. La galería también incluye el panel de TypeSafe marcado como oficial.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "awesome-jev-gallery — Articles, modèles et évaluations Jev",
+      "h1": "awesome-jev-gallery — Galerie de publications, modèles ouverts et évaluations Jev",
+      "description": "awesome-jev-gallery: Awesome JEV rassemble recherches System One, modèles ouverts, applications et évaluations indépendantes, avec liens vers code et publications.",
+      "summary": "Awesome JEV rassemble recherches System One, modèles ouverts, applications et évaluations indépendantes, avec liens vers code et publications. Consultez les primitives officielles et les échecs connus, puis remontez aux sources des modèles ou évaluations.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "Awesome JEV rassemble recherches System One, modèles ouverts, applications et évaluations indépendantes, avec liens vers code et publications.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Il distingue les documents TypeSafe, les modèles indépendants reconstruisant l’interface et les logiciels utilisant effectivement Jev.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Consultez les primitives officielles et les échecs connus, puis remontez aux sources des modèles ou évaluations.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "Les chiffres de performance appartiennent aux auteurs cités et à leurs conditions de test. Le tableau d’évaluation TypeSafe est également présent, signalé comme officiel.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "awesome-jev-gallery — Jev: Forschung, Modelle, Bewertungen",
+      "h1": "awesome-jev-gallery — Galerie für Forschung, offene Modelle und Jev-Auswertungen",
+      "description": "awesome-jev-gallery: Awesome JEV sammelt System-One-Forschung, offene Modelle, Anwendungen und unabhängige Auswertungen mit Links zu Code und Veröffentlichungen.",
+      "summary": "Awesome JEV sammelt System-One-Forschung, offene Modelle, Anwendungen und unabhängige Auswertungen mit Links zu Code und Veröffentlichungen. Offizielle Primitive und bekannte Fehlermuster bieten Orientierung; Modell- und Auswertungseinträge führen zu den Originalquellen.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "Awesome JEV sammelt System-One-Forschung, offene Modelle, Anwendungen und unabhängige Auswertungen mit Links zu Code und Veröffentlichungen.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Es trennt TypeSafe-Material, unabhängige Nachbildungen der Schnittstelle und Software, die Jev tatsächlich einsetzt.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Einstieg",
+          "text": "Offizielle Primitive und bekannte Fehlermuster bieten Orientierung; Modell- und Auswertungseinträge führen zu den Originalquellen.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Leistungszahlen stammen von den verlinkten Autoren und deren Testbedingungen. TypeSafes Evaluationsdashboard ist ebenfalls enthalten und als offiziell markiert.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "awesome-jev-gallery — Artigos, modelos e avaliações Jev",
+      "h1": "awesome-jev-gallery — Galeria de artigos, modelos abertos e avaliações Jev",
+      "description": "awesome-jev-gallery: O Awesome JEV reúne pesquisas de System One, modelos abertos, aplicações e avaliações independentes com links para código e artigos.",
+      "summary": "O Awesome JEV reúne pesquisas de System One, modelos abertos, aplicações e avaliações independentes com links para código e artigos. Comece pelas primitivas oficiais e falhas conhecidas, depois siga as entradas de modelos ou avaliações até as fontes originais.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "O Awesome JEV reúne pesquisas de System One, modelos abertos, aplicações e avaliações independentes com links para código e artigos.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "Distingue materiais da TypeSafe, modelos independentes que recriam a interface e programas que realmente usam Jev.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como começar",
+          "text": "Comece pelas primitivas oficiais e falhas conhecidas, depois siga as entradas de modelos ou avaliações até as fontes originais.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "Os números de desempenho pertencem aos autores citados e às suas condições de teste. A galeria também inclui o painel TypeSafe identificado como oficial.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "awesome-jev-gallery — Публикации, модели и оценки Jev",
+      "h1": "awesome-jev-gallery — Галерея публикаций, открытых моделей и оценок Jev",
+      "description": "awesome-jev-gallery: Awesome JEV собирает исследования System One, открытые модели, приложения и независимые оценки со ссылками на код и статьи.",
+      "summary": "Awesome JEV собирает исследования System One, открытые модели, приложения и независимые оценки со ссылками на код и статьи. Начните с официальных примитивов и известных ошибок, затем переходите к первоисточникам моделей и оценок.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Awesome JEV собирает исследования System One, открытые модели, приложения и независимые оценки со ссылками на код и статьи.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Он разделяет материалы TypeSafe, независимые модели с воссозданным интерфейсом и программы, действительно использующие Jev.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Начало работы",
+          "text": "Начните с официальных примитивов и известных ошибок, затем переходите к первоисточникам моделей и оценок.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Показатели производительности принадлежат авторам ссылок и их условиям тестирования. Панель оценок TypeSafe также включена и помечена как официальная.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "awesome-jev-gallery — Jev शोधपत्र, खुले मॉडल और मूल्यांकन संग्रह",
+      "h1": "awesome-jev-gallery — Jev शोधपत्र, खुले मॉडल और मूल्यांकन संग्रह",
+      "description": "awesome-jev-gallery: Awesome JEV System One शोध, खुले मॉडल, अनुप्रयोग और स्वतंत्र मूल्यांकन को कोड तथा शोधपत्रों के लिंक के साथ रखता है।",
+      "summary": "Awesome JEV System One शोध, खुले मॉडल, अनुप्रयोग और स्वतंत्र मूल्यांकन को कोड तथा शोधपत्रों के लिंक के साथ रखता है। आधिकारिक मूल ऑपरेशन और ज्ञात विफलताओं से शुरुआत करें, फिर मॉडल या मूल्यांकन प्रविष्टि से मूल स्रोत देखें।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "परियोजना का काम",
+          "text": "Awesome JEV System One शोध, खुले मॉडल, अनुप्रयोग और स्वतंत्र मूल्यांकन को कोड तथा शोधपत्रों के लिंक के साथ रखता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "यह TypeSafe सामग्री, इंटरफ़ेस दोबारा बनाने वाले स्वतंत्र मॉडल और वास्तव में Jev उपयोग करने वाले सॉफ़्टवेयर अलग करता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "शुरुआत कैसे करें",
+          "text": "आधिकारिक मूल ऑपरेशन और ज्ञात विफलताओं से शुरुआत करें, फिर मॉडल या मूल्यांकन प्रविष्टि से मूल स्रोत देखें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "प्रदर्शन आँकड़े जुड़े लेखकों और उनकी परीक्षण स्थितियों के हैं। TypeSafe का मूल्यांकन डैशबोर्ड भी आधिकारिक चिह्न के साथ शामिल है।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "awesome-jev-gallery — Makalah, model, dan evaluasi Jev",
+      "h1": "awesome-jev-gallery — Galeri makalah, model terbuka, dan evaluasi Jev",
+      "description": "awesome-jev-gallery: Awesome JEV menghimpun riset System One, model terbuka, aplikasi, dan evaluasi independen dengan tautan kode serta makalah.",
+      "summary": "Awesome JEV menghimpun riset System One, model terbuka, aplikasi, dan evaluasi independen dengan tautan kode serta makalah. Mulai dari primitif resmi dan kegagalan yang diketahui, lalu ikuti entri model atau evaluasi ke sumber aslinya.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "Awesome JEV menghimpun riset System One, model terbuka, aplikasi, dan evaluasi independen dengan tautan kode serta makalah.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Galeri membedakan materi TypeSafe, model independen yang membangun ulang antarmuka, dan perangkat lunak yang benar-benar memakai Jev.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara memulai",
+          "text": "Mulai dari primitif resmi dan kegagalan yang diketahui, lalu ikuti entri model atau evaluasi ke sumber aslinya.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Angka kinerja berasal dari penulis tertaut beserta kondisi pengujiannya. Dasbor evaluasi TypeSafe juga disertakan dan ditandai resmi.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "awesome-jev-gallery — Bài báo, mô hình và đánh giá Jev",
+      "h1": "awesome-jev-gallery — Bộ sưu tập bài báo, mô hình mở và đánh giá Jev",
+      "description": "awesome-jev-gallery: Awesome JEV tập hợp nghiên cứu System One, mô hình mở, ứng dụng và đánh giá độc lập, kèm liên kết mã nguồn và bài báo.",
+      "summary": "Awesome JEV tập hợp nghiên cứu System One, mô hình mở, ứng dụng và đánh giá độc lập, kèm liên kết mã nguồn và bài báo. Bắt đầu với phép toán chính thức và lỗi đã biết, sau đó theo mục mô hình hoặc đánh giá đến nguồn gốc.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Công dụng",
+          "text": "Awesome JEV tập hợp nghiên cứu System One, mô hình mở, ứng dụng và đánh giá độc lập, kèm liên kết mã nguồn và bài báo.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Bộ sưu tập tách tài liệu TypeSafe, mô hình độc lập tái tạo giao diện và phần mềm thực sự dùng Jev.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách bắt đầu",
+          "text": "Bắt đầu với phép toán chính thức và lỗi đã biết, sau đó theo mục mô hình hoặc đánh giá đến nguồn gốc.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Số liệu hiệu năng thuộc về tác giả được dẫn và điều kiện thử của họ. Bảng đánh giá TypeSafe cũng được liệt kê với nhãn chính thức.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "awesome-jev-gallery — Jev makaleleri, modelleri ve değerlendirmeleri",
+      "h1": "awesome-jev-gallery — Jev makaleleri, açık modelleri ve değerlendirmeleri galerisi",
+      "description": "awesome-jev-gallery: Awesome JEV; System One araştırmalarını, açık modelleri, uygulamaları ve bağımsız değerlendirmeleri kod ve makale bağlantılarıyla toplar.",
+      "summary": "Awesome JEV; System One araştırmalarını, açık modelleri, uygulamaları ve bağımsız değerlendirmeleri kod ve makale bağlantılarıyla toplar. Resmî temel işlemler ve bilinen hata türleriyle başlayıp model veya değerlendirme kayıtlarından özgün kaynaklara ilerleyin.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "Awesome JEV; System One araştırmalarını, açık modelleri, uygulamaları ve bağımsız değerlendirmeleri kod ve makale bağlantılarıyla toplar.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "TypeSafe yayınlarını, arayüzü yeniden kuran bağımsız modelleri ve gerçekten Jev kullanan yazılımları ayırır.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Başlangıç",
+          "text": "Resmî temel işlemler ve bilinen hata türleriyle başlayıp model veya değerlendirme kayıtlarından özgün kaynaklara ilerleyin.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Performans sayıları bağlantı verilen yazarlara ve test koşullarına aittir. TypeSafe değerlendirme panosu da resmî etiketiyle listelenir.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "awesome-jev-gallery — Articoli, modelli e valutazioni Jev",
+      "h1": "awesome-jev-gallery — Galleria di articoli, modelli aperti e valutazioni Jev",
+      "description": "awesome-jev-gallery: Awesome JEV raccoglie ricerca System One, modelli aperti, applicazioni e valutazioni indipendenti con link a codice e articoli.",
+      "summary": "Awesome JEV raccoglie ricerca System One, modelli aperti, applicazioni e valutazioni indipendenti con link a codice e articoli. Parti dalle primitive ufficiali e dai problemi noti, poi segui le voci dei modelli o delle valutazioni fino alle fonti originali.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "Awesome JEV raccoglie ricerca System One, modelli aperti, applicazioni e valutazioni indipendenti con link a codice e articoli.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Distingue materiali TypeSafe, modelli indipendenti che ricreano l’interfaccia e software che usa realmente Jev.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come iniziare",
+          "text": "Parti dalle primitive ufficiali e dai problemi noti, poi segui le voci dei modelli o delle valutazioni fino alle fonti originali.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "I dati prestazionali appartengono agli autori collegati e alle loro condizioni di prova. Anche il pannello TypeSafe è elencato, con etichetta ufficiale.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

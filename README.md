@@ -12,6 +12,7 @@ Node 24 and Python 3.12 are used in CI. The frontend is plain JavaScript, HTML a
 npm ci
 npm run build
 npm run db:migrate:local
+npm run catalog:seed:local
 npm run dev
 ```
 
@@ -94,7 +95,7 @@ Discovery health is separate from service liveness. `/api/catalog/status` report
 
 The supported locales are English (`en`), Simplified Chinese (`zh-cn`), Traditional Chinese (`zh-tw`), Japanese (`ja`), Korean (`ko`), Spanish (`es`), French (`fr`), German (`de`), Brazilian Portuguese (`pt-br`), Russian (`ru`), Hindi (`hi`), Indonesian (`id`), Vietnamese (`vi`), Turkish (`tr`) and Italian (`it`). The 15 locale options represent 14 languages, counting both Chinese scripts separately. This selection prioritizes major developer markets; it is not a ranking by native speaker count. Right-to-left locales are outside the current scope.
 
-`public/assets/js/i18n.js` is the locale source. The build validates message completeness and placeholders, generates the language menu and `shared/locales.js`, and uses that same inventory for edge routes and sitemap alternates. Each visitor downloads only their selected language bundle. Localization covers the landing page interface; repository descriptions, code examples, project detail pages and policy pages retain their source language. New locales link to the existing English OmniaKey integration guide and identify it as English.
+`public/assets/js/i18n.js` is the locale source. The build validates message completeness and placeholders, generates the language menu and `shared/locales.js`, and uses that same inventory for edge routes and sitemap alternates. Each visitor downloads only their selected language bundle. The first 100 reviewed projects have localized detail bodies and listing/search summaries in all 15 locales. Other projects retain the earlier generated metadata and source descriptions. Code, source quotations and policy pages retain their source language. New locales link to the existing English OmniaKey integration guide and identify it as English.
 
 ## Project search metadata
 
@@ -109,6 +110,26 @@ The wording rules and evidence boundaries are documented in
 details belong in `catalog/project-seo.json`; the locale vocabulary lives in
 `shared/project-seo-copy.js`. Newly discovered repositories inherit these rules.
 Migration 0007 indexes the active-name disambiguation lookup.
+
+The first 100 projects by stars in the 2026-09-30 live capture now have separate,
+source-backed content in `content/projects/`, selected by stable GitHub ID in
+`content/project-selection.json`. These records take precedence over generated
+metadata. Each contains 15 independently phrased TDH versions, a project summary,
+four explanatory sections, pinned sources and a claim ledger. Categories and Jev
+relationships are shared by details, listings, search and scheduled refreshes.
+
+Migration 0008 stores full content separately from compact catalog previews.
+Publishing checks record hashes, all locale rows and listing/search consistency.
+The worker preserves reviewed copy and queues new or changed sources for review;
+it does not generate or translate content automatically. This batch used Codex
+writing and separate model review, with no paid model API calls. Search intents
+are hypotheses, not measured search volumes, rankings or CTR results.
+
+See [`docs/project-content-100.md`](docs/project-content-100.md) for the batch scope,
+source restoration, review process and local/production publication commands.
+`npm run build` checks the committed ledger and structure without an external
+source archive. `npm run content:check` is the strict source-hash/quotation release
+gate. These checks deliberately report different verification coverage.
 
 Run `npm run audit:project-seo -- --static` after building to inspect every supported
 locale and English fallback. Pass `--catalog /path/to/catalog.json --out reports/name`
@@ -173,7 +194,7 @@ npx wrangler pages secret put ADMIN_EMAILS --project-name jevhunt
 npm run deploy
 ```
 
-`npm run deploy` builds and tests the site, applies additive database migrations, inserts missing bootstrap records, deploys the scheduled Worker, deploys Pages and verifies production. Updates after this initial release run automatically inside Cloudflare. No GitHub Actions deployment secret is required.
+`npm run deploy` checks archived source evidence, builds and tests the site, applies additive database migrations, inserts missing bootstrap records, deploys the scheduled Worker, publishes and verifies the selected reviewed content, deploys Pages and verifies production. The content check fetches every selected locale page, compares its TDH/body/citations, verifies localized listing summaries and checks sitemap inclusion. Metadata updates continue automatically inside Cloudflare; editorial content changes require review and publication. No GitHub Actions deployment secret is required.
 
 The existing public client ID and D1 binding are in `wrangler.toml`. Pages does not accept `account_id` in that file; use the environment if multiple Cloudflare accounts are available. The scheduler config is `workers/catalog-sync/wrangler.toml`.
 

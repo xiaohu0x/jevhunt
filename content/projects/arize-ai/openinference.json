@@ -1,0 +1,779 @@
+{
+  "version": "source-content-v1",
+  "repo": "Arize-ai/openinference",
+  "repositoryId": 735999703,
+  "relationship": "integration",
+  "category": "integrations",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "path": "README.md",
+      "commit": "300bba9191bf563794e10032d0ae25930d2f79f3",
+      "url": "https://github.com/Arize-ai/openinference/blob/300bba9191bf563794e10032d0ae25930d2f79f3/README.md",
+      "sha256": "229e4e29420ae61aeb5602be4fd77848c8aa8a18de26847dee8887eb717de311",
+      "accessedAt": "2026-09-30T07:33:48.105Z",
+      "id": "s1"
+    },
+    {
+      "path": "js/packages/openinference-instrumentation-typesafe/examples/all-question-types.ts",
+      "commit": "300bba9191bf563794e10032d0ae25930d2f79f3",
+      "url": "https://github.com/Arize-ai/openinference/blob/300bba9191bf563794e10032d0ae25930d2f79f3/js/packages/openinference-instrumentation-typesafe/examples/all-question-types.ts",
+      "sha256": "c6150b2ca985a7d43382605cbb1febd23d9f262921a23b2c99f1dffbdb8e5b06",
+      "accessedAt": "2026-09-30T07:33:48.515Z",
+      "id": "s2"
+    },
+    {
+      "path": "js/packages/openinference-instrumentation-typesafe/README.md",
+      "commit": "300bba9191bf563794e10032d0ae25930d2f79f3",
+      "url": "https://github.com/Arize-ai/openinference/blob/300bba9191bf563794e10032d0ae25930d2f79f3/js/packages/openinference-instrumentation-typesafe/README.md",
+      "sha256": "15f286ae8767244552ae52e16dfa79e59c71696ad9649f0694fb615664348347",
+      "accessedAt": "2026-09-30T09:04:27.419441+00:00",
+      "id": "s3"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "OpenInference supplies conventions and instrumentation for tracing AI applications, including model calls, retrieval and external tools.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 13,
+          "end": 28,
+          "quote": "OpenInference is a set of conventions and plugins that is complementary to [OpenTelemetry](https://opentelemetry.io/) to\nenable tracing of AI applications. OpenInference is natively supported\nby [Arize Phoenix](https://github.com/Arize-ai/phoenix) and [Arize AX](https://arize.com/products/ax?utm_source=docs&utm_medium=web&utm_content=openinference), but can be used with any OpenTelemetry-compatible backend as\nwell.\n\n## Specification\n\nThe OpenInference specification is edited in markdown files found in the [spec directory](./spec/). It's designed to\nprovide insight into the invocation of LLMs and the surrounding application context such as retrieval from vector stores\nand the usage of external tools such as search engines or APIs. The specification is transport and file-format agnostic,\nand is intended to be used in conjunction with other specifications such as JSON, ProtoBuf, and DataFrames.\n\n## Instrumentation\n\nOpenInference provides a set of instrumentations for popular machine learning SDKs and frameworks in a variety of\nlanguages."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "Its TypeSafe integration records systemOne calls as spans with JSON inputs and outputs, model and token usage; examples cover Choice, Noul and Score.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s3",
+          "start": 5,
+          "end": 7,
+          "quote": "This module provides automatic instrumentation for the [TypeSafe AI Node.js SDK](https://www.npmjs.com/package/@typesafe-ai/sdk) (`@typesafe-ai/sdk`), which may be used in conjunction with [@opentelemetry/sdk-trace-node](https://github.com/open-telemetry/opentelemetry-js/tree/main/packages/opentelemetry-sdk-trace-node).\n\nEach `TypeSafeClient.systemOne` call produces one OpenInference `LLM` span with JSON `input.value` / `output.value`, model, and token usage. `client.models.list()` is not instrumented. Traces follow the [OpenInference semantic conventions](https://github.com/Arize-ai/openinference/blob/main/spec/semantic_conventions.md) and can be sent to any OpenTelemetry-compatible backend such as [Arize Phoenix](https://github.com/Arize-ai/phoenix) or [Arize AX](https://arize.com/products/ax?utm_source=docs&utm_medium=web&utm_content=openinference)."
+        },
+        {
+          "source": "s2",
+          "start": 8,
+          "end": 19,
+          "quote": "    const client = new TypeSafeClient();\n    const result = await client.systemOne({\n      state: { subject: \"Payment failed\", messages: [\"I tried twice and need help today.\"] },\n      questions: {\n        category: choice({ task: \"Choose the support team\" }, {\n          billing: { handles: [\"payments\", \"refunds\"] }, technical: \"Product bugs\", other: null,\n        }),\n        urgent: noul(\"Does this need immediate attention?\"),\n        severity: score(\"How severe is the issue?\", [\"Minor inconvenience\", \"Blocks a task\", \"Critical outage\"]),\n        // Plain question objects work alongside the builders.\n        needs_reply: { type: \"noul\", instructions: \"Does the customer need a reply?\" },\n      },"
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Register TypeSafeInstrumentation before loading the CommonJS SDK, or use manuallyInstrument for ESM, bundlers or an already loaded SDK.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s3",
+          "start": 19,
+          "end": 41,
+          "quote": "Register the instrumentation **before** loading the SDK in CommonJS:\n\n```typescript\nimport { NodeTracerProvider } from \"@opentelemetry/sdk-trace-node\";\nimport { registerInstrumentations } from \"@opentelemetry/instrumentation\";\nimport { TypeSafeInstrumentation } from \"@arizeai/openinference-instrumentation-typesafe\";\n\nconst provider = new NodeTracerProvider();\nprovider.register();\n\nregisterInstrumentations({\n  instrumentations: [new TypeSafeInstrumentation()],\n});\n```\n\nFor ESM, bundlers, or when the SDK is imported first, call `manuallyInstrument`:\n\n```typescript\nimport * as TypeSafe from \"@typesafe-ai/sdk\";\nimport { TypeSafeInstrumentation } from \"@arizeai/openinference-instrumentation-typesafe\";\n\nconst instrumentation = new TypeSafeInstrumentation();\ninstrumentation.manuallyInstrument(TypeSafe);"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "The Node.js package requires Node.js 20+ and TypeSafe SDK 0.6.0 or later; models.list() calls are not instrumented.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s3",
+          "start": 7,
+          "end": 9,
+          "quote": "Each `TypeSafeClient.systemOne` call produces one OpenInference `LLM` span with JSON `input.value` / `output.value`, model, and token usage. `client.models.list()` is not instrumented. Traces follow the [OpenInference semantic conventions](https://github.com/Arize-ai/openinference/blob/main/spec/semantic_conventions.md) and can be sent to any OpenTelemetry-compatible backend such as [Arize Phoenix](https://github.com/Arize-ai/phoenix) or [Arize AX](https://arize.com/products/ax?utm_source=docs&utm_medium=web&utm_content=openinference).\n\nRequires Node.js 20+."
+        },
+        {
+          "source": "s3",
+          "start": 121,
+          "end": 127,
+          "quote": "## Compatibility\n\n`@arizeai/openinference-instrumentation-typesafe` is compatible with the following versions of the `@typesafe-ai/sdk` package:\n\n| TypeSafe SDK Version | OpenInference Instrumentation Version |\n| -------------------- | ------------------------------------- |\n| >=0.6.0              | ^0.1.0                                |"
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "OpenInference: tracing for TypeSafe decision calls",
+      "h1": "OpenInference: tracing for TypeSafe decision calls",
+      "description": "OpenInference instruments TypeSafe System One calls, exposing decision requests and results to OpenTelemetry-compatible backends.",
+      "summary": "OpenInference supplies conventions and instrumentation for tracing AI applications, including model calls, retrieval and external tools. Its TypeSafe integration records systemOne calls as spans with JSON inputs and outputs, model and token usage; examples cover Choice, Noul and Score.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose and audience",
+          "text": "OpenInference supplies conventions and instrumentation for tracing AI applications, including model calls, retrieval and external tools.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "Its TypeSafe integration records systemOne calls as spans with JSON inputs and outputs, model and token usage; examples cover Choice, Noul and Score.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Using the project",
+          "text": "Register TypeSafeInstrumentation before loading the CommonJS SDK, or use manuallyInstrument for ESM, bundlers or an already loaded SDK.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "The Node.js package requires Node.js 20+ and TypeSafe SDK 0.6.0 or later; models.list() calls are not instrumented.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "OpenInference：追踪 TypeSafe 决策调用",
+      "h1": "OpenInference：追踪 TypeSafe 决策调用",
+      "description": "OpenInference 为 TypeSafe System One 调用添加追踪，将决策请求与结果发送到兼容 OpenTelemetry 的后端。",
+      "summary": "OpenInference 提供 AI 应用追踪规范和插桩，覆盖模型调用、检索及外部工具。 TypeSafe 集成将 systemOne 调用记录为 span，含 JSON 输入输出、模型与词元用量；示例覆盖 Choice、Noul 和 Score。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途与适用对象",
+          "text": "OpenInference 提供 AI 应用追踪规范和插桩，覆盖模型调用、检索及外部工具。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "TypeSafe 集成将 systemOne 调用记录为 span，含 JSON 输入输出、模型与词元用量；示例覆盖 Choice、Noul 和 Score。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "在加载 CommonJS SDK 前注册 TypeSafeInstrumentation；ESM、打包器或 SDK 已加载时使用 manuallyInstrument。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "Node.js 包要求 Node.js 20+ 与 TypeSafe SDK 0.6.0 以上；不会为 models.list() 调用插桩。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "OpenInference：追蹤 TypeSafe 決策呼叫",
+      "h1": "OpenInference：追蹤 TypeSafe 決策呼叫",
+      "description": "OpenInference 為 TypeSafe System One 呼叫加入追蹤，將決策請求與結果提供給相容 OpenTelemetry 的後端。",
+      "summary": "OpenInference 提供 AI 應用追蹤規範與插樁，涵蓋模型呼叫、檢索及外部工具。 TypeSafe 整合將 systemOne 呼叫記為 span，包含 JSON 輸入輸出、模型和詞元用量；範例涵蓋 Choice、Noul 與 Score。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途與適用對象",
+          "text": "OpenInference 提供 AI 應用追蹤規範與插樁，涵蓋模型呼叫、檢索及外部工具。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "TypeSafe 整合將 systemOne 呼叫記為 span，包含 JSON 輸入輸出、模型和詞元用量；範例涵蓋 Choice、Noul 與 Score。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "在載入 CommonJS SDK 前註冊 TypeSafeInstrumentation；ESM、打包工具或 SDK 已載入時使用 manuallyInstrument。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "Node.js 套件需要 Node.js 20+ 及 TypeSafe SDK 0.6.0 以上；models.list() 呼叫不會被追蹤。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "OpenInference：TypeSafe の判断呼び出しを追跡",
+      "h1": "OpenInference：TypeSafe の判断呼び出しを追跡",
+      "description": "OpenInference は TypeSafe System One 呼び出しを計測し、判断の入力と結果を OpenTelemetry 対応基盤へ送れます。",
+      "summary": "AI アプリの追跡規約と計測機能を提供し、モデル呼び出し、検索、外部ツールを扱います。 TypeSafe 連携は systemOne を span として記録し、JSON 入出力、モデル、トークン使用量を含めます。例は Choice、Noul、Score に対応します。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途と対象",
+          "text": "AI アプリの追跡規約と計測機能を提供し、モデル呼び出し、検索、外部ツールを扱います。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev との関係",
+          "text": "TypeSafe 連携は systemOne を span として記録し、JSON 入出力、モデル、トークン使用量を含めます。例は Choice、Noul、Score に対応します。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "CommonJS SDK の読み込み前に TypeSafeInstrumentation を登録し、ESM やバンドラー、読み込み済み SDK では manuallyInstrument を使います。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範囲と制約",
+          "text": "Node.js パッケージは Node.js 20 以降と TypeSafe SDK 0.6.0 以降が必要です。models.list() は計測しません。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "OpenInference: TypeSafe 판단 호출 추적",
+      "h1": "OpenInference: TypeSafe 판단 호출 추적",
+      "description": "OpenInference는 TypeSafe System One 호출을 계측해 판단 요청과 결과를 OpenTelemetry 호환 백엔드로 전달합니다.",
+      "summary": "AI 애플리케이션 추적 규약과 계측 기능을 제공하며 모델 호출, 검색, 외부 도구를 다룹니다. TypeSafe 연동은 systemOne을 JSON 입력·출력, 모델, 토큰 사용량이 있는 span으로 기록하며 예시는 Choice, Noul, Score를 다룹니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "용도와 대상",
+          "text": "AI 애플리케이션 추적 규약과 계측 기능을 제공하며 모델 호출, 검색, 외부 도구를 다룹니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "TypeSafe 연동은 systemOne을 JSON 입력·출력, 모델, 토큰 사용량이 있는 span으로 기록하며 예시는 Choice, Noul, Score를 다룹니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "CommonJS SDK 로드 전에 TypeSafeInstrumentation을 등록하고 ESM, 번들러 또는 이미 로드된 SDK에는 manuallyInstrument를 씁니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 한계",
+          "text": "Node.js 패키지는 Node.js 20 이상과 TypeSafe SDK 0.6.0 이상이 필요하며 models.list()는 계측하지 않습니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "OpenInference: trazas de decisiones TypeSafe",
+      "h1": "OpenInference: trazas de decisiones TypeSafe",
+      "description": "OpenInference instrumenta llamadas TypeSafe System One y expone solicitudes y resultados a backends compatibles con OpenTelemetry.",
+      "summary": "Proporciona convenciones e instrumentación para rastrear aplicaciones de IA, incluidas llamadas a modelos, recuperación y herramientas externas. La integración TypeSafe registra systemOne como spans con entradas y salidas JSON, modelo y tokens; los ejemplos cubren Choice, Noul y Score.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "Proporciona convenciones e instrumentación para rastrear aplicaciones de IA, incluidas llamadas a modelos, recuperación y herramientas externas.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "La integración TypeSafe registra systemOne como spans con entradas y salidas JSON, modelo y tokens; los ejemplos cubren Choice, Noul y Score.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo se usa",
+          "text": "Registre TypeSafeInstrumentation antes de cargar el SDK CommonJS, o use manuallyInstrument con ESM, bundlers o SDK ya cargados.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "El paquete requiere Node.js 20+ y TypeSafe SDK 0.6.0 o posterior; no instrumenta models.list().",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "OpenInference : traces des décisions TypeSafe",
+      "h1": "OpenInference : traces des décisions TypeSafe",
+      "description": "OpenInference instrumente les appels TypeSafe System One et expose requêtes et résultats aux backends compatibles OpenTelemetry.",
+      "summary": "Il fournit conventions et instrumentation pour tracer les applications IA, dont appels de modèles, recherche et outils externes. L'intégration TypeSafe enregistre systemOne en spans avec entrées et sorties JSON, modèle et tokens ; les exemples couvrent Choice, Noul et Score.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Usage et public visé",
+          "text": "Il fournit conventions et instrumentation pour tracer les applications IA, dont appels de modèles, recherche et outils externes.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "L'intégration TypeSafe enregistre systemOne en spans avec entrées et sorties JSON, modèle et tokens ; les exemples couvrent Choice, Noul et Score.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Enregistrez TypeSafeInstrumentation avant le SDK CommonJS, ou utilisez manuallyInstrument pour ESM, les bundlers ou un SDK déjà chargé.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "Le paquet exige Node.js 20+ et TypeSafe SDK 0.6.0 ou ultérieur ; models.list() n'est pas instrumenté.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "OpenInference: Tracing für TypeSafe-Entscheidungen",
+      "h1": "OpenInference: Tracing für TypeSafe-Entscheidungen",
+      "description": "OpenInference instrumentiert TypeSafe-System-One-Aufrufe und stellt Anfragen und Ergebnisse OpenTelemetry-kompatiblen Backends bereit.",
+      "summary": "Es liefert Konventionen und Instrumentierung für KI-Anwendungen, einschließlich Modellaufrufen, Retrieval und externen Werkzeugen. Die TypeSafe-Integration erfasst systemOne als Spans mit JSON-Ein-/Ausgaben, Modell und Tokenverbrauch; Beispiele decken Choice, Noul und Score ab.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Zweck und Zielgruppe",
+          "text": "Es liefert Konventionen und Instrumentierung für KI-Anwendungen, einschließlich Modellaufrufen, Retrieval und externen Werkzeugen.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Die TypeSafe-Integration erfasst systemOne als Spans mit JSON-Ein-/Ausgaben, Modell und Tokenverbrauch; Beispiele decken Choice, Noul und Score ab.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Verwendung",
+          "text": "Registrieren Sie TypeSafeInstrumentation vor dem CommonJS-SDK oder verwenden Sie manuallyInstrument für ESM, Bundler oder bereits geladene SDKs.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Das Paket benötigt Node.js 20+ und TypeSafe SDK ab 0.6.0; models.list() wird nicht instrumentiert.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "OpenInference: rastreamento de decisões TypeSafe",
+      "h1": "OpenInference: rastreamento de decisões TypeSafe",
+      "description": "OpenInference instrumenta chamadas TypeSafe System One e expõe pedidos e resultados a backends compatíveis com OpenTelemetry.",
+      "summary": "Fornece convenções e instrumentação para rastrear aplicações de IA, incluindo chamadas de modelos, recuperação e ferramentas externas. A integração TypeSafe registra systemOne como spans com entradas e saídas JSON, modelo e tokens; exemplos cobrem Choice, Noul e Score.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Finalidade e público",
+          "text": "Fornece convenções e instrumentação para rastrear aplicações de IA, incluindo chamadas de modelos, recuperação e ferramentas externas.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "A integração TypeSafe registra systemOne como spans com entradas e saídas JSON, modelo e tokens; exemplos cobrem Choice, Noul e Score.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Registre TypeSafeInstrumentation antes do SDK CommonJS ou use manuallyInstrument para ESM, bundlers ou SDK já carregado.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "O pacote exige Node.js 20+ e TypeSafe SDK 0.6.0 ou posterior; models.list() não é instrumentado.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "OpenInference: трассировка решений TypeSafe",
+      "h1": "OpenInference: трассировка решений TypeSafe",
+      "description": "OpenInference инструментирует вызовы TypeSafe System One и передаёт запросы и результаты в OpenTelemetry-совместимые системы.",
+      "summary": "Проект предоставляет соглашения и инструментацию для трассировки ИИ-приложений, включая модели, поиск и внешние инструменты. Интеграция TypeSafe записывает systemOne как spans с JSON-входами и выходами, моделью и токенами; примеры охватывают Choice, Noul и Score.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Проект предоставляет соглашения и инструментацию для трассировки ИИ-приложений, включая модели, поиск и внешние инструменты.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Интеграция TypeSafe записывает systemOne как spans с JSON-входами и выходами, моделью и токенами; примеры охватывают Choice, Noul и Score.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Регистрируйте TypeSafeInstrumentation до загрузки CommonJS SDK; для ESM, сборщиков или загруженного SDK используйте manuallyInstrument.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Пакету нужны Node.js 20+ и TypeSafe SDK от 0.6.0; вызовы models.list() не инструментируются.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "OpenInference: TypeSafe निर्णय कॉल की ट्रेसिंग",
+      "h1": "OpenInference: TypeSafe निर्णय कॉल की ट्रेसिंग",
+      "description": "OpenInference, TypeSafe System One कॉल को इंस्ट्रूमेंट करके अनुरोध और परिणाम OpenTelemetry-संगत बैकएंड तक पहुँचाता है।",
+      "summary": "यह AI ऐप की ट्रेसिंग के नियम और इंस्ट्रूमेंटेशन देता है, जिसमें मॉडल कॉल, पुनर्प्राप्ति और बाहरी टूल शामिल हैं। TypeSafe एकीकरण systemOne को JSON इनपुट-आउटपुट, मॉडल और टोकन उपयोग वाले span में रिकॉर्ड करता है; उदाहरण Choice, Noul और Score दिखाते हैं।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "उद्देश्य और उपयोगकर्ता",
+          "text": "यह AI ऐप की ट्रेसिंग के नियम और इंस्ट्रूमेंटेशन देता है, जिसमें मॉडल कॉल, पुनर्प्राप्ति और बाहरी टूल शामिल हैं।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "TypeSafe एकीकरण systemOne को JSON इनपुट-आउटपुट, मॉडल और टोकन उपयोग वाले span में रिकॉर्ड करता है; उदाहरण Choice, Noul और Score दिखाते हैं।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल का तरीका",
+          "text": "CommonJS SDK लोड करने से पहले TypeSafeInstrumentation दर्ज करें; ESM, bundler या पहले से लोड SDK के लिए manuallyInstrument इस्तेमाल करें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "पैकेज को Node.js 20+ और TypeSafe SDK 0.6.0 या नया चाहिए; models.list() कॉल की ट्रेसिंग नहीं होती।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "OpenInference: pelacakan panggilan keputusan TypeSafe",
+      "h1": "OpenInference: pelacakan panggilan keputusan TypeSafe",
+      "description": "OpenInference menginstrumentasi panggilan TypeSafe System One dan mengirim permintaan serta hasil ke backend kompatibel OpenTelemetry.",
+      "summary": "Proyek menyediakan konvensi dan instrumentasi untuk melacak aplikasi AI, termasuk panggilan model, pencarian, dan alat eksternal. Integrasi TypeSafe merekam systemOne sebagai span dengan masukan/keluaran JSON, model, dan token; contoh mencakup Choice, Noul, serta Score.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Tujuan dan pengguna",
+          "text": "Proyek menyediakan konvensi dan instrumentasi untuk melacak aplikasi AI, termasuk panggilan model, pencarian, dan alat eksternal.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Integrasi TypeSafe merekam systemOne sebagai span dengan masukan/keluaran JSON, model, dan token; contoh mencakup Choice, Noul, serta Score.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Daftarkan TypeSafeInstrumentation sebelum SDK CommonJS dimuat, atau gunakan manuallyInstrument untuk ESM, bundler, atau SDK yang sudah dimuat.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Paket memerlukan Node.js 20+ dan TypeSafe SDK 0.6.0 ke atas; panggilan models.list() tidak diinstrumentasi.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "OpenInference: theo dõi lời gọi quyết định TypeSafe",
+      "h1": "OpenInference: theo dõi lời gọi quyết định TypeSafe",
+      "description": "OpenInference gắn đo lường cho lời gọi TypeSafe System One và đưa yêu cầu cùng kết quả đến backend tương thích OpenTelemetry.",
+      "summary": "Dự án cung cấp quy ước và đo lường để theo dõi ứng dụng AI, bao gồm gọi mô hình, truy xuất và công cụ ngoài. Tích hợp TypeSafe ghi systemOne thành span với đầu vào/ra JSON, mô hình và token; ví dụ có Choice, Noul và Score.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích và đối tượng",
+          "text": "Dự án cung cấp quy ước và đo lường để theo dõi ứng dụng AI, bao gồm gọi mô hình, truy xuất và công cụ ngoài.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Tích hợp TypeSafe ghi systemOne thành span với đầu vào/ra JSON, mô hình và token; ví dụ có Choice, Noul và Score.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Đăng ký TypeSafeInstrumentation trước khi nạp SDK CommonJS, hoặc dùng manuallyInstrument cho ESM, bundler hay SDK đã nạp.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Gói cần Node.js 20+ và TypeSafe SDK từ 0.6.0; lời gọi models.list() không được đo lường.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "OpenInference: TypeSafe karar çağrılarını izleme",
+      "h1": "OpenInference: TypeSafe karar çağrılarını izleme",
+      "description": "OpenInference, TypeSafe System One çağrılarını ölçümleyerek istek ve sonuçları OpenTelemetry uyumlu arka uçlara sunar.",
+      "summary": "Model çağrıları, bilgi getirme ve dış araçlar dahil AI uygulamalarını izlemek için kurallar ve ölçüm araçları sağlar. TypeSafe entegrasyonu systemOne çağrılarını JSON girdi/çıktı, model ve token kullanımlı span olarak kaydeder; örnekler Choice, Noul ve Score içerir.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Amaç ve hedef kitle",
+          "text": "Model çağrıları, bilgi getirme ve dış araçlar dahil AI uygulamalarını izlemek için kurallar ve ölçüm araçları sağlar.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "TypeSafe entegrasyonu systemOne çağrılarını JSON girdi/çıktı, model ve token kullanımlı span olarak kaydeder; örnekler Choice, Noul ve Score içerir.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "CommonJS SDK yüklenmeden TypeSafeInstrumentation kaydedilir; ESM, paketleyici veya yüklenmiş SDK için manuallyInstrument kullanılır.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Paket Node.js 20+ ve TypeSafe SDK 0.6.0 veya sonrası gerektirir; models.list() çağrıları ölçümlenmez.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "OpenInference: tracciamento delle decisioni TypeSafe",
+      "h1": "OpenInference: tracciamento delle decisioni TypeSafe",
+      "description": "OpenInference strumenta le chiamate TypeSafe System One ed espone richieste e risultati ai backend compatibili OpenTelemetry.",
+      "summary": "Fornisce convenzioni e strumentazione per tracciare applicazioni IA, incluse chiamate ai modelli, recupero e strumenti esterni. L'integrazione TypeSafe registra systemOne come span con input/output JSON, modello e token; gli esempi coprono Choice, Noul e Score.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Scopo e destinatari",
+          "text": "Fornisce convenzioni e strumentazione per tracciare applicazioni IA, incluse chiamate ai modelli, recupero e strumenti esterni.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "L'integrazione TypeSafe registra systemOne come span con input/output JSON, modello e token; gli esempi coprono Choice, Noul e Score.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come si usa",
+          "text": "Si registra TypeSafeInstrumentation prima del SDK CommonJS, oppure si usa manuallyInstrument per ESM, bundler o SDK già caricato.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "Il pacchetto richiede Node.js 20+ e TypeSafe SDK 0.6.0 o successivo; models.list() non viene strumentato.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  },
+  "displayName": "OpenInference"
+}

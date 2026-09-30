@@ -1,0 +1,774 @@
+{
+  "version": "source-content-v1",
+  "repo": "mrmps/classifier-dev",
+  "repositoryId": 1332654895,
+  "relationship": "jev-app",
+  "category": "apps",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "a17bf2b6353f6234af6e977a463da7cd1975b68e",
+      "url": "https://github.com/mrmps/classifier-dev/blob/a17bf2b6353f6234af6e977a463da7cd1975b68e/README.md",
+      "sha256": "94f5bd035a7a5aeaa224e5602a1cc9bf0ca538816975cdaddce37fdcd1121a43",
+      "accessedAt": "2026-09-30T07:33:51.247Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "classifier.dev exposes HTTP and CLI text classification, including batches and multiple label dimensions.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 3,
+          "end": 17,
+          "quote": "Zero-shot text classification. Plain text in, a label and a calibrated\nconfidence out. No key, no signup. Up to a thousand texts per request.\n\n    curl https://classifier.dev/spam,not+spam/Win+a+free+iPhone\n    spam\n\n    curl \"https://classifier.dev/?labels=spam,not+spam&text=Win+a+free+iPhone\"   # same call, query form\n    spam\n\nSingle Cloudflare Worker. No database, no framework, no build step beyond esbuild.\n\n## CLI\n\n    npm i -g classifier-dev\n    classify bug,feature,praise < feedback.txt"
+        },
+        {
+          "source": "source-1",
+          "start": 480,
+          "end": 500,
+          "quote": "`POST /v1/classify` also accepts `items` and `dimensions`:\n\n```json\n{\n  \"items\": [\"Checkout charges me twice\"],\n  \"dimensions\": {\n    \"team\": [\"billing\", \"identity\", \"platform\"],\n    \"urgency\": {\n      \"labels\": [\"immediate\", \"normal\", \"low\"],\n      \"instructions\": \"Active financial harm is immediate.\"\n    },\n    \"kind\": [\"bug\", \"request\", \"question\"]\n  }\n}\n```\n\nEach `results[i].dimensions[name]` carries its own label, confidence, scores,\nmodel and latency. Jev shares state across item–dimension questions, packing\nboth context limits. Smart escalation is per field and clears the original\nscores; unavailable Jev falls back only up to 20 decisions. The API accepts\nup to 20 dimensions and 1,000 decisions, with each decision charged to quota."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "Jev supplies label probabilities; the smart tier escalates uncertain single-label answers to a reasoning model, while multilabel classification uses Jev judgments.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 128,
+          "end": 145,
+          "quote": "Both tiers answer from [TypeSafe's Jev](https://docs.typesafe.ai), a decision\nmodel rather than a language model: it takes a state and typed questions and\nreturns a calibrated probability per option, in ~150ms. That shape is why the\nAPI can do three things the LLM version could not.\n\n**A thousand inputs per request.** State is an array of `{id, text}` and each\ninput gets its own question, so the whole batch is one upstream call. The\ndocumented limit is 64k tokens per request; `jev.ts` packs to a conservative\nbudget and runs the resulting requests eight at a time. Measured: 400 news\nheadlines classified in 650ms end to end, and packing 100 items scored the\nsame as sending them one at a time.\n\n**Confidence that means something.** On 400 six-way emotion items, answers at\n>= 0.9 confidence were right 82% of the time and answers below 0.5 were right\n29%. The previous model's logprob \"confidence\" put 87% of news items above 0.9\nand was right on 68% of those. So `tier: \"smart\"` now means: re-ask the\nsingle-label answers below 0.7 of a fast reasoning model and replace them,\nmarked `escalated: true`. Nothing else changes. Which model matters: on"
+        },
+        {
+          "source": "source-1",
+          "start": 152,
+          "end": 159,
+          "quote": "**Multi-label in one pass.** One yes/no question per label, labels at >= 0.7\nreturned most-likely-first with the full score map. F1 0.887 on the seven-case\nset against 0.799 for the sweep-and-verify LLM cascade it replaced, in 230ms\ninstead of 1.5s. Re-judging its candidates with the reasoning model made it\nworse (and took 23s), so multi-label ignores the tier.\n\nThe LLM chains in `index.ts` remain as the fallback when TypeSafe is\nunavailable, limited to twenty inputs because they are one call per input."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Pass labels and text in a URL, install the classify CLI, or POST items and dimensions to /v1/classify.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 6,
+          "end": 17,
+          "quote": "    curl https://classifier.dev/spam,not+spam/Win+a+free+iPhone\n    spam\n\n    curl \"https://classifier.dev/?labels=spam,not+spam&text=Win+a+free+iPhone\"   # same call, query form\n    spam\n\nSingle Cloudflare Worker. No database, no framework, no build step beyond esbuild.\n\n## CLI\n\n    npm i -g classifier-dev\n    classify bug,feature,praise < feedback.txt"
+        },
+        {
+          "source": "source-1",
+          "start": 480,
+          "end": 493,
+          "quote": "`POST /v1/classify` also accepts `items` and `dimensions`:\n\n```json\n{\n  \"items\": [\"Checkout charges me twice\"],\n  \"dimensions\": {\n    \"team\": [\"billing\", \"identity\", \"platform\"],\n    \"urgency\": {\n      \"labels\": [\"immediate\", \"normal\", \"low\"],\n      \"instructions\": \"Active financial harm is immediate.\"\n    },\n    \"kind\": [\"bug\", \"request\", \"question\"]\n  }\n}"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "Per-IP quotas constrain use. If Jev is unavailable, the documented language-model fallback handles at most twenty inputs rather than the full batch size.",
+      "kind": "source-limitation",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 158,
+          "end": 162,
+          "quote": "The LLM chains in `index.ts` remain as the fallback when TypeSafe is\nunavailable, limited to twenty inputs because they are one call per input.\nThe digest reports which model actually answered, with a `FALLBACK` marker,\nbecause the previous primary was delisted upstream and served its backup for\nweeks at F1 0.546 without anything saying so."
+        },
+        {
+          "source": "source-1",
+          "start": 364,
+          "end": 367,
+          "quote": "## Rate limiting\n\nPer IP in a Durable Object, counted in classifications: 3,000/min and\n20,000/day on fast, 200/min and 2,000/day on smart."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "classifier-dev — Text labels and multidimensional classification with Jev",
+      "h1": "classifier-dev — Text labels and multidimensional classification with Jev",
+      "description": "classifier-dev: Classify text through HTTP or CLI using Jev label probabilities, with batch requests, multiple dimensions and optional smart escalation.",
+      "summary": "classifier.dev exposes HTTP and CLI text classification, including batches and multiple label dimensions. Pass labels and text in a URL, install the classify CLI, or POST items and dimensions to /v1/classify.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "What it does",
+          "text": "classifier.dev exposes HTTP and CLI text classification, including batches and multiple label dimensions.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "Jev supplies label probabilities; the smart tier escalates uncertain single-label answers to a reasoning model, while multilabel classification uses Jev judgments.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Getting started",
+          "text": "Pass labels and text in a URL, install the classify CLI, or POST items and dimensions to /v1/classify.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "Per-IP quotas constrain use. If Jev is unavailable, the documented language-model fallback handles at most twenty inputs rather than the full batch size.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "classifier-dev — 用 Jev 进行文本标签与多维分类",
+      "h1": "classifier-dev — 用 Jev 进行文本标签与多维分类",
+      "description": "classifier-dev: 通过 HTTP 或 CLI 用 Jev 标签概率分类文本，支持批次、多维标签和可选 smart 升级复核。",
+      "summary": "classifier.dev 通过 HTTP 和 CLI 提供文本分类，支持批处理及多个标签维度。 可在 URL 中传入标签和文本，安装 classify CLI，或将 items 和 dimensions POST 到 /v1/classify。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "classifier.dev 通过 HTTP 和 CLI 提供文本分类，支持批处理及多个标签维度。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "Jev 提供标签概率；smart 档将不确定的单标签答案交给推理模型复核，多标签分类使用 Jev 判断。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "可在 URL 中传入标签和文本，安装 classify CLI，或将 items 和 dimensions POST 到 /v1/classify。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "使用受每 IP 配额约束。Jev 不可用时，文档中的语言模型回退最多处理二十条输入，不能覆盖完整批量大小。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "classifier-dev — 以 Jev 進行文字標籤與多維分類",
+      "h1": "classifier-dev — 以 Jev 進行文字標籤與多維分類",
+      "description": "classifier-dev: 透過 HTTP 或 CLI 以 Jev 標籤機率分類文字，支援批次、多維標籤及選用 smart 升級複核。",
+      "summary": "classifier.dev 透過 HTTP 和 CLI 提供文字分類，支援批次及多個標籤維度。 可在 URL 傳入標籤與文字、安裝 classify CLI，或將 items 和 dimensions POST 至 /v1/classify。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "classifier.dev 透過 HTTP 和 CLI 提供文字分類，支援批次及多個標籤維度。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "Jev 提供標籤機率；smart 層級將不確定的單標籤答案交由推理模型複核，多標籤分類使用 Jev 判斷。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "可在 URL 傳入標籤與文字、安裝 classify CLI，或將 items 和 dimensions POST 至 /v1/classify。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "使用受每 IP 配額約束。Jev 無法使用時，文件中的語言模型備援最多處理二十筆輸入，無法覆蓋完整批次大小。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "classifier-dev — Jev によるテキスト分類と複数軸のラベル付け",
+      "h1": "classifier-dev — Jev によるテキスト分類と複数軸のラベル付け",
+      "description": "classifier-dev: HTTP または CLI から Jev のラベル確率でテキスト分類。バッチ、複数軸、任意の smart エスカレーションに対応します。",
+      "summary": "classifier.dev は HTTP と CLI でテキスト分類を提供し、バッチ処理と複数のラベル軸に対応します。 URL にラベルと本文を渡すか、classify CLI を導入するか、items と dimensions を /v1/classify に POST します。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "できること",
+          "text": "classifier.dev は HTTP と CLI でテキスト分類を提供し、バッチ処理と複数のラベル軸に対応します。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "Jev がラベル確率を返し、smart モードは不確かな単一ラベル回答を推論モデルに回します。複数ラベルでは Jev の判断を使います。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い始めるには",
+          "text": "URL にラベルと本文を渡すか、classify CLI を導入するか、items と dimensions を /v1/classify に POST します。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "対象範囲と制約",
+          "text": "IP ごとの利用枠があります。Jev が使えない場合の言語モデルへの代替処理は最大20入力で、通常のバッチ全体には対応しません。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "classifier-dev — Jev 텍스트 라벨과 다차원 분류",
+      "h1": "classifier-dev — Jev 텍스트 라벨과 다차원 분류",
+      "description": "classifier-dev: HTTP나 CLI로 Jev 라벨 확률을 이용해 텍스트를 분류하며 배치, 다차원 라벨, 선택적 smart 재검토를 지원합니다.",
+      "summary": "classifier.dev는 HTTP와 CLI로 텍스트 분류를 제공하며 배치와 여러 라벨 차원을 지원합니다. URL에 라벨과 텍스트를 넣거나 classify CLI를 설치하거나 /v1/classify에 items와 dimensions를 POST합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "classifier.dev는 HTTP와 CLI로 텍스트 분류를 제공하며 배치와 여러 라벨 차원을 지원합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Jev가 라벨 확률을 제공하고 smart 등급은 불확실한 단일 라벨 답을 추론 모델에 넘깁니다. 다중 라벨 분류는 Jev 판단을 사용합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "URL에 라벨과 텍스트를 넣거나 classify CLI를 설치하거나 /v1/classify에 items와 dimensions를 POST합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 제약",
+          "text": "IP별 할당량이 적용됩니다. Jev를 사용할 수 없을 때 언어 모델 대체 경로는 전체 배치 대신 최대 스무 입력만 처리합니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "classifier-dev — Etiquetas y clasificación multidimensional con Jev",
+      "h1": "classifier-dev — Etiquetas y clasificación multidimensional con Jev",
+      "description": "classifier-dev: Clasifica por HTTP o CLI con probabilidades Jev, lotes, varias dimensiones y escalado smart opcional.",
+      "summary": "classifier.dev ofrece clasificación de texto por HTTP y CLI, con lotes y múltiples dimensiones de etiquetas. Envía etiquetas y texto por URL, instala classify o publica items y dimensions en /v1/classify.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "classifier.dev ofrece clasificación de texto por HTTP y CLI, con lotes y múltiples dimensiones de etiquetas.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Jev aporta probabilidades; el nivel smart deriva respuestas inciertas de etiqueta única a un modelo de razonamiento, mientras multietiqueta usa Jev.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo empezar",
+          "text": "Envía etiquetas y texto por URL, instala classify o publica items y dimensions en /v1/classify.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "Hay cuotas por IP. Si Jev no está disponible, la alternativa con modelos de lenguaje admite como máximo veinte entradas, no todo el lote habitual.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "classifier-dev — Étiquetage et classification multidimensionnelle avec Jev",
+      "h1": "classifier-dev — Étiquetage et classification multidimensionnelle avec Jev",
+      "description": "classifier-dev: Classez par HTTP ou CLI avec probabilités Jev, lots, plusieurs dimensions et escalade smart facultative.",
+      "summary": "classifier.dev expose la classification de texte par HTTP et CLI, avec lots et plusieurs dimensions d’étiquettes. Passez étiquettes et texte dans l’URL, installez classify ou envoyez items et dimensions à /v1/classify.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "classifier.dev expose la classification de texte par HTTP et CLI, avec lots et plusieurs dimensions d’étiquettes.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Jev fournit les probabilités ; le niveau smart transmet les réponses mono-étiquette incertaines à un modèle de raisonnement, tandis que l’étiquetage multiple utilise Jev.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Passez étiquettes et texte dans l’URL, installez classify ou envoyez items et dimensions à /v1/classify.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "Des quotas par IP s’appliquent. Si Jev est indisponible, le repli vers un modèle de langage traite au plus vingt entrées, et non la taille habituelle du lot.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "classifier-dev — Textlabels und mehrdimensionale Klassifikation mit Jev",
+      "h1": "classifier-dev — Textlabels und mehrdimensionale Klassifikation mit Jev",
+      "description": "classifier-dev: Text per HTTP oder CLI mit Jev-Wahrscheinlichkeiten klassifizieren, mit Stapeln, mehreren Dimensionen und optionaler smart-Eskalation.",
+      "summary": "classifier.dev bietet Textklassifikation per HTTP und CLI, einschließlich Stapeln und mehreren Labeldimensionen. Labels und Text in einer URL übergeben, classify installieren oder items und dimensions an /v1/classify senden.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "classifier.dev bietet Textklassifikation per HTTP und CLI, einschließlich Stapeln und mehreren Labeldimensionen.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Jev liefert Labelwahrscheinlichkeiten; die smart-Stufe gibt unsichere Einzellabel-Antworten an ein Reasoning-Modell weiter, Mehrfachlabels nutzen Jev-Urteile.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Einstieg",
+          "text": "Labels und Text in einer URL übergeben, classify installieren oder items und dimensions an /v1/classify senden.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Es gelten IP-bezogene Kontingente. Ist Jev nicht verfügbar, verarbeitet der Sprachmodell-Fallback höchstens zwanzig Eingaben statt der vollen üblichen Stapelgröße.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "classifier-dev — Rótulos e classificação multidimensional com Jev",
+      "h1": "classifier-dev — Rótulos e classificação multidimensional com Jev",
+      "description": "classifier-dev: Classifique por HTTP ou CLI com probabilidades Jev, lotes, várias dimensões e escalonamento smart opcional.",
+      "summary": "O classifier.dev oferece classificação de texto por HTTP e CLI, incluindo lotes e várias dimensões de rótulos. Passe rótulos e texto na URL, instale classify ou envie items e dimensions para /v1/classify.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "O classifier.dev oferece classificação de texto por HTTP e CLI, incluindo lotes e várias dimensões de rótulos.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "O Jev fornece probabilidades; o nível smart encaminha respostas incertas de rótulo único a um modelo de raciocínio, enquanto multirrótulo usa Jev.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como começar",
+          "text": "Passe rótulos e texto na URL, instale classify ou envie items e dimensions para /v1/classify.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "Há cotas por IP. Se o Jev estiver indisponível, a alternativa com modelos de linguagem atende no máximo vinte entradas, não o lote completo habitual.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "classifier-dev — Метки текста и многомерная классификация с Jev",
+      "h1": "classifier-dev — Метки текста и многомерная классификация с Jev",
+      "description": "classifier-dev: Классификация через HTTP или CLI по вероятностям Jev, с пакетами, несколькими измерениями и необязательной smart-эскалацией.",
+      "summary": "classifier.dev предоставляет классификацию текста через HTTP и CLI, включая пакеты и несколько измерений меток. Передайте метки и текст в URL, установите classify либо отправьте items и dimensions в /v1/classify.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "classifier.dev предоставляет классификацию текста через HTTP и CLI, включая пакеты и несколько измерений меток.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Jev выдаёт вероятности меток; уровень smart передаёт неуверенные ответы с одной меткой рассуждающей модели, а множественные метки определяет Jev.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Начало работы",
+          "text": "Передайте метки и текст в URL, установите classify либо отправьте items и dimensions в /v1/classify.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Действуют квоты на IP. При недоступности Jev резервная языковая модель обрабатывает максимум двадцать входов вместо обычного полного пакета.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "classifier-dev — Jev से पाठ लेबल और बहुआयामी वर्गीकरण",
+      "h1": "classifier-dev — Jev से पाठ लेबल और बहुआयामी वर्गीकरण",
+      "description": "classifier-dev: HTTP या CLI से Jev लेबल संभावनाओं पर वर्गीकरण, बैच, कई आयाम और वैकल्पिक smart पुनःजाँच उपलब्ध हैं।",
+      "summary": "classifier.dev HTTP और CLI से पाठ वर्गीकरण देता है, जिसमें बैच और कई लेबल आयाम शामिल हैं। URL में लेबल और पाठ दें, classify स्थापित करें या items और dimensions को /v1/classify पर POST करें।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "परियोजना का काम",
+          "text": "classifier.dev HTTP और CLI से पाठ वर्गीकरण देता है, जिसमें बैच और कई लेबल आयाम शामिल हैं।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "Jev लेबल संभावनाएँ देता है; smart स्तर अनिश्चित एकल-लेबल उत्तर तर्क मॉडल को भेजता है, जबकि बहु-लेबल वर्गीकरण Jev उपयोग करता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "शुरुआत कैसे करें",
+          "text": "URL में लेबल और पाठ दें, classify स्थापित करें या items और dimensions को /v1/classify पर POST करें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "प्रति-IP कोटा लागू है। Jev अनुपलब्ध होने पर भाषा मॉडल विकल्प अधिकतम बीस इनपुट संभालता है, सामान्य पूरे बैच को नहीं।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "classifier-dev — Label teks dan klasifikasi multidimensi dengan Jev",
+      "h1": "classifier-dev — Label teks dan klasifikasi multidimensi dengan Jev",
+      "description": "classifier-dev: Klasifikasi lewat HTTP atau CLI dengan probabilitas Jev, batch, beberapa dimensi, dan eskalasi smart opsional.",
+      "summary": "classifier.dev menyediakan klasifikasi teks lewat HTTP dan CLI, termasuk batch serta beberapa dimensi label. Kirim label dan teks melalui URL, pasang classify, atau POST items dan dimensions ke /v1/classify.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "classifier.dev menyediakan klasifikasi teks lewat HTTP dan CLI, termasuk batch serta beberapa dimensi label.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Jev memberi probabilitas label; tingkat smart meneruskan jawaban label tunggal yang tidak pasti ke model penalaran, sedangkan multilabel memakai Jev.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara memulai",
+          "text": "Kirim label dan teks melalui URL, pasang classify, atau POST items dan dimensions ke /v1/classify.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Kuota per IP berlaku. Saat Jev tidak tersedia, cadangan model bahasa menangani paling banyak dua puluh masukan, bukan ukuran batch penuh biasa.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "classifier-dev — Gán nhãn văn bản và phân loại đa chiều bằng Jev",
+      "h1": "classifier-dev — Gán nhãn văn bản và phân loại đa chiều bằng Jev",
+      "description": "classifier-dev: Phân loại qua HTTP hoặc CLI với xác suất Jev, hỗ trợ lô, đa chiều và chuyển cấp smart tùy chọn.",
+      "summary": "classifier.dev cung cấp phân loại văn bản qua HTTP và CLI, hỗ trợ lô dữ liệu cùng nhiều chiều nhãn. Truyền nhãn và văn bản trong URL, cài classify hoặc POST items và dimensions tới /v1/classify.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Công dụng",
+          "text": "classifier.dev cung cấp phân loại văn bản qua HTTP và CLI, hỗ trợ lô dữ liệu cùng nhiều chiều nhãn.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Jev đưa xác suất nhãn; mức smart chuyển câu trả lời đơn nhãn thiếu chắc chắn tới mô hình suy luận, còn đa nhãn dùng Jev.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách bắt đầu",
+          "text": "Truyền nhãn và văn bản trong URL, cài classify hoặc POST items và dimensions tới /v1/classify.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Có hạn ngạch theo IP. Khi Jev không khả dụng, mô hình ngôn ngữ dự phòng xử lý tối đa hai mươi đầu vào, không phải toàn bộ lô thông thường.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "classifier-dev — Jev ile metin etiketleri ve çok boyutlu sınıflandırma",
+      "h1": "classifier-dev — Jev ile metin etiketleri ve çok boyutlu sınıflandırma",
+      "description": "classifier-dev: HTTP veya CLI üzerinden Jev olasılıklarıyla sınıflandırma; toplu girdiler, çoklu boyutlar ve isteğe bağlı smart yükseltmesi.",
+      "summary": "classifier.dev HTTP ve CLI üzerinden toplu ve birden fazla etiket boyutuyla metin sınıflandırması sunar. URL ile etiket ve metin iletin, classify kurun ya da /v1/classify adresine items ve dimensions POST edin.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "classifier.dev HTTP ve CLI üzerinden toplu ve birden fazla etiket boyutuyla metin sınıflandırması sunar.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Jev etiket olasılıkları verir; smart düzeyi belirsiz tek etiketli yanıtları akıl yürütme modeline aktarır, çoklu etiketlemede Jev kullanılır.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Başlangıç",
+          "text": "URL ile etiket ve metin iletin, classify kurun ya da /v1/classify adresine items ve dimensions POST edin.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "IP başına kotalar uygulanır. Jev kullanılamadığında dil modeli yedeği tam olağan toplu boyut yerine en fazla yirmi girdi işler.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "classifier-dev — Etichette e classificazione multidimensionale con Jev",
+      "h1": "classifier-dev — Etichette e classificazione multidimensionale con Jev",
+      "description": "classifier-dev: Classifica via HTTP o CLI con probabilità Jev, lotti, più dimensioni ed escalation smart facoltativa.",
+      "summary": "classifier.dev offre classificazione testuale tramite HTTP e CLI, con lotti e più dimensioni di etichette. Passa etichette e testo nell’URL, installa classify oppure invia items e dimensions a /v1/classify.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "classifier.dev offre classificazione testuale tramite HTTP e CLI, con lotti e più dimensioni di etichette.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Jev fornisce probabilità; il livello smart passa risposte monoetichetta incerte a un modello di ragionamento, mentre il multietichetta usa Jev.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come iniziare",
+          "text": "Passa etichette e testo nell’URL, installa classify oppure invia items e dimensions a /v1/classify.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "Si applicano quote per IP. Se Jev non è disponibile, il ripiego su modelli linguistici gestisce al massimo venti input, non l’intero lotto abituale.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

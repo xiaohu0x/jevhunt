@@ -1,0 +1,756 @@
+{
+  "version": "source-content-v1",
+  "repo": "moritzkremb/jev-voice-browser",
+  "repositoryId": 1375142045,
+  "relationship": "jev-app",
+  "category": "browser",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "198a0764395a666f8398026c0d8abdaf6d1866c5",
+      "url": "https://github.com/moritzkremb/jev-voice-browser/blob/198a0764395a666f8398026c0d8abdaf6d1866c5/README.md",
+      "sha256": "46c00b4c57fd23e5cc1201a5eb4cd38539fd7b607752e4c0ba23b9a2c0326b28",
+      "accessedAt": "2026-09-30T07:33:51.445Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "kind": "documented",
+      "text": "jev-voice-browser streams speech transcripts to a Node server controlling a visible Chromium window through Playwright.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 3,
+          "end": 8,
+          "quote": "A Node app that controls a **headed Chromium window** (Playwright) by voice. Speech is streamed\nword by word from the browser's Web Speech API to a small Node server; on every partial transcript\nthe server asks **Jev** (TypeSafe's System One model, `jev-1.13.0`) one request with a dozen typed\nquestions — intent, target element, site, \"is the command complete?\", \"is this even addressed to\nme?\", \"is it destructive?\" — gets typed probabilities back in ~250–350 ms, and code decides whether\nto act, wait, ask, or ignore."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "kind": "documented",
+      "text": "Jev selects intent and targets; code extracts literal text candidates and decides whether to act, wait or ask.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 5,
+          "end": 11,
+          "quote": "the server asks **Jev** (TypeSafe's System One model, `jev-1.13.0`) one request with a dozen typed\nquestions — intent, target element, site, \"is the command complete?\", \"is this even addressed to\nme?\", \"is it destructive?\" — gets typed probabilities back in ~250–350 ms, and code decides whether\nto act, wait, ask, or ignore.\n\nJev never generates text. Search queries, typed text and URLs are extracted as candidate spans by\ncode and Jev only *picks* one, which is copied verbatim."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "kind": "documented",
+      "text": "Use Node 20+, a TypeSafe key and Chrome or Edge for the microphone control page.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 25,
+          "end": 38,
+          "quote": "Requirements: Node ≥ 20 (tested on 22), npm, Chrome or Edge for the microphone (the Web Speech API\nis not available in Firefox/Safari). Real API calls cost ~$0.0002 each.\n\n```bash\ngit clone https://github.com/moritzkremb/jev-voice-browser.git\ncd jev-voice-browser\nnpm install\nnpx playwright install chromium\ncp .env.example .env          # paste your TypeSafe API key (https://console.typesafe.ai/keys)\n./run.sh                      # starts the server on http://localhost:8787\n```\n\nThen open **http://localhost:8787 in your normal Chrome**, click **Start mic**, allow the\nmicrophone, and speak. A separate Chromium window (the *controlled* browser) is opened by the server;"
+        },
+        {
+          "source": "source-1",
+          "start": 50,
+          "end": 52,
+          "quote": "Set the key yourself instead of `.env`: `export TYPESAFE_API_KEY=…` (legacy `JEV_API_KEY` is\nalso accepted) and `npm start`. The key is only ever read by the Node process; the control page\nnever sees it."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "kind": "documented",
+      "text": "Speech recognition sends audio to Google. Page snapshots omit iframes and cap visible candidates at 100 elements.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 169,
+          "end": 178,
+          "quote": "- Web Speech API only in Chrome/Edge; it sends audio to Google. Interim results arrive in bursts, so\n  \"acting before you finish\" is most visible on longer sentences.\n- One action per utterance; extra words after an executed command are treated as a new command\n  only if there are at least two of them.\n- Element snapshot is capped at 100 items (viewport first) and 60 chars of text each — deep pages\n  need a scroll before \"click …\" finds below-fold items. Elements inside iframes are not seen.\n- Sites with heavy bot protection (Google consent, some search engines in headless mode) may not\n  render results; the demo uses Wikipedia, example.com, Hacker News and DuckDuckGo.\n- `select_option` matches the option label in code by substring; `switch_tab` cycles.\n- Confidence gates are calibrated on `jev-1.13.0`; re-check `T` if you move the model alias."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "jev-voice-browser: voice control with Jev decisions",
+      "h1": "jev-voice-browser: voice control with Jev decisions",
+      "description": "jev-voice-browser uses Jev to turn partial speech transcripts into bounded Playwright actions; code selects when to act and copies text candidates literally.",
+      "summary": "jev-voice-browser streams speech transcripts to a Node server controlling a visible Chromium window through Playwright. Jev selects intent and targets; code extracts literal text candidates and decides whether to act, wait or ask. Use Node 20+, a TypeSafe key and Chrome or Edge for the microphone control page.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose",
+          "text": "jev-voice-browser streams speech transcripts to a Node server controlling a visible Chromium window through Playwright.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’s role",
+          "text": "Jev selects intent and targets; code extracts literal text candidates and decides whether to act, wait or ask.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "How to use it",
+          "text": "Use Node 20+, a TypeSafe key and Chrome or Edge for the microphone control page.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limits to consider",
+          "text": "Speech recognition sends audio to Google. Page snapshots omit iframes and cap visible candidates at 100 elements.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "jev-voice-browser：用 Jev 决策语音控制浏览器",
+      "h1": "jev-voice-browser：用 Jev 决策语音控制浏览器",
+      "description": "jev-voice-browser 用 Jev 将逐步到达的语音转录转成有界 Playwright 操作，代码决定何时执行并原样复制文字候选；麦克风识别会将音频发送给 Google。",
+      "summary": "jev-voice-browser 将语音转录流发送给 Node 服务，通过 Playwright 控制可见 Chromium 窗口。 Jev 选择意图和目标；代码提取原文候选，并决定执行、等待还是询问。 需要 Node 20+、TypeSafe 密钥，以及 Chrome 或 Edge 麦克风控制页。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "jev-voice-browser 将语音转录流发送给 Node 服务，通过 Playwright 控制可见 Chromium 窗口。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "Jev 选择意图和目标；代码提取原文候选，并决定执行、等待还是询问。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "需要 Node 20+、TypeSafe 密钥，以及 Chrome 或 Edge 麦克风控制页。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用边界",
+          "text": "语音识别会把音频发给 Google；页面快照不包含 iframe，候选元素最多 100 个。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "jev-voice-browser：以 Jev 決策語音控制瀏覽器",
+      "h1": "jev-voice-browser：以 Jev 決策語音控制瀏覽器",
+      "description": "jev-voice-browser 用 Jev 將逐步到達的語音轉錄轉成有界 Playwright 操作，程式決定何時執行並原樣複製文字候選；麥克風辨識會將音訊傳給 Google。",
+      "summary": "jev-voice-browser 將語音轉錄串流傳給 Node 服務，透過 Playwright 控制可見 Chromium 視窗。 Jev 選擇意圖與目標；程式擷取原文候選，並決定執行、等待或詢問。 需要 Node 20+、TypeSafe 金鑰，以及 Chrome 或 Edge 麥克風控制頁。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "jev-voice-browser 將語音轉錄串流傳給 Node 服務，透過 Playwright 控制可見 Chromium 視窗。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "Jev 選擇意圖與目標；程式擷取原文候選，並決定執行、等待或詢問。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "需要 Node 20+、TypeSafe 金鑰，以及 Chrome 或 Edge 麥克風控制頁。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用限制",
+          "text": "語音辨識會將音訊傳給 Google；頁面快照不包含 iframe，候選元素最多 100 個。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "jev-voice-browser：Jev 判断による音声ブラウザー操作",
+      "h1": "jev-voice-browser：Jev 判断による音声ブラウザー操作",
+      "description": "jev-voice-browser は途中の音声文字起こしから Jev が操作を選び、Playwright で実行します。コードが実行時機と原文候補のコピーを管理します。",
+      "summary": "jev-voice-browser は音声の文字起こしを Node に送り、Playwright で表示中の Chromium を操作します。 Jev が意図と対象を選び、コードが原文候補を抽出して実行・待機・質問を決めます。 Node 20 以降、TypeSafe キー、マイク制御ページ用の Chrome または Edge が必要です。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "何ができるか",
+          "text": "jev-voice-browser は音声の文字起こしを Node に送り、Playwright で表示中の Chromium を操作します。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "Jev が意図と対象を選び、コードが原文候補を抽出して実行・待機・質問を決めます。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "Node 20 以降、TypeSafe キー、マイク制御ページ用の Chrome または Edge が必要です。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "制約と注意点",
+          "text": "音声認識は Google に音声を送ります。ページ情報は iframe を含まず、候補は最大 100 要素です。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "jev-voice-browser: Jev 판단으로 음성 브라우저 제어",
+      "h1": "jev-voice-browser: Jev 판단으로 음성 브라우저 제어",
+      "description": "jev-voice-browser는 중간 음성 전사문을 Jev 판단으로 Playwright 동작에 연결합니다. 코드는 실행 시점을 정하고 원문 후보를 그대로 복사합니다.",
+      "summary": "jev-voice-browser는 음성 전사문을 Node 서버로 보내 Playwright로 보이는 Chromium 창을 제어합니다. Jev가 의도와 대상을 고르고 코드는 원문 후보를 추출해 실행, 대기, 질문을 결정합니다. Node 20+, TypeSafe 키, 마이크 제어 페이지용 Chrome 또는 Edge가 필요합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "jev-voice-browser는 음성 전사문을 Node 서버로 보내 Playwright로 보이는 Chromium 창을 제어합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Jev가 의도와 대상을 고르고 코드는 원문 후보를 추출해 실행, 대기, 질문을 결정합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "Node 20+, TypeSafe 키, 마이크 제어 페이지용 Chrome 또는 Edge가 필요합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "제약 사항",
+          "text": "음성 인식은 오디오를 Google로 보냅니다. 페이지 스냅샷은 iframe을 제외하고 후보를 최대 100개로 제한합니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "jev-voice-browser: control por voz con decisiones Jev",
+      "h1": "jev-voice-browser: control por voz con decisiones Jev",
+      "description": "jev-voice-browser convierte transcripciones parciales en acciones Playwright con Jev; el código decide cuándo actuar y copia literalmente los candidatos.",
+      "summary": "jev-voice-browser envía transcripciones a Node para controlar una ventana Chromium visible mediante Playwright. Jev elige intención y destino; el código extrae texto literal y decide actuar, esperar o preguntar. Usa Node 20+, una clave TypeSafe y Chrome o Edge para la página del micrófono.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "jev-voice-browser envía transcripciones a Node para controlar una ventana Chromium visible mediante Playwright.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "El papel de Jev",
+          "text": "Jev elige intención y destino; el código extrae texto literal y decide actuar, esperar o preguntar.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo usarlo",
+          "text": "Usa Node 20+, una clave TypeSafe y Chrome o Edge para la página del micrófono.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Límites a considerar",
+          "text": "El reconocimiento envía audio a Google. Las capturas de elementos omiten iframes y admiten como máximo 100 candidatos.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "jev-voice-browser : navigation vocale avec Jev",
+      "h1": "jev-voice-browser : navigation vocale avec Jev",
+      "description": "jev-voice-browser transforme les transcriptions partielles en actions Playwright avec Jev ; le code décide quand agir et copie les textes sans les réécrire.",
+      "summary": "jev-voice-browser transmet les transcriptions à Node pour piloter une fenêtre Chromium visible avec Playwright. Jev choisit intention et cible ; le code extrait le texte exact et décide d’agir, attendre ou demander. Utilisez Node 20+, une clé TypeSafe et Chrome ou Edge pour la page de contrôle du microphone.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "jev-voice-browser transmet les transcriptions à Node pour piloter une fenêtre Chromium visible avec Playwright.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Le rôle de Jev",
+          "text": "Jev choisit intention et cible ; le code extrait le texte exact et décide d’agir, attendre ou demander.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Utilisation",
+          "text": "Utilisez Node 20+, une clé TypeSafe et Chrome ou Edge pour la page de contrôle du microphone.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limites à connaître",
+          "text": "La reconnaissance envoie l’audio à Google. L’observation exclut les iframes et se limite à 100 éléments candidats.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "jev-voice-browser: Sprachsteuerung mit Jev-Entscheidungen",
+      "h1": "jev-voice-browser: Sprachsteuerung mit Jev-Entscheidungen",
+      "description": "jev-voice-browser übersetzt Teiltranskripte mit Jev in begrenzte Playwright-Aktionen; Code bestimmt den Zeitpunkt und kopiert Textkandidaten wortgetreu.",
+      "summary": "jev-voice-browser sendet Sprachtranskripte an Node und steuert ein sichtbares Chromium-Fenster über Playwright. Jev wählt Absicht und Ziel; Code extrahiert wörtliche Textkandidaten und entscheidet über Handeln, Warten oder Nachfragen. Node 20+, TypeSafe-Schlüssel sowie Chrome oder Edge für die Mikrofonseite werden benötigt.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "jev-voice-browser sendet Sprachtranskripte an Node und steuert ein sichtbares Chromium-Fenster über Playwright.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Die Rolle von Jev",
+          "text": "Jev wählt Absicht und Ziel; Code extrahiert wörtliche Textkandidaten und entscheidet über Handeln, Warten oder Nachfragen.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Nutzung",
+          "text": "Node 20+, TypeSafe-Schlüssel sowie Chrome oder Edge für die Mikrofonseite werden benötigt.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Grenzen",
+          "text": "Spracherkennung sendet Audio an Google. Seitenaufnahmen schließen iframes aus und enthalten höchstens 100 Elementkandidaten.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "jev-voice-browser: controle por voz com Jev",
+      "h1": "jev-voice-browser: controle por voz com Jev",
+      "description": "jev-voice-browser transforma transcrições parciais em ações Playwright com Jev; o código decide quando agir e copia literalmente os candidatos.",
+      "summary": "jev-voice-browser envia transcrições ao Node para controlar uma janela Chromium visível com Playwright. Jev escolhe intenção e alvo; o código extrai texto literal e decide agir, esperar ou perguntar. Use Node 20+, chave TypeSafe e Chrome ou Edge para a página de controle do microfone.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "jev-voice-browser envia transcrições ao Node para controlar uma janela Chromium visível com Playwright.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "O papel do Jev",
+          "text": "Jev escolhe intenção e alvo; o código extrai texto literal e decide agir, esperar ou perguntar.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Use Node 20+, chave TypeSafe e Chrome ou Edge para a página de controle do microfone.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limitações",
+          "text": "O reconhecimento envia áudio ao Google. A observação exclui iframes e limita os candidatos a 100 elementos.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "jev-voice-browser: голосовое управление с Jev",
+      "h1": "jev-voice-browser: голосовое управление с Jev",
+      "description": "jev-voice-browser преобразует частичные транскрипты в действия Playwright с Jev; код выбирает момент исполнения и дословно копирует текстовые варианты.",
+      "summary": "jev-voice-browser передаёт транскрипты речи серверу Node, управляющему видимым Chromium через Playwright. Jev выбирает намерение и цель; код извлекает буквальные фрагменты и решает действовать, ждать или уточнять. Нужны Node 20+, ключ TypeSafe и Chrome либо Edge для страницы управления микрофоном.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "jev-voice-browser передаёт транскрипты речи серверу Node, управляющему видимым Chromium через Playwright.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Jev выбирает намерение и цель; код извлекает буквальные фрагменты и решает действовать, ждать или уточнять.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Нужны Node 20+, ключ TypeSafe и Chrome либо Edge для страницы управления микрофоном.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ограничения",
+          "text": "Распознавание отправляет аудио Google. Снимок страницы не включает iframe и ограничен 100 элементами-кандидатами.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "jev-voice-browser: Jev से आवाज़ द्वारा ब्राउज़र नियंत्रण",
+      "h1": "jev-voice-browser: Jev से आवाज़ द्वारा ब्राउज़र नियंत्रण",
+      "description": "jev-voice-browser अधूरे आवाज़-पाठ को Jev से सीमित Playwright कार्रवाइयों में बदलता है; कोड समय चुनता है और पाठ उम्मीदवार ज्यों के त्यों भरता है।",
+      "summary": "jev-voice-browser आवाज़ का पाठ Node सर्वर तक भेजकर Playwright से दिखती Chromium विंडो चलाता है। Jev इरादा और लक्ष्य चुनता है; कोड मूल पाठ निकालकर कार्रवाई, इंतज़ार या प्रश्न का निर्णय लेता है। Node 20+, TypeSafe कुंजी और माइक्रोफ़ोन पेज के लिए Chrome या Edge चाहिए।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "किस काम आता है",
+          "text": "jev-voice-browser आवाज़ का पाठ Node सर्वर तक भेजकर Playwright से दिखती Chromium विंडो चलाता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "Jev इरादा और लक्ष्य चुनता है; कोड मूल पाठ निकालकर कार्रवाई, इंतज़ार या प्रश्न का निर्णय लेता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल कैसे करें",
+          "text": "Node 20+, TypeSafe कुंजी और माइक्रोफ़ोन पेज के लिए Chrome या Edge चाहिए।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "सीमाएँ",
+          "text": "आवाज़ पहचान ऑडियो Google को भेजती है। पेज निरीक्षण iframe छोड़ता है और अधिकतम 100 तत्व दिखाता है।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "jev-voice-browser: kontrol suara dengan keputusan Jev",
+      "h1": "jev-voice-browser: kontrol suara dengan keputusan Jev",
+      "description": "jev-voice-browser mengubah transkrip parsial menjadi tindakan Playwright melalui Jev; kode menentukan kapan bertindak dan menyalin teks secara literal.",
+      "summary": "jev-voice-browser mengirim transkrip suara ke Node untuk mengendalikan jendela Chromium terlihat lewat Playwright. Jev memilih maksud dan sasaran; kode mengekstrak teks literal dan memutuskan bertindak, menunggu, atau bertanya. Gunakan Node 20+, kunci TypeSafe, serta Chrome atau Edge untuk halaman kontrol mikrofon.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "jev-voice-browser mengirim transkrip suara ke Node untuk mengendalikan jendela Chromium terlihat lewat Playwright.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Jev memilih maksud dan sasaran; kode mengekstrak teks literal dan memutuskan bertindak, menunggu, atau bertanya.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Gunakan Node 20+, kunci TypeSafe, serta Chrome atau Edge untuk halaman kontrol mikrofon.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Batasan",
+          "text": "Pengenalan suara mengirim audio ke Google. Pengamatan halaman mengabaikan iframe dan dibatasi 100 kandidat elemen.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "jev-voice-browser: điều khiển giọng nói với Jev",
+      "h1": "jev-voice-browser: điều khiển giọng nói với Jev",
+      "description": "jev-voice-browser dùng Jev biến bản chép lời từng phần thành thao tác Playwright có giới hạn; mã chọn lúc thực hiện và sao chép nguyên văn ứng viên.",
+      "summary": "jev-voice-browser gửi bản chép lời đến Node để điều khiển cửa sổ Chromium hiển thị bằng Playwright. Jev chọn ý định và mục tiêu; mã trích văn bản gốc rồi quyết định làm, chờ hay hỏi. Cần Node 20+, khóa TypeSafe và Chrome hoặc Edge cho trang điều khiển micrô.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích",
+          "text": "jev-voice-browser gửi bản chép lời đến Node để điều khiển cửa sổ Chromium hiển thị bằng Playwright.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Jev chọn ý định và mục tiêu; mã trích văn bản gốc rồi quyết định làm, chờ hay hỏi.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Cần Node 20+, khóa TypeSafe và Chrome hoặc Edge cho trang điều khiển micrô.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Giới hạn",
+          "text": "Nhận dạng giọng nói gửi âm thanh tới Google. Quan sát trang bỏ qua iframe và giới hạn 100 phần tử ứng viên.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "jev-voice-browser: Jev kararlarıyla sesli tarayıcı kontrolü",
+      "h1": "jev-voice-browser: Jev kararlarıyla sesli tarayıcı kontrolü",
+      "description": "jev-voice-browser kısmi konuşma metnini Jev ile sınırlı Playwright eylemlerine çevirir; kod zamanı belirler ve metin adaylarını aynen kopyalar.",
+      "summary": "jev-voice-browser konuşma dökümlerini Node’a gönderip görünür Chromium penceresini Playwright ile yönetir. Jev niyet ve hedefi seçer; kod özgün metin adaylarını çıkarıp eylem, bekleme veya soru kararı verir. Node 20+, TypeSafe anahtarı ve mikrofon kontrol sayfası için Chrome ya da Edge gerekir.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "jev-voice-browser konuşma dökümlerini Node’a gönderip görünür Chromium penceresini Playwright ile yönetir.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Jev niyet ve hedefi seçer; kod özgün metin adaylarını çıkarıp eylem, bekleme veya soru kararı verir.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Node 20+, TypeSafe anahtarı ve mikrofon kontrol sayfası için Chrome ya da Edge gerekir.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Sınırlamalar",
+          "text": "Konuşma tanıma sesi Google’a gönderir. Sayfa gözlemi iframe içermez ve en fazla 100 öğe adayı tutar.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "jev-voice-browser: controllo vocale con decisioni Jev",
+      "h1": "jev-voice-browser: controllo vocale con decisioni Jev",
+      "description": "jev-voice-browser trasforma trascrizioni parziali in azioni Playwright con Jev; il codice decide quando agire e copia letteralmente i candidati.",
+      "summary": "jev-voice-browser invia trascrizioni a Node per controllare una finestra Chromium visibile tramite Playwright. Jev sceglie intento e bersaglio; il codice estrae testo letterale e decide se agire, aspettare o chiedere. Servono Node 20+, chiave TypeSafe e Chrome o Edge per la pagina del microfono.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "jev-voice-browser invia trascrizioni a Node per controllare una finestra Chromium visibile tramite Playwright.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Il ruolo di Jev",
+          "text": "Jev sceglie intento e bersaglio; il codice estrae testo letterale e decide se agire, aspettare o chiedere.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come usarlo",
+          "text": "Servono Node 20+, chiave TypeSafe e Chrome o Edge per la pagina del microfono.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limiti",
+          "text": "Il riconoscimento invia audio a Google. L’osservazione esclude iframe e limita i candidati a 100 elementi.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

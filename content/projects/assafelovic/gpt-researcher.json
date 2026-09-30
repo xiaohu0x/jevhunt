@@ -1,0 +1,769 @@
+{
+  "version": "source-content-v1",
+  "repo": "assafelovic/gpt-researcher",
+  "repositoryId": 639835356,
+  "relationship": "integration",
+  "category": "agents",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "path": "README.md",
+      "commit": "0957c301ed06c2a5857b834358c7227c739041d4",
+      "url": "https://github.com/assafelovic/gpt-researcher/blob/0957c301ed06c2a5857b834358c7227c739041d4/README.md",
+      "sha256": "a626a979f449e5fd0917b23209dbdbc1e7afbea5d2b38bacd4d86dee667929e7",
+      "accessedAt": "2026-09-30T07:33:45.186Z",
+      "id": "s1"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "Planning and execution agents gather, summarize and track sources, then combine findings into a cited research report.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 25,
+          "end": 27,
+          "quote": "**GPT Researcher the first open deep research agent designed for both web and local research on any given task.** \n\nThe agent produces detailed, factual, and unbiased research reports with citations. GPT Researcher provides a full suite of customization options to create tailor made and domain specific research agents. Inspired by the recent [Plan-and-Solve](https://arxiv.org/abs/2305.04091) and [RAG](https://arxiv.org/abs/2005.11401) papers, GPT Researcher addresses misinformation, speed, determinism, and reliability by offering stable performance and increased speed through parallelized agent work."
+        },
+        {
+          "source": "s1",
+          "start": 54,
+          "end": 67,
+          "quote": "## Architecture\n\nThe core idea is to utilize 'planner' and 'execution' agents. The planner generates research questions, while the execution agents gather relevant information. The publisher then aggregates all findings into a comprehensive report.\n\n<div align=\"center\">\n<img align=\"center\" height=\"600\" src=\"https://github.com/assafelovic/gpt-researcher/assets/13554167/4ac896fd-63ab-4b77-9688-ff62aafcc527\">\n</div>\n\nSteps:\n* Create a task-specific agent based on a research query.\n* Generate questions that collectively form an objective opinion on the task.\n* Use a crawler agent for gathering information for each question.\n* Summarize and source-track each resource.\n* Filter and aggregate summaries into a final research report."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "When TYPESAFE_API_KEY is present, Jev scores passage usefulness for the research question before the LLM reads the context.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 226,
+          "end": 228,
+          "quote": "## 🎯 Smart Context Filtering with Jev\n\nEvery research run scrapes dozens of pages, and only some of each page helps answer the question. Before anything reaches the LLM, GPT Researcher decides which passages to keep. By default it uses **[Jev](https://typesafe.ai/blog/introducing-system-one-models-and-jev)** by TypeSafe, a model that scores how useful each passage is for the question, rather than how similar its words or embedding are."
+        },
+        {
+          "source": "s1",
+          "start": 241,
+          "end": 245,
+          "quote": "**Nothing is required.** With a `TYPESAFE_API_KEY`, Jev is used. Without one, or if a Jev call fails, GPT Researcher falls back to keyword (BM25) ranking, which runs locally with no API key, model or embeddings. Embeddings remain available as an option.\n\n```bash\nexport TYPESAFE_API_KEY=...   # use Jev (the default when a key is set)\nexport CONTEXT_FILTER=auto    # auto | jev | keyword | embeddings | none"
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Create GPTResearcher with a query, run conduct_research(), then call write_report() to produce the report.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 143,
+          "end": 153,
+          "quote": "### Example Usage:\n```python\n...\nfrom gpt_researcher import GPTResearcher\n\nquery = \"why is Nvidia stock going up?\"\nresearcher = GPTResearcher(query=query)\n# Conduct research on the given query\nresearch_result = await researcher.conduct_research()\n# Write the report\nreport = await researcher.write_report()"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "Missing credentials or failed Jev calls trigger local BM25 filtering. The documented setup separately needs Python 3.12 and research-provider credentials.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 99,
+          "end": 111,
+          "quote": "1. Install Python 3.12 or later. [Guide](https://www.tutorialsteacher.com/python/install-python).\n2. Clone the project and navigate to the directory:\n\n    ```bash\n    git clone https://github.com/assafelovic/gpt-researcher.git\n    cd gpt-researcher\n    ```\n\n3. Set up API keys by exporting them or storing them in a `.env` file.\n\n    ```bash\n    export OPENAI_API_KEY={Your OpenAI API Key here}\n    export TAVILY_API_KEY={Your Tavily API Key here}"
+        },
+        {
+          "source": "s1",
+          "start": 241,
+          "end": 245,
+          "quote": "**Nothing is required.** With a `TYPESAFE_API_KEY`, Jev is used. Without one, or if a Jev call fails, GPT Researcher falls back to keyword (BM25) ranking, which runs locally with no API key, model or embeddings. Embeddings remain available as an option.\n\n```bash\nexport TYPESAFE_API_KEY=...   # use Jev (the default when a key is set)\nexport CONTEXT_FILTER=auto    # auto | jev | keyword | embeddings | none"
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "GPT Researcher: research reports with optional Jev filtering",
+      "h1": "GPT Researcher: research reports with optional Jev filtering",
+      "description": "GPT Researcher researches web and local sources; Jev can rank useful passages before report generation.",
+      "summary": "Planning and execution agents gather, summarize and track sources, then combine findings into a cited research report. When TYPESAFE_API_KEY is present, Jev scores passage usefulness for the research question before the LLM reads the context.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose and audience",
+          "text": "Planning and execution agents gather, summarize and track sources, then combine findings into a cited research report.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "When TYPESAFE_API_KEY is present, Jev scores passage usefulness for the research question before the LLM reads the context.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Using the project",
+          "text": "Create GPTResearcher with a query, run conduct_research(), then call write_report() to produce the report.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "Missing credentials or failed Jev calls trigger local BM25 filtering. The documented setup separately needs Python 3.12 and research-provider credentials.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "GPT Researcher：可选 Jev 过滤的研究报告工具",
+      "h1": "GPT Researcher：可选 Jev 过滤的研究报告工具",
+      "description": "GPT Researcher 调研网页和本地资料，可用 Jev 在生成报告前筛选有用段落。",
+      "summary": "规划与执行智能体收集资料、总结并追踪来源，再将发现整合为附有引用的研究报告。 设置 TYPESAFE_API_KEY 后，Jev 会评估每段内容对研究问题的有用程度，再交给大语言模型处理。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途与适用对象",
+          "text": "规划与执行智能体收集资料、总结并追踪来源，再将发现整合为附有引用的研究报告。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "设置 TYPESAFE_API_KEY 后，Jev 会评估每段内容对研究问题的有用程度，再交给大语言模型处理。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "使用查询创建 GPTResearcher，执行 conduct_research()，然后调用 write_report() 生成报告。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "缺少 Jev 凭据或调用失败会回退到本地 BM25 过滤。文档中的运行配置另需 Python 3.12 和研究服务凭据。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "GPT Researcher：可選 Jev 篩選的研究報告工具",
+      "h1": "GPT Researcher：可選 Jev 篩選的研究報告工具",
+      "description": "GPT Researcher 研究網頁和本機資料，可用 Jev 在產生報告前篩選有用段落。",
+      "summary": "規劃與執行代理收集資料、摘要並追蹤來源，再整合為附有引用的研究報告。 設定 TYPESAFE_API_KEY 後，Jev 會評估每段內容對研究問題的有用程度，再將內容交給大型語言模型。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途與適用對象",
+          "text": "規劃與執行代理收集資料、摘要並追蹤來源，再整合為附有引用的研究報告。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "設定 TYPESAFE_API_KEY 後，Jev 會評估每段內容對研究問題的有用程度，再將內容交給大型語言模型。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "以查詢建立 GPTResearcher，執行 conduct_research()，再呼叫 write_report() 產生報告。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "缺少 Jev 憑證或呼叫失敗時會改用本機 BM25 篩選。文件中的設定另需 Python 3.12 與研究服務憑證。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "GPT Researcher：任意の Jev フィルターで調査報告を作成",
+      "h1": "GPT Researcher：任意の Jev フィルターで調査報告を作成",
+      "description": "GPT Researcher はウェブやローカル資料を調査し、Jev で報告に役立つ文章を選別できます。",
+      "summary": "計画と実行を担うエージェントが資料を収集・要約し、出典を追跡して引用付きの報告にまとめます。 TYPESAFE_API_KEY があれば、LLM に渡す前に Jev が調査の問いに対する各文章の有用性を評価します。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途と対象",
+          "text": "計画と実行を担うエージェントが資料を収集・要約し、出典を追跡して引用付きの報告にまとめます。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev との関係",
+          "text": "TYPESAFE_API_KEY があれば、LLM に渡す前に Jev が調査の問いに対する各文章の有用性を評価します。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "問いを指定して GPTResearcher を作成し、conduct_research() の後に write_report() を呼び出します。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範囲と制約",
+          "text": "Jev のキーがない場合や呼び出し失敗時はローカルの BM25 に切り替わります。記載の構成には別途 Python 3.12 と調査サービスの認証情報が必要です。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "GPT Researcher: 선택적 Jev 필터로 연구 보고서 작성",
+      "h1": "GPT Researcher: 선택적 Jev 필터로 연구 보고서 작성",
+      "description": "GPT Researcher는 웹과 로컬 자료를 조사하며 Jev로 보고서에 유용한 문단을 선별할 수 있습니다.",
+      "summary": "계획 및 실행 에이전트가 자료를 수집하고 요약하며 출처를 추적한 뒤 인용이 포함된 연구 보고서로 통합합니다. TYPESAFE_API_KEY가 있으면 Jev가 연구 질문에 대한 문단의 유용성을 평가한 후 LLM에 전달합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "용도와 대상",
+          "text": "계획 및 실행 에이전트가 자료를 수집하고 요약하며 출처를 추적한 뒤 인용이 포함된 연구 보고서로 통합합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "TYPESAFE_API_KEY가 있으면 Jev가 연구 질문에 대한 문단의 유용성을 평가한 후 LLM에 전달합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "질의로 GPTResearcher를 만들고 conduct_research()를 실행한 뒤 write_report()를 호출합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 한계",
+          "text": "Jev 키가 없거나 호출이 실패하면 로컬 BM25로 전환합니다. 문서의 구성에는 별도로 Python 3.12와 연구 서비스 인증 정보가 필요합니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "GPT Researcher: informes con filtrado Jev opcional",
+      "h1": "GPT Researcher: informes con filtrado Jev opcional",
+      "description": "GPT Researcher investiga fuentes web y locales; Jev puede seleccionar pasajes útiles antes de redactar el informe.",
+      "summary": "Agentes de planificación y ejecución recopilan, resumen y registran fuentes para elaborar un informe con citas. Con TYPESAFE_API_KEY, Jev evalúa la utilidad de cada pasaje para la pregunta antes de enviarlo al LLM.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "Agentes de planificación y ejecución recopilan, resumen y registran fuentes para elaborar un informe con citas.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Con TYPESAFE_API_KEY, Jev evalúa la utilidad de cada pasaje para la pregunta antes de enviarlo al LLM.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo se usa",
+          "text": "Cree GPTResearcher con una consulta, ejecute conduct_research() y después write_report() para generar el informe.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "Sin credenciales Jev o si la llamada falla, se usa BM25 local. La configuración documentada requiere además Python 3.12 y credenciales de investigación.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "GPT Researcher : rapports avec filtrage Jev facultatif",
+      "h1": "GPT Researcher : rapports avec filtrage Jev facultatif",
+      "description": "GPT Researcher explore des sources web et locales ; Jev peut sélectionner les passages utiles avant la rédaction.",
+      "summary": "Des agents planifient la recherche, collectent et résument les sources, puis réunissent les résultats dans un rapport avec citations. Avec TYPESAFE_API_KEY, Jev évalue l'utilité des passages pour la question avant leur transmission au LLM.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Usage et public visé",
+          "text": "Des agents planifient la recherche, collectent et résument les sources, puis réunissent les résultats dans un rapport avec citations.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Avec TYPESAFE_API_KEY, Jev évalue l'utilité des passages pour la question avant leur transmission au LLM.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Créez GPTResearcher avec une requête, lancez conduct_research(), puis write_report() pour produire le rapport.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "Sans clé Jev ou en cas d'échec, le filtrage passe à BM25 en local. La configuration décrite nécessite aussi Python 3.12 et des identifiants de recherche.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "GPT Researcher: Forschungsberichte mit optionalem Jev-Filter",
+      "h1": "GPT Researcher: Forschungsberichte mit optionalem Jev-Filter",
+      "description": "GPT Researcher untersucht Web- und lokale Quellen; Jev kann nützliche Passagen vor der Berichtserstellung auswählen.",
+      "summary": "Planungs- und Ausführungsagenten sammeln, verdichten und dokumentieren Quellen und führen die Ergebnisse zu einem Bericht mit Zitaten zusammen. Mit TYPESAFE_API_KEY bewertet Jev den Nutzen von Passagen für die Forschungsfrage, bevor sie das LLM erreichen.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Zweck und Zielgruppe",
+          "text": "Planungs- und Ausführungsagenten sammeln, verdichten und dokumentieren Quellen und führen die Ergebnisse zu einem Bericht mit Zitaten zusammen.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Mit TYPESAFE_API_KEY bewertet Jev den Nutzen von Passagen für die Forschungsfrage, bevor sie das LLM erreichen.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Verwendung",
+          "text": "GPTResearcher wird mit einer Frage erstellt; auf conduct_research() folgt write_report() zur Berichtserstellung.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Ohne Jev-Schlüssel oder bei fehlgeschlagenem Aufruf greift lokales BM25. Die dokumentierte Einrichtung benötigt zusätzlich Python 3.12 und Zugangsdaten für Forschungsdienste.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "GPT Researcher: relatórios com filtro Jev opcional",
+      "h1": "GPT Researcher: relatórios com filtro Jev opcional",
+      "description": "GPT Researcher pesquisa fontes web e locais; Jev pode selecionar trechos úteis antes da redação do relatório.",
+      "summary": "Agentes de planejamento e execução coletam, resumem e registram fontes para reunir os resultados em um relatório com citações. Com TYPESAFE_API_KEY, Jev avalia a utilidade dos trechos para a pergunta antes de enviá-los ao LLM.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Finalidade e público",
+          "text": "Agentes de planejamento e execução coletam, resumem e registram fontes para reunir os resultados em um relatório com citações.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "Com TYPESAFE_API_KEY, Jev avalia a utilidade dos trechos para a pergunta antes de enviá-los ao LLM.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Crie GPTResearcher com uma consulta, execute conduct_research() e depois write_report() para gerar o relatório.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "Sem chave Jev ou em caso de falha, o filtro usa BM25 local. A configuração documentada também exige Python 3.12 e credenciais dos serviços de pesquisa.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "GPT Researcher: отчёты с необязательным фильтром Jev",
+      "h1": "GPT Researcher: отчёты с необязательным фильтром Jev",
+      "description": "GPT Researcher исследует веб- и локальные источники; Jev может отбирать полезные фрагменты перед написанием отчёта.",
+      "summary": "Агенты планируют исследование, собирают и обобщают материалы, отслеживают источники и формируют отчёт с цитатами. При наличии TYPESAFE_API_KEY Jev оценивает полезность фрагментов для вопроса перед передачей контекста LLM.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Агенты планируют исследование, собирают и обобщают материалы, отслеживают источники и формируют отчёт с цитатами.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "При наличии TYPESAFE_API_KEY Jev оценивает полезность фрагментов для вопроса перед передачей контекста LLM.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Создайте GPTResearcher с запросом, выполните conduct_research(), затем вызовите write_report() для подготовки отчёта.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "При отсутствии ключа Jev или ошибке вызова используется локальный BM25. Описанная настройка также требует Python 3.12 и учётных данных исследовательских сервисов.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "GPT Researcher: वैकल्पिक Jev फ़िल्टर के साथ शोध रिपोर्ट",
+      "h1": "GPT Researcher: वैकल्पिक Jev फ़िल्टर के साथ शोध रिपोर्ट",
+      "description": "GPT Researcher वेब और स्थानीय स्रोतों पर शोध करता है; Jev रिपोर्ट से पहले उपयोगी अंश चुन सकता है।",
+      "summary": "योजना और निष्पादन एजेंट स्रोत जुटाते हैं, सार बनाते हैं और संदर्भों का रिकॉर्ड रखकर उद्धरणों सहित रिपोर्ट तैयार करते हैं। TYPESAFE_API_KEY होने पर Jev, LLM तक पहुँचने से पहले प्रश्न के लिए हर अंश की उपयोगिता आँकता है।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "उद्देश्य और उपयोगकर्ता",
+          "text": "योजना और निष्पादन एजेंट स्रोत जुटाते हैं, सार बनाते हैं और संदर्भों का रिकॉर्ड रखकर उद्धरणों सहित रिपोर्ट तैयार करते हैं।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "TYPESAFE_API_KEY होने पर Jev, LLM तक पहुँचने से पहले प्रश्न के लिए हर अंश की उपयोगिता आँकता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल का तरीका",
+          "text": "प्रश्न देकर GPTResearcher बनाएँ, conduct_research() चलाएँ और फिर write_report() से रिपोर्ट तैयार करें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "Jev कुंजी न होने या कॉल विफल होने पर स्थानीय BM25 इस्तेमाल होता है। दस्तावेज़ वाला सेटअप अलग से Python 3.12 और शोध सेवाओं के क्रेडेंशियल चाहता है।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "GPT Researcher: laporan riset dengan filter Jev opsional",
+      "h1": "GPT Researcher: laporan riset dengan filter Jev opsional",
+      "description": "GPT Researcher meneliti sumber web dan lokal; Jev dapat memilih bagian berguna sebelum laporan ditulis.",
+      "summary": "Agen perencana dan pelaksana mengumpulkan, merangkum, serta melacak sumber untuk menyusun laporan dengan kutipan. Jika TYPESAFE_API_KEY tersedia, Jev menilai kegunaan tiap bagian bagi pertanyaan sebelum konteks dikirim ke LLM.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Tujuan dan pengguna",
+          "text": "Agen perencana dan pelaksana mengumpulkan, merangkum, serta melacak sumber untuk menyusun laporan dengan kutipan.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Jika TYPESAFE_API_KEY tersedia, Jev menilai kegunaan tiap bagian bagi pertanyaan sebelum konteks dikirim ke LLM.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Buat GPTResearcher dengan pertanyaan, jalankan conduct_research(), lalu panggil write_report() untuk menghasilkan laporan.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Tanpa kunci Jev atau saat panggilan gagal, filter beralih ke BM25 lokal. Konfigurasi terdokumentasi juga memerlukan Python 3.12 dan kredensial layanan riset.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "GPT Researcher: báo cáo nghiên cứu với bộ lọc Jev tùy chọn",
+      "h1": "GPT Researcher: báo cáo nghiên cứu với bộ lọc Jev tùy chọn",
+      "description": "GPT Researcher nghiên cứu nguồn web và cục bộ; Jev có thể chọn đoạn hữu ích trước khi viết báo cáo.",
+      "summary": "Tác tử lập kế hoạch và thực thi thu thập, tóm tắt, theo dõi nguồn rồi tổng hợp thành báo cáo có trích dẫn. Khi có TYPESAFE_API_KEY, Jev chấm mức hữu ích của từng đoạn đối với câu hỏi trước khi chuyển ngữ cảnh cho LLM.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích và đối tượng",
+          "text": "Tác tử lập kế hoạch và thực thi thu thập, tóm tắt, theo dõi nguồn rồi tổng hợp thành báo cáo có trích dẫn.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Khi có TYPESAFE_API_KEY, Jev chấm mức hữu ích của từng đoạn đối với câu hỏi trước khi chuyển ngữ cảnh cho LLM.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Tạo GPTResearcher với câu hỏi, chạy conduct_research(), sau đó gọi write_report() để tạo báo cáo.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Thiếu khóa Jev hoặc gọi lỗi thì chuyển sang BM25 cục bộ. Cấu hình được mô tả còn cần Python 3.12 và thông tin xác thực dịch vụ nghiên cứu.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "GPT Researcher: isteğe bağlı Jev filtresiyle araştırma raporları",
+      "h1": "GPT Researcher: isteğe bağlı Jev filtresiyle araştırma raporları",
+      "description": "GPT Researcher web ve yerel kaynakları araştırır; Jev rapor yazılmadan önce yararlı pasajları seçebilir.",
+      "summary": "Planlama ve yürütme ajanları kaynakları toplar, özetler ve izler; bulgular atıflı bir araştırma raporunda birleştirilir. TYPESAFE_API_KEY varsa Jev, bağlam LLM'e ulaşmadan önce pasajların araştırma sorusuna ne kadar yararlı olduğunu değerlendirir.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Amaç ve hedef kitle",
+          "text": "Planlama ve yürütme ajanları kaynakları toplar, özetler ve izler; bulgular atıflı bir araştırma raporunda birleştirilir.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "TYPESAFE_API_KEY varsa Jev, bağlam LLM'e ulaşmadan önce pasajların araştırma sorusuna ne kadar yararlı olduğunu değerlendirir.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Bir sorguyla GPTResearcher oluşturulur, conduct_research() çalıştırılır ve ardından write_report() çağrılır.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Jev anahtarı yoksa veya çağrı başarısızsa yerel BM25 kullanılır. Belgelenen kurulum ayrıca Python 3.12 ve araştırma hizmeti kimlik bilgileri gerektirir.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "GPT Researcher: rapporti con filtro Jev facoltativo",
+      "h1": "GPT Researcher: rapporti con filtro Jev facoltativo",
+      "description": "GPT Researcher esplora fonti web e locali; Jev può selezionare i passaggi utili prima della stesura del rapporto.",
+      "summary": "Agenti di pianificazione ed esecuzione raccolgono, riassumono e tracciano le fonti, riunendo i risultati in un rapporto con citazioni. Con TYPESAFE_API_KEY, Jev valuta l'utilità dei passaggi per la domanda prima che il contesto raggiunga il LLM.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Scopo e destinatari",
+          "text": "Agenti di pianificazione ed esecuzione raccolgono, riassumono e tracciano le fonti, riunendo i risultati in un rapporto con citazioni.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Con TYPESAFE_API_KEY, Jev valuta l'utilità dei passaggi per la domanda prima che il contesto raggiunga il LLM.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come si usa",
+          "text": "Si crea GPTResearcher con una domanda, si esegue conduct_research() e poi write_report() per generare il rapporto.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "Senza chiave Jev o se la chiamata fallisce, subentra BM25 locale. La configurazione documentata richiede anche Python 3.12 e credenziali dei servizi di ricerca.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  },
+  "displayName": "GPT Researcher"
+}

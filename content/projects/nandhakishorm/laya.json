@@ -1,0 +1,769 @@
+{
+  "version": "source-content-v1",
+  "repo": "NandhaKishorM/laya",
+  "repositoryId": 1375382253,
+  "relationship": "local-alternative",
+  "category": "research",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "path": "README.md",
+      "commit": "9d955671415fc19f069b9cc998928075c1f255ec",
+      "url": "https://github.com/NandhaKishorM/laya/blob/9d955671415fc19f069b9cc998928075c1f255ec/README.md",
+      "sha256": "2fc5805fef24e8b29ca1ddcba66769f0ccf1e011c3709175e7e2de5936338ad2",
+      "accessedAt": "2026-09-30T07:33:45.186Z",
+      "id": "s1"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "Laya uses a non-autoregressive model to answer choice, score and noul questions, with a router selecting checkpoints.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 8,
+          "end": 8,
+          "quote": "**Multilingual, non-autoregressive System 1 decision engine.** Typed decisions over 100+ languages in a single forward pass — 33 ms — trained with reinforcement learning against strictly proper scoring rules (RLCD), with a router that picks the right checkpoint per request."
+        },
+        {
+          "source": "s1",
+          "start": 52,
+          "end": 71,
+          "quote": "```python\nfrom laya import Router\n\nrouter = Router()  # downloads a checkpoint on first use; Router(preload=True) loads all three up front\n\nstate = \"Hi, we were billed twice for March. Please refund the duplicate today or we will cancel our plan.\"\nquestions = {\n    \"department\": {\"type\": \"choice\", \"instructions\": \"Which department should handle this?\",\n                   \"criteria\": {\"billing\": \"invoices, payments, refunds\",\n                                \"technical\": \"bugs, outages, system errors\",\n                                \"other\": \"everything else\"}},\n    \"urgency\": {\"type\": \"score\", \"instructions\": \"How urgent is this?\",\n                \"criteria\": [\"not urgent\", \"soon\", \"blocking\"]},\n    \"churn_risk\": {\"type\": \"noul\", \"instructions\": \"Does the user threaten to cancel or leave?\"},\n}\n\nresult = router.predict(state, questions)\nprint(result[\"answers\"][\"department\"][\"choice\"])  # billing\nprint(result[\"answers\"][\"churn_risk\"][\"noul\"])    # probability the answer is yes\nprint(result[\"routing\"][\"model\"])                 # english"
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "Its self-hosted server exposes POST /v1/systemone for existing Jev clients; the underlying model is Laya rather than hosted Jev.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 470,
+          "end": 477,
+          "quote": "## Self-Hosting: HTTP Server (Jev-compatible)\n\n`laya.serve` exposes the `Router` over HTTP on the same `POST /v1/systemone`\nwire protocol as TypeSafe's hosted Jev API. Laya's answer payload is already\nschema-identical to what Jev returns (`choice`/`score`/`noul` answers and a\n`{input_tokens, output_tokens}` usage block), so an existing Jev client — e.g.\nthe [`hs-jev`](https://github.com/getmissionctrl/hs-jev) Haskell client — just\nneeds its `baseUrl` repointed; nothing else changes."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Pass state and questions to Router.predict(), or use the HTTP server with device, checkpoint and optional authentication settings.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 52,
+          "end": 71,
+          "quote": "```python\nfrom laya import Router\n\nrouter = Router()  # downloads a checkpoint on first use; Router(preload=True) loads all three up front\n\nstate = \"Hi, we were billed twice for March. Please refund the duplicate today or we will cancel our plan.\"\nquestions = {\n    \"department\": {\"type\": \"choice\", \"instructions\": \"Which department should handle this?\",\n                   \"criteria\": {\"billing\": \"invoices, payments, refunds\",\n                                \"technical\": \"bugs, outages, system errors\",\n                                \"other\": \"everything else\"}},\n    \"urgency\": {\"type\": \"score\", \"instructions\": \"How urgent is this?\",\n                \"criteria\": [\"not urgent\", \"soon\", \"blocking\"]},\n    \"churn_risk\": {\"type\": \"noul\", \"instructions\": \"Does the user threaten to cancel or leave?\"},\n}\n\nresult = router.predict(state, questions)\nprint(result[\"answers\"][\"department\"][\"choice\"])  # billing\nprint(result[\"answers\"][\"churn_risk\"][\"noul\"])    # probability the answer is yes\nprint(result[\"routing\"][\"model\"])                 # english"
+        },
+        {
+          "source": "s1",
+          "start": 492,
+          "end": 501,
+          "quote": "Configuration is by environment variable: `LAYA_HOST`, `LAYA_PORT`,\n`LAYA_DEVICE`, `LAYA_PRELOAD`, `LAYA_MODELS` (comma list to preload),\n`LAYA_THREADS` (cap torch intra-op threads for CPU inference — keep at or below\nphysical cores), `LAYA_AUTO_TASK`, `LAYA_MAX_LOADED` (checkpoints resident at\nonce, 2 by default; raise it to 3 when `LAYA_AUTO_TASK` makes a third one\nreachable on demand, or the server rebuilds one every time routing switches),\nand `LAYA_API_KEY` (when set, clients must\nsend `Authorization: Bearer <key>`). A client's `model` field is honoured when it\nnames a Laya checkpoint (`english`/`multilingual`/`typed-decisions`), otherwise\nthe router auto-selects by script/language."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "Confidence thresholds do not transfer directly from Jev, and options share a token budget. The authors emphasize task-specific specialization of base checkpoints.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 503,
+          "end": 507,
+          "quote": "Three things differ from Jev when you port a client:\n\n* **Options per question.** A question's options share the checkpoint's option budget, `head_max_len` (192 tokens on `laya`, 256 on the other two), not Jev's cap of 255 options. In addition, the HTTP server (`laya.serve`) enforces an amplification guard of at most 100 choice options per question (`MAX_CHOICE_OPTIONS = 100`, rejected with 413 before inference). Once options overflow the token budget, around 20 options with a short description each, every option is trimmed to fit, so long or similar labels can reach the model reading the same ([Where Jev leads](#where-jev-leads)). Once they no longer fit the window at all, the library rejects the request with 422. For more candidates, narrow them first with `predict_shortlist` ([Honest limits](#honest-limits)).\n* **Score levels.** Every level needs a description. A `null` level is rejected with 422 rather than scored and echoed back in `legend`.\n* **`confidence`** on `choice` and `score` answers is 1 minus normalised entropy, a measure of how concentrated the distribution is, not Jev's `(n·p_max − 1)/(n − 1)`. A threshold carried over from Jev does not transfer. For one calibrated number on every question type, gate on `answer_confidence`, the probability of the reported answer."
+        },
+        {
+          "source": "s1",
+          "start": 1106,
+          "end": 1109,
+          "quote": "* **The base checkpoints are near chance on typed-decisions zero-shot** -- 0.362 and 0.352\n  against a 0.318 random baseline and a 0.461 majority-class baseline. The 0.766 figure comes\n  from the checkpoint fine-tuned on that benchmark's own training split. Laya is a fast base to\n  specialise, not a zero-shot decision engine."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "Laya: a local decision engine with a Jev-compatible API",
+      "h1": "Laya: a local decision engine with a Jev-compatible API",
+      "description": "Laya makes typed decisions locally and offers a Jev-compatible HTTP interface, with different confidence semantics and option limits.",
+      "summary": "Laya uses a non-autoregressive model to answer choice, score and noul questions, with a router selecting checkpoints. Its self-hosted server exposes POST /v1/systemone for existing Jev clients; the underlying model is Laya rather than hosted Jev.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose and audience",
+          "text": "Laya uses a non-autoregressive model to answer choice, score and noul questions, with a router selecting checkpoints.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "Its self-hosted server exposes POST /v1/systemone for existing Jev clients; the underlying model is Laya rather than hosted Jev.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Using the project",
+          "text": "Pass state and questions to Router.predict(), or use the HTTP server with device, checkpoint and optional authentication settings.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "Confidence thresholds do not transfer directly from Jev, and options share a token budget. The authors emphasize task-specific specialization of base checkpoints.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "Laya：提供 Jev 兼容 API 的本地决策引擎",
+      "h1": "Laya：提供 Jev 兼容 API 的本地决策引擎",
+      "description": "Laya 在本地执行类型化决策，并提供 Jev 兼容 HTTP 接口；置信度定义和选项限制有所不同。",
+      "summary": "Laya 通过非自回归模型回答 choice、score 和 noul 问题，由路由器选择检查点。 自托管服务器提供 POST /v1/systemone 供现有 Jev 客户端接入；实际运行的是 Laya 模型。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途与适用对象",
+          "text": "Laya 通过非自回归模型回答 choice、score 和 noul 问题，由路由器选择检查点。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "自托管服务器提供 POST /v1/systemone 供现有 Jev 客户端接入；实际运行的是 Laya 模型。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "将状态和问题传给 Router.predict()，或使用 HTTP 服务配置设备、检查点与可选身份验证。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "Jev 的置信度阈值不能直接照搬，选项还共享词元预算。作者强调应针对具体任务专门训练基础检查点。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "Laya：提供 Jev 相容 API 的本機決策引擎",
+      "h1": "Laya：提供 Jev 相容 API 的本機決策引擎",
+      "description": "Laya 在本機執行型別化決策，並提供 Jev 相容 HTTP 介面；信心值定義與選項限制有所不同。",
+      "summary": "Laya 以非自迴歸模型回答 choice、score 和 noul 問題，並由路由器選擇模型檢查點。 自架伺服器提供 POST /v1/systemone，讓既有 Jev 用戶端接入；底層執行的是 Laya 模型。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途與適用對象",
+          "text": "Laya 以非自迴歸模型回答 choice、score 和 noul 問題，並由路由器選擇模型檢查點。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "自架伺服器提供 POST /v1/systemone，讓既有 Jev 用戶端接入；底層執行的是 Laya 模型。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "將狀態和問題傳給 Router.predict()，或在 HTTP 服務設定裝置、檢查點與選用的驗證機制。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "Jev 的信心值門檻不能直接沿用，選項也共用詞元預算。作者強調應針對任務特化基礎檢查點。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "Laya：Jev 互換 API を持つローカル判断エンジン",
+      "h1": "Laya：Jev 互換 API を持つローカル判断エンジン",
+      "description": "Laya はローカルで型付きの判断を行い、Jev 互換 HTTP API を提供します。信頼度の定義や選択肢の制約は異なります。",
+      "summary": "非自己回帰モデルで choice、score、noul の問いに答え、ルーターがチェックポイントを選びます。 自前のサーバーは既存 Jev クライアント向けに POST /v1/systemone を公開します。動作するモデルは Laya です。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途と対象",
+          "text": "非自己回帰モデルで choice、score、noul の問いに答え、ルーターがチェックポイントを選びます。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev との関係",
+          "text": "自前のサーバーは既存 Jev クライアント向けに POST /v1/systemone を公開します。動作するモデルは Laya です。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "Router.predict() に状態と問いを渡すか、HTTP サーバーでデバイス、チェックポイント、任意の認証を設定します。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範囲と制約",
+          "text": "Jev の信頼度しきい値はそのまま使えず、選択肢はトークン予算を共有します。作者は基礎モデルのタスク別調整を重視しています。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "Laya: Jev 호환 API를 제공하는 로컬 판단 엔진",
+      "h1": "Laya: Jev 호환 API를 제공하는 로컬 판단 엔진",
+      "description": "Laya는 로컬에서 정해진 형식의 판단을 수행하며 Jev 호환 HTTP API를 제공합니다. 신뢰도 정의와 선택지 제한은 다릅니다.",
+      "summary": "비자기회귀 모델로 choice, score, noul 질문에 답하고 라우터가 체크포인트를 선택합니다. 자체 호스팅 서버는 기존 Jev 클라이언트를 위한 POST /v1/systemone을 제공하며, 실제 모델은 Laya입니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "용도와 대상",
+          "text": "비자기회귀 모델로 choice, score, noul 질문에 답하고 라우터가 체크포인트를 선택합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "자체 호스팅 서버는 기존 Jev 클라이언트를 위한 POST /v1/systemone을 제공하며, 실제 모델은 Laya입니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "Router.predict()에 상태와 질문을 전달하거나 HTTP 서버에서 장치, 체크포인트, 선택적 인증을 설정합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 한계",
+          "text": "Jev의 신뢰도 임계값을 그대로 옮길 수 없으며 선택지는 토큰 예산을 공유합니다. 저자는 기본 체크포인트의 작업별 특화를 강조합니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "Laya: motor local de decisiones con API compatible con Jev",
+      "h1": "Laya: motor local de decisiones con API compatible con Jev",
+      "description": "Laya toma decisiones tipadas en local y ofrece una API HTTP compatible con Jev, con diferencias en confianza y opciones.",
+      "summary": "Un modelo no autorregresivo responde preguntas choice, score y noul; un enrutador selecciona el checkpoint. El servidor propio expone POST /v1/systemone para clientes Jev existentes, pero ejecuta el modelo Laya.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "Un modelo no autorregresivo responde preguntas choice, score y noul; un enrutador selecciona el checkpoint.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "El servidor propio expone POST /v1/systemone para clientes Jev existentes, pero ejecuta el modelo Laya.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo se usa",
+          "text": "Envíe estado y preguntas a Router.predict(), o configure dispositivo, checkpoint y autenticación opcional en el servidor HTTP.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "Los umbrales de confianza de Jev no se trasladan directamente; las opciones comparten presupuesto de tokens. Los autores recomiendan especializar los checkpoints base.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "Laya : moteur local de décision avec API compatible Jev",
+      "h1": "Laya : moteur local de décision avec API compatible Jev",
+      "description": "Laya produit des décisions typées en local et propose une API HTTP compatible Jev, avec des différences de confiance et de limites.",
+      "summary": "Un modèle non autorégressif répond aux questions choice, score et noul ; un routeur sélectionne le checkpoint. Le serveur autohébergé expose POST /v1/systemone aux clients Jev existants, mais exécute le modèle Laya.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Usage et public visé",
+          "text": "Un modèle non autorégressif répond aux questions choice, score et noul ; un routeur sélectionne le checkpoint.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Le serveur autohébergé expose POST /v1/systemone aux clients Jev existants, mais exécute le modèle Laya.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Transmettez état et questions à Router.predict(), ou configurez matériel, checkpoint et authentification facultative sur le serveur HTTP.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "Les seuils de confiance Jev ne sont pas directement transférables ; les options partagent un budget de tokens. Les auteurs préconisent une spécialisation des checkpoints de base.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "Laya: lokale Entscheidungsengine mit Jev-kompatibler API",
+      "h1": "Laya: lokale Entscheidungsengine mit Jev-kompatibler API",
+      "description": "Laya trifft typisierte Entscheidungen lokal und bietet eine Jev-kompatible HTTP-API mit abweichenden Konfidenzwerten und Auswahlgrenzen.",
+      "summary": "Ein nicht autoregressives Modell beantwortet choice-, score- und noul-Fragen; ein Router wählt den Checkpoint. Der selbst betriebene Server stellt POST /v1/systemone für bestehende Jev-Clients bereit, führt aber das Laya-Modell aus.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Zweck und Zielgruppe",
+          "text": "Ein nicht autoregressives Modell beantwortet choice-, score- und noul-Fragen; ein Router wählt den Checkpoint.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Der selbst betriebene Server stellt POST /v1/systemone für bestehende Jev-Clients bereit, führt aber das Laya-Modell aus.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Verwendung",
+          "text": "Zustand und Fragen gehen an Router.predict(); beim HTTP-Server lassen sich Gerät, Checkpoint und optionale Authentifizierung konfigurieren.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Jev-Konfidenzschwellen sind nicht direkt übertragbar; Auswahloptionen teilen ein Tokenbudget. Die Autoren betonen die aufgabenspezifische Anpassung der Basismodelle.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "Laya: motor local de decisões com API compatível com Jev",
+      "h1": "Laya: motor local de decisões com API compatível com Jev",
+      "description": "Laya gera decisões tipadas localmente e oferece API HTTP compatível com Jev, com diferenças na confiança e nos limites de opções.",
+      "summary": "Um modelo não autorregressivo responde perguntas choice, score e noul; um roteador seleciona o checkpoint. O servidor próprio expõe POST /v1/systemone para clientes Jev existentes, mas executa o modelo Laya.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Finalidade e público",
+          "text": "Um modelo não autorregressivo responde perguntas choice, score e noul; um roteador seleciona o checkpoint.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "O servidor próprio expõe POST /v1/systemone para clientes Jev existentes, mas executa o modelo Laya.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Envie estado e perguntas a Router.predict(), ou configure dispositivo, checkpoint e autenticação opcional no servidor HTTP.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "Os limiares de confiança do Jev não são transferíveis diretamente; as opções dividem um orçamento de tokens. Os autores enfatizam a especialização dos checkpoints base.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "Laya: локальный движок решений с API, совместимым с Jev",
+      "h1": "Laya: локальный движок решений с API, совместимым с Jev",
+      "description": "Laya выдаёт типизированные решения локально и предоставляет совместимый с Jev HTTP API с отличиями в уверенности и лимитах вариантов.",
+      "summary": "Неавторегрессионная модель отвечает на вопросы choice, score и noul; маршрутизатор выбирает чекпойнт. Собственный сервер предоставляет POST /v1/systemone для существующих клиентов Jev, но исполняет модель Laya.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Неавторегрессионная модель отвечает на вопросы choice, score и noul; маршрутизатор выбирает чекпойнт.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Собственный сервер предоставляет POST /v1/systemone для существующих клиентов Jev, но исполняет модель Laya.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Передайте состояние и вопросы в Router.predict() либо настройте устройство, чекпойнт и необязательную авторизацию HTTP-сервера.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Пороги уверенности Jev нельзя переносить напрямую; варианты делят бюджет токенов. Авторы подчёркивают необходимость специализации базовых чекпойнтов под задачу.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "Laya: Jev-संगत API वाला स्थानीय निर्णय इंजन",
+      "h1": "Laya: Jev-संगत API वाला स्थानीय निर्णय इंजन",
+      "description": "Laya स्थानीय रूप से निश्चित प्रकार के निर्णय देता है और Jev-संगत HTTP API प्रदान करता है; विश्वास मान और विकल्प सीमाएँ अलग हैं।",
+      "summary": "गैर-ऑटोरेग्रेसिव मॉडल choice, score और noul प्रश्नों का उत्तर देता है, जबकि राउटर चेकपॉइंट चुनता है। स्वयं होस्ट किया गया सर्वर मौजूदा Jev क्लाइंट के लिए POST /v1/systemone देता है, लेकिन मॉडल Laya चलता है।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "उद्देश्य और उपयोगकर्ता",
+          "text": "गैर-ऑटोरेग्रेसिव मॉडल choice, score और noul प्रश्नों का उत्तर देता है, जबकि राउटर चेकपॉइंट चुनता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "स्वयं होस्ट किया गया सर्वर मौजूदा Jev क्लाइंट के लिए POST /v1/systemone देता है, लेकिन मॉडल Laya चलता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल का तरीका",
+          "text": "Router.predict() को स्थिति और प्रश्न दें, या HTTP सर्वर में डिवाइस, चेकपॉइंट और वैकल्पिक प्रमाणीकरण तय करें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "Jev के विश्वास मान की सीमाएँ सीधे लागू नहीं होतीं; विकल्प टोकन बजट साझा करते हैं। लेखक बेस चेकपॉइंट को कार्य के अनुसार ढालने पर ज़ोर देते हैं।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "Laya: mesin keputusan lokal dengan API kompatibel Jev",
+      "h1": "Laya: mesin keputusan lokal dengan API kompatibel Jev",
+      "description": "Laya menghasilkan keputusan bertipe secara lokal dan menyediakan API HTTP kompatibel Jev, dengan perbedaan tingkat keyakinan dan batas opsi.",
+      "summary": "Model nonautoregresif menjawab pertanyaan choice, score, dan noul; router memilih checkpoint yang digunakan. Server yang dihosting sendiri menyediakan POST /v1/systemone bagi klien Jev yang ada, tetapi menjalankan model Laya.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Tujuan dan pengguna",
+          "text": "Model nonautoregresif menjawab pertanyaan choice, score, dan noul; router memilih checkpoint yang digunakan.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Server yang dihosting sendiri menyediakan POST /v1/systemone bagi klien Jev yang ada, tetapi menjalankan model Laya.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Kirim status dan pertanyaan ke Router.predict(), atau atur perangkat, checkpoint, serta autentikasi opsional pada server HTTP.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Ambang keyakinan Jev tidak langsung berlaku; opsi berbagi anggaran token. Penulis menekankan penyesuaian checkpoint dasar untuk tugas tertentu.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "Laya: bộ máy quyết định cục bộ với API tương thích Jev",
+      "h1": "Laya: bộ máy quyết định cục bộ với API tương thích Jev",
+      "description": "Laya đưa ra quyết định có kiểu ở máy cục bộ và cung cấp HTTP API tương thích Jev, nhưng khác về độ tin cậy và giới hạn lựa chọn.",
+      "summary": "Mô hình phi tự hồi quy trả lời câu hỏi choice, score và noul; bộ định tuyến chọn checkpoint. Máy chủ tự lưu trữ cung cấp POST /v1/systemone cho ứng dụng khách Jev hiện có, nhưng mô hình chạy bên dưới là Laya.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích và đối tượng",
+          "text": "Mô hình phi tự hồi quy trả lời câu hỏi choice, score và noul; bộ định tuyến chọn checkpoint.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Máy chủ tự lưu trữ cung cấp POST /v1/systemone cho ứng dụng khách Jev hiện có, nhưng mô hình chạy bên dưới là Laya.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Truyền trạng thái và câu hỏi vào Router.predict(), hoặc cấu hình thiết bị, checkpoint và xác thực tùy chọn cho máy chủ HTTP.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Không thể chuyển nguyên ngưỡng tin cậy Jev; các lựa chọn dùng chung ngân sách token. Tác giả nhấn mạnh việc tinh chỉnh checkpoint nền theo nhiệm vụ.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "Laya: Jev uyumlu API sunan yerel karar motoru",
+      "h1": "Laya: Jev uyumlu API sunan yerel karar motoru",
+      "description": "Laya yerelde türü belirli kararlar üretir ve Jev uyumlu HTTP API sunar; güven değerleri ile seçenek sınırları farklıdır.",
+      "summary": "Otoregresif olmayan model choice, score ve noul sorularını yanıtlar; yönlendirici model kontrol noktasını seçer. Kendi sunucunuzda POST /v1/systemone üzerinden mevcut Jev istemcileri kullanılabilir; çalışan model Laya’dır.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Amaç ve hedef kitle",
+          "text": "Otoregresif olmayan model choice, score ve noul sorularını yanıtlar; yönlendirici model kontrol noktasını seçer.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Kendi sunucunuzda POST /v1/systemone üzerinden mevcut Jev istemcileri kullanılabilir; çalışan model Laya’dır.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Durum ve sorular Router.predict() çağrısına verilir; HTTP sunucusunda cihaz, kontrol noktası ve isteğe bağlı kimlik doğrulama ayarlanır.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Jev güven eşikleri doğrudan taşınamaz; seçenekler token bütçesini paylaşır. Yazarlar temel modellerin göreve göre özelleştirilmesini vurgular.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "Laya: motore locale di decisione con API compatibile Jev",
+      "h1": "Laya: motore locale di decisione con API compatibile Jev",
+      "description": "Laya produce decisioni tipizzate in locale e offre un'API HTTP compatibile Jev, con differenze nella confidenza e nei limiti delle opzioni.",
+      "summary": "Un modello non autoregressivo risponde a domande choice, score e noul; un router seleziona il checkpoint. Il server autogestito espone POST /v1/systemone ai client Jev esistenti, ma esegue il modello Laya.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Scopo e destinatari",
+          "text": "Un modello non autoregressivo risponde a domande choice, score e noul; un router seleziona il checkpoint.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Il server autogestito espone POST /v1/systemone ai client Jev esistenti, ma esegue il modello Laya.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come si usa",
+          "text": "Si passano stato e domande a Router.predict(), oppure si configurano dispositivo, checkpoint e autenticazione facoltativa nel server HTTP.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "Le soglie di confidenza Jev non si trasferiscono direttamente; le opzioni condividono un budget di token. Gli autori sottolineano la specializzazione dei checkpoint di base.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  },
+  "displayName": "Laya"
+}

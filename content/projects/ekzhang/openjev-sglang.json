@@ -1,0 +1,762 @@
+{
+  "version": "source-content-v1",
+  "repo": "ekzhang/openjev-sglang",
+  "repositoryId": 1374869789,
+  "relationship": "local-alternative",
+  "category": "research",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "path": "README.md",
+      "commit": "5f633dccaf5a45c7e0a45d06653d019bb6bf1441",
+      "url": "https://github.com/ekzhang/openjev-sglang/blob/5f633dccaf5a45c7e0a45d06653d019bb6bf1441/README.md",
+      "sha256": "83038b39c2ffb840a2243b21dfbaf8b4631d65bc1923507289b9070779d3e704",
+      "accessedAt": "2026-09-30T07:33:51.640Z",
+      "id": "s1"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "The project pairs Qwen3.6-35B-A3B on SGLang with a separate Python API process for typed decision serving.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 3,
+          "end": 12,
+          "quote": "A server implementing the [TypeSafe/Jev HTTP API](https://docs.typesafe.ai/api)\nwith **Qwen3.6-35B-A3B on SGLang**.\n\n![](https://i.imgur.com/wHM3jxV.gif)\n\nEach container one B200 with SGLang **0.5.19's Rust frontend**,\nradix caching, and **breakable prefill CUDA graphs**. A separate Python API process\nuses FastAPI, uvloop, the Rust-backed HF tokenizer, and pooled asynchronous HTTP\nconnections to SGLang on localhost. CUDA dependencies stay in SGLang's container;\n`uv sync` on your laptop installs only the API, deployment tools, and tests."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "POST /v1/systemone supports Noul, Choice and Score; jev-latest is an alias for the configured Qwen model, not a TypeSafe request.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 100,
+          "end": 118,
+          "quote": "| Route                | Purpose                                                          |\n| -------------------- | ---------------------------------------------------------------- |\n| `POST /v1/systemone` | Noul, Choice, and Score evaluation                               |\n| `GET /v1/models`     | Model catalogue with TypeSafe and OpenAI-style fields            |\n| `GET /v1/limits`     | Admission limits                                                 |\n| `GET /health`        | Readiness, including SGLang health and startup duration          |\n| `GET /health/live`   | API process liveness                                             |\n| `GET /`              | Scalar API reference with an editable example and request client |\n| `GET /docs`          | Built-in Swagger UI                                              |\n| `GET /openapi.json`  | Generated API schema                                             |\n\n`jev-latest` is a compatibility alias for the configured Qwen model. The public\nmodel ID is `Qwen/Qwen3.6-35B-A3B`;\nNVIDIA's repository is only the internal weight source. Set\n`OPENJEV_SERVED_MODEL_NAME` or `openjev serve --served-model-name NAME` to override\nthe public ID. It is also passed to SGLang as `--served-model-name`.\nNo requests go to TypeSafe. The public server is\nthe evaluation API; SGLang's generation and administration routes remain on\nlocalhost and aren't forwarded publicly."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Connect the API to a matching SGLang backend and submit state plus questions; health, model and limit endpoints expose server status.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 102,
+          "end": 105,
+          "quote": "| `POST /v1/systemone` | Noul, Choice, and Score evaluation                               |\n| `GET /v1/models`     | Model catalogue with TypeSafe and OpenAI-style fields            |\n| `GET /v1/limits`     | Admission limits                                                 |\n| `GET /health`        | Readiness, including SGLang health and startup duration          |"
+        },
+        {
+          "source": "s1",
+          "start": 213,
+          "end": 218,
+          "quote": "# Connect to an existing backend; it must have matching model/tokenizer revision,\n# selected-token logprobs, radix cache, and a sufficient context length:\nuv run openjev serve --connect http://127.0.0.1:30000\n\n# On a B200 host/container with SGLang 0.5.19 installed in another environment:\nuv run openjev serve --sglang-python /path/to/sglang/bin/python"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "N questions require N+1 single-token backend calls. Probabilities depend on options and ordering and are not calibrated correctness estimates.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 140,
+          "end": 143,
+          "quote": "This is a prefill plus first-token-readout workload: there is no generated chain\nof thought and no autoregressive continuation after the first token. There are\n**N+1 one-token calls for N questions**, including the cache-warming call.\nSpeculative decoding is not enabled."
+        },
+        {
+          "source": "s1",
+          "start": 198,
+          "end": 202,
+          "quote": "OpenJev defines\n`confidence = 1 - H(probabilities) / log(number_of_options)`, clamped to [0, 1].\nThis is zero for a uniform distribution and one for a point mass. Probabilities\nare conditioned on the supplied options, depend on prompt and label ordering,\nand are not calibrated estimates of correctness."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "openjev-sglang: a Qwen server with the Jev HTTP API",
+      "h1": "openjev-sglang: a Qwen server with the Jev HTTP API",
+      "description": "openjev-sglang serves Qwen through SGLang behind a Jev-compatible evaluation API, without calling TypeSafe.",
+      "summary": "The project pairs Qwen3.6-35B-A3B on SGLang with a separate Python API process for typed decision serving. POST /v1/systemone supports Noul, Choice and Score; jev-latest is an alias for the configured Qwen model, not a TypeSafe request.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose and audience",
+          "text": "The project pairs Qwen3.6-35B-A3B on SGLang with a separate Python API process for typed decision serving.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "POST /v1/systemone supports Noul, Choice and Score; jev-latest is an alias for the configured Qwen model, not a TypeSafe request.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Using the project",
+          "text": "Connect the API to a matching SGLang backend and submit state plus questions; health, model and limit endpoints expose server status.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "N questions require N+1 single-token backend calls. Probabilities depend on options and ordering and are not calibrated correctness estimates.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "openjev-sglang：实现 Jev HTTP API 的 Qwen 服务",
+      "h1": "openjev-sglang：实现 Jev HTTP API 的 Qwen 服务",
+      "description": "openjev-sglang 用 SGLang 运行 Qwen，提供 Jev 兼容评估 API，不调用 TypeSafe。",
+      "summary": "项目将 SGLang 上的 Qwen3.6-35B-A3B 与独立 Python API 进程组合，用于提供类型化决策服务。 POST /v1/systemone 支持 Noul、Choice 和 Score；jev-latest 只是所配置 Qwen 模型的别名。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途与适用对象",
+          "text": "项目将 SGLang 上的 Qwen3.6-35B-A3B 与独立 Python API 进程组合，用于提供类型化决策服务。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "POST /v1/systemone 支持 Noul、Choice 和 Score；jev-latest 只是所配置 Qwen 模型的别名。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "将 API 连接到匹配的 SGLang 后端并提交状态与问题；健康、模型和限制端点可查看服务状态。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "N 个问题需要 N+1 次单词元后端调用。概率受选项及顺序影响，不是经过校准的正确率估计。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "openjev-sglang：實作 Jev HTTP API 的 Qwen 服務",
+      "h1": "openjev-sglang：實作 Jev HTTP API 的 Qwen 服務",
+      "description": "openjev-sglang 以 SGLang 執行 Qwen，提供 Jev 相容評估 API，不呼叫 TypeSafe。",
+      "summary": "專案將 SGLang 上的 Qwen3.6-35B-A3B 與獨立 Python API 程序結合，提供型別化決策服務。 POST /v1/systemone 支援 Noul、Choice 和 Score；jev-latest 僅是所設定 Qwen 模型的別名。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途與適用對象",
+          "text": "專案將 SGLang 上的 Qwen3.6-35B-A3B 與獨立 Python API 程序結合，提供型別化決策服務。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "POST /v1/systemone 支援 Noul、Choice 和 Score；jev-latest 僅是所設定 Qwen 模型的別名。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "將 API 連至相符的 SGLang 後端，提交狀態與問題；健康、模型及限制端點可查詢服務狀態。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "N 個問題需要 N+1 次單詞元後端呼叫。機率受選項及順序影響，不是經校準的正確率估計。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "openjev-sglang：Jev HTTP API を備えた Qwen サーバー",
+      "h1": "openjev-sglang：Jev HTTP API を備えた Qwen サーバー",
+      "description": "openjev-sglang は SGLang 上の Qwen に Jev 互換評価 API を提供し、TypeSafe へは接続しません。",
+      "summary": "SGLang で動く Qwen3.6-35B-A3B と別プロセスの Python API を組み合わせた型付き判断サーバーです。 POST /v1/systemone は Noul、Choice、Score に対応し、jev-latest は設定された Qwen モデルの別名です。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途と対象",
+          "text": "SGLang で動く Qwen3.6-35B-A3B と別プロセスの Python API を組み合わせた型付き判断サーバーです。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev との関係",
+          "text": "POST /v1/systemone は Noul、Choice、Score に対応し、jev-latest は設定された Qwen モデルの別名です。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "対応する SGLang バックエンドへ接続して状態と質問を送り、health、model、limit の各 API で状態を確認できます。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範囲と制約",
+          "text": "N 個の質問には N+1 回の単一トークン処理が必要です。確率は選択肢と順序に依存し、校正済みの正解率ではありません。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "openjev-sglang: Jev HTTP API를 제공하는 Qwen 서버",
+      "h1": "openjev-sglang: Jev HTTP API를 제공하는 Qwen 서버",
+      "description": "openjev-sglang은 SGLang에서 Qwen을 실행해 Jev 호환 평가 API를 제공하며 TypeSafe를 호출하지 않습니다.",
+      "summary": "SGLang의 Qwen3.6-35B-A3B와 별도 Python API 프로세스를 결합해 형식화된 판단을 제공합니다. POST /v1/systemone은 Noul, Choice, Score를 지원하며 jev-latest는 설정된 Qwen 모델의 별칭입니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "용도와 대상",
+          "text": "SGLang의 Qwen3.6-35B-A3B와 별도 Python API 프로세스를 결합해 형식화된 판단을 제공합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "POST /v1/systemone은 Noul, Choice, Score를 지원하며 jev-latest는 설정된 Qwen 모델의 별칭입니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "일치하는 SGLang 백엔드에 API를 연결해 상태와 질문을 보내고 상태, 모델, 제한 엔드포인트로 서버를 확인합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 한계",
+          "text": "N개 질문에 N+1번의 단일 토큰 호출이 필요합니다. 확률은 선택지와 순서에 의존하며 보정된 정답률이 아닙니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "openjev-sglang: servidor Qwen con API HTTP Jev",
+      "h1": "openjev-sglang: servidor Qwen con API HTTP Jev",
+      "description": "openjev-sglang sirve Qwen mediante SGLang con una API compatible con Jev, sin llamar a TypeSafe.",
+      "summary": "Combina Qwen3.6-35B-A3B en SGLang con un proceso API Python separado para servir decisiones tipadas. POST /v1/systemone admite Noul, Choice y Score; jev-latest es un alias del Qwen configurado.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "Combina Qwen3.6-35B-A3B en SGLang con un proceso API Python separado para servir decisiones tipadas.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "POST /v1/systemone admite Noul, Choice y Score; jev-latest es un alias del Qwen configurado.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo se usa",
+          "text": "Conecte un backend SGLang compatible y envíe estado y preguntas; los endpoints de salud, modelos y límites muestran el estado.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "N preguntas requieren N+1 llamadas de un token. Las probabilidades dependen de opciones y orden, y no son estimaciones calibradas de acierto.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "openjev-sglang : serveur Qwen avec API HTTP Jev",
+      "h1": "openjev-sglang : serveur Qwen avec API HTTP Jev",
+      "description": "openjev-sglang sert Qwen via SGLang derrière une API compatible Jev, sans appeler TypeSafe.",
+      "summary": "Il associe Qwen3.6-35B-A3B sur SGLang à un processus API Python distinct pour les décisions typées. POST /v1/systemone prend en charge Noul, Choice et Score ; jev-latest désigne le modèle Qwen configuré.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Usage et public visé",
+          "text": "Il associe Qwen3.6-35B-A3B sur SGLang à un processus API Python distinct pour les décisions typées.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "POST /v1/systemone prend en charge Noul, Choice et Score ; jev-latest désigne le modèle Qwen configuré.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Reliez un backend SGLang compatible et envoyez état et questions ; les endpoints de santé, modèles et limites renseignent le serveur.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "N questions nécessitent N+1 appels d'un token. Les probabilités dépendent des options et de leur ordre, sans calibration de justesse.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "openjev-sglang: Qwen-Server mit Jev-HTTP-API",
+      "h1": "openjev-sglang: Qwen-Server mit Jev-HTTP-API",
+      "description": "openjev-sglang stellt Qwen über SGLang mit Jev-kompatibler Auswertungs-API bereit, ohne TypeSafe aufzurufen.",
+      "summary": "Qwen3.6-35B-A3B auf SGLang und ein separater Python-API-Prozess bilden den Server für typisierte Entscheidungen. POST /v1/systemone unterstützt Noul, Choice und Score; jev-latest ist ein Alias des konfigurierten Qwen-Modells.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Zweck und Zielgruppe",
+          "text": "Qwen3.6-35B-A3B auf SGLang und ein separater Python-API-Prozess bilden den Server für typisierte Entscheidungen.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "POST /v1/systemone unterstützt Noul, Choice und Score; jev-latest ist ein Alias des konfigurierten Qwen-Modells.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Verwendung",
+          "text": "Verbinden Sie ein passendes SGLang-Backend und senden Sie Zustand und Fragen; Health-, Modell- und Limit-Endpunkte zeigen den Serverstatus.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "N Fragen benötigen N+1 Aufrufe mit je einem Token. Wahrscheinlichkeiten hängen von Optionen und Reihenfolge ab und sind keine kalibrierten Korrektheitsschätzungen.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "openjev-sglang: servidor Qwen com API HTTP Jev",
+      "h1": "openjev-sglang: servidor Qwen com API HTTP Jev",
+      "description": "openjev-sglang serve Qwen por SGLang com API de avaliação compatível com Jev, sem chamar a TypeSafe.",
+      "summary": "Combina Qwen3.6-35B-A3B no SGLang com um processo API Python separado para servir decisões tipadas. POST /v1/systemone aceita Noul, Choice e Score; jev-latest é um alias do Qwen configurado.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Finalidade e público",
+          "text": "Combina Qwen3.6-35B-A3B no SGLang com um processo API Python separado para servir decisões tipadas.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "POST /v1/systemone aceita Noul, Choice e Score; jev-latest é um alias do Qwen configurado.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Conecte um backend SGLang compatível e envie estado e perguntas; endpoints de saúde, modelos e limites expõem o estado do servidor.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "N perguntas exigem N+1 chamadas de um token. As probabilidades dependem das opções e ordem, sem serem estimativas calibradas de acerto.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "openjev-sglang: сервер Qwen с HTTP API Jev",
+      "h1": "openjev-sglang: сервер Qwen с HTTP API Jev",
+      "description": "openjev-sglang обслуживает Qwen через SGLang с совместимым API Jev, не обращаясь к TypeSafe.",
+      "summary": "Qwen3.6-35B-A3B на SGLang работает вместе с отдельным Python API-процессом для типизированных решений. POST /v1/systemone поддерживает Noul, Choice и Score; jev-latest является псевдонимом настроенной модели Qwen.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Qwen3.6-35B-A3B на SGLang работает вместе с отдельным Python API-процессом для типизированных решений.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "POST /v1/systemone поддерживает Noul, Choice и Score; jev-latest является псевдонимом настроенной модели Qwen.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Подключите совместимый SGLang-бэкенд и отправляйте состояние с вопросами; endpoints здоровья, моделей и лимитов показывают состояние сервера.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "N вопросов требуют N+1 однотокенного вызова. Вероятности зависят от вариантов и порядка и не являются калиброванными оценками правильности.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "openjev-sglang: Jev HTTP API वाला Qwen सर्वर",
+      "h1": "openjev-sglang: Jev HTTP API वाला Qwen सर्वर",
+      "description": "openjev-sglang, SGLang से Qwen चलाकर Jev-संगत मूल्यांकन API देता है और TypeSafe को कॉल नहीं करता।",
+      "summary": "यह SGLang पर Qwen3.6-35B-A3B और अलग Python API प्रक्रिया जोड़कर निश्चित प्रकार के निर्णय देता है। POST /v1/systemone में Noul, Choice और Score मिलते हैं; jev-latest कॉन्फ़िगर किए Qwen मॉडल का उपनाम है।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "उद्देश्य और उपयोगकर्ता",
+          "text": "यह SGLang पर Qwen3.6-35B-A3B और अलग Python API प्रक्रिया जोड़कर निश्चित प्रकार के निर्णय देता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "POST /v1/systemone में Noul, Choice और Score मिलते हैं; jev-latest कॉन्फ़िगर किए Qwen मॉडल का उपनाम है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल का तरीका",
+          "text": "मेल खाते SGLang बैकएंड से जुड़कर स्थिति और प्रश्न भेजें; स्वास्थ्य, मॉडल और सीमा endpoint सर्वर की स्थिति बताते हैं।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "N प्रश्नों के लिए N+1 एक-टोकन कॉल होती हैं। संभावनाएँ विकल्पों और क्रम पर निर्भर हैं, कैलिब्रेट की गई सही होने की दर नहीं।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "openjev-sglang: server Qwen dengan API HTTP Jev",
+      "h1": "openjev-sglang: server Qwen dengan API HTTP Jev",
+      "description": "openjev-sglang melayani Qwen lewat SGLang dengan API evaluasi kompatibel Jev, tanpa memanggil TypeSafe.",
+      "summary": "Qwen3.6-35B-A3B di SGLang dipasangkan dengan proses API Python terpisah untuk melayani keputusan bertipe. POST /v1/systemone mendukung Noul, Choice, dan Score; jev-latest merupakan alias model Qwen yang dikonfigurasi.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Tujuan dan pengguna",
+          "text": "Qwen3.6-35B-A3B di SGLang dipasangkan dengan proses API Python terpisah untuk melayani keputusan bertipe.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "POST /v1/systemone mendukung Noul, Choice, dan Score; jev-latest merupakan alias model Qwen yang dikonfigurasi.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Hubungkan backend SGLang yang cocok, kirim status dan pertanyaan, lalu lihat kondisi server melalui endpoint kesehatan, model, serta batas.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "N pertanyaan memerlukan N+1 panggilan satu token. Probabilitas bergantung pada opsi dan urutan, bukan perkiraan kebenaran terkalibrasi.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "openjev-sglang: máy chủ Qwen với HTTP API Jev",
+      "h1": "openjev-sglang: máy chủ Qwen với HTTP API Jev",
+      "description": "openjev-sglang phục vụ Qwen qua SGLang bằng API đánh giá tương thích Jev, không gọi TypeSafe.",
+      "summary": "Qwen3.6-35B-A3B trên SGLang kết hợp với tiến trình API Python riêng để phục vụ quyết định có kiểu. POST /v1/systemone hỗ trợ Noul, Choice và Score; jev-latest là bí danh của mô hình Qwen đã cấu hình.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích và đối tượng",
+          "text": "Qwen3.6-35B-A3B trên SGLang kết hợp với tiến trình API Python riêng để phục vụ quyết định có kiểu.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "POST /v1/systemone hỗ trợ Noul, Choice và Score; jev-latest là bí danh của mô hình Qwen đã cấu hình.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Kết nối backend SGLang phù hợp rồi gửi trạng thái và câu hỏi; endpoint sức khỏe, mô hình và giới hạn cho biết tình trạng máy chủ.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "N câu hỏi cần N+1 lượt gọi một token. Xác suất phụ thuộc lựa chọn và thứ tự, không phải ước lượng độ đúng đã hiệu chuẩn.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "openjev-sglang: Jev HTTP API sunan Qwen sunucusu",
+      "h1": "openjev-sglang: Jev HTTP API sunan Qwen sunucusu",
+      "description": "openjev-sglang, TypeSafe çağırmadan SGLang üzerinden Qwen’i Jev uyumlu değerlendirme API’siyle sunar.",
+      "summary": "SGLang üzerindeki Qwen3.6-35B-A3B, türü belirli kararlar için ayrı Python API süreciyle birleştirilir. POST /v1/systemone, Noul, Choice ve Score destekler; jev-latest yapılandırılan Qwen modelinin takma adıdır.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Amaç ve hedef kitle",
+          "text": "SGLang üzerindeki Qwen3.6-35B-A3B, türü belirli kararlar için ayrı Python API süreciyle birleştirilir.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "POST /v1/systemone, Noul, Choice ve Score destekler; jev-latest yapılandırılan Qwen modelinin takma adıdır.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Uyumlu SGLang arka ucuna bağlanıp durum ve sorular gönderilir; sağlık, model ve sınır uç noktaları sunucu durumunu gösterir.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "N soru için N+1 tek-token çağrısı gerekir. Olasılıklar seçeneklere ve sıraya bağlıdır; kalibre edilmiş doğruluk tahmini değildir.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "openjev-sglang: server Qwen con API HTTP Jev",
+      "h1": "openjev-sglang: server Qwen con API HTTP Jev",
+      "description": "openjev-sglang serve Qwen tramite SGLang con un'API di valutazione compatibile Jev, senza chiamare TypeSafe.",
+      "summary": "Combina Qwen3.6-35B-A3B su SGLang con un processo API Python separato per decisioni tipizzate. POST /v1/systemone supporta Noul, Choice e Score; jev-latest è un alias del modello Qwen configurato.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Scopo e destinatari",
+          "text": "Combina Qwen3.6-35B-A3B su SGLang con un processo API Python separato per decisioni tipizzate.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "POST /v1/systemone supporta Noul, Choice e Score; jev-latest è un alias del modello Qwen configurato.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come si usa",
+          "text": "Si collega un backend SGLang compatibile e si inviano stato e domande; endpoint salute, modelli e limiti mostrano lo stato del server.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "N domande richiedono N+1 chiamate da un token. Le probabilità dipendono da opzioni e ordine e non sono stime calibrate di correttezza.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

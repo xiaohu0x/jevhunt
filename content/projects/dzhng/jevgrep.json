@@ -1,0 +1,774 @@
+{
+  "version": "source-content-v1",
+  "repo": "dzhng/jevgrep",
+  "repositoryId": 1388482474,
+  "relationship": "jev-app",
+  "category": "agents",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "path": "README.md",
+      "commit": "09346e16c43d3b9bb809839591dc43c3d5c5aa8f",
+      "url": "https://github.com/dzhng/jevgrep/blob/09346e16c43d3b9bb809839591dc43c3d5c5aa8f/README.md",
+      "sha256": "fa876ee4776e80d884f41bd307738bed7938a827a99a758bceb1dc51949cf7bf",
+      "accessedAt": "2026-09-30T07:33:48.103Z",
+      "id": "s1"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "The jg CLI helps coding agents explore unfamiliar repositories by returning relevant files, line references and source excerpts.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 15,
+          "end": 19,
+          "quote": "Coding agents spend part of every unfamiliar task finding the right files.\nJevgrep gives them a place to start: ask a repository question, and `jg` returns\nrelevant files, reading leads, and verbatim source excerpts in one stdout response.\nIt uses [Jev](https://vercel.com/ai-gateway/models/jev) to judge relevance across\nfolders, files, and declarations. Your coding agent then implements and tests the change."
+        },
+        {
+          "source": "s1",
+          "start": 90,
+          "end": 93,
+          "quote": "The summary and compact file list come first, followed by selected source with\nline references, then detailed declaration and call locations. Python and TypeScript/JavaScript support declaration\nparsing; other text uses a fallback. The output is evidence for the agent to use,\nnot a generated answer or a guarantee that every relevant file was found."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "Jev judges folders, file previews and declarations as the search follows relevant branches through the repository.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 18,
+          "end": 19,
+          "quote": "It uses [Jev](https://vercel.com/ai-gateway/models/jev) to judge relevance across\nfolders, files, and declarations. Your coding agent then implements and tests the change."
+        },
+        {
+          "source": "s1",
+          "start": 84,
+          "end": 88,
+          "quote": "Jevgrep explores the repository hierarchy and follows qualifying branches. It\nselects files using content previews, then identifies useful source units and\nsurrounding context. It keeps qualifying file locations even when it cannot\nconfidently return an excerpt; it does not force every search into a fixed top-two\nlist."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Configure credentials for a supported provider, install the agent skill and ask jg a repository question; Node.js 22+ on macOS or Linux is required.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 21,
+          "end": 28,
+          "quote": "```sh\nnpm install -g @dzhng/jevgrep\njg auth\njg skill\njg \"How are telemetry events recorded and sent?\" ./my-project\n```\n\nRequires **Node.js 22+**, **macOS or Linux**, and a key for **Vercel AI Gateway, TypeSafe, OpenRouter, or OpenCode Zen**."
+        },
+        {
+          "source": "s1",
+          "start": 34,
+          "end": 49,
+          "quote": "## Install the agent skill — required for agent setup\n\nInstalling the CLI alone does not teach your coding agent to use it. **Install\nthe skill as well**, from the project where your agent works:\n\n```sh\njg skill\n```\n\nThe installer detects your coding agents (Claude Code, Codex, OpenCode and\nothers) and asks where to install. Add `--global` for a user-wide install, or\n`--yes` for unattended installation. The\n[skill](skills/jevgrep/SKILL.md) explains installation, invocation and the meaning of returned context.\nIt leaves research and implementation decisions to the calling agent. The current repository skill\nchecks for `jg` and installs the CLI if it is missing; authentication still needs\nyour selected provider’s key. The skill installer itself does not configure credentials."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "Search sends eligible source content to the chosen provider. Results are retrieval evidence, not a guarantee that every relevant file was found.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 90,
+          "end": 97,
+          "quote": "The summary and compact file list come first, followed by selected source with\nline references, then detailed declaration and call locations. Python and TypeScript/JavaScript support declaration\nparsing; other text uses a fallback. The output is evidence for the agent to use,\nnot a generated answer or a guarantee that every relevant file was found.\n[See a recorded output example](specs/done/jevgrep/assets/stdout-example.txt).\n\nWhen you already know an exact symbol or path, a direct read or `rg` search may be\nall you need. Jevgrep is most useful for questions that span unfamiliar files."
+        },
+        {
+          "source": "s1",
+          "start": 122,
+          "end": 125,
+          "quote": "Searches send eligible source content to Jev through the provider selected during auth. Default\nfilesystem filtering respects ignore files and excludes hidden, dependency/build,\nbinary, and obvious credential files. These filters are not a guarantee that all\nsensitive information has been removed; choose a search root you intend to send."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "jevgrep: find relevant code with Jev",
+      "h1": "jevgrep: find relevant code with Jev",
+      "description": "jevgrep answers repository search questions with file leads and verbatim excerpts, using Jev to judge relevance.",
+      "summary": "The jg CLI helps coding agents explore unfamiliar repositories by returning relevant files, line references and source excerpts. Jev judges folders, file previews and declarations as the search follows relevant branches through the repository.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose and audience",
+          "text": "The jg CLI helps coding agents explore unfamiliar repositories by returning relevant files, line references and source excerpts.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "Jev judges folders, file previews and declarations as the search follows relevant branches through the repository.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Using the project",
+          "text": "Configure credentials for a supported provider, install the agent skill and ask jg a repository question; Node.js 22+ on macOS or Linux is required.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "Search sends eligible source content to the chosen provider. Results are retrieval evidence, not a guarantee that every relevant file was found.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "jevgrep：用 Jev 查找相关代码",
+      "h1": "jevgrep：用 Jev 查找相关代码",
+      "description": "jevgrep 用 Jev 判断相关性，以文件线索和源码原文片段回答代码库搜索需求。",
+      "summary": "jg CLI 帮助编程智能体探索陌生代码库，返回相关文件、行号引用与源码片段。 搜索沿相关分支遍历代码库，Jev 评估目录、文件预览和声明的相关性。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途与适用对象",
+          "text": "jg CLI 帮助编程智能体探索陌生代码库，返回相关文件、行号引用与源码片段。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "搜索沿相关分支遍历代码库，Jev 评估目录、文件预览和声明的相关性。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "配置受支持服务商的认证信息，安装智能体技能后向 jg 提问；需要 macOS 或 Linux 上的 Node.js 22+。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "搜索会把符合条件的源码发给所选服务商。结果是检索证据，不保证找到全部相关文件。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "jevgrep：以 Jev 尋找相關程式碼",
+      "h1": "jevgrep：以 Jev 尋找相關程式碼",
+      "description": "jevgrep 用 Jev 判斷相關性，提供檔案線索與原始碼片段，協助搜尋程式碼庫。",
+      "summary": "jg CLI 協助程式開發代理探索陌生儲存庫，傳回相關檔案、行號引用和原始碼片段。 搜尋沿相關分支走訪儲存庫，由 Jev 評估目錄、檔案預覽及宣告的相關程度。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途與適用對象",
+          "text": "jg CLI 協助程式開發代理探索陌生儲存庫，傳回相關檔案、行號引用和原始碼片段。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "搜尋沿相關分支走訪儲存庫，由 Jev 評估目錄、檔案預覽及宣告的相關程度。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "設定支援服務商的身分驗證資訊並安裝代理技能後，即可向 jg 提問；需在 macOS 或 Linux 使用 Node.js 22+。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "搜尋會將符合條件的原始碼傳給所選服務商。結果屬檢索證據，不保證找出所有相關檔案。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "jevgrep：Jev で関連コードを検索",
+      "h1": "jevgrep：Jev で関連コードを検索",
+      "description": "jevgrep は Jev で関連性を判断し、リポジトリの問いに対してファイル候補と原文コードを返します。",
+      "summary": "jg CLI は未知のリポジトリを調べる開発エージェント向けに、関連ファイル、行番号、コード抜粋を提示します。 Jev がフォルダー、ファイルのプレビュー、宣言を評価し、検索は関連する枝をたどります。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途と対象",
+          "text": "jg CLI は未知のリポジトリを調べる開発エージェント向けに、関連ファイル、行番号、コード抜粋を提示します。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev との関係",
+          "text": "Jev がフォルダー、ファイルのプレビュー、宣言を評価し、検索は関連する枝をたどります。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "対応プロバイダーの認証とスキル導入後に jg へ質問します。macOS または Linux と Node.js 22 以降が必要です。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範囲と制約",
+          "text": "対象コードは選んだプロバイダーへ送信されます。結果は検索の証拠であり、関連ファイルの網羅を保証しません。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "jevgrep: Jev로 관련 코드 찾기",
+      "h1": "jevgrep: Jev로 관련 코드 찾기",
+      "description": "jevgrep는 Jev로 관련성을 판단하고 저장소 질문에 파일 단서와 원문 코드 발췌를 반환합니다.",
+      "summary": "jg CLI는 낯선 저장소를 탐색하는 코딩 에이전트에 관련 파일, 줄 참조, 소스 발췌를 제공합니다. Jev가 폴더, 파일 미리보기, 선언을 평가하며 검색이 관련 분기를 따라갑니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "용도와 대상",
+          "text": "jg CLI는 낯선 저장소를 탐색하는 코딩 에이전트에 관련 파일, 줄 참조, 소스 발췌를 제공합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Jev가 폴더, 파일 미리보기, 선언을 평가하며 검색이 관련 분기를 따라갑니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "지원되는 제공자의 인증 정보를 설정하고 에이전트 스킬을 설치한 뒤 jg에 질문합니다. macOS 또는 Linux와 Node.js 22 이상이 필요합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 한계",
+          "text": "검색 대상 소스는 선택한 제공자에게 전송됩니다. 결과는 검색 근거이며 모든 관련 파일을 찾았다는 보증은 아닙니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "jevgrep: buscar código relevante con Jev",
+      "h1": "jevgrep: buscar código relevante con Jev",
+      "description": "jevgrep usa Jev para juzgar relevancia y devuelve pistas de archivos y extractos literales ante preguntas sobre un repositorio.",
+      "summary": "La CLI jg ayuda a agentes a explorar repositorios desconocidos con archivos relevantes, referencias de línea y extractos de código. Jev evalúa carpetas, vistas previas y declaraciones mientras la búsqueda recorre las ramas relevantes.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "La CLI jg ayuda a agentes a explorar repositorios desconocidos con archivos relevantes, referencias de línea y extractos de código.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Jev evalúa carpetas, vistas previas y declaraciones mientras la búsqueda recorre las ramas relevantes.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo se usa",
+          "text": "Configure las credenciales de un proveedor compatible, instale la habilidad del agente y pregunte a jg; requiere Node.js 22+ en macOS o Linux.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "La búsqueda envía código elegible al proveedor elegido. Los resultados son evidencia recuperada, sin garantizar encontrar todos los archivos relevantes.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "jevgrep : rechercher du code pertinent avec Jev",
+      "h1": "jevgrep : rechercher du code pertinent avec Jev",
+      "description": "jevgrep utilise Jev pour juger la pertinence et renvoie pistes de fichiers et extraits exacts en réponse aux questions sur un dépôt.",
+      "summary": "La CLI jg aide les agents à explorer un dépôt inconnu avec fichiers pertinents, références de lignes et extraits de code. Jev évalue dossiers, aperçus de fichiers et déclarations pendant que la recherche suit les branches pertinentes.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Usage et public visé",
+          "text": "La CLI jg aide les agents à explorer un dépôt inconnu avec fichiers pertinents, références de lignes et extraits de code.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Jev évalue dossiers, aperçus de fichiers et déclarations pendant que la recherche suit les branches pertinentes.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Configurez les identifiants d’un fournisseur compatible, installez la compétence de l’agent et interrogez jg ; Node.js 22+ sous macOS ou Linux est requis.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "La recherche transmet le code éligible au fournisseur choisi. Les résultats sont des éléments retrouvés, sans garantie d'exhaustivité.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "jevgrep: relevanten Code mit Jev finden",
+      "h1": "jevgrep: relevanten Code mit Jev finden",
+      "description": "jevgrep bewertet Relevanz mit Jev und liefert Dateihinweise sowie wörtliche Codeauszüge zu Repository-Fragen.",
+      "summary": "Die jg-CLI hilft Coding-Agenten in unbekannten Repositories mit relevanten Dateien, Zeilenreferenzen und Quelltextauszügen. Jev bewertet Ordner, Dateivorschauen und Deklarationen, während die Suche passenden Verzweigungen folgt.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Zweck und Zielgruppe",
+          "text": "Die jg-CLI hilft Coding-Agenten in unbekannten Repositories mit relevanten Dateien, Zeilenreferenzen und Quelltextauszügen.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Jev bewertet Ordner, Dateivorschauen und Deklarationen, während die Suche passenden Verzweigungen folgt.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Verwendung",
+          "text": "Richten Sie Zugangsdaten für einen unterstützten Anbieter ein, installieren Sie den Agentenskill und fragen Sie jg; erforderlich ist Node.js 22+ auf macOS oder Linux.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Passender Quelltext wird zum gewählten Anbieter gesendet. Ergebnisse sind Suchbelege und garantieren nicht, dass jede relevante Datei gefunden wurde.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "jevgrep: encontrar código relevante com Jev",
+      "h1": "jevgrep: encontrar código relevante com Jev",
+      "description": "jevgrep usa Jev para avaliar relevância e devolve pistas de arquivos e trechos literais para perguntas sobre um repositório.",
+      "summary": "A CLI jg ajuda agentes a explorar repositórios desconhecidos com arquivos relevantes, referências de linha e trechos de código. Jev avalia pastas, prévias de arquivos e declarações enquanto a busca segue os ramos relevantes.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Finalidade e público",
+          "text": "A CLI jg ajuda agentes a explorar repositórios desconhecidos com arquivos relevantes, referências de linha e trechos de código.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "Jev avalia pastas, prévias de arquivos e declarações enquanto a busca segue os ramos relevantes.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Configure as credenciais de um provedor compatível, instale a habilidade do agente e pergunte ao jg; exige Node.js 22+ em macOS ou Linux.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "A busca envia código elegível ao provedor escolhido. Os resultados são evidências recuperadas, sem garantir encontrar todos os arquivos relevantes.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "jevgrep: поиск релевантного кода через Jev",
+      "h1": "jevgrep: поиск релевантного кода через Jev",
+      "description": "jevgrep оценивает релевантность через Jev и возвращает файлы-кандидаты и дословные фрагменты по вопросам о репозитории.",
+      "summary": "CLI jg помогает агентам изучать незнакомые репозитории, выдавая нужные файлы, номера строк и исходные фрагменты. Jev оценивает каталоги, предварительный текст файлов и объявления, пока поиск следует по релевантным ветвям.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "CLI jg помогает агентам изучать незнакомые репозитории, выдавая нужные файлы, номера строк и исходные фрагменты.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Jev оценивает каталоги, предварительный текст файлов и объявления, пока поиск следует по релевантным ветвям.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Настройте авторизацию провайдера, установите навык агента и задайте вопрос jg; нужны Node.js 22+ и macOS либо Linux.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Поиск отправляет подходящий исходный код выбранному провайдеру. Результаты являются найденными свидетельствами, но не гарантируют полноту охвата.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "jevgrep: Jev से संबंधित कोड खोजें",
+      "h1": "jevgrep: Jev से संबंधित कोड खोजें",
+      "description": "jevgrep प्रासंगिकता के लिए Jev इस्तेमाल करता है और रिपॉज़िटरी प्रश्नों पर फ़ाइल संकेत तथा मूल कोड अंश लौटाता है।",
+      "summary": "jg CLI एजेंटों को अपरिचित रिपॉज़िटरी में संबंधित फ़ाइलें, पंक्ति संदर्भ और स्रोत अंश खोजने में मदद करता है। खोज संबंधित शाखाओं में आगे बढ़ती है और Jev फ़ोल्डर, फ़ाइल झलक तथा घोषणाओं की प्रासंगिकता आँकता है।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "उद्देश्य और उपयोगकर्ता",
+          "text": "jg CLI एजेंटों को अपरिचित रिपॉज़िटरी में संबंधित फ़ाइलें, पंक्ति संदर्भ और स्रोत अंश खोजने में मदद करता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "खोज संबंधित शाखाओं में आगे बढ़ती है और Jev फ़ोल्डर, फ़ाइल झलक तथा घोषणाओं की प्रासंगिकता आँकता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल का तरीका",
+          "text": "समर्थित प्रदाता के क्रेडेंशियल सेट करें, एजेंट स्किल इंस्टॉल करें और jg से प्रश्न पूछें; macOS या Linux पर Node.js 22+ चाहिए।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "खोज योग्य स्रोत चुने गए प्रदाता को भेजा जाता है। परिणाम मिले हुए साक्ष्य हैं, सभी संबंधित फ़ाइलें मिलने की गारंटी नहीं।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "jevgrep: temukan kode relevan dengan Jev",
+      "h1": "jevgrep: temukan kode relevan dengan Jev",
+      "description": "jevgrep menilai relevansi memakai Jev dan mengembalikan petunjuk berkas serta kutipan kode asli untuk pertanyaan repositori.",
+      "summary": "CLI jg membantu agen menjelajahi repositori asing dengan berkas relevan, rujukan baris, dan cuplikan sumber. Jev menilai folder, pratinjau berkas, dan deklarasi saat pencarian mengikuti cabang yang relevan.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Tujuan dan pengguna",
+          "text": "CLI jg membantu agen menjelajahi repositori asing dengan berkas relevan, rujukan baris, dan cuplikan sumber.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Jev menilai folder, pratinjau berkas, dan deklarasi saat pencarian mengikuti cabang yang relevan.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Atur kredensial penyedia yang didukung, pasang keterampilan agen, lalu tanyakan pada jg; memerlukan Node.js 22+ di macOS atau Linux.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Pencarian mengirim sumber yang memenuhi syarat ke penyedia pilihan. Hasilnya bukti temuan, bukan jaminan semua berkas relevan ditemukan.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "jevgrep: tìm mã liên quan bằng Jev",
+      "h1": "jevgrep: tìm mã liên quan bằng Jev",
+      "description": "jevgrep dùng Jev đánh giá độ liên quan, trả gợi ý tệp và trích đoạn nguyên văn cho câu hỏi về kho mã.",
+      "summary": "CLI jg giúp tác tử khám phá kho mã lạ bằng tệp liên quan, tham chiếu dòng và trích đoạn nguồn. Jev đánh giá thư mục, phần xem trước tệp và khai báo khi tìm kiếm đi theo các nhánh liên quan.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích và đối tượng",
+          "text": "CLI jg giúp tác tử khám phá kho mã lạ bằng tệp liên quan, tham chiếu dòng và trích đoạn nguồn.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Jev đánh giá thư mục, phần xem trước tệp và khai báo khi tìm kiếm đi theo các nhánh liên quan.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Cấu hình thông tin xác thực của nhà cung cấp được hỗ trợ, cài kỹ năng tác tử rồi hỏi jg; cần Node.js 22+ trên macOS hoặc Linux.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Tìm kiếm gửi mã đủ điều kiện đến nhà cung cấp đã chọn. Kết quả là bằng chứng truy xuất, không bảo đảm tìm mọi tệp liên quan.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "jevgrep: Jev ile ilgili kodu bulma",
+      "h1": "jevgrep: Jev ile ilgili kodu bulma",
+      "description": "jevgrep, Jev ile ilgiyi değerlendirir ve depo sorularına dosya ipuçları ile kaynak koddan birebir alıntılar döndürür.",
+      "summary": "jg CLI, kodlama ajanlarına yabancı depolarda ilgili dosyalar, satır referansları ve kaynak parçaları sağlar. Arama ilgili dalları izlerken Jev klasörleri, dosya önizlemelerini ve bildirimleri değerlendirir.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Amaç ve hedef kitle",
+          "text": "jg CLI, kodlama ajanlarına yabancı depolarda ilgili dosyalar, satır referansları ve kaynak parçaları sağlar.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Arama ilgili dalları izlerken Jev klasörleri, dosya önizlemelerini ve bildirimleri değerlendirir.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Sağlayıcı kimlik doğrulaması yapılıp ajan becerisi kurulur, ardından jg’ye soru sorulur; macOS veya Linux üzerinde Node.js 22+ gerekir.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Uygun kaynak içerik seçilen sağlayıcıya gönderilir. Sonuçlar bulunan kanıtlardır; tüm ilgili dosyaların bulunduğunu garanti etmez.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "jevgrep: trovare codice pertinente con Jev",
+      "h1": "jevgrep: trovare codice pertinente con Jev",
+      "description": "jevgrep valuta la pertinenza con Jev e restituisce indicazioni sui file ed estratti letterali per domande su un repository.",
+      "summary": "La CLI jg aiuta gli agenti a esplorare repository sconosciuti con file pertinenti, riferimenti di riga ed estratti del sorgente. Jev valuta cartelle, anteprime dei file e dichiarazioni mentre la ricerca segue i rami pertinenti.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Scopo e destinatari",
+          "text": "La CLI jg aiuta gli agenti a esplorare repository sconosciuti con file pertinenti, riferimenti di riga ed estratti del sorgente.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Jev valuta cartelle, anteprime dei file e dichiarazioni mentre la ricerca segue i rami pertinenti.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come si usa",
+          "text": "Si configurano le credenziali di un provider supportato, si installa la skill dell’agente e si interroga jg; servono Node.js 22+ e macOS o Linux.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "La ricerca invia sorgente idoneo al provider scelto. I risultati sono prove recuperate, senza garanzia di trovare tutti i file pertinenti.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

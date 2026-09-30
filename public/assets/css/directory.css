@@ -21,6 +21,13 @@ html[data-theme="dark"] .directory-home,html[data-theme="dark"] .directory-detai
 .directory-detail .legal__header h1{font-family:var(--disp);font-size:clamp(2rem,4.5vw,3.5rem);overflow-wrap:anywhere;}
 .directory-detail .project-source-description{margin-top:12px;color:var(--text-2);font-size:.9rem;line-height:1.65;overflow-wrap:anywhere;}
 .directory-detail .project-repo{overflow-wrap:anywhere;}
+.directory-detail .project-explanation{max-width:900px;margin:32px 0 36px;}
+.directory-detail .project-explanation section{margin:0 0 26px;}
+.directory-detail .project-explanation h2{font-size:1.3rem;line-height:1.4;margin:0 0 10px;}
+.directory-detail .project-explanation p{line-height:1.8;overflow-wrap:anywhere;}
+.directory-detail .project-citations,.directory-detail .project-content-date{font-size:.85rem;color:var(--muted);margin-top:8px;}
+.directory-detail .project-original{max-width:900px;margin:0 0 28px;color:var(--text-2);}
+.directory-detail .project-original summary{cursor:pointer;font-size:.9rem;}
 .directory-detail .project-detail{gap:24px;}
 .directory-detail .project-detail>section{min-width:0;padding:24px;background:var(--panel);border:1px solid var(--line);border-radius:16px;}
 .directory-detail .project-detail h2{margin-top:0;}

@@ -1,0 +1,769 @@
+{
+  "version": "source-content-v1",
+  "repo": "typesafe-ai/system-one-adapter-python",
+  "repositoryId": 1328238153,
+  "relationship": "sdk",
+  "category": "official",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "e1d4cc938204b22fc5a3c3aca7044072fe3f712d",
+      "url": "https://github.com/typesafe-ai/system-one-adapter-python/blob/e1d4cc938204b22fc5a3c3aca7044072fe3f712d/README.md",
+      "sha256": "511e16b17c0bb50586f1b8a58c3f9ea96ef6e263f91af1c71368d3f72a334ca9",
+      "accessedAt": "2026-09-30T07:33:51.563Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "kind": "documented",
+      "text": "System One Adapter implements the typesafe_sdk evaluation interface using other providers’ LLM APIs.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 3,
+          "end": 7,
+          "quote": "A drop-in replacement for `typesafe_sdk`'s `system_one` evaluation API, backed by LLM\nAPIs instead of TypeSafe. \n\nUseful for comparing TypeSafe against an LLM on\ncost/speed/intelligence."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "kind": "documented",
+      "text": "It enables comparisons with TypeSafe while preserving typed answers and adding retry, latency and normalization diagnostics.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 3,
+          "end": 4,
+          "quote": "A drop-in replacement for `typesafe_sdk`'s `system_one` evaluation API, backed by LLM\nAPIs instead of TypeSafe. "
+        },
+        {
+          "source": "source-1",
+          "start": 87,
+          "end": 93,
+          "quote": "The response is a `typesafe_sdk.SystemOneResponse` subclass — same `answers` and typed\nviews — with two additions:\n\n- `response.usage` adds `input_tokens_total` / `output_tokens_total` (across retries),\n  `n_retries`, `n_retries_malformed_structure`, and `latency`.\n- `response.debug` holds `llm_attempts`, `retry_reasons`, and probability-normalization\n  diagnostics."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "kind": "documented",
+      "text": "Configure a provider, model and probability or discrete answer mode; native structured outputs are optional.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 21,
+          "end": 38,
+          "quote": "Unlike `TypeSafeClient`, the client is configured with how the LLM should answer, and\neach call names a `provider` alongside the `model`:\n\n```python\nfrom system_one_adapter import SystemOneAdapterClient, Noul, Score, Choice\n\nclient = SystemOneAdapterClient(\n    structured_outputs=True,  # use the provider's native structured-output mode\n    llm_answer_mode=\"probabilities\",  # or \"discrete\"\n    normalize_probabilities=True,\n)\n\nresponse = client.system_one(\n    state=\"This book was a delight to read.\",\n    questions={\"positive\": Noul(instructions=\"The book review is positive.\")},\n    provider=\"openai\",  # \"openai\", \"anthropic\", or \"gemini\"\n    model=\"gpt-4o-mini\",\n)"
+        },
+        {
+          "source": "source-1",
+          "start": 132,
+          "end": 140,
+          "quote": "## Options\n\n| Option | Meaning |\n| --- | --- |\n| `structured_outputs` | Use the provider's native structured output, else prompt for JSON and validate client-side (works with any chat model). |\n| `llm_answer_mode` | `\"probabilities\"` (per-label distribution) or `\"discrete\"` (one value per question). |\n| `normalize_probabilities` | Rescale invalid LLM probability distributions to sum to 1. |\n| `n_retry_malformed_structure` | Corrective retries when the model's output fails schema validation. |\n| `retry` | `typesafe_sdk.RetryPolicy` for transient provider failures. |"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "kind": "documented",
+      "text": "Providers can omit token usage, which remains None. Corrective retries share an allowance within each evaluation.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 95,
+          "end": 97,
+          "quote": "OpenAI-compatible endpoints may omit token usage. Unreported counts are `None`;\nthe evaluation still succeeds. A cumulative token count is `None` if any attempt\nomitted that count. Reported counts, including zero, are preserved."
+        },
+        {
+          "source": "source-1",
+          "start": 142,
+          "end": 144,
+          "quote": "The transient retry count and time budget apply separately to each provider request.\nCorrective requests share the evaluation's `n_retry_malformed_structure` allowance\nand preserve the earlier responses and correction messages."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "System One Adapter: compare typed decisions with LLMs",
+      "h1": "System One Adapter: compare typed decisions with LLMs",
+      "description": "System One Adapter runs Jev-shaped evaluations through OpenAI-compatible, Anthropic or Gemini APIs, preserving typed responses for model comparisons.",
+      "summary": "System One Adapter implements the typesafe_sdk evaluation interface using other providers’ LLM APIs. It enables comparisons with TypeSafe while preserving typed answers and adding retry, latency and normalization diagnostics. Configure a provider, model and probability or discrete answer mode; native structured outputs are optional.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose",
+          "text": "System One Adapter implements the typesafe_sdk evaluation interface using other providers’ LLM APIs.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’s role",
+          "text": "It enables comparisons with TypeSafe while preserving typed answers and adding retry, latency and normalization diagnostics.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "How to use it",
+          "text": "Configure a provider, model and probability or discrete answer mode; native structured outputs are optional.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limits to consider",
+          "text": "Providers can omit token usage, which remains None. Corrective retries share an allowance within each evaluation.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "System One Adapter：用 LLM 比较类型化决策",
+      "h1": "System One Adapter：用 LLM 比较类型化决策",
+      "description": "System One Adapter 通过 OpenAI 兼容、Anthropic 或 Gemini API 执行 Jev 形式的评估，保留类型化响应并记录重试与延迟，便于比较模型而非调用托管 Jev。",
+      "summary": "System One Adapter 用其他供应商的 LLM API 实现 typesafe_sdk 评估接口。 它用于和 TypeSafe 比较，保留类型化答案并增加重试、延迟和概率归一化诊断。 配置供应商、模型及概率或离散答案模式；可以选择原生结构化输出。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "System One Adapter 用其他供应商的 LLM API 实现 typesafe_sdk 评估接口。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "它用于和 TypeSafe 比较，保留类型化答案并增加重试、延迟和概率归一化诊断。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "配置供应商、模型及概率或离散答案模式；可以选择原生结构化输出。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用边界",
+          "text": "供应商缺失的 token 用量记为 None；每次评估中的纠正重试共享次数额度。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "System One Adapter：以 LLM 比較型別化決策",
+      "h1": "System One Adapter：以 LLM 比較型別化決策",
+      "description": "System One Adapter 透過 OpenAI 相容、Anthropic 或 Gemini API 執行 Jev 形式的評估，保留型別化回應並記錄重試與延遲，便於比較模型，而非呼叫託管 Jev。",
+      "summary": "System One Adapter 用其他供應商的 LLM API 實作 typesafe_sdk 評估介面。 它用於和 TypeSafe 比較，保留型別化答案，並增加重試、延遲與機率正規化診斷。 設定供應商、模型及機率或離散答案模式；可選用原生結構化輸出。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "System One Adapter 用其他供應商的 LLM API 實作 typesafe_sdk 評估介面。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "它用於和 TypeSafe 比較，保留型別化答案，並增加重試、延遲與機率正規化診斷。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "設定供應商、模型及機率或離散答案模式；可選用原生結構化輸出。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用限制",
+          "text": "供應商缺少的 token 用量記為 None；每次評估中的修正重試共用次數額度。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "System One Adapter：LLM と型付き判断を比較",
+      "h1": "System One Adapter：LLM と型付き判断を比較",
+      "description": "System One Adapter は OpenAI 互換・Anthropic・Gemini API で Jev 形式の評価を行い、型付き応答を保ってモデルを比較できます。",
+      "summary": "System One Adapter は別プロバイダーの LLM API で typesafe_sdk の評価インターフェースを実装します。 TypeSafe との比較用に型付き回答を維持し、再試行、遅延、確率正規化の診断を追加します。 プロバイダー、モデル、確率または離散回答を指定します。ネイティブ構造化出力は任意です。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "何ができるか",
+          "text": "System One Adapter は別プロバイダーの LLM API で typesafe_sdk の評価インターフェースを実装します。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "TypeSafe との比較用に型付き回答を維持し、再試行、遅延、確率正規化の診断を追加します。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "プロバイダー、モデル、確率または離散回答を指定します。ネイティブ構造化出力は任意です。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "制約と注意点",
+          "text": "利用量が返らなければ None のままです。修正リトライ回数は評価ごとに共有されます。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "System One Adapter: LLM의 타입별 판단 비교",
+      "h1": "System One Adapter: LLM의 타입별 판단 비교",
+      "description": "System One Adapter는 OpenAI 호환·Anthropic·Gemini API로 Jev 형식 평가를 실행하고 타입별 응답을 유지해 모델을 비교합니다.",
+      "summary": "System One Adapter는 다른 제공자의 LLM API로 typesafe_sdk 평가 인터페이스를 구현합니다. TypeSafe와 비교할 수 있도록 타입별 답변을 유지하고 재시도, 지연, 확률 정규화 진단을 추가합니다. 제공자, 모델, 확률 또는 이산 답변 모드를 설정합니다. 네이티브 구조화 출력은 선택 사항입니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "System One Adapter는 다른 제공자의 LLM API로 typesafe_sdk 평가 인터페이스를 구현합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "TypeSafe와 비교할 수 있도록 타입별 답변을 유지하고 재시도, 지연, 확률 정규화 진단을 추가합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "제공자, 모델, 확률 또는 이산 답변 모드를 설정합니다. 네이티브 구조화 출력은 선택 사항입니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "제약 사항",
+          "text": "제공자가 사용량을 생략하면 None으로 남습니다. 보정 재시도 횟수는 평가 안에서 공유됩니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "System One Adapter: comparar decisiones tipadas con LLM",
+      "h1": "System One Adapter: comparar decisiones tipadas con LLM",
+      "description": "System One Adapter ejecuta evaluaciones de formato Jev mediante API compatibles con OpenAI, Anthropic o Gemini, conservando respuestas tipadas para comparar modelos.",
+      "summary": "System One Adapter implementa la evaluación typesafe_sdk mediante API LLM de otros proveedores. Permite comparar con TypeSafe manteniendo respuestas tipadas y añadiendo diagnósticos de reintentos, latencia y normalización. Configura proveedor, modelo y modo de probabilidades o valores discretos; la salida estructurada nativa es opcional.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "System One Adapter implementa la evaluación typesafe_sdk mediante API LLM de otros proveedores.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "El papel de Jev",
+          "text": "Permite comparar con TypeSafe manteniendo respuestas tipadas y añadiendo diagnósticos de reintentos, latencia y normalización.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo usarlo",
+          "text": "Configura proveedor, modelo y modo de probabilidades o valores discretos; la salida estructurada nativa es opcional.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Límites a considerar",
+          "text": "El uso de tokens omitido queda como None. Los reintentos correctivos comparten un límite por evaluación.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "System One Adapter : comparer des décisions typées avec des LLM",
+      "h1": "System One Adapter : comparer des décisions typées avec des LLM",
+      "description": "System One Adapter exécute des évaluations au format Jev via des API compatibles OpenAI, Anthropic ou Gemini, avec réponses typées pour comparer les modèles.",
+      "summary": "System One Adapter implémente l’évaluation typesafe_sdk avec les API LLM d’autres fournisseurs. Il compare avec TypeSafe en conservant les réponses typées et ajoutant diagnostics de reprise, latence et normalisation. Configurez fournisseur, modèle et réponses probabilistes ou discrètes ; les sorties structurées natives sont facultatives.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "System One Adapter implémente l’évaluation typesafe_sdk avec les API LLM d’autres fournisseurs.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Le rôle de Jev",
+          "text": "Il compare avec TypeSafe en conservant les réponses typées et ajoutant diagnostics de reprise, latence et normalisation.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Utilisation",
+          "text": "Configurez fournisseur, modèle et réponses probabilistes ou discrètes ; les sorties structurées natives sont facultatives.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limites à connaître",
+          "text": "L’usage de tokens absent reste None. Les reprises correctives partagent une limite par évaluation.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "System One Adapter: typisierte Entscheidungen mit LLMs vergleichen",
+      "h1": "System One Adapter: typisierte Entscheidungen mit LLMs vergleichen",
+      "description": "System One Adapter führt Jev-förmige Bewertungen über OpenAI-kompatible, Anthropic- oder Gemini-APIs aus und behält typisierte Antworten für Modellvergleiche.",
+      "summary": "System One Adapter implementiert die typesafe_sdk-Evaluation über LLM-APIs anderer Anbieter. Er ermöglicht TypeSafe-Vergleiche mit typisierten Antworten und zusätzlichen Diagnosen zu Wiederholungen, Latenz und Normalisierung. Anbieter, Modell und Wahrscheinlichkeits- oder Einzelwertmodus wählen; native strukturierte Ausgaben sind optional.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "System One Adapter implementiert die typesafe_sdk-Evaluation über LLM-APIs anderer Anbieter.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Die Rolle von Jev",
+          "text": "Er ermöglicht TypeSafe-Vergleiche mit typisierten Antworten und zusätzlichen Diagnosen zu Wiederholungen, Latenz und Normalisierung.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Nutzung",
+          "text": "Anbieter, Modell und Wahrscheinlichkeits- oder Einzelwertmodus wählen; native strukturierte Ausgaben sind optional.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Grenzen",
+          "text": "Fehlende Tokenzahlen bleiben None. Korrekturwiederholungen teilen sich ein Kontingent je Evaluation.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "System One Adapter: comparar decisões tipadas com LLMs",
+      "h1": "System One Adapter: comparar decisões tipadas com LLMs",
+      "description": "System One Adapter executa avaliações no formato Jev por APIs compatíveis com OpenAI, Anthropic ou Gemini, preservando respostas tipadas para comparar modelos.",
+      "summary": "System One Adapter implementa a avaliação typesafe_sdk usando APIs LLM de outros provedores. Permite comparar com TypeSafe, preservando respostas tipadas e adicionando diagnósticos de repetição, latência e normalização. Configure provedor, modelo e modo probabilístico ou discreto; saídas estruturadas nativas são opcionais.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "System One Adapter implementa a avaliação typesafe_sdk usando APIs LLM de outros provedores.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "O papel do Jev",
+          "text": "Permite comparar com TypeSafe, preservando respostas tipadas e adicionando diagnósticos de repetição, latência e normalização.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Configure provedor, modelo e modo probabilístico ou discreto; saídas estruturadas nativas são opcionais.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limitações",
+          "text": "Uso de tokens omitido permanece None. Tentativas corretivas compartilham um limite por avaliação.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "System One Adapter: сравнение типизированных решений с LLM",
+      "h1": "System One Adapter: сравнение типизированных решений с LLM",
+      "description": "System One Adapter выполняет оценки формата Jev через совместимые с OpenAI API, Anthropic и Gemini, сохраняя типизированные ответы для сравнения моделей.",
+      "summary": "System One Adapter реализует интерфейс оценки typesafe_sdk через LLM API других провайдеров. Он позволяет сравнивать с TypeSafe, сохраняя типизированные ответы и добавляя диагностику повторов, задержек и нормализации. Задайте провайдера, модель и вероятностный либо дискретный режим; нативный структурированный вывод необязателен.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "System One Adapter реализует интерфейс оценки typesafe_sdk через LLM API других провайдеров.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Он позволяет сравнивать с TypeSafe, сохраняя типизированные ответы и добавляя диагностику повторов, задержек и нормализации.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Задайте провайдера, модель и вероятностный либо дискретный режим; нативный структурированный вывод необязателен.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ограничения",
+          "text": "Отсутствующее число токенов остаётся None. Исправляющие повторы делят общий лимит одной оценки.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "System One Adapter: LLM के निर्धारित प्रकार वाले निर्णयों की तुलना",
+      "h1": "System One Adapter: LLM के निर्धारित प्रकार वाले निर्णयों की तुलना",
+      "description": "System One Adapter OpenAI-संगत, Anthropic या Gemini API से Jev-प्रारूप मूल्यांकन चलाता है और मॉडल तुलना के लिए निर्धारित प्रकार वाले उत्तर बनाए रखता है।",
+      "summary": "System One Adapter दूसरे प्रदाताओं के LLM API से typesafe_sdk मूल्यांकन इंटरफ़ेस लागू करता है। TypeSafe से तुलना के लिए निर्धारित प्रकार वाले उत्तर बनाए रखता है और पुनःप्रयास, विलंब तथा सामान्यीकरण का विवरण देता है। प्रदाता, मॉडल और संभावना या अलग मान वाला उत्तर मोड चुनें; मूल संरचित आउटपुट वैकल्पिक है।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "किस काम आता है",
+          "text": "System One Adapter दूसरे प्रदाताओं के LLM API से typesafe_sdk मूल्यांकन इंटरफ़ेस लागू करता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "TypeSafe से तुलना के लिए निर्धारित प्रकार वाले उत्तर बनाए रखता है और पुनःप्रयास, विलंब तथा सामान्यीकरण का विवरण देता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल कैसे करें",
+          "text": "प्रदाता, मॉडल और संभावना या अलग मान वाला उत्तर मोड चुनें; मूल संरचित आउटपुट वैकल्पिक है।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "सीमाएँ",
+          "text": "न मिली टोकन संख्या None रहती है। सुधार वाले पुनःप्रयास प्रति मूल्यांकन साझा सीमा इस्तेमाल करते हैं।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "System One Adapter: bandingkan keputusan bertipe dengan LLM",
+      "h1": "System One Adapter: bandingkan keputusan bertipe dengan LLM",
+      "description": "System One Adapter menjalankan evaluasi berformat Jev melalui API kompatibel OpenAI, Anthropic, atau Gemini sambil mempertahankan jawaban bertipe untuk perbandingan.",
+      "summary": "System One Adapter menerapkan antarmuka evaluasi typesafe_sdk memakai API LLM dari penyedia lain. Perbandingan dengan TypeSafe mempertahankan jawaban bertipe dan menambah diagnostik pengulangan, latensi, serta normalisasi. Atur penyedia, model, dan mode probabilitas atau diskret; keluaran terstruktur bawaan bersifat opsional.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "System One Adapter menerapkan antarmuka evaluasi typesafe_sdk memakai API LLM dari penyedia lain.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Perbandingan dengan TypeSafe mempertahankan jawaban bertipe dan menambah diagnostik pengulangan, latensi, serta normalisasi.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Atur penyedia, model, dan mode probabilitas atau diskret; keluaran terstruktur bawaan bersifat opsional.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Batasan",
+          "text": "Jumlah token yang tidak dilaporkan tetap None. Pengulangan korektif berbagi batas per evaluasi.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "System One Adapter: so sánh quyết định có kiểu với LLM",
+      "h1": "System One Adapter: so sánh quyết định có kiểu với LLM",
+      "description": "System One Adapter chạy đánh giá dạng Jev qua API tương thích OpenAI, Anthropic hoặc Gemini, giữ đáp án có kiểu để so sánh mô hình.",
+      "summary": "System One Adapter triển khai giao diện đánh giá typesafe_sdk bằng API LLM của nhà cung cấp khác. Công cụ so sánh với TypeSafe, giữ câu trả lời có kiểu và thêm chẩn đoán thử lại, độ trễ, chuẩn hóa. Chọn nhà cung cấp, mô hình, chế độ xác suất hoặc rời rạc; đầu ra cấu trúc gốc là tùy chọn.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích",
+          "text": "System One Adapter triển khai giao diện đánh giá typesafe_sdk bằng API LLM của nhà cung cấp khác.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Công cụ so sánh với TypeSafe, giữ câu trả lời có kiểu và thêm chẩn đoán thử lại, độ trễ, chuẩn hóa.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Chọn nhà cung cấp, mô hình, chế độ xác suất hoặc rời rạc; đầu ra cấu trúc gốc là tùy chọn.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Giới hạn",
+          "text": "Số token không được báo sẽ giữ None. Các lần thử sửa dùng chung giới hạn cho mỗi lượt đánh giá.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "System One Adapter: türlenmiş kararları LLM’lerle karşılaştırma",
+      "h1": "System One Adapter: türlenmiş kararları LLM’lerle karşılaştırma",
+      "description": "System One Adapter OpenAI uyumlu, Anthropic veya Gemini API’leriyle Jev biçiminde değerlendirme yapar; model karşılaştırması için türlenmiş yanıtları korur.",
+      "summary": "System One Adapter, typesafe_sdk değerlendirme arayüzünü diğer sağlayıcıların LLM API’leriyle uygular. TypeSafe karşılaştırmalarında türlenmiş yanıtları korur; yeniden deneme, gecikme ve normalleştirme tanıları ekler. Sağlayıcıyı, modeli ve olasılık ya da ayrık yanıt kipini seçin; sağlayıcının yerleşik yapılandırılmış çıktı desteği isteğe bağlıdır.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "System One Adapter, typesafe_sdk değerlendirme arayüzünü diğer sağlayıcıların LLM API’leriyle uygular.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "TypeSafe karşılaştırmalarında türlenmiş yanıtları korur; yeniden deneme, gecikme ve normalleştirme tanıları ekler.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Sağlayıcıyı, modeli ve olasılık ya da ayrık yanıt kipini seçin; sağlayıcının yerleşik yapılandırılmış çıktı desteği isteğe bağlıdır.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Sınırlamalar",
+          "text": "Bildirilmeyen token sayısı None kalır. Düzeltici denemeler değerlendirme başına ortak sınır kullanır.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "System One Adapter: confrontare decisioni tipizzate con LLM",
+      "h1": "System One Adapter: confrontare decisioni tipizzate con LLM",
+      "description": "System One Adapter esegue valutazioni in formato Jev tramite API compatibili OpenAI, Anthropic o Gemini, mantenendo risposte tipizzate per confrontare modelli.",
+      "summary": "System One Adapter implementa l’interfaccia di valutazione typesafe_sdk tramite API LLM di altri fornitori. Consente confronti con TypeSafe mantenendo risposte tipizzate e aggiungendo diagnostica di tentativi, latenza e normalizzazione. Configura fornitore, modello e modalità probabilistica o discreta; l’output strutturato nativo è facoltativo.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "System One Adapter implementa l’interfaccia di valutazione typesafe_sdk tramite API LLM di altri fornitori.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Il ruolo di Jev",
+          "text": "Consente confronti con TypeSafe mantenendo risposte tipizzate e aggiungendo diagnostica di tentativi, latenza e normalizzazione.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come usarlo",
+          "text": "Configura fornitore, modello e modalità probabilistica o discreta; l’output strutturato nativo è facoltativo.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limiti",
+          "text": "Il conteggio token non riportato resta None. I tentativi correttivi condividono un limite per valutazione.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  },
+  "displayName": "System One Adapter"
+}

@@ -1,0 +1,762 @@
+{
+  "version": "source-content-v1",
+  "repo": "yibie/awesome-jev",
+  "repositoryId": 1374561793,
+  "relationship": "resource",
+  "category": "lists",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "path": "README.md",
+      "commit": "bece57c29665ce4263fe23ce19c9576854f235ec",
+      "url": "https://github.com/yibie/awesome-jev/blob/bece57c29665ce4263fe23ce19c9576854f235ec/README.md",
+      "sha256": "7925c9ab266fae5ed3dd42bcd495256acdf2e8af378d00c0f5b6d376423b5268",
+      "accessedAt": "2026-09-30T07:33:47.633Z",
+      "id": "s1"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "This curated directory organizes public projects and discussions by application domain so readers can discover reusable decision patterns.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 5,
+          "end": 11,
+          "quote": "A curated awesome list of public projects and practices built on [Jev](https://typesafe.ai/blog/introducing-system-one-models-and-jev), TypeSafe AI's System One model for typed decisions.\n\nThis README is the homepage aggregate of the current category files, so the latest accepted entries are visible here without drilling into subpages.\n\nJev is not a chat model. It takes unstructured state plus a **typed question** and returns a **typed decision** — a choice, a score, or a boolean, each with a confidence. That makes it a drop-in decision layer for software: classification, routing, rubric scoring, verification, and agent guardrails. This list tracks who is actually building with it, and which patterns transfer across industries.\n\nThe repository treats all categories equally — each entry lives in exactly one category, chosen by its direct Jev application domain. A dedicated **Related Practices / Discussions** category captures credible public practice signals — X threads, Reddit discussions, and interviews — that describe real Jev usage even when no strong standalone case page exists yet."
+        },
+        {
+          "source": "s1",
+          "start": 20,
+          "end": 25,
+          "quote": "Most Jev discussion is scattered across launch threads, model-gateway listings, and one-off prototypes. This list answers two practical questions quickly:\n\n- Where is Jev already making real decisions in production workflows?\n- Which decision patterns transfer across industries?\n\nThis is not a comprehensive database. It is a high-signal, fast-scanning field guide."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "Inclusion requires a public, citable concrete Jev use or documented derivative, with a summary of the scenario and method.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 27,
+          "end": 34,
+          "quote": "## Inclusion criteria\n\nAn entry should meet all of the following:\n\n- The source is public and citable.\n- The example **uses Jev** (or a documented Jev port/derivative) for a concrete decision task — not a generic classifier, router, or LLM judge with no Jev involvement.\n- The source explicitly names `Jev`/`jev`, cites TypeSafe AI's System One models, or shows a typed-decision loop (typed question → typed answer with confidence → accept/reject/escalate).\n- The summary explains the scenario, method, and value in one sentence."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Browse classification, guardrails, scoring, agent decisions and evaluation categories, then follow each entry to its original source.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 7,
+          "end": 11,
+          "quote": "This README is the homepage aggregate of the current category files, so the latest accepted entries are visible here without drilling into subpages.\n\nJev is not a chat model. It takes unstructured state plus a **typed question** and returns a **typed decision** — a choice, a score, or a boolean, each with a confidence. That makes it a drop-in decision layer for software: classification, routing, rubric scoring, verification, and agent guardrails. This list tracks who is actually building with it, and which patterns transfer across industries.\n\nThe repository treats all categories equally — each entry lives in exactly one category, chosen by its direct Jev application domain. A dedicated **Related Practices / Discussions** category captures credible public practice signals — X threads, Reddit discussions, and interviews — that describe real Jev usage even when no strong standalone case page exists yet."
+        },
+        {
+          "source": "s1",
+          "start": 62,
+          "end": 70,
+          "quote": "## Current coverage\n\n- [Classification & Routing](categories/classification-routing.md) — 47 entries\n- [Adaptive & Realtime UI](categories/adaptive-realtime-ui.md) — 9 entries\n- [Verification & Guardrails](categories/verification-guardrails.md) — 39 entries\n- [Scoring & Ranking](categories/scoring-ranking.md) — 37 entries\n- [Agent Decisions](categories/agent-decisions.md) — 54 entries\n- [Data Labeling & Curation](categories/data-labeling-curation.md) — 9 entries\n- [Evaluation & Benchmarking](categories/evaluation-benchmarking.md) — 32 entries"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "Listing is not a code review, security audit or runtime check; compilation, benchmarks and license suitability are not verified.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 44,
+          "end": 48,
+          "quote": "## Curation is not endorsement\n\nInclusion means one thing: the entry satisfies the inclusion rules above. It is not a quality review, a security audit, or a recommendation. We do not verify that a project compiles, that its tests pass, that its published numbers reproduce, or that its license permits your use.\n\nThis matters most for projects that arrive in bulk. When one author releases several repositories on the same day, they commonly share a single scaffold — the same `AGENTS.md`, `CLAUDE.md`, `STATE.md`, and `CHANGELOG.md` — land in one or two commits each, and may ship considerably more prose than code. Such projects can be entirely legitimate; they are simply **unproven**. Treat them as leads, not as validated tools."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "awesome-jev: curated Jev projects and decision patterns",
+      "h1": "awesome-jev: curated Jev projects and decision patterns",
+      "description": "awesome-jev catalogs public Jev projects and practices, helping readers find concrete decision workflows without implying endorsement.",
+      "summary": "This curated directory organizes public projects and discussions by application domain so readers can discover reusable decision patterns. Inclusion requires a public, citable concrete Jev use or documented derivative, with a summary of the scenario and method.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose and audience",
+          "text": "This curated directory organizes public projects and discussions by application domain so readers can discover reusable decision patterns.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "Inclusion requires a public, citable concrete Jev use or documented derivative, with a summary of the scenario and method.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Using the project",
+          "text": "Browse classification, guardrails, scoring, agent decisions and evaluation categories, then follow each entry to its original source.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "Listing is not a code review, security audit or runtime check; compilation, benchmarks and license suitability are not verified.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "awesome-jev：Jev 项目与决策模式精选目录",
+      "h1": "awesome-jev：Jev 项目与决策模式精选目录",
+      "description": "awesome-jev 收录公开 Jev 项目与实践，帮助读者发现具体决策流程，但收录不代表背书。",
+      "summary": "这个精选目录按应用领域整理公开项目与讨论，方便查找可复用的决策模式。 收录要求来源公开且可引用，并有具体 Jev 用例或有文档的衍生实现，同时说明场景与方法。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途与适用对象",
+          "text": "这个精选目录按应用领域整理公开项目与讨论，方便查找可复用的决策模式。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "收录要求来源公开且可引用，并有具体 Jev 用例或有文档的衍生实现，同时说明场景与方法。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "可浏览分类、护栏、评分、智能体决策和评估等类别，再跳转到条目的原始来源。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "收录不等于代码审查、安全审计或运行验证；项目是否编译、基准是否复现以及许可是否适用均未核验。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "awesome-jev：Jev 專案與決策模式精選目錄",
+      "h1": "awesome-jev：Jev 專案與決策模式精選目錄",
+      "description": "awesome-jev 收錄公開 Jev 專案與實務，協助尋找具體決策流程，但收錄不代表背書。",
+      "summary": "精選目錄依應用領域整理公開專案及討論，方便探索可重用的決策模式。 收錄要求來源公開且可引用，包含具體 Jev 用例或有文件的衍生實作，並說明情境與方法。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途與適用對象",
+          "text": "精選目錄依應用領域整理公開專案及討論，方便探索可重用的決策模式。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "收錄要求來源公開且可引用，包含具體 Jev 用例或有文件的衍生實作，並說明情境與方法。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "可瀏覽分類、護欄、評分、代理決策和評估等類別，再前往各項目的原始來源。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "收錄並非程式碼審查、安全稽核或執行驗證；編譯、基準重現與授權適用性均未經核實。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "awesome-jev：Jev プロジェクトと判断パターンの一覧",
+      "h1": "awesome-jev：Jev プロジェクトと判断パターンの一覧",
+      "description": "awesome-jev は公開 Jev プロジェクトと実践を整理し、具体的な判断処理を探すための資料です。掲載は推奨を意味しません。",
+      "summary": "公開プロジェクトや議論を用途別にまとめ、再利用できる判断パターンを探せるようにしています。 掲載には公開・引用可能な資料と、具体的な Jev 利用または文書化された派生実装、場面と手法の要約が必要です。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途と対象",
+          "text": "公開プロジェクトや議論を用途別にまとめ、再利用できる判断パターンを探せるようにしています。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev との関係",
+          "text": "掲載には公開・引用可能な資料と、具体的な Jev 利用または文書化された派生実装、場面と手法の要約が必要です。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "分類、ガードレール、評価点、エージェント判断、検証などのカテゴリから原資料へ進めます。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範囲と制約",
+          "text": "コードレビュー、安全監査、動作検証を行う一覧ではありません。ビルド、ベンチマークの再現性、ライセンスの適合性は未確認です。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "awesome-jev: Jev 프로젝트와 판단 패턴 모음",
+      "h1": "awesome-jev: Jev 프로젝트와 판단 패턴 모음",
+      "description": "awesome-jev는 공개 Jev 프로젝트와 사례를 정리해 구체적 판단 흐름을 찾도록 돕습니다. 등재가 보증을 뜻하지는 않습니다.",
+      "summary": "적용 분야별로 공개 프로젝트와 논의를 정리한 목록으로 재사용할 판단 패턴을 탐색할 수 있습니다. 공개되고 인용 가능한 구체적 Jev 사용 또는 문서화된 파생 구현과 시나리오·방법 요약이 등재 조건입니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "용도와 대상",
+          "text": "적용 분야별로 공개 프로젝트와 논의를 정리한 목록으로 재사용할 판단 패턴을 탐색할 수 있습니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "공개되고 인용 가능한 구체적 Jev 사용 또는 문서화된 파생 구현과 시나리오·방법 요약이 등재 조건입니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "분류, 가드레일, 점수, 에이전트 판단, 평가 범주를 살펴본 뒤 각 항목의 원본 출처를 확인합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 한계",
+          "text": "등재는 코드 검토, 보안 감사, 실행 검증이 아닙니다. 컴파일, 벤치마크 재현, 라이선스 적합성은 검증하지 않습니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "awesome-jev: directorio de proyectos y patrones Jev",
+      "h1": "awesome-jev: directorio de proyectos y patrones Jev",
+      "description": "awesome-jev reúne proyectos y prácticas públicas de Jev para descubrir flujos concretos; incluirlos no implica recomendarlos.",
+      "summary": "El directorio organiza proyectos y debates por ámbito de aplicación para encontrar patrones de decisión reutilizables. Exige fuentes públicas y citables con uso concreto de Jev o un derivado documentado, resumiendo escenario y método.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "El directorio organiza proyectos y debates por ámbito de aplicación para encontrar patrones de decisión reutilizables.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Exige fuentes públicas y citables con uso concreto de Jev o un derivado documentado, resumiendo escenario y método.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo se usa",
+          "text": "Explore clasificación, controles, puntuación, decisiones de agentes y evaluación, y siga cada entrada hasta su fuente original.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "La inclusión no revisa código, seguridad ni funcionamiento; no verifica compilación, reproducción de benchmarks o adecuación de licencias.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "awesome-jev : répertoire de projets et pratiques Jev",
+      "h1": "awesome-jev : répertoire de projets et pratiques Jev",
+      "description": "awesome-jev rassemble des projets et pratiques publics Jev pour découvrir des décisions concrètes, sans valeur d'approbation.",
+      "summary": "Le répertoire classe projets et discussions par domaine d'application afin de repérer des schémas de décision réutilisables. Il exige une source publique et citable, un usage concret de Jev ou un dérivé documenté, et un résumé du contexte et de la méthode.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Usage et public visé",
+          "text": "Le répertoire classe projets et discussions par domaine d'application afin de repérer des schémas de décision réutilisables.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Il exige une source publique et citable, un usage concret de Jev ou un dérivé documenté, et un résumé du contexte et de la méthode.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Parcourez classification, garde-fous, notation, décisions d'agents et évaluation, puis ouvrez la source originale de chaque entrée.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "L'inclusion ne vaut ni revue de code, ni audit de sécurité, ni test d'exécution ; compilation, benchmarks et adéquation des licences ne sont pas vérifiés.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "awesome-jev: Verzeichnis von Jev-Projekten und Entscheidungsmustern",
+      "h1": "awesome-jev: Verzeichnis von Jev-Projekten und Entscheidungsmustern",
+      "description": "awesome-jev sammelt öffentliche Jev-Projekte und Praxisbeispiele für konkrete Entscheidungsabläufe; die Aufnahme ist keine Empfehlung.",
+      "summary": "Das kuratierte Verzeichnis ordnet Projekte und Diskussionen nach Anwendungsgebiet und erschließt wiederverwendbare Entscheidungsmuster. Erforderlich sind öffentliche, zitierbare Quellen mit konkreter Jev-Nutzung oder dokumentierter Ableitung sowie eine Beschreibung von Szenario und Methode.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Zweck und Zielgruppe",
+          "text": "Das kuratierte Verzeichnis ordnet Projekte und Diskussionen nach Anwendungsgebiet und erschließt wiederverwendbare Entscheidungsmuster.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Erforderlich sind öffentliche, zitierbare Quellen mit konkreter Jev-Nutzung oder dokumentierter Ableitung sowie eine Beschreibung von Szenario und Methode.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Verwendung",
+          "text": "Erkunden Sie Klassifikation, Schutzmechanismen, Bewertung, Agentenentscheidungen und Evaluation und öffnen Sie die jeweilige Originalquelle.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Die Aufnahme umfasst keine Code-, Sicherheits- oder Laufzeitprüfung; Kompilierung, reproduzierbare Benchmarks und passende Lizenzen werden nicht verifiziert.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "awesome-jev: catálogo de projetos e padrões Jev",
+      "h1": "awesome-jev: catálogo de projetos e padrões Jev",
+      "description": "awesome-jev reúne projetos e práticas públicas de Jev para encontrar fluxos concretos; inclusão não significa endosso.",
+      "summary": "O catálogo organiza projetos e discussões por área de aplicação para descobrir padrões de decisão reutilizáveis. Exige fonte pública e citável, uso concreto de Jev ou derivado documentado e resumo do cenário e método.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Finalidade e público",
+          "text": "O catálogo organiza projetos e discussões por área de aplicação para descobrir padrões de decisão reutilizáveis.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "Exige fonte pública e citável, uso concreto de Jev ou derivado documentado e resumo do cenário e método.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Explore classificação, proteções, pontuação, decisões de agentes e avaliação, depois siga cada item até sua fonte original.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "A inclusão não é revisão de código, auditoria de segurança ou teste de execução; compilação, benchmarks e adequação de licença não são verificados.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "awesome-jev: каталог проектов и шаблонов решений Jev",
+      "h1": "awesome-jev: каталог проектов и шаблонов решений Jev",
+      "description": "awesome-jev собирает публичные проекты и практики Jev для поиска конкретных процессов; включение не означает одобрения.",
+      "summary": "Каталог распределяет проекты и обсуждения по областям применения, помогая находить повторно используемые схемы решений. Нужны публичный цитируемый источник, конкретное применение Jev или документированный производный проект и описание сценария и метода.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Каталог распределяет проекты и обсуждения по областям применения, помогая находить повторно используемые схемы решений.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Нужны публичный цитируемый источник, конкретное применение Jev или документированный производный проект и описание сценария и метода.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Просматривайте классификацию, защитные проверки, оценки, решения агентов и тестирование, затем открывайте первоисточник записи.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Включение не является проверкой кода, безопасности или работы; сборка, воспроизводимость тестов и пригодность лицензии не подтверждаются.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "awesome-jev: Jev प्रोजेक्ट और निर्णय पैटर्न की सूची",
+      "h1": "awesome-jev: Jev प्रोजेक्ट और निर्णय पैटर्न की सूची",
+      "description": "awesome-jev सार्वजनिक Jev प्रोजेक्ट और अभ्यास एकत्र करता है, ताकि ठोस निर्णय प्रवाह मिलें; सूची में होना समर्थन नहीं है।",
+      "summary": "यह चुनी हुई सूची प्रोजेक्ट और चर्चाएँ उपयोग क्षेत्र के अनुसार रखती है, जिससे दोबारा इस्तेमाल योग्य निर्णय पैटर्न मिल सकें। शामिल होने के लिए सार्वजनिक, उद्धरण योग्य स्रोत और ठोस Jev उपयोग या दस्तावेज़ वाला व्युत्पन्न तथा परिदृश्य और तरीके का सार चाहिए।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "उद्देश्य और उपयोगकर्ता",
+          "text": "यह चुनी हुई सूची प्रोजेक्ट और चर्चाएँ उपयोग क्षेत्र के अनुसार रखती है, जिससे दोबारा इस्तेमाल योग्य निर्णय पैटर्न मिल सकें।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "शामिल होने के लिए सार्वजनिक, उद्धरण योग्य स्रोत और ठोस Jev उपयोग या दस्तावेज़ वाला व्युत्पन्न तथा परिदृश्य और तरीके का सार चाहिए।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल का तरीका",
+          "text": "वर्गीकरण, सुरक्षा जाँच, स्कोरिंग, एजेंट निर्णय और मूल्यांकन श्रेणियाँ देखें, फिर हर प्रविष्टि का मूल स्रोत खोलें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "सूची कोड समीक्षा, सुरक्षा ऑडिट या रनटाइम जाँच नहीं करती; संकलन, बेंचमार्क पुनरुत्पादन और लाइसेंस उपयुक्तता सत्यापित नहीं हैं।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "awesome-jev: katalog proyek dan pola keputusan Jev",
+      "h1": "awesome-jev: katalog proyek dan pola keputusan Jev",
+      "description": "awesome-jev menghimpun proyek serta praktik Jev publik untuk menemukan alur konkret; pencantuman bukan dukungan resmi.",
+      "summary": "Direktori kurasi mengatur proyek dan diskusi berdasarkan bidang penerapan agar pola keputusan yang dapat dipakai ulang mudah ditemukan. Entri harus memiliki sumber publik yang dapat dikutip, penggunaan Jev konkret atau turunan terdokumentasi, serta ringkasan skenario dan metode.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Tujuan dan pengguna",
+          "text": "Direktori kurasi mengatur proyek dan diskusi berdasarkan bidang penerapan agar pola keputusan yang dapat dipakai ulang mudah ditemukan.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Entri harus memiliki sumber publik yang dapat dikutip, penggunaan Jev konkret atau turunan terdokumentasi, serta ringkasan skenario dan metode.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Telusuri kategori klasifikasi, pengaman, penilaian, keputusan agen, dan evaluasi, lalu buka sumber asli setiap entri.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Pencantuman bukan tinjauan kode, audit keamanan, atau uji jalan; kompilasi, reproduksi benchmark, dan kecocokan lisensi tidak diverifikasi.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "awesome-jev: danh mục dự án và mẫu quyết định Jev",
+      "h1": "awesome-jev: danh mục dự án và mẫu quyết định Jev",
+      "description": "awesome-jev tập hợp dự án và thực hành Jev công khai để tìm quy trình cụ thể; được liệt kê không có nghĩa được bảo chứng.",
+      "summary": "Danh mục tuyển chọn sắp xếp dự án và thảo luận theo lĩnh vực để khám phá mẫu quyết định có thể tái sử dụng. Mục được đưa vào phải có nguồn công khai trích dẫn được, dùng Jev cụ thể hoặc bản phái sinh có tài liệu và tóm tắt cách làm.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích và đối tượng",
+          "text": "Danh mục tuyển chọn sắp xếp dự án và thảo luận theo lĩnh vực để khám phá mẫu quyết định có thể tái sử dụng.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Mục được đưa vào phải có nguồn công khai trích dẫn được, dùng Jev cụ thể hoặc bản phái sinh có tài liệu và tóm tắt cách làm.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Duyệt phân loại, kiểm soát, chấm điểm, quyết định tác tử và đánh giá rồi mở nguồn gốc của từng mục.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Danh mục không kiểm tra mã, bảo mật hay khả năng chạy; biên dịch, tái lập benchmark và mức phù hợp giấy phép không được xác minh.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "awesome-jev: Jev projeleri ve karar örüntüleri dizini",
+      "h1": "awesome-jev: Jev projeleri ve karar örüntüleri dizini",
+      "description": "awesome-jev somut karar akışları bulmak için açık Jev projelerini ve uygulamalarını toplar; listelenmek onay anlamına gelmez.",
+      "summary": "Seçilmiş dizin, yeniden kullanılabilir karar örüntülerini bulmak için projeleri ve tartışmaları uygulama alanına göre düzenler. Kaynak herkese açık ve atıf yapılabilir olmalı; somut Jev kullanımı veya belgeli türev ile senaryo ve yöntem özeti içermelidir.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Amaç ve hedef kitle",
+          "text": "Seçilmiş dizin, yeniden kullanılabilir karar örüntülerini bulmak için projeleri ve tartışmaları uygulama alanına göre düzenler.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Kaynak herkese açık ve atıf yapılabilir olmalı; somut Jev kullanımı veya belgeli türev ile senaryo ve yöntem özeti içermelidir.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Sınıflandırma, koruma, puanlama, ajan kararları ve değerlendirme kategorilerini gezip her kaydın asıl kaynağını açabilirsiniz.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Listeleme kod incelemesi, güvenlik denetimi veya çalışma testi değildir; derleme, benchmark tekrarı ve lisans uygunluğu doğrulanmaz.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "awesome-jev: catalogo di progetti e schemi decisionali Jev",
+      "h1": "awesome-jev: catalogo di progetti e schemi decisionali Jev",
+      "description": "awesome-jev raccoglie progetti e pratiche pubbliche Jev per trovare flussi concreti; l'inclusione non implica approvazione.",
+      "summary": "Il catalogo organizza progetti e discussioni per ambito applicativo, facilitando la scoperta di schemi decisionali riutilizzabili. Richiede fonte pubblica citabile, uso concreto di Jev o derivato documentato e sintesi dello scenario e del metodo.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Scopo e destinatari",
+          "text": "Il catalogo organizza progetti e discussioni per ambito applicativo, facilitando la scoperta di schemi decisionali riutilizzabili.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Richiede fonte pubblica citabile, uso concreto di Jev o derivato documentato e sintesi dello scenario e del metodo.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come si usa",
+          "text": "Si esplorano classificazione, controlli, punteggi, decisioni degli agenti e valutazione, poi si segue la fonte originale di ogni voce.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "L'inclusione non è revisione del codice, audit di sicurezza o verifica di esecuzione; compilazione, benchmark e adeguatezza delle licenze non vengono verificati.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

@@ -1,0 +1,763 @@
+{
+  "version": "source-content-v1",
+  "repo": "szczyglis-dev/py-gpt",
+  "repositoryId": 625710399,
+  "relationship": "integration",
+  "category": "apps",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "path": "README.md",
+      "commit": "013b327608677defa60f1c102bdabd4a5c128f86",
+      "url": "https://github.com/szczyglis-dev/py-gpt/blob/013b327608677defa60f1c102bdabd4a5c128f86/README.md",
+      "sha256": "f67cf8437147eaabcdc9b2c15c4305756ec9340128482f7223df2a74cd72a40d",
+      "accessedAt": "2026-09-30T07:33:47.609Z",
+      "id": "s1"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "PyGPT is a multi-provider desktop assistant for Linux, Windows and macOS, with chat, agents, RAG and tool integrations.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 17,
+          "end": 19,
+          "quote": "**PyGPT** is an open-source desktop AI assistant for `Linux`, `Windows` and `macOS`. It supports models from `OpenAI` (`GPT-6 Astra`, `GPT-5.6`, `GPT-4`, etc.), `Google Gemini`, `Anthropic Claude`, `xAI Grok`, `Perplexity / Sonar`, `DeepSeek`, plus models available through `HuggingFace`, `LlamaIndex`, OpenAI-compatible APIs, and local `Ollama` installations such as `DeepSeek`, `Qwen`, `gpt-oss`, `Gemma`, `Mistral`, `Llama`, and others.\n\nBeyond chat, PyGPT includes Agents with Chat, Orchestrator and Swarm workflows, Agent Skills, plugins and MCP connectors, RAG, files and attachments, Python/IPython and system tools, web search, vision and camera input, image and video generation, Computer use, realtime voice, speech input/output, memory, automation, and external integrations. Models can use local and remote tools, work with files, call APIs, and control the desktop or browser when enabled."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "The Jev plugin exposes jev_evaluate(state, questions), returning Choice, Score or Noul results to the current model.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 1581,
+          "end": 1589,
+          "quote": "The **Jev / System One (inline)** plugin integrates [TypeSafe AI Jev](https://typesafe.ai/), the first public **System One Model**. Jev is not a chat or text-generation model. Instead, it evaluates structured state and returns typed, machine-readable decisions that the current model or a larger tool workflow can use directly.\n\nJev is designed for bounded semantic decisions where the possible output is known in advance but the decision still requires AI judgment. Typical uses include classification and routing, selecting from known candidates, verifying conditions or model output, assigning ordered scores or severity levels, and evaluating several independent decisions over the same state.\n\nJev exposes three decision primitives:\n\n- **Choice** - selects one value from a predefined set and returns a typed choice with probability/confidence information.\n- **Score** - evaluates an item against an ordered scale and returns a structured score with distribution/confidence information.\n- **Noul** - evaluates a yes/no condition and returns its probability instead of generating prose."
+        },
+        {
+          "source": "s1",
+          "start": 1610,
+          "end": 1613,
+          "quote": "The plugin exposes one tool: `jev_evaluate(state, questions)`. The current model supplies a shared structured `state` plus one or more named `questions`; PyGPT sends them to TypeSafe's `/v1/systemone` endpoint and returns the typed JSON result to the model.\n\n- `state` - structured JSON object containing the data to evaluate. Source text can be placed in fields such as `text`, `message`, or `document`.\n- `questions` - object keyed by stable question IDs. Each question defines `type` (`choice`, `score`, or `noul`), `instructions`, and the criteria required by that primitive."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Enable the plugin, configure Jev credentials under API Keys and its model in plugin settings, then request a bounded decision in conversation.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 1593,
+          "end": 1606,
+          "quote": "### Configuration\n\nConfigure the TypeSafe credentials in:\n\n`Config -> Settings -> API Keys -> Jev`\n\n- **Jev API key** - TypeSafe API key used to authenticate requests. You can also set `TYPESAFE_API_KEY`.\n- **API base** - TypeSafe API base URL. Default: `https://api.typesafe.ai`. You can override it with `TYPESAFE_BASE_URL`.\n\nConfigure the Jev model separately in:\n\n`Plugins -> Settings -> Jev / System One`\n\n- **Model** - Jev model ID used for System One requests. Default: `jev-latest`."
+        },
+        {
+          "source": "s1",
+          "start": 1642,
+          "end": 1644,
+          "quote": "You normally do not need to construct the tool payload manually. Once the plugin is enabled, you can ask the current model to use Jev for a bounded decision, for example:\n\n`Use Jev to classify this support message as billing, refund, technical, or other, and estimate whether it needs urgent attention.`"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "Jev needs a predefined output space and serves decision tasks rather than open-ended writing; this inline plugin operates independently of the global Tools switch.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 1583,
+          "end": 1591,
+          "quote": "Jev is designed for bounded semantic decisions where the possible output is known in advance but the decision still requires AI judgment. Typical uses include classification and routing, selecting from known candidates, verifying conditions or model output, assigning ordered scores or severity levels, and evaluating several independent decisions over the same state.\n\nJev exposes three decision primitives:\n\n- **Choice** - selects one value from a predefined set and returns a typed choice with probability/confidence information.\n- **Score** - evaluates an item against an ordered scale and returns a structured score with distribution/confidence information.\n- **Noul** - evaluates a yes/no condition and returns its probability instead of generating prose.\n\nBecause the output space is declared before the request, Jev is intended for structured automation rather than open-ended writing, chat responses, or free-form reasoning. As an inline plugin, it works independently of the global **Tools** switch."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "PyGPT: desktop assistant with an inline Jev plugin",
+      "h1": "PyGPT: desktop assistant with an inline Jev plugin",
+      "description": "PyGPT adds Jev decisions to desktop conversations through an inline plugin for classification, routing, verification and scoring.",
+      "summary": "PyGPT is a multi-provider desktop assistant for Linux, Windows and macOS, with chat, agents, RAG and tool integrations. The Jev plugin exposes jev_evaluate(state, questions), returning Choice, Score or Noul results to the current model.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose and audience",
+          "text": "PyGPT is a multi-provider desktop assistant for Linux, Windows and macOS, with chat, agents, RAG and tool integrations.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "The Jev plugin exposes jev_evaluate(state, questions), returning Choice, Score or Noul results to the current model.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Using the project",
+          "text": "Enable the plugin, configure Jev credentials under API Keys and its model in plugin settings, then request a bounded decision in conversation.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "Jev needs a predefined output space and serves decision tasks rather than open-ended writing; this inline plugin operates independently of the global Tools switch.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "PyGPT：带内联 Jev 插件的桌面助手",
+      "h1": "PyGPT：带内联 Jev 插件的桌面助手",
+      "description": "PyGPT 通过内联插件在桌面对话中调用 Jev，处理分类、路由、验证和评分决策。",
+      "summary": "PyGPT 是适用于 Linux、Windows 和 macOS 的多服务商桌面助手，提供聊天、智能体、RAG 和工具集成。 Jev 插件公开 jev_evaluate(state, questions)，将 Choice、Score 或 Noul 结果返回给当前模型。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途与适用对象",
+          "text": "PyGPT 是适用于 Linux、Windows 和 macOS 的多服务商桌面助手，提供聊天、智能体、RAG 和工具集成。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "Jev 插件公开 jev_evaluate(state, questions)，将 Choice、Score 或 Noul 结果返回给当前模型。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "启用插件后，在 API Keys 设置 Jev 凭据，在插件设置选择模型，再通过对话要求执行有明确选项的判断。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "Jev 需要预定义输出空间，适合决策而非开放式写作；该内联插件独立于全局 Tools 开关运行。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "PyGPT：提供內聯 Jev 外掛的桌面助手",
+      "h1": "PyGPT：提供內聯 Jev 外掛的桌面助手",
+      "description": "PyGPT 透過內聯外掛在桌面對話中使用 Jev，處理分類、分流、驗證與評分決策。",
+      "summary": "PyGPT 是支援 Linux、Windows 及 macOS 的多服務商桌面助手，提供聊天、代理、RAG 和工具整合。 Jev 外掛公開 jev_evaluate(state, questions)，將 Choice、Score 或 Noul 結果交回目前模型。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途與適用對象",
+          "text": "PyGPT 是支援 Linux、Windows 及 macOS 的多服務商桌面助手，提供聊天、代理、RAG 和工具整合。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "Jev 外掛公開 jev_evaluate(state, questions)，將 Choice、Score 或 Noul 結果交回目前模型。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "啟用外掛後，在 API Keys 設定 Jev 憑證，於外掛設定選擇模型，再以對話要求進行範圍明確的判斷。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "Jev 需要預先定義輸出範圍，適合決策而非開放式寫作；此內聯外掛獨立於全域 Tools 開關運作。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "PyGPT：Jev プラグイン付きデスクトップ助手",
+      "h1": "PyGPT：Jev プラグイン付きデスクトップ助手",
+      "description": "PyGPT はインラインプラグインで Jev を呼び、会話中に分類、振り分け、検証、評価を行えます。",
+      "summary": "Linux、Windows、macOS 向けの複数プロバイダー対応助手で、チャット、エージェント、RAG、ツール連携を備えます。 Jev プラグインは jev_evaluate(state, questions) を公開し、Choice、Score、Noul の結果を現在のモデルへ返します。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途と対象",
+          "text": "Linux、Windows、macOS 向けの複数プロバイダー対応助手で、チャット、エージェント、RAG、ツール連携を備えます。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev との関係",
+          "text": "Jev プラグインは jev_evaluate(state, questions) を公開し、Choice、Score、Noul の結果を現在のモデルへ返します。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "プラグインを有効にし、API Keys に認証情報、プラグイン設定にモデルを指定して、会話で範囲の決まった判断を依頼します。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範囲と制約",
+          "text": "Jev には出力候補の事前定義が必要で、自由作文ではなく判断向けです。このプラグインは全体の Tools スイッチとは独立して動きます。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "PyGPT: 인라인 Jev 플러그인이 있는 데스크톱 도우미",
+      "h1": "PyGPT: 인라인 Jev 플러그인이 있는 데스크톱 도우미",
+      "description": "PyGPT는 인라인 플러그인으로 Jev를 호출해 대화 중 분류, 라우팅, 검증, 점수 결정을 처리합니다.",
+      "summary": "Linux, Windows, macOS용 다중 제공자 데스크톱 도우미로 채팅, 에이전트, RAG, 도구 연동을 제공합니다. Jev 플러그인은 jev_evaluate(state, questions)를 노출하고 Choice, Score, Noul 결과를 현재 모델에 반환합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "용도와 대상",
+          "text": "Linux, Windows, macOS용 다중 제공자 데스크톱 도우미로 채팅, 에이전트, RAG, 도구 연동을 제공합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Jev 플러그인은 jev_evaluate(state, questions)를 노출하고 Choice, Score, Noul 결과를 현재 모델에 반환합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "플러그인을 켜고 API Keys에 Jev 인증을, 플러그인 설정에 모델을 지정한 후 대화에서 범위가 정해진 판단을 요청합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 한계",
+          "text": "Jev는 미리 정의된 출력 공간이 필요하며 자유 글쓰기 대신 판단을 담당합니다. 플러그인은 전역 Tools 스위치와 독립적으로 작동합니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "PyGPT: asistente de escritorio con plugin Jev integrado",
+      "h1": "PyGPT: asistente de escritorio con plugin Jev integrado",
+      "description": "PyGPT incorpora decisiones Jev a las conversaciones mediante un plugin para clasificación, rutas, verificación y puntuación.",
+      "summary": "Es un asistente multiproveedor para Linux, Windows y macOS con chat, agentes, RAG e integración de herramientas. El plugin expone jev_evaluate(state, questions) y devuelve resultados Choice, Score o Noul al modelo actual.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "Es un asistente multiproveedor para Linux, Windows y macOS con chat, agentes, RAG e integración de herramientas.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "El plugin expone jev_evaluate(state, questions) y devuelve resultados Choice, Score o Noul al modelo actual.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo se usa",
+          "text": "Active el plugin, configure credenciales Jev en API Keys y el modelo en sus ajustes, y solicite una decisión acotada.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "Jev requiere salidas predefinidas y sirve para decisiones, no escritura abierta; el plugin funciona independientemente del interruptor global Tools.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "PyGPT : assistant de bureau avec plugin Jev intégré",
+      "h1": "PyGPT : assistant de bureau avec plugin Jev intégré",
+      "description": "PyGPT ajoute des décisions Jev aux conversations via un plugin de classement, routage, vérification et notation.",
+      "summary": "Cet assistant multiprestataire pour Linux, Windows et macOS propose chat, agents, RAG et intégrations d'outils. Le plugin expose jev_evaluate(state, questions) et renvoie des résultats Choice, Score ou Noul au modèle courant.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Usage et public visé",
+          "text": "Cet assistant multiprestataire pour Linux, Windows et macOS propose chat, agents, RAG et intégrations d'outils.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Le plugin expose jev_evaluate(state, questions) et renvoie des résultats Choice, Score ou Noul au modèle courant.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Activez le plugin, configurez Jev dans API Keys et son modèle dans les réglages du plugin, puis demandez une décision délimitée.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "Jev exige des sorties prédéfinies et sert aux décisions, pas à la rédaction libre ; le plugin fonctionne indépendamment de l'interrupteur global Tools.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "PyGPT: Desktop-Assistent mit integriertem Jev-Plugin",
+      "h1": "PyGPT: Desktop-Assistent mit integriertem Jev-Plugin",
+      "description": "PyGPT ergänzt Desktop-Gespräche um Jev-Entscheidungen für Klassifikation, Routing, Prüfung und Bewertung.",
+      "summary": "Der Assistent für mehrere Anbieter läuft auf Linux, Windows und macOS und umfasst Chat, Agenten, RAG und Werkzeuge. Das Jev-Plugin bietet jev_evaluate(state, questions) und gibt Choice-, Score- oder Noul-Ergebnisse an das aktuelle Modell zurück.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Zweck und Zielgruppe",
+          "text": "Der Assistent für mehrere Anbieter läuft auf Linux, Windows und macOS und umfasst Chat, Agenten, RAG und Werkzeuge.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Das Jev-Plugin bietet jev_evaluate(state, questions) und gibt Choice-, Score- oder Noul-Ergebnisse an das aktuelle Modell zurück.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Verwendung",
+          "text": "Aktivieren Sie das Plugin, hinterlegen Sie Jev unter API Keys und das Modell in den Plugin-Einstellungen, und fragen Sie nach einer begrenzten Entscheidung.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Jev benötigt vorgegebene Ausgabemöglichkeiten und dient Entscheidungen statt freiem Schreiben; das Plugin arbeitet unabhängig vom globalen Tools-Schalter.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "PyGPT: assistente de desktop com plugin Jev integrado",
+      "h1": "PyGPT: assistente de desktop com plugin Jev integrado",
+      "description": "PyGPT adiciona decisões Jev às conversas por um plugin de classificação, roteamento, verificação e pontuação.",
+      "summary": "O assistente multiprovedor roda em Linux, Windows e macOS e oferece chat, agentes, RAG e integração de ferramentas. O plugin expõe jev_evaluate(state, questions), devolvendo resultados Choice, Score ou Noul ao modelo atual.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Finalidade e público",
+          "text": "O assistente multiprovedor roda em Linux, Windows e macOS e oferece chat, agentes, RAG e integração de ferramentas.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "O plugin expõe jev_evaluate(state, questions), devolvendo resultados Choice, Score ou Noul ao modelo atual.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Ative o plugin, configure credenciais Jev em API Keys e seu modelo nas configurações do plugin, depois peça uma decisão delimitada.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "Jev exige saídas predefinidas e atende a decisões, não à escrita livre; o plugin opera independentemente do interruptor global Tools.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "PyGPT: настольный помощник с плагином Jev",
+      "h1": "PyGPT: настольный помощник с плагином Jev",
+      "description": "PyGPT добавляет решения Jev в разговоры через плагин классификации, маршрутизации, проверки и оценки.",
+      "summary": "Это многопровайдерный помощник для Linux, Windows и macOS с чатами, агентами, RAG и интеграцией инструментов. Плагин предоставляет jev_evaluate(state, questions) и возвращает результаты Choice, Score или Noul текущей модели.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Это многопровайдерный помощник для Linux, Windows и macOS с чатами, агентами, RAG и интеграцией инструментов.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Плагин предоставляет jev_evaluate(state, questions) и возвращает результаты Choice, Score или Noul текущей модели.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Включите плагин, задайте данные Jev в API Keys и модель в настройках плагина, затем запросите ограниченное решение.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Jev требует заранее заданных выходов и предназначен для решений, не свободного письма; плагин работает независимо от общего переключателя Tools.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "PyGPT: इनलाइन Jev प्लगइन वाला डेस्कटॉप सहायक",
+      "h1": "PyGPT: इनलाइन Jev प्लगइन वाला डेस्कटॉप सहायक",
+      "description": "PyGPT प्लगइन से संवाद में Jev जोड़ता है, ताकि वर्गीकरण, रूटिंग, सत्यापन और स्कोरिंग निर्णय लिए जा सकें।",
+      "summary": "यह Linux, Windows और macOS का बहु-प्रदाता सहायक है, जिसमें चैट, एजेंट, RAG और टूल एकीकरण हैं। Jev प्लगइन jev_evaluate(state, questions) देता है और Choice, Score या Noul परिणाम वर्तमान मॉडल को लौटाता है।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "उद्देश्य और उपयोगकर्ता",
+          "text": "यह Linux, Windows और macOS का बहु-प्रदाता सहायक है, जिसमें चैट, एजेंट, RAG और टूल एकीकरण हैं।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "Jev प्लगइन jev_evaluate(state, questions) देता है और Choice, Score या Noul परिणाम वर्तमान मॉडल को लौटाता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल का तरीका",
+          "text": "प्लगइन चालू करें, API Keys में Jev क्रेडेंशियल और प्लगइन सेटिंग में मॉडल चुनें, फिर सीमित दायरे का निर्णय माँगें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "Jev के आउटपुट पहले तय होने चाहिए; यह निर्णयों के लिए है, खुला लेखन नहीं। प्लगइन वैश्विक Tools स्विच से स्वतंत्र चलता है।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "PyGPT: asisten desktop dengan plugin Jev inline",
+      "h1": "PyGPT: asisten desktop dengan plugin Jev inline",
+      "description": "PyGPT menambahkan keputusan Jev ke percakapan melalui plugin klasifikasi, perutean, verifikasi, dan penilaian.",
+      "summary": "Asisten multipenyedia ini berjalan di Linux, Windows, dan macOS, dengan chat, agen, RAG, serta integrasi alat. Plugin menyediakan jev_evaluate(state, questions), mengembalikan hasil Choice, Score, atau Noul ke model aktif.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Tujuan dan pengguna",
+          "text": "Asisten multipenyedia ini berjalan di Linux, Windows, dan macOS, dengan chat, agen, RAG, serta integrasi alat.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Plugin menyediakan jev_evaluate(state, questions), mengembalikan hasil Choice, Score, atau Noul ke model aktif.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Aktifkan plugin, atur kredensial Jev pada API Keys dan model pada pengaturan plugin, lalu minta keputusan berbatas jelas.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Jev memerlukan ruang keluaran yang ditentukan sebelumnya untuk keputusan, bukan penulisan bebas; plugin beroperasi terpisah dari sakelar Tools global.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "PyGPT: trợ lý máy tính với plugin Jev nội tuyến",
+      "h1": "PyGPT: trợ lý máy tính với plugin Jev nội tuyến",
+      "description": "PyGPT thêm quyết định Jev vào hội thoại qua plugin phân loại, định tuyến, kiểm chứng và chấm điểm.",
+      "summary": "Trợ lý đa nhà cung cấp chạy trên Linux, Windows và macOS, với chat, tác tử, RAG và tích hợp công cụ. Plugin cung cấp jev_evaluate(state, questions), trả kết quả Choice, Score hoặc Noul cho mô hình hiện tại.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích và đối tượng",
+          "text": "Trợ lý đa nhà cung cấp chạy trên Linux, Windows và macOS, với chat, tác tử, RAG và tích hợp công cụ.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Plugin cung cấp jev_evaluate(state, questions), trả kết quả Choice, Score hoặc Noul cho mô hình hiện tại.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Bật plugin, cấu hình xác thực Jev tại API Keys và mô hình trong cài đặt plugin, rồi yêu cầu quyết định có phạm vi rõ ràng.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Jev cần không gian đầu ra định sẵn, phục vụ quyết định thay vì viết tự do; plugin hoạt động độc lập với công tắc Tools toàn cục.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "PyGPT: satır içi Jev eklentili masaüstü asistanı",
+      "h1": "PyGPT: satır içi Jev eklentili masaüstü asistanı",
+      "description": "PyGPT, sınıflandırma, yönlendirme, doğrulama ve puanlama eklentisiyle konuşmalara Jev kararları ekler.",
+      "summary": "Linux, Windows ve macOS için çok sağlayıcılı asistan; sohbet, ajanlar, RAG ve araç entegrasyonları sunar. Jev eklentisi jev_evaluate(state, questions) sağlar ve Choice, Score veya Noul sonuçlarını etkin modele döndürür.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Amaç ve hedef kitle",
+          "text": "Linux, Windows ve macOS için çok sağlayıcılı asistan; sohbet, ajanlar, RAG ve araç entegrasyonları sunar.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Jev eklentisi jev_evaluate(state, questions) sağlar ve Choice, Score veya Noul sonuçlarını etkin modele döndürür.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Eklenti açılır, API Keys altında Jev kimlik bilgileri ve eklenti ayarlarında model belirlenir, ardından sınırlı bir karar istenir.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Jev önceden tanımlanmış çıktılar gerektirir; serbest yazı yerine kararlar içindir. Eklenti genel Tools anahtarından bağımsız çalışır.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "PyGPT: assistente desktop con plugin Jev inline",
+      "h1": "PyGPT: assistente desktop con plugin Jev inline",
+      "description": "PyGPT aggiunge decisioni Jev alle conversazioni tramite un plugin per classificazione, instradamento, verifica e valutazione.",
+      "summary": "L'assistente multiprovider per Linux, Windows e macOS offre chat, agenti, RAG e integrazioni di strumenti. Il plugin espone jev_evaluate(state, questions) e restituisce risultati Choice, Score o Noul al modello corrente.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Scopo e destinatari",
+          "text": "L'assistente multiprovider per Linux, Windows e macOS offre chat, agenti, RAG e integrazioni di strumenti.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Il plugin espone jev_evaluate(state, questions) e restituisce risultati Choice, Score o Noul al modello corrente.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come si usa",
+          "text": "Si attiva il plugin, si configurano credenziali Jev in API Keys e modello nelle impostazioni del plugin, poi si richiede una decisione delimitata.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "Jev richiede uscite predefinite e serve alle decisioni, non alla scrittura libera; il plugin opera indipendentemente dall'interruttore globale Tools.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  },
+  "displayName": "PyGPT"
+}

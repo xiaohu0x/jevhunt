@@ -1,0 +1,756 @@
+{
+  "version": "source-content-v1",
+  "repo": "fhshaik/typesafe-mario",
+  "repositoryId": 1372537050,
+  "relationship": "jev-app",
+  "category": "games",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "ca22449ed187118d19326d1f54b01b6636578aa4",
+      "url": "https://github.com/fhshaik/typesafe-mario/blob/ca22449ed187118d19326d1f54b01b6636578aa4/README.md",
+      "sha256": "c489f93504144937f7c8088f681d0d6370d46114ca6d09987f405b120a357504",
+      "accessedAt": "2026-09-30T07:33:51.252Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "TypeSafe Mario is an experimental NES controller loop using emulator telemetry and RAM-derived game observations.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 3,
+          "end": 11,
+          "quote": "An experimental controller that lets TypeSafe's Jev model directly choose NES\ncontroller inputs for the original Super Mario Bros.\n\nThe model does **not** receive screenshots. The harness translates emulator telemetry\nand RAM into compact, object-centric JSON containing Mario's motion, jump trajectory,\nupcoming enemies, terrain, measured response delay, recent-control results, and episode\nprogress. Jev chooses one of the legal controller actions, the emulator advances several\nframes, and the loop repeats. The raw local tile grid remains available in debug logs\nand the UI, but is not duplicated in the model input."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "Jev Choice selects a legal controller action; Noul estimates jump usefulness and Score reports immediate danger for the display.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 103,
+          "end": 112,
+          "quote": "Each request evaluates three independent judgments over the same state:\n\n- a `Choice` selects the next controller macro;\n- a `Noul` estimates whether a forward jump is useful now;\n- a `Score` measures immediate danger for the live visualization.\n\nExact timing arithmetic stays in code. For example, the parser combines measured\nresponse age, enemy motion, action cadence, and jump-clearance time into a typed\n`jump_must_start_this_decision` fact. Jev interprets those facts and still owns the\ncontroller choice—there is no scripted recovery-action override."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "With Python 3.13, a TypeSafe key and your local game setup, inspect state-demo before running the play command.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 29,
+          "end": 58,
+          "quote": "## Requirements\n\n- Python 3.13 or newer\n- A TypeSafe API key in `TYPESAFE_API_KEY`\n- A legal local setup for Super Mario Bros.\n\nThis repository contains no Nintendo ROM or other copyrighted game data. You are\nresponsible for ensuring that your emulator and game files are obtained and used\nlawfully.\n\n## Setup\n\n```powershell\npy -3.13 -m venv .venv\n.venv\\Scripts\\python -m pip install -e \".[mario,dev]\"\n$env:TYPESAFE_API_KEY = \"your-key\"\n```\n\nInspect the exact JSON and text that will be sent to TypeSafe without launching the\ngame or calling the API:\n\n```powershell\n.venv\\Scripts\\typesafe-mario state-demo\n```\n\nRun World 1-1 with Jev making a decision every eight emulator steps. The default\ndisplay is a single recordable window with the live game and model telemetry:\n\n```powershell\n.venv\\Scripts\\typesafe-mario play --env SuperMarioBros-1-1-v0 --frames-per-decision 8"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "The model receives structured state rather than screenshots. The repository does not include Nintendo ROMs or game assets.",
+      "kind": "source-limitation",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 6,
+          "end": 11,
+          "quote": "The model does **not** receive screenshots. The harness translates emulator telemetry\nand RAM into compact, object-centric JSON containing Mario's motion, jump trajectory,\nupcoming enemies, terrain, measured response delay, recent-control results, and episode\nprogress. Jev chooses one of the legal controller actions, the emulator advances several\nframes, and the loop repeats. The raw local tile grid remains available in debug logs\nand the UI, but is not duplicated in the model input."
+        },
+        {
+          "source": "source-1",
+          "start": 35,
+          "end": 37,
+          "quote": "This repository contains no Nintendo ROM or other copyrighted game data. You are\nresponsible for ensuring that your emulator and game files are obtained and used\nlawfully."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "typesafe-mario — Jev controls Mario from game state",
+      "h1": "typesafe-mario — Structured-state Jev control for Super Mario Bros.",
+      "description": "typesafe-mario: Jev Choice selects a legal controller action; Noul estimates jump usefulness and Score reports immediate danger for the display.",
+      "summary": "TypeSafe Mario is an experimental NES controller loop using emulator telemetry and RAM-derived game observations. With Python 3.13, a TypeSafe key and your local game setup, inspect state-demo before running the play command.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "What it does",
+          "text": "TypeSafe Mario is an experimental NES controller loop using emulator telemetry and RAM-derived game observations.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "Jev Choice selects a legal controller action; Noul estimates jump usefulness and Score reports immediate danger for the display.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Getting started",
+          "text": "With Python 3.13, a TypeSafe key and your local game setup, inspect state-demo before running the play command.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "The model receives structured state rather than screenshots. The repository does not include Nintendo ROMs or game assets.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "typesafe-mario — 以结构化状态让 Jev 控制超级马力欧",
+      "h1": "typesafe-mario — 以结构化状态让 Jev 控制超级马力欧",
+      "description": "typesafe-mario: Jev Choice 选择合法按键动作，Noul 估计跳跃是否有用，Score 提供画面展示的即时危险程度。",
+      "summary": "TypeSafe Mario 是实验性 NES 控制循环，使用模拟器遥测及 RAM 提取的游戏观察。 准备 Python 3.13、TypeSafe 密钥和本地游戏环境，先检查 state-demo，再运行 play 命令。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "TypeSafe Mario 是实验性 NES 控制循环，使用模拟器遥测及 RAM 提取的游戏观察。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "Jev Choice 选择合法按键动作，Noul 估计跳跃是否有用，Score 提供画面展示的即时危险程度。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "准备 Python 3.13、TypeSafe 密钥和本地游戏环境，先检查 state-demo，再运行 play 命令。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "模型接收结构化状态而非截图。仓库不包含任天堂 ROM 或游戏素材。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "typesafe-mario — 以結構化狀態讓 Jev 控制超級瑪利歐",
+      "h1": "typesafe-mario — 以結構化狀態讓 Jev 控制超級瑪利歐",
+      "description": "typesafe-mario: Jev Choice 選擇合法按鍵動作，Noul 估計跳躍是否有用，Score 提供畫面顯示的即時危險程度。",
+      "summary": "TypeSafe Mario 是實驗性 NES 控制迴圈，使用模擬器遙測和 RAM 擷取的遊戲觀察。 準備 Python 3.13、TypeSafe 金鑰及本機遊戲環境，先檢查 state-demo，再執行 play。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "TypeSafe Mario 是實驗性 NES 控制迴圈，使用模擬器遙測和 RAM 擷取的遊戲觀察。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "Jev Choice 選擇合法按鍵動作，Noul 估計跳躍是否有用，Score 提供畫面顯示的即時危險程度。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "準備 Python 3.13、TypeSafe 金鑰及本機遊戲環境，先檢查 state-demo，再執行 play。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "模型接收結構化狀態而非截圖。儲存庫不含任天堂 ROM 或遊戲素材。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "typesafe-mario — 構造化状態で Jev がスーパーマリオを操作",
+      "h1": "typesafe-mario — 構造化状態で Jev がスーパーマリオを操作",
+      "description": "typesafe-mario: Choice が許可された操作を選び、Noul がジャンプの有用性を評価し、Score が表示用の直近の危険度を返します。",
+      "summary": "TypeSafe Mario は、エミュレーターのテレメトリーと RAM 由来の観測を使う実験的な NES 操作ループです。 Python 3.13、TypeSafe キー、ローカルのゲーム環境を用意し、state-demo を確認してから play を実行します。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "できること",
+          "text": "TypeSafe Mario は、エミュレーターのテレメトリーと RAM 由来の観測を使う実験的な NES 操作ループです。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "Choice が許可された操作を選び、Noul がジャンプの有用性を評価し、Score が表示用の直近の危険度を返します。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い始めるには",
+          "text": "Python 3.13、TypeSafe キー、ローカルのゲーム環境を用意し、state-demo を確認してから play を実行します。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "対象範囲と制約",
+          "text": "モデルへの入力は画像ではなく構造化状態です。リポジトリに任天堂の ROM やゲームデータは含まれません。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "typesafe-mario — 구조화된 상태로 Jev가 슈퍼 마리오 조작",
+      "h1": "typesafe-mario — 구조화된 상태로 Jev가 슈퍼 마리오 조작",
+      "description": "typesafe-mario: Choice가 허용된 입력을 고르고 Noul은 점프 유용성을 판단하며 Score는 화면에 표시할 즉각적 위험도를 반환합니다.",
+      "summary": "TypeSafe Mario는 에뮬레이터 텔레메트리와 RAM 기반 관찰을 사용하는 실험적 NES 제어 루프입니다. Python 3.13, TypeSafe 키, 로컬 게임 환경을 준비하고 state-demo를 확인한 뒤 play를 실행합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "TypeSafe Mario는 에뮬레이터 텔레메트리와 RAM 기반 관찰을 사용하는 실험적 NES 제어 루프입니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Choice가 허용된 입력을 고르고 Noul은 점프 유용성을 판단하며 Score는 화면에 표시할 즉각적 위험도를 반환합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "Python 3.13, TypeSafe 키, 로컬 게임 환경을 준비하고 state-demo를 확인한 뒤 play를 실행합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 제약",
+          "text": "모델 입력은 스크린샷이 아닌 구조화된 상태입니다. 저장소에는 닌텐도 ROM이나 게임 데이터가 없습니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "typesafe-mario — Jev controla Mario a partir del estado",
+      "h1": "typesafe-mario — Control de Super Mario Bros. con estado estructurado y Jev",
+      "description": "typesafe-mario: Choice elige una acción legal; Noul estima la utilidad de saltar y Score muestra peligro inmediato.",
+      "summary": "TypeSafe Mario es un controlador NES experimental basado en telemetría del emulador y observaciones derivadas de RAM. Con Python 3.13, clave TypeSafe y juego local, inspecciona state-demo antes de ejecutar play.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "TypeSafe Mario es un controlador NES experimental basado en telemetría del emulador y observaciones derivadas de RAM.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Choice elige una acción permitida; Noul estima la utilidad de saltar y Score muestra peligro inmediato.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo empezar",
+          "text": "Con Python 3.13, clave TypeSafe y juego local, inspecciona state-demo antes de ejecutar play.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "El modelo recibe estado estructurado, no capturas. El repositorio no incluye ROMs ni recursos de Nintendo.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "typesafe-mario — Jev pilote Mario depuis l’état du jeu",
+      "h1": "typesafe-mario — Contrôler Super Mario Bros. avec un état structuré et Jev",
+      "description": "typesafe-mario: Choice choisit une action autorisée ; Noul estime l’intérêt du saut et Score indique le danger immédiat à l’écran.",
+      "summary": "TypeSafe Mario est une boucle NES expérimentale utilisant la télémétrie de l’émulateur et des observations issues de la RAM. Avec Python 3.13, une clé TypeSafe et le jeu local, inspectez state-demo avant de lancer play.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "TypeSafe Mario est une boucle NES expérimentale utilisant la télémétrie de l’émulateur et des observations issues de la RAM.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Choice choisit une action autorisée ; Noul estime l’intérêt du saut et Score indique le danger immédiat à l’écran.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Avec Python 3.13, une clé TypeSafe et le jeu local, inspectez state-demo avant de lancer play.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "Le modèle reçoit un état structuré, pas des captures. Le dépôt ne contient ni ROM ni ressources Nintendo.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "typesafe-mario — Jev steuert Mario anhand des Spielzustands",
+      "h1": "typesafe-mario — Super Mario Bros. mit strukturiertem Zustand und Jev steuern",
+      "description": "typesafe-mario: Choice wählt eine zulässige Aktion; Noul schätzt den Nutzen eines Sprungs und Score liefert die Gefahrenanzeige.",
+      "summary": "TypeSafe Mario ist eine experimentelle NES-Steuerung mit Emulatortelemetrie und aus RAM gewonnenen Beobachtungen. Mit Python 3.13, TypeSafe-Schlüssel und lokalem Spiel zuerst state-demo prüfen, dann play starten.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "TypeSafe Mario ist eine experimentelle NES-Steuerung mit Emulatortelemetrie und aus RAM gewonnenen Beobachtungen.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Choice wählt eine zulässige Aktion; Noul schätzt den Nutzen eines Sprungs und Score liefert die Gefahrenanzeige.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Einstieg",
+          "text": "Mit Python 3.13, TypeSafe-Schlüssel und lokalem Spiel zuerst state-demo prüfen, dann play starten.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Das Modell erhält strukturierten Zustand statt Screenshots. Nintendo-ROMs oder Spielmaterial sind nicht enthalten.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "typesafe-mario — Jev controla Mario pelo estado do jogo",
+      "h1": "typesafe-mario — Controle de Super Mario Bros. com estado estruturado e Jev",
+      "description": "typesafe-mario: Choice escolhe uma ação permitida; Noul estima a utilidade do salto e Score informa o perigo imediato na tela.",
+      "summary": "TypeSafe Mario é um controlador NES experimental com telemetria do emulador e observações derivadas da RAM. Com Python 3.13, chave TypeSafe e jogo local, confira state-demo antes de executar play.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "TypeSafe Mario é um controlador NES experimental com telemetria do emulador e observações derivadas da RAM.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "Choice escolhe uma ação permitida; Noul estima a utilidade do salto e Score informa o perigo imediato na tela.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como começar",
+          "text": "Com Python 3.13, chave TypeSafe e jogo local, confira state-demo antes de executar play.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "O modelo recebe estado estruturado, não capturas. O repositório não inclui ROMs nem recursos da Nintendo.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "typesafe-mario — Jev управляет Mario по состоянию игры",
+      "h1": "typesafe-mario — Управление Super Mario Bros. через Jev и структурированное состояние",
+      "description": "typesafe-mario: Choice выбирает допустимое действие; Noul оценивает полезность прыжка, а Score показывает непосредственную опасность.",
+      "summary": "TypeSafe Mario — экспериментальный NES-контроллер с телеметрией эмулятора и наблюдениями из RAM. Подготовьте Python 3.13, ключ TypeSafe и локальную игру; изучите state-demo перед запуском play.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "TypeSafe Mario — экспериментальный NES-контроллер с телеметрией эмулятора и наблюдениями из RAM.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Choice выбирает допустимое действие; Noul оценивает полезность прыжка, а Score показывает непосредственную опасность.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Начало работы",
+          "text": "Подготовьте Python 3.13, ключ TypeSafe и локальную игру; изучите state-demo перед запуском play.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Модель получает структурированное состояние, не скриншоты. ROM и игровые ресурсы Nintendo в репозиторий не входят.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "typesafe-mario — संरचित स्थिति से Jev द्वारा Super Mario Bros. नियंत्रण",
+      "h1": "typesafe-mario — संरचित स्थिति से Jev द्वारा Super Mario Bros. नियंत्रण",
+      "description": "typesafe-mario: Choice अनुमत कार्रवाई चुनता है; Noul कूद की उपयोगिता और Score स्क्रीन के लिए तत्काल खतरा आँकता है।",
+      "summary": "TypeSafe Mario प्रायोगिक NES नियंत्रण लूप है जो एमुलेटर टेलीमेट्री और RAM से मिली स्थिति उपयोग करता है। Python 3.13, TypeSafe कुंजी और स्थानीय गेम के साथ play से पहले state-demo देखें।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "परियोजना का काम",
+          "text": "TypeSafe Mario प्रायोगिक NES नियंत्रण लूप है जो एमुलेटर टेलीमेट्री और RAM से मिली स्थिति उपयोग करता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "Choice अनुमत कार्रवाई चुनता है; Noul कूद की उपयोगिता और Score स्क्रीन के लिए तत्काल खतरा आँकता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "शुरुआत कैसे करें",
+          "text": "Python 3.13, TypeSafe कुंजी और स्थानीय गेम के साथ play से पहले state-demo देखें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "मॉडल को स्क्रीनशॉट नहीं, संरचित स्थिति मिलती है। रिपॉज़िटरी में Nintendo ROM या गेम सामग्री नहीं है।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "typesafe-mario — Kontrol Mario berbasis keadaan oleh Jev",
+      "h1": "typesafe-mario — Kontrol Super Mario Bros. dengan keadaan terstruktur dan Jev",
+      "description": "typesafe-mario: Choice memilih tindakan yang diizinkan; Noul menilai manfaat melompat dan Score menampilkan tingkat bahaya langsung.",
+      "summary": "TypeSafe Mario adalah pengontrol NES eksperimental yang memakai telemetri emulator dan pengamatan dari RAM. Siapkan Python 3.13, kunci TypeSafe, dan gim lokal; periksa state-demo sebelum menjalankan play.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "TypeSafe Mario adalah pengontrol NES eksperimental yang memakai telemetri emulator dan pengamatan dari RAM.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Choice memilih tindakan yang diizinkan; Noul menilai manfaat melompat dan Score menampilkan tingkat bahaya langsung.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara memulai",
+          "text": "Siapkan Python 3.13, kunci TypeSafe, dan gim lokal; periksa state-demo sebelum menjalankan play.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Model menerima keadaan terstruktur, bukan tangkapan layar. Repositori tidak memuat ROM atau aset Nintendo.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "typesafe-mario — Jev điều khiển Mario từ trạng thái",
+      "h1": "typesafe-mario — Jev điều khiển Super Mario Bros. từ trạng thái có cấu trúc",
+      "description": "typesafe-mario: Choice chọn thao tác hợp lệ; Noul ước lượng lợi ích nhảy và Score thể hiện nguy hiểm tức thời trên màn hình.",
+      "summary": "TypeSafe Mario là vòng điều khiển NES thử nghiệm dùng dữ liệu đo từ giả lập và quan sát lấy từ RAM. Chuẩn bị Python 3.13, khóa TypeSafe và game cục bộ; xem state-demo trước khi chạy play.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Công dụng",
+          "text": "TypeSafe Mario là vòng điều khiển NES thử nghiệm dùng dữ liệu đo từ giả lập và quan sát lấy từ RAM.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Choice chọn thao tác hợp lệ; Noul ước lượng lợi ích nhảy và Score thể hiện nguy hiểm tức thời trên màn hình.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách bắt đầu",
+          "text": "Chuẩn bị Python 3.13, khóa TypeSafe và game cục bộ; xem state-demo trước khi chạy play.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Mô hình nhận trạng thái có cấu trúc, không nhận ảnh màn hình. Kho không chứa ROM hay tài nguyên Nintendo.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "typesafe-mario — Jev oyun durumuyla Mario’yu kontrol eder",
+      "h1": "typesafe-mario — Yapılandırılmış durumla Jev’in Super Mario Bros. kontrolü",
+      "description": "typesafe-mario: Choice geçerli eylemi seçer; Noul zıplamanın yararını, Score ekrandaki anlık tehlikeyi değerlendirir.",
+      "summary": "TypeSafe Mario, emülatör telemetrisi ve RAM’den alınan gözlemleri kullanan deneysel bir NES kontrol döngüsüdür. Python 3.13, TypeSafe anahtarı ve yerel oyunla play öncesinde state-demo çıktısını inceleyin.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "TypeSafe Mario, emülatör telemetrisi ve RAM’den alınan gözlemleri kullanan deneysel bir NES kontrol döngüsüdür.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Choice geçerli eylemi seçer; Noul zıplamanın yararını, Score ekrandaki anlık tehlikeyi değerlendirir.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Başlangıç",
+          "text": "Python 3.13, TypeSafe anahtarı ve yerel oyunla play öncesinde state-demo çıktısını inceleyin.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Model ekran görüntüsü yerine yapılandırılmış durum alır. Depoda Nintendo ROM’u veya oyun varlığı bulunmaz.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "typesafe-mario — Jev controlla Mario dallo stato di gioco",
+      "h1": "typesafe-mario — Controllo di Super Mario Bros. con stato strutturato e Jev",
+      "description": "typesafe-mario: Choice sceglie un’azione consentita; Noul stima l’utilità del salto e Score mostra il livello di pericolo immediato.",
+      "summary": "TypeSafe Mario è un controller NES sperimentale che usa telemetria dell’emulatore e osservazioni ricavate dalla RAM. Con Python 3.13, chiave TypeSafe e gioco locale, controlla state-demo prima di eseguire play.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "TypeSafe Mario è un controller NES sperimentale che usa telemetria dell’emulatore e osservazioni ricavate dalla RAM.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Choice sceglie un’azione consentita; Noul stima l’utilità del salto e Score mostra il livello di pericolo immediato.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come iniziare",
+          "text": "Con Python 3.13, chiave TypeSafe e gioco locale, controlla state-demo prima di eseguire play.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "Il modello riceve stato strutturato, non screenshot. Il repository non include ROM o risorse Nintendo.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

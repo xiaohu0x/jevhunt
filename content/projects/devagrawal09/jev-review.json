@@ -1,0 +1,763 @@
+{
+  "version": "source-content-v1",
+  "repo": "devagrawal09/jev-review",
+  "repositoryId": 1373665161,
+  "relationship": "jev-app",
+  "category": "agents",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "31f89602797fb7bea007f8a480bf368bf564954e",
+      "url": "https://github.com/devagrawal09/jev-review/blob/31f89602797fb7bea007f8a480bf368bf564954e/README.md",
+      "sha256": "d8d98618015949ce1ab1c820d28d84ed64601fa7dd81c4bdbfde2fb9e30a9afe",
+      "accessedAt": "2026-09-30T07:33:49.425Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "kind": "documented",
+      "text": "Jev Review scans Git diffs or complete codebases for correctness, security, reliability, compatibility and test coverage.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 3,
+          "end": 3,
+          "quote": "A small code-review workflow built with [TypeSafe Jev](https://typesafe.ai). It can review a Git diff or scan a complete codebase, follows the strongest structured signals through focused model calls, and presents the result in a quiet local dashboard."
+        },
+        {
+          "source": "source-1",
+          "start": 20,
+          "end": 27,
+          "quote": "- Exposes separate change-review and complete-codebase entry points.\n- Uses changed or related tests as context when judging test gaps.\n- Screens correctness, security, reliability, compatibility, and test coverage.\n- Selects concrete diff hunks or source regions before scoring impact.\n- Uses structured hints, counterexamples, and explicit decision boundaries.\n- Applies thresholds and workflow policy in code.\n- Shows large reports in collapsible dashboard sections.\n- Binds the dashboard to `127.0.0.1` and never serves environment files."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "kind": "documented",
+      "text": "Jev selects evidence, classifies mechanisms, scores severity and, when needed, uses Choice to select a reviewer. Code applies thresholds and workflow policy.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 9,
+          "end": 25,
+          "quote": "The reviewer keeps orchestration in code and uses Jev for bounded judgments:\n\n```text\nNoul risk matrix\n  -> Choice + Score file profiles\n  -> Choice evidence selection\n  -> Choice mechanism classification\n  -> Score severity\n  -> conditional Choice reviewer routing\n```\n\n- Exposes separate change-review and complete-codebase entry points.\n- Uses changed or related tests as context when judging test gaps.\n- Screens correctness, security, reliability, compatibility, and test coverage.\n- Selects concrete diff hunks or source regions before scoring impact.\n- Uses structured hints, counterexamples, and explicit decision boundaries.\n- Applies thresholds and workflow policy in code."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "kind": "documented",
+      "text": "Use Node.js 24+, Git and a TypeSafe key to generate JSON reports or inspect saved reviews locally.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 31,
+          "end": 43,
+          "quote": "Requires Node.js 24+, Git, and a [TypeSafe API key](https://console.typesafe.ai/settings/keys).\n\n```bash\nnpm install\ncp .env.example .env\n# Add TYPESAFE_API_KEY to .env\n\n# Review the current Git diff\nnpm run review:changes:save -- /path/to/git/repository\n\n# Or scan every non-ignored source file under a scope\nnpm run review:codebase:save -- /path/to/git/repository-or-package\nnpm run dashboard"
+        },
+        {
+          "source": "source-1",
+          "start": 50,
+          "end": 56,
+          "quote": "| Command | Purpose |\n| --- | --- |\n| `npm run review:changes -- <path>` | Print a current-diff review as JSON |\n| `npm run review:changes:save -- <path>` | Save a current-diff review for the dashboard |\n| `npm run review:codebase -- <path>` | Print a complete codebase scan as JSON |\n| `npm run review:codebase:save -- <path>` | Save a complete codebase scan for the dashboard |\n| `npm run dashboard` | Start the local dashboard |"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "kind": "documented",
+      "text": "This experiment lacks compiler and static-analysis integration. Findings prompt review and do not prove defects.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 83,
+          "end": 85,
+          "quote": "## Current Scope\n\nThis is an experiment in composing fast typed judgments into a review workflow. It does not yet integrate compiler diagnostics, static analyzers, repository indexing, or generated explanations. Findings are review prompts, not proof of a defect."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "Jev Review: typed judgments for code review",
+      "h1": "Jev Review: typed judgments for code review",
+      "description": "Jev Review composes typed Jev judgments to review Git diffs or codebases, selecting evidence and severity for local reports. Findings still require review.",
+      "summary": "Jev Review scans Git diffs or complete codebases for correctness, security, reliability, compatibility and test coverage. Jev selects evidence, classifies mechanisms, scores severity and, when needed, uses Choice to select a reviewer. Code applies thresholds and workflow policy. Use Node.js 24+, Git and a TypeSafe key to generate JSON reports or inspect saved reviews locally.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose",
+          "text": "Jev Review scans Git diffs or complete codebases for correctness, security, reliability, compatibility and test coverage.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’s role",
+          "text": "Jev selects evidence, classifies mechanisms, scores severity and, when needed, uses Choice to select a reviewer. Code applies thresholds and workflow policy.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "How to use it",
+          "text": "Use Node.js 24+, Git and a TypeSafe key to generate JSON reports or inspect saved reviews locally.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limits to consider",
+          "text": "This experiment lacks compiler and static-analysis integration. Findings prompt review and do not prove defects.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "Jev Review：用类型化判断审查代码",
+      "h1": "Jev Review：用类型化判断审查代码",
+      "description": "Jev Review 将 Jev 的类型化判断组合成 Git 差异与完整代码库审查，选择证据、判定问题机制与严重程度，并生成本地报告；发现项仍需核实，不是缺陷证明。",
+      "summary": "Jev Review 扫描 Git 差异或完整代码库，检查正确性、安全性、可靠性、兼容性和测试覆盖。 Jev 选择证据、判断问题机制并评估严重程度，满足条件时通过 Choice 选择审查者；代码负责阈值与流程策略。 使用 Node.js 24+、Git 和 TypeSafe 密钥，生成 JSON 报告或在本地查看已保存审查。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "Jev Review 扫描 Git 差异或完整代码库，检查正确性、安全性、可靠性、兼容性和测试覆盖。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "Jev 选择证据、判断问题机制并评估严重程度，满足条件时通过 Choice 选择审查者；代码负责阈值与流程策略。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "使用 Node.js 24+、Git 和 TypeSafe 密钥，生成 JSON 报告或在本地查看已保存审查。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用边界",
+          "text": "这是尚未集成编译器和静态分析的实验；发现项是审查线索，不能证明缺陷存在。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "Jev Review：以型別化判斷審查程式碼",
+      "h1": "Jev Review：以型別化判斷審查程式碼",
+      "description": "Jev Review 將 Jev 的型別化判斷組成 Git 差異與完整程式碼庫審查，選擇證據、判定問題機制與嚴重程度，再產生本地報告；發現項目仍需核實，並非缺陷證明。",
+      "summary": "Jev Review 掃描 Git 差異或完整程式碼庫，檢查正確性、安全性、可靠性、相容性與測試涵蓋。 Jev 選擇證據、判斷問題機制並評估嚴重程度，符合條件時透過 Choice 選擇審查者；程式碼負責門檻與流程策略。 使用 Node.js 24+、Git 與 TypeSafe 金鑰，產生 JSON 報告或在本地查看已儲存審查。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "Jev Review 掃描 Git 差異或完整程式碼庫，檢查正確性、安全性、可靠性、相容性與測試涵蓋。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "Jev 選擇證據、判斷問題機制並評估嚴重程度，符合條件時透過 Choice 選擇審查者；程式碼負責門檻與流程策略。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "使用 Node.js 24+、Git 與 TypeSafe 金鑰，產生 JSON 報告或在本地查看已儲存審查。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用限制",
+          "text": "這是尚未整合編譯器與靜態分析的實驗；發現項目是審查線索，不能證明缺陷存在。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "Jev Review：型付き判断によるコードレビュー",
+      "h1": "Jev Review：型付き判断によるコードレビュー",
+      "description": "Jev Review は Git 差分やコード全体を Jev の型付き判断で調べ、根拠と重大度をローカル報告にまとめます。指摘は確認が必要です。",
+      "summary": "Jev Review は Git 差分やコード全体から正しさ、安全性、信頼性、互換性、テスト不足を調べます。 Jev が根拠を選び、問題の種類と重大度を評価し、条件に応じて Choice でレビュー担当を選びます。しきい値と処理方針はコードが適用します。 Node.js 24 以降、Git、TypeSafe キーで JSON レポートを作成し、保存したレビューをローカルで確認できます。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "何ができるか",
+          "text": "Jev Review は Git 差分やコード全体から正しさ、安全性、信頼性、互換性、テスト不足を調べます。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "Jev が根拠を選び、問題の種類と重大度を評価し、条件に応じて Choice でレビュー担当を選びます。しきい値と処理方針はコードが適用します。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "Node.js 24 以降、Git、TypeSafe キーで JSON レポートを作成し、保存したレビューをローカルで確認できます。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "制約と注意点",
+          "text": "コンパイラーや静的解析との連携は未実装の実験です。指摘は確認の手がかりで、欠陥の証明ではありません。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "Jev Review: 타입별 판단으로 코드 검토",
+      "h1": "Jev Review: 타입별 판단으로 코드 검토",
+      "description": "Jev Review는 Jev 판단으로 Git 변경분과 코드베이스를 검토하고 증거·심각도를 로컬 보고서로 정리합니다. 발견 사항은 추가 확인이 필요합니다.",
+      "summary": "Jev Review는 Git 변경분이나 전체 코드베이스의 정확성, 보안, 신뢰성, 호환성, 테스트 범위를 살펴봅니다. Jev가 증거를 선택하고 문제 메커니즘과 심각도를 평가하며, 조건에 따라 Choice로 검토자를 선택합니다. 임계값과 워크플로 정책은 코드가 적용합니다. Node.js 24+, Git, TypeSafe 키로 JSON 보고서를 만들거나 저장된 검토를 로컬에서 확인합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "Jev Review는 Git 변경분이나 전체 코드베이스의 정확성, 보안, 신뢰성, 호환성, 테스트 범위를 살펴봅니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Jev가 증거를 선택하고 문제 메커니즘과 심각도를 평가하며, 조건에 따라 Choice로 검토자를 선택합니다. 임계값과 워크플로 정책은 코드가 적용합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "Node.js 24+, Git, TypeSafe 키로 JSON 보고서를 만들거나 저장된 검토를 로컬에서 확인합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "제약 사항",
+          "text": "컴파일러와 정적 분석을 통합하지 않은 실험입니다. 발견 사항은 검토 단서이며 결함을 증명하지 않습니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "Jev Review: decisiones tipadas para revisar código",
+      "h1": "Jev Review: decisiones tipadas para revisar código",
+      "description": "Jev Review combina juicios Jev para revisar diffs o código completo, seleccionando evidencia y gravedad en informes locales que requieren revisión.",
+      "summary": "Jev Review examina diffs Git o código completo buscando problemas de corrección, seguridad, fiabilidad, compatibilidad y pruebas. Jev selecciona evidencia, clasifica mecanismos y puntúa gravedad; cuando corresponde, elige al revisor mediante Choice. El código aplica umbrales y políticas del flujo. Usa Node.js 24+, Git y una clave TypeSafe para generar JSON o consultar revisiones guardadas localmente.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "Jev Review examina diffs Git o código completo buscando problemas de corrección, seguridad, fiabilidad, compatibilidad y pruebas.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "El papel de Jev",
+          "text": "Jev selecciona evidencia, clasifica mecanismos y puntúa gravedad; cuando corresponde, elige al revisor mediante Choice. El código aplica umbrales y políticas del flujo.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo usarlo",
+          "text": "Usa Node.js 24+, Git y una clave TypeSafe para generar JSON o consultar revisiones guardadas localmente.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Límites a considerar",
+          "text": "Es experimental y no integra compiladores ni análisis estático. Los hallazgos orientan la revisión, no demuestran defectos.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "Jev Review : jugements typés pour relire le code",
+      "h1": "Jev Review : jugements typés pour relire le code",
+      "description": "Jev Review combine des jugements Jev pour examiner diffs ou code complet, avec preuves et gravité dans des rapports locaux à vérifier.",
+      "summary": "Jev Review examine les diffs Git ou tout le code pour vérifier correction, sécurité, fiabilité, compatibilité et tests. Jev sélectionne les preuves, classe les mécanismes et évalue la gravité ; selon les conditions du flux, il choisit le réviseur avec Choice. Le code applique les seuils et la politique du processus. Node.js 24+, Git et une clé TypeSafe permettent de générer du JSON ou consulter les revues enregistrées localement.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "Jev Review examine les diffs Git ou tout le code pour vérifier correction, sécurité, fiabilité, compatibilité et tests.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Le rôle de Jev",
+          "text": "Jev sélectionne les preuves, classe les mécanismes et évalue la gravité ; selon les conditions du flux, il choisit le réviseur avec Choice. Le code applique les seuils et la politique du processus.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Utilisation",
+          "text": "Node.js 24+, Git et une clé TypeSafe permettent de générer du JSON ou consulter les revues enregistrées localement.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limites à connaître",
+          "text": "L’expérience n’intègre ni compilateur ni analyse statique. Les constats invitent à vérifier, sans prouver un défaut.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "Jev Review: typisierte Urteile für Codeprüfung",
+      "h1": "Jev Review: typisierte Urteile für Codeprüfung",
+      "description": "Jev Review prüft Diffs oder Codebasen mit typisierten Jev-Urteilen und erstellt lokale Berichte mit Belegen und Schweregrad; Hinweise brauchen Prüfung.",
+      "summary": "Jev Review untersucht Git-Diffs oder ganze Codebasen auf Korrektheit, Sicherheit, Zuverlässigkeit, Kompatibilität und Testabdeckung. Jev wählt Belege, klassifiziert Mechanismen, bewertet den Schweregrad und wählt bei Bedarf per Choice einen Reviewer. Der Code setzt Schwellenwerte und Ablaufregeln um. Mit Node.js 24+, Git und TypeSafe-Schlüssel JSON-Berichte erzeugen oder gespeicherte Prüfungen lokal ansehen.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "Jev Review untersucht Git-Diffs oder ganze Codebasen auf Korrektheit, Sicherheit, Zuverlässigkeit, Kompatibilität und Testabdeckung.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Die Rolle von Jev",
+          "text": "Jev wählt Belege, klassifiziert Mechanismen, bewertet den Schweregrad und wählt bei Bedarf per Choice einen Reviewer. Der Code setzt Schwellenwerte und Ablaufregeln um.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Nutzung",
+          "text": "Mit Node.js 24+, Git und TypeSafe-Schlüssel JSON-Berichte erzeugen oder gespeicherte Prüfungen lokal ansehen.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Grenzen",
+          "text": "Das Experiment integriert weder Compiler noch statische Analyse. Hinweise regen zur Prüfung an und beweisen keine Fehler.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "Jev Review: julgamentos tipados para revisão de código",
+      "h1": "Jev Review: julgamentos tipados para revisão de código",
+      "description": "Jev Review combina julgamentos Jev para revisar diffs ou código completo, selecionando evidências e gravidade em relatórios locais que exigem revisão.",
+      "summary": "Jev Review examina diffs Git ou bases completas em busca de problemas de correção, segurança, confiabilidade, compatibilidade e testes. Jev seleciona evidências, classifica mecanismos e avalia gravidade; quando necessário, escolhe o revisor por Choice. O código aplica os limites e a política do fluxo. Use Node.js 24+, Git e chave TypeSafe para gerar JSON ou consultar revisões salvas localmente.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "Jev Review examina diffs Git ou bases completas em busca de problemas de correção, segurança, confiabilidade, compatibilidade e testes.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "O papel do Jev",
+          "text": "Jev seleciona evidências, classifica mecanismos e avalia gravidade; quando necessário, escolhe o revisor por Choice. O código aplica os limites e a política do fluxo.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Use Node.js 24+, Git e chave TypeSafe para gerar JSON ou consultar revisões salvas localmente.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limitações",
+          "text": "É experimental e não integra compiladores nem análise estática. Os achados orientam a revisão, sem provar defeitos.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "Jev Review: типизированные оценки для ревью кода",
+      "h1": "Jev Review: типизированные оценки для ревью кода",
+      "description": "Jev Review проверяет Git-diff или весь код типизированными оценками Jev, формируя локальные отчёты с доказательствами и серьёзностью. Находки требуют проверки.",
+      "summary": "Jev Review проверяет Git-изменения или всю кодовую базу на корректность, безопасность, надёжность, совместимость и покрытие тестами. Jev выбирает доказательства, классифицирует механизмы и оценивает серьёзность; при выполнении условий выбирает рецензента через Choice. Код применяет пороги и правила процесса. Node.js 24+, Git и ключ TypeSafe позволяют получать JSON-отчёты или просматривать сохранённые ревью локально.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Jev Review проверяет Git-изменения или всю кодовую базу на корректность, безопасность, надёжность, совместимость и покрытие тестами.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Jev выбирает доказательства, классифицирует механизмы и оценивает серьёзность; при выполнении условий выбирает рецензента через Choice. Код применяет пороги и правила процесса.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Node.js 24+, Git и ключ TypeSafe позволяют получать JSON-отчёты или просматривать сохранённые ревью локально.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ограничения",
+          "text": "Эксперимент не интегрирует компиляторы и статический анализ. Находки требуют проверки, а не доказывают наличие дефектов.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "Jev Review: कोड समीक्षा के लिए निर्धारित प्रकार वाले निर्णय",
+      "h1": "Jev Review: कोड समीक्षा के लिए निर्धारित प्रकार वाले निर्णय",
+      "description": "Jev Review निर्धारित प्रकार वाले Jev निर्णयों से Git बदलाव या पूरा कोड जाँचकर साक्ष्य और गंभीरता वाली स्थानीय रिपोर्ट देता है; निष्कर्षों की पुष्टि ज़रूरी है।",
+      "summary": "Jev Review Git बदलाव या पूरा कोड जाँचकर शुद्धता, सुरक्षा, विश्वसनीयता, संगतता और टेस्ट कवरेज देखता है। Jev साक्ष्य चुनता, समस्या का तरीका वर्गीकृत करता और गंभीरता आँकता है; शर्त पूरी होने पर Choice से समीक्षक भी चुनता है। कोड सीमाएँ और प्रक्रिया की नीति लागू करता है। Node.js 24+, Git और TypeSafe कुंजी से JSON रिपोर्ट बनाएँ या सहेजी समीक्षा स्थानीय रूप से देखें।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "किस काम आता है",
+          "text": "Jev Review Git बदलाव या पूरा कोड जाँचकर शुद्धता, सुरक्षा, विश्वसनीयता, संगतता और टेस्ट कवरेज देखता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "Jev साक्ष्य चुनता, समस्या का तरीका वर्गीकृत करता और गंभीरता आँकता है; शर्त पूरी होने पर Choice से समीक्षक भी चुनता है। कोड सीमाएँ और प्रक्रिया की नीति लागू करता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल कैसे करें",
+          "text": "Node.js 24+, Git और TypeSafe कुंजी से JSON रिपोर्ट बनाएँ या सहेजी समीक्षा स्थानीय रूप से देखें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "सीमाएँ",
+          "text": "यह प्रयोग कंपाइलर या स्थिर विश्लेषण से जुड़ा नहीं है। निष्कर्ष समीक्षा के संकेत हैं, दोष का प्रमाण नहीं।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "Jev Review: penilaian bertipe untuk ulasan kode",
+      "h1": "Jev Review: penilaian bertipe untuk ulasan kode",
+      "description": "Jev Review menggabungkan penilaian Jev untuk memeriksa diff atau seluruh kode, memilih bukti dan keparahan dalam laporan lokal yang perlu ditinjau.",
+      "summary": "Jev Review memeriksa diff Git atau seluruh kode untuk kebenaran, keamanan, keandalan, kompatibilitas, dan cakupan tes. Jev memilih bukti, mengklasifikasikan mekanisme, dan menilai keparahan; ketika syaratnya terpenuhi, Choice memilih peninjau. Kode menerapkan ambang dan kebijakan alur. Gunakan Node.js 24+, Git, dan kunci TypeSafe untuk membuat JSON atau melihat ulasan tersimpan secara lokal.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "Jev Review memeriksa diff Git atau seluruh kode untuk kebenaran, keamanan, keandalan, kompatibilitas, dan cakupan tes.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Jev memilih bukti, mengklasifikasikan mekanisme, dan menilai keparahan; ketika syaratnya terpenuhi, Choice memilih peninjau. Kode menerapkan ambang dan kebijakan alur.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Gunakan Node.js 24+, Git, dan kunci TypeSafe untuk membuat JSON atau melihat ulasan tersimpan secara lokal.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Batasan",
+          "text": "Eksperimen ini belum mengintegrasikan compiler dan analisis statis. Temuan menjadi petunjuk peninjauan, bukan bukti cacat.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "Jev Review: phán đoán có kiểu để rà soát mã",
+      "h1": "Jev Review: phán đoán có kiểu để rà soát mã",
+      "description": "Jev Review kết hợp phán đoán Jev để rà soát diff hay toàn bộ mã, chọn bằng chứng và mức nghiêm trọng cho báo cáo cục bộ cần kiểm chứng.",
+      "summary": "Jev Review quét diff Git hoặc toàn bộ mã để xét tính đúng, bảo mật, tin cậy, tương thích và độ phủ kiểm thử. Jev chọn bằng chứng, phân loại cơ chế và chấm mức nghiêm trọng; khi đủ điều kiện, dùng Choice chọn bên rà soát. Mã áp dụng ngưỡng và chính sách quy trình. Dùng Node.js 24+, Git và khóa TypeSafe để xuất JSON hoặc xem bản rà soát đã lưu cục bộ.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích",
+          "text": "Jev Review quét diff Git hoặc toàn bộ mã để xét tính đúng, bảo mật, tin cậy, tương thích và độ phủ kiểm thử.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Jev chọn bằng chứng, phân loại cơ chế và chấm mức nghiêm trọng; khi đủ điều kiện, dùng Choice chọn bên rà soát. Mã áp dụng ngưỡng và chính sách quy trình.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Dùng Node.js 24+, Git và khóa TypeSafe để xuất JSON hoặc xem bản rà soát đã lưu cục bộ.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Giới hạn",
+          "text": "Thử nghiệm chưa tích hợp trình biên dịch hay phân tích tĩnh. Phát hiện là gợi ý rà soát, không chứng minh lỗi.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "Jev Review: kod incelemesi için türlenmiş yargılar",
+      "h1": "Jev Review: kod incelemesi için türlenmiş yargılar",
+      "description": "Jev Review, Jev yargılarıyla Git farklarını veya kodu inceleyip yerel rapora kanıt ve önem derecesi seçer. Bulgular ayrıca incelenmelidir.",
+      "summary": "Jev Review Git farklarını veya tüm kodu doğruluk, güvenlik, güvenilirlik, uyumluluk ve test kapsamı açısından tarar. Jev kanıt seçer, mekanizmaları sınıflandırır, önem derecesini puanlar ve koşullar sağlandığında Choice ile inceleyiciyi seçer. Kod eşikleri ve iş akışı politikasını uygular. Node.js 24+, Git ve TypeSafe anahtarıyla JSON raporu oluşturun veya kayıtlı incelemeleri yerelde görüntüleyin.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "Jev Review Git farklarını veya tüm kodu doğruluk, güvenlik, güvenilirlik, uyumluluk ve test kapsamı açısından tarar.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Jev kanıt seçer, mekanizmaları sınıflandırır, önem derecesini puanlar ve koşullar sağlandığında Choice ile inceleyiciyi seçer. Kod eşikleri ve iş akışı politikasını uygular.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Node.js 24+, Git ve TypeSafe anahtarıyla JSON raporu oluşturun veya kayıtlı incelemeleri yerelde görüntüleyin.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Sınırlamalar",
+          "text": "Deney, derleyici veya statik analizle entegre değildir. Bulgular inceleme işaretidir, kusurun kanıtı değildir.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "Jev Review: giudizi tipizzati per revisionare codice",
+      "h1": "Jev Review: giudizi tipizzati per revisionare codice",
+      "description": "Jev Review combina giudizi Jev per esaminare diff o intere basi di codice, con prove e gravità nei rapporti locali; i risultati vanno verificati.",
+      "summary": "Jev Review esamina diff Git o intere basi di codice per correttezza, sicurezza, affidabilità, compatibilità e copertura dei test. Jev seleziona prove, classifica meccanismi e valuta la gravità; quando previsto dal flusso, sceglie anche il revisore tramite Choice. Il codice applica soglie e regole del processo. Usa Node.js 24+, Git e una chiave TypeSafe per generare JSON o consultare revisioni salvate localmente.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "Jev Review esamina diff Git o intere basi di codice per correttezza, sicurezza, affidabilità, compatibilità e copertura dei test.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Il ruolo di Jev",
+          "text": "Jev seleziona prove, classifica meccanismi e valuta la gravità; quando previsto dal flusso, sceglie anche il revisore tramite Choice. Il codice applica soglie e regole del processo.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come usarlo",
+          "text": "Usa Node.js 24+, Git e una chiave TypeSafe per generare JSON o consultare revisioni salvate localmente.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limiti",
+          "text": "L’esperimento non integra compilatori o analisi statica. I risultati suggeriscono verifiche, senza dimostrare difetti.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  },
+  "displayName": "Jev Review"
+}

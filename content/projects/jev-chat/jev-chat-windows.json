@@ -1,0 +1,781 @@
+{
+  "version": "source-content-v1",
+  "repo": "jev-chat/jev-chat-windows",
+  "repositoryId": 1379929433,
+  "relationship": "jev-app",
+  "category": "apps",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "c6d3a10474ce1ff3b7f8f6402b3b5e0e58fad5f1",
+      "url": "https://github.com/jev-chat/jev-chat-windows/blob/c6d3a10474ce1ff3b7f8f6402b3b5e0e58fad5f1/README.md",
+      "sha256": "def19ed163ceb7e742d076922770bb5d0c92ccde2f622f670158b64de092ae6c",
+      "accessedAt": "2026-09-30T07:33:49.201Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "kind": "documented",
+      "text": "JevChat-Windows reads WeChat and KakaoTalk conversations with local OCR and offers candidate replies beside the chat window.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 11,
+          "end": 15,
+          "quote": "聊天窗口旁挂的回复辅助：本地 OCR 读屏上的对话 → Jev 判断意图/情绪 → 给出 3 条候选回复 →\n一键填入输入框。**发送永远手动，程序不替你按发送。**\n\n判断内核来自安卓版 [Finderchangchang/jev-chat-JARVIS](https://github.com/Finderchangchang/jev-chat-JARVIS)，\n这里把采集换成了 Windows 端的窗口截图 + 离线 OCR。"
+        },
+        {
+          "source": "source-1",
+          "start": 79,
+          "end": 84,
+          "quote": "## 支持的聊天软件\n\n| 软件 | OCR | 自己的气泡 | 窗口 |\n|---|---|---|---|\n| 微信 | RapidOCR（中英文模型） | 绿色 | 标题为「微信」的主窗口 |\n| KakaoTalk（韩国） | Windows.Media.Ocr（系统语言包，离线） | `#FEE500` | 一个对话一个窗口，主列表窗除外 |"
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "kind": "documented",
+      "text": "Jev judges intent and tension and ranks three candidates; a separate language model drafts them.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 45,
+          "end": 52,
+          "quote": "设置页的「模型」卡片分两节，各填一把 key：\n\n1. **判断 · Jev** —— 判断意图、紧张度，并给三条候选排序。来源选 **OpenRouter**（默认，key 在\n   [openrouter.ai](https://openrouter.ai/) 申请）或 **TypeSafe 直连**（key 在\n   [console.typesafe.ai](https://console.typesafe.ai/) 申请）。填的是哪家的 key 看你上面选了哪家。\n2. **起草 · 语言模型** —— 写那三条候选。默认 **DeepSeek 官网**直连，key 在\n   [platform.deepseek.com](https://platform.deepseek.com/) 申请（很便宜，起草一次几厘钱）。\n   换别家见下面的表，OpenAI / Anthropic / Gemini 三种接口都支持。"
+        },
+        {
+          "source": "source-1",
+          "start": 112,
+          "end": 114,
+          "quote": "- **3 条候选**：每条带 Jev 给的胜出概率百分比，按概率排序，推荐那条置顶并标「推荐回复」；\n  每条都有「填入」和复制按钮。\n- **判断摘要**：建议动作、可能意图、对方可能需要、紧张度 0–9。"
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "kind": "documented",
+      "text": "Configure a decision-provider key and a drafting-provider key on Windows 10 1903+ or Windows 11.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 27,
+          "end": 31,
+          "quote": "要求：Windows 10 1903+ / 11，聊天窗口开着，两个 API key（判断一个、起草一个，见下）。\n\n首次启动会弹设置页填这两个 key。key 写进 Windows 用户环境变量（注册表 `HKCU\\Environment`）——\n全程只有 `JEV_API_KEY` 和 `LLM_API_KEY` 这两个，不落任何文件；其余设置写在 exe 旁边的\n`config.json`，整个文件夹拷走设置也跟着走。"
+        },
+        {
+          "source": "source-1",
+          "start": 43,
+          "end": 55,
+          "quote": "**第一次启动**\n\n设置页的「模型」卡片分两节，各填一把 key：\n\n1. **判断 · Jev** —— 判断意图、紧张度，并给三条候选排序。来源选 **OpenRouter**（默认，key 在\n   [openrouter.ai](https://openrouter.ai/) 申请）或 **TypeSafe 直连**（key 在\n   [console.typesafe.ai](https://console.typesafe.ai/) 申请）。填的是哪家的 key 看你上面选了哪家。\n2. **起草 · 语言模型** —— 写那三条候选。默认 **DeepSeek 官网**直连，key 在\n   [platform.deepseek.com](https://platform.deepseek.com/) 申请（很便宜，起草一次几厘钱）。\n   换别家见下面的表，OpenAI / Anthropic / Gemini 三种接口都支持。\n3. 选「你们的关系」（恋人 / 朋友 / 同事 / 家人 / 自定义），保存。可以用了。\n\n两把 key 各管一节，互不相干；同一节里换来源要重填一次 key（只存这一把）。"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "kind": "documented",
+      "text": "Sending stays manual. Analysis sends conversation text to configured providers, and OCR errors can misidentify speakers or conversations.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 141,
+          "end": 141,
+          "quote": "- **绝不自动发送。** 只把文字粘进输入框就停手，不发回车、不点发送按钮。发不发、改不改，你来定。"
+        },
+        {
+          "source": "source-1",
+          "start": 153,
+          "end": 160,
+          "quote": "什么会出网：判断（`JEV_API_KEY`）去你选的 OpenRouter 或 TypeSafe 直连；起草（`LLM_API_KEY`）发给你\n在设置里选的那家接口（DeepSeek 官网、OpenRouter、OpenAI、Moonshot、智谱、通义、硅基流动、\nOpenCode Go、Anthropic、Gemini，或者自填的 OpenAI 兼容 / Anthropic 兼容地址），加上启动时（可关）一次到\nGitHub 查版本号。**本项目没有任何自建服务器**，聊天内容只在触发分析的那一刻，发给你自己在设置里\n配置的那个接口，本项目不收集、不落盘、不进日志。发出去的内容固定是：**最近 N 条对话文本**（N =\n设置里的「参考上下文」，默认 10；群聊带发言人名）、**关系设置**、**你自己最近 12 条 60 字以内的短\n消息**（当口吻样本，链接和长段不送）、**你填的说话风格**，群聊指定了回复对象的话再加一个对象名。\n除此之外没有别的。OCR 全程离线。GitHub 版本查询只带 UA 和当前版本号，不夹带任何聊天内容。"
+        },
+        {
+          "source": "source-1",
+          "start": 393,
+          "end": 398,
+          "quote": "- **群聊里名字行被 OCR 漏识，这条消息会挂到上一个人头上**；「填入时带 @」加的 `@名字 ` 也只是纯文本，\n  不会把它变成真正的 @ 提醒——真 @ 得走对方自己的选人面板，本工具不模拟那套按键。\n- **会话靠头部标题认**：OCR 抖一个字会按相似度归到已知会话（不然一抖就多出一个会话），\n  代价是名字只差一个字的两个会话会被并成一个。头部一直认不出就先挂在「当前会话」名下。\n- **同一人连发两句一模一样的会吞一条**：去重按文本相似度做的。对「要不要触发分析」没影响。\n- **`fill` 靠点击输入框坐标**：算的是消息区底线下方 40px、左边界右侧 60px，对方改布局就得跟着调。"
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "JevChat-Windows: OCR chat replies ranked by Jev",
+      "h1": "JevChat-Windows: OCR chat replies ranked by Jev",
+      "description": "JevChat-Windows uses local OCR for WeChat and KakaoTalk. Jev judges intent and ranks three replies drafted by another model; sending remains manual.",
+      "summary": "JevChat-Windows reads WeChat and KakaoTalk conversations with local OCR and offers candidate replies beside the chat window. Jev judges intent and tension and ranks three candidates; a separate language model drafts them. Configure a decision-provider key and a drafting-provider key on Windows 10 1903+ or Windows 11.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose",
+          "text": "JevChat-Windows reads WeChat and KakaoTalk conversations with local OCR and offers candidate replies beside the chat window.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’s role",
+          "text": "Jev judges intent and tension and ranks three candidates; a separate language model drafts them.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "How to use it",
+          "text": "Configure a decision-provider key and a drafting-provider key on Windows 10 1903+ or Windows 11.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limits to consider",
+          "text": "Sending stays manual. Analysis sends conversation text to configured providers, and OCR errors can misidentify speakers or conversations.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "JevChat-Windows：用 OCR 读聊天、用 Jev 排回复",
+      "h1": "JevChat-Windows：用 OCR 读聊天、用 Jev 排回复",
+      "description": "JevChat-Windows 本地 OCR 读取微信和 KakaoTalk，由 Jev 判断意图与紧张度、排序三条回复，独立模型负责起草；可以填入输入框，发送始终由用户手动完成。",
+      "summary": "JevChat-Windows 通过本地 OCR 读取微信和 KakaoTalk 对话，在聊天窗口旁提供候选回复。 Jev 判断意图、紧张度并为三条候选排序；独立语言模型负责起草。 在 Windows 10 1903+ 或 Windows 11 上，分别配置判断服务与起草服务的密钥。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "JevChat-Windows 通过本地 OCR 读取微信和 KakaoTalk 对话，在聊天窗口旁提供候选回复。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "Jev 判断意图、紧张度并为三条候选排序；独立语言模型负责起草。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "在 Windows 10 1903+ 或 Windows 11 上，分别配置判断服务与起草服务的密钥。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用边界",
+          "text": "发送始终手动进行。分析会将对话文本发给所选服务；OCR 错误可能混淆发言人或会话。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "JevChat-Windows：以 OCR 讀取聊天、用 Jev 排序回覆",
+      "h1": "JevChat-Windows：以 OCR 讀取聊天、用 Jev 排序回覆",
+      "description": "JevChat-Windows 以本地 OCR 讀取微信與 KakaoTalk，由 Jev 判斷意圖及緊張程度、排序三則回覆，獨立模型負責起草；可填入輸入框，傳送始終由使用者操作。",
+      "summary": "JevChat-Windows 透過本地 OCR 讀取微信與 KakaoTalk 對話，在聊天視窗旁提供候選回覆。 Jev 判斷意圖、緊張程度並為三則候選排序；獨立語言模型負責起草。 在 Windows 10 1903+ 或 Windows 11 上，分別設定判斷服務與起草服務的金鑰。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "JevChat-Windows 透過本地 OCR 讀取微信與 KakaoTalk 對話，在聊天視窗旁提供候選回覆。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "Jev 判斷意圖、緊張程度並為三則候選排序；獨立語言模型負責起草。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "在 Windows 10 1903+ 或 Windows 11 上，分別設定判斷服務與起草服務的金鑰。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用限制",
+          "text": "傳送始終由使用者操作。分析會將對話文字傳給所選服務；OCR 錯誤可能混淆發言者或對話。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "JevChat-Windows：OCR と Jev による返信候補",
+      "h1": "JevChat-Windows：OCR と Jev による返信候補",
+      "description": "JevChat-Windows は WeChat と KakaoTalk をローカル OCR で読み、別モデルが書く 3 返信を Jev が評価・順位付けします。送信は手動です。",
+      "summary": "JevChat-Windows は WeChat と KakaoTalk の会話をローカル OCR で読み、チャット横に返信候補を表示します。 Jev は意図と緊張度を判断して 3 候補を順位付けし、文章は別の言語モデルが作成します。 Windows 10 1903 以降または Windows 11 で、判断用と文章作成用の API キーを設定します。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "何ができるか",
+          "text": "JevChat-Windows は WeChat と KakaoTalk の会話をローカル OCR で読み、チャット横に返信候補を表示します。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "Jev は意図と緊張度を判断して 3 候補を順位付けし、文章は別の言語モデルが作成します。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "Windows 10 1903 以降または Windows 11 で、判断用と文章作成用の API キーを設定します。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "制約と注意点",
+          "text": "送信は手動です。分析時は会話文を指定プロバイダーへ送り、OCR 誤認識で話者や会話が混同される場合があります。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "JevChat-Windows: OCR 대화 읽기와 Jev 답장 순위화",
+      "h1": "JevChat-Windows: OCR 대화 읽기와 Jev 답장 순위화",
+      "description": "JevChat-Windows는 로컬 OCR로 WeChat·KakaoTalk를 읽고 별도 모델이 작성한 세 답장을 Jev가 판단·정렬합니다. 전송은 수동입니다.",
+      "summary": "JevChat-Windows는 로컬 OCR로 WeChat과 KakaoTalk 대화를 읽고 채팅창 옆에 답장 후보를 제공합니다. Jev가 의도와 긴장도를 판단해 세 후보의 순위를 매기며, 별도 언어 모델이 답장을 작성합니다. Windows 10 1903+ 또는 Windows 11에서 판단 제공자 키와 작성 제공자 키를 각각 설정합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "JevChat-Windows는 로컬 OCR로 WeChat과 KakaoTalk 대화를 읽고 채팅창 옆에 답장 후보를 제공합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Jev가 의도와 긴장도를 판단해 세 후보의 순위를 매기며, 별도 언어 모델이 답장을 작성합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "Windows 10 1903+ 또는 Windows 11에서 판단 제공자 키와 작성 제공자 키를 각각 설정합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "제약 사항",
+          "text": "전송은 항상 수동입니다. 분석 시 대화 텍스트가 선택한 제공자에게 전송되며 OCR 오류로 화자나 대화를 혼동할 수 있습니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "JevChat-Windows: respuestas de chat con OCR y Jev",
+      "h1": "JevChat-Windows: respuestas de chat con OCR y Jev",
+      "description": "JevChat-Windows lee WeChat y KakaoTalk con OCR local. Jev evalúa intención y ordena tres respuestas de otro modelo; el envío es manual.",
+      "summary": "JevChat-Windows lee conversaciones WeChat y KakaoTalk mediante OCR local y muestra respuestas junto a la ventana. Jev evalúa intención y tensión y ordena tres candidatos; otro modelo redacta las respuestas. Configura claves separadas para decisión y redacción en Windows 10 1903+ o Windows 11.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "JevChat-Windows lee conversaciones WeChat y KakaoTalk mediante OCR local y muestra respuestas junto a la ventana.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "El papel de Jev",
+          "text": "Jev evalúa intención y tensión y ordena tres candidatos; otro modelo redacta las respuestas.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo usarlo",
+          "text": "Configura claves separadas para decisión y redacción en Windows 10 1903+ o Windows 11.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Límites a considerar",
+          "text": "El envío es manual. El análisis transmite texto a los proveedores elegidos; errores OCR pueden confundir hablantes o conversaciones.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "JevChat-Windows : réponses de chat avec OCR et Jev",
+      "h1": "JevChat-Windows : réponses de chat avec OCR et Jev",
+      "description": "JevChat-Windows lit WeChat et KakaoTalk par OCR local. Jev juge l’intention et classe trois réponses d’un autre modèle ; l’envoi reste manuel.",
+      "summary": "JevChat-Windows lit les conversations WeChat et KakaoTalk par OCR local et propose des réponses à côté du chat. Jev évalue intention et tension, puis classe trois propositions rédigées par un modèle de langage distinct. Configurez deux clés, pour décision et rédaction, sous Windows 10 1903+ ou Windows 11.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "JevChat-Windows lit les conversations WeChat et KakaoTalk par OCR local et propose des réponses à côté du chat.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Le rôle de Jev",
+          "text": "Jev évalue intention et tension, puis classe trois propositions rédigées par un modèle de langage distinct.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Utilisation",
+          "text": "Configurez deux clés, pour décision et rédaction, sous Windows 10 1903+ ou Windows 11.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limites à connaître",
+          "text": "L’envoi reste manuel. L’analyse transmet le texte aux fournisseurs choisis ; des erreurs OCR peuvent confondre interlocuteurs ou conversations.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "JevChat-Windows: Antwortvorschläge mit OCR und Jev",
+      "h1": "JevChat-Windows: Antwortvorschläge mit OCR und Jev",
+      "description": "JevChat-Windows liest WeChat und KakaoTalk per OCR. Jev bewertet Absichten und sortiert drei Antworten eines anderen Modells; Versand bleibt manuell.",
+      "summary": "JevChat-Windows liest WeChat- und KakaoTalk-Gespräche per lokaler OCR und zeigt Antwortvorschläge neben dem Chat. Jev bewertet Absicht und Anspannung und sortiert drei Vorschläge; ein separates Sprachmodell formuliert sie. Unter Windows 10 1903+ oder Windows 11 jeweils einen Schlüssel für Bewertung und Textentwurf einrichten.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "JevChat-Windows liest WeChat- und KakaoTalk-Gespräche per lokaler OCR und zeigt Antwortvorschläge neben dem Chat.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Die Rolle von Jev",
+          "text": "Jev bewertet Absicht und Anspannung und sortiert drei Vorschläge; ein separates Sprachmodell formuliert sie.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Nutzung",
+          "text": "Unter Windows 10 1903+ oder Windows 11 jeweils einen Schlüssel für Bewertung und Textentwurf einrichten.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Grenzen",
+          "text": "Gesendet wird manuell. Zur Analyse gehen Gesprächstexte an gewählte Anbieter; OCR-Fehler können Sprecher oder Gespräche verwechseln.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "JevChat-Windows: respostas de chat com OCR e Jev",
+      "h1": "JevChat-Windows: respostas de chat com OCR e Jev",
+      "description": "JevChat-Windows lê WeChat e KakaoTalk com OCR local. Jev avalia intenção e ordena três respostas de outro modelo; o envio é manual.",
+      "summary": "JevChat-Windows lê conversas do WeChat e KakaoTalk com OCR local e oferece respostas ao lado da janela. Jev avalia intenção e tensão e ordena três opções; outro modelo de linguagem redige as respostas. Configure chaves separadas para decisão e redação no Windows 10 1903+ ou Windows 11.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "JevChat-Windows lê conversas do WeChat e KakaoTalk com OCR local e oferece respostas ao lado da janela.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "O papel do Jev",
+          "text": "Jev avalia intenção e tensão e ordena três opções; outro modelo de linguagem redige as respostas.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Configure chaves separadas para decisão e redação no Windows 10 1903+ ou Windows 11.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limitações",
+          "text": "O envio é manual. A análise envia texto aos provedores escolhidos; erros de OCR podem confundir participantes ou conversas.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "JevChat-Windows: варианты ответов с OCR и Jev",
+      "h1": "JevChat-Windows: варианты ответов с OCR и Jev",
+      "description": "JevChat-Windows читает WeChat и KakaoTalk локальным OCR. Jev оценивает намерение и ранжирует три ответа другой модели; отправка ручная.",
+      "summary": "JevChat-Windows читает разговоры WeChat и KakaoTalk локальным OCR и предлагает ответы рядом с окном чата. Jev определяет намерение и напряжённость, ранжируя три варианта; отдельная языковая модель составляет текст. Укажите отдельные ключи сервисов оценки и написания в Windows 10 1903+ либо Windows 11.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "JevChat-Windows читает разговоры WeChat и KakaoTalk локальным OCR и предлагает ответы рядом с окном чата.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Jev определяет намерение и напряжённость, ранжируя три варианта; отдельная языковая модель составляет текст.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Укажите отдельные ключи сервисов оценки и написания в Windows 10 1903+ либо Windows 11.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ограничения",
+          "text": "Отправка остаётся ручной. Анализ передаёт текст выбранным провайдерам; ошибки OCR могут перепутать говорящих или разговоры.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "JevChat-Windows: OCR और Jev से चैट जवाब",
+      "h1": "JevChat-Windows: OCR और Jev से चैट जवाब",
+      "description": "JevChat-Windows स्थानीय OCR से WeChat और KakaoTalk पढ़ता है। Jev इरादा जाँचकर दूसरे मॉडल के तीन उत्तर क्रम देता है; भेजना हाथ से होता है।",
+      "summary": "JevChat-Windows स्थानीय OCR से WeChat और KakaoTalk बातचीत पढ़कर चैट विंडो के पास उत्तर सुझाता है। Jev इरादा और तनाव जाँचकर तीन उम्मीदवार क्रम देता है; अलग भाषा मॉडल उत्तर लिखता है। Windows 10 1903+ या Windows 11 पर निर्णय और लेखन प्रदाताओं की अलग कुंजियाँ सेट करें।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "किस काम आता है",
+          "text": "JevChat-Windows स्थानीय OCR से WeChat और KakaoTalk बातचीत पढ़कर चैट विंडो के पास उत्तर सुझाता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "Jev इरादा और तनाव जाँचकर तीन उम्मीदवार क्रम देता है; अलग भाषा मॉडल उत्तर लिखता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल कैसे करें",
+          "text": "Windows 10 1903+ या Windows 11 पर निर्णय और लेखन प्रदाताओं की अलग कुंजियाँ सेट करें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "सीमाएँ",
+          "text": "भेजना हमेशा हाथ से होता है। विश्लेषण के लिए पाठ चुने प्रदाताओं को जाता है; OCR वक्ता या बातचीत गलत पहचान सकता है।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "JevChat-Windows: balasan chat dengan OCR dan Jev",
+      "h1": "JevChat-Windows: balasan chat dengan OCR dan Jev",
+      "description": "JevChat-Windows membaca WeChat dan KakaoTalk dengan OCR lokal. Jev menilai maksud dan mengurutkan tiga balasan model lain; pengiriman tetap manual.",
+      "summary": "JevChat-Windows membaca percakapan WeChat dan KakaoTalk memakai OCR lokal, lalu menampilkan calon balasan di samping chat. Jev menilai maksud dan ketegangan serta mengurutkan tiga kandidat; model bahasa terpisah menulisnya. Atur kunci penyedia keputusan dan penyedia penulisan pada Windows 10 1903+ atau Windows 11.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "JevChat-Windows membaca percakapan WeChat dan KakaoTalk memakai OCR lokal, lalu menampilkan calon balasan di samping chat.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Jev menilai maksud dan ketegangan serta mengurutkan tiga kandidat; model bahasa terpisah menulisnya.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Atur kunci penyedia keputusan dan penyedia penulisan pada Windows 10 1903+ atau Windows 11.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Batasan",
+          "text": "Pengiriman tetap manual. Analisis mengirim teks ke penyedia terpilih; kesalahan OCR dapat mencampur pembicara atau percakapan.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "JevChat-Windows: gợi ý trả lời bằng OCR và Jev",
+      "h1": "JevChat-Windows: gợi ý trả lời bằng OCR và Jev",
+      "description": "JevChat-Windows đọc WeChat và KakaoTalk bằng OCR cục bộ. Jev xét ý định và xếp ba câu trả lời do mô hình khác soạn; người dùng tự gửi.",
+      "summary": "JevChat-Windows đọc hội thoại WeChat và KakaoTalk bằng OCR cục bộ, rồi hiện gợi ý trả lời cạnh cửa sổ chat. Jev đánh giá ý định và căng thẳng, xếp hạng ba phương án do mô hình ngôn ngữ riêng soạn. Đặt khóa riêng cho dịch vụ đánh giá và soạn thảo trên Windows 10 1903+ hoặc Windows 11.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích",
+          "text": "JevChat-Windows đọc hội thoại WeChat và KakaoTalk bằng OCR cục bộ, rồi hiện gợi ý trả lời cạnh cửa sổ chat.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Jev đánh giá ý định và căng thẳng, xếp hạng ba phương án do mô hình ngôn ngữ riêng soạn.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Đặt khóa riêng cho dịch vụ đánh giá và soạn thảo trên Windows 10 1903+ hoặc Windows 11.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Giới hạn",
+          "text": "Người dùng tự gửi. Phân tích chuyển văn bản đến nhà cung cấp đã chọn; lỗi OCR có thể nhầm người nói hoặc hội thoại.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "JevChat-Windows: OCR ve Jev ile sohbet yanıtları",
+      "h1": "JevChat-Windows: OCR ve Jev ile sohbet yanıtları",
+      "description": "JevChat-Windows yerel OCR ile WeChat ve KakaoTalk okur. Jev niyeti değerlendirip başka modelin üç yanıtını sıralar; gönderim elle yapılır.",
+      "summary": "JevChat-Windows, WeChat ve KakaoTalk konuşmalarını yerel OCR ile okuyup pencerenin yanında yanıt adayları sunar. Jev niyet ve gerginliği değerlendirip üç adayı sıralar; yanıtları ayrı dil modeli yazar. Windows 10 1903+ veya Windows 11 üzerinde karar ve yazım sağlayıcılarının anahtarlarını ayrı ayarlayın.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "JevChat-Windows, WeChat ve KakaoTalk konuşmalarını yerel OCR ile okuyup pencerenin yanında yanıt adayları sunar.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Jev niyet ve gerginliği değerlendirip üç adayı sıralar; yanıtları ayrı dil modeli yazar.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Windows 10 1903+ veya Windows 11 üzerinde karar ve yazım sağlayıcılarının anahtarlarını ayrı ayarlayın.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Sınırlamalar",
+          "text": "Gönderim elle yapılır. Analiz metni seçilen sağlayıcılara gönderir; OCR hataları konuşmacıları veya sohbetleri karıştırabilir.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "JevChat-Windows: risposte chat con OCR e Jev",
+      "h1": "JevChat-Windows: risposte chat con OCR e Jev",
+      "description": "JevChat-Windows legge WeChat e KakaoTalk con OCR locale. Jev valuta l’intento e ordina tre risposte di un altro modello; l’invio resta manuale.",
+      "summary": "JevChat-Windows legge conversazioni WeChat e KakaoTalk con OCR locale e propone risposte accanto alla finestra. Jev valuta intenzione e tensione e ordina tre alternative; un modello linguistico separato le scrive. Configura chiavi distinte per decisione e scrittura su Windows 10 1903+ o Windows 11.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "JevChat-Windows legge conversazioni WeChat e KakaoTalk con OCR locale e propone risposte accanto alla finestra.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Il ruolo di Jev",
+          "text": "Jev valuta intenzione e tensione e ordina tre alternative; un modello linguistico separato le scrive.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come usarlo",
+          "text": "Configura chiavi distinte per decisione e scrittura su Windows 10 1903+ o Windows 11.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limiti",
+          "text": "L’invio resta manuale. L’analisi trasmette testo ai fornitori scelti; errori OCR possono confondere interlocutori o conversazioni.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  },
+  "displayName": "JevChat-Windows"
+}

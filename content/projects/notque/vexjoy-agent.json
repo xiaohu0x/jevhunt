@@ -1,0 +1,768 @@
+{
+  "version": "source-content-v1",
+  "repo": "notque/vexjoy-agent",
+  "repositoryId": 1184844109,
+  "relationship": "integration",
+  "category": "agents",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "76b7dc5f1266552654aee3b7e72dda101b206973",
+      "url": "https://github.com/notque/vexjoy-agent/blob/76b7dc5f1266552654aee3b7e72dda101b206973/README.md",
+      "sha256": "63a658470f56210a905b7d3003f447b6d04872dfefafa4d64e0120b1455b346c",
+      "accessedAt": "2026-09-30T07:33:51.151Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "VexJoy Agent connects requests to specialist agents, reusable skills and workflows across supported coding runtimes.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 7,
+          "end": 14,
+          "quote": "VexJoy Agent connects plain-English requests to specialist agents, skills, and workflows. `/do` selects the knowledge and tools needed for your task. Hooks enforce specific checks, and scripts handle repeatable work.\n\nThe aim is to give capable models useful domain knowledge without making you learn the toolkit's catalog.\n\n<!-- Counts here must match the Four Layers table (~line 143). Verify both: python3 scripts/validate-doc-counts.py -->\n43 agents, 62 skills, 78 hooks, 147 scripts. Agents carry domain knowledge, skills provide reusable methods, hooks enforce selected checks, and scripts handle repeatable plumbing.\n\nWorks across Claude Code (`/do`), Codex (`$do`), Factory (`/do`), Reasonix (`/do`)."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "Its /d route uses Jev to classify the request and check that the proposed outcome preserves the user’s intent before dispatch.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 44,
+          "end": 52,
+          "quote": "## /d — Jev-Powered Router\n\n`/d` requires [TypeSafe's Jev](https://docs.typesafe.ai). Jev classifies the\nrequest, checks that the selected route preserves the requested outcome, and\nthen dispatches the agent, skill, and pipeline.\n\nIntent preservation is production behavior: `/d` restates the requested\noutcome and gates dispatch on a Jev receipt for that exact proposed intent,\npreventing an agent from quietly expanding an apple into an orchard."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Install the toolkit for the desired runtime and configure direct TypeSafe or Vercel transport; the installer supports a dry-run preview.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 54,
+          "end": 69,
+          "quote": "Choose either transport:\n\n```bash\n# Preferred: Jev through Vercel AI Gateway\nexport JEV_TRANSPORT=vercel\nexport AI_GATEWAY_API_KEY=...\n\n# Alternative: Jev's direct API\nexport JEV_TRANSPORT=direct\nexport TYPESAFE_API_KEY=...\n```\n\n`JEV_TRANSPORT=auto` is the default. It prefers Vercel when\n`AI_GATEWAY_API_KEY` is set, then uses the direct API when only\n`TYPESAFE_API_KEY` is set. An explicit transport never silently switches to\nthe other one. The TypeSafe MCP plugin is not required for `/d`."
+        },
+        {
+          "source": "source-1",
+          "start": 118,
+          "end": 137,
+          "quote": "## Installation\n\n```bash\ngit clone https://github.com/notque/vexjoy-agent.git ~/vexjoy-agent\ncd ~/vexjoy-agent\n./install.sh\n```\n\nInstalls into `~/.claude/` and into `~/.codex/`, `~/.factory/`, `~/.hermes/`, and `~/.reasonix/` when the runtime command is on PATH or its home directory exists. `install.sh` wraps the `vexinstall` engine (`scripts/vexinstall/`). Each SessionStart in the repo re-syncs through the same engine. Symlinks (default in a git checkout) follow `git pull`; `--copy` gives a stable snapshot.\n\n| Flag | Effect |\n|---|---|\n| `--dry-run` | Print the plan; write nothing |\n| `--target <t>` | Only `claude`, `codex`, `factory`, `hermes`, `reasonix`, or `all` |\n| `--no-takeover` | Leave old unowned copies in place (default: move them to trash and replace) |\n| `--uninstall` / `--rollback` | Remove owned entries / restore the newest trash and settings backup |\n\nLayout and safety rules: [docs/installer-layout.md](docs/installer-layout.md).\n\nWant only part of the toolkit? Run `./install.sh --configure`, or copy `.local.example/profile.yaml` to `.local/profile.yaml` and edit it. Without a profile, the full toolkit installs. Details: [.local.example/README.md](.local.example/README.md)."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "Explicit transports do not silently switch. Hook enforcement depends on runtime and tool path; Jev-based context pruning is a separate optional plugin.",
+      "kind": "source-limitation",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 66,
+          "end": 74,
+          "quote": "`JEV_TRANSPORT=auto` is the default. It prefers Vercel when\n`AI_GATEWAY_API_KEY` is set, then uses the direct API when only\n`TYPESAFE_API_KEY` is set. An explicit transport never silently switches to\nthe other one. The TypeSafe MCP plugin is not required for `/d`.\n\nIntent-alignment judgments are recorded in `learning.db` without raw request\ntext. Receipts keep the Jev judge model separate from the executing agent's\nconfigured model and effort level. View proposed-intent difference rates by\nagent profile, judge model, and transport:"
+        },
+        {
+          "source": "source-1",
+          "start": 106,
+          "end": 106,
+          "quote": "Hooks run at configured events. Skills state what to verify; blocking hooks enforce the checks they cover. Coverage depends on the runtime and tool path."
+        },
+        {
+          "source": "source-1",
+          "start": 146,
+          "end": 153,
+          "quote": "**Jev Auto-Compact plugin** (optional, requires `TYPESAFE_API_KEY`):\n\n```bash\nclaude plugin marketplace add ./plugins/jev-auto-compact\nclaude plugin install jev-auto-compact@jev-auto-compact -y\n```\n\nReplaces generated compaction summaries with Jev-judged verbatim pruning after context reaches 60%. Inspect recorded before/after tokens and duration with `python3 scripts/jev-compact-evidence.py`."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "vexjoy-agent — Route specialist agent work with Jev intent checks",
+      "h1": "vexjoy-agent — Route specialist agent work with Jev intent checks",
+      "description": "vexjoy-agent: Its /d route uses Jev to classify the request and check that the proposed outcome preserves the user’s intent before dispatch.",
+      "summary": "VexJoy Agent connects requests to specialist agents, reusable skills and workflows across supported coding runtimes. Install the toolkit for the desired runtime and configure direct TypeSafe or Vercel transport; the installer supports a dry-run preview.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "What it does",
+          "text": "VexJoy Agent connects requests to specialist agents, reusable skills and workflows across supported coding runtimes.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "Its /d route uses Jev to classify the request and check that the proposed outcome preserves the user’s intent before dispatch.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Getting started",
+          "text": "Install the toolkit for the desired runtime and configure direct TypeSafe or Vercel transport; the installer supports a dry-run preview.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "Explicit transports do not silently switch. Hook enforcement depends on runtime and tool path; Jev-based context pruning is a separate optional plugin.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "vexjoy-agent — 以 Jev 意图检查分派专业代理任务",
+      "h1": "vexjoy-agent — 以 Jev 意图检查分派专业代理任务",
+      "description": "vexjoy-agent: /d 路由用 Jev 分类请求，并在分派前检查拟定结果是否保留用户意图。",
+      "summary": "VexJoy Agent 将请求连接到支持的编程环境中的专业代理、可复用技能与工作流。 为目标环境安装工具集，配置 TypeSafe 直连或 Vercel 传输；安装器支持 dry-run 预览。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "VexJoy Agent 将请求连接到支持的编程环境中的专业代理、可复用技能与工作流。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "/d 路由用 Jev 分类请求，并在分派前检查拟定结果是否保留用户意图。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "为目标环境安装工具集，配置 TypeSafe 直连或 Vercel 传输；安装器支持 dry-run 预览。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "显式选择的传输不会静默切换。Hook 执行保障取决于环境和工具路径；Jev 上下文裁剪是独立可选插件。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "vexjoy-agent — 以 Jev 意圖檢查分派專業代理工作",
+      "h1": "vexjoy-agent — 以 Jev 意圖檢查分派專業代理工作",
+      "description": "vexjoy-agent: /d 路由利用 Jev 分類請求，並在分派前檢查擬定成果是否保留使用者意圖。",
+      "summary": "VexJoy Agent 將請求連結到支援程式環境中的專業代理、可重用技能及流程。 為目標環境安裝工具組，設定 TypeSafe 直連或 Vercel 傳輸；安裝程式支援 dry-run 預覽。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "VexJoy Agent 將請求連結到支援程式環境中的專業代理、可重用技能及流程。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "/d 路由利用 Jev 分類請求，並在分派前檢查擬定成果是否保留使用者意圖。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "為目標環境安裝工具組，設定 TypeSafe 直連或 Vercel 傳輸；安裝程式支援 dry-run 預覽。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "明確選定的傳輸不會靜默切換。Hook 保障取決於環境與工具路徑；Jev 上下文裁剪是另一個選用外掛。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "vexjoy-agent — Jev で意図を確認して専門エージェントへ割り振る",
+      "h1": "vexjoy-agent — Jev で意図を確認して専門エージェントへ割り振る",
+      "description": "vexjoy-agent: /d は Jev で依頼を分類し、提案した成果がユーザーの意図を保つか確認してから処理を渡します。",
+      "summary": "VexJoy Agent は対応する開発環境で、依頼を専門エージェント、再利用可能なスキル、作業手順に結び付けます。 対象環境に導入し、TypeSafe 直接接続か Vercel を設定します。インストーラーは dry-run で事前確認できます。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "できること",
+          "text": "VexJoy Agent は対応する開発環境で、依頼を専門エージェント、再利用可能なスキル、作業手順に結び付けます。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "/d は Jev で依頼を分類し、提案した成果がユーザーの意図を保つか確認してから処理を渡します。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い始めるには",
+          "text": "対象環境に導入し、TypeSafe 直接接続か Vercel を設定します。インストーラーは dry-run で事前確認できます。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "対象範囲と制約",
+          "text": "明示した接続方式は自動で変わりません。フックの強制力は環境とツール経路次第で、Jev による履歴削減は別の任意プラグインです。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "vexjoy-agent — Jev 의도 검사로 전문 에이전트 작업 배분",
+      "h1": "vexjoy-agent — Jev 의도 검사로 전문 에이전트 작업 배분",
+      "description": "vexjoy-agent: /d는 Jev로 요청을 분류하고 제안된 결과가 사용자 의도를 유지하는지 확인한 뒤 배정합니다.",
+      "summary": "VexJoy Agent는 지원되는 코딩 환경에서 요청을 전문 에이전트, 재사용 스킬, 작업 흐름에 연결합니다. 대상 환경에 도구 모음을 설치하고 TypeSafe 직접 연결 또는 Vercel을 설정합니다. 설치기는 dry-run 미리보기를 지원합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "VexJoy Agent는 지원되는 코딩 환경에서 요청을 전문 에이전트, 재사용 스킬, 작업 흐름에 연결합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "/d는 Jev로 요청을 분류하고 제안된 결과가 사용자 의도를 유지하는지 확인한 뒤 배정합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "대상 환경에 도구 모음을 설치하고 TypeSafe 직접 연결 또는 Vercel을 설정합니다. 설치기는 dry-run 미리보기를 지원합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 제약",
+          "text": "명시한 전송 방식은 자동 전환하지 않습니다. 훅의 강제력은 환경과 도구 경로에 달리며 Jev 맥락 정리는 별도의 선택 플러그인입니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "vexjoy-agent — Agentes con verificación de intención Jev",
+      "h1": "vexjoy-agent — Enrutamiento de especialistas con comprobación de intención Jev",
+      "description": "vexjoy-agent: La ruta /d usa Jev para clasificar la petición y comprobar que el resultado propuesto mantiene la intención antes de despachar.",
+      "summary": "VexJoy Agent conecta peticiones con agentes especialistas, habilidades reutilizables y flujos en entornos de programación compatibles. Instala para el entorno elegido y configura TypeSafe directo o Vercel; el instalador ofrece vista previa dry-run.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "VexJoy Agent conecta peticiones con agentes especialistas, habilidades reutilizables y flujos en entornos de programación compatibles.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "La ruta /d usa Jev para clasificar la petición y comprobar que el resultado propuesto mantiene la intención antes de despachar.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo empezar",
+          "text": "Instala para el entorno elegido y configura TypeSafe directo o Vercel; el instalador ofrece vista previa dry-run.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "Un transporte explícito no cambia silenciosamente. Los controles dependen del entorno y la ruta de herramientas; la poda de contexto con Jev es otro complemento opcional.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "vexjoy-agent — Agents spécialisés et contrôle d’intention Jev",
+      "h1": "vexjoy-agent — Aiguiller les spécialistes avec un contrôle d’intention Jev",
+      "description": "vexjoy-agent: La route /d utilise Jev pour classer la demande et vérifier que le résultat proposé préserve l’intention avant l’affectation.",
+      "summary": "VexJoy Agent relie les demandes à des agents spécialisés, compétences réutilisables et parcours dans les environnements compatibles. Installez pour l’environnement choisi et configurez TypeSafe direct ou Vercel ; l’installateur propose un aperçu dry-run.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "VexJoy Agent relie les demandes à des agents spécialisés, compétences réutilisables et parcours dans les environnements compatibles.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "La route /d utilise Jev pour classer la demande et vérifier que le résultat proposé préserve l’intention avant l’affectation.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Installez pour l’environnement choisi et configurez TypeSafe direct ou Vercel ; l’installateur propose un aperçu dry-run.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "Un transport explicite ne change pas silencieusement. L’application des hooks dépend de l’environnement et du chemin d’outils ; l’élagage Jev est un module facultatif distinct.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "vexjoy-agent — Spezialisten mit Jev-Intentprüfung zuordnen",
+      "h1": "vexjoy-agent — Spezialisten mit Jev-Intentprüfung zuordnen",
+      "description": "vexjoy-agent: Der /d-Pfad klassifiziert mit Jev die Anfrage und prüft vor der Zuweisung, ob das geplante Ergebnis die Nutzerabsicht wahrt.",
+      "summary": "VexJoy Agent verbindet Anfragen mit Spezialagenten, wiederverwendbaren Skills und Abläufen in unterstützten Coding-Umgebungen. Für die gewünschte Umgebung installieren und TypeSafe direkt oder Vercel konfigurieren; der Installer bietet eine dry-run-Vorschau.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "VexJoy Agent verbindet Anfragen mit Spezialagenten, wiederverwendbaren Skills und Abläufen in unterstützten Coding-Umgebungen.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Der /d-Pfad klassifiziert mit Jev die Anfrage und prüft vor der Zuweisung, ob das geplante Ergebnis die Nutzerabsicht wahrt.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Einstieg",
+          "text": "Für die gewünschte Umgebung installieren und TypeSafe direkt oder Vercel konfigurieren; der Installer bietet eine dry-run-Vorschau.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Explizite Transportwahl wird nicht still geändert. Hook-Durchsetzung hängt von Umgebung und Werkzeugpfad ab; Jev-Kontextkürzung ist ein separates optionales Plugin.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "vexjoy-agent — Agentes com verificação de intenção Jev",
+      "h1": "vexjoy-agent — Distribuir tarefas com verificação de intenção pelo Jev",
+      "description": "vexjoy-agent: A rota /d usa Jev para classificar o pedido e conferir se o resultado proposto preserva a intenção antes de encaminhar.",
+      "summary": "O VexJoy Agent conecta pedidos a agentes especialistas, habilidades reutilizáveis e fluxos nos ambientes de programação suportados. Instale para o ambiente desejado e configure TypeSafe direto ou Vercel; o instalador oferece prévia dry-run.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "O VexJoy Agent conecta pedidos a agentes especialistas, habilidades reutilizáveis e fluxos nos ambientes de programação suportados.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "A rota /d usa Jev para classificar o pedido e conferir se o resultado proposto preserva a intenção antes de encaminhar.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como começar",
+          "text": "Instale para o ambiente desejado e configure TypeSafe direto ou Vercel; o instalador oferece prévia dry-run.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "Um transporte explícito não muda silenciosamente. A execução dos hooks depende do ambiente e do caminho de ferramentas; a poda de contexto com Jev é outro plugin opcional.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "vexjoy-agent — Выбор агентов с проверкой намерения Jev",
+      "h1": "vexjoy-agent — Маршрутизация специалистов с проверкой намерения Jev",
+      "description": "vexjoy-agent: Маршрут /d классифицирует запрос через Jev и проверяет сохранение намерения пользователя в предложенном результате до назначения работы.",
+      "summary": "VexJoy Agent связывает запросы со специализированными агентами, повторно используемыми навыками и процессами в поддерживаемых средах. Установите набор для нужной среды и настройте TypeSafe напрямую или Vercel; установщик поддерживает предпросмотр dry-run.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "VexJoy Agent связывает запросы со специализированными агентами, повторно используемыми навыками и процессами в поддерживаемых средах.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Маршрут /d классифицирует запрос через Jev и проверяет сохранение намерения пользователя в предложенном результате до назначения работы.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Начало работы",
+          "text": "Установите набор для нужной среды и настройте TypeSafe напрямую или Vercel; установщик поддерживает предпросмотр dry-run.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Явно выбранный транспорт не меняется скрытно. Действие хуков зависит от среды и пути инструментов; сокращение контекста через Jev — отдельный необязательный плагин.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "vexjoy-agent — Jev से आशय जाँचकर विशेषज्ञ एजेंट चुनें",
+      "h1": "vexjoy-agent — Jev से आशय जाँचकर विशेषज्ञ एजेंट चुनें",
+      "description": "vexjoy-agent: /d मार्ग Jev से अनुरोध वर्गीकृत करता है और काम भेजने से पहले प्रस्तावित परिणाम में उपयोगकर्ता का आशय जाँचता है।",
+      "summary": "VexJoy Agent समर्थित कोडिंग परिवेशों में अनुरोधों को विशेषज्ञ एजेंट, पुनः उपयोग योग्य स्किल और कार्यप्रवाह से जोड़ता है। चुने परिवेश के लिए टूलकिट स्थापित करके सीधा TypeSafe या Vercel सेट करें; इंस्टॉलर dry-run पूर्वावलोकन देता है।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "परियोजना का काम",
+          "text": "VexJoy Agent समर्थित कोडिंग परिवेशों में अनुरोधों को विशेषज्ञ एजेंट, पुनः उपयोग योग्य स्किल और कार्यप्रवाह से जोड़ता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "/d मार्ग Jev से अनुरोध वर्गीकृत करता है और काम भेजने से पहले प्रस्तावित परिणाम में उपयोगकर्ता का आशय जाँचता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "शुरुआत कैसे करें",
+          "text": "चुने परिवेश के लिए टूलकिट स्थापित करके सीधा TypeSafe या Vercel सेट करें; इंस्टॉलर dry-run पूर्वावलोकन देता है।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "स्पष्ट चुना मार्ग चुपचाप नहीं बदलता। Hook प्रवर्तन परिवेश और टूल पथ पर निर्भर है; Jev संदर्भ छँटाई अलग वैकल्पिक प्लगइन है।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "vexjoy-agent — Perutean spesialis dengan pemeriksaan maksud Jev",
+      "h1": "vexjoy-agent — Perutean spesialis dengan pemeriksaan maksud Jev",
+      "description": "vexjoy-agent: Rute /d memakai Jev untuk mengklasifikasi permintaan dan memeriksa apakah hasil usulan mempertahankan maksud pengguna sebelum penugasan.",
+      "summary": "VexJoy Agent menghubungkan permintaan dengan agen spesialis, keterampilan pakai ulang, dan alur kerja pada lingkungan yang didukung. Pasang untuk lingkungan pilihan dan atur TypeSafe langsung atau Vercel; pemasang mendukung pratinjau dry-run.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "VexJoy Agent menghubungkan permintaan dengan agen spesialis, keterampilan pakai ulang, dan alur kerja pada lingkungan yang didukung.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Rute /d memakai Jev untuk mengklasifikasi permintaan dan memeriksa apakah hasil usulan mempertahankan maksud pengguna sebelum penugasan.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara memulai",
+          "text": "Pasang untuk lingkungan pilihan dan atur TypeSafe langsung atau Vercel; pemasang mendukung pratinjau dry-run.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Transport eksplisit tidak berganti diam-diam. Penegakan hook bergantung pada lingkungan dan jalur alat; pemangkasan konteks Jev adalah plugin opsional terpisah.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "vexjoy-agent — Phân công tác tử với kiểm tra ý định bằng Jev",
+      "h1": "vexjoy-agent — Phân công tác tử với kiểm tra ý định bằng Jev",
+      "description": "vexjoy-agent: Luồng /d dùng Jev phân loại yêu cầu và kiểm tra kết quả đề xuất còn giữ ý định người dùng trước khi phân công.",
+      "summary": "VexJoy Agent nối yêu cầu với tác tử chuyên môn, kỹ năng tái sử dụng và quy trình trong các môi trường lập trình hỗ trợ. Cài cho môi trường mong muốn và cấu hình TypeSafe trực tiếp hoặc Vercel; trình cài có xem trước dry-run.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Công dụng",
+          "text": "VexJoy Agent nối yêu cầu với tác tử chuyên môn, kỹ năng tái sử dụng và quy trình trong các môi trường lập trình hỗ trợ.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Luồng /d dùng Jev phân loại yêu cầu và kiểm tra kết quả đề xuất còn giữ ý định người dùng trước khi phân công.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách bắt đầu",
+          "text": "Cài cho môi trường mong muốn và cấu hình TypeSafe trực tiếp hoặc Vercel; trình cài có xem trước dry-run.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Phương thức truyền chọn rõ sẽ không âm thầm đổi. Khả năng thực thi hook phụ thuộc môi trường và đường công cụ; cắt ngữ cảnh bằng Jev là plugin tùy chọn riêng.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "vexjoy-agent — Jev niyet denetimiyle uzman ajan yönlendirmesi",
+      "h1": "vexjoy-agent — Jev niyet denetimiyle uzman ajan yönlendirmesi",
+      "description": "vexjoy-agent: /d yolu Jev ile isteği sınıflandırır ve görevlendirmeden önce önerilen sonucun kullanıcının niyetini koruduğunu denetler.",
+      "summary": "VexJoy Agent desteklenen kodlama ortamlarında istekleri uzman ajanlara, yeniden kullanılabilir becerilere ve iş akışlarına bağlar. İstenen ortam için kurup doğrudan TypeSafe veya Vercel’i yapılandırın; kurucu dry-run önizlemesini destekler.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "VexJoy Agent desteklenen kodlama ortamlarında istekleri uzman ajanlara, yeniden kullanılabilir becerilere ve iş akışlarına bağlar.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "/d yolu Jev ile isteği sınıflandırır ve görevlendirmeden önce önerilen sonucun kullanıcının niyetini koruduğunu denetler.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Başlangıç",
+          "text": "İstenen ortam için kurup doğrudan TypeSafe veya Vercel’i yapılandırın; kurucu dry-run önizlemesini destekler.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Açıkça seçilmiş taşıma yöntemi sessizce değişmez. Hook yaptırımı ortama ve araç yoluna bağlıdır; Jev bağlam budaması ayrı, isteğe bağlı bir eklentidir.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "vexjoy-agent — Agenti con verifica dell’intento Jev",
+      "h1": "vexjoy-agent — Instradare specialisti con controllo dell’intento Jev",
+      "description": "vexjoy-agent: Il percorso /d usa Jev per classificare la richiesta e verificare che l’esito proposto conservi l’intento prima dell’assegnazione.",
+      "summary": "VexJoy Agent collega richieste ad agenti specializzati, competenze riutilizzabili e flussi negli ambienti supportati. Installa per l’ambiente scelto e configura TypeSafe diretto o Vercel; l’installatore offre un’anteprima dry-run.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "VexJoy Agent collega richieste ad agenti specializzati, competenze riutilizzabili e flussi negli ambienti supportati.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Il percorso /d usa Jev per classificare la richiesta e verificare che l’esito proposto conservi l’intento prima dell’assegnazione.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come iniziare",
+          "text": "Installa per l’ambiente scelto e configura TypeSafe diretto o Vercel; l’installatore offre un’anteprima dry-run.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "Un trasporto esplicito non cambia silenziosamente. L’applicazione degli hook dipende da ambiente e percorso degli strumenti; la potatura Jev è un plugin facoltativo separato.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

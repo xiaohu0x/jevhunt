@@ -1,0 +1,768 @@
+{
+  "version": "source-content-v1",
+  "repo": "cobanov/awesome-jev",
+  "repositoryId": 1375694187,
+  "relationship": "resource",
+  "category": "lists",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "bb350810423e3c50a1fae7bafb89cb52cb404b36",
+      "url": "https://github.com/cobanov/awesome-jev/blob/bb350810423e3c50a1fae7bafb89cb52cb404b36/README.md",
+      "sha256": "93af0ba674a937c357013f5ee728619d41edc64b76abecff1c443a3591fe2bfc",
+      "accessedAt": "2026-09-30T07:33:50.973Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "The curated list organizes Jev providers, SDKs, agent workflows, context tools, games and evaluations with source and limitation notes.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 12,
+          "end": 16,
+          "quote": "> A curated, source-backed list of projects built with Jev, TypeSafe AI's System One model for fast, typed, probabilistic decisions.\n\nJev takes program state plus typed questions and returns constrained answers with probabilities. It is designed for software decisions such as classification, routing, scoring, ranking, verification, and guardrails, rather than free-form text generation.\n\nThis list favors public source code, concrete Jev usage, clear limitations, and reproducible evidence. The latest review added **20 source-reviewed integrations, projects, and studies**, bringing the community catalog to **155**, alongside official resources, provider integrations, and related lists. See the [September 20 research notes](research/2026-09-20.md) for pinned source evidence and review boundaries. Review completed September 20, 2026 (Europe/Istanbul); upstream event dates below are UTC."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "It focuses on concrete typed-decision use and separates independent open reproductions from hosted Jev integrations.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 38,
+          "end": 44,
+          "quote": "## Start here\n\n**System One shape:** text or structured state + typed questions → constrained answers + probabilities → deterministic application code.\n\n**Question primitives:** `Choice` selects an option, `Score` evaluates ordered rubric levels, and `Noul` returns a number from 0 to 1 representing the probability of \"yes\". Review or abstention behavior is defined in application code. See the [primitive reference](https://docs.typesafe.ai/primitives).\n\n**Input boundary:** the hosted Jev model is text-only. Browser, audio, image, and robotics projects supply extracted text or structured observations, or use separate perception models. Independent multimodal reproductions are listed separately."
+        },
+        {
+          "source": "source-1",
+          "start": 279,
+          "end": 281,
+          "quote": "## Open reproductions and research\n\nThese projects explore Jev-like interfaces or open implementations. They are independent efforts, not official TypeSafe releases or verified reproductions of its proprietary architecture, RLCD training, or calibration."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Read the Choice, Score and Noul introduction, then follow the relevant workflow category and pinned research notes to source code.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 18,
+          "end": 35,
+          "quote": "## Contents\n\n- [Start here](#start-here)\n- [Recent developments](#recent-developments)\n- [Official resources](#official-resources)\n- [Provider integrations](#provider-integrations)\n- [Framework integrations](#framework-integrations)\n- [SDKs and developer tools](#sdks-and-developer-tools)\n- [Agents, coding, and guardrails](#agents-coding-and-guardrails)\n- [Context and compaction](#context-and-compaction)\n- [Browser and computer use](#browser-and-computer-use)\n- [Routing, data, and workflows](#routing-data-and-workflows)\n- [Games, robotics, and interactive demos](#games-robotics-and-interactive-demos)\n- [Media and creative tools](#media-and-creative-tools)\n- [Open reproductions and research](#open-reproductions-and-research)\n- [Evaluation and calibration](#evaluation-and-calibration)\n- [Guides and cookbooks](#guides-and-cookbooks)\n- [Related lists](#related-lists)"
+        },
+        {
+          "source": "source-1",
+          "start": 38,
+          "end": 44,
+          "quote": "## Start here\n\n**System One shape:** text or structured state + typed questions → constrained answers + probabilities → deterministic application code.\n\n**Question primitives:** `Choice` selects an option, `Score` evaluates ordered rubric levels, and `Noul` returns a number from 0 to 1 representing the probability of \"yes\". Review or abstention behavior is defined in application code. See the [primitive reference](https://docs.typesafe.ai/primitives).\n\n**Input boundary:** the hosted Jev model is text-only. Browser, audio, image, and robotics projects supply extracted text or structured observations, or use separate perception models. Independent multimodal reproductions are listed separately."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "Open reproductions are not verified copies of TypeSafe’s proprietary architecture or training. Linked projects retain their own licenses despite the list’s CC0 license.",
+      "kind": "source-limitation",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 281,
+          "end": 281,
+          "quote": "These projects explore Jev-like interfaces or open implementations. They are independent efforts, not official TypeSafe releases or verified reproductions of its proprietary architecture, RLCD training, or calibration."
+        },
+        {
+          "source": "source-1",
+          "start": 372,
+          "end": 372,
+          "quote": "**License:** [CC0 1.0 Universal](LICENSE). Linked projects keep their own licenses."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "awesome-jev — Jev integrations and research",
+      "h1": "awesome-jev — Source-backed Jev integrations and research",
+      "description": "awesome-jev: The curated list organizes Jev providers, SDKs, agent workflows, context tools, games and evaluations with source and limitation notes.",
+      "summary": "The curated list organizes Jev providers, SDKs, agent workflows, context tools, games and evaluations with source and limitation notes. Read the Choice, Score and Noul introduction, then follow the relevant workflow category and pinned research notes to source code.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "What it does",
+          "text": "The curated list organizes Jev providers, SDKs, agent workflows, context tools, games and evaluations with source and limitation notes.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "It focuses on concrete typed-decision use and separates independent open reproductions from hosted Jev integrations.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Getting started",
+          "text": "Read the Choice, Score and Noul introduction, then follow the relevant workflow category and pinned research notes to source code.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "Open reproductions are not verified copies of TypeSafe’s proprietary architecture or training. Linked projects retain their own licenses despite the list’s CC0 license.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "awesome-jev — 有来源依据的 Jev 集成与研究清单",
+      "h1": "awesome-jev — 有来源依据的 Jev 集成与研究清单",
+      "description": "awesome-jev: 该精选清单按服务商、SDK、智能体工作流、上下文工具、游戏和评估整理 Jev 项目，并附来源与限制说明。",
+      "summary": "该精选清单按服务商、SDK、智能体工作流、上下文工具、游戏和评估整理 Jev 项目，并附来源与限制说明。 先读 Choice、Score 和 Noul 简介，再按工作流分类及固定提交的研究笔记追溯源码。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "该精选清单按服务商、SDK、智能体工作流、上下文工具、游戏和评估整理 Jev 项目，并附来源与限制说明。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "重点是具体的类型化决策用法，并将独立开放复现与托管 Jev 集成分开。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "先读 Choice、Score 和 Noul 简介，再按工作流分类及固定提交的研究笔记追溯源码。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "开放复现并非经验证的 TypeSafe 专有架构或训练复制品。清单采用 CC0，但链接项目仍保留各自许可证。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "awesome-jev — 附來源依據的 Jev 整合與研究清單",
+      "h1": "awesome-jev — 附來源依據的 Jev 整合與研究清單",
+      "description": "awesome-jev: 此精選清單依服務商、SDK、代理流程、上下文工具、遊戲及評估整理 Jev 專案，附上來源和限制。",
+      "summary": "此精選清單依服務商、SDK、代理流程、上下文工具、遊戲及評估整理 Jev 專案，附上來源和限制。 先讀 Choice、Score 和 Noul 簡介，再依流程分類與固定提交的研究筆記追溯原始碼。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "此精選清單依服務商、SDK、代理流程、上下文工具、遊戲及評估整理 Jev 專案，附上來源和限制。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "重點是具體的型別化決策用法，並將獨立開放重製與代管 Jev 整合分開。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "先讀 Choice、Score 和 Noul 簡介，再依流程分類與固定提交的研究筆記追溯原始碼。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "開放重製並非已驗證的 TypeSafe 專有架構或訓練複製品。清單採 CC0，連結專案仍保留各自授權。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "awesome-jev — 出典付きの Jev 統合・研究リスト",
+      "h1": "awesome-jev — 出典付きの Jev 統合・研究リスト",
+      "description": "awesome-jev: Jev の提供元、SDK、エージェント処理、コンテキスト管理、ゲーム、評価を出典と制約付きで整理するリストです。",
+      "summary": "Jev の提供元、SDK、エージェント処理、コンテキスト管理、ゲーム、評価を出典と制約付きで整理するリストです。 Choice、Score、Noul の説明から始め、用途別カテゴリとコミット固定の研究記録からコードへ進めます。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "できること",
+          "text": "Jev の提供元、SDK、エージェント処理、コンテキスト管理、ゲーム、評価を出典と制約付きで整理するリストです。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "具体的な型付き判断の利用を重視し、独立した公開再実装とホストされた Jev の統合を分けています。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い始めるには",
+          "text": "Choice、Score、Noul の説明から始め、用途別カテゴリとコミット固定の研究記録からコードへ進めます。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "対象範囲と制約",
+          "text": "公開再実装は TypeSafe の非公開構造や学習を検証済みの形で再現したものではありません。リストは CC0 ですが、掲載先には各自のライセンスが適用されます。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "awesome-jev — 출처를 갖춘 Jev 통합·연구 목록",
+      "h1": "awesome-jev — 출처를 갖춘 Jev 통합·연구 목록",
+      "description": "awesome-jev: Jev 제공자, SDK, 에이전트 작업, 맥락 도구, 게임, 평가를 출처와 제약 설명으로 정리한 목록입니다.",
+      "summary": "Jev 제공자, SDK, 에이전트 작업, 맥락 도구, 게임, 평가를 출처와 제약 설명으로 정리한 목록입니다. Choice, Score, Noul 소개를 읽고 작업 분류와 커밋이 고정된 연구 기록을 따라 소스를 확인할 수 있습니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "Jev 제공자, SDK, 에이전트 작업, 맥락 도구, 게임, 평가를 출처와 제약 설명으로 정리한 목록입니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "구체적인 타입 기반 판단 사용을 중시하고 독립 공개 재구현과 호스팅 Jev 통합을 구분합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "Choice, Score, Noul 소개를 읽고 작업 분류와 커밋이 고정된 연구 기록을 따라 소스를 확인할 수 있습니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 제약",
+          "text": "공개 재구현은 TypeSafe 비공개 구조나 학습의 검증된 복제본이 아닙니다. 목록은 CC0이지만 연결된 프로젝트는 각자 라이선스를 유지합니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "awesome-jev — Integraciones e investigación Jev",
+      "h1": "awesome-jev — Lista documentada de integraciones e investigación Jev",
+      "description": "awesome-jev: La lista organiza proveedores, SDK, flujos de agentes, herramientas de contexto, juegos y evaluaciones con fuentes y límites.",
+      "summary": "La lista organiza proveedores, SDK, flujos de agentes, herramientas de contexto, juegos y evaluaciones con fuentes y límites. Lee la introducción a Choice, Score y Noul; después sigue una categoría y las notas con commits fijados hasta el código.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "La lista organiza proveedores, SDK, flujos de agentes, herramientas de contexto, juegos y evaluaciones con fuentes y límites.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Prioriza usos concretos de decisiones tipadas y separa reproducciones abiertas independientes de integraciones con Jev alojado.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo empezar",
+          "text": "Lee la introducción a Choice, Score y Noul; después sigue una categoría y las notas con commits fijados hasta el código.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "Las reproducciones no son copias verificadas de la arquitectura o entrenamiento propietarios de TypeSafe. Los proyectos enlazados conservan sus licencias aunque la lista sea CC0.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "awesome-jev — Intégrations et recherches Jev",
+      "h1": "awesome-jev — Liste sourcée d’intégrations et de recherches Jev",
+      "description": "awesome-jev: La liste classe fournisseurs, SDK, parcours d’agents, outils de contexte, jeux et évaluations avec sources et limites.",
+      "summary": "La liste classe fournisseurs, SDK, parcours d’agents, outils de contexte, jeux et évaluations avec sources et limites. Lisez l’introduction à Choice, Score et Noul, puis suivez les catégories et notes à commits figés jusqu’au code.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "La liste classe fournisseurs, SDK, parcours d’agents, outils de contexte, jeux et évaluations avec sources et limites.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Elle privilégie les usages concrets de décisions typées et sépare reproductions ouvertes indépendantes et intégrations Jev hébergées.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Lisez l’introduction à Choice, Score et Noul, puis suivez les catégories et notes à commits figés jusqu’au code.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "Les reproductions ne sont pas des copies vérifiées de l’architecture ou de l’entraînement propriétaires de TypeSafe. Les projets liés gardent leurs licences malgré la licence CC0 de la liste.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "awesome-jev — Belegte Jev-Integrationen und Forschung",
+      "h1": "awesome-jev — Belegte Jev-Integrationen und Forschung",
+      "description": "awesome-jev: Die Liste ordnet Anbieter, SDKs, Agentenabläufe, Kontextwerkzeuge, Spiele und Auswertungen mit Quellen und Einschränkungen.",
+      "summary": "Die Liste ordnet Anbieter, SDKs, Agentenabläufe, Kontextwerkzeuge, Spiele und Auswertungen mit Quellen und Einschränkungen. Die Einführung in Choice, Score und Noul lesen und dann Kategorien sowie commitgebundenen Forschungsnotizen zum Quellcode folgen.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "Die Liste ordnet Anbieter, SDKs, Agentenabläufe, Kontextwerkzeuge, Spiele und Auswertungen mit Quellen und Einschränkungen.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Sie konzentriert sich auf konkrete typisierte Entscheidungen und trennt unabhängige offene Nachbildungen von gehosteten Jev-Integrationen.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Einstieg",
+          "text": "Die Einführung in Choice, Score und Noul lesen und dann Kategorien sowie commitgebundenen Forschungsnotizen zum Quellcode folgen.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Offene Nachbildungen sind keine verifizierten Kopien der proprietären Architektur oder des Trainings von TypeSafe. Verlinkte Projekte behalten trotz CC0-Lizenz der Liste ihre eigenen Lizenzen.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "awesome-jev — Integrações e pesquisas Jev",
+      "h1": "awesome-jev — Lista documentada de integrações e pesquisas Jev",
+      "description": "awesome-jev: A lista organiza provedores, SDKs, fluxos de agentes, ferramentas de contexto, jogos e avaliações com fontes e limitações.",
+      "summary": "A lista organiza provedores, SDKs, fluxos de agentes, ferramentas de contexto, jogos e avaliações com fontes e limitações. Leia a introdução a Choice, Score e Noul; depois siga categorias e notas com commits fixados até o código.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "A lista organiza provedores, SDKs, fluxos de agentes, ferramentas de contexto, jogos e avaliações com fontes e limitações.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "Prioriza usos concretos de decisões tipadas e separa reproduções abertas independentes de integrações com Jev hospedado.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como começar",
+          "text": "Leia a introdução a Choice, Score e Noul; depois siga categorias e notas com commits fixados até o código.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "Reproduções não são cópias verificadas da arquitetura ou do treinamento proprietários da TypeSafe. Projetos vinculados mantêm suas licenças, apesar da licença CC0 da lista.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "awesome-jev — Интеграции и исследования Jev",
+      "h1": "awesome-jev — Подкреплённый источниками список интеграций и исследований Jev",
+      "description": "awesome-jev: Список группирует провайдеров, SDK, процессы агентов, инструменты контекста, игры и оценки с источниками и ограничениями.",
+      "summary": "Список группирует провайдеров, SDK, процессы агентов, инструменты контекста, игры и оценки с источниками и ограничениями. Изучите Choice, Score и Noul, затем следуйте категориям и исследовательским заметкам с фиксированными коммитами к коду.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Список группирует провайдеров, SDK, процессы агентов, инструменты контекста, игры и оценки с источниками и ограничениями.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Он сосредоточен на конкретных типизированных решениях и отделяет независимые открытые реализации от интеграций облачного Jev.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Начало работы",
+          "text": "Изучите Choice, Score и Noul, затем следуйте категориям и исследовательским заметкам с фиксированными коммитами к коду.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Открытые реализации не являются проверенными копиями закрытой архитектуры или обучения TypeSafe. У связанных проектов свои лицензии, несмотря на CC0 самого списка.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "awesome-jev — स्रोत-समर्थित Jev एकीकरण और शोध सूची",
+      "h1": "awesome-jev — स्रोत-समर्थित Jev एकीकरण और शोध सूची",
+      "description": "awesome-jev: यह सूची स्रोत व सीमाओं के साथ प्रदाता, SDK, एजेंट कार्यप्रवाह, संदर्भ टूल, गेम और मूल्यांकन व्यवस्थित करती है।",
+      "summary": "यह सूची स्रोत व सीमाओं के साथ प्रदाता, SDK, एजेंट कार्यप्रवाह, संदर्भ टूल, गेम और मूल्यांकन व्यवस्थित करती है। Choice, Score और Noul परिचय पढ़ें, फिर संबंधित श्रेणी और निश्चित कमिट वाले शोध नोट से कोड तक जाएँ।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "परियोजना का काम",
+          "text": "यह सूची स्रोत व सीमाओं के साथ प्रदाता, SDK, एजेंट कार्यप्रवाह, संदर्भ टूल, गेम और मूल्यांकन व्यवस्थित करती है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "यह ठोस प्रकार-निर्धारित निर्णयों पर केंद्रित है और स्वतंत्र खुले पुनर्निर्माणों को होस्टेड Jev एकीकरण से अलग रखती है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "शुरुआत कैसे करें",
+          "text": "Choice, Score और Noul परिचय पढ़ें, फिर संबंधित श्रेणी और निश्चित कमिट वाले शोध नोट से कोड तक जाएँ।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "खुले पुनर्निर्माण TypeSafe की मालिकाना वास्तुकला या प्रशिक्षण की सत्यापित प्रतियाँ नहीं हैं। सूची CC0 है, पर जुड़े प्रोजेक्ट अपने लाइसेंस रखते हैं।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "awesome-jev — Integrasi dan riset Jev",
+      "h1": "awesome-jev — Daftar integrasi dan riset Jev berbasis sumber",
+      "description": "awesome-jev: Daftar ini mengatur penyedia, SDK, alur agen, alat konteks, permainan, dan evaluasi beserta sumber dan batasannya.",
+      "summary": "Daftar ini mengatur penyedia, SDK, alur agen, alat konteks, permainan, dan evaluasi beserta sumber dan batasannya. Baca pengantar Choice, Score, dan Noul, lalu ikuti kategori serta catatan riset ber-commit tetap menuju kode.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "Daftar ini mengatur penyedia, SDK, alur agen, alat konteks, permainan, dan evaluasi beserta sumber dan batasannya.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Fokusnya penggunaan keputusan bertipe yang konkret, dengan pemisahan reproduksi terbuka independen dan integrasi Jev terhosting.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara memulai",
+          "text": "Baca pengantar Choice, Score, dan Noul, lalu ikuti kategori serta catatan riset ber-commit tetap menuju kode.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Reproduksi terbuka bukan salinan terverifikasi arsitektur atau pelatihan tertutup TypeSafe. Proyek tertaut mempertahankan lisensi sendiri meski daftar berlisensi CC0.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "awesome-jev — Tích hợp và nghiên cứu Jev",
+      "h1": "awesome-jev — Danh sách tích hợp và nghiên cứu Jev có nguồn dẫn",
+      "description": "awesome-jev: Danh sách sắp xếp nhà cung cấp, SDK, quy trình tác tử, công cụ ngữ cảnh, trò chơi và đánh giá cùng nguồn, giới hạn.",
+      "summary": "Danh sách sắp xếp nhà cung cấp, SDK, quy trình tác tử, công cụ ngữ cảnh, trò chơi và đánh giá cùng nguồn, giới hạn. Đọc giới thiệu Choice, Score và Noul, rồi theo nhóm quy trình và ghi chú nghiên cứu cố định commit đến mã nguồn.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Công dụng",
+          "text": "Danh sách sắp xếp nhà cung cấp, SDK, quy trình tác tử, công cụ ngữ cảnh, trò chơi và đánh giá cùng nguồn, giới hạn.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Tập trung vào cách dùng quyết định có kiểu cụ thể và tách bản tái tạo mở độc lập khỏi tích hợp Jev trên dịch vụ.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách bắt đầu",
+          "text": "Đọc giới thiệu Choice, Score và Noul, rồi theo nhóm quy trình và ghi chú nghiên cứu cố định commit đến mã nguồn.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Bản tái tạo mở không phải bản sao đã xác minh của kiến trúc hay huấn luyện độc quyền TypeSafe. Dự án liên kết giữ giấy phép riêng dù danh sách dùng CC0.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "awesome-jev — Jev entegrasyonları ve araştırmaları",
+      "h1": "awesome-jev — Kaynaklı Jev entegrasyonları ve araştırmaları listesi",
+      "description": "awesome-jev: Liste sağlayıcıları, SDK’leri, ajan akışlarını, bağlam araçlarını, oyunları ve değerlendirmeleri kaynak ve sınırlama notlarıyla düzenler.",
+      "summary": "Liste sağlayıcıları, SDK’leri, ajan akışlarını, bağlam araçlarını, oyunları ve değerlendirmeleri kaynak ve sınırlama notlarıyla düzenler. Choice, Score ve Noul girişini okuyup ilgili kategorileri ve commit’e sabitlenmiş araştırma notlarını koda kadar izleyin.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "Liste sağlayıcıları, SDK’leri, ajan akışlarını, bağlam araçlarını, oyunları ve değerlendirmeleri kaynak ve sınırlama notlarıyla düzenler.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Somut türlenmiş karar kullanımına odaklanır; bağımsız açık yeniden yapımları barındırılan Jev entegrasyonlarından ayırır.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Başlangıç",
+          "text": "Choice, Score ve Noul girişini okuyup ilgili kategorileri ve commit’e sabitlenmiş araştırma notlarını koda kadar izleyin.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Açık yeniden yapımlar TypeSafe’in özel mimarisi veya eğitiminin doğrulanmış kopyaları değildir. Liste CC0 olsa da bağlı projeler kendi lisanslarını korur.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "awesome-jev — Integrazioni e ricerche Jev",
+      "h1": "awesome-jev — Elenco documentato di integrazioni e ricerche Jev",
+      "description": "awesome-jev: L’elenco organizza fornitori, SDK, flussi di agenti, strumenti di contesto, giochi e valutazioni con fonti e limiti.",
+      "summary": "L’elenco organizza fornitori, SDK, flussi di agenti, strumenti di contesto, giochi e valutazioni con fonti e limiti. Leggi Choice, Score e Noul, poi segui categorie e note di ricerca fissate a commit fino al codice.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "L’elenco organizza fornitori, SDK, flussi di agenti, strumenti di contesto, giochi e valutazioni con fonti e limiti.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Privilegia usi concreti di decisioni tipizzate e separa riproduzioni aperte indipendenti da integrazioni Jev ospitate.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come iniziare",
+          "text": "Leggi Choice, Score e Noul, poi segui categorie e note di ricerca fissate a commit fino al codice.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "Le riproduzioni non sono copie verificate dell’architettura o dell’addestramento proprietari TypeSafe. I progetti collegati mantengono le proprie licenze anche se l’elenco è CC0.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

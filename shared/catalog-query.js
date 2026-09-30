@@ -1,5 +1,6 @@
 import { activeClause, CATEGORY_IDS, CATEGORY_NAMES, cleanText } from "./catalog-data.js";
 import { LOCALES } from "./locales.js";
+import { localizeCatalogProjects } from "./project-content-store.js";
 
 const KINDS = ["jev-app", "integration", "sdk", "local-alternative", "research", "resource", "unclassified"];
 const tieBreak = "stars DESC, name COLLATE NOCASE, repo";
@@ -39,6 +40,7 @@ export function catalogCacheRequest(url, query, revision) {
   const key = new URL(url.origin + url.pathname);
   key.searchParams.set("mode", query.mode);
   key.searchParams.set("full", query.full ? "1" : "0");
+  key.searchParams.set("locale", query.locale);
   if (query.mode === "page") {
     for (const field of ["page", "pageSize", "q", "category", "kind", "language", "activity", "sort", "locale"]) {
       key.searchParams.set(field, String(query[field]));
@@ -64,10 +66,10 @@ function filters(query, messages) {
     const pattern = "%" + query.q.replace(/[\\%_]/g, "\\$&") + "%";
     const categoryMatches = CATEGORY_IDS.filter((id, i) =>
       [id, CATEGORY_NAMES[i], messages[`category.${id}.name`]].filter(Boolean).join(" ").toLowerCase().includes(query.q));
-    const text = "name || ' ' || repo || ' ' || COALESCE(json_extract(payload, '$.desc'), '') || ' ' || COALESCE(language, '')";
+    const text = "name || ' ' || repo || ' ' || COALESCE(json_extract(payload, '$.desc'), '') || ' ' || COALESCE(json_extract(payload, '$.content.summary'), '') || ' ' || COALESCE((SELECT l.search_text FROM project_content_locales l JOIN project_content c ON c.repo=l.repo AND c.content_hash=l.content_hash WHERE l.repo=catalog_entries.repo AND c.github_id=catalog_entries.github_id AND l.locale=?), '') || ' ' || COALESCE(language, '')";
     const categoryClause = categoryMatches.length ? ` OR category IN (${categoryMatches.map(() => "?").join(",")})` : "";
     clauses.push(`((${text}) LIKE ? ESCAPE '\\'${categoryClause})`);
-    values.push(pattern, ...categoryMatches);
+    values.push(query.locale, pattern, ...categoryMatches);
   }
   return { where: clauses.join(" AND "), values };
 }
@@ -80,5 +82,7 @@ export async function readCatalogPage(DB, query, messages = {}) {
   const page = Math.min(query.page, totalPages), offset = (page - 1) * pageSize;
   const result = await DB.prepare(`SELECT ${query.full ? "payload" : "preview"} AS data FROM catalog_entries WHERE ${where} ORDER BY ${SORT_SQL[query.sort]} LIMIT ? OFFSET ?`)
     .bind(...values, pageSize, offset).all();
-  return { apps: result.results.map(row => JSON.parse(row.data)), pagination: { page, pageSize, total, totalPages, start: total ? offset + 1 : 0, end: Math.min(total, offset + pageSize) } };
+  const projects = result.results.map(row => JSON.parse(row.data));
+  const apps = query.full ? projects : await localizeCatalogProjects(DB, projects, query.locale);
+  return { apps, pagination: { page, pageSize, total, totalPages, start: total ? offset + 1 : 0, end: Math.min(total, offset + pageSize) } };
 }

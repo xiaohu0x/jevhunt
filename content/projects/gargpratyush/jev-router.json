@@ -1,0 +1,762 @@
+{
+  "version": "source-content-v1",
+  "repo": "gargpratyush/jev-router",
+  "repositoryId": 1373617155,
+  "relationship": "integration",
+  "category": "agents",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "38da6b84ea01241bfc41fbddc0928d0f40a703f0",
+      "url": "https://github.com/gargpratyush/jev-router/blob/38da6b84ea01241bfc41fbddc0928d0f40a703f0/README.md",
+      "sha256": "524ceebedd33b12af674aa6b6b83032befa5b37d277fea73c88a2a64c2874248",
+      "accessedAt": "2026-09-30T07:33:50.801Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "jev-router launches the native coding CLIs through a local proxy and selects a model tier for each new user turn.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 3,
+          "end": 12,
+          "quote": "Automatic per-turn model routing for Claude Code and OpenAI Codex. Jev sends simple work to\nthe fast tier and difficult work to the strong tier, while preserving each CLI's native\ninterface, tools, sessions, permissions, and authentication.\n\n| Command | Interface | Authentication | Routing decision |\n| --- | --- | --- | --- |\n| `jev-claude` | Claude Code | Existing `claude login` | Status line |\n| `jev-codex` | OpenAI Codex | Existing `codex login` | Commentary line |\n\nBoth commands launch the real upstream CLI. Jev only chooses the model for a fresh user turn."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "One Jev call recommends a tier; local policy honors explicit model requests, confidence gates and conversation size before routing.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 180,
+          "end": 200,
+          "quote": "## Routing policy\n\nOne Jev call per fresh user turn selects a shared abstract tier:\n\n| Tier | Claude Code default | Codex default |\n| --- | --- | --- |\n| Fast | Haiku | `gpt-5.6-luna` |\n| Balanced | Sonnet | `gpt-5.6-terra` |\n| Strong | Opus | `gpt-5.6-sol` |\n| Long | Fable | `gpt-6-astra` |\n\n`src/policy.mjs` then applies these rules:\n\n- explicit requests such as `use opus`, `use luna`, or `use strong` win;\n- failure, timeout, or an unrecognised Jev answer keeps the current model;\n- low confidence never downgrades and caps upgrades at the balanced tier;\n- large conversations refuse downgrades that would waste more prompt-cache work than they save;\n- unavailable tiers step upward rather than silently choosing a weaker model;\n- the long tier is disabled unless `JEV_ALLOW_FABLE=1`.\n\nTool-loop continuations keep the tier chosen at the start of the turn. Main conversations and"
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Install jev-router with npm, configure JEV_API_KEY, and launch jev-claude or jev-codex with an installed, authenticated upstream CLI.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 16,
+          "end": 25,
+          "quote": "Requires Node.js 20.12+ and at least one supported CLI:\n[Claude Code](https://code.claude.com/docs/en/setup) or\n[OpenAI Codex](https://developers.openai.com/codex/cli).\n\n### 1. npm package\n\n```bash\nnpm install -g jev-router\necho \"JEV_API_KEY=...\" > ~/.jev-router.env\n```"
+        },
+        {
+          "source": "source-1",
+          "start": 43,
+          "end": 49,
+          "quote": "Get a key from [TypeSafe](https://docs.typesafe.ai). Then launch either interface from any\nrepository:\n\n```bash\njev-claude\njev-codex\n```"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "Tool continuations keep their initial tier; Jev failure keeps the current model. Temporary explanation files contain the prompt and exact routing exchange.",
+      "kind": "source-limitation",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 193,
+          "end": 200,
+          "quote": "- explicit requests such as `use opus`, `use luna`, or `use strong` win;\n- failure, timeout, or an unrecognised Jev answer keeps the current model;\n- low confidence never downgrades and caps upgrades at the balanced tier;\n- large conversations refuse downgrades that would waste more prompt-cache work than they save;\n- unavailable tiers step upward rather than silently choosing a weaker model;\n- the long tier is disabled unless `JEV_ALLOW_FABLE=1`.\n\nTool-loop continuations keep the tier chosen at the start of the turn. Main conversations and"
+        },
+        {
+          "source": "source-1",
+          "start": 130,
+          "end": 134,
+          "quote": "Claude filenames use Claude Code's session UUID. Codex filenames use\n`codex-<jev-codex-process-id>.json`. These temporary files contain prompt text and Jev's exact\nrequest and response, so they are readable only by you (the directory is created with mode 700 and each\nfile with 600). Files not updated for 7 days are deleted automatically, and the operating system\nmay also remove them during normal temporary-file cleanup."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "jev-router — Models per Claude Code/Codex turn",
+      "h1": "jev-router — Per-turn model routing for Claude Code and Codex",
+      "description": "jev-router: Let Jev recommend a model tier for each new Claude Code or Codex turn, with local confidence rules and native CLI sessions.",
+      "summary": "jev-router launches the native coding CLIs through a local proxy and selects a model tier for each new user turn. Install jev-router with npm, configure JEV_API_KEY, and launch jev-claude or jev-codex with an installed, authenticated upstream CLI.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "What it does",
+          "text": "jev-router launches the native coding CLIs through a local proxy and selects a model tier for each new user turn.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "One Jev call recommends a tier; local policy honors explicit model requests, confidence gates and conversation size before routing.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Getting started",
+          "text": "Install jev-router with npm, configure JEV_API_KEY, and launch jev-claude or jev-codex with an installed, authenticated upstream CLI.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "Tool continuations keep their initial tier; Jev failure keeps the current model. Temporary explanation files contain the prompt and exact routing exchange.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "jev-router — 为 Claude Code 与 Codex 按轮选择模型",
+      "h1": "jev-router — 为 Claude Code 与 Codex 按轮选择模型",
+      "description": "jev-router: 由 Jev 为 Claude Code 或 Codex 新轮次推荐模型档位，本地置信度规则控制路由，并沿用原生 CLI 会话。",
+      "summary": "jev-router 通过本地代理启动原生编程 CLI，并为每个新用户轮次选择模型档位。 用 npm 安装 jev-router，配置 JEV_API_KEY，在上游 CLI 已安装并登录后运行 jev-claude 或 jev-codex。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "jev-router 通过本地代理启动原生编程 CLI，并为每个新用户轮次选择模型档位。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "每轮一次 Jev 调用推荐档位，本地策略再处理显式模型要求、置信度门槛和对话大小。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "用 npm 安装 jev-router，配置 JEV_API_KEY，在上游 CLI 已安装并登录后运行 jev-claude 或 jev-codex。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "工具续轮沿用初始档位；Jev 失败时保留当前模型。临时解释文件会保存提示词及完整路由请求和响应。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "jev-router — 為 Claude Code 與 Codex 逐輪選擇模型",
+      "h1": "jev-router — 為 Claude Code 與 Codex 逐輪選擇模型",
+      "description": "jev-router: 由 Jev 為 Claude Code 或 Codex 新回合推薦模型層級，以本機信心規則控制路由並沿用原生 CLI 工作階段。",
+      "summary": "jev-router 透過本機代理啟動原生程式 CLI，為每個新的使用者回合選擇模型層級。 以 npm 安裝 jev-router，設定 JEV_API_KEY，在上游 CLI 已安裝並登入後執行 jev-claude 或 jev-codex。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "jev-router 透過本機代理啟動原生程式 CLI，為每個新的使用者回合選擇模型層級。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "每回合一次 Jev 呼叫建議層級，本機策略再處理明確模型要求、信心門檻與對話大小。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "以 npm 安裝 jev-router，設定 JEV_API_KEY，在上游 CLI 已安裝並登入後執行 jev-claude 或 jev-codex。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "工具後續步驟沿用初始層級；Jev 失敗時保留目前模型。暫存解釋檔會保存提示詞與完整路由請求及回應。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "jev-router — 各ターンの Claude Code/Codex モデル",
+      "h1": "jev-router — Claude Code と Codex のターン別モデル選択",
+      "description": "jev-router: Claude Code と Codex の新しいターンで Jev がモデル階層を提案。ローカルの信頼度規則と元の CLI セッションを使います。",
+      "summary": "jev-router はローカルプロキシ経由で本来の CLI を起動し、新しいユーザーターンごとにモデルの階層を選びます。 npm で導入して JEV_API_KEY を設定し、元の CLI を導入・認証したうえで jev-claude または jev-codex を起動します。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "できること",
+          "text": "jev-router はローカルプロキシ経由で本来の CLI を起動し、新しいユーザーターンごとにモデルの階層を選びます。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "1回の Jev 呼び出しが階層を提案し、ローカル方針が明示的なモデル指定、信頼度、会話量を考慮します。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い始めるには",
+          "text": "npm で導入して JEV_API_KEY を設定し、元の CLI を導入・認証したうえで jev-claude または jev-codex を起動します。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "対象範囲と制約",
+          "text": "ツール処理の継続中は最初の階層を維持し、Jev が失敗すると現在のモデルを保持します。説明用の一時ファイルにはプロンプトと判断の送受信内容が残ります。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "jev-router — Claude Code와 Codex의 턴별 모델 선택",
+      "h1": "jev-router — Claude Code와 Codex의 턴별 모델 선택",
+      "description": "jev-router: Claude Code와 Codex 새 턴마다 Jev가 모델 등급을 추천하며 로컬 신뢰도 규칙과 원래 CLI 세션을 사용합니다.",
+      "summary": "jev-router는 로컬 프록시로 원래 코딩 CLI를 실행하고 새 사용자 턴마다 모델 등급을 고릅니다. npm으로 설치해 JEV_API_KEY를 설정하고 원래 CLI의 설치와 인증을 마친 뒤 jev-claude 또는 jev-codex를 실행합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "jev-router는 로컬 프록시로 원래 코딩 CLI를 실행하고 새 사용자 턴마다 모델 등급을 고릅니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "한 번의 Jev 호출이 등급을 추천하며 로컬 정책이 명시적 모델 요청, 신뢰도 기준, 대화 크기를 반영합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "npm으로 설치해 JEV_API_KEY를 설정하고 원래 CLI의 설치와 인증을 마친 뒤 jev-claude 또는 jev-codex를 실행합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 제약",
+          "text": "도구 후속 실행은 처음 등급을 유지하며 Jev 실패 시 현재 모델을 유지합니다. 임시 설명 파일에는 프롬프트와 정확한 라우팅 요청·응답이 저장됩니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "jev-router — Modelos por turno: Claude Code y Codex",
+      "h1": "jev-router — Selección de modelo por turno en Claude Code y Codex",
+      "description": "jev-router: Jev recomienda un nivel por turno nuevo de Claude Code o Codex, con reglas locales de confianza y sesiones CLI nativas.",
+      "summary": "jev-router lanza las CLI originales mediante un proxy local y selecciona un nivel de modelo para cada nuevo turno del usuario. Instala con npm, configura JEV_API_KEY y ejecuta jev-claude o jev-codex con la CLI original instalada y autenticada.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "jev-router lanza las CLI originales mediante un proxy local y selecciona un nivel de modelo para cada nuevo turno del usuario.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Una llamada a Jev recomienda el nivel; la política local respeta modelos explícitos, confianza y tamaño de conversación.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo empezar",
+          "text": "Instala con npm, configura JEV_API_KEY y ejecuta jev-claude o jev-codex con la CLI original instalada y autenticada.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "Las continuaciones de herramientas conservan el nivel inicial; si Jev falla se mantiene el modelo. Los archivos temporales de explicación guardan el prompt y el intercambio exacto de enrutamiento.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "jev-router — Modèle par tour : Claude Code/Codex",
+      "h1": "jev-router — Choix du modèle par tour pour Claude Code et Codex",
+      "description": "jev-router: Jev recommande un niveau par nouveau tour Claude Code ou Codex, avec règles locales de confiance et sessions CLI natives.",
+      "summary": "jev-router lance les CLI natives via un proxy local et choisit un niveau de modèle à chaque nouveau tour utilisateur. Installez avec npm, configurez JEV_API_KEY puis lancez jev-claude ou jev-codex avec la CLI d’origine installée et authentifiée.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "jev-router lance les CLI natives via un proxy local et choisit un niveau de modèle à chaque nouveau tour utilisateur.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Un appel Jev recommande le niveau ; la politique locale respecte le modèle demandé, la confiance et la taille de conversation.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Installez avec npm, configurez JEV_API_KEY puis lancez jev-claude ou jev-codex avec la CLI d’origine installée et authentifiée.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "Les suites d’appels d’outils gardent le niveau initial ; un échec Jev conserve le modèle courant. Les fichiers temporaires d’explication contiennent le prompt et l’échange exact de routage.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "jev-router — Claude Code/Codex: Modell pro Turn",
+      "h1": "jev-router — Modellauswahl pro Turn für Claude Code und Codex",
+      "description": "jev-router: Jev empfiehlt Modellstufen für neue Claude-Code- oder Codex-Turns, mit lokalen Konfidenzregeln und nativen CLI-Sitzungen.",
+      "summary": "jev-router startet die ursprünglichen Coding-CLIs über einen lokalen Proxy und wählt für jeden neuen Nutzerturn eine Modellstufe. Mit npm installieren, JEV_API_KEY setzen und jev-claude oder jev-codex mit installierter und authentifizierter Original-CLI starten.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "jev-router startet die ursprünglichen Coding-CLIs über einen lokalen Proxy und wählt für jeden neuen Nutzerturn eine Modellstufe.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Ein Jev-Aufruf empfiehlt die Stufe; lokale Regeln berücksichtigen ausdrückliche Modellwünsche, Konfidenz und Gesprächsgröße.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Einstieg",
+          "text": "Mit npm installieren, JEV_API_KEY setzen und jev-claude oder jev-codex mit installierter und authentifizierter Original-CLI starten.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Fortgesetzte Werkzeugaufrufe behalten ihre Anfangsstufe; bei Jev-Ausfall bleibt das Modell erhalten. Temporäre Erklärungsdateien enthalten Prompt und exakten Routing-Austausch.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "jev-router — Modelo por turno: Claude Code e Codex",
+      "h1": "jev-router — Seleção de modelo por turno no Claude Code e Codex",
+      "description": "jev-router: Jev recomenda níveis por turno novo do Claude Code ou Codex, com regras locais de confiança e sessões CLI nativas.",
+      "summary": "O jev-router inicia as CLIs nativas por um proxy local e escolhe um nível de modelo a cada novo turno do usuário. Instale com npm, configure JEV_API_KEY e execute jev-claude ou jev-codex com a CLI original instalada e autenticada.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "O jev-router inicia as CLIs nativas por um proxy local e escolhe um nível de modelo a cada novo turno do usuário.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "Uma chamada ao Jev recomenda o nível; a política local respeita pedidos explícitos, confiança e tamanho da conversa.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como começar",
+          "text": "Instale com npm, configure JEV_API_KEY e execute jev-claude ou jev-codex com a CLI original instalada e autenticada.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "Continuações de ferramentas mantêm o nível inicial; falhas do Jev preservam o modelo atual. Arquivos temporários de explicação contêm o prompt e a troca exata do roteamento.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "jev-router — Модель на ход Claude Code/Codex",
+      "h1": "jev-router — Выбор модели на каждый ход Claude Code и Codex",
+      "description": "jev-router: Jev рекомендует уровень модели на новый ход Claude Code или Codex с локальными правилами уверенности и исходной CLI.",
+      "summary": "jev-router запускает исходные CLI через локальный прокси и выбирает уровень модели для каждого нового хода пользователя. Установите через npm, задайте JEV_API_KEY и запустите jev-claude или jev-codex с установленной и авторизованной исходной CLI.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "jev-router запускает исходные CLI через локальный прокси и выбирает уровень модели для каждого нового хода пользователя.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Один вызов Jev рекомендует уровень; локальные правила учитывают явный выбор модели, уверенность и размер беседы.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Начало работы",
+          "text": "Установите через npm, задайте JEV_API_KEY и запустите jev-claude или jev-codex с установленной и авторизованной исходной CLI.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Продолжения работы инструментов сохраняют начальный уровень; сбой Jev оставляет текущую модель. Временные файлы объяснения содержат промпт и точный обмен маршрутизации.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "jev-router — Claude Code/Codex के हर टर्न का मॉडल",
+      "h1": "jev-router — Claude Code और Codex में हर टर्न पर मॉडल चयन",
+      "description": "jev-router: हर नए Claude Code या Codex टर्न के लिए Jev मॉडल स्तर सुझाता है; स्थानीय विश्वास नियम और मूल CLI सत्र बने रहते हैं।",
+      "summary": "jev-router स्थानीय प्रॉक्सी से मूल कोडिंग CLI चलाता है और हर नए उपयोगकर्ता टर्न के लिए मॉडल स्तर चुनता है। npm से स्थापित करें, JEV_API_KEY सेट करें और मूल CLI स्थापित व प्रमाणित होने पर jev-claude या jev-codex चलाएँ।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "परियोजना का काम",
+          "text": "jev-router स्थानीय प्रॉक्सी से मूल कोडिंग CLI चलाता है और हर नए उपयोगकर्ता टर्न के लिए मॉडल स्तर चुनता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "एक Jev कॉल स्तर सुझाती है; स्थानीय नीति स्पष्ट मॉडल माँग, विश्वास सीमा और बातचीत का आकार देखती है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "शुरुआत कैसे करें",
+          "text": "npm से स्थापित करें, JEV_API_KEY सेट करें और मूल CLI स्थापित व प्रमाणित होने पर jev-claude या jev-codex चलाएँ।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "टूल के अगले चरण शुरुआती स्तर रखते हैं; Jev विफल हो तो वर्तमान मॉडल बना रहता है। अस्थायी व्याख्या फ़ाइलों में प्रॉम्प्ट और पूरा रूटिंग आदान-प्रदान होता है।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "jev-router — Model per giliran Claude Code/Codex",
+      "h1": "jev-router — Pemilihan model per giliran untuk Claude Code dan Codex",
+      "description": "jev-router: Jev menyarankan tingkat model tiap giliran Claude Code atau Codex, dengan aturan keyakinan lokal dan sesi CLI asli.",
+      "summary": "jev-router menjalankan CLI asli melalui proxy lokal dan memilih tingkat model pada setiap giliran pengguna baru. Pasang melalui npm, atur JEV_API_KEY, lalu jalankan jev-claude atau jev-codex dengan CLI asli yang terpasang dan terautentikasi.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "jev-router menjalankan CLI asli melalui proxy lokal dan memilih tingkat model pada setiap giliran pengguna baru.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Satu panggilan Jev menyarankan tingkat; kebijakan lokal mempertimbangkan permintaan model eksplisit, keyakinan, dan ukuran percakapan.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara memulai",
+          "text": "Pasang melalui npm, atur JEV_API_KEY, lalu jalankan jev-claude atau jev-codex dengan CLI asli yang terpasang dan terautentikasi.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Kelanjutan alat mempertahankan tingkat awal; kegagalan Jev mempertahankan model saat ini. Berkas penjelasan sementara menyimpan prompt dan pertukaran perutean persis.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "jev-router — Chọn mô hình mỗi lượt Claude Code/Codex",
+      "h1": "jev-router — Chọn mô hình theo lượt cho Claude Code và Codex",
+      "description": "jev-router: Jev đề xuất cấp mô hình mỗi lượt Claude Code hoặc Codex, dùng quy tắc tin cậy cục bộ và phiên CLI gốc.",
+      "summary": "jev-router khởi chạy CLI gốc qua proxy cục bộ và chọn cấp mô hình cho mỗi lượt mới của người dùng. Cài qua npm, đặt JEV_API_KEY rồi chạy jev-claude hoặc jev-codex khi CLI gốc đã được cài và xác thực.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Công dụng",
+          "text": "jev-router khởi chạy CLI gốc qua proxy cục bộ và chọn cấp mô hình cho mỗi lượt mới của người dùng.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Một lần gọi Jev đề xuất cấp; chính sách cục bộ xét yêu cầu mô hình rõ ràng, ngưỡng tin cậy và kích thước hội thoại.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách bắt đầu",
+          "text": "Cài qua npm, đặt JEV_API_KEY rồi chạy jev-claude hoặc jev-codex khi CLI gốc đã được cài và xác thực.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Các bước công cụ tiếp nối giữ cấp ban đầu; lỗi Jev giữ nguyên mô hình hiện tại. Tệp giải thích tạm chứa prompt và toàn bộ trao đổi định tuyến chính xác.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "jev-router — Claude Code/Codex turuna göre model",
+      "h1": "jev-router — Claude Code ve Codex için tur bazında model seçimi",
+      "description": "jev-router: Jev yeni Claude Code veya Codex turunda model düzeyi önerir; yerel güven kuralları ve asıl CLI oturumları kullanılır.",
+      "summary": "jev-router asıl kodlama CLI’lerini yerel proxy üzerinden başlatır ve her yeni kullanıcı turunda model düzeyi seçer. npm ile kurun, JEV_API_KEY ayarlayın ve asıl CLI kurulup kimliği doğrulandığında jev-claude veya jev-codex çalıştırın.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "jev-router asıl kodlama CLI’lerini yerel proxy üzerinden başlatır ve her yeni kullanıcı turunda model düzeyi seçer.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Tek Jev çağrısı düzey önerir; yerel politika açık model taleplerini, güven eşiklerini ve konuşma büyüklüğünü dikkate alır.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Başlangıç",
+          "text": "npm ile kurun, JEV_API_KEY ayarlayın ve asıl CLI kurulup kimliği doğrulandığında jev-claude veya jev-codex çalıştırın.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Araç devamları ilk düzeyi korur; Jev hatasında mevcut model tutulur. Geçici açıklama dosyaları prompt’u ve yönlendirme alışverişinin tam içeriğini saklar.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "jev-router — Modello per turno Claude Code/Codex",
+      "h1": "jev-router — Scelta del modello per turno in Claude Code e Codex",
+      "description": "jev-router: Jev suggerisce un livello per ogni nuovo turno Claude Code o Codex, con regole locali di confidenza e sessioni CLI native.",
+      "summary": "jev-router avvia le CLI originali tramite un proxy locale e sceglie un livello di modello per ogni nuovo turno utente. Installa con npm, configura JEV_API_KEY e avvia jev-claude o jev-codex con la CLI originale installata e autenticata.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "jev-router avvia le CLI originali tramite un proxy locale e sceglie un livello di modello per ogni nuovo turno utente.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Una chiamata Jev suggerisce il livello; le regole locali rispettano richieste esplicite, confidenza e dimensione della conversazione.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come iniziare",
+          "text": "Installa con npm, configura JEV_API_KEY e avvia jev-claude o jev-codex con la CLI originale installata e autenticata.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "Le continuazioni degli strumenti mantengono il livello iniziale; un errore Jev conserva il modello corrente. I file temporanei di spiegazione contengono prompt e scambio esatto di instradamento.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

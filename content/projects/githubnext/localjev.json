@@ -1,0 +1,762 @@
+{
+  "version": "source-content-v1",
+  "repo": "githubnext/localjev",
+  "repositoryId": 1376174149,
+  "relationship": "local-alternative",
+  "category": "integrations",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "3f23e36e1a3bff46c7e83e8e3781d3512bc82021",
+      "url": "https://github.com/githubnext/localjev/blob/3f23e36e1a3bff46c7e83e8e3781d3512bc82021/README.md",
+      "sha256": "564c82e559058baad9973953f50945865eae152cce19b9e711662780303fbb91",
+      "accessedAt": "2026-09-30T07:33:48.871Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "kind": "documented",
+      "text": "LocalJev translates typed decision requests into DiffusionGemma classification prompts and validates the generated probability output.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 3,
+          "end": 5,
+          "quote": "A local, Jev-compatible `POST /v1/systemone` API written in TypeScript for\n[Bun](https://bun.sh/), backed by DiffusionGemma through an OpenAI-compatible\nChat Completions endpoint."
+        },
+        {
+          "source": "source-1",
+          "start": 24,
+          "end": 29,
+          "quote": "1. translate `state` and typed Jev questions into a classification prompt;\n2. ask DiffusionGemma for a JSON probability scalar/vector;\n3. validate the complete result and retry malformed output;\n4. normalize vectors and calculate Jev-compatible choices, expected scores, and\n   entropy-based confidence;\n5. return the normal Jev response shape."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "kind": "documented",
+      "text": "Its Bun service exposes Jev’s response format through a standard OpenAI-compatible chat backend.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 15,
+          "end": 34,
+          "quote": "[Jev](https://typesafe.ai/) uses a typed decision API rather than an OpenAI chat API.\n[OpenJev](https://github.com/razorback16/openjev) implements the Jev wire protocol and\nobtains probabilities with a special one-step DiffusionGemma **structured read**. Its\nbackend depends on unmerged vLLM request extensions such as\n`diffusion_seed_canvas`, `diffusion_read_only`, and requested token logprobs.\n\nThe normal oMLX API does not expose those primitives. LocalJev therefore takes the\nportable approach:\n\n1. translate `state` and typed Jev questions into a classification prompt;\n2. ask DiffusionGemma for a JSON probability scalar/vector;\n3. validate the complete result and retry malformed output;\n4. normalize vectors and calculate Jev-compatible choices, expected scores, and\n   entropy-based confidence;\n5. return the normal Jev response shape.\n\nThis is wire-compatible, but not mathematically equivalent to OpenJev's logit read.\nThe probabilities are generated/self-reported by the model rather than read directly\nfrom its logits. Evaluate their calibration on your own workload before relying on\nthem for consequential decisions."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "kind": "documented",
+      "text": "Run it with Bun and an oMLX server, then direct TypeSafe SDK clients to the local API.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 36,
+          "end": 44,
+          "quote": "## Run with oMLX\n\nRequires Bun 1.2+ and a running oMLX server.\n\n```sh\nbun install\ncp .env.example .env\n$EDITOR .env # replace the upstream API-key placeholder\nbun run start"
+        },
+        {
+          "source": "source-1",
+          "start": 98,
+          "end": 111,
+          "quote": "## Use the TypeSafe SDK\n\nThe SDK requires an API-key value. LocalJev accepts any value unless\n`LOCALJEV_API_KEY` is configured. Set the SDK environment for your shell:\n\n```fish\n# fish\nset -gx TYPESAFE_BASE_URL http://127.0.0.1:8080\nset -gx TYPESAFE_API_KEY local\n```\n\n```sh\n# bash/zsh\nexport TYPESAFE_BASE_URL=http://127.0.0.1:8080"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "kind": "documented",
+      "text": "Probabilities are model-generated, not direct logits. Wire compatibility does not establish OpenJev-equivalent mathematics or calibration.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 31,
+          "end": 34,
+          "quote": "This is wire-compatible, but not mathematically equivalent to OpenJev's logit read.\nThe probabilities are generated/self-reported by the model rather than read directly\nfrom its logits. Evaluate their calibration on your own workload before relying on\nthem for consequential decisions."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "LocalJev: a local Jev-compatible DiffusionGemma bridge",
+      "h1": "LocalJev: a local Jev-compatible DiffusionGemma bridge",
+      "description": "LocalJev bridges DiffusionGemma chat output to the Jev API on Bun. Probabilities are generated by the model, so compatible responses do not imply calibrated logits.",
+      "summary": "LocalJev translates typed decision requests into DiffusionGemma classification prompts and validates the generated probability output. Its Bun service exposes Jev’s response format through a standard OpenAI-compatible chat backend. Run it with Bun and an oMLX server, then direct TypeSafe SDK clients to the local API.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose",
+          "text": "LocalJev translates typed decision requests into DiffusionGemma classification prompts and validates the generated probability output.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’s role",
+          "text": "Its Bun service exposes Jev’s response format through a standard OpenAI-compatible chat backend.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "How to use it",
+          "text": "Run it with Bun and an oMLX server, then direct TypeSafe SDK clients to the local API.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limits to consider",
+          "text": "Probabilities are model-generated, not direct logits. Wire compatibility does not establish OpenJev-equivalent mathematics or calibration.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "LocalJev：兼容 Jev 的本地 DiffusionGemma 桥接",
+      "h1": "LocalJev：兼容 Jev 的本地 DiffusionGemma 桥接",
+      "description": "LocalJev 在 Bun 上将 DiffusionGemma 聊天输出转换为 Jev API 响应；概率是模型生成值，并非直接读取 logits，协议兼容不代表数学机制或校准等价。",
+      "summary": "LocalJev 将类型化决策请求转为 DiffusionGemma 分类提示词，并校验生成的概率输出。 其 Bun 服务连接标准 OpenAI 兼容聊天后端，对外提供 Jev 响应格式。 使用 Bun 和 oMLX 服务运行，再让 TypeSafe SDK 客户端连接本地 API。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "LocalJev 将类型化决策请求转为 DiffusionGemma 分类提示词，并校验生成的概率输出。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "其 Bun 服务连接标准 OpenAI 兼容聊天后端，对外提供 Jev 响应格式。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "使用 Bun 和 oMLX 服务运行，再让 TypeSafe SDK 客户端连接本地 API。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用边界",
+          "text": "概率由模型生成，并非直接读取 logits；协议兼容不代表与 OpenJev 的数学机制或校准等价。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "LocalJev：相容 Jev 的本地 DiffusionGemma 橋接",
+      "h1": "LocalJev：相容 Jev 的本地 DiffusionGemma 橋接",
+      "description": "LocalJev 在 Bun 上將 DiffusionGemma 聊天輸出轉為 Jev API 回應；機率由模型產生，並非直接讀取 logits，協定相容不代表數學機制或校準等價。",
+      "summary": "LocalJev 將型別化決策請求轉為 DiffusionGemma 分類提示詞，並驗證產生的機率輸出。 其 Bun 服務連接標準 OpenAI 相容聊天後端，對外提供 Jev 回應格式。 使用 Bun 與 oMLX 服務執行，再讓 TypeSafe SDK 用戶端連接本地 API。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "LocalJev 將型別化決策請求轉為 DiffusionGemma 分類提示詞，並驗證產生的機率輸出。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "其 Bun 服務連接標準 OpenAI 相容聊天後端，對外提供 Jev 回應格式。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "使用 Bun 與 oMLX 服務執行，再讓 TypeSafe SDK 用戶端連接本地 API。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用限制",
+          "text": "機率由模型產生，並非直接讀取 logits；協定相容不代表與 OpenJev 的數學機制或校準等價。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "LocalJev：Jev 互換のローカル DiffusionGemma 接続",
+      "h1": "LocalJev：Jev 互換のローカル DiffusionGemma 接続",
+      "description": "LocalJev は Bun 上で DiffusionGemma のチャット出力を Jev API に接続します。確率は生成値であり、校正済み logits を意味しません。",
+      "summary": "LocalJev は型付き判断リクエストを DiffusionGemma の分類プロンプトに変換し、生成された確率を検証します。 Bun 製サービスが標準の OpenAI 互換チャット基盤を使い、Jev 形式の応答を返します。 Bun と oMLX サーバーで実行し、TypeSafe SDK をローカル API に接続します。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "何ができるか",
+          "text": "LocalJev は型付き判断リクエストを DiffusionGemma の分類プロンプトに変換し、生成された確率を検証します。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "Bun 製サービスが標準の OpenAI 互換チャット基盤を使い、Jev 形式の応答を返します。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "Bun と oMLX サーバーで実行し、TypeSafe SDK をローカル API に接続します。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "制約と注意点",
+          "text": "確率は生成値であり直接の logits ではありません。通信形式の互換性は OpenJev と同じ計算や校正を意味しません。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "LocalJev: Jev 호환 로컬 DiffusionGemma 연결",
+      "h1": "LocalJev: Jev 호환 로컬 DiffusionGemma 연결",
+      "description": "LocalJev는 Bun에서 DiffusionGemma 채팅 출력을 Jev API로 연결합니다. 확률은 모델 생성값이며 보정된 logits와 같지 않습니다.",
+      "summary": "LocalJev는 타입별 판단 요청을 DiffusionGemma 분류 프롬프트로 바꾸고 생성된 확률 출력을 검증합니다. Bun 서비스가 표준 OpenAI 호환 채팅 백엔드를 통해 Jev 응답 형식을 제공합니다. Bun과 oMLX 서버로 실행한 뒤 TypeSafe SDK 클라이언트를 로컬 API에 연결합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "LocalJev는 타입별 판단 요청을 DiffusionGemma 분류 프롬프트로 바꾸고 생성된 확률 출력을 검증합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Bun 서비스가 표준 OpenAI 호환 채팅 백엔드를 통해 Jev 응답 형식을 제공합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "Bun과 oMLX 서버로 실행한 뒤 TypeSafe SDK 클라이언트를 로컬 API에 연결합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "제약 사항",
+          "text": "확률은 직접 읽은 logits가 아니라 모델 생성값입니다. 프로토콜 호환성이 OpenJev와 동일한 계산이나 보정을 뜻하지는 않습니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "LocalJev: puente local entre Jev y DiffusionGemma",
+      "h1": "LocalJev: puente local entre Jev y DiffusionGemma",
+      "description": "LocalJev conecta DiffusionGemma con la API Jev sobre Bun. Las probabilidades son generadas; compatibilidad no implica logits calibrados.",
+      "summary": "LocalJev convierte solicitudes tipadas en instrucciones de clasificación para DiffusionGemma y valida las probabilidades generadas. Su servicio Bun ofrece el formato de respuesta Jev mediante un backend de chat compatible con OpenAI. Ejecútalo con Bun y oMLX, y dirige los clientes TypeSafe SDK a la API local.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "LocalJev convierte solicitudes tipadas en instrucciones de clasificación para DiffusionGemma y valida las probabilidades generadas.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "El papel de Jev",
+          "text": "Su servicio Bun ofrece el formato de respuesta Jev mediante un backend de chat compatible con OpenAI.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo usarlo",
+          "text": "Ejecútalo con Bun y oMLX, y dirige los clientes TypeSafe SDK a la API local.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Límites a considerar",
+          "text": "Las probabilidades son generadas, no logits directos; compatibilidad de protocolo no significa equivalencia matemática ni calibración con OpenJev.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "LocalJev : passerelle locale compatible Jev",
+      "h1": "LocalJev : passerelle locale compatible Jev",
+      "description": "LocalJev relie DiffusionGemma à l’API Jev sur Bun. Les probabilités sont générées ; la compatibilité ne prouve pas des logits calibrés.",
+      "summary": "LocalJev transforme les requêtes typées en prompts de classification DiffusionGemma et valide les probabilités générées. Son service Bun restitue le format Jev à partir d’un backend de chat compatible OpenAI. Exécutez-le avec Bun et oMLX, puis connectez les clients SDK TypeSafe à l’API locale.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "LocalJev transforme les requêtes typées en prompts de classification DiffusionGemma et valide les probabilités générées.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Le rôle de Jev",
+          "text": "Son service Bun restitue le format Jev à partir d’un backend de chat compatible OpenAI.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Utilisation",
+          "text": "Exécutez-le avec Bun et oMLX, puis connectez les clients SDK TypeSafe à l’API locale.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limites à connaître",
+          "text": "Les probabilités sont générées, pas lues dans les logits ; la compatibilité du protocole n’implique pas l’équivalence mathématique avec OpenJev.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "LocalJev: lokale Jev-Brücke für DiffusionGemma",
+      "h1": "LocalJev: lokale Jev-Brücke für DiffusionGemma",
+      "description": "LocalJev verbindet DiffusionGemma auf Bun mit der Jev-API. Wahrscheinlichkeiten sind generiert; kompatible Antworten bedeuten keine kalibrierten Logits.",
+      "summary": "LocalJev übersetzt typisierte Anfragen in DiffusionGemma-Klassifikationsprompts und validiert die erzeugten Wahrscheinlichkeiten. Der Bun-Dienst liefert das Jev-Antwortformat über ein normales OpenAI-kompatibles Chat-Backend. Mit Bun und einem oMLX-Server starten und TypeSafe-SDK-Clients auf die lokale API richten.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "LocalJev übersetzt typisierte Anfragen in DiffusionGemma-Klassifikationsprompts und validiert die erzeugten Wahrscheinlichkeiten.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Die Rolle von Jev",
+          "text": "Der Bun-Dienst liefert das Jev-Antwortformat über ein normales OpenAI-kompatibles Chat-Backend.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Nutzung",
+          "text": "Mit Bun und einem oMLX-Server starten und TypeSafe-SDK-Clients auf die lokale API richten.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Grenzen",
+          "text": "Wahrscheinlichkeiten werden generiert, nicht aus Logits gelesen. Protokollkompatibilität bedeutet weder mathematische noch kalibrierte Gleichwertigkeit mit OpenJev.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "LocalJev: ponte local compatível com Jev",
+      "h1": "LocalJev: ponte local compatível com Jev",
+      "description": "LocalJev conecta DiffusionGemma à API Jev no Bun. As probabilidades são geradas; compatibilidade não implica logits calibrados.",
+      "summary": "LocalJev converte solicitações tipadas em prompts de classificação para DiffusionGemma e valida as probabilidades geradas. Seu serviço Bun oferece o formato de resposta Jev usando um backend de chat compatível com OpenAI. Execute com Bun e oMLX e direcione os clientes TypeSafe SDK à API local.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "LocalJev converte solicitações tipadas em prompts de classificação para DiffusionGemma e valida as probabilidades geradas.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "O papel do Jev",
+          "text": "Seu serviço Bun oferece o formato de resposta Jev usando um backend de chat compatível com OpenAI.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Execute com Bun e oMLX e direcione os clientes TypeSafe SDK à API local.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limitações",
+          "text": "As probabilidades são geradas, não logits diretos; compatibilidade de protocolo não implica equivalência matemática ou de calibração com OpenJev.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "LocalJev: локальный мост Jev к DiffusionGemma",
+      "h1": "LocalJev: локальный мост Jev к DiffusionGemma",
+      "description": "LocalJev связывает DiffusionGemma с Jev API на Bun. Вероятности генерируются моделью; совместимость не означает калиброванные логиты.",
+      "summary": "LocalJev превращает типизированные запросы в промпты классификации для DiffusionGemma и проверяет сгенерированные вероятности. Служба на Bun возвращает формат ответов Jev через стандартный чат-бэкенд, совместимый с OpenAI. Запустите Bun и сервер oMLX, затем направьте клиенты TypeSafe SDK на локальный API.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "LocalJev превращает типизированные запросы в промпты классификации для DiffusionGemma и проверяет сгенерированные вероятности.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Служба на Bun возвращает формат ответов Jev через стандартный чат-бэкенд, совместимый с OpenAI.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Запустите Bun и сервер oMLX, затем направьте клиенты TypeSafe SDK на локальный API.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ограничения",
+          "text": "Вероятности генерируются моделью, а не считываются из логитов; совместимость протокола не означает математическую эквивалентность или калибровку OpenJev.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "LocalJev: Jev-संगत स्थानीय DiffusionGemma ब्रिज",
+      "h1": "LocalJev: Jev-संगत स्थानीय DiffusionGemma ब्रिज",
+      "description": "LocalJev Bun पर DiffusionGemma चैट को Jev API से जोड़ता है। संभावनाएँ मॉडल बनाता है; संगत उत्तर कैलिब्रेटेड logits का प्रमाण नहीं।",
+      "summary": "LocalJev निर्धारित संरचना वाले अनुरोधों को DiffusionGemma वर्गीकरण प्रॉम्प्ट में बदलकर उत्पन्न संभावनाओं की जाँच करता है। इसकी Bun सेवा सामान्य OpenAI-संगत चैट बैकएंड से Jev के प्रारूप में उत्तर देती है। Bun और oMLX सर्वर के साथ चलाएँ, फिर TypeSafe SDK क्लाइंट को स्थानीय API पर भेजें।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "किस काम आता है",
+          "text": "LocalJev निर्धारित संरचना वाले अनुरोधों को DiffusionGemma वर्गीकरण प्रॉम्प्ट में बदलकर उत्पन्न संभावनाओं की जाँच करता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "इसकी Bun सेवा सामान्य OpenAI-संगत चैट बैकएंड से Jev के प्रारूप में उत्तर देती है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल कैसे करें",
+          "text": "Bun और oMLX सर्वर के साथ चलाएँ, फिर TypeSafe SDK क्लाइंट को स्थानीय API पर भेजें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "सीमाएँ",
+          "text": "संभावनाएँ मॉडल बनाता है, सीधे logits से नहीं मिलतीं; प्रोटोकॉल संगतता OpenJev जैसे गणित या कैलिब्रेशन का प्रमाण नहीं।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "LocalJev: penghubung DiffusionGemma lokal yang kompatibel Jev",
+      "h1": "LocalJev: penghubung DiffusionGemma lokal yang kompatibel Jev",
+      "description": "LocalJev menjembatani DiffusionGemma ke API Jev di Bun. Probabilitas dihasilkan model; respons kompatibel tidak berarti logits terkalibrasi.",
+      "summary": "LocalJev mengubah permintaan bertipe menjadi prompt klasifikasi DiffusionGemma dan memvalidasi probabilitas yang dihasilkan. Layanan Bun-nya menyediakan format respons Jev melalui backend chat standar yang kompatibel OpenAI. Jalankan dengan Bun dan server oMLX, lalu arahkan klien SDK TypeSafe ke API lokal.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "LocalJev mengubah permintaan bertipe menjadi prompt klasifikasi DiffusionGemma dan memvalidasi probabilitas yang dihasilkan.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Layanan Bun-nya menyediakan format respons Jev melalui backend chat standar yang kompatibel OpenAI.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Jalankan dengan Bun dan server oMLX, lalu arahkan klien SDK TypeSafe ke API lokal.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Batasan",
+          "text": "Probabilitas dihasilkan model, bukan logits langsung; kompatibilitas protokol tidak berarti matematika atau kalibrasinya setara OpenJev.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "LocalJev: cầu nối DiffusionGemma cục bộ tương thích Jev",
+      "h1": "LocalJev: cầu nối DiffusionGemma cục bộ tương thích Jev",
+      "description": "LocalJev nối đầu ra chat DiffusionGemma với API Jev trên Bun. Xác suất do mô hình sinh; tương thích không bảo đảm logits được hiệu chỉnh.",
+      "summary": "LocalJev chuyển yêu cầu có kiểu thành lời nhắc phân loại DiffusionGemma và kiểm tra xác suất được sinh ra. Dịch vụ Bun trả định dạng Jev qua hệ thống chat chuẩn tương thích OpenAI. Chạy bằng Bun cùng máy chủ oMLX, rồi trỏ máy khách SDK TypeSafe vào API cục bộ.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích",
+          "text": "LocalJev chuyển yêu cầu có kiểu thành lời nhắc phân loại DiffusionGemma và kiểm tra xác suất được sinh ra.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Dịch vụ Bun trả định dạng Jev qua hệ thống chat chuẩn tương thích OpenAI.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Chạy bằng Bun cùng máy chủ oMLX, rồi trỏ máy khách SDK TypeSafe vào API cục bộ.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Giới hạn",
+          "text": "Xác suất do mô hình sinh, không đọc trực tiếp logits; tương thích giao thức không đồng nghĩa toán học hay hiệu chỉnh tương đương OpenJev.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "LocalJev: Jev uyumlu yerel DiffusionGemma köprüsü",
+      "h1": "LocalJev: Jev uyumlu yerel DiffusionGemma köprüsü",
+      "description": "LocalJev, Bun üzerinde DiffusionGemma sohbetini Jev API’ye bağlar. Olasılıklar modelce üretilir; uyumlu yanıtlar kalibre logit anlamına gelmez.",
+      "summary": "LocalJev türlenmiş istekleri DiffusionGemma sınıflandırma istemlerine çevirir ve üretilen olasılıkları doğrular. Bun servisi, standart OpenAI uyumlu sohbet arka ucuyla Jev yanıt biçimini sunar. Bun ve oMLX sunucusuyla çalıştırın, ardından TypeSafe SDK istemcilerini yerel API’ye yönlendirin.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "LocalJev türlenmiş istekleri DiffusionGemma sınıflandırma istemlerine çevirir ve üretilen olasılıkları doğrular.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Bun servisi, standart OpenAI uyumlu sohbet arka ucuyla Jev yanıt biçimini sunar.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Bun ve oMLX sunucusuyla çalıştırın, ardından TypeSafe SDK istemcilerini yerel API’ye yönlendirin.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Sınırlamalar",
+          "text": "Olasılıklar doğrudan logit değildir, modelce üretilir; protokol uyumu OpenJev ile matematiksel veya kalibrasyon eşdeğerliği sağlamaz.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "LocalJev: ponte locale compatibile Jev per DiffusionGemma",
+      "h1": "LocalJev: ponte locale compatibile Jev per DiffusionGemma",
+      "description": "LocalJev collega DiffusionGemma all’API Jev su Bun. Le probabilità sono generate; risposte compatibili non implicano logits calibrati.",
+      "summary": "LocalJev converte richieste tipizzate in prompt di classificazione DiffusionGemma e verifica le probabilità generate. Il servizio Bun restituisce il formato Jev tramite un backend chat standard compatibile OpenAI. Eseguilo con Bun e un server oMLX, poi indirizza i client SDK TypeSafe all’API locale.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "LocalJev converte richieste tipizzate in prompt di classificazione DiffusionGemma e verifica le probabilità generate.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Il ruolo di Jev",
+          "text": "Il servizio Bun restituisce il formato Jev tramite un backend chat standard compatibile OpenAI.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come usarlo",
+          "text": "Eseguilo con Bun e un server oMLX, poi indirizza i client SDK TypeSafe all’API locale.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limiti",
+          "text": "Le probabilità sono generate, non logits diretti; compatibilità del protocollo non significa equivalenza matematica o di calibrazione con OpenJev.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

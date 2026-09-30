@@ -1,0 +1,756 @@
+{
+  "version": "source-content-v1",
+  "repo": "receptron/laya",
+  "repositoryId": 1377318357,
+  "relationship": "local-alternative",
+  "category": "sdks",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "6478649e723122ca24bbf5fb69ed1010023c9750",
+      "url": "https://github.com/receptron/laya/blob/6478649e723122ca24bbf5fb69ed1010023c9750/README.md",
+      "sha256": "630512522e90a5eb139d8b7a5d26b09a93a6ba1014cc1bd8105631ee95e53178",
+      "accessedAt": "2026-09-30T07:33:49.944Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "The package runs Convai Innovations’ Laya model through ONNX Runtime for typed classification and scoring in Node.js and TypeScript.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 3,
+          "end": 16,
+          "quote": "Run **[Laya](https://huggingface.co/convaiinnovations/laya)** — the open-source, Jev-compatible\n_System 1 decision model_ by Convai Innovations — from Node.js / TypeScript.\n\nLaya does not generate text. You hand it a state (a ticket, an email, a JSON object) and typed\nquestions, and it returns every answer with calibrated probabilities in **one forward pass**:\n\n- `choice` — pick one option, with a probability per option\n- `score` — an expected level on an ordered rubric, with the distribution\n- `noul` — a calibrated P(true) for a yes/no statement\n\nThis package runs the model with [ONNX Runtime](https://onnxruntime.ai/); PyTorch and Python are\nnot needed at runtime. The request/response shape is the same as the Python reference\nimplementation (`RLAgent.system_one`) and as TypeSafe Jev's `system_one` API, and the output\nmatches the Python implementation to four decimal places."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "It exposes a request and response shape compatible with Jev’s system_one API while running Laya weights locally.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 13,
+          "end": 16,
+          "quote": "This package runs the model with [ONNX Runtime](https://onnxruntime.ai/); PyTorch and Python are\nnot needed at runtime. The request/response shape is the same as the Python reference\nimplementation (`RLAgent.system_one`) and as TypeSafe Jev's `system_one` API, and the output\nmatches the Python implementation to four decimal places."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Install @receptron/laya on Node.js 20 or newer, load Laya, then pass state and typed questions to systemOne; close the instance afterward.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 18,
+          "end": 35,
+          "quote": "## Install\n\n```sh\nnpm install @receptron/laya\n```\n\nNode.js 20 or newer. The ONNX weights (about 1.7 GB, fp32) are downloaded from Hugging Face on first\nuse and cached under `~/.cache/receptron-laya` (override with `LAYA_CACHE`). Budget roughly 2 GB of\nRAM for the loaded model plus a few hundred MB per batch of questions.\n\n## Usage\n\n```ts\nimport { Laya } from \"@receptron/laya\";\n\nconst laya = await Laya.load();\n\nconst result = await laya.systemOne("
+        },
+        {
+          "source": "source-1",
+          "start": 58,
+          "end": 58,
+          "quote": "await laya.close();"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "Question options must fit 192 tokens. The English checkpoint truncates state at its 512-token limit after the question header, and numeric JSON formatting can differ from Python.",
+      "kind": "source-limitation",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 100,
+          "end": 106,
+          "quote": "## Limits\n\n- Each question's options must fit in `head_max_len` (192) tokens; `systemOne` throws otherwise.\n  Fewer than about 20 options per `choice` question is the model's own recommendation.\n- The state is truncated to `max_len` (512 tokens for the English checkpoint) after the question header.\n- A JSON state is serialized like Python's `json.dumps(ensure_ascii=False)` so that tokens match the\n  reference implementation; non-integer numbers may format differently between JS and Python."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "laya — Local Laya decisions in Node.js",
+      "h1": "laya — Local Laya decisions in Node.js",
+      "description": "laya: Run Laya locally in Node.js through ONNX Runtime, with typed questions and a request format compatible with Jev’s system_one API.",
+      "summary": "The package runs Convai Innovations’ Laya model through ONNX Runtime for typed classification and scoring in Node.js and TypeScript. Install @receptron/laya on Node.js 20 or newer, load Laya, then pass state and typed questions to systemOne; close the instance afterward.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "What it does",
+          "text": "The package runs Convai Innovations’ Laya model through ONNX Runtime for typed classification and scoring in Node.js and TypeScript.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "It exposes a request and response shape compatible with Jev’s system_one API while running Laya weights locally.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Getting started",
+          "text": "Install @receptron/laya on Node.js 20 or newer, load Laya, then pass state and typed questions to systemOne; close the instance afterward.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "Question options must fit 192 tokens. The English checkpoint truncates state at its 512-token limit after the question header, and numeric JSON formatting can differ from Python.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "laya — 在 Node.js 本地运行 Laya 决策",
+      "h1": "laya — 在 Node.js 本地运行 Laya 决策",
+      "description": "laya: 通过 ONNX Runtime 在 Node.js 本地运行 Laya，用与 Jev system_one 兼容的格式回答类型化问题。",
+      "summary": "该包通过 ONNX Runtime 运行 Convai Innovations 的 Laya 模型，为 Node.js 和 TypeScript 提供类型化分类与评分。 使用 Node.js 20 或更新版本安装 @receptron/laya，加载 Laya 后向 systemOne 传入状态和类型化问题，用完关闭实例。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "该包通过 ONNX Runtime 运行 Convai Innovations 的 Laya 模型，为 Node.js 和 TypeScript 提供类型化分类与评分。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "它使用与 Jev 的 system_one API 兼容的请求和响应结构，实际在本地运行 Laya 权重。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "使用 Node.js 20 或更新版本安装 @receptron/laya，加载 Laya 后向 systemOne 传入状态和类型化问题，用完关闭实例。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "问题选项须容纳在 192 个 token 内。英文检查点在问题头之后按 512-token 上限截断状态，JSON 数字格式也可能与 Python 不同。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "laya — 在 Node.js 本機執行 Laya 決策",
+      "h1": "laya — 在 Node.js 本機執行 Laya 決策",
+      "description": "laya: 透過 ONNX Runtime 在 Node.js 本機執行 Laya，以與 Jev system_one 相容的格式回答型別化問題。",
+      "summary": "此套件透過 ONNX Runtime 執行 Convai Innovations 的 Laya 模型，為 Node.js 和 TypeScript 提供具型別的分類與評分。 以 Node.js 20 或更新版本安裝 @receptron/laya，載入 Laya 後將狀態和具型別的問題交給 systemOne，用完關閉實例。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "此套件透過 ONNX Runtime 執行 Convai Innovations 的 Laya 模型，為 Node.js 和 TypeScript 提供具型別的分類與評分。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "它採用與 Jev 的 system_one API 相容的請求和回應結構，實際在本機執行 Laya 權重。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "以 Node.js 20 或更新版本安裝 @receptron/laya，載入 Laya 後將狀態和具型別的問題交給 systemOne，用完關閉實例。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "問題選項須在 192 個 token 內。英文檢查點在問題標頭之後依 512-token 上限截斷狀態，JSON 數字格式也可能與 Python 不同。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "laya — Node.js で Laya の判断をローカル実行",
+      "h1": "laya — Node.js で Laya の判断をローカル実行",
+      "description": "laya: ONNX Runtime で Node.js 上の Laya をローカル実行。Jev の system_one と互換の形式で型付き質問を扱います。",
+      "summary": "Convai Innovations の Laya を ONNX Runtime で動かし、Node.js と TypeScript から型付き分類や採点を行うパッケージです。 Node.js 20 以降で @receptron/laya をインストールし、Laya を読み込んで状態と型付き質問を systemOne に渡します。終了後はインスタンスを閉じます。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "できること",
+          "text": "Convai Innovations の Laya を ONNX Runtime で動かし、Node.js と TypeScript から型付き分類や採点を行うパッケージです。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "Jev の system_one API と互換のリクエスト・レスポンス形式を使い、実際の推論はローカルの Laya の重みで行います。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い始めるには",
+          "text": "Node.js 20 以降で @receptron/laya をインストールし、Laya を読み込んで状態と型付き質問を systemOne に渡します。終了後はインスタンスを閉じます。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "対象範囲と制約",
+          "text": "質問の選択肢は192トークン以内です。英語版チェックポイントは質問ヘッダーの後で状態を512トークンの上限に合わせて切り詰め、JSON の数値表記は Python と異なる場合があります。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "laya — Node.js에서 Laya를 로컬로 실행",
+      "h1": "laya — Node.js에서 Laya를 로컬로 실행",
+      "description": "laya: ONNX Runtime으로 Node.js에서 Laya를 로컬 실행하며 Jev system_one 호환 형식으로 타입 기반 질문을 처리합니다.",
+      "summary": "Convai Innovations의 Laya 모델을 ONNX Runtime으로 실행해 Node.js와 TypeScript에서 타입이 지정된 분류와 점수 평가를 제공합니다. Node.js 20 이상에서 @receptron/laya를 설치하고 Laya를 로드한 뒤 상태와 질문을 systemOne에 전달합니다. 사용 후 인스턴스를 닫습니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "Convai Innovations의 Laya 모델을 ONNX Runtime으로 실행해 Node.js와 TypeScript에서 타입이 지정된 분류와 점수 평가를 제공합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Jev의 system_one API와 호환되는 요청·응답 형식을 사용하지만 실제 추론은 로컬 Laya 가중치로 수행합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "Node.js 20 이상에서 @receptron/laya를 설치하고 Laya를 로드한 뒤 상태와 질문을 systemOne에 전달합니다. 사용 후 인스턴스를 닫습니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 제약",
+          "text": "질문 선택지는 192토큰 이내여야 합니다. 영어 체크포인트는 질문 헤더 뒤에서 상태를 512토큰 한도에 맞게 자르며, JSON 숫자 표기는 Python과 다를 수 있습니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "laya — Decisiones locales de Laya en Node.js",
+      "h1": "laya — Decisiones locales de Laya en Node.js",
+      "description": "laya: Ejecuta Laya localmente en Node.js con ONNX Runtime y preguntas tipadas compatibles con el formato system_one de Jev.",
+      "summary": "El paquete ejecuta Laya, de Convai Innovations, con ONNX Runtime para clasificar y puntuar con tipos definidos desde Node.js y TypeScript. Instala @receptron/laya con Node.js 20 o posterior, carga Laya y pasa estado y preguntas tipadas a systemOne; cierra la instancia al terminar.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "El paquete ejecuta Laya, de Convai Innovations, con ONNX Runtime para clasificar y puntuar con tipos definidos desde Node.js y TypeScript.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Utiliza una estructura de peticiones y respuestas compatible con system_one de Jev, pero ejecuta localmente los pesos de Laya.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo empezar",
+          "text": "Instala @receptron/laya con Node.js 20 o posterior, carga Laya y pasa estado y preguntas tipadas a systemOne; cierra la instancia al terminar.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "Las opciones deben caber en 192 tokens. El checkpoint inglés trunca el estado al límite de 512 tokens tras la cabecera; los números JSON pueden formatearse de forma distinta a Python.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "laya — Décisions locales avec Laya dans Node.js",
+      "h1": "laya — Décisions locales avec Laya dans Node.js",
+      "description": "laya: Exécutez Laya localement dans Node.js via ONNX Runtime avec des questions typées au format compatible avec system_one de Jev.",
+      "summary": "Le paquet exécute Laya de Convai Innovations via ONNX Runtime pour la classification et la notation typées dans Node.js et TypeScript. Installez @receptron/laya avec Node.js 20 ou ultérieur, chargez Laya et transmettez l’état et les questions typées à systemOne, puis fermez l’instance.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "Le paquet exécute Laya de Convai Innovations via ONNX Runtime pour la classification et la notation typées dans Node.js et TypeScript.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Il reprend une structure de requêtes et réponses compatible avec system_one de Jev, tout en exécutant localement les poids de Laya.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Installez @receptron/laya avec Node.js 20 ou ultérieur, chargez Laya et transmettez l’état et les questions typées à systemOne, puis fermez l’instance.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "Les options doivent tenir dans 192 tokens. Le checkpoint anglais tronque l’état à sa limite de 512 tokens après l’en-tête ; le format des nombres JSON peut différer de Python.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "laya — Lokale Laya-Entscheidungen in Node.js",
+      "h1": "laya — Lokale Laya-Entscheidungen in Node.js",
+      "description": "laya: Laya lokal in Node.js über ONNX Runtime ausführen, mit typisierten Fragen im Jev-kompatiblen system_one-Format.",
+      "summary": "Das Paket führt Laya von Convai Innovations mit ONNX Runtime aus und ermöglicht typisierte Klassifikation und Bewertung in Node.js und TypeScript. Unter Node.js 20 oder neuer @receptron/laya installieren, Laya laden und Zustand sowie typisierte Fragen an systemOne übergeben. Die Instanz danach schließen.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "Das Paket führt Laya von Convai Innovations mit ONNX Runtime aus und ermöglicht typisierte Klassifikation und Bewertung in Node.js und TypeScript.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Anfragen und Antworten folgen einem zu Jevs system_one-API kompatiblen Format; lokal laufen dabei die Gewichte von Laya.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Einstieg",
+          "text": "Unter Node.js 20 oder neuer @receptron/laya installieren, Laya laden und Zustand sowie typisierte Fragen an systemOne übergeben. Die Instanz danach schließen.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Frageoptionen müssen in 192 Tokens passen. Der englische Checkpoint kürzt den Zustand nach dem Fragenkopf auf sein 512-Token-Limit; JSON-Zahlen können anders formatiert sein als in Python.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "laya — Decisões locais com Laya no Node.js",
+      "h1": "laya — Decisões locais com Laya no Node.js",
+      "description": "laya: Execute Laya localmente no Node.js com ONNX Runtime e perguntas tipadas no formato compatível com system_one do Jev.",
+      "summary": "O pacote executa o Laya da Convai Innovations com ONNX Runtime para classificação e pontuação tipadas no Node.js e TypeScript. Instale @receptron/laya no Node.js 20 ou superior, carregue o Laya e envie estado e perguntas tipadas ao systemOne; feche a instância ao terminar.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "O pacote executa o Laya da Convai Innovations com ONNX Runtime para classificação e pontuação tipadas no Node.js e TypeScript.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "Usa um formato de requisição e resposta compatível com a API system_one do Jev, executando os pesos do Laya localmente.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como começar",
+          "text": "Instale @receptron/laya no Node.js 20 ou superior, carregue o Laya e envie estado e perguntas tipadas ao systemOne; feche a instância ao terminar.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "As opções precisam caber em 192 tokens. O checkpoint inglês trunca o estado no limite de 512 tokens após o cabeçalho; números JSON podem ter formatação diferente da usada no Python.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "laya — Локальные решения Laya в Node.js",
+      "h1": "laya — Локальные решения Laya в Node.js",
+      "description": "laya: Запускайте Laya локально в Node.js через ONNX Runtime с типизированными вопросами в формате system_one, совместимом с Jev.",
+      "summary": "Пакет запускает Laya от Convai Innovations через ONNX Runtime для типизированной классификации и оценивания в Node.js и TypeScript. Установите @receptron/laya в Node.js 20 или новее, загрузите Laya и передайте состояние и типизированные вопросы в systemOne; после работы закройте экземпляр.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Пакет запускает Laya от Convai Innovations через ONNX Runtime для типизированной классификации и оценивания в Node.js и TypeScript.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Формат запросов и ответов совместим с API system_one Jev, но локально исполняются веса Laya.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Начало работы",
+          "text": "Установите @receptron/laya в Node.js 20 или новее, загрузите Laya и передайте состояние и типизированные вопросы в systemOne; после работы закройте экземпляр.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Варианты ответа должны укладываться в 192 токена. Английский чекпойнт обрезает состояние после заголовка вопроса до лимита 512 токенов; формат чисел JSON может отличаться от Python.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "laya — Node.js में स्थानीय Laya निर्णय",
+      "h1": "laya — Node.js में स्थानीय Laya निर्णय",
+      "description": "laya: ONNX Runtime से Node.js में स्थानीय Laya चलाएँ और Jev system_one-संगत प्रारूप में निर्धारित प्रकार के प्रश्न दें।",
+      "summary": "यह पैकेज ONNX Runtime से Convai Innovations का Laya मॉडल चलाता है और Node.js तथा TypeScript में निर्धारित प्रकार के वर्गीकरण और अंक देता है। Node.js 20 या नए संस्करण पर @receptron/laya स्थापित करें, Laya लोड करें और systemOne को स्थिति तथा प्रश्न दें; काम के बाद इंस्टेंस बंद करें।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "परियोजना का काम",
+          "text": "यह पैकेज ONNX Runtime से Convai Innovations का Laya मॉडल चलाता है और Node.js तथा TypeScript में निर्धारित प्रकार के वर्गीकरण और अंक देता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "अनुरोध और उत्तर का ढाँचा Jev के system_one API से संगत है, लेकिन स्थानीय रूप से Laya के वेट चलते हैं।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "शुरुआत कैसे करें",
+          "text": "Node.js 20 या नए संस्करण पर @receptron/laya स्थापित करें, Laya लोड करें और systemOne को स्थिति तथा प्रश्न दें; काम के बाद इंस्टेंस बंद करें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "प्रश्न के विकल्प 192 टोकन में समाने चाहिए। अंग्रेज़ी चेकपॉइंट प्रश्न शीर्षक के बाद स्थिति को 512 टोकन सीमा तक काटता है; JSON संख्याओं का प्रारूप Python से अलग हो सकता है।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "laya — Keputusan Laya lokal di Node.js",
+      "h1": "laya — Keputusan Laya lokal di Node.js",
+      "description": "laya: Jalankan Laya lokal di Node.js melalui ONNX Runtime dengan pertanyaan bertipe berformat kompatibel system_one Jev.",
+      "summary": "Paket ini menjalankan Laya dari Convai Innovations melalui ONNX Runtime untuk klasifikasi dan penilaian bertipe di Node.js dan TypeScript. Pasang @receptron/laya pada Node.js 20 atau lebih baru, muat Laya, lalu kirim keadaan dan pertanyaan bertipe ke systemOne; tutup instans setelah selesai.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "Paket ini menjalankan Laya dari Convai Innovations melalui ONNX Runtime untuk klasifikasi dan penilaian bertipe di Node.js dan TypeScript.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Bentuk permintaan dan respons kompatibel dengan API system_one Jev, tetapi bobot Laya dijalankan secara lokal.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara memulai",
+          "text": "Pasang @receptron/laya pada Node.js 20 atau lebih baru, muat Laya, lalu kirim keadaan dan pertanyaan bertipe ke systemOne; tutup instans setelah selesai.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Opsi pertanyaan harus muat dalam 192 token. Checkpoint Inggris memangkas keadaan sesuai batas 512 token setelah header pertanyaan; format angka JSON dapat berbeda dari Python.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "laya — Chạy quyết định Laya cục bộ trong Node.js",
+      "h1": "laya — Chạy quyết định Laya cục bộ trong Node.js",
+      "description": "laya: Chạy Laya cục bộ trong Node.js qua ONNX Runtime với câu hỏi có kiểu theo định dạng tương thích system_one của Jev.",
+      "summary": "Gói này chạy mô hình Laya của Convai Innovations qua ONNX Runtime để phân loại và chấm điểm có kiểu dữ liệu trong Node.js và TypeScript. Cài @receptron/laya trên Node.js 20 trở lên, tải Laya rồi truyền trạng thái và câu hỏi có kiểu vào systemOne; đóng đối tượng sau khi dùng.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Công dụng",
+          "text": "Gói này chạy mô hình Laya của Convai Innovations qua ONNX Runtime để phân loại và chấm điểm có kiểu dữ liệu trong Node.js và TypeScript.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Cấu trúc yêu cầu và phản hồi tương thích với API system_one của Jev, nhưng trọng số Laya được chạy cục bộ.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách bắt đầu",
+          "text": "Cài @receptron/laya trên Node.js 20 trở lên, tải Laya rồi truyền trạng thái và câu hỏi có kiểu vào systemOne; đóng đối tượng sau khi dùng.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Các lựa chọn phải nằm trong 192 token. Checkpoint tiếng Anh cắt trạng thái theo giới hạn 512 token sau phần đầu câu hỏi; cách định dạng số JSON có thể khác Python.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "laya — Node.js içinde yerel Laya kararları",
+      "h1": "laya — Node.js içinde yerel Laya kararları",
+      "description": "laya: Laya’yı Node.js’te ONNX Runtime ile yerel çalıştırın; Jev system_one uyumlu biçimde türlenmiş sorular kullanın.",
+      "summary": "Paket, Node.js ve TypeScript’te türleri belirlenmiş sınıflandırma ve puanlama için Convai Innovations’ın Laya modelini ONNX Runtime ile çalıştırır. Node.js 20 veya üzerinde @receptron/laya paketini kurun, Laya’yı yükleyip durumu ve soruları systemOne’a iletin; iş bitince örneği kapatın.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "Paket, Node.js ve TypeScript’te türleri belirlenmiş sınıflandırma ve puanlama için Convai Innovations’ın Laya modelini ONNX Runtime ile çalıştırır.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "İstek ve yanıt yapısı Jev’in system_one API’siyle uyumludur; çıkarımda yerel Laya ağırlıkları kullanılır.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Başlangıç",
+          "text": "Node.js 20 veya üzerinde @receptron/laya paketini kurun, Laya’yı yükleyip durumu ve soruları systemOne’a iletin; iş bitince örneği kapatın.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Soru seçenekleri 192 token’a sığmalıdır. İngilizce kontrol noktası, soru başlığından sonra durumu 512 token sınırında keser; JSON sayı biçimleri Python’dan farklı olabilir.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "laya — Decisioni locali con Laya in Node.js",
+      "h1": "laya — Decisioni locali con Laya in Node.js",
+      "description": "laya: Esegui Laya localmente in Node.js tramite ONNX Runtime, con domande tipizzate compatibili con il formato system_one di Jev.",
+      "summary": "Il pacchetto esegue Laya di Convai Innovations tramite ONNX Runtime per classificazione e valutazione tipizzate in Node.js e TypeScript. Installa @receptron/laya con Node.js 20 o successivo, carica Laya e passa stato e domande tipizzate a systemOne; chiudi l’istanza al termine.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "Il pacchetto esegue Laya di Convai Innovations tramite ONNX Runtime per classificazione e valutazione tipizzate in Node.js e TypeScript.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Adotta un formato di richieste e risposte compatibile con system_one di Jev, eseguendo però localmente i pesi di Laya.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come iniziare",
+          "text": "Installa @receptron/laya con Node.js 20 o successivo, carica Laya e passa stato e domande tipizzate a systemOne; chiudi l’istanza al termine.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "Le opzioni devono rientrare in 192 token. Il checkpoint inglese tronca lo stato al limite di 512 token dopo l’intestazione; i numeri JSON possono avere un formato diverso da Python.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

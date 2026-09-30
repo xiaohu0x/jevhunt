@@ -1,0 +1,762 @@
+{
+  "version": "source-content-v1",
+  "repo": "kitze/unclutter",
+  "repositoryId": 1374363973,
+  "relationship": "jev-app",
+  "category": "browser",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "9ef9beccc1e57b4e3115ae68644b8fc9c19c29f6",
+      "url": "https://github.com/kitze/unclutter/blob/9ef9beccc1e57b4e3115ae68644b8fc9c19c29f6/README.md",
+      "sha256": "5ad63c67fd02547f34a8df9c214d9ed08f51b7475bd5994be747ffd4601eff83",
+      "accessedAt": "2026-09-30T07:33:51.636Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "kind": "documented",
+      "text": "Unclutter hides nonessential elements in Chrome, Chromium and Firefox using saved rules for matching page templates.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 101,
+          "end": 103,
+          "quote": "# Unclutter\n\nWXT extension for Chrome / Chromium and Firefox. Jev classifies nonessential page elements through Vercel AI Gateway or TypeSafe AI directly; the extension stores and reapplies local hiding rules by page template."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "kind": "documented",
+      "text": "Jev classifies candidate elements into typed categories; extension code validates responses and controls selectors and reversible hiding.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 161,
+          "end": 163,
+          "quote": "- Jev receives typed keep/ad/promotion/newsletter/social/cookie/uncertain choices. Page text is untrusted evidence, not instructions. The model cannot emit code or selectors. Responses are validated for type, completeness, valid categories, and numeric ranges. Uncertain results remain visible. Where provided, selected-choice probability and TypeSafe confidence must **both** be at least 0.9; either failing keeps the element visible. Invalid/non-finite values reject the response. Gateway answers without confidence still work. These are conservative operational thresholds, not calibrated accuracy claims.\n- Main content, navigation, ordinary forms, login/payment/security, and paywalls are protected. Cookie-dialog headings and checkbox controls may hide with their containing overlay, but sensitive inputs still block hiding. No links are clicked, consent granted, requests blocked, or access restrictions bypassed. Hiding cookie dialogs is not rejection or tracking protection; use Pause to access consent choices. Hiding ads does not prevent their network/tracking activity.\n- Hidden DOM nodes are not deleted. A temporary attribute, extension-owned stylesheet, and reversible inline display overrides remove occupied space (including inline `!important`). Original style values/priorities are restored; unrelated site style changes are preserved."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "kind": "documented",
+      "text": "Choose TypeSafe or Vercel credentials and analyze manually by default. Saved rules continue working offline.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 120,
+          "end": 129,
+          "quote": "5. Under **Connection**, choose **Vercel AI Gateway** or **TypeSafe AI**, paste the matching API key, and save it.\n6. Choose **Manual** (default) and click **Analyze page**, or select **On page visit**. Your selected provider must have credits / Jev access.\n\nAfter replacing unpacked builds, click **Reload** on the extension card and refresh website tabs. Existing keys/settings stay in place. V1 templates show **Update available**; **Re-analyze** once to include cookie dialogs, or automatic mode upgrades them once while preserving paused templates and keep-visible choices.\n\nFor Firefox 140+, run `bun run build:firefox`, open `about:debugging#/runtime/this-firefox`, choose **Load Temporary Add-on**, and select `.output/firefox-mv2/manifest.json`. Temporary add-ons disappear on Firefox restart; permanent Firefox distribution requires Mozilla signing. Chrome/Edge/Brave can use the Chromium build. Safari packaging is not included.\n\nBring your own [Vercel AI Gateway](https://vercel.com/ai-gateway) key or [TypeSafe AI key](https://console.typesafe.ai/settings/keys) (the same kind used as `JEV_KEY` / `TYPESAFE_API_KEY`). Configure it in the extension popup, not in source code or build-time environment variables. No key or shared account is bundled.\n\n**One key is stored.** Switching the provider persists immediately and reuses that key for the next analysis; paste a matching key if the providers use different credentials. Saving a key saves the selected provider with it. Removing the key does not reset the provider. Existing installations without a provider setting default to Gateway. Saved templates remain usable offline regardless of provider."
+        },
+        {
+          "source": "source-1",
+          "start": 135,
+          "end": 146,
+          "quote": "- **Manual**: paid analysis only when you click **Analyze page / Re-analyze**.\n- **On page visit**: analyze new templates in visible tabs, after a short render-settling delay. This automatically sends candidate snippets to the selected provider and incurs API charges. Off by default.\n- Saved templates apply without further model requests, including zero-rule results. New analysis-rubric versions may refresh an enabled old template once in automatic mode; paused profiles and disabled rules are preserved.\n- Automatic attempts are deduplicated across tabs and persisted before the request. Failure/interruption does not trigger automatic retries; click **Analyze page / Re-analyze** to retry.\n- Cookie overlays (including Sourcepoint's session-numbered iframe/container IDs and BBC's `ngasCookiePrompt`) are eligible for visual hiding. No Accept/Reject buttons are clicked and no consent choice is written.\n- Empty ad wrappers and their reserved-height/padding/advertisement labels collapse too, stopping before useful sibling content. Normal overflow-based cookie scroll locks are released while hiding the overlay and restored when paused.\n- Toolbar badge: green **ON** = saved and active; gray **OFF** = paused; amber **…** = analyzing; red **!** = failed. Tooltip includes actual hidden element count.\n- **Pause / Resume** controls the current page type across tabs. The header switch disables the whole extension. Both restore hidden elements immediately.\n- **Re-analyze** replaces this template's rules while preserving disabled rules that are still identified. Failed, malformed, or stale responses leave existing rules unchanged.\n- Uncheck a rule in **Hidden elements** to keep those elements visible.\n- **Forget this page type** removes its saved rules, restores the page, and permits a fresh analysis.\n- Removing the API key leaves saved rules usable offline."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "kind": "documented",
+      "text": "Visual hiding does not reject cookie consent or block tracking requests. Template matching is heuristic and can miss layout changes.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 154,
+          "end": 154,
+          "quote": "This is a conservative heuristic, not perfect template recognition. Different route families may need separate initial analyses; different layouts sharing the same shell may share a profile. Every selector is revalidated against the current DOM before hiding. Stable `data-testid`, `data-component`, IDs, and classes are used; no positional selectors or AI-generated CSS. Randomized class-only pages may yield no safely targetable candidates. There is no periodic cache expiry or automatic paid retry. Re-analyze manually after site redesigns."
+        },
+        {
+          "source": "source-1",
+          "start": 162,
+          "end": 166,
+          "quote": "- Main content, navigation, ordinary forms, login/payment/security, and paywalls are protected. Cookie-dialog headings and checkbox controls may hide with their containing overlay, but sensitive inputs still block hiding. No links are clicked, consent granted, requests blocked, or access restrictions bypassed. Hiding cookie dialogs is not rejection or tracking protection; use Pause to access consent choices. Hiding ads does not prevent their network/tracking activity.\n- Hidden DOM nodes are not deleted. A temporary attribute, extension-owned stylesheet, and reversible inline display overrides remove occupied space (including inline `!important`). Original style values/priorities are restored; unrelated site style changes are preserved.\n- Late-loaded elements are rechecked through a bounded/debounced mutation observer. SPA navigation restores the previous rules and resolves the new template. In-flight analyses are discarded after navigation or concurrent edits.\n- Cross-origin iframe contents and shadow DOM are not traversed. Identified consent iframe/container selectors are reusable across numeric session IDs. Native dialogs and ordinary embedded forms remain visible. Scroll unlocking does not run behind other visible modals; non-overflow locks (e.g. fixed-body/inert/custom event interception) may still require site-specific handling.\n- HTTP(S) access is required to restore saved rules automatically on later visits. Internal browser pages, extension stores, PDFs and file URLs are not supported."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "Unclutter: Jev page cleanup with reusable rules",
+      "h1": "Unclutter: Jev page cleanup with reusable rules",
+      "description": "Unclutter uses Jev to classify page clutter, then saves reversible local hiding rules by template; visual cleanup does not block tracking or grant consent.",
+      "summary": "Unclutter hides nonessential elements in Chrome, Chromium and Firefox using saved rules for matching page templates. Jev classifies candidate elements into typed categories; extension code validates responses and controls selectors and reversible hiding. Choose TypeSafe or Vercel credentials and analyze manually by default. Saved rules continue working offline.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose",
+          "text": "Unclutter hides nonessential elements in Chrome, Chromium and Firefox using saved rules for matching page templates.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’s role",
+          "text": "Jev classifies candidate elements into typed categories; extension code validates responses and controls selectors and reversible hiding.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "How to use it",
+          "text": "Choose TypeSafe or Vercel credentials and analyze manually by default. Saved rules continue working offline.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limits to consider",
+          "text": "Visual hiding does not reject cookie consent or block tracking requests. Template matching is heuristic and can miss layout changes.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "Unclutter：用 Jev 清理页面并复用规则",
+      "h1": "Unclutter：用 Jev 清理页面并复用规则",
+      "description": "Unclutter 用 Jev 分类页面杂项，再按模板保存可撤销的本地隐藏规则；默认手动分析，已有规则可离线复用，视觉清理不会阻止跟踪请求或替用户作出同意选择。",
+      "summary": "Unclutter 在 Chrome、Chromium 和 Firefox 中隐藏非必要元素，并为匹配的页面模板保存规则。 Jev 将候选元素分为类型化类别；扩展代码校验响应、控制选择器，并以可撤销方式隐藏内容。 选择 TypeSafe 或 Vercel 凭据，默认手动分析；已保存规则可继续离线使用。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "Unclutter 在 Chrome、Chromium 和 Firefox 中隐藏非必要元素，并为匹配的页面模板保存规则。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "Jev 将候选元素分为类型化类别；扩展代码校验响应、控制选择器，并以可撤销方式隐藏内容。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "选择 TypeSafe 或 Vercel 凭据，默认手动分析；已保存规则可继续离线使用。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用边界",
+          "text": "视觉隐藏不等于拒绝 Cookie 同意或阻止跟踪请求；模板匹配是启发式方法，可能漏掉布局变化。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "Unclutter：以 Jev 清理頁面並重用規則",
+      "h1": "Unclutter：以 Jev 清理頁面並重用規則",
+      "description": "Unclutter 用 Jev 分類頁面雜項，再依範本儲存可復原的本地隱藏規則；預設手動分析，既有規則可離線重用，視覺清理不會阻擋追蹤或代替使用者選擇同意。",
+      "summary": "Unclutter 在 Chrome、Chromium 與 Firefox 隱藏非必要元素，並為相符的頁面範本儲存規則。 Jev 將候選元素分成型別化類別；擴充程式驗證回應、控制選擇器，並以可復原方式隱藏內容。 選擇 TypeSafe 或 Vercel 憑證，預設手動分析；已儲存規則可繼續離線使用。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "Unclutter 在 Chrome、Chromium 與 Firefox 隱藏非必要元素，並為相符的頁面範本儲存規則。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "Jev 將候選元素分成型別化類別；擴充程式驗證回應、控制選擇器，並以可復原方式隱藏內容。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "選擇 TypeSafe 或 Vercel 憑證，預設手動分析；已儲存規則可繼續離線使用。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用限制",
+          "text": "視覺隱藏不等於拒絕 Cookie 同意或阻擋追蹤請求；範本比對採啟發式方法，可能遺漏版面變化。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "Unclutter：Jev と再利用ルールでページ整理",
+      "h1": "Unclutter：Jev と再利用ルールでページ整理",
+      "description": "Unclutter は Jev で不要要素を分類し、テンプレートごとに戻せる非表示ルールを保存します。追跡防止や Cookie 同意の代行ではありません。",
+      "summary": "Unclutter は Chrome、Chromium、Firefox の不要な要素を隠し、ページテンプレートごとにルールを保存します。 Jev が候補要素を分類し、拡張機能が応答を検証してセレクターと元に戻せる非表示処理を管理します。 TypeSafe または Vercel の認証を選び、標準では手動分析します。保存ルールはオフラインでも使えます。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "何ができるか",
+          "text": "Unclutter は Chrome、Chromium、Firefox の不要な要素を隠し、ページテンプレートごとにルールを保存します。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "Jev が候補要素を分類し、拡張機能が応答を検証してセレクターと元に戻せる非表示処理を管理します。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "TypeSafe または Vercel の認証を選び、標準では手動分析します。保存ルールはオフラインでも使えます。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "制約と注意点",
+          "text": "見た目を隠すだけで Cookie 同意の拒否や追跡通信の遮断にはなりません。テンプレート判定はレイアウト変更を見逃す場合があります。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "Unclutter: Jev와 재사용 규칙으로 페이지 정리",
+      "h1": "Unclutter: Jev와 재사용 규칙으로 페이지 정리",
+      "description": "Unclutter는 Jev로 불필요한 요소를 분류한 뒤 템플릿별 복원 가능한 로컬 숨김 규칙을 저장합니다. 시각적 정리는 추적 차단이나 동의 선택이 아닙니다.",
+      "summary": "Unclutter는 Chrome, Chromium, Firefox에서 불필요한 요소를 숨기고 페이지 템플릿별 규칙을 저장합니다. Jev가 후보 요소를 분류하고 확장 코드가 응답 검증, 선택자, 되돌릴 수 있는 숨김을 제어합니다. TypeSafe 또는 Vercel 인증을 선택하고 기본적으로 수동 분석합니다. 저장된 규칙은 오프라인에서도 작동합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "Unclutter는 Chrome, Chromium, Firefox에서 불필요한 요소를 숨기고 페이지 템플릿별 규칙을 저장합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Jev가 후보 요소를 분류하고 확장 코드가 응답 검증, 선택자, 되돌릴 수 있는 숨김을 제어합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "TypeSafe 또는 Vercel 인증을 선택하고 기본적으로 수동 분석합니다. 저장된 규칙은 오프라인에서도 작동합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "제약 사항",
+          "text": "화면에서 숨겨도 쿠키 동의 거부나 추적 요청 차단은 아닙니다. 휴리스틱 템플릿 매칭은 레이아웃 변화를 놓칠 수 있습니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "Unclutter: limpiar páginas con Jev y reglas reutilizables",
+      "h1": "Unclutter: limpiar páginas con Jev y reglas reutilizables",
+      "description": "Unclutter clasifica elementos con Jev y guarda reglas locales reversibles por plantilla; la limpieza visual no bloquea rastreo ni decide el consentimiento.",
+      "summary": "Unclutter oculta elementos innecesarios en Chrome, Chromium y Firefox con reglas guardadas por plantilla de página. Jev clasifica candidatos; la extensión valida respuestas y controla selectores y ocultación reversible. Elige credenciales TypeSafe o Vercel y analiza manualmente por defecto; las reglas guardadas funcionan sin conexión.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "Unclutter oculta elementos innecesarios en Chrome, Chromium y Firefox con reglas guardadas por plantilla de página.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "El papel de Jev",
+          "text": "Jev clasifica candidatos; la extensión valida respuestas y controla selectores y ocultación reversible.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo usarlo",
+          "text": "Elige credenciales TypeSafe o Vercel y analiza manualmente por defecto; las reglas guardadas funcionan sin conexión.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Límites a considerar",
+          "text": "Ocultar no rechaza consentimiento ni bloquea rastreo. La coincidencia de plantillas es heurística y puede omitir cambios de diseño.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "Unclutter : nettoyage Jev avec règles réutilisables",
+      "h1": "Unclutter : nettoyage Jev avec règles réutilisables",
+      "description": "Unclutter classe les éléments superflus avec Jev et conserve des règles locales réversibles par modèle ; ce nettoyage ne bloque pas le suivi et ne choisit pas le consentement.",
+      "summary": "Unclutter masque les éléments superflus dans Chrome, Chromium et Firefox avec des règles enregistrées par modèle de page. Jev classe les candidats ; l’extension valide les réponses et contrôle sélecteurs et masquage réversible. Choisissez des identifiants TypeSafe ou Vercel et analysez manuellement par défaut ; les règles enregistrées fonctionnent hors ligne.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "Unclutter masque les éléments superflus dans Chrome, Chromium et Firefox avec des règles enregistrées par modèle de page.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Le rôle de Jev",
+          "text": "Jev classe les candidats ; l’extension valide les réponses et contrôle sélecteurs et masquage réversible.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Utilisation",
+          "text": "Choisissez des identifiants TypeSafe ou Vercel et analysez manuellement par défaut ; les règles enregistrées fonctionnent hors ligne.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limites à connaître",
+          "text": "Masquer ne refuse pas le consentement et ne bloque pas le suivi. La reconnaissance heuristique peut manquer des changements de mise en page.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "Unclutter: Seitenbereinigung mit Jev und gespeicherten Regeln",
+      "h1": "Unclutter: Seitenbereinigung mit Jev und gespeicherten Regeln",
+      "description": "Unclutter klassifiziert störende Seitenelemente mit Jev und speichert umkehrbare lokale Vorlagenregeln; visuelle Bereinigung verhindert kein Tracking und gibt keine Einwilligung.",
+      "summary": "Unclutter blendet unnötige Elemente in Chrome, Chromium und Firefox mit gespeicherten Regeln für Seitenvorlagen aus. Jev klassifiziert Kandidaten; die Erweiterung validiert Antworten und steuert Selektoren sowie umkehrbares Ausblenden. TypeSafe- oder Vercel-Zugang wählen und standardmäßig manuell analysieren; gespeicherte Regeln funktionieren offline.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "Unclutter blendet unnötige Elemente in Chrome, Chromium und Firefox mit gespeicherten Regeln für Seitenvorlagen aus.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Die Rolle von Jev",
+          "text": "Jev klassifiziert Kandidaten; die Erweiterung validiert Antworten und steuert Selektoren sowie umkehrbares Ausblenden.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Nutzung",
+          "text": "TypeSafe- oder Vercel-Zugang wählen und standardmäßig manuell analysieren; gespeicherte Regeln funktionieren offline.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Grenzen",
+          "text": "Ausblenden lehnt keine Cookies ab und blockiert kein Tracking. Heuristische Vorlagenerkennung kann Layoutänderungen übersehen.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "Unclutter: limpeza de páginas com Jev e regras reutilizáveis",
+      "h1": "Unclutter: limpeza de páginas com Jev e regras reutilizáveis",
+      "description": "Unclutter classifica elementos com Jev e salva regras locais reversíveis por modelo; limpeza visual não bloqueia rastreamento nem decide consentimento.",
+      "summary": "Unclutter oculta elementos desnecessários no Chrome, Chromium e Firefox com regras salvas por modelo de página. Jev classifica candidatos; a extensão valida respostas e controla seletores e ocultação reversível. Escolha credenciais TypeSafe ou Vercel e analise manualmente por padrão; regras salvas funcionam offline.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "Unclutter oculta elementos desnecessários no Chrome, Chromium e Firefox com regras salvas por modelo de página.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "O papel do Jev",
+          "text": "Jev classifica candidatos; a extensão valida respostas e controla seletores e ocultação reversível.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Escolha credenciais TypeSafe ou Vercel e analise manualmente por padrão; regras salvas funcionam offline.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limitações",
+          "text": "Ocultar não rejeita consentimento nem bloqueia rastreamento. O reconhecimento heurístico de modelos pode ignorar mudanças de layout.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "Unclutter: очистка страниц с Jev и повторными правилами",
+      "h1": "Unclutter: очистка страниц с Jev и повторными правилами",
+      "description": "Unclutter классифицирует лишние элементы через Jev и сохраняет обратимые локальные правила по шаблонам; визуальная очистка не блокирует слежение и не даёт согласие.",
+      "summary": "Unclutter скрывает лишние элементы в Chrome, Chromium и Firefox по сохранённым правилам для шаблонов страниц. Jev классифицирует кандидатов; расширение проверяет ответы и управляет селекторами и обратимым скрытием. Выберите ключ TypeSafe или Vercel; по умолчанию анализ ручной, сохранённые правила работают офлайн.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Unclutter скрывает лишние элементы в Chrome, Chromium и Firefox по сохранённым правилам для шаблонов страниц.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Jev классифицирует кандидатов; расширение проверяет ответы и управляет селекторами и обратимым скрытием.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Выберите ключ TypeSafe или Vercel; по умолчанию анализ ручной, сохранённые правила работают офлайн.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ограничения",
+          "text": "Скрытие не отклоняет согласие и не блокирует трекеры. Эвристическое сопоставление шаблонов может пропустить изменения макета.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "Unclutter: Jev और पुनःप्रयोग योग्य नियमों से पेज सफ़ाई",
+      "h1": "Unclutter: Jev और पुनःप्रयोग योग्य नियमों से पेज सफ़ाई",
+      "description": "Unclutter Jev से पेज के अनावश्यक तत्व पहचानकर स्थानीय, वापस हटाए जा सकने वाले नियम रखता है; दृश्य सफ़ाई ट्रैकिंग नहीं रोकती या सहमति नहीं देती।",
+      "summary": "Unclutter Chrome, Chromium और Firefox में अनावश्यक तत्व छिपाकर पेज टेम्पलेट के नियम सहेजता है। Jev उम्मीदवार वर्गीकृत करता है; एक्सटेंशन उत्तर जाँचता और चयनकर्ता तथा वापस पलट सकने वाला छिपाव नियंत्रित करता है। TypeSafe या Vercel क्रेडेंशियल चुनें; डिफ़ॉल्ट विश्लेषण हाथ से होता है और सहेजे नियम ऑफलाइन चलते हैं।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "किस काम आता है",
+          "text": "Unclutter Chrome, Chromium और Firefox में अनावश्यक तत्व छिपाकर पेज टेम्पलेट के नियम सहेजता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "Jev उम्मीदवार वर्गीकृत करता है; एक्सटेंशन उत्तर जाँचता और चयनकर्ता तथा वापस पलट सकने वाला छिपाव नियंत्रित करता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल कैसे करें",
+          "text": "TypeSafe या Vercel क्रेडेंशियल चुनें; डिफ़ॉल्ट विश्लेषण हाथ से होता है और सहेजे नियम ऑफलाइन चलते हैं।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "सीमाएँ",
+          "text": "छिपाने से कुकी सहमति अस्वीकार या ट्रैकिंग बंद नहीं होती। अनुमान आधारित टेम्पलेट पहचान लेआउट बदलाव चूक सकती है।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "Unclutter: bersihkan halaman dengan Jev dan aturan yang dapat dipakai ulang",
+      "h1": "Unclutter: bersihkan halaman dengan Jev dan aturan yang dapat dipakai ulang",
+      "description": "Unclutter mengklasifikasikan gangguan halaman dengan Jev dan menyimpan aturan lokal yang dapat dibatalkan; pembersihan visual tidak memblokir pelacakan atau memberi persetujuan.",
+      "summary": "Unclutter menyembunyikan elemen tidak penting di Chrome, Chromium, dan Firefox dengan aturan tersimpan per templat halaman. Jev mengklasifikasikan kandidat; ekstensi memvalidasi respons serta mengendalikan selektor dan penyembunyian yang dapat dibatalkan. Pilih kredensial TypeSafe atau Vercel; analisis manual menjadi bawaan dan aturan tersimpan bekerja offline.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "Unclutter menyembunyikan elemen tidak penting di Chrome, Chromium, dan Firefox dengan aturan tersimpan per templat halaman.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Jev mengklasifikasikan kandidat; ekstensi memvalidasi respons serta mengendalikan selektor dan penyembunyian yang dapat dibatalkan.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Pilih kredensial TypeSafe atau Vercel; analisis manual menjadi bawaan dan aturan tersimpan bekerja offline.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Batasan",
+          "text": "Menyembunyikan tidak menolak persetujuan cookie atau memblokir pelacakan. Pencocokan templat heuristik dapat melewatkan perubahan tata letak.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "Unclutter: dọn trang bằng Jev và quy tắc tái sử dụng",
+      "h1": "Unclutter: dọn trang bằng Jev và quy tắc tái sử dụng",
+      "description": "Unclutter dùng Jev phân loại thành phần thừa rồi lưu quy tắc ẩn cục bộ có thể hoàn tác; dọn giao diện không chặn theo dõi hay cấp đồng ý.",
+      "summary": "Unclutter ẩn phần tử không thiết yếu trong Chrome, Chromium và Firefox bằng quy tắc lưu theo mẫu trang. Jev phân loại ứng viên; tiện ích kiểm tra phản hồi, quản lý bộ chọn và thao tác ẩn có thể hoàn tác. Chọn thông tin TypeSafe hoặc Vercel; mặc định phân tích thủ công, quy tắc đã lưu hoạt động ngoại tuyến.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích",
+          "text": "Unclutter ẩn phần tử không thiết yếu trong Chrome, Chromium và Firefox bằng quy tắc lưu theo mẫu trang.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Jev phân loại ứng viên; tiện ích kiểm tra phản hồi, quản lý bộ chọn và thao tác ẩn có thể hoàn tác.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Chọn thông tin TypeSafe hoặc Vercel; mặc định phân tích thủ công, quy tắc đã lưu hoạt động ngoại tuyến.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Giới hạn",
+          "text": "Ẩn không từ chối cookie hay chặn theo dõi. Ghép mẫu theo kinh nghiệm có thể bỏ sót thay đổi bố cục.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "Unclutter: Jev ve yeniden kullanılabilir kurallarla sayfa temizliği",
+      "h1": "Unclutter: Jev ve yeniden kullanılabilir kurallarla sayfa temizliği",
+      "description": "Unclutter Jev ile sayfa kalabalığını sınıflandırıp geri alınabilir yerel şablon kuralları saklar; görsel temizlik takibi engellemez veya onay vermez.",
+      "summary": "Unclutter Chrome, Chromium ve Firefox’ta gereksiz öğeleri sayfa şablonuna göre kayıtlı kurallarla gizler. Jev adayları sınıflandırır; uzantı yanıtları doğrulayıp seçicileri ve geri alınabilir gizlemeyi yönetir. TypeSafe veya Vercel kimlik bilgilerini seçin; varsayılan analiz elle yapılır, kayıtlı kurallar çevrimdışı çalışır.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "Unclutter Chrome, Chromium ve Firefox’ta gereksiz öğeleri sayfa şablonuna göre kayıtlı kurallarla gizler.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Jev adayları sınıflandırır; uzantı yanıtları doğrulayıp seçicileri ve geri alınabilir gizlemeyi yönetir.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "TypeSafe veya Vercel kimlik bilgilerini seçin; varsayılan analiz elle yapılır, kayıtlı kurallar çevrimdışı çalışır.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Sınırlamalar",
+          "text": "Gizlemek çerez onayını reddetmez veya takibi engellemez. Sezgisel şablon eşleştirme düzen değişikliklerini kaçırabilir.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "Unclutter: pulizia Jev con regole riutilizzabili",
+      "h1": "Unclutter: pulizia Jev con regole riutilizzabili",
+      "description": "Unclutter classifica elementi superflui con Jev e salva regole locali reversibili per modello; la pulizia visiva non blocca tracciamenti né concede consenso.",
+      "summary": "Unclutter nasconde elementi superflui in Chrome, Chromium e Firefox con regole salvate per modello di pagina. Jev classifica candidati; l’estensione valida risposte e controlla selettori e nascondimento reversibile. Scegli credenziali TypeSafe o Vercel; l’analisi è manuale di default e le regole salvate funzionano offline.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "Unclutter nasconde elementi superflui in Chrome, Chromium e Firefox con regole salvate per modello di pagina.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Il ruolo di Jev",
+          "text": "Jev classifica candidati; l’estensione valida risposte e controlla selettori e nascondimento reversibile.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come usarlo",
+          "text": "Scegli credenziali TypeSafe o Vercel; l’analisi è manuale di default e le regole salvate funzionano offline.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limiti",
+          "text": "Nascondere non rifiuta cookie né blocca tracciamenti. Il riconoscimento euristico può ignorare cambiamenti di impaginazione.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

@@ -1,0 +1,762 @@
+{
+  "version": "source-content-v1",
+  "repo": "Devin-AXIS/jev-dsh-decision",
+  "repositoryId": 1377916761,
+  "relationship": "integration",
+  "category": "integrations",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "adc88caa9bf174d367e79a5f254c7936bcef088e",
+      "url": "https://github.com/Devin-AXIS/jev-dsh-decision/blob/adc88caa9bf174d367e79a5f254c7936bcef088e/README.md",
+      "sha256": "aa72228462c66dbafb47679ec36f76a86fe3295ca5444fd7bd54b6a71dbae570",
+      "accessedAt": "2026-09-30T07:33:52.163Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "The plugin uses Jev to recommend available tools, skills and task owners and to evaluate output against defined criteria.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 8,
+          "end": 12,
+          "quote": "**为 Agent Harness 提供结构化决策能力。**\n\n将 TypeSafe AI 的 Jev 决策能力接入你的 Agent：帮助选择工具、Skill 和任务负责人，评估产出质量，并以结构化结果返回判断与概率。Jev 负责辅助决策，原 Agent 继续负责规划和执行。\n\n提供 **DeepSeek Harness 原生插件**和 **iPolloWork 导入插件**两个安装入口；在 iPolloWork 中可供 **OpenCode、DeepSeek Harness、Codex Harness** 使用。同一份决策核心，不修改引擎源码，不接管主 Agent。"
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "Jev returns structured choices and probabilities; the host agent retains planning, parameter construction and execution.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 31,
+          "end": 36,
+          "quote": "- 根据任务，在**当前真实可用且获准使用**的工具、Skill、Agent 之间推荐选择。\n- 按明确标准评分、判断是否需要某项能力；独立问题可以一次批量评估。\n- 返回选择、概率、置信度与用量；**不执行推荐动作，也不自动切换模型或路由所有请求**。\n- 提供本地配置检查和真实连接测试。连接测试会产生少量 TypeSafe API 用量。\n\nJev 是 TypeSafe AI 的结构化决策模型，不是聊天模型。原 Agent 继续负责规划、解释、参数构造、工具执行和原生子 Agent 协作。Jev 不返回文字推理过程，Agent 的解释不能冒充 Jev 的原始输出。"
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Install the native DSH bundle or import the iPolloWork package, configure a TypeSafe key, then check status before a live connection test.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 44,
+          "end": 69,
+          "quote": "已安装 DSH 后，克隆本仓库，通过本地绝对路径安装：\n\n```sh\ngit clone https://github.com/Devin-AXIS/jev-dsh-decision.git\ndsh plugin add /absolute/path/jev-dsh-decision\n```\n\n把 `/absolute/path/jev-dsh-decision` 替换成克隆目录的实际绝对路径。插件使用原生 `dsh.bundle` 格式，无需构建源码。\n\n如果已经拿到 `.tgz` 安装包，也可以直接安装：\n\n```sh\ndsh plugin add /absolute/path/dsh-jev-decision-model-0.1.2.tgz\n```\n\n### 2. 配置授权\n\n在 DSH 的凭据管理或启动环境中配置自己的 **`TYPESAFE_API_KEY`**。不要把密钥写进插件源码或聊天记录。插件复用 DSH 的 `credentials`、`tools` 和 `skills` 服务；官方默认配置提供这些服务，自定义配置需要保留它们。\n\n### 3. 验证并使用\n\n重启运行中的 DSH 会话，让新配置生效，然后在对话中说：\n\n> 使用 Jev，先检查配置，再测试连接。\n\n插件提供 `jev_status`（本地状态）、`jev_check_connection`（真实连接测试）、`jev_evaluate`（结构化评估）三个工具，以及 `jev-decision` Skill。连接测试会产生少量 TypeSafe API 用量；本地显示“已配置”不代表密钥已经验证。"
+        },
+        {
+          "source": "source-1",
+          "start": 81,
+          "end": 93,
+          "quote": "适合使用 Work 图形界面的用户。**在 Work 中安装一次，供其支持的 OpenCode、DeepSeek Harness、Codex Harness 引擎使用，无需分别安装三个包。**\n\n### 1. 导入安装包\n\n获取已签名的 `jev-decision-model-0.1.2.ipollowork-plugin` 安装包，在 **扩展 → 导入插件包** 中选择它，确认发布者为 **iPolloWork**。维护者的安装包构建方式见下方“开发和测试”。\n\n已安装旧版时，导入新版可沿用原插件身份升级。显示名称为“Jev DSH 决策引擎”，内部插件 ID `jev-decision-model` 和 DSH 包名 `dsh-jev-decision-model` 保持不变。\n\n**客户端要求：**需要包含 `ipollowork/ipollowork-2026` 官方签名公钥注册的 Work 版本。未包含此注册的旧客户端会拒绝导入；仅满足清单里的最低版本号不够。请勿绕过签名校验。\n\n### 2. 配置授权\n\n打开插件详情中的授权入口，填写自己的 **TypeSafe API Key**。密钥由 Work 的插件授权仓库保存，不需要发给对话中的 Agent。"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "OpenCode and Codex access is through iPolloWork, not standalone native packages. Recommendations neither execute actions nor automatically switch models.",
+      "kind": "source-limitation",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 27,
+          "end": 27,
+          "quote": "OpenCode 和 Codex Harness 当前支持的是 **iPolloWork 内的接入方式**，本仓库尚未提供它们各自的独立原生安装包。其他 Harness 可以基于共享决策核心开发适配器，不代表已经自动兼容。"
+        },
+        {
+          "source": "source-1",
+          "start": 33,
+          "end": 36,
+          "quote": "- 返回选择、概率、置信度与用量；**不执行推荐动作，也不自动切换模型或路由所有请求**。\n- 提供本地配置检查和真实连接测试。连接测试会产生少量 TypeSafe API 用量。\n\nJev 是 TypeSafe AI 的结构化决策模型，不是聊天模型。原 Agent 继续负责规划、解释、参数构造、工具执行和原生子 Agent 协作。Jev 不返回文字推理过程，Agent 的解释不能冒充 Jev 的原始输出。"
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "jev-dsh-decision — Jev judgments for DeepSeek Harness and iPolloWork",
+      "h1": "jev-dsh-decision — Jev judgments for DeepSeek Harness and iPolloWork",
+      "description": "jev-dsh-decision: The plugin uses Jev to recommend available tools, skills and task owners and to evaluate output against defined criteria.",
+      "summary": "The plugin uses Jev to recommend available tools, skills and task owners and to evaluate output against defined criteria. Install the native DSH bundle or import the iPolloWork package, configure a TypeSafe key, then check status before a live connection test.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "What it does",
+          "text": "The plugin uses Jev to recommend available tools, skills and task owners and to evaluate output against defined criteria.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "Jev returns structured choices and probabilities; the host agent retains planning, parameter construction and execution.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Getting started",
+          "text": "Install the native DSH bundle or import the iPolloWork package, configure a TypeSafe key, then check status before a live connection test.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "OpenCode and Codex access is through iPolloWork, not standalone native packages. Recommendations neither execute actions nor automatically switch models.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "jev-dsh-decision — 为 DeepSeek Harness 与 iPolloWork 提供 Jev 判断",
+      "h1": "jev-dsh-decision — 为 DeepSeek Harness 与 iPolloWork 提供 Jev 判断",
+      "description": "jev-dsh-decision: 插件用 Jev 推荐可用工具、技能和任务负责人，并按明确标准评估产出。",
+      "summary": "插件用 Jev 推荐可用工具、技能和任务负责人，并按明确标准评估产出。 安装原生 DSH 包或导入 iPolloWork 包，配置 TypeSafe 密钥，先查状态再测试真实连接。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "插件用 Jev 推荐可用工具、技能和任务负责人，并按明确标准评估产出。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "Jev 返回结构化选择与概率，宿主智能体继续负责规划、参数构造和执行。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "安装原生 DSH 包或导入 iPolloWork 包，配置 TypeSafe 密钥，先查状态再测试真实连接。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "OpenCode 与 Codex 通过 iPolloWork 接入，没有独立原生包。推荐不会执行动作或自动切换模型。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "jev-dsh-decision — 為 DeepSeek Harness 與 iPolloWork 提供 Jev 判斷",
+      "h1": "jev-dsh-decision — 為 DeepSeek Harness 與 iPolloWork 提供 Jev 判斷",
+      "description": "jev-dsh-decision: 外掛使用 Jev 推薦可用工具、技能及任務負責者，並依明確標準評估成果。",
+      "summary": "外掛使用 Jev 推薦可用工具、技能及任務負責者，並依明確標準評估成果。 安裝原生 DSH 套件或匯入 iPolloWork 套件，設定 TypeSafe 金鑰，先查狀態再測試實際連線。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "外掛使用 Jev 推薦可用工具、技能及任務負責者，並依明確標準評估成果。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "Jev 回傳結構化選擇與機率，宿主代理仍負責規劃、參數建構及執行。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "安裝原生 DSH 套件或匯入 iPolloWork 套件，設定 TypeSafe 金鑰，先查狀態再測試實際連線。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "OpenCode 與 Codex 透過 iPolloWork 接入，沒有獨立原生套件。推薦不會執行動作或自動切換模型。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "jev-dsh-decision — DeepSeek Harness と iPolloWork に Jev 判断を追加",
+      "h1": "jev-dsh-decision — DeepSeek Harness と iPolloWork に Jev 判断を追加",
+      "description": "jev-dsh-decision: Jev で利用可能なツール、スキル、担当エージェントを推薦し、明確な基準で成果物を評価するプラグインです。",
+      "summary": "Jev で利用可能なツール、スキル、担当エージェントを推薦し、明確な基準で成果物を評価するプラグインです。 DSH ネイティブ版か iPolloWork 版を導入し、TypeSafe キーを設定して状態確認後に実接続を試します。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "できること",
+          "text": "Jev で利用可能なツール、スキル、担当エージェントを推薦し、明確な基準で成果物を評価するプラグインです。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "Jev は構造化された選択と確率を返し、計画、引数作成、実行は元のエージェントが担います。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い始めるには",
+          "text": "DSH ネイティブ版か iPolloWork 版を導入し、TypeSafe キーを設定して状態確認後に実接続を試します。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "対象範囲と制約",
+          "text": "OpenCode と Codex は iPolloWork 経由で、独立したネイティブ版はありません。推薦だけでは実行もモデル切り替えもしません。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "jev-dsh-decision — DeepSeek Harness와 iPolloWork용 Jev 판단",
+      "h1": "jev-dsh-decision — DeepSeek Harness와 iPolloWork용 Jev 판단",
+      "description": "jev-dsh-decision: Jev로 사용 가능한 도구, 스킬, 담당 에이전트를 추천하고 명시적 기준으로 결과를 평가하는 플러그인입니다.",
+      "summary": "Jev로 사용 가능한 도구, 스킬, 담당 에이전트를 추천하고 명시적 기준으로 결과를 평가하는 플러그인입니다. DSH 전용 패키지를 설치하거나 iPolloWork 패키지를 가져오고 TypeSafe 키를 설정한 뒤 상태 확인 후 실제 연결을 시험합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "Jev로 사용 가능한 도구, 스킬, 담당 에이전트를 추천하고 명시적 기준으로 결과를 평가하는 플러그인입니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Jev는 구조화된 선택과 확률을 반환하며 계획, 인수 구성, 실행은 호스트 에이전트가 맡습니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "DSH 전용 패키지를 설치하거나 iPolloWork 패키지를 가져오고 TypeSafe 키를 설정한 뒤 상태 확인 후 실제 연결을 시험합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 제약",
+          "text": "OpenCode와 Codex는 iPolloWork를 통해 접근하며 각각의 독립 네이티브 패키지는 아직 없습니다. 추천이 행동 실행이나 모델 자동 전환을 하지는 않습니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "jev-dsh-decision — Juicios Jev para DeepSeek Harness e iPolloWork",
+      "h1": "jev-dsh-decision — Juicios Jev para DeepSeek Harness e iPolloWork",
+      "description": "jev-dsh-decision: El complemento usa Jev para recomendar herramientas, habilidades y responsables disponibles y evaluar resultados con criterios definidos.",
+      "summary": "El complemento usa Jev para recomendar herramientas, habilidades y responsables disponibles y evaluar resultados con criterios definidos. Instala el paquete DSH nativo o importa el de iPolloWork, configura TypeSafe y comprueba estado antes de probar la conexión real.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "El complemento usa Jev para recomendar herramientas, habilidades y responsables disponibles y evaluar resultados con criterios definidos.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Jev devuelve elecciones y probabilidades estructuradas; el agente anfitrión conserva planificación, parámetros y ejecución.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo empezar",
+          "text": "Instala el paquete DSH nativo o importa el de iPolloWork, configura TypeSafe y comprueba estado antes de probar la conexión real.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "OpenCode y Codex acceden mediante iPolloWork, sin paquetes nativos independientes. Recomendar no ejecuta acciones ni cambia modelos automáticamente.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "jev-dsh-decision — Jugements Jev pour DeepSeek Harness et iPolloWork",
+      "h1": "jev-dsh-decision — Jugements Jev pour DeepSeek Harness et iPolloWork",
+      "description": "jev-dsh-decision: Le module utilise Jev pour recommander outils, compétences et responsables disponibles et évaluer les résultats selon des critères.",
+      "summary": "Le module utilise Jev pour recommander outils, compétences et responsables disponibles et évaluer les résultats selon des critères. Installez le paquet DSH natif ou importez celui d’iPolloWork, configurez TypeSafe puis vérifiez l’état avant la connexion réelle.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "Le module utilise Jev pour recommander outils, compétences et responsables disponibles et évaluer les résultats selon des critères.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Jev renvoie choix et probabilités structurés ; l’agent hôte garde planification, paramètres et exécution.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Installez le paquet DSH natif ou importez celui d’iPolloWork, configurez TypeSafe puis vérifiez l’état avant la connexion réelle.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "OpenCode et Codex passent par iPolloWork, sans paquets natifs autonomes. Une recommandation n’exécute rien et ne change pas automatiquement de modèle.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "jev-dsh-decision — Jev-Urteile für DeepSeek Harness und iPolloWork",
+      "h1": "jev-dsh-decision — Jev-Urteile für DeepSeek Harness und iPolloWork",
+      "description": "jev-dsh-decision: Das Plugin nutzt Jev zur Empfehlung verfügbarer Werkzeuge, Skills und Verantwortlicher sowie zur Bewertung nach definierten Kriterien.",
+      "summary": "Das Plugin nutzt Jev zur Empfehlung verfügbarer Werkzeuge, Skills und Verantwortlicher sowie zur Bewertung nach definierten Kriterien. Das native DSH-Paket installieren oder iPolloWork-Paket importieren, TypeSafe konfigurieren und vor dem Live-Test den Status prüfen.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "Das Plugin nutzt Jev zur Empfehlung verfügbarer Werkzeuge, Skills und Verantwortlicher sowie zur Bewertung nach definierten Kriterien.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Jev liefert strukturierte Auswahl und Wahrscheinlichkeiten; Planung, Argumente und Ausführung bleiben beim Host-Agenten.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Einstieg",
+          "text": "Das native DSH-Paket installieren oder iPolloWork-Paket importieren, TypeSafe konfigurieren und vor dem Live-Test den Status prüfen.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "OpenCode und Codex werden über iPolloWork angebunden, ohne eigenständige native Pakete. Empfehlungen führen nichts aus und wechseln keine Modelle automatisch.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "jev-dsh-decision — Julgamentos Jev para DeepSeek Harness e iPolloWork",
+      "h1": "jev-dsh-decision — Julgamentos Jev para DeepSeek Harness e iPolloWork",
+      "description": "jev-dsh-decision: O plugin usa Jev para recomendar ferramentas, habilidades e responsáveis disponíveis e avaliar resultados com critérios definidos.",
+      "summary": "O plugin usa Jev para recomendar ferramentas, habilidades e responsáveis disponíveis e avaliar resultados com critérios definidos. Instale o pacote nativo DSH ou importe o iPolloWork, configure TypeSafe e confira o estado antes do teste real.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "O plugin usa Jev para recomendar ferramentas, habilidades e responsáveis disponíveis e avaliar resultados com critérios definidos.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "Jev retorna escolhas e probabilidades estruturadas; planejamento, parâmetros e execução ficam com o agente anfitrião.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como começar",
+          "text": "Instale o pacote nativo DSH ou importe o iPolloWork, configure TypeSafe e confira o estado antes do teste real.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "OpenCode e Codex acessam pelo iPolloWork, sem pacotes nativos independentes. Recomendações não executam ações nem trocam modelos automaticamente.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "jev-dsh-decision — Решения Jev для DeepSeek Harness и iPolloWork",
+      "h1": "jev-dsh-decision — Решения Jev для DeepSeek Harness и iPolloWork",
+      "description": "jev-dsh-decision: Плагин использует Jev для рекомендации доступных инструментов, навыков и исполнителей и оценки результатов по заданным критериям.",
+      "summary": "Плагин использует Jev для рекомендации доступных инструментов, навыков и исполнителей и оценки результатов по заданным критериям. Установите пакет DSH или импортируйте пакет iPolloWork, настройте TypeSafe и проверьте статус перед реальным соединением.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Плагин использует Jev для рекомендации доступных инструментов, навыков и исполнителей и оценки результатов по заданным критериям.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Jev возвращает структурированный выбор и вероятности; планирование, параметры и исполнение остаются у основного агента.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Начало работы",
+          "text": "Установите пакет DSH или импортируйте пакет iPolloWork, настройте TypeSafe и проверьте статус перед реальным соединением.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "OpenCode и Codex подключаются через iPolloWork, без отдельных нативных пакетов. Рекомендации не выполняют действий и не переключают модели автоматически.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "jev-dsh-decision — DeepSeek Harness और iPolloWork के लिए Jev निर्णय",
+      "h1": "jev-dsh-decision — DeepSeek Harness और iPolloWork के लिए Jev निर्णय",
+      "description": "jev-dsh-decision: प्लगइन Jev से उपलब्ध टूल, स्किल और जिम्मेदार एजेंट सुझाता तथा स्पष्ट मानदंडों से परिणाम जाँचता है।",
+      "summary": "प्लगइन Jev से उपलब्ध टूल, स्किल और जिम्मेदार एजेंट सुझाता तथा स्पष्ट मानदंडों से परिणाम जाँचता है। मूल DSH पैकेज या iPolloWork पैकेज स्थापित करें, TypeSafe सेट करें और वास्तविक कनेक्शन जाँच से पहले स्थिति देखें।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "परियोजना का काम",
+          "text": "प्लगइन Jev से उपलब्ध टूल, स्किल और जिम्मेदार एजेंट सुझाता तथा स्पष्ट मानदंडों से परिणाम जाँचता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "Jev संरचित चयन और संभावनाएँ लौटाता है; योजना, पैरामीटर और निष्पादन होस्ट एजेंट के पास हैं।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "शुरुआत कैसे करें",
+          "text": "मूल DSH पैकेज या iPolloWork पैकेज स्थापित करें, TypeSafe सेट करें और वास्तविक कनेक्शन जाँच से पहले स्थिति देखें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "OpenCode और Codex iPolloWork से जुड़ते हैं, स्वतंत्र मूल पैकेज नहीं हैं। सिफारिश कार्रवाई या स्वतः मॉडल बदलाव नहीं करती।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "jev-dsh-decision — Penilaian Jev untuk DeepSeek Harness dan iPolloWork",
+      "h1": "jev-dsh-decision — Penilaian Jev untuk DeepSeek Harness dan iPolloWork",
+      "description": "jev-dsh-decision: Plugin memakai Jev untuk menyarankan alat, keterampilan, dan penanggung jawab tersedia serta mengevaluasi hasil menurut kriteria.",
+      "summary": "Plugin memakai Jev untuk menyarankan alat, keterampilan, dan penanggung jawab tersedia serta mengevaluasi hasil menurut kriteria. Pasang paket DSH asli atau impor iPolloWork, atur TypeSafe, lalu periksa status sebelum menguji koneksi nyata.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "Plugin memakai Jev untuk menyarankan alat, keterampilan, dan penanggung jawab tersedia serta mengevaluasi hasil menurut kriteria.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Jev mengembalikan pilihan dan probabilitas terstruktur; agen induk tetap merencanakan, menyusun parameter, dan mengeksekusi.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara memulai",
+          "text": "Pasang paket DSH asli atau impor iPolloWork, atur TypeSafe, lalu periksa status sebelum menguji koneksi nyata.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "OpenCode dan Codex terhubung melalui iPolloWork, tanpa paket asli mandiri. Rekomendasi tidak mengeksekusi tindakan atau mengganti model otomatis.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "jev-dsh-decision — Phán đoán Jev cho DeepSeek Harness và iPolloWork",
+      "h1": "jev-dsh-decision — Phán đoán Jev cho DeepSeek Harness và iPolloWork",
+      "description": "jev-dsh-decision: Plugin dùng Jev đề xuất công cụ, kỹ năng, tác tử phụ trách sẵn có và đánh giá kết quả theo tiêu chí rõ ràng.",
+      "summary": "Plugin dùng Jev đề xuất công cụ, kỹ năng, tác tử phụ trách sẵn có và đánh giá kết quả theo tiêu chí rõ ràng. Cài gói DSH gốc hoặc nhập gói iPolloWork, cấu hình TypeSafe rồi kiểm tra trạng thái trước khi thử kết nối thật.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Công dụng",
+          "text": "Plugin dùng Jev đề xuất công cụ, kỹ năng, tác tử phụ trách sẵn có và đánh giá kết quả theo tiêu chí rõ ràng.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Jev trả lựa chọn và xác suất có cấu trúc; tác tử chủ giữ việc lập kế hoạch, tạo tham số và thực thi.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách bắt đầu",
+          "text": "Cài gói DSH gốc hoặc nhập gói iPolloWork, cấu hình TypeSafe rồi kiểm tra trạng thái trước khi thử kết nối thật.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "OpenCode và Codex đi qua iPolloWork, không có gói gốc độc lập. Đề xuất không tự thực thi hành động hoặc đổi mô hình.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "jev-dsh-decision — DeepSeek Harness ve iPolloWork için Jev kararları",
+      "h1": "jev-dsh-decision — DeepSeek Harness ve iPolloWork için Jev kararları",
+      "description": "jev-dsh-decision: Eklenti, mevcut araçları, becerileri ve sorumluları önermek ve çıktıyı ölçütlerle değerlendirmek için Jev kullanır.",
+      "summary": "Eklenti, mevcut araçları, becerileri ve sorumluları önermek ve çıktıyı ölçütlerle değerlendirmek için Jev kullanır. Yerel DSH paketini veya iPolloWork paketini kurun, TypeSafe ayarlayın ve canlı bağlantıdan önce durumu denetleyin.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "Eklenti, mevcut araçları, becerileri ve sorumluları önermek ve çıktıyı ölçütlerle değerlendirmek için Jev kullanır.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Jev yapılandırılmış seçim ve olasılıklar döndürür; planlama, parametreler ve yürütme ana ajanda kalır.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Başlangıç",
+          "text": "Yerel DSH paketini veya iPolloWork paketini kurun, TypeSafe ayarlayın ve canlı bağlantıdan önce durumu denetleyin.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "OpenCode ve Codex iPolloWork üzerinden bağlanır; bağımsız yerel paket yoktur. Öneriler eylem yürütmez veya modelleri otomatik değiştirmez.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "jev-dsh-decision — Giudizi Jev per DeepSeek Harness e iPolloWork",
+      "h1": "jev-dsh-decision — Giudizi Jev per DeepSeek Harness e iPolloWork",
+      "description": "jev-dsh-decision: Il plugin usa Jev per suggerire strumenti, competenze e responsabili disponibili e valutare risultati con criteri definiti.",
+      "summary": "Il plugin usa Jev per suggerire strumenti, competenze e responsabili disponibili e valutare risultati con criteri definiti. Installa il pacchetto DSH nativo o importa iPolloWork, configura TypeSafe e controlla lo stato prima della connessione reale.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "Il plugin usa Jev per suggerire strumenti, competenze e responsabili disponibili e valutare risultati con criteri definiti.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Jev restituisce scelte e probabilità strutturate; pianificazione, parametri ed esecuzione restano all’agente ospite.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come iniziare",
+          "text": "Installa il pacchetto DSH nativo o importa iPolloWork, configura TypeSafe e controlla lo stato prima della connessione reale.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "OpenCode e Codex passano da iPolloWork, senza pacchetti nativi autonomi. I suggerimenti non eseguono azioni né cambiano automaticamente modello.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

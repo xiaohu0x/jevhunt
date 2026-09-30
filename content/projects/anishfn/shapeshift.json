@@ -1,0 +1,780 @@
+{
+  "version": "source-content-v1",
+  "repo": "anishfn/shapeshift",
+  "repositoryId": 1381152958,
+  "relationship": "integration",
+  "category": "apps",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "5e24166dcbde6e794f0bd5b1b4bd395aaee5fc19",
+      "url": "https://github.com/anishfn/shapeshift/blob/5e24166dcbde6e794f0bd5b1b4bd395aaee5fc19/README.md",
+      "sha256": "5bb7cec85753c782c9b4d791093596301c9aa457ea0aa4199567a2ac042d1b35",
+      "accessedAt": "2026-09-30T07:33:49.155Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "kind": "documented",
+      "text": "Shapeshift turns typed text into event cards, checklists, timers, bill splits and other task-specific interfaces.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 3,
+          "end": 3,
+          "quote": "**An input that becomes what you mean.** One text box that morphs into the right UI as you type — an event card, a checklist, a timer, a color picker, a bill splitter, a poll, a converter and more."
+        },
+        {
+          "source": "source-1",
+          "start": 51,
+          "end": 73,
+          "quote": "## Card types\n\n| Card | Try |\n| --- | --- |\n| Event | `lunch with rahul and anna tomorrow` |\n| Reminder | `remind me to pay rent tomorrow urgent` |\n| Checklist | `buy milk, eggs, bread and coffee` |\n| Timer | `25 min focus` |\n| Habit | `gym 3x a week` |\n| Color | `#ff6b35`, `tiffany blue`, `minecraft diamond` |\n| Split | `split 2400 between 3` |\n| Expense | `spent 450 on uber` |\n| Convert | `5 miles in km`, `72f to c` |\n| Calculate | `18% of 3450` |\n| Trip | `flight to goa next weekend` |\n| Poll | `pizza or burgers for friday?` |\n| Contact | `rahul 98200 12345 rahul@mail.com` |\n| Bookmark | `https://vercel.com/blog check later` |\n| Countdown | `days until christmas` |\n| Time zone | `3pm pst in ist`, `what time is it in tokyo` |\n| Random | `roll 2d6`, `flip a coin`, `pick one: tacos, sushi or pizza` |\n| Goal | `read 12 books this year, 4 done` |\n| Note | anything else |"
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "kind": "documented",
+      "text": "Optional Jev classifies intent and signals; deterministic code handles dates and arithmetic. Offline keyword classification is the default.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 18,
+          "end": 22,
+          "quote": "Intent is classified by [TypeSafe AI](https://typesafe.ai)'s **Jev** model: one call answers 14 typed questions in parallel (which card, plus signals like \"is it a video call?\", \"is it urgent?\"). Everything else — dates, amounts, units, math — is deterministic code. **Jev decides, code computes.**\n\n<p align=\"center\"><img src=\"docs/diagrams/jev-fanout.svg\" alt=\"One Jev call answers 14 questions in parallel; a deterministic parser reads the same text for values\" width=\"820\"></p>\n\nIt works **fully offline by default** with a built-in keyword classifier, so you can run it without an account."
+        },
+        {
+          "source": "source-1",
+          "start": 35,
+          "end": 42,
+          "quote": "### Use the online Jev model (optional)\n\n```bash\ncp .env.example .env.local\n# then set TYPESAFE_API_KEY=... (get one at https://console.typesafe.ai/keys)\n```\n\nRestart `bun dev`. The latency readout in the bottom-right corner switches from `jev-offline` to `jev-1.13.0`. The key is only ever read on the server (`/api/intent`); it never reaches the browser. If the API is unreachable or rate-limited, Shapeshift quietly falls back to offline mode."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "kind": "documented",
+      "text": "Type into the Bun-powered app, choose a card and save it; a server-side TypeSafe key enables Jev.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 26,
+          "end": 33,
+          "quote": "Requires [Bun](https://bun.sh) 1.2+.\n\n```bash\nbun install\nbun dev\n```\n\nOpen http://localhost:3000 and start typing. Press <kbd>/</kbd> to see every card type."
+        },
+        {
+          "source": "source-1",
+          "start": 75,
+          "end": 85,
+          "quote": "Saved cards live in your browser (`localStorage`) until you delete them. Click one to edit it.\n\n### Keyboard\n\n| Key | Action |\n| --- | --- |\n| <kbd>Enter</kbd> | Save the card |\n| <kbd>Esc</kbd> | Clear (or cancel an edit) |\n| <kbd>Tab</kbd> | Keep a faint preview |\n| <kbd>←</kbd> <kbd>→</kbd> | Choose between \"Did you mean\" chips |\n| <kbd>/</kbd> | Open every card type |"
+        },
+        {
+          "source": "source-1",
+          "start": 35,
+          "end": 42,
+          "quote": "### Use the online Jev model (optional)\n\n```bash\ncp .env.example .env.local\n# then set TYPESAFE_API_KEY=... (get one at https://console.typesafe.ai/keys)\n```\n\nRestart `bun dev`. The latency readout in the bottom-right corner switches from `jev-offline` to `jev-1.13.0`. The key is only ever read on the server (`/api/intent`); it never reaches the browser. If the API is unreachable or rate-limited, Shapeshift quietly falls back to offline mode."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "kind": "documented",
+      "text": "Saved cards remain in browser localStorage. Unavailable or rate-limited Jev requests fall back to offline classification.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 42,
+          "end": 42,
+          "quote": "Restart `bun dev`. The latency readout in the bottom-right corner switches from `jev-offline` to `jev-1.13.0`. The key is only ever read on the server (`/api/intent`); it never reaches the browser. If the API is unreachable or rate-limited, Shapeshift quietly falls back to offline mode."
+        },
+        {
+          "source": "source-1",
+          "start": 75,
+          "end": 75,
+          "quote": "Saved cards live in your browser (`localStorage`) until you delete them. Click one to edit it."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "Shapeshift: adaptive input cards with optional Jev",
+      "h1": "Shapeshift: adaptive input cards with optional Jev",
+      "description": "Shapeshift turns text into event, checklist and utility cards. Optional Jev classifies intent; dates and arithmetic stay in code, with offline mode by default.",
+      "summary": "Shapeshift turns typed text into event cards, checklists, timers, bill splits and other task-specific interfaces. Optional Jev classifies intent and signals; deterministic code handles dates and arithmetic. Offline keyword classification is the default. Type into the Bun-powered app, choose a card and save it; a server-side TypeSafe key enables Jev.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose",
+          "text": "Shapeshift turns typed text into event cards, checklists, timers, bill splits and other task-specific interfaces.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’s role",
+          "text": "Optional Jev classifies intent and signals; deterministic code handles dates and arithmetic. Offline keyword classification is the default.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "How to use it",
+          "text": "Type into the Bun-powered app, choose a card and save it; a server-side TypeSafe key enables Jev.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limits to consider",
+          "text": "Saved cards remain in browser localStorage. Unavailable or rate-limited Jev requests fall back to offline classification.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "Shapeshift：用可选 Jev 将输入变成任务卡片",
+      "h1": "Shapeshift：用可选 Jev 将输入变成任务卡片",
+      "description": "Shapeshift 将文字变成日程、清单和实用卡片；可选 Jev 负责意图分类，日期与算术由代码处理。默认离线运行，启用 Jev 后遇到服务故障会回退。",
+      "summary": "Shapeshift 将文字输入变成日程、清单、计时器、分账等面向具体任务的界面。 可选 Jev 判断意图和信号；日期、算术由确定性代码处理，默认使用离线关键词分类。 在基于 Bun 的应用中输入、选择并保存卡片；配置服务端 TypeSafe 密钥即可启用 Jev。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "Shapeshift 将文字输入变成日程、清单、计时器、分账等面向具体任务的界面。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "可选 Jev 判断意图和信号；日期、算术由确定性代码处理，默认使用离线关键词分类。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "在基于 Bun 的应用中输入、选择并保存卡片；配置服务端 TypeSafe 密钥即可启用 Jev。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用边界",
+          "text": "卡片保存在浏览器 localStorage；Jev 不可用或限流时回退到离线分类。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "Shapeshift：以選用 Jev 將輸入變成任務卡片",
+      "h1": "Shapeshift：以選用 Jev 將輸入變成任務卡片",
+      "description": "Shapeshift 將文字變成行程、清單與實用卡片；選用 Jev 負責意圖分類，日期及算術由程式處理。預設離線執行，啟用 Jev 後遇服務故障會回復離線。",
+      "summary": "Shapeshift 將文字輸入變成行程、清單、計時器、分帳等對應任務的介面。 可選用 Jev 判斷意圖與訊號；日期、算術由確定性程式處理，預設使用離線關鍵字分類。 在基於 Bun 的應用中輸入、選擇並儲存卡片；設定伺服器端 TypeSafe 金鑰即可啟用 Jev。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "Shapeshift 將文字輸入變成行程、清單、計時器、分帳等對應任務的介面。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "可選用 Jev 判斷意圖與訊號；日期、算術由確定性程式處理，預設使用離線關鍵字分類。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "在基於 Bun 的應用中輸入、選擇並儲存卡片；設定伺服器端 TypeSafe 金鑰即可啟用 Jev。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用限制",
+          "text": "卡片儲存在瀏覽器 localStorage；Jev 無法使用或受限流時回到離線分類。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "Shapeshift：任意の Jev で入力をカード化",
+      "h1": "Shapeshift：任意の Jev で入力をカード化",
+      "description": "Shapeshift は入力を予定やリストのカードに変えます。任意の Jev が意図を分類し、日付と計算はコードが処理。標準ではオフラインです。",
+      "summary": "Shapeshift は入力文を予定、チェックリスト、タイマー、割り勘など、用途に合うカードへ変えます。 任意の Jev が意図や特徴を分類し、日付と計算はコードが処理します。標準ではオフラインのキーワード分類を使います。 Bun アプリに入力してカードを選び、保存します。サーバー側の TypeSafe キーで Jev を有効化できます。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "何ができるか",
+          "text": "Shapeshift は入力文を予定、チェックリスト、タイマー、割り勘など、用途に合うカードへ変えます。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "任意の Jev が意図や特徴を分類し、日付と計算はコードが処理します。標準ではオフラインのキーワード分類を使います。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "Bun アプリに入力してカードを選び、保存します。サーバー側の TypeSafe キーで Jev を有効化できます。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "制約と注意点",
+          "text": "カードはブラウザーの localStorage に保存されます。Jev の障害や利用制限時はオフライン分類へ戻ります。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "Shapeshift: 선택적 Jev로 입력을 작업 카드로 변환",
+      "h1": "Shapeshift: 선택적 Jev로 입력을 작업 카드로 변환",
+      "description": "Shapeshift는 입력을 일정·체크리스트·도구 카드로 바꿉니다. 선택적 Jev가 의도를 분류하고 날짜와 계산은 코드가 처리하며 기본은 오프라인입니다.",
+      "summary": "Shapeshift는 입력 문장을 일정, 체크리스트, 타이머, 비용 분담 등 작업별 인터페이스로 바꿉니다. 선택적 Jev가 의도와 신호를 분류하고 날짜와 계산은 코드가 처리합니다. 기본은 오프라인 키워드 분류입니다. Bun 앱에 입력해 카드를 선택하고 저장합니다. 서버 측 TypeSafe 키를 설정하면 Jev를 활성화합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "Shapeshift는 입력 문장을 일정, 체크리스트, 타이머, 비용 분담 등 작업별 인터페이스로 바꿉니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "선택적 Jev가 의도와 신호를 분류하고 날짜와 계산은 코드가 처리합니다. 기본은 오프라인 키워드 분류입니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "Bun 앱에 입력해 카드를 선택하고 저장합니다. 서버 측 TypeSafe 키를 설정하면 Jev를 활성화합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "제약 사항",
+          "text": "카드는 브라우저 localStorage에 저장됩니다. Jev 연결 불가나 속도 제한 시 오프라인 분류로 돌아갑니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "Shapeshift: tarjetas de entrada con Jev opcional",
+      "h1": "Shapeshift: tarjetas de entrada con Jev opcional",
+      "description": "Shapeshift transforma texto en tarjetas de eventos, listas y utilidades. Jev es opcional para clasificar; fechas y cálculos quedan en código.",
+      "summary": "Shapeshift convierte texto en tarjetas de eventos, listas, temporizadores, repartos de gastos y otras interfaces específicas. Jev opcional clasifica intención y señales; el código calcula fechas y cantidades. Por defecto usa palabras clave sin conexión. Escribe en la aplicación Bun, elige una tarjeta y guárdala; una clave TypeSafe del servidor activa Jev.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "Shapeshift convierte texto en tarjetas de eventos, listas, temporizadores, repartos de gastos y otras interfaces específicas.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "El papel de Jev",
+          "text": "Jev opcional clasifica intención y señales; el código calcula fechas y cantidades. Por defecto usa palabras clave sin conexión.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo usarlo",
+          "text": "Escribe en la aplicación Bun, elige una tarjeta y guárdala; una clave TypeSafe del servidor activa Jev.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Límites a considerar",
+          "text": "Las tarjetas quedan en localStorage del navegador. Si Jev falla o limita solicitudes, se usa la clasificación sin conexión.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "Shapeshift : cartes adaptées à la saisie, Jev en option",
+      "h1": "Shapeshift : cartes adaptées à la saisie, Jev en option",
+      "description": "Shapeshift transforme le texte en événements, listes et outils. Jev classe l’intention en option ; dates et calculs restent dans le code.",
+      "summary": "Shapeshift transforme le texte en événements, listes, minuteurs, partages de frais et autres interfaces spécialisées. Jev facultatif classe intentions et signaux ; le code calcule dates et nombres. Les mots-clés hors ligne sont utilisés par défaut. Saisissez, choisissez et sauvegardez une carte dans l’application Bun ; une clé TypeSafe côté serveur active Jev.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "Shapeshift transforme le texte en événements, listes, minuteurs, partages de frais et autres interfaces spécialisées.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Le rôle de Jev",
+          "text": "Jev facultatif classe intentions et signaux ; le code calcule dates et nombres. Les mots-clés hors ligne sont utilisés par défaut.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Utilisation",
+          "text": "Saisissez, choisissez et sauvegardez une carte dans l’application Bun ; une clé TypeSafe côté serveur active Jev.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limites à connaître",
+          "text": "Les cartes restent dans le localStorage du navigateur. En cas d’indisponibilité ou de limitation de Jev, le classement hors ligne reprend.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "Shapeshift: adaptive Eingabekarten mit optionalem Jev",
+      "h1": "Shapeshift: adaptive Eingabekarten mit optionalem Jev",
+      "description": "Shapeshift macht Text zu Termin-, Listen- und Werkzeugkarten. Optional erkennt Jev die Absicht; Daten und Rechnen bleiben im Code, standardmäßig offline.",
+      "summary": "Shapeshift verwandelt Text in Ereigniskarten, Checklisten, Timer, Kostenteilungen und weitere aufgabenspezifische Oberflächen. Optional klassifiziert Jev Absichten und Signale; Code berechnet Daten und Zahlen. Standard ist die Offline-Schlagwortklassifikation. In der Bun-App tippen, Karte auswählen und speichern; ein serverseitiger TypeSafe-Schlüssel aktiviert Jev.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "Shapeshift verwandelt Text in Ereigniskarten, Checklisten, Timer, Kostenteilungen und weitere aufgabenspezifische Oberflächen.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Die Rolle von Jev",
+          "text": "Optional klassifiziert Jev Absichten und Signale; Code berechnet Daten und Zahlen. Standard ist die Offline-Schlagwortklassifikation.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Nutzung",
+          "text": "In der Bun-App tippen, Karte auswählen und speichern; ein serverseitiger TypeSafe-Schlüssel aktiviert Jev.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Grenzen",
+          "text": "Karten bleiben im localStorage des Browsers. Bei Ausfall oder Ratenbegrenzung von Jev übernimmt die Offline-Klassifikation.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "Shapeshift: cartões de entrada com Jev opcional",
+      "h1": "Shapeshift: cartões de entrada com Jev opcional",
+      "description": "Shapeshift transforma texto em eventos, listas e utilidades. Jev classifica intenções opcionalmente; datas e cálculos ficam no código, com padrão offline.",
+      "summary": "Shapeshift transforma texto em eventos, listas, temporizadores, divisão de contas e outras interfaces específicas. Jev opcional classifica intenção e sinais; o código calcula datas e valores. A classificação offline por palavras-chave é padrão. Digite no app Bun, escolha e salve o cartão; uma chave TypeSafe no servidor ativa Jev.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "Shapeshift transforma texto em eventos, listas, temporizadores, divisão de contas e outras interfaces específicas.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "O papel do Jev",
+          "text": "Jev opcional classifica intenção e sinais; o código calcula datas e valores. A classificação offline por palavras-chave é padrão.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Digite no app Bun, escolha e salve o cartão; uma chave TypeSafe no servidor ativa Jev.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limitações",
+          "text": "Cartões ficam no localStorage do navegador. Falhas ou limites de requisições do Jev acionam a classificação offline.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "Shapeshift: карточки по тексту с необязательным Jev",
+      "h1": "Shapeshift: карточки по тексту с необязательным Jev",
+      "description": "Shapeshift превращает текст в карточки событий, списков и инструментов. Jev опционально определяет намерение; даты и расчёты обрабатывает код.",
+      "summary": "Shapeshift превращает текст в карточки событий, списки, таймеры, разделение счетов и другие интерфейсы задач. Необязательный Jev определяет намерения и признаки; даты и расчёты обрабатывает код. По умолчанию работает локальная классификация по словам. Введите текст в Bun-приложении, выберите карточку и сохраните; серверный ключ TypeSafe включает Jev.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Shapeshift превращает текст в карточки событий, списки, таймеры, разделение счетов и другие интерфейсы задач.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Необязательный Jev определяет намерения и признаки; даты и расчёты обрабатывает код. По умолчанию работает локальная классификация по словам.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Введите текст в Bun-приложении, выберите карточку и сохраните; серверный ключ TypeSafe включает Jev.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ограничения",
+          "text": "Карточки хранятся в localStorage браузера. При недоступности или ограничении запросов Jev включается офлайн-классификация.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "Shapeshift: वैकल्पिक Jev से इनपुट कार्ड",
+      "h1": "Shapeshift: वैकल्पिक Jev से इनपुट कार्ड",
+      "description": "Shapeshift पाठ को कार्यक्रम, सूची और उपयोगी कार्ड में बदलता है। वैकल्पिक Jev इरादा पहचानता है; तारीख और गणित कोड करता है, डिफ़ॉल्ट ऑफलाइन।",
+      "summary": "Shapeshift लिखे पाठ को कार्यक्रम, सूची, टाइमर, बिल बाँटने और अन्य कामों के खास इंटरफ़ेस में बदलता है। वैकल्पिक Jev इरादा और संकेत पहचानता है; तारीख और गणित कोड सँभालता है। डिफ़ॉल्ट वर्गीकरण ऑफलाइन कीवर्ड से होता है। Bun ऐप में लिखें, कार्ड चुनें और सहेजें; सर्वर की TypeSafe कुंजी Jev चालू करती है।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "किस काम आता है",
+          "text": "Shapeshift लिखे पाठ को कार्यक्रम, सूची, टाइमर, बिल बाँटने और अन्य कामों के खास इंटरफ़ेस में बदलता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "वैकल्पिक Jev इरादा और संकेत पहचानता है; तारीख और गणित कोड सँभालता है। डिफ़ॉल्ट वर्गीकरण ऑफलाइन कीवर्ड से होता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल कैसे करें",
+          "text": "Bun ऐप में लिखें, कार्ड चुनें और सहेजें; सर्वर की TypeSafe कुंजी Jev चालू करती है।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "सीमाएँ",
+          "text": "कार्ड ब्राउज़र localStorage में रहते हैं। Jev अनुपलब्ध होने या अनुरोध सीमा लगने पर ऑफलाइन वर्गीकरण चलता है।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "Shapeshift: kartu masukan dengan Jev opsional",
+      "h1": "Shapeshift: kartu masukan dengan Jev opsional",
+      "description": "Shapeshift mengubah teks menjadi kartu acara, daftar, dan utilitas. Jev opsional membaca maksud; tanggal dan hitungan tetap di kode, bawaan offline.",
+      "summary": "Shapeshift mengubah teks menjadi kartu acara, daftar, timer, pembagian tagihan, dan antarmuka tugas lain. Jev opsional mengklasifikasikan maksud dan sinyal; kode menghitung tanggal dan angka. Klasifikasi kata kunci offline menjadi bawaan. Ketik di aplikasi Bun, pilih kartu, lalu simpan; kunci TypeSafe di server mengaktifkan Jev.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "Shapeshift mengubah teks menjadi kartu acara, daftar, timer, pembagian tagihan, dan antarmuka tugas lain.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Jev opsional mengklasifikasikan maksud dan sinyal; kode menghitung tanggal dan angka. Klasifikasi kata kunci offline menjadi bawaan.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Ketik di aplikasi Bun, pilih kartu, lalu simpan; kunci TypeSafe di server mengaktifkan Jev.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Batasan",
+          "text": "Kartu tersimpan di localStorage browser. Saat Jev tidak tersedia atau membatasi permintaan, klasifikasi beralih ke offline.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "Shapeshift: thẻ nhập liệu thích ứng với Jev tùy chọn",
+      "h1": "Shapeshift: thẻ nhập liệu thích ứng với Jev tùy chọn",
+      "description": "Shapeshift biến văn bản thành thẻ sự kiện, danh sách và tiện ích. Jev tùy chọn phân loại ý định; mã xử lý ngày và phép tính, mặc định ngoại tuyến.",
+      "summary": "Shapeshift biến văn bản thành thẻ sự kiện, danh sách, hẹn giờ, chia hóa đơn và giao diện theo tác vụ. Jev tùy chọn phân loại ý định và tín hiệu; mã xử lý ngày và phép tính. Mặc định dùng từ khóa ngoại tuyến. Nhập vào ứng dụng Bun, chọn rồi lưu thẻ; khóa TypeSafe phía máy chủ bật Jev.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích",
+          "text": "Shapeshift biến văn bản thành thẻ sự kiện, danh sách, hẹn giờ, chia hóa đơn và giao diện theo tác vụ.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Jev tùy chọn phân loại ý định và tín hiệu; mã xử lý ngày và phép tính. Mặc định dùng từ khóa ngoại tuyến.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Nhập vào ứng dụng Bun, chọn rồi lưu thẻ; khóa TypeSafe phía máy chủ bật Jev.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Giới hạn",
+          "text": "Thẻ nằm trong localStorage của trình duyệt. Jev lỗi hoặc bị giới hạn yêu cầu thì hệ thống chuyển sang phân loại ngoại tuyến.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "Shapeshift: isteğe bağlı Jev ile uyarlanan giriş kartları",
+      "h1": "Shapeshift: isteğe bağlı Jev ile uyarlanan giriş kartları",
+      "description": "Shapeshift metni etkinlik, liste ve araç kartlarına çevirir. İsteğe bağlı Jev niyeti sınıflandırır; tarih ve hesap kodda kalır, varsayılan çevrimdışıdır.",
+      "summary": "Shapeshift metni etkinlik kartı, kontrol listesi, zamanlayıcı, hesap paylaşımı ve diğer görev arayüzlerine dönüştürür. İsteğe bağlı Jev niyet ve işaretleri sınıflandırır; tarih ve hesabı kod yapar. Varsayılan sınıflandırma çevrimdışı anahtar kelimelerdir. Bun uygulamasında yazın, kartı seçip kaydedin; sunucudaki TypeSafe anahtarı Jev’i etkinleştirir.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "Shapeshift metni etkinlik kartı, kontrol listesi, zamanlayıcı, hesap paylaşımı ve diğer görev arayüzlerine dönüştürür.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "İsteğe bağlı Jev niyet ve işaretleri sınıflandırır; tarih ve hesabı kod yapar. Varsayılan sınıflandırma çevrimdışı anahtar kelimelerdir.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Bun uygulamasında yazın, kartı seçip kaydedin; sunucudaki TypeSafe anahtarı Jev’i etkinleştirir.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Sınırlamalar",
+          "text": "Kartlar tarayıcı localStorage alanında kalır. Jev erişilemezse veya istek sınırına takılırsa çevrimdışı sınıflandırma kullanılır.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "Shapeshift: schede adattive con Jev facoltativo",
+      "h1": "Shapeshift: schede adattive con Jev facoltativo",
+      "description": "Shapeshift trasforma testo in eventi, liste e strumenti. Jev classifica l’intento in opzione; date e calcoli restano nel codice, con modalità offline predefinita.",
+      "summary": "Shapeshift trasforma il testo in eventi, liste, timer, divisioni del conto e altre interfacce dedicate. Jev facoltativo classifica intenzioni e segnali; il codice gestisce date e calcoli. La modalità predefinita usa parole chiave offline. Scrivi nell’app Bun, scegli e salva la scheda; una chiave TypeSafe sul server attiva Jev.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "Shapeshift trasforma il testo in eventi, liste, timer, divisioni del conto e altre interfacce dedicate.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Il ruolo di Jev",
+          "text": "Jev facoltativo classifica intenzioni e segnali; il codice gestisce date e calcoli. La modalità predefinita usa parole chiave offline.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come usarlo",
+          "text": "Scrivi nell’app Bun, scegli e salva la scheda; una chiave TypeSafe sul server attiva Jev.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limiti",
+          "text": "Le schede restano nel localStorage del browser. Indisponibilità o limiti di Jev fanno ripartire la classificazione offline.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

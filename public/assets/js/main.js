@@ -1,5 +1,6 @@
 import { readCatalogState, catalogUrl, matchesProject } from "./catalog-state.js?v=3a1701cd8f";
 import { renderProjectCard } from "./project-card.js?v=3e5057a044";
+import { localizeStaticProjects, staticCatalogIndexUrl } from "./catalog-locales.js?v=2b9c2f1347";
 /* ==========================================================================
    JevHunt — interactions
    ========================================================================== */
@@ -351,7 +352,7 @@ import { renderProjectCard } from "./project-card.js?v=3e5057a044";
   async function ensureCatalog() {
     if (window.JH.catalogLoaded) return;
     if (!catalogLoading) {
-      const load = import("./catalog-all.js?v=" + encodeURIComponent(window.JH.catalogMeta.catalogHash));
+      const load = import(staticCatalogIndexUrl(window.JH.catalogMeta));
       catalogLoading = load.then(() => { catalogLoading = null; renderApps(); }).catch(error => {
         catalogLoading = null;
         catalogFailed = true;
@@ -429,7 +430,8 @@ import { renderProjectCard } from "./project-card.js?v=3e5057a044";
     }
     showCatalogLoading(false);
     showCatalogError(false);
-    const list = remote ? window.JH.apps : window.JH.apps
+    const projects = localizeStaticProjects(window.JH.apps, window.JH.catalogSummaryOverlay, localeKey, remote);
+    const list = remote ? projects : projects
       .filter(a => matchesProject(a, state, catLabel))
       .sort((a, b) => {
         if (state.sort === "stars-asc") return a.stars - b.stars || compareDate(a.created, b.created) || compareName(a.name, b.name);

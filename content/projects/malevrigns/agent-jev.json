@@ -1,0 +1,769 @@
+{
+  "version": "source-content-v1",
+  "repo": "malevrigns/agent-jev",
+  "repositoryId": 1380116460,
+  "relationship": "research",
+  "category": "research",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "path": "README.md",
+      "commit": "a965ca8ff06ccabc0c796dca5447b55cc2069cee",
+      "url": "https://github.com/malevrigns/agent-jev/blob/a965ca8ff06ccabc0c796dca5447b55cc2069cee/README.md",
+      "sha256": "ba203f4a36a32855c1c0c11990e8d2872913d64a6c41c4728854c918aab48c17",
+      "accessedAt": "2026-09-30T07:33:51.802Z",
+      "id": "s1"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "A candidate-scoring head returns distributions for gates, routes and scores without decoding prose or JSON answers.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 36,
+          "end": 38,
+          "quote": "AgentJev-0.6B does not write. You hand it a state and questions you have already phrased. One forward pass returns a probability for every option. The number of decoded tokens is zero.\n\nPut it where an agent loop needs a gate, a route, or a score. Leave the prose to a larger model."
+        },
+        {
+          "source": "s1",
+          "start": 63,
+          "end": 79,
+          "quote": "## Primitives\n\nThree shapes. Every one of them returns the full distribution, not only the winner.\n\n| | Boolean | Choice | Score |\n| --- | --- | --- | --- |\n| Ask | A proposition | Which of these, given exactly these options | Where on this ordered rubric |\n| You send | Optional `criteria` for true and false | 2–255 options, each a description. A list or a map | 2–10 level descriptions, lowest first |\n| You get back | `value`, `probability` of true, both masses | `value`, `top_probability`, `margin`, the full map | `level` (argmax), `score` = Σ i · Pᵢ |\n\n`margin` is the gap between the best option and the second. Choice is a preference inside the set you passed. It is not an independent probability that the action will succeed. If you need that, ask a boolean per action and calibrate it on your own outcomes.\n\n---\n\n## One forward pass\n\nThe backbone is Qwen3-0.6B with the language-model head removed. Each candidate is read at its last token. A small permutation-equivariant head then scores the set: the order of options does not smuggle in a ranking. Softmax is per question."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "The README compares a benchmark-trained AgentJev specialist with Jev 1.13.0 evaluated zero-shot; these use different training conditions.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 151,
+          "end": 157,
+          "quote": "### How to read the table\n\nSpecialist and generalist are not the same measurement. The dataset card says so, and the table marks it. Jev 1.13.0 answered these schemas zero-shot. AgentJev, Laya, ModernBERT, and MiniLM were fit on this benchmark.\n\nLaya's published checkpoint trained on all 1,200 official training cases. This run held out 120 development cases and 120 calibration cases, and selected the step-600 checkpoint by development soft cross-entropy **before** the test split was opened. Temperature is one positive scalar per primitive, fit only on the calibration cases. The loss was soft cross-entropy plus 0.1 times sum-of-candidates Brier. Seed `20260921`. Dataset revision `ea9306458d6e9563628369a3d1e72e362fb381d2`.\n\nTargets are teacher distributions, including synthetic cases. Beating a row here does not mean a pull request merged, an incident was contained, or an invoice was paid."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Download the weights, wrap the safetensors file for the torch server and use the local workbench or Python client.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 184,
+          "end": 218,
+          "quote": "## Run it\n\nThe weights are the safetensors state dict at [https://huggingface.co/aimeigaoshou/agent-jev](https://huggingface.co/aimeigaoshou/agent-jev). This git tree has the code. The server still wants a torch checkpoint, so wrap the file once.\n\n```bash\ngit clone https://github.com/malevrigns/agent-jev.git\ncd agent-jev\npython -m venv .venv\npip install -r requirements.txt\npip install huggingface_hub safetensors\n```\n\n```python\nfrom huggingface_hub import hf_hub_download\nfrom safetensors.torch import load_file\nimport torch\n\nsrc = hf_hub_download(\"aimeigaoshou/agent-jev\", \"model.safetensors\")\ntorch.save({\"state_dict\": load_file(src)}, \"agentjev_v1.pt\")\nhf_hub_download(\"aimeigaoshou/agent-jev\", \"temperatures.json\", local_dir=\".\")\n```\n\n```bash\npython -m jev_service.server \\\n  --checkpoint agentjev_v1.pt \\\n  --model-path Qwen/Qwen3-0.6B \\\n  --temperatures temperatures.json \\\n  --port 8149\n```\n\n`model.safetensors` is the full module, backbone plus candidate head. It is not a causal language model, and `AutoModelForCausalLM` will not load it. `AgentJevModel` builds the Qwen3 skeleton, then `load_state_dict(..., strict=True)` replaces it. Use `dtype=torch.bfloat16` for that load. The tensors are bf16.\n\nThe process binds **127.0.0.1** only. The workbench is [http://127.0.0.1:8149/](http://127.0.0.1:8149/). `GET /health` and `GET /api/info` return the loaded checkpoint. The benchmark checkpoint selected for the table above was step 600. These published tensors are that run.\n\n`--temperatures` takes scalars fit on held-out calibration cases. `--page` swaps the workbench HTML. `--device` defaults to `cuda:0`. `--max-tokens` defaults to 2048."
+        },
+        {
+          "source": "s1",
+          "start": 222,
+          "end": 229,
+          "quote": "## Client\n\n`agentjev_client.py` speaks to that server. No extra dependencies beyond the standard library.\n\n```python\nfrom agentjev_client import AgentJev\n\njev = AgentJev(\"http://127.0.0.1:8149\")"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "Inputs beyond 2,048 tokens are rejected. The included Claude Code PreToolUse hook allows the tool to proceed when its server is unavailable.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 93,
+          "end": 93,
+          "quote": "**The context is 2,048 tokens, and over-length input is refused.** A diff or a trace that does not fit is an error, not a silent crop of the question or a candidate."
+        },
+        {
+          "source": "s1",
+          "start": 349,
+          "end": 353,
+          "quote": "## A gate in front of the tool\n\n`agentjev_hook.py` is a Claude Code `PreToolUse` command hook for Bash, Write, and Edit. It posts the tool payload to `http://127.0.0.1:8149/api/evaluate`, asks a boolean and a four-level score, and prints a decision.\n\nIt blocks only when the score is level 3 **and** the boolean says the action is not safe. If the server does not answer, the hook exits 0 and the tool proceeds. Point the hook at the script, and keep the server on port 8149. The endpoint is fixed in the file."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "AgentJev: local probability models for agent decisions",
+      "h1": "AgentJev: local probability models for agent decisions",
+      "description": "AgentJev scores Boolean, Choice and Score questions with a Qwen3-0.6B backbone and publishes a qualified comparison with Jev.",
+      "summary": "A candidate-scoring head returns distributions for gates, routes and scores without decoding prose or JSON answers. The README compares a benchmark-trained AgentJev specialist with Jev 1.13.0 evaluated zero-shot; these use different training conditions.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose and audience",
+          "text": "A candidate-scoring head returns distributions for gates, routes and scores without decoding prose or JSON answers.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "The README compares a benchmark-trained AgentJev specialist with Jev 1.13.0 evaluated zero-shot; these use different training conditions.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Using the project",
+          "text": "Download the weights, wrap the safetensors file for the torch server and use the local workbench or Python client.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "Inputs beyond 2,048 tokens are rejected. The included Claude Code PreToolUse hook allows the tool to proceed when its server is unavailable.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "AgentJev：面向智能体决策的本地概率模型",
+      "h1": "AgentJev：面向智能体决策的本地概率模型",
+      "description": "AgentJev 用 Qwen3-0.6B 回答 Boolean、Choice 和 Score 问题，并给出注明训练差异的 Jev 对比。",
+      "summary": "候选评分头直接为门控、路由与评分返回分布，无需解码文字或 JSON 答案。 README 对比的是经基准数据训练的 AgentJev 专用模型与零样本评估的 Jev 1.13.0，训练条件不同。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途与适用对象",
+          "text": "候选评分头直接为门控、路由与评分返回分布，无需解码文字或 JSON 答案。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "README 对比的是经基准数据训练的 AgentJev 专用模型与零样本评估的 Jev 1.13.0，训练条件不同。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "下载权重，将 safetensors 文件包装为 torch 服务所需格式，再使用本地工作台或 Python 客户端。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "超过 2,048 词元的输入会被拒绝；随附 Claude Code PreToolUse 钩子在服务不可用时放行工具。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "AgentJev：供代理決策使用的本機機率模型",
+      "h1": "AgentJev：供代理決策使用的本機機率模型",
+      "description": "AgentJev 以 Qwen3-0.6B 回答 Boolean、Choice 和 Score 問題，並提供註明訓練差異的 Jev 比較。",
+      "summary": "候選評分頭直接為閘控、路由及評分回傳分布，不需解碼文字或 JSON 答案。 README 比較以基準資料訓練的 AgentJev 專用模型與零樣本評估的 Jev 1.13.0，兩者訓練條件不同。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途與適用對象",
+          "text": "候選評分頭直接為閘控、路由及評分回傳分布，不需解碼文字或 JSON 答案。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "README 比較以基準資料訓練的 AgentJev 專用模型與零樣本評估的 Jev 1.13.0，兩者訓練條件不同。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "下載權重，將 safetensors 檔案包裝為 torch 伺服器所需格式，再使用本機工作台或 Python 用戶端。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "超過 2,048 詞元的輸入會被拒絕；隨附 Claude Code PreToolUse 掛鉤在伺服器不可用時放行工具。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "AgentJev：エージェント判断向けローカル確率モデル",
+      "h1": "AgentJev：エージェント判断向けローカル確率モデル",
+      "description": "AgentJev は Qwen3-0.6B で Boolean、Choice、Score を処理し、学習条件の差を明記して Jev と比較します。",
+      "summary": "候補評価ヘッドがゲート、振り分け、採点用の分布を返し、文章や JSON のデコードを行いません。 README は基準データで学習した AgentJev とゼロショットの Jev 1.13.0 を比較しており、学習条件が異なります。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途と対象",
+          "text": "候補評価ヘッドがゲート、振り分け、採点用の分布を返し、文章や JSON のデコードを行いません。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev との関係",
+          "text": "README は基準データで学習した AgentJev とゼロショットの Jev 1.13.0 を比較しており、学習条件が異なります。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "重みを取得し、safetensors を torch サーバー用に包んで、ローカル作業画面か Python クライアントを使います。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範囲と制約",
+          "text": "2,048 トークン超の入力は拒否されます。付属の Claude Code PreToolUse フックはサーバー不通時にツールを通します。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "AgentJev: 에이전트 판단용 로컬 확률 모델",
+      "h1": "AgentJev: 에이전트 판단용 로컬 확률 모델",
+      "description": "AgentJev는 Qwen3-0.6B로 Boolean, Choice, Score를 평가하고 학습 조건 차이를 명시한 Jev 비교를 제공합니다.",
+      "summary": "후보 점수 헤드가 게이트, 라우팅, 평점용 분포를 반환하며 문장이나 JSON 답변을 디코딩하지 않습니다. README는 벤치마크에 학습된 AgentJev와 제로샷 Jev 1.13.0을 비교하므로 학습 조건이 다릅니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "용도와 대상",
+          "text": "후보 점수 헤드가 게이트, 라우팅, 평점용 분포를 반환하며 문장이나 JSON 답변을 디코딩하지 않습니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "README는 벤치마크에 학습된 AgentJev와 제로샷 Jev 1.13.0을 비교하므로 학습 조건이 다릅니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "가중치를 받고 safetensors 파일을 torch 서버 형식으로 감싼 뒤 로컬 워크벤치나 Python 클라이언트를 사용합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 한계",
+          "text": "2,048토큰 초과 입력은 거절합니다. 포함된 Claude Code PreToolUse 훅은 서버가 응답하지 않으면 도구 실행을 허용합니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "AgentJev: probabilidades locales para decisiones de agentes",
+      "h1": "AgentJev: probabilidades locales para decisiones de agentes",
+      "description": "AgentJev evalúa Boolean, Choice y Score con Qwen3-0.6B y publica una comparación con Jev que distingue condiciones de entrenamiento.",
+      "summary": "Una cabeza de puntuación devuelve distribuciones para controles, rutas y valoraciones sin decodificar prosa ni respuestas JSON. El README compara AgentJev entrenado en el benchmark con Jev 1.13.0 en zero-shot; las condiciones de entrenamiento son distintas.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "Una cabeza de puntuación devuelve distribuciones para controles, rutas y valoraciones sin decodificar prosa ni respuestas JSON.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "El README compara AgentJev entrenado en el benchmark con Jev 1.13.0 en zero-shot; las condiciones de entrenamiento son distintas.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo se usa",
+          "text": "Descargue los pesos, adapte el archivo safetensors al servidor torch y use el panel local o cliente Python.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "Se rechazan entradas de más de 2.048 tokens. El hook Claude Code PreToolUse incluido permite la herramienta si el servidor no responde.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "AgentJev : probabilités locales pour décisions d'agents",
+      "h1": "AgentJev : probabilités locales pour décisions d'agents",
+      "description": "AgentJev évalue Boolean, Choice et Score avec Qwen3-0.6B et publie une comparaison avec Jev en précisant les différences d’entraînement.",
+      "summary": "Une tête de scoring renvoie des distributions pour contrôles, routage et notation, sans décoder de prose ni de réponse JSON. Le README compare AgentJev entraîné sur le benchmark à Jev 1.13.0 en zero-shot ; les conditions d'entraînement diffèrent.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Usage et public visé",
+          "text": "Une tête de scoring renvoie des distributions pour contrôles, routage et notation, sans décoder de prose ni de réponse JSON.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Le README compare AgentJev entraîné sur le benchmark à Jev 1.13.0 en zero-shot ; les conditions d'entraînement diffèrent.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Téléchargez les poids, adaptez le fichier safetensors au serveur torch et utilisez l'interface locale ou le client Python.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "Les entrées dépassant 2 048 tokens sont refusées. Le hook Claude Code PreToolUse fourni laisse passer l'outil si le serveur est indisponible.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "AgentJev: lokale Wahrscheinlichkeiten für Agentenentscheidungen",
+      "h1": "AgentJev: lokale Wahrscheinlichkeiten für Agentenentscheidungen",
+      "description": "AgentJev bewertet Boolean, Choice und Score mit Qwen3-0.6B und vergleicht sich mit Jev, wobei unterschiedliche Trainingsbedingungen ausgewiesen werden.",
+      "summary": "Ein Kandidatenkopf liefert Verteilungen für Prüfungen, Routing und Bewertungen, ohne Prosa oder JSON-Antworten zu decodieren. Das README vergleicht benchmarktrainiertes AgentJev mit Jev 1.13.0 im Zero-Shot-Verfahren; die Trainingsbedingungen unterscheiden sich.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Zweck und Zielgruppe",
+          "text": "Ein Kandidatenkopf liefert Verteilungen für Prüfungen, Routing und Bewertungen, ohne Prosa oder JSON-Antworten zu decodieren.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Das README vergleicht benchmarktrainiertes AgentJev mit Jev 1.13.0 im Zero-Shot-Verfahren; die Trainingsbedingungen unterscheiden sich.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Verwendung",
+          "text": "Laden Sie Gewichte herunter, verpacken Sie safetensors für den Torch-Server und nutzen Sie lokale Arbeitsoberfläche oder Python-Client.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Eingaben über 2.048 Tokens werden abgewiesen. Der enthaltene Claude-Code-PreToolUse-Hook lässt Werkzeuge bei unerreichbarem Server weiterlaufen.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "AgentJev: probabilidades locais para decisões de agentes",
+      "h1": "AgentJev: probabilidades locais para decisões de agentes",
+      "description": "AgentJev avalia Boolean, Choice e Score com Qwen3-0.6B e publica uma comparação com Jev, explicitando as diferenças de treinamento.",
+      "summary": "Uma cabeça de pontuação retorna distribuições para filtros, rotas e notas sem decodificar prosa ou respostas JSON. O README compara AgentJev treinado no benchmark com Jev 1.13.0 em zero-shot; as condições de treinamento diferem.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Finalidade e público",
+          "text": "Uma cabeça de pontuação retorna distribuições para filtros, rotas e notas sem decodificar prosa ou respostas JSON.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "O README compara AgentJev treinado no benchmark com Jev 1.13.0 em zero-shot; as condições de treinamento diferem.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Baixe os pesos, adapte o arquivo safetensors ao servidor torch e use a interface local ou cliente Python.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "Entradas acima de 2.048 tokens são rejeitadas. O hook Claude Code PreToolUse incluído permite a ferramenta quando o servidor está indisponível.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "AgentJev: локальные вероятности для решений агентов",
+      "h1": "AgentJev: локальные вероятности для решений агентов",
+      "description": "AgentJev оценивает Boolean, Choice и Score на Qwen3-0.6B и публикует сравнение с Jev с оговоркой о различиях в обучении.",
+      "summary": "Голова оценки кандидатов выдаёт распределения для проверок, маршрутов и баллов без декодирования текста или JSON-ответов. README сравнивает обученный на бенчмарке AgentJev с Jev 1.13.0 в режиме zero-shot; условия обучения различаются.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Голова оценки кандидатов выдаёт распределения для проверок, маршрутов и баллов без декодирования текста или JSON-ответов.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "README сравнивает обученный на бенчмарке AgentJev с Jev 1.13.0 в режиме zero-shot; условия обучения различаются.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Загрузите веса, оберните safetensors для torch-сервера и используйте локальный интерфейс либо Python-клиент.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Входы длиннее 2 048 токенов отклоняются. Включённый хук Claude Code PreToolUse разрешает инструмент при недоступности сервера.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "AgentJev: एजेंट निर्णयों के लिए स्थानीय संभाव्यता मॉडल",
+      "h1": "AgentJev: एजेंट निर्णयों के लिए स्थानीय संभाव्यता मॉडल",
+      "description": "AgentJev, Qwen3-0.6B से Boolean, Choice और Score आँकता है और प्रशिक्षण अंतर बताते हुए Jev तुलना देता है।",
+      "summary": "उम्मीदवार स्कोरिंग हेड गेट, रूट और स्कोर के लिए वितरण लौटाता है, बिना गद्य या JSON उत्तर डिकोड किए। README बेंचमार्क पर प्रशिक्षित AgentJev और zero-shot Jev 1.13.0 की तुलना करता है; प्रशिक्षण परिस्थितियाँ अलग हैं।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "उद्देश्य और उपयोगकर्ता",
+          "text": "उम्मीदवार स्कोरिंग हेड गेट, रूट और स्कोर के लिए वितरण लौटाता है, बिना गद्य या JSON उत्तर डिकोड किए।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "README बेंचमार्क पर प्रशिक्षित AgentJev और zero-shot Jev 1.13.0 की तुलना करता है; प्रशिक्षण परिस्थितियाँ अलग हैं।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल का तरीका",
+          "text": "वेट डाउनलोड करें, safetensors फ़ाइल को torch सर्वर के प्रारूप में रखें और स्थानीय वर्कबेंच या Python क्लाइंट इस्तेमाल करें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "2,048 टोकन से बड़े इनपुट अस्वीकार होते हैं। शामिल Claude Code PreToolUse हुक सर्वर अनुपलब्ध होने पर टूल को चलने देता है।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "AgentJev: probabilitas lokal untuk keputusan agen",
+      "h1": "AgentJev: probabilitas lokal untuk keputusan agen",
+      "description": "AgentJev menilai Boolean, Choice, dan Score dengan Qwen3-0.6B serta menerbitkan perbandingan dengan Jev yang menjelaskan perbedaan kondisi pelatihan.",
+      "summary": "Kepala penilaian kandidat mengembalikan distribusi untuk gerbang, rute, dan skor tanpa mendekode prosa atau jawaban JSON. README membandingkan AgentJev yang dilatih pada benchmark dengan Jev 1.13.0 zero-shot; kondisi pelatihannya berbeda.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Tujuan dan pengguna",
+          "text": "Kepala penilaian kandidat mengembalikan distribusi untuk gerbang, rute, dan skor tanpa mendekode prosa atau jawaban JSON.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "README membandingkan AgentJev yang dilatih pada benchmark dengan Jev 1.13.0 zero-shot; kondisi pelatihannya berbeda.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Unduh bobot, bungkus berkas safetensors untuk server torch, lalu gunakan workbench lokal atau klien Python.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Masukan di atas 2.048 token ditolak. Hook Claude Code PreToolUse bawaan membiarkan alat berjalan saat server tidak tersedia.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "AgentJev: xác suất cục bộ cho quyết định tác tử",
+      "h1": "AgentJev: xác suất cục bộ cho quyết định tác tử",
+      "description": "AgentJev đánh giá Boolean, Choice và Score bằng Qwen3-0.6B, đồng thời so sánh Jev với chú thích về khác biệt huấn luyện.",
+      "summary": "Đầu chấm điểm ứng viên trả phân phối cho kiểm soát, định tuyến và điểm số mà không giải mã văn xuôi hay đáp án JSON. README so sánh AgentJev được huấn luyện trên benchmark với Jev 1.13.0 zero-shot; điều kiện huấn luyện khác nhau.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích và đối tượng",
+          "text": "Đầu chấm điểm ứng viên trả phân phối cho kiểm soát, định tuyến và điểm số mà không giải mã văn xuôi hay đáp án JSON.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "README so sánh AgentJev được huấn luyện trên benchmark với Jev 1.13.0 zero-shot; điều kiện huấn luyện khác nhau.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Tải trọng số, bọc tệp safetensors cho máy chủ torch rồi dùng giao diện cục bộ hoặc ứng dụng khách Python.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Đầu vào quá 2.048 token bị từ chối. Hook Claude Code PreToolUse đi kèm cho công cụ chạy khi máy chủ không khả dụng.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "AgentJev: ajan kararları için yerel olasılık modeli",
+      "h1": "AgentJev: ajan kararları için yerel olasılık modeli",
+      "description": "AgentJev, Qwen3-0.6B ile Boolean, Choice ve Score değerlendirir; Jev karşılaştırmasında eğitim koşullarını ayırır.",
+      "summary": "Aday puanlama başlığı, metin veya JSON yanıt çözmeden geçitler, yönlendirme ve puanlar için dağılımlar döndürür. README, benchmark üzerinde eğitilen AgentJev’i zero-shot Jev 1.13.0 ile karşılaştırır; eğitim koşulları farklıdır.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Amaç ve hedef kitle",
+          "text": "Aday puanlama başlığı, metin veya JSON yanıt çözmeden geçitler, yönlendirme ve puanlar için dağılımlar döndürür.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "README, benchmark üzerinde eğitilen AgentJev’i zero-shot Jev 1.13.0 ile karşılaştırır; eğitim koşulları farklıdır.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Ağırlıklar indirilir, safetensors dosyası torch sunucusuna uygun paketlenir; yerel arayüz veya Python istemcisi kullanılır.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "2.048 tokeni aşan girdiler reddedilir. Dahil edilen Claude Code PreToolUse kancası sunucu yoksa aracın çalışmasına izin verir.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "AgentJev: probabilità locali per decisioni degli agenti",
+      "h1": "AgentJev: probabilità locali per decisioni degli agenti",
+      "description": "AgentJev valuta Boolean, Choice e Score con Qwen3-0.6B e pubblica un confronto con Jev, distinguendo le condizioni di addestramento.",
+      "summary": "Una testa di scoring restituisce distribuzioni per controlli, instradamento e punteggi senza decodificare prosa o risposte JSON. Il README confronta AgentJev addestrato sul benchmark con Jev 1.13.0 zero-shot; le condizioni di addestramento sono diverse.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Scopo e destinatari",
+          "text": "Una testa di scoring restituisce distribuzioni per controlli, instradamento e punteggi senza decodificare prosa o risposte JSON.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Il README confronta AgentJev addestrato sul benchmark con Jev 1.13.0 zero-shot; le condizioni di addestramento sono diverse.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come si usa",
+          "text": "Si scaricano i pesi, si adatta safetensors al server torch e si usa l'interfaccia locale o il client Python.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "Gli input oltre 2.048 token sono rifiutati. L'hook Claude Code PreToolUse incluso lascia procedere lo strumento se il server è indisponibile.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  },
+  "displayName": "AgentJev"
+}

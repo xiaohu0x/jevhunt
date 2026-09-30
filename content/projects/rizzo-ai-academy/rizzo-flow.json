@@ -1,0 +1,763 @@
+{
+  "version": "source-content-v1",
+  "repo": "Rizzo-AI-Academy/rizzo-flow",
+  "repositoryId": 1378880709,
+  "relationship": "local-alternative",
+  "category": "research",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "b9ba007ee4d2928bbab5b1d8bfe9009c3696b6de",
+      "url": "https://github.com/Rizzo-AI-Academy/rizzo-flow/blob/b9ba007ee4d2928bbab5b1d8bfe9009c3696b6de/README.md",
+      "sha256": "45ed5fdfa5c7e32fbd99ad1c822896bf6c098a683bfaebe083c379a3c39c21f5",
+      "accessedAt": "2026-09-30T07:33:48.967Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "kind": "documented",
+      "text": "Rizzo Flow runs open decision models locally, returning choices, probabilities, rubric scores and numbers through a Jev-compatible HTTP interface.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 30,
+          "end": 40,
+          "quote": "**Rizzo Flow** is an open-source, local-first implementation of the idea behind\n[**Jev**](https://typesafe.ai/blog/introducing-system-one-models-and-jev), TypeSafe's \"System One\"\nmodel: a *function call with judgment* that takes unstructured state and returns **typed decisions\nwith probabilities** — a yes/no, a choice among options, a score on a rubric, a number — instead\nof text you then have to parse.\n\nJev is a closed, hosted service. Rizzo Flow gives you the same programming model **on your own\nhardware, with open weights, and with the same HTTP interface**, so code written against the\nTypeSafe API can point at `localhost` by changing one URL. It runs on\n[llama.cpp](https://github.com/ggml-org/llama.cpp), so the hardware can be an Apple, NVIDIA, AMD\nor Intel GPU, or no GPU at all."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "kind": "documented",
+      "text": "It reproduces Jev’s interface pattern, not its proprietary architecture or training; the project is independent.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 42,
+          "end": 47,
+          "quote": "> **Independent project.** Rizzo Flow is not affiliated with TypeSafe and does not reproduce Jev's\n> proprietary architecture or its RLCD training. It reproduces the *interface pattern* with an\n> open model (Spark-X2.5, with our own [LoRA fine-tune](#fine-tuning) on public data), in the\n> spirit of [SemIf](https://github.com/TheoLeeCJ/SemIf), which inspired it. Probabilities are\n> **uncalibrated** unless you calibrate them on your own data, and\n> we make no claim of matching Jev or SemIf in quality. Every number below comes with its caveats."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "kind": "documented",
+      "text": "Serve a selected model with llama.cpp and point TypeSafe-compatible application code at the local endpoint.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 167,
+          "end": 171,
+          "quote": "`rizzo serve` flags: `--size`, `--quant`, `--weights flow|base`, `--device auto|gpu|cpu|cuda|vulkan|metal|rocm|sycl`,\n`--port`, `--host`, `--batch-size` (question micro-batch, default 4), `--ctx` (token limit per\nquestion, default 8192), `--threads` (CPU), `--model /path/to/file.gguf` (overrides `--size`),\n`--calibration fit.json`. Set `RIZZO_API_KEY=...` before starting for Bearer auth on the\nJev-compatible endpoints. The model loads in about 10 seconds."
+        },
+        {
+          "source": "source-1",
+          "start": 36,
+          "end": 40,
+          "quote": "Jev is a closed, hosted service. Rizzo Flow gives you the same programming model **on your own\nhardware, with open weights, and with the same HTTP interface**, so code written against the\nTypeSafe API can point at `localhost` by changing one URL. It runs on\n[llama.cpp](https://github.com/ggml-org/llama.cpp), so the hardware can be an Apple, NVIDIA, AMD\nor Intel GPU, or no GPU at all."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "kind": "documented",
+      "text": "Probabilities need workload-specific calibration; quantization, hardware and runtime changes can alter them.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 45,
+          "end": 47,
+          "quote": "> spirit of [SemIf](https://github.com/TheoLeeCJ/SemIf), which inspired it. Probabilities are\n> **uncalibrated** unless you calibrate them on your own data, and\n> we make no claim of matching Jev or SemIf in quality. Every number below comes with its caveats."
+        },
+        {
+          "source": "source-1",
+          "start": 173,
+          "end": 175,
+          "quote": "Quantization changes probabilities, and so does the hardware (CUDA, Vulkan and Metal round\ndifferently): compare on your own workload, and note that a calibration is bound to the runtime,\nbackend and file it was fitted on."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "Rizzo Flow: local Jev-style decisions on llama.cpp",
+      "h1": "Rizzo Flow: local Jev-style decisions on llama.cpp",
+      "description": "Rizzo Flow serves local open models through a Jev-compatible API on llama.cpp. It reproduces the interface pattern; probabilities need your own calibration.",
+      "summary": "Rizzo Flow runs open decision models locally, returning choices, probabilities, rubric scores and numbers through a Jev-compatible HTTP interface. It reproduces Jev’s interface pattern, not its proprietary architecture or training; the project is independent. Serve a selected model with llama.cpp and point TypeSafe-compatible application code at the local endpoint.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose",
+          "text": "Rizzo Flow runs open decision models locally, returning choices, probabilities, rubric scores and numbers through a Jev-compatible HTTP interface.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’s role",
+          "text": "It reproduces Jev’s interface pattern, not its proprietary architecture or training; the project is independent.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "How to use it",
+          "text": "Serve a selected model with llama.cpp and point TypeSafe-compatible application code at the local endpoint.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limits to consider",
+          "text": "Probabilities need workload-specific calibration; quantization, hardware and runtime changes can alter them.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "Rizzo Flow：基于 llama.cpp 的本地 Jev 风格决策",
+      "h1": "Rizzo Flow：基于 llama.cpp 的本地 Jev 风格决策",
+      "description": "Rizzo Flow 用 llama.cpp 在本地运行开放模型并提供兼容 Jev 的 API；它复现接口模式，不复现 Jev 的专有架构，概率需要基于实际任务自行校准。",
+      "summary": "Rizzo Flow 在本地运行开放决策模型，通过兼容 Jev 的 HTTP 接口返回选择、概率、量表评分和数值。 它复现 Jev 的接口模式，并未复现专有架构或训练方法，属于独立项目。 使用 llama.cpp 部署所选模型，让兼容 TypeSafe 的应用代码连接本地端点。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "Rizzo Flow 在本地运行开放决策模型，通过兼容 Jev 的 HTTP 接口返回选择、概率、量表评分和数值。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "它复现 Jev 的接口模式，并未复现专有架构或训练方法，属于独立项目。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "使用 llama.cpp 部署所选模型，让兼容 TypeSafe 的应用代码连接本地端点。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用边界",
+          "text": "概率需要针对实际任务校准；量化、硬件和运行时变化都可能影响结果。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "Rizzo Flow：以 llama.cpp 執行本地 Jev 風格決策",
+      "h1": "Rizzo Flow：以 llama.cpp 執行本地 Jev 風格決策",
+      "description": "Rizzo Flow 用 llama.cpp 在本地執行開放模型並提供相容 Jev 的 API；它重現介面模式，不重現 Jev 的專有架構，機率需依實際任務自行校準。",
+      "summary": "Rizzo Flow 在本地執行開放決策模型，透過相容 Jev 的 HTTP 介面回傳選擇、機率、量表評分與數值。 它重現 Jev 的介面模式，並未重現專有架構或訓練方法，屬於獨立專案。 使用 llama.cpp 部署所選模型，讓相容 TypeSafe 的應用程式連接本地端點。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "Rizzo Flow 在本地執行開放決策模型，透過相容 Jev 的 HTTP 介面回傳選擇、機率、量表評分與數值。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "它重現 Jev 的介面模式，並未重現專有架構或訓練方法，屬於獨立專案。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "使用 llama.cpp 部署所選模型，讓相容 TypeSafe 的應用程式連接本地端點。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用限制",
+          "text": "機率需要針對實際任務校準；量化、硬體與執行環境的變動都可能影響結果。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "Rizzo Flow：llama.cpp によるローカル Jev 風判断",
+      "h1": "Rizzo Flow：llama.cpp によるローカル Jev 風判断",
+      "description": "Rizzo Flow は llama.cpp でローカルモデルを Jev 互換 API として提供します。再現するのはインターフェースで、確率は独自に校正が必要です。",
+      "summary": "Rizzo Flow はオープンモデルをローカル実行し、Jev 互換 HTTP API で選択、確率、評価値、数値を返します。 Jev のインターフェース設計を再現した独立プロジェクトで、独自アーキテクチャや学習方法の再現ではありません。 llama.cpp でモデルを起動し、TypeSafe 互換アプリの接続先をローカルに指定します。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "何ができるか",
+          "text": "Rizzo Flow はオープンモデルをローカル実行し、Jev 互換 HTTP API で選択、確率、評価値、数値を返します。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "Jev のインターフェース設計を再現した独立プロジェクトで、独自アーキテクチャや学習方法の再現ではありません。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "llama.cpp でモデルを起動し、TypeSafe 互換アプリの接続先をローカルに指定します。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "制約と注意点",
+          "text": "確率は自分のデータで校正する必要があります。量子化、ハードウェア、実行環境によって値が変わります。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "Rizzo Flow: llama.cpp 기반 로컬 Jev 방식 판단",
+      "h1": "Rizzo Flow: llama.cpp 기반 로컬 Jev 방식 판단",
+      "description": "Rizzo Flow는 llama.cpp에서 로컬 모델을 Jev 호환 API로 제공합니다. 인터페이스 패턴을 재현하며 확률은 직접 보정해야 합니다.",
+      "summary": "Rizzo Flow는 공개 결정 모델을 로컬에서 실행해 Jev 호환 HTTP 인터페이스로 선택, 확률, 기준별 점수, 수치를 반환합니다. Jev의 인터페이스 패턴을 재현한 독립 프로젝트이며 독점 구조나 학습 방식의 복제는 아닙니다. llama.cpp로 선택한 모델을 서빙하고 TypeSafe 호환 앱 코드를 로컬 엔드포인트에 연결합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "Rizzo Flow는 공개 결정 모델을 로컬에서 실행해 Jev 호환 HTTP 인터페이스로 선택, 확률, 기준별 점수, 수치를 반환합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Jev의 인터페이스 패턴을 재현한 독립 프로젝트이며 독점 구조나 학습 방식의 복제는 아닙니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "llama.cpp로 선택한 모델을 서빙하고 TypeSafe 호환 앱 코드를 로컬 엔드포인트에 연결합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "제약 사항",
+          "text": "확률은 실제 작업 데이터로 보정해야 합니다. 양자화, 하드웨어, 런타임 변화에 따라 값이 달라질 수 있습니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "Rizzo Flow: decisiones locales al estilo Jev",
+      "h1": "Rizzo Flow: decisiones locales al estilo Jev",
+      "description": "Rizzo Flow sirve modelos locales con API compatible Jev sobre llama.cpp. Reproduce la interfaz; las probabilidades necesitan calibración propia.",
+      "summary": "Rizzo Flow ejecuta modelos abiertos localmente y devuelve elecciones, probabilidades, puntuaciones y números por una interfaz HTTP compatible con Jev. Reproduce el patrón de interfaz de Jev, no su arquitectura ni entrenamiento propietarios; es independiente. Sirve un modelo con llama.cpp y dirige el código compatible con TypeSafe al endpoint local.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "Rizzo Flow ejecuta modelos abiertos localmente y devuelve elecciones, probabilidades, puntuaciones y números por una interfaz HTTP compatible con Jev.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "El papel de Jev",
+          "text": "Reproduce el patrón de interfaz de Jev, no su arquitectura ni entrenamiento propietarios; es independiente.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo usarlo",
+          "text": "Sirve un modelo con llama.cpp y dirige el código compatible con TypeSafe al endpoint local.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Límites a considerar",
+          "text": "Las probabilidades requieren calibración propia; la cuantización, el hardware y el entorno de ejecución pueden cambiarlas.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "Rizzo Flow : décisions locales de type Jev",
+      "h1": "Rizzo Flow : décisions locales de type Jev",
+      "description": "Rizzo Flow sert des modèles locaux via une API compatible Jev sur llama.cpp. Il reproduit l’interface ; les probabilités nécessitent une calibration.",
+      "summary": "Rizzo Flow exécute des modèles ouverts localement et renvoie choix, probabilités, scores et nombres via une interface HTTP compatible Jev. Projet indépendant, il reproduit le principe d’interface de Jev, pas son architecture ni son entraînement propriétaires. Servez un modèle avec llama.cpp et connectez le code compatible TypeSafe au point d’accès local.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "Rizzo Flow exécute des modèles ouverts localement et renvoie choix, probabilités, scores et nombres via une interface HTTP compatible Jev.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Le rôle de Jev",
+          "text": "Projet indépendant, il reproduit le principe d’interface de Jev, pas son architecture ni son entraînement propriétaires.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Utilisation",
+          "text": "Servez un modèle avec llama.cpp et connectez le code compatible TypeSafe au point d’accès local.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limites à connaître",
+          "text": "Les probabilités nécessitent une calibration sur vos données ; quantification, matériel et environnement d’exécution peuvent les modifier.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "Rizzo Flow: lokale Jev-artige Entscheidungen",
+      "h1": "Rizzo Flow: lokale Jev-artige Entscheidungen",
+      "description": "Rizzo Flow stellt lokale Modelle über llama.cpp mit Jev-kompatibler API bereit. Es bildet die Schnittstelle nach; Wahrscheinlichkeiten brauchen Kalibrierung.",
+      "summary": "Rizzo Flow betreibt offene Modelle lokal und liefert Auswahlwerte, Wahrscheinlichkeiten, Rubrikwerte und Zahlen über eine Jev-kompatible HTTP-Schnittstelle. Das unabhängige Projekt bildet Jevs Schnittstellenmuster nach, nicht dessen proprietäre Architektur oder Training. Ein Modell mit llama.cpp bereitstellen und TypeSafe-kompatiblen Anwendungscode auf den lokalen Endpunkt richten.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "Rizzo Flow betreibt offene Modelle lokal und liefert Auswahlwerte, Wahrscheinlichkeiten, Rubrikwerte und Zahlen über eine Jev-kompatible HTTP-Schnittstelle.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Die Rolle von Jev",
+          "text": "Das unabhängige Projekt bildet Jevs Schnittstellenmuster nach, nicht dessen proprietäre Architektur oder Training.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Nutzung",
+          "text": "Ein Modell mit llama.cpp bereitstellen und TypeSafe-kompatiblen Anwendungscode auf den lokalen Endpunkt richten.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Grenzen",
+          "text": "Wahrscheinlichkeiten benötigen eigene Kalibrierung; Quantisierung, Hardware und Laufzeitänderungen können sie verändern.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "Rizzo Flow: decisões locais no estilo Jev",
+      "h1": "Rizzo Flow: decisões locais no estilo Jev",
+      "description": "Rizzo Flow serve modelos locais com API compatível Jev em llama.cpp. Reproduz a interface; as probabilidades precisam de calibração própria.",
+      "summary": "Rizzo Flow executa modelos abertos localmente e retorna escolhas, probabilidades, pontuações e números por uma interface HTTP compatível com Jev. O projeto independente reproduz o padrão de interface do Jev, não sua arquitetura ou treinamento proprietários. Sirva um modelo com llama.cpp e direcione o código compatível com TypeSafe ao endpoint local.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "Rizzo Flow executa modelos abertos localmente e retorna escolhas, probabilidades, pontuações e números por uma interface HTTP compatível com Jev.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "O papel do Jev",
+          "text": "O projeto independente reproduz o padrão de interface do Jev, não sua arquitetura ou treinamento proprietários.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Sirva um modelo com llama.cpp e direcione o código compatível com TypeSafe ao endpoint local.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limitações",
+          "text": "As probabilidades exigem calibração nos seus dados; quantização, hardware e ambiente de execução podem alterá-las.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "Rizzo Flow: локальные решения в стиле Jev",
+      "h1": "Rizzo Flow: локальные решения в стиле Jev",
+      "description": "Rizzo Flow обслуживает локальные модели через совместимый с Jev API на llama.cpp. Повторяется интерфейс; вероятности требуют своей калибровки.",
+      "summary": "Rizzo Flow запускает открытые модели локально и возвращает выбор, вероятности, оценки и числа через совместимый с Jev HTTP-интерфейс. Независимый проект повторяет интерфейс Jev, но не его закрытую архитектуру или обучение. Запустите модель через llama.cpp и направьте совместимый с TypeSafe код на локальную точку доступа.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Rizzo Flow запускает открытые модели локально и возвращает выбор, вероятности, оценки и числа через совместимый с Jev HTTP-интерфейс.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Независимый проект повторяет интерфейс Jev, но не его закрытую архитектуру или обучение.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Запустите модель через llama.cpp и направьте совместимый с TypeSafe код на локальную точку доступа.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ограничения",
+          "text": "Вероятности требуют калибровки на ваших данных; квантование, оборудование и среда выполнения могут их изменить.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "Rizzo Flow: llama.cpp पर स्थानीय Jev-जैसे निर्णय",
+      "h1": "Rizzo Flow: llama.cpp पर स्थानीय Jev-जैसे निर्णय",
+      "description": "Rizzo Flow llama.cpp पर स्थानीय मॉडल को Jev-संगत API देता है। यह इंटरफ़ेस पैटर्न अपनाता है; संभावनाएँ अपने डेटा पर कैलिब्रेट करनी होंगी।",
+      "summary": "Rizzo Flow खुले मॉडल स्थानीय रूप से चलाकर Jev-संगत HTTP इंटरफ़ेस से विकल्प, संभावनाएँ, पैमाने के स्कोर और संख्याएँ देता है। स्वतंत्र परियोजना Jev का इंटरफ़ेस पैटर्न अपनाती है, उसकी निजी संरचना या प्रशिक्षण नहीं। llama.cpp से मॉडल चलाएँ और TypeSafe-संगत ऐप को स्थानीय एंडपॉइंट पर भेजें।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "किस काम आता है",
+          "text": "Rizzo Flow खुले मॉडल स्थानीय रूप से चलाकर Jev-संगत HTTP इंटरफ़ेस से विकल्प, संभावनाएँ, पैमाने के स्कोर और संख्याएँ देता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "स्वतंत्र परियोजना Jev का इंटरफ़ेस पैटर्न अपनाती है, उसकी निजी संरचना या प्रशिक्षण नहीं।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल कैसे करें",
+          "text": "llama.cpp से मॉडल चलाएँ और TypeSafe-संगत ऐप को स्थानीय एंडपॉइंट पर भेजें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "सीमाएँ",
+          "text": "संभावनाओं को अपने काम के डेटा पर कैलिब्रेट करना चाहिए; क्वांटाइज़ेशन, हार्डवेयर और रनटाइम बदलने से वे बदल सकती हैं।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "Rizzo Flow: keputusan lokal bergaya Jev",
+      "h1": "Rizzo Flow: keputusan lokal bergaya Jev",
+      "description": "Rizzo Flow menyajikan model lokal melalui API kompatibel Jev pada llama.cpp. Antarmukanya ditiru; probabilitas memerlukan kalibrasi sendiri.",
+      "summary": "Rizzo Flow menjalankan model terbuka secara lokal dan mengembalikan pilihan, probabilitas, skor rubrik, serta angka melalui HTTP kompatibel Jev. Proyek independen ini meniru pola antarmuka Jev, bukan arsitektur atau pelatihan proprieternya. Sajikan model dengan llama.cpp dan arahkan kode aplikasi kompatibel TypeSafe ke endpoint lokal.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "Rizzo Flow menjalankan model terbuka secara lokal dan mengembalikan pilihan, probabilitas, skor rubrik, serta angka melalui HTTP kompatibel Jev.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Proyek independen ini meniru pola antarmuka Jev, bukan arsitektur atau pelatihan proprieternya.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Sajikan model dengan llama.cpp dan arahkan kode aplikasi kompatibel TypeSafe ke endpoint lokal.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Batasan",
+          "text": "Probabilitas memerlukan kalibrasi pada data Anda; kuantisasi, perangkat keras, dan lingkungan eksekusi dapat mengubahnya.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "Rizzo Flow: quyết định cục bộ theo hướng Jev",
+      "h1": "Rizzo Flow: quyết định cục bộ theo hướng Jev",
+      "description": "Rizzo Flow cung cấp mô hình cục bộ qua API tương thích Jev trên llama.cpp. Dự án tái hiện giao diện; xác suất cần tự hiệu chỉnh.",
+      "summary": "Rizzo Flow chạy mô hình mở cục bộ, trả lựa chọn, xác suất, điểm theo tiêu chí và số qua HTTP tương thích Jev. Dự án độc lập tái hiện mẫu giao diện Jev, không tái tạo kiến trúc hay cách huấn luyện độc quyền. Chạy mô hình bằng llama.cpp rồi trỏ mã ứng dụng tương thích TypeSafe vào điểm cuối cục bộ.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích",
+          "text": "Rizzo Flow chạy mô hình mở cục bộ, trả lựa chọn, xác suất, điểm theo tiêu chí và số qua HTTP tương thích Jev.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Dự án độc lập tái hiện mẫu giao diện Jev, không tái tạo kiến trúc hay cách huấn luyện độc quyền.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Chạy mô hình bằng llama.cpp rồi trỏ mã ứng dụng tương thích TypeSafe vào điểm cuối cục bộ.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Giới hạn",
+          "text": "Xác suất cần hiệu chỉnh trên dữ liệu của bạn; lượng tử hóa, phần cứng và môi trường chạy có thể làm thay đổi giá trị.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "Rizzo Flow: llama.cpp üzerinde yerel Jev benzeri kararlar",
+      "h1": "Rizzo Flow: llama.cpp üzerinde yerel Jev benzeri kararlar",
+      "description": "Rizzo Flow, llama.cpp üzerinde yerel modellere Jev uyumlu API sunar. Arayüz örüntüsünü uygular; olasılıklar kendi kalibrasyonunuzu gerektirir.",
+      "summary": "Rizzo Flow açık modelleri yerelde çalıştırır; Jev uyumlu HTTP arayüzünden seçim, olasılık, ölçüt puanı ve sayılar döndürür. Bağımsız proje Jev’in arayüz örüntüsünü yeniden uygular; özel mimarisini veya eğitimini kopyalamaz. llama.cpp ile model sunun ve TypeSafe uyumlu uygulama kodunu yerel uç noktaya yönlendirin.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "Rizzo Flow açık modelleri yerelde çalıştırır; Jev uyumlu HTTP arayüzünden seçim, olasılık, ölçüt puanı ve sayılar döndürür.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Bağımsız proje Jev’in arayüz örüntüsünü yeniden uygular; özel mimarisini veya eğitimini kopyalamaz.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "llama.cpp ile model sunun ve TypeSafe uyumlu uygulama kodunu yerel uç noktaya yönlendirin.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Sınırlamalar",
+          "text": "Olasılıklar kendi verilerinizde kalibrasyon ister; nicemleme, donanım ve çalışma ortamı değişiklikleri değerleri etkileyebilir.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "Rizzo Flow: decisioni locali in stile Jev",
+      "h1": "Rizzo Flow: decisioni locali in stile Jev",
+      "description": "Rizzo Flow serve modelli locali tramite API compatibile Jev su llama.cpp. Riproduce l’interfaccia; le probabilità richiedono una propria calibrazione.",
+      "summary": "Rizzo Flow esegue modelli aperti localmente e restituisce scelte, probabilità, punteggi e numeri tramite HTTP compatibile Jev. Il progetto indipendente riproduce lo schema dell’interfaccia Jev, non l’architettura o l’addestramento proprietari. Servi un modello con llama.cpp e indirizza il codice compatibile TypeSafe all’endpoint locale.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "Rizzo Flow esegue modelli aperti localmente e restituisce scelte, probabilità, punteggi e numeri tramite HTTP compatibile Jev.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Il ruolo di Jev",
+          "text": "Il progetto indipendente riproduce lo schema dell’interfaccia Jev, non l’architettura o l’addestramento proprietari.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come usarlo",
+          "text": "Servi un modello con llama.cpp e indirizza il codice compatibile TypeSafe all’endpoint locale.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limiti",
+          "text": "Le probabilità richiedono calibrazione sui propri dati; quantizzazione, hardware e ambiente di esecuzione possono modificarle.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  },
+  "displayName": "Rizzo Flow"
+}

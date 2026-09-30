@@ -1,0 +1,777 @@
+{
+  "version": "source-content-v1",
+  "repo": "typesafe-ai/skills",
+  "repositoryId": 1345508845,
+  "relationship": "resource",
+  "category": "official",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "path": "README.md",
+      "commit": "65a39f393687675ce170e6094757de20370365b9",
+      "url": "https://github.com/typesafe-ai/skills/blob/65a39f393687675ce170e6094757de20370365b9/README.md",
+      "sha256": "799ce1dc39dc1cb98977f930610bf693a26d1a78e5912b860014447d97390282",
+      "accessedAt": "2026-09-30T07:33:47.608Z",
+      "id": "s1"
+    },
+    {
+      "path": "skills/typesafe-ai/SKILL.md",
+      "commit": "65a39f393687675ce170e6094757de20370365b9",
+      "url": "https://github.com/typesafe-ai/skills/blob/65a39f393687675ce170e6094757de20370365b9/skills/typesafe-ai/SKILL.md",
+      "sha256": "71ea90d7906c6554c4f4c460ef7361b2d26f59116ccdae986dc6d997b9389f52",
+      "accessedAt": "2026-09-30T08:50:23.411874+00:00",
+      "id": "s2"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "This official resource helps agents design TypeSafe workflows, find documentation and compose typed judgments in code.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 1,
+          "end": 5,
+          "quote": "# TypeSafe Agent Skills\n\nAgent skills for building with [TypeSafe](https://typesafe.ai): typed decisions and probabilities from System One models.\n\nYou can [read SKILL.md on GitHub](https://github.com/typesafe-ai/skills/blob/main/skills/typesafe-ai/SKILL.md) or fetch its [raw Markdown](https://raw.githubusercontent.com/typesafe-ai/skills/main/skills/typesafe-ai/SKILL.md)."
+        },
+        {
+          "source": "s1",
+          "start": 36,
+          "end": 38,
+          "quote": "| Skill | Purpose |\n|---|---|\n| [typesafe-ai](skills/typesafe-ai/SKILL.md) | Design TypeSafe workflows, find current docs and cookbooks, and compose typed judgments in code |"
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "The skill describes Jev as a System One model returning typed answers and probabilities for application-controlled workflows.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s2",
+          "start": 18,
+          "end": 24,
+          "quote": "TypeSafe makes units of AI intelligence usable like programming primitives: small\njudgments you can compose into larger capabilities. Its **System One models** return\nfast, focused judgments that software can consume directly. **Jev** is TypeSafe's\nflagship and first System One model. It understands natural language and returns\ntyped answers and probabilities rather\nthan generating text or reasoning explanations. Code owns the workflow; the model\nsupplies programmable common sense where ordinary code needs semantic understanding."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Install the Claude Code plugin or the skills.sh package, then request a workflow such as support-ticket routing with uncertain cases reviewed.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 9,
+          "end": 24,
+          "quote": "### Claude Code plugin\n\nRun in your terminal:\n\n```bash\nclaude plugin marketplace add typesafe-ai/skills\nclaude plugin install typesafe@typesafe-ai\n```\n\n### Other agents via skills.sh\n\n```bash\nnpx skills add typesafe-ai/skills --skill typesafe-ai\n```\n\nSelect your agent when prompted. Installation is project-local by default; add `-g` to install globally."
+        },
+        {
+          "source": "s1",
+          "start": 30,
+          "end": 34,
+          "quote": "Ask your agent, for example:\n\n> Use TypeSafe to route incoming support tickets by department, with human review for uncertain decisions.\n\nIn Claude Code, you can explicitly invoke the plugin skill with `/typesafe:typesafe-ai`."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "Installation through skills.sh is project-local by default. The skill supplies guidance; live TypeSafe documentation carries current API contracts, model limits and examples.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 18,
+          "end": 26,
+          "quote": "### Other agents via skills.sh\n\n```bash\nnpx skills add typesafe-ai/skills --skill typesafe-ai\n```\n\nSelect your agent when prompted. Installation is project-local by default; add `-g` to install globally.\n\nSee the [installation guide](https://docs.typesafe.ai/agent-skill#installation) for a prompt to copy to your agent, manual installation, and updates."
+        },
+        {
+          "source": "s2",
+          "start": 28,
+          "end": 30,
+          "quote": "**The live TypeSafe docs are the source of truth. Read them as part of the task.**\nThis skill gives direction; the docs carry current concepts, prompting guidance,\nAPI contracts, SDK usage, models, limits, and worked examples."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "TypeSafe Agent Skills: guidance for building with Jev",
+      "h1": "TypeSafe Agent Skills: guidance for building with Jev",
+      "description": "TypeSafe Agent Skills gives coding agents guidance for designing typed-decision workflows with Jev and System One models.",
+      "summary": "This official resource helps agents design TypeSafe workflows, find documentation and compose typed judgments in code. The skill describes Jev as a System One model returning typed answers and probabilities for application-controlled workflows.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose and audience",
+          "text": "This official resource helps agents design TypeSafe workflows, find documentation and compose typed judgments in code.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "The skill describes Jev as a System One model returning typed answers and probabilities for application-controlled workflows.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Using the project",
+          "text": "Install the Claude Code plugin or the skills.sh package, then request a workflow such as support-ticket routing with uncertain cases reviewed.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "Installation through skills.sh is project-local by default. The skill supplies guidance; live TypeSafe documentation carries current API contracts, model limits and examples.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "TypeSafe Agent Skills：构建 Jev 工作流的指导资源",
+      "h1": "TypeSafe Agent Skills：构建 Jev 工作流的指导资源",
+      "description": "TypeSafe Agent Skills 为编程智能体提供使用 Jev 和 System One 模型设计类型化决策流程的指导。",
+      "summary": "这套官方资源帮助智能体设计 TypeSafe 流程、查找文档，并在代码中组合类型化判断。 技能将 Jev 描述为返回类型化答案和概率的 System One 模型，具体工作流由应用代码控制。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途与适用对象",
+          "text": "这套官方资源帮助智能体设计 TypeSafe 流程、查找文档，并在代码中组合类型化判断。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "技能将 Jev 描述为返回类型化答案和概率的 System One 模型，具体工作流由应用代码控制。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "可安装 Claude Code 插件或 skills.sh 技能，再要求构建工单路由等流程，将不确定情况交给审核。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "通过 skills.sh 安装时，默认范围为当前项目。技能提供方法指导；最新 API 合约、模型限制和示例由在线 TypeSafe 文档维护。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "TypeSafe Agent Skills：建立 Jev 工作流程的指引",
+      "h1": "TypeSafe Agent Skills：建立 Jev 工作流程的指引",
+      "description": "TypeSafe Agent Skills 為程式開發代理提供使用 Jev 與 System One 模型設計型別化決策流程的指引。",
+      "summary": "這套官方資源協助代理設計 TypeSafe 流程、尋找文件，並在程式碼中組合型別化判斷。 技能將 Jev 說明為回傳型別化答案及機率的 System One 模型，工作流程由應用程式控制。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途與適用對象",
+          "text": "這套官方資源協助代理設計 TypeSafe 流程、尋找文件，並在程式碼中組合型別化判斷。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "技能將 Jev 說明為回傳型別化答案及機率的 System One 模型，工作流程由應用程式控制。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "可安裝 Claude Code 外掛或 skills.sh 技能，再要求建立工單分流等流程，將不確定案例交付審查。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "透過 skills.sh 安裝時，預設範圍為目前專案。技能提供指引；最新 API 契約、模型限制與範例由線上 TypeSafe 文件維護。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "TypeSafe Agent Skills：Jev を使う開発手順の資料",
+      "h1": "TypeSafe Agent Skills：Jev を使う開発手順の資料",
+      "description": "TypeSafe Agent Skills は Jev と System One を使った型付き判断の設計を開発エージェントに案内します。",
+      "summary": "公式の資料として、TypeSafe ワークフローの設計、文書の参照、コードでの判断の組み合わせを支援します。 スキルでは Jev を型付き回答と確率を返す System One モデルと説明し、処理の流れはアプリ側が制御します。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途と対象",
+          "text": "公式の資料として、TypeSafe ワークフローの設計、文書の参照、コードでの判断の組み合わせを支援します。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev との関係",
+          "text": "スキルでは Jev を型付き回答と確率を返す System One モデルと説明し、処理の流れはアプリ側が制御します。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "Claude Code プラグインか skills.sh パッケージを導入し、不確実な問い合わせを人に回す振り分け処理などを依頼できます。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範囲と制約",
+          "text": "skills.sh での導入先は、既定では現在のプロジェクトです。スキルは指針を示し、最新の API 契約、制約、例は TypeSafe のオンライン文書にあります。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "TypeSafe Agent Skills: Jev 개발을 위한 안내 자료",
+      "h1": "TypeSafe Agent Skills: Jev 개발을 위한 안내 자료",
+      "description": "TypeSafe Agent Skills는 Jev와 System One으로 형식화된 판단 흐름을 설계하도록 코딩 에이전트를 안내합니다.",
+      "summary": "공식 자료로 TypeSafe 흐름 설계, 문서 검색, 코드에서 판단을 조합하는 작업을 돕습니다. 스킬은 Jev를 형식화된 답변과 확률을 반환하는 System One 모델로 설명하며 흐름은 애플리케이션 코드가 제어합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "용도와 대상",
+          "text": "공식 자료로 TypeSafe 흐름 설계, 문서 검색, 코드에서 판단을 조합하는 작업을 돕습니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "스킬은 Jev를 형식화된 답변과 확률을 반환하는 System One 모델로 설명하며 흐름은 애플리케이션 코드가 제어합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "Claude Code 플러그인이나 skills.sh 패키지를 설치한 뒤 불확실한 건은 검토로 보내는 지원 티켓 분류 같은 흐름을 요청합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 한계",
+          "text": "skills.sh를 통한 설치는 기본적으로 현재 프로젝트에 적용됩니다. 스킬은 지침을 제공하고 최신 API 계약, 모델 제한, 예시는 온라인 TypeSafe 문서에 있습니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "TypeSafe Agent Skills: guía para desarrollar con Jev",
+      "h1": "TypeSafe Agent Skills: guía para desarrollar con Jev",
+      "description": "TypeSafe Agent Skills orienta a agentes de programación al diseñar decisiones tipadas con Jev y modelos System One.",
+      "summary": "Este recurso oficial ayuda a diseñar flujos TypeSafe, localizar documentación y combinar juicios tipados en código. La habilidad describe Jev como modelo System One que devuelve respuestas tipadas y probabilidades en flujos controlados por la aplicación.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "Este recurso oficial ayuda a diseñar flujos TypeSafe, localizar documentación y combinar juicios tipados en código.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "La habilidad describe Jev como modelo System One que devuelve respuestas tipadas y probabilidades en flujos controlados por la aplicación.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo se usa",
+          "text": "Instale el plugin Claude Code o el paquete skills.sh y solicite, por ejemplo, rutas de tickets con revisión de casos inciertos.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "La instalación mediante skills.sh es local al proyecto por defecto. La habilidad orienta; la documentación TypeSafe en línea contiene contratos API, límites y ejemplos vigentes.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "TypeSafe Agent Skills : guide de développement avec Jev",
+      "h1": "TypeSafe Agent Skills : guide de développement avec Jev",
+      "description": "TypeSafe Agent Skills aide les agents de code à concevoir des décisions typées avec Jev et les modèles System One.",
+      "summary": "Cette ressource officielle guide la conception de flux TypeSafe, la recherche documentaire et la composition de jugements typés en code. La compétence présente Jev comme un modèle System One renvoyant réponses typées et probabilités dans des flux contrôlés par l'application.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Usage et public visé",
+          "text": "Cette ressource officielle guide la conception de flux TypeSafe, la recherche documentaire et la composition de jugements typés en code.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "La compétence présente Jev comme un modèle System One renvoyant réponses typées et probabilités dans des flux contrôlés par l'application.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Installez le plugin Claude Code ou le paquet skills.sh, puis demandez par exemple un routage de tickets avec revue des cas incertains.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "L’installation via skills.sh est locale au projet par défaut. La compétence donne une orientation ; la documentation TypeSafe en ligne porte contrats API, limites et exemples actuels.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "TypeSafe Agent Skills: Anleitung für die Entwicklung mit Jev",
+      "h1": "TypeSafe Agent Skills: Anleitung für die Entwicklung mit Jev",
+      "description": "TypeSafe Agent Skills hilft Coding-Agenten, typisierte Entscheidungsabläufe mit Jev und System-One-Modellen zu entwerfen.",
+      "summary": "Die offizielle Ressource unterstützt TypeSafe-Workflows, Dokumentationssuche und das Kombinieren typisierter Urteile in Code. Der Skill beschreibt Jev als System-One-Modell für typisierte Antworten und Wahrscheinlichkeiten; den Ablauf steuert die Anwendung.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Zweck und Zielgruppe",
+          "text": "Die offizielle Ressource unterstützt TypeSafe-Workflows, Dokumentationssuche und das Kombinieren typisierter Urteile in Code.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Der Skill beschreibt Jev als System-One-Modell für typisierte Antworten und Wahrscheinlichkeiten; den Ablauf steuert die Anwendung.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Verwendung",
+          "text": "Installieren Sie das Claude-Code-Plugin oder skills.sh-Paket und fragen Sie etwa nach Ticketrouting mit Prüfung unsicherer Fälle.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Über skills.sh wird standardmäßig projektlokal installiert. Der Skill liefert Orientierung; aktuelle API-Verträge, Modellgrenzen und Beispiele stehen in der TypeSafe-Onlinedokumentation.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "TypeSafe Agent Skills: orientação para criar com Jev",
+      "h1": "TypeSafe Agent Skills: orientação para criar com Jev",
+      "description": "TypeSafe Agent Skills orienta agentes de programação a criar decisões tipadas com Jev e modelos System One.",
+      "summary": "O recurso oficial ajuda a projetar fluxos TypeSafe, encontrar documentação e combinar julgamentos tipados em código. A habilidade descreve Jev como modelo System One que retorna respostas tipadas e probabilidades em fluxos controlados pela aplicação.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Finalidade e público",
+          "text": "O recurso oficial ajuda a projetar fluxos TypeSafe, encontrar documentação e combinar julgamentos tipados em código.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "A habilidade descreve Jev como modelo System One que retorna respostas tipadas e probabilidades em fluxos controlados pela aplicação.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Instale o plugin Claude Code ou o pacote skills.sh e peça, por exemplo, roteamento de tickets com revisão dos casos incertos.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "A instalação via skills.sh é local ao projeto por padrão. A habilidade orienta; a documentação TypeSafe online mantém contratos de API, limites e exemplos atuais.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "TypeSafe Agent Skills: руководство по разработке с Jev",
+      "h1": "TypeSafe Agent Skills: руководство по разработке с Jev",
+      "description": "TypeSafe Agent Skills помогает агентам программирования проектировать типизированные решения с Jev и моделями System One.",
+      "summary": "Официальный ресурс помогает строить процессы TypeSafe, находить документацию и объединять типизированные суждения в коде. Навык описывает Jev как System One модель, возвращающую типизированные ответы и вероятности; процессом управляет приложение.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Официальный ресурс помогает строить процессы TypeSafe, находить документацию и объединять типизированные суждения в коде.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Навык описывает Jev как System One модель, возвращающую типизированные ответы и вероятности; процессом управляет приложение.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Установите плагин Claude Code или пакет skills.sh и запросите, например, маршрутизацию обращений с проверкой неопределённых случаев.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Установка через skills.sh по умолчанию локальна для проекта. Навык задаёт подход; актуальные API-контракты, ограничения и примеры содержит онлайн-документация TypeSafe.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "TypeSafe Agent Skills: Jev से बनाने का मार्गदर्शन",
+      "h1": "TypeSafe Agent Skills: Jev से बनाने का मार्गदर्शन",
+      "description": "TypeSafe Agent Skills कोडिंग एजेंटों को Jev और System One से निश्चित प्रकार के निर्णय प्रवाह बनाने में मार्गदर्शन देता है।",
+      "summary": "यह आधिकारिक संसाधन TypeSafe प्रवाह डिज़ाइन करने, दस्तावेज़ खोजने और कोड में निर्णय जोड़ने में मदद करता है। स्किल Jev को निश्चित प्रकार के उत्तर और संभावनाएँ देने वाला System One मॉडल बताती है; प्रवाह ऐप नियंत्रित करता है।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "उद्देश्य और उपयोगकर्ता",
+          "text": "यह आधिकारिक संसाधन TypeSafe प्रवाह डिज़ाइन करने, दस्तावेज़ खोजने और कोड में निर्णय जोड़ने में मदद करता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "स्किल Jev को निश्चित प्रकार के उत्तर और संभावनाएँ देने वाला System One मॉडल बताती है; प्रवाह ऐप नियंत्रित करता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल का तरीका",
+          "text": "Claude Code प्लगइन या skills.sh पैकेज इंस्टॉल करके ऐसा टिकट रूटिंग प्रवाह माँगें जिसमें अनिश्चित मामलों की समीक्षा हो।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "skills.sh से इंस्टॉलेशन डिफ़ॉल्ट रूप से प्रोजेक्ट तक सीमित है। स्किल दिशा देती है; मौजूदा API अनुबंध, सीमाएँ और उदाहरण ऑनलाइन TypeSafe दस्तावेज़ों में हैं।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "TypeSafe Agent Skills: panduan membangun dengan Jev",
+      "h1": "TypeSafe Agent Skills: panduan membangun dengan Jev",
+      "description": "TypeSafe Agent Skills memandu agen pemrograman merancang alur keputusan bertipe memakai Jev dan model System One.",
+      "summary": "Sumber resmi ini membantu merancang alur TypeSafe, menemukan dokumentasi, dan menyusun penilaian bertipe dalam kode. Keterampilan menjelaskan Jev sebagai model System One yang mengembalikan jawaban bertipe serta probabilitas; aplikasi mengendalikan alurnya.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Tujuan dan pengguna",
+          "text": "Sumber resmi ini membantu merancang alur TypeSafe, menemukan dokumentasi, dan menyusun penilaian bertipe dalam kode.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Keterampilan menjelaskan Jev sebagai model System One yang mengembalikan jawaban bertipe serta probabilitas; aplikasi mengendalikan alurnya.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Pasang plugin Claude Code atau paket skills.sh, lalu minta alur seperti perutean tiket dengan peninjauan kasus tidak pasti.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Instalasi melalui skills.sh secara bawaan hanya untuk proyek. Keterampilan memberi arahan; dokumentasi TypeSafe daring memuat kontrak API, batas, dan contoh terbaru.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "TypeSafe Agent Skills: hướng dẫn xây dựng với Jev",
+      "h1": "TypeSafe Agent Skills: hướng dẫn xây dựng với Jev",
+      "description": "TypeSafe Agent Skills hướng dẫn tác tử lập trình thiết kế quyết định có kiểu bằng Jev và mô hình System One.",
+      "summary": "Tài nguyên chính thức giúp thiết kế quy trình TypeSafe, tìm tài liệu và kết hợp phán đoán có kiểu trong mã. Kỹ năng mô tả Jev là mô hình System One trả đáp án có kiểu cùng xác suất; ứng dụng kiểm soát quy trình.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích và đối tượng",
+          "text": "Tài nguyên chính thức giúp thiết kế quy trình TypeSafe, tìm tài liệu và kết hợp phán đoán có kiểu trong mã.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Kỹ năng mô tả Jev là mô hình System One trả đáp án có kiểu cùng xác suất; ứng dụng kiểm soát quy trình.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Cài plugin Claude Code hoặc gói skills.sh rồi yêu cầu quy trình như phân luồng phiếu hỗ trợ với bước kiểm tra trường hợp không chắc chắn.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Khi cài qua skills.sh, phạm vi mặc định chỉ là dự án hiện tại. Kỹ năng định hướng, còn tài liệu TypeSafe trực tuyến chứa hợp đồng API, giới hạn và ví dụ hiện hành.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "TypeSafe Agent Skills: Jev ile geliştirme rehberi",
+      "h1": "TypeSafe Agent Skills: Jev ile geliştirme rehberi",
+      "description": "TypeSafe Agent Skills, kodlama ajanlarına Jev ve System One ile türü belirli karar akışları tasarlama rehberliği sunar.",
+      "summary": "Resmî kaynak, TypeSafe akışlarını tasarlamaya, belgeleri bulmaya ve türü belirli yargıları kodda birleştirmeye yardımcı olur. Beceri, Jev’i türü belirli yanıtlar ve olasılıklar döndüren System One modeli olarak açıklar; akışı uygulama yönetir.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Amaç ve hedef kitle",
+          "text": "Resmî kaynak, TypeSafe akışlarını tasarlamaya, belgeleri bulmaya ve türü belirli yargıları kodda birleştirmeye yardımcı olur.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Beceri, Jev’i türü belirli yanıtlar ve olasılıklar döndüren System One modeli olarak açıklar; akışı uygulama yönetir.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Claude Code eklentisi veya skills.sh paketi kurulup belirsiz durumları incelemeye yönlendiren destek talebi akışı gibi işler istenir.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "skills.sh üzerinden kurulum varsayılan olarak projeye özeldir. Beceri yön verir; güncel API sözleşmeleri, sınırlar ve örnekler TypeSafe çevrimiçi belgelerindedir.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "TypeSafe Agent Skills: guida allo sviluppo con Jev",
+      "h1": "TypeSafe Agent Skills: guida allo sviluppo con Jev",
+      "description": "TypeSafe Agent Skills guida gli agenti di codice nella progettazione di decisioni tipizzate con Jev e modelli System One.",
+      "summary": "La risorsa ufficiale aiuta a progettare flussi TypeSafe, trovare documentazione e comporre giudizi tipizzati nel codice. La skill descrive Jev come modello System One che restituisce risposte tipizzate e probabilità; il flusso è controllato dall'applicazione.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Scopo e destinatari",
+          "text": "La risorsa ufficiale aiuta a progettare flussi TypeSafe, trovare documentazione e comporre giudizi tipizzati nel codice.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "La skill descrive Jev come modello System One che restituisce risposte tipizzate e probabilità; il flusso è controllato dall'applicazione.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come si usa",
+          "text": "Si installa il plugin Claude Code o il pacchetto skills.sh e si richiede, per esempio, instradamento dei ticket con revisione dei casi incerti.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "L’installazione tramite skills.sh è locale al progetto per impostazione predefinita. La skill orienta; la documentazione TypeSafe online contiene contratti API, limiti ed esempi aggiornati.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  },
+  "displayName": "TypeSafe Agent Skills"
+}

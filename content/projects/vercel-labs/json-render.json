@@ -1,0 +1,776 @@
+{
+  "version": "source-content-v1",
+  "repo": "vercel-labs/json-render",
+  "repositoryId": 1134411737,
+  "relationship": "integration",
+  "category": "integrations",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "path": "README.md",
+      "commit": "c2600d73908ed505e6d726f5b6f969ba8f597ce7",
+      "url": "https://github.com/vercel-labs/json-render/blob/c2600d73908ed505e6d726f5b6f969ba8f597ce7/README.md",
+      "sha256": "4f0b85cbce1da48fa5a698cf559df7d6a858fbc444d810f0899355a10ac6326a",
+      "accessedAt": "2026-09-30T07:33:45.187Z",
+      "id": "s1"
+    },
+    {
+      "path": "apps/web/lib/jev/compose.ts",
+      "commit": "c2600d73908ed505e6d726f5b6f969ba8f597ce7",
+      "url": "https://github.com/vercel-labs/json-render/blob/c2600d73908ed505e6d726f5b6f969ba8f597ce7/apps/web/lib/jev/compose.ts",
+      "sha256": "54f8cc68a1c31d399c1956b36382475cb2e796fc17c2172952e048ce4afc46c3",
+      "accessedAt": "2026-09-30T07:33:45.193Z",
+      "id": "s2"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "Developers define allowed components and actions so generated interfaces follow their own catalog and schema.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 41,
+          "end": 48,
+          "quote": "## Why json-render?\n\njson-render is a **Generative UI** framework: AI generates interfaces from natural language prompts, constrained to components you define. You set the guardrails, AI generates within them:\n\n- **Guardrailed** - AI can only use components in your catalog\n- **Predictable** - JSON output matches your schema, every time\n- **Fast** - Stream and render progressively as the model responds\n- **Cross-Platform** - React, Vue, Svelte, Solid (web), React Native (mobile) from the same catalog"
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "The playground's experimental composer uses typesafe-ai/jev to evaluate candidate components while building a UI specification.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 811,
+          "end": 811,
+          "quote": "- [Experimental Jev composition](https://json-render.dev/docs/jev): use `experimental_composeSpec` and `experimental_createEvaluator` from core with your own catalog, or select **Jev (Experimental)** in `/playground`. Unreleased; source-build instructions are in the guide."
+        },
+        {
+          "source": "s2",
+          "start": 21,
+          "end": 35,
+          "quote": "/** The playground supplies its own content and recipes to the public API. */\nexport async function* composeUI(\n  prompt: string,\n  signal: AbortSignal,\n  evaluate: Evaluate = experimental_createEvaluator({\n    model: \"typesafe-ai/jev\",\n    apiKey: process.env.JEV_AI_GATEWAY_API_KEY ?? \"\",\n  }),\n  initialSpec?: Spec,\n): AsyncGenerator<CompositionEvent> {\n  for await (const event of experimental_composeSpec({\n    catalog: playgroundCatalog,\n    candidates: buildCandidates(prompt),\n    initialSpec,\n    initialState: { ...platformState, ...initialSpec?.state },"
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Define a catalog, then use experimental_composeSpec and experimental_createEvaluator or select Jev in the playground.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 53,
+          "end": 86,
+          "quote": "### 1. Define Your Catalog\n\n```typescript\nimport { defineCatalog } from \"@json-render/core\";\nimport { schema } from \"@json-render/react/schema\";\nimport { z } from \"zod\";\n\nconst catalog = defineCatalog(schema, {\n  components: {\n    Card: {\n      props: z.object({ title: z.string() }),\n      description: \"A card container\",\n    },\n    Metric: {\n      props: z.object({\n        label: z.string(),\n        value: z.string(),\n        format: z.enum([\"currency\", \"percent\", \"number\"]).nullable(),\n      }),\n      description: \"Display a metric value\",\n    },\n    Button: {\n      props: z.object({\n        label: z.string(),\n        action: z.string(),\n      }),\n      description: \"Clickable button\",\n    },\n  },\n  actions: {\n    export_report: { description: \"Export dashboard to PDF\" },\n    refresh_data: { description: \"Refresh all metrics\" },\n  },\n});"
+        },
+        {
+          "source": "s1",
+          "start": 811,
+          "end": 811,
+          "quote": "- [Experimental Jev composition](https://json-render.dev/docs/jev): use `experimental_composeSpec` and `experimental_createEvaluator` from core with your own catalog, or select **Jev (Experimental)** in `/playground`. Unreleased; source-build instructions are in the guide."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "The Jev path is experimental and unreleased, with source-build instructions; its playground evaluator reads JEV_AI_GATEWAY_API_KEY.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 811,
+          "end": 811,
+          "quote": "- [Experimental Jev composition](https://json-render.dev/docs/jev): use `experimental_composeSpec` and `experimental_createEvaluator` from core with your own catalog, or select **Jev (Experimental)** in `/playground`. Unreleased; source-build instructions are in the guide."
+        },
+        {
+          "source": "s2",
+          "start": 25,
+          "end": 28,
+          "quote": "  evaluate: Evaluate = experimental_createEvaluator({\n    model: \"typesafe-ai/jev\",\n    apiKey: process.env.JEV_AI_GATEWAY_API_KEY ?? \"\",\n  }),"
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "json-render: UI generation with experimental Jev composition",
+      "h1": "json-render: UI generation with experimental Jev composition",
+      "description": "json-render constrains generated interfaces to a component catalog and includes an experimental Jev composition path.",
+      "summary": "Developers define allowed components and actions so generated interfaces follow their own catalog and schema. The playground's experimental composer uses typesafe-ai/jev to evaluate candidate components while building a UI specification.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose and audience",
+          "text": "Developers define allowed components and actions so generated interfaces follow their own catalog and schema.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "The playground's experimental composer uses typesafe-ai/jev to evaluate candidate components while building a UI specification.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Using the project",
+          "text": "Define a catalog, then use experimental_composeSpec and experimental_createEvaluator or select Jev in the playground.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "The Jev path is experimental and unreleased, with source-build instructions; its playground evaluator reads JEV_AI_GATEWAY_API_KEY.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "json-render：支持实验性 Jev 组合的界面生成",
+      "h1": "json-render：支持实验性 Jev 组合的界面生成",
+      "description": "json-render 将生成界面限定在组件目录内，并提供实验性的 Jev 界面组合路径。",
+      "summary": "开发者定义可用组件和操作，让生成界面遵循自己的组件目录与结构约束。 试验场中的实验性组合器用 typesafe-ai/jev 评估候选组件，逐步构建界面描述。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途与适用对象",
+          "text": "开发者定义可用组件和操作，让生成界面遵循自己的组件目录与结构约束。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "试验场中的实验性组合器用 typesafe-ai/jev 评估候选组件，逐步构建界面描述。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "定义组件目录后，可使用 experimental_composeSpec 和 experimental_createEvaluator，或在试验场选择 Jev。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "Jev 路径仍处于实验阶段且尚未发布，需参考源码构建说明；试验场读取 JEV_AI_GATEWAY_API_KEY。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "json-render：支援實驗性 Jev 組合的介面生成",
+      "h1": "json-render：支援實驗性 Jev 組合的介面生成",
+      "description": "json-render 將生成介面限制在元件目錄內，並提供實驗性的 Jev 介面組合流程。",
+      "summary": "開發者定義允許的元件和動作，讓生成介面遵循自訂元件目錄與資料結構。 試用介面的實驗性組合器以 typesafe-ai/jev 評估候選元件，建立介面規格。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途與適用對象",
+          "text": "開發者定義允許的元件和動作，讓生成介面遵循自訂元件目錄與資料結構。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "試用介面的實驗性組合器以 typesafe-ai/jev 評估候選元件，建立介面規格。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "定義元件目錄後，使用 experimental_composeSpec 與 experimental_createEvaluator，或在試用介面選擇 Jev。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "Jev 流程仍為實驗功能且尚未發布，須參考原始碼建置說明；試用介面讀取 JEV_AI_GATEWAY_API_KEY。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "json-render：実験的な Jev 構成機能で UI を生成",
+      "h1": "json-render：実験的な Jev 構成機能で UI を生成",
+      "description": "json-render は部品カタログの範囲で UI を生成し、実験的な Jev 構成機能も提供します。",
+      "summary": "開発者が使用可能な部品と操作を定義し、生成 UI の構造を制約します。 プレイグラウンドの実験的コンポーザーは typesafe-ai/jev で候補部品を評価し、UI 仕様を組み立てます。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途と対象",
+          "text": "開発者が使用可能な部品と操作を定義し、生成 UI の構造を制約します。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev との関係",
+          "text": "プレイグラウンドの実験的コンポーザーは typesafe-ai/jev で候補部品を評価し、UI 仕様を組み立てます。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "カタログを定義して experimental_composeSpec と experimental_createEvaluator を使うか、プレイグラウンドで Jev を選びます。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範囲と制約",
+          "text": "Jev 機能は実験段階で未リリースです。ソースからのビルド手順があり、プレイグラウンドは JEV_AI_GATEWAY_API_KEY を参照します。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "json-render: 실험적 Jev 구성 기능으로 UI 생성",
+      "h1": "json-render: 실험적 Jev 구성 기능으로 UI 생성",
+      "description": "json-render는 컴포넌트 카탈로그 안에서 UI를 생성하며 실험적 Jev 구성 경로를 제공합니다.",
+      "summary": "개발자가 허용할 컴포넌트와 동작을 정의하여 생성된 인터페이스가 카탈로그와 스키마를 따르게 합니다. 플레이그라운드의 실험적 구성기는 typesafe-ai/jev로 후보 컴포넌트를 평가하며 UI 명세를 만듭니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "용도와 대상",
+          "text": "개발자가 허용할 컴포넌트와 동작을 정의하여 생성된 인터페이스가 카탈로그와 스키마를 따르게 합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "플레이그라운드의 실험적 구성기는 typesafe-ai/jev로 후보 컴포넌트를 평가하며 UI 명세를 만듭니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "카탈로그를 정의한 후 experimental_composeSpec과 experimental_createEvaluator를 쓰거나 플레이그라운드에서 Jev를 선택합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 한계",
+          "text": "Jev 경로는 실험 단계이며 아직 출시되지 않았습니다. 소스 빌드 안내가 있고 플레이그라운드는 JEV_AI_GATEWAY_API_KEY를 읽습니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "json-render: interfaces con composición Jev experimental",
+      "h1": "json-render: interfaces con composición Jev experimental",
+      "description": "json-render limita las interfaces generadas a un catálogo e incluye una vía experimental de composición con Jev.",
+      "summary": "El desarrollador define componentes y acciones permitidos para que las interfaces respeten su catálogo y esquema. El compositor experimental del playground evalúa componentes candidatos con typesafe-ai/jev al construir la especificación de interfaz.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "El desarrollador define componentes y acciones permitidos para que las interfaces respeten su catálogo y esquema.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "El compositor experimental del playground evalúa componentes candidatos con typesafe-ai/jev al construir la especificación de interfaz.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo se usa",
+          "text": "Defina un catálogo y use experimental_composeSpec y experimental_createEvaluator, o seleccione Jev en el playground.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "La vía Jev es experimental y aún no publicada; exige compilación desde el código. El evaluador del playground lee JEV_AI_GATEWAY_API_KEY.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "json-render : interfaces avec composition Jev expérimentale",
+      "h1": "json-render : interfaces avec composition Jev expérimentale",
+      "description": "json-render limite les interfaces générées à un catalogue et propose une composition expérimentale avec Jev.",
+      "summary": "Le développeur définit les composants et actions autorisés afin de contraindre l'interface à son catalogue et son schéma. Le compositeur expérimental du playground évalue les composants candidats avec typesafe-ai/jev pour construire une spécification d'interface.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Usage et public visé",
+          "text": "Le développeur définit les composants et actions autorisés afin de contraindre l'interface à son catalogue et son schéma.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Le compositeur expérimental du playground évalue les composants candidats avec typesafe-ai/jev pour construire une spécification d'interface.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Définissez un catalogue, utilisez experimental_composeSpec et experimental_createEvaluator, ou sélectionnez Jev dans le playground.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "Cette voie est expérimentale et non publiée ; le guide décrit une compilation des sources. Le playground lit JEV_AI_GATEWAY_API_KEY.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "json-render: UI-Erzeugung mit experimenteller Jev-Komposition",
+      "h1": "json-render: UI-Erzeugung mit experimenteller Jev-Komposition",
+      "description": "json-render begrenzt generierte Oberflächen auf einen Komponentenkatalog und bietet experimentelle Komposition mit Jev.",
+      "summary": "Entwickler legen erlaubte Komponenten und Aktionen fest, damit erzeugte Oberflächen dem eigenen Katalog und Schema folgen. Die experimentelle Kompositionslogik im Playground bewertet mögliche Komponenten mit typesafe-ai/jev und erstellt daraus eine UI-Spezifikation.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Zweck und Zielgruppe",
+          "text": "Entwickler legen erlaubte Komponenten und Aktionen fest, damit erzeugte Oberflächen dem eigenen Katalog und Schema folgen.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Die experimentelle Kompositionslogik im Playground bewertet mögliche Komponenten mit typesafe-ai/jev und erstellt daraus eine UI-Spezifikation.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Verwendung",
+          "text": "Definieren Sie einen Katalog und verwenden Sie experimental_composeSpec und experimental_createEvaluator oder wählen Sie Jev im Playground.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Der Jev-Pfad ist experimentell und unveröffentlicht; eine Anleitung beschreibt den Quellcode-Build. Der Playground liest JEV_AI_GATEWAY_API_KEY.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "json-render: interfaces com composição Jev experimental",
+      "h1": "json-render: interfaces com composição Jev experimental",
+      "description": "json-render restringe interfaces geradas a um catálogo de componentes e inclui composição experimental com Jev.",
+      "summary": "O desenvolvedor define componentes e ações permitidos para que as interfaces sigam seu catálogo e esquema. O compositor experimental do playground avalia componentes candidatos com typesafe-ai/jev ao montar a especificação da interface.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Finalidade e público",
+          "text": "O desenvolvedor define componentes e ações permitidos para que as interfaces sigam seu catálogo e esquema.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "O compositor experimental do playground avalia componentes candidatos com typesafe-ai/jev ao montar a especificação da interface.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Defina um catálogo e use experimental_composeSpec e experimental_createEvaluator, ou selecione Jev no playground.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "O caminho Jev é experimental e ainda não foi lançado; há instruções para compilar o código. O playground lê JEV_AI_GATEWAY_API_KEY.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "json-render: создание UI с экспериментальной композицией Jev",
+      "h1": "json-render: создание UI с экспериментальной композицией Jev",
+      "description": "json-render ограничивает создаваемый интерфейс каталогом компонентов и предлагает экспериментальную компоновку через Jev.",
+      "summary": "Разработчик задаёт разрешённые компоненты и действия, чтобы интерфейс соответствовал собственному каталогу и схеме. Экспериментальный компоновщик playground оценивает компоненты-кандидаты через typesafe-ai/jev и собирает спецификацию интерфейса.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Разработчик задаёт разрешённые компоненты и действия, чтобы интерфейс соответствовал собственному каталогу и схеме.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Экспериментальный компоновщик playground оценивает компоненты-кандидаты через typesafe-ai/jev и собирает спецификацию интерфейса.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Определите каталог и используйте experimental_composeSpec с experimental_createEvaluator либо выберите Jev в playground.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Интеграция экспериментальная и ещё не выпущена; описана сборка из исходников. Playground читает JEV_AI_GATEWAY_API_KEY.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "json-render: प्रायोगिक Jev संयोजन से UI निर्माण",
+      "h1": "json-render: प्रायोगिक Jev संयोजन से UI निर्माण",
+      "description": "json-render जनरेट किए गए इंटरफ़ेस को घटक कैटलॉग तक सीमित रखता है और प्रायोगिक Jev संयोजन देता है।",
+      "summary": "डेवलपर अनुमत घटक और कार्रवाइयाँ तय करता है, ताकि इंटरफ़ेस उसके कैटलॉग और स्कीमा के अनुसार बने। प्लेग्राउंड का प्रायोगिक संयोजक typesafe-ai/jev से संभावित घटकों का मूल्यांकन करते हुए UI विनिर्देश बनाता है।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "उद्देश्य और उपयोगकर्ता",
+          "text": "डेवलपर अनुमत घटक और कार्रवाइयाँ तय करता है, ताकि इंटरफ़ेस उसके कैटलॉग और स्कीमा के अनुसार बने।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "प्लेग्राउंड का प्रायोगिक संयोजक typesafe-ai/jev से संभावित घटकों का मूल्यांकन करते हुए UI विनिर्देश बनाता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल का तरीका",
+          "text": "कैटलॉग तय करके experimental_composeSpec और experimental_createEvaluator इस्तेमाल करें, या प्लेग्राउंड में Jev चुनें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "Jev वाला रास्ता प्रायोगिक और अप्रकाशित है; स्रोत से बिल्ड करने के निर्देश हैं। प्लेग्राउंड JEV_AI_GATEWAY_API_KEY पढ़ता है।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "json-render: UI dengan komposisi Jev eksperimental",
+      "h1": "json-render: UI dengan komposisi Jev eksperimental",
+      "description": "json-render membatasi antarmuka yang dihasilkan pada katalog komponen dan menyertakan komposisi Jev eksperimental.",
+      "summary": "Pengembang menentukan komponen dan tindakan yang diizinkan agar antarmuka mengikuti katalog serta skema mereka. Komposer eksperimental di playground memakai typesafe-ai/jev untuk menilai kandidat komponen saat menyusun spesifikasi UI.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Tujuan dan pengguna",
+          "text": "Pengembang menentukan komponen dan tindakan yang diizinkan agar antarmuka mengikuti katalog serta skema mereka.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Komposer eksperimental di playground memakai typesafe-ai/jev untuk menilai kandidat komponen saat menyusun spesifikasi UI.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Tentukan katalog, lalu gunakan experimental_composeSpec dan experimental_createEvaluator atau pilih Jev di playground.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Jalur Jev masih eksperimental dan belum dirilis; panduan menjelaskan build dari sumber. Playground membaca JEV_AI_GATEWAY_API_KEY.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "json-render: tạo UI với khả năng tổ hợp Jev thử nghiệm",
+      "h1": "json-render: tạo UI với khả năng tổ hợp Jev thử nghiệm",
+      "description": "json-render giới hạn giao diện được tạo theo danh mục thành phần và cung cấp cách tổ hợp thử nghiệm bằng Jev.",
+      "summary": "Nhà phát triển định nghĩa thành phần và hành động được phép để giao diện tuân theo danh mục cùng lược đồ riêng. Bộ tổ hợp thử nghiệm trong playground dùng typesafe-ai/jev đánh giá thành phần ứng viên khi xây dựng đặc tả UI.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích và đối tượng",
+          "text": "Nhà phát triển định nghĩa thành phần và hành động được phép để giao diện tuân theo danh mục cùng lược đồ riêng.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Bộ tổ hợp thử nghiệm trong playground dùng typesafe-ai/jev đánh giá thành phần ứng viên khi xây dựng đặc tả UI.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Định nghĩa danh mục rồi dùng experimental_composeSpec và experimental_createEvaluator, hoặc chọn Jev trong playground.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Luồng Jev còn thử nghiệm và chưa phát hành; tài liệu hướng dẫn biên dịch từ nguồn. Playground đọc JEV_AI_GATEWAY_API_KEY.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "json-render: deneysel Jev bileşimiyle UI üretimi",
+      "h1": "json-render: deneysel Jev bileşimiyle UI üretimi",
+      "description": "json-render, üretilen arayüzleri bileşen kataloğuyla sınırlar ve deneysel Jev bileşimi sunar.",
+      "summary": "Geliştirici izin verilen bileşen ve işlemleri tanımlar; arayüzler bu kataloğa ve şemaya göre üretilir. Playground içindeki deneysel oluşturucu, UI tanımını kurarken aday bileşenleri typesafe-ai/jev ile değerlendirir.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Amaç ve hedef kitle",
+          "text": "Geliştirici izin verilen bileşen ve işlemleri tanımlar; arayüzler bu kataloğa ve şemaya göre üretilir.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Playground içindeki deneysel oluşturucu, UI tanımını kurarken aday bileşenleri typesafe-ai/jev ile değerlendirir.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Katalog tanımlayıp experimental_composeSpec ve experimental_createEvaluator kullanılır veya playground üzerinden Jev seçilir.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Jev yolu deneysel ve henüz yayımlanmamıştır; kaynak koddan derleme yönergeleri vardır. Playground, JEV_AI_GATEWAY_API_KEY okur.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "json-render: interfacce con composizione Jev sperimentale",
+      "h1": "json-render: interfacce con composizione Jev sperimentale",
+      "description": "json-render limita le interfacce generate a un catalogo di componenti e include una composizione Jev sperimentale.",
+      "summary": "Lo sviluppatore definisce componenti e azioni consentiti, vincolando l'interfaccia al proprio catalogo e schema. Il compositore sperimentale del playground valuta i componenti candidati con typesafe-ai/jev mentre costruisce la specifica UI.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Scopo e destinatari",
+          "text": "Lo sviluppatore definisce componenti e azioni consentiti, vincolando l'interfaccia al proprio catalogo e schema.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Il compositore sperimentale del playground valuta i componenti candidati con typesafe-ai/jev mentre costruisce la specifica UI.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come si usa",
+          "text": "Si definisce un catalogo e si usano experimental_composeSpec ed experimental_createEvaluator, oppure si seleziona Jev nel playground.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "Il percorso Jev è sperimentale e non ancora rilasciato; sono indicate le istruzioni di compilazione. Il playground legge JEV_AI_GATEWAY_API_KEY.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

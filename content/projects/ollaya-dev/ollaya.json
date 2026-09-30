@@ -1,0 +1,774 @@
+{
+  "version": "source-content-v1",
+  "repo": "ollaya-dev/ollaya",
+  "repositoryId": 1384260430,
+  "relationship": "local-alternative",
+  "category": "apps",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "f42c89eb7436cfd0f02c582b54b182727118e438",
+      "url": "https://github.com/ollaya-dev/ollaya/blob/f42c89eb7436cfd0f02c582b54b182727118e438/README.md",
+      "sha256": "4daa4328d5325f21a076ecfcf82c524cbf98e5542737646f4d7297de843708a8",
+      "accessedAt": "2026-09-30T07:33:48.628Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "kind": "documented",
+      "text": "ollaya downloads named open decision models and serves typed questions through a local daemon.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 20,
+          "end": 24,
+          "quote": "A decision model reads a *state* (a message, an email, a ticket, any JSON) plus typed questions\n(`choice`, `score`, `noul`) and returns calibrated probabilities in a single forward pass, in\nmilliseconds. It never generates text. Ollaya pulls these models by name, serves them from a\nlocal daemon, and speaks TypeSafe's `/v1/systemone` wire format, so existing Jev clients work by\nchanging one environment variable."
+        },
+        {
+          "source": "source-1",
+          "start": 46,
+          "end": 48,
+          "quote": "- **One binary.** `ollaya serve` runs the daemon; `ollaya run`, `pull`, `list`, `ps`, `show`, `rm`,\n  `cp`, `stop` and `create` work the way they do in Ollama. If the daemon isn't running, the CLI\n  starts it."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "kind": "documented",
+      "text": "It implements TypeSafe-compatible endpoints for existing Jev clients, while remaining an independent project.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 49,
+          "end": 51,
+          "quote": "- **TypeSafe-compatible.** `POST /v1/systemone`, `/v1/decisions` and `GET /v1/models` are\n  wire-identical to TypeSafe. The official SDK works unchanged when you set\n  `TYPESAFE_BASE_URL=http://localhost:11435`."
+        },
+        {
+          "source": "source-1",
+          "start": 157,
+          "end": 157,
+          "quote": "Ollaya is an independent project. It is not affiliated with or endorsed by Ollama or TypeSafe."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "kind": "documented",
+      "text": "Use its CLI, desktop app or MCP server; Modelfiles can package reusable question sets.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 59,
+          "end": 71,
+          "quote": "- **For agents.** `ollaya mcp` serves the models to Claude Code, Claude Desktop, Cursor and other\n  MCP clients (`claude mcp add ollaya -- ollaya mcp`), and the\n  [`ollaya-decisions` skill](skills/ollaya-decisions/SKILL.md) teaches agents when and how to use\n  them (`npx skills add ollaya-dev/ollaya --skill ollaya-decisions`).\n- **Routers.** `laya` detects the script and language of each request, then answers with\n  `laya:en` or `laya:multilingual`.\n- **Modelfiles.** You can bake a question set into your own model:\n  ```\n  FROM laya\n  QUESTIONS ./triage.json\n  PARAMETER precision fp32\n  ```\n  Then run `ollaya create triage -f Modelfile` and `ollaya run triage \"…\"`."
+        },
+        {
+          "source": "source-1",
+          "start": 112,
+          "end": 114,
+          "quote": "- **Desktop app** for macOS, Windows and Linux: start and stop the server, download models and run\n  them in one window. On macOS it lives in the menu bar. Get it from\n  [ollaya.dev/download](https://ollaya.dev/download)."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "kind": "documented",
+      "text": "Model weights come from their original authors and retain their own licenses; ollaya does not rehost them.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 55,
+          "end": 58,
+          "quote": "- **Weights come from their authors.** Ollaya publishes only small ONNX graphs, about 3 MB each.\n  These graphs read the original weight files (usually `model.safetensors`) from the author's\n  Hugging Face repository, pinned to a commit and verified by sha256. Models whose authors publish\n  GGUF files (`winnow`, `jevk5`) run that file itself on llama.cpp. Ollaya never re-hosts weights."
+        },
+        {
+          "source": "source-1",
+          "start": 150,
+          "end": 155,
+          "quote": "Apache-2.0. Each model keeps its own license: `laya` (Convai Innovations), `decider` (Mapika),\n`kev` (Jared Palmer, on Qwen3.5 by the Qwen team), `decision` (the vLLM Semantic Router\ncontributors, on Qwen3.5), `qwen3guard` (Qwen team), `gliclass` (Knowledgator), `von` (Victor Hugo\nPanisa), `winnow` (EldanRing, on Gemma 4 by Google DeepMind), `jevk5` (alibiserikbay, on Qwen3.5)\nand `nli:modernbert-large` are Apache-2.0, and `nli:deberta-v3-large` (Moritz Laurer) is MIT. llama.cpp, which Ollaya ships for\nGGUF models, is MIT."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "ollaya: serve local decision models to Jev clients",
+      "h1": "ollaya: serve local decision models to Jev clients",
+      "description": "ollaya downloads open decision models and serves them locally through a CLI, desktop app and MCP, with TypeSafe-compatible endpoints for Jev clients.",
+      "summary": "ollaya downloads named open decision models and serves typed questions through a local daemon. It implements TypeSafe-compatible endpoints for existing Jev clients, while remaining an independent project. Use its CLI, desktop app or MCP server; Modelfiles can package reusable question sets.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose",
+          "text": "ollaya downloads named open decision models and serves typed questions through a local daemon.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’s role",
+          "text": "It implements TypeSafe-compatible endpoints for existing Jev clients, while remaining an independent project.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "How to use it",
+          "text": "Use its CLI, desktop app or MCP server; Modelfiles can package reusable question sets.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limits to consider",
+          "text": "Model weights come from their original authors and retain their own licenses; ollaya does not rehost them.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "ollaya：为 Jev 客户端提供本地决策模型",
+      "h1": "ollaya：为 Jev 客户端提供本地决策模型",
+      "description": "ollaya 下载开放决策模型，在本地通过命令行、桌面应用和 MCP 提供服务；兼容 TypeSafe 的端点可接入现有 Jev 客户端，模型权重仍来自各自作者。",
+      "summary": "ollaya 按名称下载开放决策模型，并通过本地守护进程处理类型化问题。 它实现兼容 TypeSafe 的端点，可接入现有 Jev 客户端，但属于独立项目。 可使用命令行、桌面应用或 MCP 服务；Modelfile 可封装重复使用的问题集。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "ollaya 按名称下载开放决策模型，并通过本地守护进程处理类型化问题。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "它实现兼容 TypeSafe 的端点，可接入现有 Jev 客户端，但属于独立项目。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "可使用命令行、桌面应用或 MCP 服务；Modelfile 可封装重复使用的问题集。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用边界",
+          "text": "模型权重来自原作者，保留各自许可证；ollaya 不重新托管权重。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "ollaya：為 Jev 用戶端提供本地決策模型",
+      "h1": "ollaya：為 Jev 用戶端提供本地決策模型",
+      "description": "ollaya 下載開放決策模型，在本地透過命令列、桌面應用與 MCP 提供服務；相容 TypeSafe 的端點可接上既有 Jev 用戶端，模型權重仍來自原作者。",
+      "summary": "ollaya 依名稱下載開放決策模型，透過本地常駐程式處理型別化問題。 它實作相容 TypeSafe 的端點，可接上現有 Jev 用戶端，但屬於獨立專案。 可使用命令列、桌面應用或 MCP 服務；Modelfile 可封裝重複使用的問題集。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "ollaya 依名稱下載開放決策模型，透過本地常駐程式處理型別化問題。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "它實作相容 TypeSafe 的端點，可接上現有 Jev 用戶端，但屬於獨立專案。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "可使用命令列、桌面應用或 MCP 服務；Modelfile 可封裝重複使用的問題集。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用限制",
+          "text": "模型權重來自原作者，保留各自授權；ollaya 不重新託管權重。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "ollaya：Jev クライアント向けのローカル決定モデル",
+      "h1": "ollaya：Jev クライアント向けのローカル決定モデル",
+      "description": "ollaya はオープン決定モデルを取得し、CLI・デスクトップ・MCP でローカル提供します。TypeSafe 互換 API で Jev クライアントに接続できます。",
+      "summary": "ollaya は名前で指定したオープンな決定モデルを取得し、ローカルの常駐プロセスで型付き質問を処理します。 既存の Jev クライアント向けに TypeSafe 互換エンドポイントを実装した独立プロジェクトです。 CLI、デスクトップアプリ、MCP サーバーを利用でき、Modelfile で再利用する質問集をまとめられます。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "何ができるか",
+          "text": "ollaya は名前で指定したオープンな決定モデルを取得し、ローカルの常駐プロセスで型付き質問を処理します。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "既存の Jev クライアント向けに TypeSafe 互換エンドポイントを実装した独立プロジェクトです。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "CLI、デスクトップアプリ、MCP サーバーを利用でき、Modelfile で再利用する質問集をまとめられます。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "制約と注意点",
+          "text": "モデルの重みは元の作者から取得し、各ライセンスが適用されます。ollaya 自体は重みを再配布しません。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "ollaya: Jev 클라이언트용 로컬 결정 모델 서버",
+      "h1": "ollaya: Jev 클라이언트용 로컬 결정 모델 서버",
+      "description": "ollaya는 공개 결정 모델을 받아 CLI, 데스크톱 앱, MCP로 로컬 제공하며 TypeSafe 호환 엔드포인트로 Jev 클라이언트와 연결합니다.",
+      "summary": "ollaya는 이름으로 공개 결정 모델을 내려받고 로컬 데몬을 통해 타입이 지정된 질문을 처리합니다. 기존 Jev 클라이언트가 쓸 수 있는 TypeSafe 호환 엔드포인트를 구현한 독립 프로젝트입니다. CLI, 데스크톱 앱, MCP 서버를 이용할 수 있으며 Modelfile로 재사용할 질문 묶음을 정의합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "ollaya는 이름으로 공개 결정 모델을 내려받고 로컬 데몬을 통해 타입이 지정된 질문을 처리합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "기존 Jev 클라이언트가 쓸 수 있는 TypeSafe 호환 엔드포인트를 구현한 독립 프로젝트입니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "CLI, 데스크톱 앱, MCP 서버를 이용할 수 있으며 Modelfile로 재사용할 질문 묶음을 정의합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "제약 사항",
+          "text": "모델 가중치는 원저자에게서 받으며 각각의 라이선스를 유지합니다. ollaya가 가중치를 다시 호스팅하지는 않습니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "ollaya: modelos locales para clientes Jev",
+      "h1": "ollaya: modelos locales para clientes Jev",
+      "description": "ollaya descarga modelos de decisión abiertos y los sirve localmente por CLI, escritorio y MCP, con endpoints compatibles para clientes Jev.",
+      "summary": "ollaya descarga modelos de decisión abiertos por nombre y atiende preguntas tipadas mediante un servicio local. Implementa endpoints compatibles con TypeSafe para clientes Jev existentes, como proyecto independiente. Utiliza su CLI, aplicación de escritorio o servidor MCP; los Modelfiles agrupan conjuntos reutilizables de preguntas.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "ollaya descarga modelos de decisión abiertos por nombre y atiende preguntas tipadas mediante un servicio local.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "El papel de Jev",
+          "text": "Implementa endpoints compatibles con TypeSafe para clientes Jev existentes, como proyecto independiente.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo usarlo",
+          "text": "Utiliza su CLI, aplicación de escritorio o servidor MCP; los Modelfiles agrupan conjuntos reutilizables de preguntas.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Límites a considerar",
+          "text": "Los pesos proceden de sus autores y conservan sus licencias; ollaya no vuelve a alojarlos.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "ollaya : modèles locaux pour clients Jev",
+      "h1": "ollaya : modèles locaux pour clients Jev",
+      "description": "ollaya télécharge et sert des modèles de décision locaux via CLI, application et MCP, avec des points d’accès compatibles pour les clients Jev.",
+      "summary": "ollaya télécharge des modèles de décision ouverts par leur nom et traite les questions typées via un service local. Ce projet indépendant fournit des points d’accès compatibles TypeSafe pour les clients Jev existants. Utilisez la CLI, l’application de bureau ou le serveur MCP ; les Modelfiles regroupent des questions réutilisables.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "ollaya télécharge des modèles de décision ouverts par leur nom et traite les questions typées via un service local.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Le rôle de Jev",
+          "text": "Ce projet indépendant fournit des points d’accès compatibles TypeSafe pour les clients Jev existants.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Utilisation",
+          "text": "Utilisez la CLI, l’application de bureau ou le serveur MCP ; les Modelfiles regroupent des questions réutilisables.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limites à connaître",
+          "text": "Les poids proviennent de leurs auteurs et gardent leurs licences ; ollaya ne les héberge pas à nouveau.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "ollaya: lokale Entscheidungsmodelle für Jev-Clients",
+      "h1": "ollaya: lokale Entscheidungsmodelle für Jev-Clients",
+      "description": "ollaya lädt offene Entscheidungsmodelle und stellt sie lokal per CLI, Desktop-App und MCP bereit, mit kompatiblen Endpunkten für Jev-Clients.",
+      "summary": "ollaya lädt offene Entscheidungsmodelle anhand ihres Namens und verarbeitet typisierte Fragen über einen lokalen Dienst. Das unabhängige Projekt implementiert TypeSafe-kompatible Endpunkte für vorhandene Jev-Clients. CLI, Desktop-App und MCP-Server stehen bereit; Modelfiles bündeln wiederverwendbare Fragensätze.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "ollaya lädt offene Entscheidungsmodelle anhand ihres Namens und verarbeitet typisierte Fragen über einen lokalen Dienst.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Die Rolle von Jev",
+          "text": "Das unabhängige Projekt implementiert TypeSafe-kompatible Endpunkte für vorhandene Jev-Clients.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Nutzung",
+          "text": "CLI, Desktop-App und MCP-Server stehen bereit; Modelfiles bündeln wiederverwendbare Fragensätze.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Grenzen",
+          "text": "Modellgewichte kommen von ihren ursprünglichen Autoren und behalten ihre Lizenzen; ollaya hostet sie nicht selbst erneut.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "ollaya: modelos locais para clientes Jev",
+      "h1": "ollaya: modelos locais para clientes Jev",
+      "description": "ollaya baixa modelos abertos de decisão e os serve localmente por CLI, desktop e MCP, com endpoints compatíveis para clientes Jev.",
+      "summary": "ollaya baixa modelos abertos de decisão pelo nome e processa perguntas tipadas em um serviço local. O projeto independente implementa endpoints compatíveis com TypeSafe para clientes Jev existentes. Use a CLI, o aplicativo desktop ou o servidor MCP; Modelfiles agrupam conjuntos reutilizáveis de perguntas.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "ollaya baixa modelos abertos de decisão pelo nome e processa perguntas tipadas em um serviço local.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "O papel do Jev",
+          "text": "O projeto independente implementa endpoints compatíveis com TypeSafe para clientes Jev existentes.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Use a CLI, o aplicativo desktop ou o servidor MCP; Modelfiles agrupam conjuntos reutilizáveis de perguntas.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limitações",
+          "text": "Os pesos vêm dos autores originais e mantêm suas licenças; ollaya não os hospeda novamente.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "ollaya: локальные модели для клиентов Jev",
+      "h1": "ollaya: локальные модели для клиентов Jev",
+      "description": "ollaya скачивает открытые модели решений и обслуживает их локально через CLI, приложение и MCP, предоставляя совместимые API для клиентов Jev.",
+      "summary": "ollaya скачивает открытые модели решений по имени и обрабатывает типизированные вопросы через локальную службу. Независимый проект реализует совместимые с TypeSafe точки доступа для существующих клиентов Jev. Доступны CLI, настольное приложение и MCP-сервер; Modelfile позволяет сохранить многократно используемый набор вопросов.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "ollaya скачивает открытые модели решений по имени и обрабатывает типизированные вопросы через локальную службу.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Независимый проект реализует совместимые с TypeSafe точки доступа для существующих клиентов Jev.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Доступны CLI, настольное приложение и MCP-сервер; Modelfile позволяет сохранить многократно используемый набор вопросов.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ограничения",
+          "text": "Веса поступают от исходных авторов и сохраняют собственные лицензии; ollaya не размещает их у себя повторно.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "ollaya: Jev क्लाइंट के लिए स्थानीय निर्णय मॉडल",
+      "h1": "ollaya: Jev क्लाइंट के लिए स्थानीय निर्णय मॉडल",
+      "description": "ollaya खुले निर्णय मॉडल डाउनलोड करके CLI, डेस्कटॉप और MCP से स्थानीय सेवा देता है, Jev क्लाइंट के लिए संगत एंडपॉइंट सहित।",
+      "summary": "ollaya नाम से खुले निर्णय मॉडल डाउनलोड करता है और स्थानीय सेवा से निर्धारित उत्तर-प्रकार वाले प्रश्नों के उत्तर देता है। स्वतंत्र परियोजना के तौर पर यह मौजूदा Jev क्लाइंट के लिए TypeSafe-संगत एंडपॉइंट देता है। CLI, डेस्कटॉप ऐप या MCP सर्वर इस्तेमाल करें; Modelfile में दोबारा उपयोग होने वाले प्रश्न रख सकते हैं।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "किस काम आता है",
+          "text": "ollaya नाम से खुले निर्णय मॉडल डाउनलोड करता है और स्थानीय सेवा से निर्धारित उत्तर-प्रकार वाले प्रश्नों के उत्तर देता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "स्वतंत्र परियोजना के तौर पर यह मौजूदा Jev क्लाइंट के लिए TypeSafe-संगत एंडपॉइंट देता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल कैसे करें",
+          "text": "CLI, डेस्कटॉप ऐप या MCP सर्वर इस्तेमाल करें; Modelfile में दोबारा उपयोग होने वाले प्रश्न रख सकते हैं।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "सीमाएँ",
+          "text": "मॉडल वेट मूल लेखकों से आते हैं और अपने लाइसेंस रखते हैं; ollaya उन्हें दोबारा होस्ट नहीं करता।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "ollaya: model keputusan lokal untuk klien Jev",
+      "h1": "ollaya: model keputusan lokal untuk klien Jev",
+      "description": "ollaya mengunduh model keputusan terbuka dan menyajikannya lewat CLI, desktop, dan MCP lokal, dengan endpoint kompatibel untuk klien Jev.",
+      "summary": "ollaya mengunduh model keputusan terbuka berdasarkan nama dan melayani pertanyaan bertipe melalui daemon lokal. Proyek independen ini menyediakan endpoint kompatibel TypeSafe untuk klien Jev yang sudah ada. Gunakan CLI, aplikasi desktop, atau server MCP; Modelfile dapat mengemas kumpulan pertanyaan yang bisa dipakai ulang.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "ollaya mengunduh model keputusan terbuka berdasarkan nama dan melayani pertanyaan bertipe melalui daemon lokal.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Proyek independen ini menyediakan endpoint kompatibel TypeSafe untuk klien Jev yang sudah ada.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Gunakan CLI, aplikasi desktop, atau server MCP; Modelfile dapat mengemas kumpulan pertanyaan yang bisa dipakai ulang.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Batasan",
+          "text": "Bobot model berasal dari penulis aslinya dan tetap memakai lisensi masing-masing; ollaya tidak menghosting ulang bobot tersebut.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "ollaya: mô hình quyết định cục bộ cho máy khách Jev",
+      "h1": "ollaya: mô hình quyết định cục bộ cho máy khách Jev",
+      "description": "ollaya tải mô hình quyết định mở và cung cấp cục bộ qua CLI, ứng dụng máy tính, MCP với điểm cuối tương thích cho máy khách Jev.",
+      "summary": "ollaya tải mô hình quyết định mở theo tên và xử lý câu hỏi có kiểu qua dịch vụ cục bộ. Dự án độc lập này triển khai điểm cuối tương thích TypeSafe cho máy khách Jev hiện có. Dùng CLI, ứng dụng máy tính hoặc máy chủ MCP; Modelfile đóng gói các bộ câu hỏi tái sử dụng.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích",
+          "text": "ollaya tải mô hình quyết định mở theo tên và xử lý câu hỏi có kiểu qua dịch vụ cục bộ.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Dự án độc lập này triển khai điểm cuối tương thích TypeSafe cho máy khách Jev hiện có.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Dùng CLI, ứng dụng máy tính hoặc máy chủ MCP; Modelfile đóng gói các bộ câu hỏi tái sử dụng.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Giới hạn",
+          "text": "Trọng số đến từ tác giả gốc và giữ giấy phép riêng; ollaya không lưu trữ lại trọng số.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "ollaya: Jev istemcileri için yerel karar modelleri",
+      "h1": "ollaya: Jev istemcileri için yerel karar modelleri",
+      "description": "ollaya açık karar modellerini indirip CLI, masaüstü ve MCP üzerinden yerelde sunar; Jev istemcileri için uyumlu uç noktalar sağlar.",
+      "summary": "ollaya açık karar modellerini adlarıyla indirir ve türlenmiş soruları yerel bir servis üzerinden işler. Bağımsız proje, mevcut Jev istemcileri için TypeSafe uyumlu uç noktalar sunar. CLI, masaüstü uygulaması veya MCP sunucusunu kullanın; Modelfile ile tekrar kullanılabilir soru kümeleri tanımlanabilir.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "ollaya açık karar modellerini adlarıyla indirir ve türlenmiş soruları yerel bir servis üzerinden işler.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Bağımsız proje, mevcut Jev istemcileri için TypeSafe uyumlu uç noktalar sunar.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "CLI, masaüstü uygulaması veya MCP sunucusunu kullanın; Modelfile ile tekrar kullanılabilir soru kümeleri tanımlanabilir.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Sınırlamalar",
+          "text": "Model ağırlıkları asıl yazarlardan gelir ve kendi lisanslarını korur; ollaya ağırlıkları yeniden barındırmaz.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "ollaya: modelli locali per client Jev",
+      "h1": "ollaya: modelli locali per client Jev",
+      "description": "ollaya scarica modelli decisionali aperti e li serve localmente via CLI, desktop e MCP, con endpoint compatibili per client Jev.",
+      "summary": "ollaya scarica modelli decisionali aperti per nome e gestisce domande tipizzate tramite un servizio locale. Il progetto indipendente implementa endpoint compatibili TypeSafe per i client Jev esistenti. Usa CLI, app desktop o server MCP; i Modelfile raccolgono insiemi di domande riutilizzabili.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "ollaya scarica modelli decisionali aperti per nome e gestisce domande tipizzate tramite un servizio locale.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Il ruolo di Jev",
+          "text": "Il progetto indipendente implementa endpoint compatibili TypeSafe per i client Jev esistenti.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come usarlo",
+          "text": "Usa CLI, app desktop o server MCP; i Modelfile raccolgono insiemi di domande riutilizzabili.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limiti",
+          "text": "I pesi provengono dagli autori originali e mantengono le proprie licenze; ollaya non li ospita nuovamente.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

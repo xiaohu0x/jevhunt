@@ -1,0 +1,762 @@
+{
+  "version": "source-content-v1",
+  "repo": "jkudish/jev-browser",
+  "repositoryId": 1374967555,
+  "relationship": "jev-app",
+  "category": "browser",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "b767894987cd45bf77a786fe410051613eabcef0",
+      "url": "https://github.com/jkudish/jev-browser/blob/b767894987cd45bf77a786fe410051613eabcef0/README.md",
+      "sha256": "a517824afc29bca23d37540e6782210cd589029bdb863259d1b1556399294603",
+      "accessedAt": "2026-09-30T07:33:51.998Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "Jev Browser runs a task from a starting URL and returns the final page, screenshot and decision trace.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 12,
+          "end": 14,
+          "quote": "Give jev-browser a task and a URL.\n\nIt drives a real headless browser through an MCP server, CLI, or library. TypeSafe's Jev model picks one action per step from the page's clickable, typeable, and selectable elements, and scores how likely it is that the goal is met or the run is stuck. Code owns the loop: budgets, recovery, stop gates. You get the final page, a step trace with confidences, console errors, and a screenshot."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "Jev chooses DOM actions and judges completion or stalling; a separate configurable model supplies text when typing is needed.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 415,
+          "end": 425,
+          "quote": "Each step makes one primary Jev call with three questions over the same state: an action Choice over the page's interactive elements plus scroll/back/done, a goal Noul, and a stuck Noul ([fan-out pattern](https://docs.typesafe.ai/patterns/fan-out.md)). The state includes a short excerpt of the page's visible text, so the goal judgment can see content, not just URLs and links. A select action adds one second-stage Choice for its option. Elements come from the DOM directly, not the accessibility tree, because accessibility trees under-report inputs; the agent found DuckDuckGo's search box only after this switch. Actions: click, search, type, select a native dropdown, submit, scroll, back, done.\n\nThree of those actions move text or forms, and the boundaries are deliberate. Search boxes, identified structurally as `input[type=search]` or `role=searchbox` and nothing else, get a single `search_eN` action that types the query and runs the search in one step. Submit controls (`button[type=submit]`, `input[type=submit]`, and a `button` with no type attribute inside a form) are offered as `submit_eN` instead of `click_eN`. Every other single-line text field offers two actions: `type_eN`, which types without submitting, and `submit_eN`, which presses Enter on that field to submit. So filling one field of a multi-field form never submits it under the agent's feet, and a field that only looks like a search box (a plain text input in a div with a JavaScript Enter handler) never gets the one-action search.\n\nStop conditions, in code, checked before executing the step's proposed action: the agent chooses `done`, goal probability > 0.85, stuck probability > 0.85, the step budget, or the time budget. A repeated action with no effect switches to the next-best option from the Choice distribution. There is deliberately no low-confidence override: split probability across several similar elements is usually several acceptable alternatives, not uncertainty.\n\nStatuses: `done` (agent chose to stop), `goal_achieved` (the goal watcher fired), `stuck`, `max_steps`, `timeout`, `error`, and `blocked` (a bot-protection interstitial stopped the run; see \"What you get back\"). `done` and `goal_achieved` are two independent judgments; agreement between them is what a trustworthy finish looks like, and the trace shows both at every step.\n\n## The typing model\n\nJev never generates text. It returns typed decisions only: which option, with what probabilities. So when a task needs a string, typing a search query or filling a field, that string comes from a small model you choose. This is the only place a second model is involved, and it runs once per typed field, so a multi-field form makes one call per field. Each call is capped at 256 output tokens on OpenRouter and Google and 48 tokens on every other provider. Reasoning is disabled on OpenRouter and on Gemini Flash models (reasoning models can burn the whole budget on hidden tokens and return empty text; Gemini 3 Flash keeps its minimum thinking level). Gemini Pro models cannot turn thinking that low, so they keep their default thinking."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Use the npm CLI, MCP server or navigate library with Node.js 22 and a Jev provider key.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 36,
+          "end": 36,
+          "quote": "Requires Node.js 22 or newer, an API key for a Jev transport ([TypeSafe direct](https://console.typesafe.ai/settings/keys) is the default; alternatives are listed under [Configuration](#configuration)), and optionally a key for a typing provider (see [the typing model](#the-typing-model)). Playwright's Chromium downloads automatically on install; set `JEV_BROWSER_SKIP_BROWSER_DOWNLOAD=1` to opt out."
+        },
+        {
+          "source": "source-1",
+          "start": 154,
+          "end": 160,
+          "quote": "The same agent runs from the command line. Result JSON is printed to stdout.\n\n```bash\nnpx -y @jkudish/jev-browser run \"Find the newest release and stop on it\" https://github.com/jkudish/jev-browser/releases\n```\n\nCLI options include `--format`, `--max-chars`, `--max-steps`, `--max-seconds`, `--no-typing`, `--screenshot path.jpg`, `--record path.webm` (or a directory for Playwright's raw output), and `--cookie-file name=@path` to start behind a login. Run with `--help` for the full list."
+        },
+        {
+          "source": "source-1",
+          "start": 169,
+          "end": 172,
+          "quote": "Or import it as a library. The package entry exports `navigate` side-effect free: importing it starts no server and no browser until you call it.\n\n```js\nimport { navigate } from \"@jkudish/jev-browser\";"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "Dense pages may exceed the 240-element view. File inputs, shadow DOM and iframes are outside the documented scope; inspect the trace and outcome.",
+      "kind": "source-limitation",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 455,
+          "end": 461,
+          "quote": "## Limits\n\n- Up to 240 elements per step; Jev's Choice supports 255 options. Beyond that the list is truncated and the state says so, which can hide the needed element on very dense pages.\n- The markdown format converts the whole body, so it carries navigation chrome and can include inline script text; a readability pass is a candidate improvement, not a committed one.\n- Password fields are only ever filled by code, never typed by the model, and only when a password source is configured (see [Password fill](#password-fill-logins)); file inputs are never offered. Start behind a login with [seed cookies](#seed-cookies-start-behind-a-login) (`cookies` on `navigate()`, `--cookie-file` on the CLI, `cookie_file`/`cookie_env` on MCP). Hover-revealed menus, keyboard actions other than Enter within the explicit search and submit actions (Escape, Tab, arrow keys), shadow DOM, and iframes are out of scope for v0.1.\n- Thresholds (0.85 goal, 0.85 stuck, budgets) are starting points measured on Wikipedia and DuckDuckGo tasks. Tune them for your sites.\n- Jev is calibrated, not infallible. Treat the trace as evidence, not proof."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "jev-browser — Jev selects actions in a headless browser",
+      "h1": "jev-browser — Jev selects actions in a headless browser",
+      "description": "jev-browser: Jev chooses DOM actions and judges completion or stalling; a separate configurable model supplies text when typing is needed.",
+      "summary": "Jev Browser runs a task from a starting URL and returns the final page, screenshot and decision trace. Use the npm CLI, MCP server or navigate library with Node.js 22 and a Jev provider key.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "What it does",
+          "text": "Jev Browser runs a task from a starting URL and returns the final page, screenshot and decision trace.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "Jev chooses DOM actions and judges completion or stalling; a separate configurable model supplies text when typing is needed.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Getting started",
+          "text": "Use the npm CLI, MCP server or navigate library with Node.js 22 and a Jev provider key.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "Dense pages may exceed the 240-element view. File inputs, shadow DOM and iframes are outside the documented scope; inspect the trace and outcome.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "jev-browser — 由 Jev 选择无头浏览器动作",
+      "h1": "jev-browser — 由 Jev 选择无头浏览器动作",
+      "description": "jev-browser: Jev 选择 DOM 动作并判断完成或停滞；需要输入文字时由独立可配置模型提供文本。",
+      "summary": "Jev Browser 从起始 URL 执行任务，返回最终页面、截图和决策轨迹。 准备 Node.js 22 和 Jev 服务密钥，使用 npm CLI、MCP 服务器或 navigate 库。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "Jev Browser 从起始 URL 执行任务，返回最终页面、截图和决策轨迹。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "Jev 选择 DOM 动作并判断完成或停滞；需要输入文字时由独立可配置模型提供文本。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "准备 Node.js 22 和 Jev 服务密钥，使用 npm CLI、MCP 服务器或 navigate 库。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "密集页面可能超过 240 元素视图。文件输入、shadow DOM 和 iframe 不在文档范围内，需检查轨迹及结果。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "jev-browser — 由 Jev 選擇無頭瀏覽器動作",
+      "h1": "jev-browser — 由 Jev 選擇無頭瀏覽器動作",
+      "description": "jev-browser: Jev 選擇 DOM 動作並判斷完成或停滯；需要輸入時由獨立可設定的模型提供文字。",
+      "summary": "Jev Browser 從起始 URL 執行任務，回傳最終頁面、截圖及決策軌跡。 準備 Node.js 22 與 Jev 服務金鑰，使用 npm CLI、MCP 伺服器或 navigate 函式庫。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "Jev Browser 從起始 URL 執行任務，回傳最終頁面、截圖及決策軌跡。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "Jev 選擇 DOM 動作並判斷完成或停滯；需要輸入時由獨立可設定的模型提供文字。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "準備 Node.js 22 與 Jev 服務金鑰，使用 npm CLI、MCP 伺服器或 navigate 函式庫。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "密集頁面可能超過 240 元素視圖。檔案輸入、shadow DOM 和 iframe 不在文件範圍內，需檢查軌跡及結果。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "jev-browser — Jev がヘッドレスブラウザーの行動を選択",
+      "h1": "jev-browser — Jev がヘッドレスブラウザーの行動を選択",
+      "description": "jev-browser: Jev が DOM 操作と完了・停滞を判断し、文字入力が必要なら別に設定したモデルが文字列を用意します。",
+      "summary": "Jev Browser は開始 URL からタスクを実行し、最終ページ、画像、判断履歴を返します。 Node.js 22 と Jev のキーを用意し、npm CLI、MCP サーバー、navigate ライブラリを使います。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "できること",
+          "text": "Jev Browser は開始 URL からタスクを実行し、最終ページ、画像、判断履歴を返します。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "Jev が DOM 操作と完了・停滞を判断し、文字入力が必要なら別に設定したモデルが文字列を用意します。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い始めるには",
+          "text": "Node.js 22 と Jev のキーを用意し、npm CLI、MCP サーバー、navigate ライブラリを使います。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "対象範囲と制約",
+          "text": "密集したページでは240要素の表示範囲を超えます。ファイル入力、shadow DOM、iframe は対象外で、履歴と結果の確認が必要です。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "jev-browser — Jev가 헤드리스 브라우저 행동 선택",
+      "h1": "jev-browser — Jev가 헤드리스 브라우저 행동 선택",
+      "description": "jev-browser: Jev가 DOM 행동과 완료·정체를 판단하고 입력할 문자는 별도로 설정한 모델이 제공합니다.",
+      "summary": "Jev Browser는 시작 URL부터 작업을 실행하고 최종 페이지, 스크린샷, 판단 기록을 반환합니다. Node.js 22와 Jev 키를 준비해 npm CLI, MCP 서버 또는 navigate 라이브러리를 사용합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "Jev Browser는 시작 URL부터 작업을 실행하고 최종 페이지, 스크린샷, 판단 기록을 반환합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Jev가 DOM 행동과 완료·정체를 판단하고 입력할 문자는 별도로 설정한 모델이 제공합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "Node.js 22와 Jev 키를 준비해 npm CLI, MCP 서버 또는 navigate 라이브러리를 사용합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 제약",
+          "text": "복잡한 페이지는 240개 요소 범위를 넘을 수 있습니다. 파일 입력, shadow DOM, iframe은 문서상 범위 밖이며 기록과 결과를 확인해야 합니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "jev-browser — Acciones de navegador elegidas por Jev",
+      "h1": "jev-browser — Jev elige acciones en un navegador sin interfaz",
+      "description": "jev-browser: Jev elige acciones DOM y evalúa finalización o bloqueo; otro modelo configurable genera el texto necesario.",
+      "summary": "Jev Browser ejecuta una tarea desde una URL y devuelve página final, captura y traza de decisiones. Usa la CLI npm, servidor MCP o biblioteca navigate con Node.js 22 y clave Jev.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "Jev Browser ejecuta una tarea desde una URL y devuelve página final, captura y traza de decisiones.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Jev elige acciones DOM y evalúa finalización o bloqueo; otro modelo configurable genera el texto necesario.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo empezar",
+          "text": "Usa la CLI npm, servidor MCP o biblioteca navigate con Node.js 22 y clave Jev.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "Las páginas densas pueden superar los 240 elementos. Los campos para subir archivos, shadow DOM e iframes quedan fuera del alcance documentado; revisa la traza y el resultado.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "jev-browser — Actions de navigateur choisies par Jev",
+      "h1": "jev-browser — Jev choisit les actions d’un navigateur sans interface",
+      "description": "jev-browser: Jev choisit les actions DOM et juge fin ou blocage ; un autre modèle configurable fournit le texte à saisir.",
+      "summary": "Jev Browser exécute une tâche depuis une URL et renvoie page finale, capture et trace des décisions. Utilisez CLI npm, serveur MCP ou bibliothèque navigate avec Node.js 22 et une clé Jev.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "Jev Browser exécute une tâche depuis une URL et renvoie page finale, capture et trace des décisions.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Jev choisit les actions DOM et juge fin ou blocage ; un autre modèle configurable fournit le texte à saisir.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Utilisez CLI npm, serveur MCP ou bibliothèque navigate avec Node.js 22 et une clé Jev.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "Les pages denses peuvent dépasser 240 éléments. Les champs de téléversement de fichiers, le shadow DOM et les iframes sont hors périmètre documenté ; contrôlez la trace et le résultat.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "jev-browser — Jev wählt Aktionen im Headless-Browser",
+      "h1": "jev-browser — Jev wählt Aktionen im Headless-Browser",
+      "description": "jev-browser: Jev wählt DOM-Aktionen und bewertet Abschluss oder Stillstand; ein separates Modell liefert benötigten Eingabetext.",
+      "summary": "Jev Browser führt eine Aufgabe ab einer URL aus und liefert letzte Seite, Screenshot und Entscheidungsspur. npm-CLI, MCP-Server oder navigate-Bibliothek mit Node.js 22 und Jev-Schlüssel verwenden.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "Jev Browser führt eine Aufgabe ab einer URL aus und liefert letzte Seite, Screenshot und Entscheidungsspur.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Jev wählt DOM-Aktionen und bewertet Abschluss oder Stillstand; ein separates Modell liefert benötigten Eingabetext.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Einstieg",
+          "text": "npm-CLI, MCP-Server oder navigate-Bibliothek mit Node.js 22 und Jev-Schlüssel verwenden.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Dichte Seiten können 240 Elemente überschreiten. Dateieingaben, Shadow DOM und Iframes liegen außerhalb des dokumentierten Umfangs; Spur und Ergebnis prüfen.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "jev-browser — Ações de navegador escolhidas pelo Jev",
+      "h1": "jev-browser — Jev escolhe ações em navegador sem interface",
+      "description": "jev-browser: Jev escolhe ações DOM e avalia conclusão ou travamento; outro modelo configurável fornece o texto necessário.",
+      "summary": "O Jev Browser executa uma tarefa a partir de uma URL e retorna página final, captura e rastro de decisões. Use a CLI npm, servidor MCP ou biblioteca navigate com Node.js 22 e chave Jev.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "O Jev Browser executa uma tarefa a partir de uma URL e retorna página final, captura e rastro de decisões.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "Jev escolhe ações DOM e avalia conclusão ou travamento; outro modelo configurável fornece o texto necessário.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como começar",
+          "text": "Use a CLI npm, servidor MCP ou biblioteca navigate com Node.js 22 e chave Jev.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "Páginas densas podem exceder 240 elementos. Campos de upload de arquivos, shadow DOM e iframes ficam fora do escopo documentado; confira o rastro e o resultado.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "jev-browser — Jev выбирает действия в браузере",
+      "h1": "jev-browser — Jev выбирает действия в браузере без интерфейса",
+      "description": "jev-browser: Jev выбирает DOM-действия и оценивает завершение или застой; вводимый текст даёт отдельная настраиваемая модель.",
+      "summary": "Jev Browser выполняет задачу от начального URL и возвращает итоговую страницу, скриншот и трассу решений. Используйте npm CLI, MCP-сервер или библиотеку navigate с Node.js 22 и ключом Jev.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Jev Browser выполняет задачу от начального URL и возвращает итоговую страницу, скриншот и трассу решений.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Jev выбирает DOM-действия и оценивает завершение или застой; вводимый текст даёт отдельная настраиваемая модель.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Начало работы",
+          "text": "Используйте npm CLI, MCP-сервер или библиотеку navigate с Node.js 22 и ключом Jev.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Сложные страницы могут превысить 240 элементов. Файловые поля, shadow DOM и iframe вне заявленного охвата; проверяйте трассу и результат.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "jev-browser — हेडलेस ब्राउज़र में Jev कार्रवाई चुनता है",
+      "h1": "jev-browser — हेडलेस ब्राउज़र में Jev कार्रवाई चुनता है",
+      "description": "jev-browser: Jev DOM कार्रवाई और पूरा होने या अटकने का निर्णय करता है; अलग मॉडल ज़रूरी इनपुट पाठ देता है।",
+      "summary": "Jev Browser शुरुआती URL से काम चलाकर अंतिम पृष्ठ, स्क्रीनशॉट और निर्णय रिकॉर्ड देता है। Node.js 22 और Jev कुंजी के साथ npm CLI, MCP सर्वर या navigate लाइब्रेरी उपयोग करें।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "परियोजना का काम",
+          "text": "Jev Browser शुरुआती URL से काम चलाकर अंतिम पृष्ठ, स्क्रीनशॉट और निर्णय रिकॉर्ड देता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "Jev DOM कार्रवाई और पूरा होने या अटकने का निर्णय करता है; अलग मॉडल ज़रूरी इनपुट पाठ देता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "शुरुआत कैसे करें",
+          "text": "Node.js 22 और Jev कुंजी के साथ npm CLI, MCP सर्वर या navigate लाइब्रेरी उपयोग करें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "घने पृष्ठ 240 तत्व सीमा पार कर सकते हैं। फ़ाइल इनपुट, shadow DOM और iframe दायरे से बाहर हैं; रिकॉर्ड व परिणाम जाँचें।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "jev-browser — Jev memilih tindakan browser",
+      "h1": "jev-browser — Jev memilih tindakan browser tanpa antarmuka",
+      "description": "jev-browser: Jev memilih tindakan DOM dan menilai selesai atau macet; model terpisah menyediakan teks yang perlu diketik.",
+      "summary": "Jev Browser menjalankan tugas dari URL awal dan mengembalikan halaman akhir, tangkapan layar, serta jejak keputusan. Gunakan CLI npm, server MCP, atau pustaka navigate dengan Node.js 22 dan kunci Jev.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "Jev Browser menjalankan tugas dari URL awal dan mengembalikan halaman akhir, tangkapan layar, serta jejak keputusan.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Jev memilih tindakan DOM dan menilai selesai atau macet; model terpisah menyediakan teks yang perlu diketik.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara memulai",
+          "text": "Gunakan CLI npm, server MCP, atau pustaka navigate dengan Node.js 22 dan kunci Jev.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Halaman padat dapat melebihi 240 elemen. Input berkas, shadow DOM, dan iframe di luar cakupan; periksa jejak serta hasil.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "jev-browser — Jev chọn thao tác trình duyệt",
+      "h1": "jev-browser — Jev chọn thao tác trình duyệt không giao diện",
+      "description": "jev-browser: Jev chọn thao tác DOM và đánh giá hoàn tất hoặc mắc kẹt; mô hình riêng cung cấp văn bản cần nhập.",
+      "summary": "Jev Browser thực hiện nhiệm vụ từ URL ban đầu, trả trang cuối, ảnh chụp và dấu vết quyết định. Dùng CLI npm, máy chủ MCP hoặc thư viện navigate với Node.js 22 và khóa Jev.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Công dụng",
+          "text": "Jev Browser thực hiện nhiệm vụ từ URL ban đầu, trả trang cuối, ảnh chụp và dấu vết quyết định.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Jev chọn thao tác DOM và đánh giá hoàn tất hoặc mắc kẹt; mô hình riêng cung cấp văn bản cần nhập.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách bắt đầu",
+          "text": "Dùng CLI npm, máy chủ MCP hoặc thư viện navigate với Node.js 22 và khóa Jev.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Trang dày có thể vượt 240 phần tử. Đầu vào tệp, shadow DOM và iframe ngoài phạm vi tài liệu; kiểm tra dấu vết và kết quả.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "jev-browser — Jev başsız tarayıcı eylemlerini seçer",
+      "h1": "jev-browser — Jev başsız tarayıcı eylemlerini seçer",
+      "description": "jev-browser: Jev DOM eylemlerini, tamamlanmayı ve takılmayı değerlendirir; ayrı model gereken giriş metnini sağlar.",
+      "summary": "Jev Browser başlangıç URL’sinden görevi yürütür; son sayfayı, ekran görüntüsünü ve karar izini döndürür. Node.js 22 ve Jev anahtarıyla npm CLI, MCP sunucusu veya navigate kütüphanesini kullanın.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "Jev Browser başlangıç URL’sinden görevi yürütür; son sayfayı, ekran görüntüsünü ve karar izini döndürür.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Jev DOM eylemlerini, tamamlanmayı ve takılmayı değerlendirir; ayrı model gereken giriş metnini sağlar.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Başlangıç",
+          "text": "Node.js 22 ve Jev anahtarıyla npm CLI, MCP sunucusu veya navigate kütüphanesini kullanın.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Yoğun sayfalar 240 öğeyi aşabilir. Dosya girişleri, shadow DOM ve iframe belgelenen kapsam dışıdır; izi ve sonucu denetleyin.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "jev-browser — Azioni del browser scelte da Jev",
+      "h1": "jev-browser — Jev sceglie azioni nel browser senza interfaccia",
+      "description": "jev-browser: Jev sceglie azioni DOM e valuta completamento o stallo; un modello separato fornisce il testo da digitare.",
+      "summary": "Jev Browser esegue un compito da un URL iniziale e restituisce pagina finale, screenshot e traccia decisionale. Usa CLI npm, server MCP o libreria navigate con Node.js 22 e chiave Jev.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "Jev Browser esegue un compito da un URL iniziale e restituisce pagina finale, screenshot e traccia decisionale.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Jev sceglie azioni DOM e valuta completamento o stallo; un modello separato fornisce il testo da digitare.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come iniziare",
+          "text": "Usa CLI npm, server MCP o libreria navigate con Node.js 22 e chiave Jev.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "Le pagine dense possono superare i 240 elementi. I campi per caricare file, shadow DOM e iframe sono fuori dall’ambito documentato; verifica la traccia e il risultato.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

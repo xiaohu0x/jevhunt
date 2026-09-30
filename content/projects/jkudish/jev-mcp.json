@@ -1,0 +1,750 @@
+{
+  "version": "source-content-v1",
+  "repo": "jkudish/jev-mcp",
+  "repositoryId": 1373837418,
+  "relationship": "integration",
+  "category": "integrations",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "53fe5756252956863af2ecbd2952339352e82e15",
+      "url": "https://github.com/jkudish/jev-mcp/blob/53fe5756252956863af2ecbd2952339352e82e15/README.md",
+      "sha256": "d352bb7418ced8b13400832d4026971cf150052a43c1b2e562e34dbdee91f424",
+      "accessedAt": "2026-09-30T07:33:50.921Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "Jev MCP gives agents tools for evidence verification, classification, reranking, extraction and patch review.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 12,
+          "end": 25,
+          "quote": "Give your agent twelve judgment tools:\n\n- `jev_verify` checks claims against evidence.\n- `jev_screen` judges content before it enters context.\n- `jev_noul` returns a calibrated probability for a stated proposition.\n- `jev_find` picks the best candidate by meaning.\n- `jev_rerank` scores and sorts every candidate.\n- `jev_classify` batch-assigns items to classes.\n- `jev_decide` settles bounded alternatives.\n- `jev_compare` judges how two passages relate.\n- `jev_extract` pulls field values with regex plus judgment.\n- `jev_audit` audits extracted values against their source before they are trusted.\n- `jev_review` scores a proposed diff before the task is called done.\n- `jev_gate` reviews a patch and verifies completion claims in one call."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "Tools translate these jobs into Jev Choice, Score or Noul questions; extraction selects regex-found values and application code maps answers to actions.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 715,
+          "end": 715,
+          "quote": "Jev is TypeSafe's System One model: it returns typed answers with calibrated probability distributions, not generated text. A verify call is a Choice over supports / contradicts / says_nothing, so you see the whole distribution, not one label. A screen call is a set of yes/no probabilities. A find call is a Choice over your candidate ids plus an existence check. A rerank call is one yes/no relevance question per candidate. A compare call is a Choice over three relations, repeated independently per aspect. An extract call is a Choice over the candidates your regex already found, so the model picks a value but never writes one. A review call is four Score rubrics plus one safe-to-apply probability; a gate adds one Choice per completion claim, judged from evidence only. Code maps the answers to verdicts and actions; policy stays with you."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Register npx -y @jkudish/jev-mcp in an MCP client using Node.js 22 or newer and a configured Jev provider key.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 44,
+          "end": 65,
+          "quote": "## Install\n\nRequires Node.js 22 or newer and an API key for a Jev provider ([TypeSafe direct](https://console.typesafe.ai/settings/keys) is the default; alternatives are listed under [Configuration](#configuration)).\n\n### Let an agent install it for you\n\nPaste this into your coding agent:\n\n```text\nInstall the Jev MCP server for me. The package is @jkudish/jev-mcp on npm and the server\ncommand is `npx -y @jkudish/jev-mcp`; register it as an MCP server with your client. Check whether\nTYPESAFE_API_KEY is already set in the server environment; if not, walk me through setting it up without\npasting the key into the chat (I can create one at console.typesafe.ai/settings/keys). When it's\nregistered, ask if I'd like to try a claim verification, and when we do, show me the verdicts and cost.\nFull instructions: https://github.com/jkudish/jev-mcp#readme\n```\n\nFrom npm:\n\n```bash\nnpx -y @jkudish/jev-mcp\n```"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "Choice and Score confidence measures concentration, not correctness. Default thresholds need task-specific tuning, and policy remains in the caller’s code.",
+      "kind": "source-limitation",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 717,
+          "end": 723,
+          "quote": "For Choice and Score, `confidence` measures how peaked the option probabilities are, scaled from 0 for a uniform distribution to 1 for all probability on one option; it is not the probability the answer is correct, so tune thresholds against observed outcomes.\n\n## Limits and tuning\n\n- Thresholds (`auto_accept`, `block_at`, `review_at`, exists cutoffs) are starting points from the TypeSafe cookbooks. Tune them against your own data before you enforce them. See [how TypeSafe reports confidence](https://docs.typesafe.ai/confidence.md).\n- Jev is calibrated, not infallible. Typed output guarantees the interface, not the truth. Keep policy in code and escalate low-confidence results to a person or a bigger model.\n- Every result that calls the model includes token usage, so you can see what each judgment costs. A `jev_extract` call where no field reaches the model reports `usage: null`."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "jev-mcp — Typed Jev judgments as MCP tools",
+      "h1": "jev-mcp — Typed Jev judgments as MCP tools",
+      "description": "jev-mcp: Expose Jev verification, classification, reranking and patch judgments through MCP tools; the calling agent retains action policy.",
+      "summary": "Jev MCP gives agents tools for evidence verification, classification, reranking, extraction and patch review. Register npx -y @jkudish/jev-mcp in an MCP client using Node.js 22 or newer and a configured Jev provider key.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "What it does",
+          "text": "Jev MCP gives agents tools for evidence verification, classification, reranking, extraction and patch review.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "Tools translate these jobs into Jev Choice, Score or Noul questions; extraction selects regex-found values and application code maps answers to actions.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Getting started",
+          "text": "Register npx -y @jkudish/jev-mcp in an MCP client using Node.js 22 or newer and a configured Jev provider key.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "Choice and Score confidence measures concentration, not correctness. Default thresholds need task-specific tuning, and policy remains in the caller’s code.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "jev-mcp — 通过 MCP 工具使用 Jev 类型化判断",
+      "h1": "jev-mcp — 通过 MCP 工具使用 Jev 类型化判断",
+      "description": "jev-mcp: 通过 MCP 工具提供 Jev 证据核查、分类、重排与补丁判断，动作策略仍由调用方智能体掌控。",
+      "summary": "Jev MCP 为智能体提供证据核查、分类、重排、提取和补丁审阅工具。 使用 Node.js 22 或更新版本，配置 Jev 服务密钥，并在 MCP 客户端注册 npx -y @jkudish/jev-mcp。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "Jev MCP 为智能体提供证据核查、分类、重排、提取和补丁审阅工具。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "工具将任务转为 Jev 的 Choice、Score 或 Noul 问题；提取从正则匹配值中选择，应用代码再把答案映射为动作。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "使用 Node.js 22 或更新版本，配置 Jev 服务密钥，并在 MCP 客户端注册 npx -y @jkudish/jev-mcp。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "Choice 和 Score 的置信度衡量分布集中程度，不是正确率。默认阈值需按任务调整，执行策略仍在调用方代码中。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "jev-mcp — 透過 MCP 工具使用 Jev 型別化判斷",
+      "h1": "jev-mcp — 透過 MCP 工具使用 Jev 型別化判斷",
+      "description": "jev-mcp: 透過 MCP 工具提供 Jev 證據查核、分類、重排與修補判斷，動作策略仍由呼叫端代理掌控。",
+      "summary": "Jev MCP 為代理提供證據查核、分類、重新排序、擷取和修補審閱工具。 使用 Node.js 22 或更新版本，設定 Jev 服務金鑰，並在 MCP 用戶端登錄 npx -y @jkudish/jev-mcp。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "Jev MCP 為代理提供證據查核、分類、重新排序、擷取和修補審閱工具。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "工具將工作轉為 Jev 的 Choice、Score 或 Noul 問題；擷取從正規表示式匹配值中選擇，再由程式碼將答案對應至動作。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "使用 Node.js 22 或更新版本，設定 Jev 服務金鑰，並在 MCP 用戶端登錄 npx -y @jkudish/jev-mcp。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "Choice 與 Score 的信心值衡量分布集中度，不是正確率。預設門檻須依任務調整，執行策略仍由呼叫端程式碼掌控。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "jev-mcp — Jev の型付き判断を MCP ツールで提供",
+      "h1": "jev-mcp — Jev の型付き判断を MCP ツールで提供",
+      "description": "jev-mcp: MCP ツールから Jev の検証、分類、再順位付け、パッチ判断を利用し、行動方針は呼び出し側に残します。",
+      "summary": "Jev MCP はエージェントに証拠検証、分類、再順位付け、抽出、パッチレビューのツールを提供します。 Node.js 22 以降と Jev 提供元のキーを用意し、npx -y @jkudish/jev-mcp を MCP クライアントに登録します。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "できること",
+          "text": "Jev MCP はエージェントに証拠検証、分類、再順位付け、抽出、パッチレビューのツールを提供します。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "各処理を Jev の Choice、Score、Noul に変換します。抽出は正規表現で見つけた値から選び、行動への対応付けはコードで行います。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い始めるには",
+          "text": "Node.js 22 以降と Jev 提供元のキーを用意し、npx -y @jkudish/jev-mcp を MCP クライアントに登録します。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "対象範囲と制約",
+          "text": "Choice と Score の信頼度は分布の集中度で、正答率ではありません。しきい値は用途別に調整し、方針は呼び出し側のコードに残します。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "jev-mcp — MCP 도구로 제공하는 Jev 판단",
+      "h1": "jev-mcp — MCP 도구로 제공하는 Jev 판단",
+      "description": "jev-mcp: MCP 도구로 Jev 검증, 분류, 재정렬, 패치 판단을 제공하며 행동 정책은 호출 에이전트가 관리합니다.",
+      "summary": "Jev MCP는 에이전트에 근거 검증, 분류, 재정렬, 추출, 패치 검토 도구를 제공합니다. Node.js 22 이상과 Jev 제공자 키를 준비하고 MCP 클라이언트에 npx -y @jkudish/jev-mcp를 등록합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "Jev MCP는 에이전트에 근거 검증, 분류, 재정렬, 추출, 패치 검토 도구를 제공합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "작업을 Jev의 Choice, Score, Noul 질문으로 바꿉니다. 추출은 정규식이 찾은 값에서 선택하며 코드는 답을 행동으로 연결합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "Node.js 22 이상과 Jev 제공자 키를 준비하고 MCP 클라이언트에 npx -y @jkudish/jev-mcp를 등록합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 제약",
+          "text": "Choice와 Score 신뢰도는 분포의 집중도이지 정답 확률이 아닙니다. 기본 임계값은 업무에 맞게 조정하고 정책은 호출자 코드에 둡니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "jev-mcp — Juicios tipados de Jev mediante MCP",
+      "h1": "jev-mcp — Juicios tipados de Jev mediante MCP",
+      "description": "jev-mcp: Verificación, clasificación, reordenación y juicios de parches Jev mediante MCP; el agente conserva la política de acción.",
+      "summary": "Jev MCP ofrece herramientas de verificación de pruebas, clasificación, reordenación, extracción y revisión de parches. Registra npx -y @jkudish/jev-mcp en un cliente MCP con Node.js 22 o posterior y una clave de proveedor Jev.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "Jev MCP ofrece herramientas de verificación de pruebas, clasificación, reordenación, extracción y revisión de parches.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Convierte tareas en preguntas Choice, Score o Noul; la extracción elige valores encontrados por regex y el código decide las acciones.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo empezar",
+          "text": "Registra npx -y @jkudish/jev-mcp en un cliente MCP con Node.js 22 o posterior y una clave de proveedor Jev.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "La confianza Choice y Score mide concentración, no acierto. Ajusta los umbrales al caso y conserva la política en el código del cliente.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "jev-mcp — Jugements typés Jev sous forme d’outils MCP",
+      "h1": "jev-mcp — Jugements typés Jev sous forme d’outils MCP",
+      "description": "jev-mcp: Vérification, classification, reclassement et jugements de correctifs Jev via MCP ; l’agent garde la politique d’action.",
+      "summary": "Jev MCP fournit des outils de vérification des preuves, classification, reclassement, extraction et revue de correctifs. Enregistrez npx -y @jkudish/jev-mcp dans un client MCP avec Node.js 22 ou ultérieur et une clé de fournisseur Jev.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "Jev MCP fournit des outils de vérification des preuves, classification, reclassement, extraction et revue de correctifs.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Il traduit ces tâches en questions Choice, Score ou Noul ; l’extraction choisit parmi les valeurs trouvées par regex et le code décide des actions.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Enregistrez npx -y @jkudish/jev-mcp dans un client MCP avec Node.js 22 ou ultérieur et une clé de fournisseur Jev.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "La confiance Choice et Score mesure la concentration, pas la justesse. Adaptez les seuils à vos données et gardez la politique dans le code appelant.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "jev-mcp — Typisierte Jev-Urteile als MCP-Werkzeuge",
+      "h1": "jev-mcp — Typisierte Jev-Urteile als MCP-Werkzeuge",
+      "description": "jev-mcp: Jev-Prüfung, Klassifikation, Neusortierung und Patch-Urteile als MCP-Werkzeuge; Aktionsregeln bleiben beim Agenten.",
+      "summary": "Jev MCP bietet Agenten Werkzeuge für Belegprüfung, Klassifikation, Neusortierung, Extraktion und Patch-Review. npx -y @jkudish/jev-mcp mit Node.js 22 oder neuer und einem Jev-Anbieterschlüssel im MCP-Client registrieren.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "Jev MCP bietet Agenten Werkzeuge für Belegprüfung, Klassifikation, Neusortierung, Extraktion und Patch-Review.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Die Aufgaben werden zu Choice-, Score- oder Noul-Fragen; Extraktion wählt Regex-Fundstellen aus, Anwendungscode ordnet Antworten Aktionen zu.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Einstieg",
+          "text": "npx -y @jkudish/jev-mcp mit Node.js 22 oder neuer und einem Jev-Anbieterschlüssel im MCP-Client registrieren.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Choice- und Score-Konfidenz messen Konzentration statt Richtigkeit. Standardschwellen müssen zum Einsatzfall passen; die Richtlinien bleiben im aufrufenden Code.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "jev-mcp — Julgamentos tipados do Jev em ferramentas MCP",
+      "h1": "jev-mcp — Julgamentos tipados do Jev em ferramentas MCP",
+      "description": "jev-mcp: Verificação, classificação, reordenação e avaliação de patches pelo Jev via MCP; o agente mantém a política de ação.",
+      "summary": "O Jev MCP oferece verificação de evidências, classificação, reordenação, extração e revisão de patches para agentes. Registre npx -y @jkudish/jev-mcp em um cliente MCP com Node.js 22 ou superior e chave de provedor Jev.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "O Jev MCP oferece verificação de evidências, classificação, reordenação, extração e revisão de patches para agentes.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "Transforma tarefas em perguntas Choice, Score ou Noul; a extração escolhe valores encontrados por regex e o código define as ações.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como começar",
+          "text": "Registre npx -y @jkudish/jev-mcp em um cliente MCP com Node.js 22 ou superior e chave de provedor Jev.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "A confiança de Choice e Score mede concentração, não acerto. Ajuste os limites aos seus dados e mantenha a política no código do chamador.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "jev-mcp — Типизированные решения Jev как MCP-инструменты",
+      "h1": "jev-mcp — Типизированные решения Jev как MCP-инструменты",
+      "description": "jev-mcp: Проверка, классификация, переранжирование и оценка патчей Jev через MCP; правила действий остаются у агента.",
+      "summary": "Jev MCP предоставляет агентам проверку доказательств, классификацию, переранжирование, извлечение и ревью патчей. Зарегистрируйте npx -y @jkudish/jev-mcp в MCP-клиенте с Node.js 22 или новее и ключом провайдера Jev.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Jev MCP предоставляет агентам проверку доказательств, классификацию, переранжирование, извлечение и ревью патчей.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Задачи превращаются в Choice, Score или Noul; извлечение выбирает значения, найденные regex, а действия определяет код приложения.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Начало работы",
+          "text": "Зарегистрируйте npx -y @jkudish/jev-mcp в MCP-клиенте с Node.js 22 или новее и ключом провайдера Jev.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Уверенность Choice и Score измеряет концентрацию, а не правильность. Пороги нужно настроить на своих данных; политика остаётся в вызывающем коде.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "jev-mcp — MCP टूल के रूप में Jev निर्णय",
+      "h1": "jev-mcp — MCP टूल के रूप में Jev निर्णय",
+      "description": "jev-mcp: MCP टूल से Jev सत्यापन, वर्गीकरण, पुनःक्रम और पैच निर्णय लें; कार्रवाई की नीति एजेंट के पास रहती है।",
+      "summary": "Jev MCP एजेंटों को प्रमाण सत्यापन, वर्गीकरण, पुनःक्रम, निष्कर्षण और पैच समीक्षा के टूल देता है। Node.js 22 या नए संस्करण और Jev प्रदाता कुंजी के साथ MCP क्लाइंट में npx -y @jkudish/jev-mcp दर्ज करें।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "परियोजना का काम",
+          "text": "Jev MCP एजेंटों को प्रमाण सत्यापन, वर्गीकरण, पुनःक्रम, निष्कर्षण और पैच समीक्षा के टूल देता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "काम Choice, Score या Noul प्रश्न बनते हैं; निष्कर्षण regex से मिले मान चुनता है और कोड उत्तर को कार्रवाई से जोड़ता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "शुरुआत कैसे करें",
+          "text": "Node.js 22 या नए संस्करण और Jev प्रदाता कुंजी के साथ MCP क्लाइंट में npx -y @jkudish/jev-mcp दर्ज करें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "Choice और Score विश्वास वितरण का संकेंद्रण बताता है, शुद्धता नहीं। सीमा अपने काम के अनुसार तय करें और नीति कॉलर कोड में रखें।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "jev-mcp — Penilaian bertipe Jev sebagai alat MCP",
+      "h1": "jev-mcp — Penilaian bertipe Jev sebagai alat MCP",
+      "description": "jev-mcp: Verifikasi, klasifikasi, pemeringkatan ulang, dan penilaian patch Jev melalui MCP; kebijakan tindakan tetap pada agen.",
+      "summary": "Jev MCP memberi agen alat verifikasi bukti, klasifikasi, pemeringkatan ulang, ekstraksi, dan tinjauan patch. Daftarkan npx -y @jkudish/jev-mcp pada klien MCP dengan Node.js 22 atau lebih baru dan kunci penyedia Jev.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "Jev MCP memberi agen alat verifikasi bukti, klasifikasi, pemeringkatan ulang, ekstraksi, dan tinjauan patch.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Tugas diubah menjadi pertanyaan Choice, Score, atau Noul; ekstraksi memilih nilai hasil regex dan kode memetakan jawaban ke tindakan.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara memulai",
+          "text": "Daftarkan npx -y @jkudish/jev-mcp pada klien MCP dengan Node.js 22 atau lebih baru dan kunci penyedia Jev.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Keyakinan Choice dan Score mengukur konsentrasi, bukan kebenaran. Sesuaikan ambang dengan data tugas dan pertahankan kebijakan di kode pemanggil.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "jev-mcp — Phán đoán có kiểu Jev dưới dạng công cụ MCP",
+      "h1": "jev-mcp — Phán đoán có kiểu Jev dưới dạng công cụ MCP",
+      "description": "jev-mcp: Kiểm chứng, phân loại, xếp hạng lại và đánh giá bản vá bằng Jev qua MCP; tác tử giữ chính sách hành động.",
+      "summary": "Jev MCP cung cấp công cụ kiểm chứng bằng chứng, phân loại, xếp hạng lại, trích xuất và duyệt bản vá cho tác tử. Đăng ký npx -y @jkudish/jev-mcp trong ứng dụng khách MCP với Node.js 22 trở lên và khóa nhà cung cấp Jev.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Công dụng",
+          "text": "Jev MCP cung cấp công cụ kiểm chứng bằng chứng, phân loại, xếp hạng lại, trích xuất và duyệt bản vá cho tác tử.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Nhiệm vụ được đổi thành Choice, Score hoặc Noul; trích xuất chọn giá trị regex tìm được, còn mã ứng dụng quyết định hành động.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách bắt đầu",
+          "text": "Đăng ký npx -y @jkudish/jev-mcp trong ứng dụng khách MCP với Node.js 22 trở lên và khóa nhà cung cấp Jev.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Độ tin cậy Choice và Score đo độ tập trung, không phải độ đúng. Điều chỉnh ngưỡng theo dữ liệu công việc và giữ chính sách trong mã bên gọi.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "jev-mcp — MCP araçları olarak türlenmiş Jev kararları",
+      "h1": "jev-mcp — MCP araçları olarak türlenmiş Jev kararları",
+      "description": "jev-mcp: MCP üzerinden Jev doğrulama, sınıflandırma, yeniden sıralama ve yama değerlendirmesi; eylem politikası ajanda kalır.",
+      "summary": "Jev MCP ajanlara kanıt doğrulama, sınıflandırma, yeniden sıralama, çıkarma ve yama inceleme araçları sunar. Node.js 22 veya üstü ve Jev sağlayıcı anahtarıyla npx -y @jkudish/jev-mcp komutunu MCP istemcisine kaydedin.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "Jev MCP ajanlara kanıt doğrulama, sınıflandırma, yeniden sıralama, çıkarma ve yama inceleme araçları sunar.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "İşler Choice, Score veya Noul sorularına çevrilir; çıkarma regex ile bulunan değerleri seçer, uygulama kodu yanıtları eylemlere dönüştürür.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Başlangıç",
+          "text": "Node.js 22 veya üstü ve Jev sağlayıcı anahtarıyla npx -y @jkudish/jev-mcp komutunu MCP istemcisine kaydedin.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Choice ve Score güveni doğruluğu değil yoğunlaşmayı ölçer. Eşikleri kendi verinize uyarlayın; politika çağıran kodda kalmalıdır.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "jev-mcp — Giudizi tipizzati Jev come strumenti MCP",
+      "h1": "jev-mcp — Giudizi tipizzati Jev come strumenti MCP",
+      "description": "jev-mcp: Verifica, classificazione, riordino e giudizi sulle patch Jev via MCP; l’agente mantiene le regole d’azione.",
+      "summary": "Jev MCP offre agli agenti verifica delle prove, classificazione, riordino, estrazione e revisione delle patch. Registra npx -y @jkudish/jev-mcp in un client MCP con Node.js 22 o successivo e una chiave del fornitore Jev.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "Jev MCP offre agli agenti verifica delle prove, classificazione, riordino, estrazione e revisione delle patch.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Traduce i compiti in Choice, Score o Noul; l’estrazione sceglie valori trovati da regex e il codice associa risposte e azioni.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come iniziare",
+          "text": "Registra npx -y @jkudish/jev-mcp in un client MCP con Node.js 22 o successivo e una chiave del fornitore Jev.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "La confidenza Choice e Score misura concentrazione, non correttezza. Adatta le soglie ai tuoi dati e mantieni le regole nel codice chiamante.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

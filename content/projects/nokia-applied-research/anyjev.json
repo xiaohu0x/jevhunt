@@ -1,0 +1,768 @@
+{
+  "version": "source-content-v1",
+  "repo": "nokia-applied-research/AnyJev",
+  "repositoryId": 1379166549,
+  "relationship": "local-alternative",
+  "category": "research",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "10d5db91dda38dbde74c6abc1c075ce6463723d1",
+      "url": "https://github.com/nokia-applied-research/AnyJev/blob/10d5db91dda38dbde74c6abc1c075ce6463723d1/README.md",
+      "sha256": "42bc7535ab361ff31a04cda395d1f43d6f676f78189bdd31754d7d0a14d28801",
+      "accessedAt": "2026-09-30T07:33:48.832Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "kind": "documented",
+      "text": "AnyJev reads probabilities from open models to answer choice, yes/no and scoring questions without generating prose.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 101,
+          "end": 107,
+          "quote": "## ✨ What it is\n\nAsk any open LLM a **typed question** — a choice, a yes/no, a score — and get a **decision with a\nprobability you can threshold**, read from one prefill of its next-token distribution. Nothing is\ngenerated and nothing is parsed. Raw logits change their answer when you reorder the options and\ntheir confidence cannot be trusted; AnyJev fixes the first with zero labels and the second with a\nfew hundred."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "kind": "documented",
+      "text": "It is an independent Jev-style approach; its L2 heads leave the base model’s weights unchanged.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 129,
+          "end": 130,
+          "quote": "A closed-form head per question, solved on 100–300 labels in seconds — no gradients, the model's\nweights untouched — and read from one prompt stopped partway down."
+        },
+        {
+          "source": "source-1",
+          "start": 190,
+          "end": 192,
+          "quote": "<sub>Every number is regenerated from committed JSON (`bash scripts/regen_docs.sh`); a second run\nfrom a clean checkout reproduced every zero-label number bit for bit. Not affiliated with TypeSafe\nAI or Jev; rows published by their authors were not rerun here.</sub>"
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "kind": "documented",
+      "text": "Use label-free L0 readouts or fit an L2 head for a particular question, with transformers or vLLM.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 49,
+          "end": 70,
+          "quote": "```python\nfrom anyjev import Decider, Question\nfrom anyjev.backends.vllm import VLLMBackend\n\nd = Decider(VLLMBackend(\"http://localhost:8000\", \"./qwen-b18\"), level=\"L2\")\nroute = Question.choice(\"Which team should handle this?\",\n                        [\"billing\", \"technical\", \"sales\", \"other\"], name=\"route\")\n\nd.fit_head(route, states, labels, layers=[-1])   # 100–300 labels, one closed-form solve\nd.decide(ticket, [route])[\"route\"].distribution  # {\"billing\": 0.81, \"technical\": 0.07, ...}\n```\n\n**Without labels, turn on the rotation budget — recommended for any K-option `choice`.** L0 asks the\nmodel once per option rotation so that no option is favoured by its position. Most decisions do not need\nall K: read them one at a time, stop when the leader is far enough ahead, and the threshold can be\ncalibrated so the answer matches the full cycle's a stated fraction of the time — measured against\n**our own full-strength readout, so it needs no labels at all.**\n\n```python\nd = Decider(VLLMBackend(\"http://localhost:8000\", \"./qwen-b18\"), adaptive_shifts=True)\nd.calibrate_adaptive(route, unlabelled_tickets, target=0.01)   # a few hundred states, no labels\nd.decide_batch(tickets, route)      # diagnostics: shifts_used, stop_threshold"
+        },
+        {
+          "source": "source-1",
+          "start": 196,
+          "end": 200,
+          "quote": "- [x] `choice`, `noul` and `score` from one prefill; L0 with zero labels; L1 artifacts\n- [x] **L2**: a closed-form head per question, routing, label-free adaptation, `observe`\n- [x] Shipped heads for five Qwen3 models; a packaged demo\n- [ ] 🚧 **Speed optimization** *(ongoing)*: making every decision cheaper\n- [x] **L2 on served engines**: vLLM, through an embed server's pooler or a truncated checkpoint (`anyjev.pipeline`, `anyjev.truncate`); SGLang not yet"
+        },
+        {
+          "source": "source-1",
+          "start": 210,
+          "end": 210,
+          "quote": "- **L2 is per question and per model.** Heads fit on other questions do not help a new one, and only Qwen3 heads ship. It needs hidden states, which transformers and a vLLM embed server both provide; other engines do not yet."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "kind": "documented",
+      "text": "L2 heads are question- and model-specific; letter readout supports at most 26 options, and agent-loop evaluation remains pending.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 207,
+          "end": 214,
+          "quote": "## 🔍 Limitations\n\n- **On typed-decisions, \"accuracy\" is agreement with a teacher LLM.** The gold is the mean of three samples of one model; a fresh sample of that teacher agrees with it 0.735 of the time.\n- **L2 is per question and per model.** Heads fit on other questions do not help a new one, and only Qwen3 heads ship. It needs hidden states, which transformers and a vLLM embed server both provide; other engines do not yet.\n- **Calibration cannot fix a model that cannot answer.** On maze edges and Minesweeper no readout beats the trivial baseline.\n- **L0 is not a free win everywhere.** The batch prior costs accuracy when one label dominates ([when L0 helps](https://github.com/nokia-applied-research/AnyJev/blob/main/docs/when_l0_helps.md)).\n\n<sub>Also: at most 26 options in the letter readout (a span readout is on the roadmap, not in the code); coverage at 5% risk is a high-variance estimate at n = 300; the headline tables are Qwen models; every decision here is scored in isolation, not inside an agent loop.</sub>"
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "AnyJev: typed decisions from open LLMs",
+      "h1": "AnyJev: typed decisions from open LLMs",
+      "description": "AnyJev adapts open LLMs to Jev-style typed decisions using label-free readouts or per-question L2 heads, with transformers and vLLM support.",
+      "summary": "AnyJev reads probabilities from open models to answer choice, yes/no and scoring questions without generating prose. It is an independent Jev-style approach; its L2 heads leave the base model’s weights unchanged. Use label-free L0 readouts or fit an L2 head for a particular question, with transformers or vLLM.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose",
+          "text": "AnyJev reads probabilities from open models to answer choice, yes/no and scoring questions without generating prose.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’s role",
+          "text": "It is an independent Jev-style approach; its L2 heads leave the base model’s weights unchanged.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "How to use it",
+          "text": "Use label-free L0 readouts or fit an L2 head for a particular question, with transformers or vLLM.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limits to consider",
+          "text": "L2 heads are question- and model-specific; letter readout supports at most 26 options, and agent-loop evaluation remains pending.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "AnyJev：让开放模型回答类型化问题",
+      "h1": "AnyJev：让开放模型回答类型化问题",
+      "description": "AnyJev 通过无需标签的概率读出或按问题拟合的 L2 预测头，将开放 LLM 用于 Jev 风格决策；支持 transformers 和 vLLM，L2 头绑定具体问题与模型。",
+      "summary": "AnyJev 从开放模型读取概率，回答选择、是非和评分问题，无需生成文章。 这是独立的 Jev 风格方案；L2 预测头不会修改基础模型权重。 可用无需标签的 L0 读出，或借助 transformers、vLLM 为特定问题拟合 L2 预测头。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "AnyJev 从开放模型读取概率，回答选择、是非和评分问题，无需生成文章。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "这是独立的 Jev 风格方案；L2 预测头不会修改基础模型权重。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "可用无需标签的 L0 读出，或借助 transformers、vLLM 为特定问题拟合 L2 预测头。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用边界",
+          "text": "L2 预测头绑定问题和模型；字母读出最多支持 26 个选项，智能体循环评估尚未完成。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "AnyJev：讓開放模型回答型別化問題",
+      "h1": "AnyJev：讓開放模型回答型別化問題",
+      "description": "AnyJev 以不需標籤的機率讀出或依問題擬合的 L2 預測頭，讓開放 LLM 執行 Jev 風格決策；支援 transformers 與 vLLM，L2 頭綁定問題和模型。",
+      "summary": "AnyJev 從開放模型讀取機率，回答選擇、是非與評分問題，無需產生文章。 這是獨立的 Jev 風格方案；L2 預測頭不會修改基礎模型權重。 可用不需標籤的 L0 讀出，或透過 transformers、vLLM 為特定問題擬合 L2 預測頭。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "AnyJev 從開放模型讀取機率，回答選擇、是非與評分問題，無需產生文章。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "這是獨立的 Jev 風格方案；L2 預測頭不會修改基礎模型權重。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "可用不需標籤的 L0 讀出，或透過 transformers、vLLM 為特定問題擬合 L2 預測頭。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用限制",
+          "text": "L2 預測頭綁定問題與模型；字母讀出最多支援 26 個選項，代理迴圈評估尚未完成。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "AnyJev：オープンモデルから型付き判断を取得",
+      "h1": "AnyJev：オープンモデルから型付き判断を取得",
+      "description": "AnyJev はラベル不要の確率読み出しや質問別 L2 ヘッドで、オープン LLM を Jev 風判断に利用します。transformers と vLLM に対応します。",
+      "summary": "AnyJev はオープンモデルの確率を読み、文章を生成せず選択・真偽・採点の質問に答えます。 独立した Jev 風の手法で、L2 の予測ヘッドは基盤モデルの重みを変更しません。 ラベル不要の L0 を使うか、transformers または vLLM で特定質問用の L2 ヘッドを学習させます。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "何ができるか",
+          "text": "AnyJev はオープンモデルの確率を読み、文章を生成せず選択・真偽・採点の質問に答えます。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "独立した Jev 風の手法で、L2 の予測ヘッドは基盤モデルの重みを変更しません。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "ラベル不要の L0 を使うか、transformers または vLLM で特定質問用の L2 ヘッドを学習させます。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "制約と注意点",
+          "text": "L2 ヘッドは質問とモデルごとに必要です。文字による読み出しは最大 26 択で、エージェントループ評価は未実施です。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "AnyJev: 공개 LLM에서 타입별 판단 추출",
+      "h1": "AnyJev: 공개 LLM에서 타입별 판단 추출",
+      "description": "AnyJev는 라벨 없는 확률 추출이나 질문별 L2 헤드로 공개 LLM을 Jev 방식 판단에 활용하며 transformers와 vLLM을 지원합니다.",
+      "summary": "AnyJev는 공개 모델의 확률을 읽어 문장을 생성하지 않고 선택, 참거짓, 점수 질문에 답합니다. 독립적인 Jev 방식 접근이며 L2 예측 헤드는 기반 모델 가중치를 변경하지 않습니다. 라벨 없는 L0 추출을 사용하거나 transformers 또는 vLLM에서 특정 질문용 L2 헤드를 맞춥니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "AnyJev는 공개 모델의 확률을 읽어 문장을 생성하지 않고 선택, 참거짓, 점수 질문에 답합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "독립적인 Jev 방식 접근이며 L2 예측 헤드는 기반 모델 가중치를 변경하지 않습니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "라벨 없는 L0 추출을 사용하거나 transformers 또는 vLLM에서 특정 질문용 L2 헤드를 맞춥니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "제약 사항",
+          "text": "L2 헤드는 질문과 모델마다 필요합니다. 문자 추출은 최대 26개 선택지를 지원하며 에이전트 루프 평가는 아직 예정입니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "AnyJev: decisiones tipadas con modelos abiertos",
+      "h1": "AnyJev: decisiones tipadas con modelos abiertos",
+      "description": "AnyJev adapta LLM abiertos a decisiones tipo Jev con lecturas sin etiquetas o cabezales L2 por pregunta, usando transformers y vLLM.",
+      "summary": "AnyJev lee probabilidades de modelos abiertos para responder preguntas de elección, sí/no y puntuación sin redactar texto. Es un enfoque independiente inspirado en Jev; sus cabezales L2 no modifican los pesos del modelo base. Usa L0 sin etiquetas o ajusta un cabezal L2 para una pregunta mediante transformers o vLLM.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "AnyJev lee probabilidades de modelos abiertos para responder preguntas de elección, sí/no y puntuación sin redactar texto.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "El papel de Jev",
+          "text": "Es un enfoque independiente inspirado en Jev; sus cabezales L2 no modifican los pesos del modelo base.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo usarlo",
+          "text": "Usa L0 sin etiquetas o ajusta un cabezal L2 para una pregunta mediante transformers o vLLM.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Límites a considerar",
+          "text": "L2 depende de cada pregunta y modelo; la lectura por letras admite 26 opciones y falta evaluar bucles de agentes.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "AnyJev : décisions typées avec des modèles ouverts",
+      "h1": "AnyJev : décisions typées avec des modèles ouverts",
+      "description": "AnyJev adapte les LLM ouverts aux décisions de type Jev, avec lecture sans étiquettes ou têtes L2 par question, via transformers et vLLM.",
+      "summary": "AnyJev lit les probabilités de modèles ouverts pour répondre à des choix, questions binaires et scores sans rédiger. Cette approche indépendante s’inspire de Jev ; les têtes L2 ne modifient pas les poids du modèle de base. Utilisez L0 sans étiquettes ou ajustez une tête L2 par question avec transformers ou vLLM.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "AnyJev lit les probabilités de modèles ouverts pour répondre à des choix, questions binaires et scores sans rédiger.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Le rôle de Jev",
+          "text": "Cette approche indépendante s’inspire de Jev ; les têtes L2 ne modifient pas les poids du modèle de base.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Utilisation",
+          "text": "Utilisez L0 sans étiquettes ou ajustez une tête L2 par question avec transformers ou vLLM.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limites à connaître",
+          "text": "L2 dépend de la question et du modèle ; la lecture par lettres accepte 26 options et l’évaluation en boucle d’agent reste à faire.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "AnyJev: typisierte Entscheidungen aus offenen LLMs",
+      "h1": "AnyJev: typisierte Entscheidungen aus offenen LLMs",
+      "description": "AnyJev nutzt offene LLMs für Jev-artige Entscheidungen: ohne Labels oder mit fragebezogenen L2-Köpfen, über transformers und vLLM.",
+      "summary": "AnyJev liest Modellwahrscheinlichkeiten für Auswahl-, Ja/Nein- und Bewertungsfragen aus, ohne Fließtext zu erzeugen. Der unabhängige Ansatz folgt Jevs Idee; L2-Ausgabeköpfe lassen die Gewichte des Basismodells unverändert. L0 ohne Labels verwenden oder mit transformers beziehungsweise vLLM einen L2-Kopf für eine konkrete Frage anpassen.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "AnyJev liest Modellwahrscheinlichkeiten für Auswahl-, Ja/Nein- und Bewertungsfragen aus, ohne Fließtext zu erzeugen.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Die Rolle von Jev",
+          "text": "Der unabhängige Ansatz folgt Jevs Idee; L2-Ausgabeköpfe lassen die Gewichte des Basismodells unverändert.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Nutzung",
+          "text": "L0 ohne Labels verwenden oder mit transformers beziehungsweise vLLM einen L2-Kopf für eine konkrete Frage anpassen.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Grenzen",
+          "text": "L2 ist frage- und modellspezifisch. Das Buchstabenverfahren unterstützt höchstens 26 Optionen; Tests in Agentenschleifen stehen noch aus.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "AnyJev: decisões tipadas com modelos abertos",
+      "h1": "AnyJev: decisões tipadas com modelos abertos",
+      "description": "AnyJev adapta LLMs abertos a decisões no estilo Jev com leitura sem rótulos ou cabeças L2 por pergunta, usando transformers e vLLM.",
+      "summary": "AnyJev lê probabilidades de modelos abertos para responder escolhas, perguntas de sim/não e pontuações sem redigir texto. É uma abordagem independente inspirada no Jev; suas cabeças L2 preservam os pesos do modelo base. Use L0 sem rótulos ou ajuste uma cabeça L2 para uma pergunta com transformers ou vLLM.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "AnyJev lê probabilidades de modelos abertos para responder escolhas, perguntas de sim/não e pontuações sem redigir texto.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "O papel do Jev",
+          "text": "É uma abordagem independente inspirada no Jev; suas cabeças L2 preservam os pesos do modelo base.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Use L0 sem rótulos ou ajuste uma cabeça L2 para uma pergunta com transformers ou vLLM.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limitações",
+          "text": "L2 depende da pergunta e do modelo; a leitura por letras aceita até 26 opções e falta avaliar ciclos de agentes.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "AnyJev: типизированные решения из открытых LLM",
+      "h1": "AnyJev: типизированные решения из открытых LLM",
+      "description": "AnyJev адаптирует открытые LLM к решениям в стиле Jev: без разметки или с головой L2 для вопроса, через transformers и vLLM.",
+      "summary": "AnyJev считывает вероятности открытых моделей для выбора вариантов, ответов да/нет и оценок без генерации текста. Это независимый подход по образцу Jev; головы L2 не меняют веса базовой модели. Используйте L0 без разметки или подберите голову L2 для конкретного вопроса через transformers либо vLLM.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "AnyJev считывает вероятности открытых моделей для выбора вариантов, ответов да/нет и оценок без генерации текста.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Это независимый подход по образцу Jev; головы L2 не меняют веса базовой модели.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Используйте L0 без разметки или подберите голову L2 для конкретного вопроса через transformers либо vLLM.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ограничения",
+          "text": "L2 зависит от вопроса и модели; буквенное считывание ограничено 26 вариантами, оценка в агентном цикле ещё не проведена.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "AnyJev: खुले LLM से निर्धारित प्रकार वाले निर्णय",
+      "h1": "AnyJev: खुले LLM से निर्धारित प्रकार वाले निर्णय",
+      "description": "AnyJev खुले LLM को बिना लेबल रीडआउट या प्रश्न-विशेष L2 हेड से Jev-जैसे निर्णय देता है; transformers और vLLM समर्थित हैं।",
+      "summary": "AnyJev खुले मॉडल की संभावनाएँ पढ़कर विकल्प, हाँ/नहीं और स्कोर वाले प्रश्नों का उत्तर देता है, बिना गद्य बनाए। यह स्वतंत्र Jev-जैसा तरीका है; इसके L2 हेड मूल मॉडल के वेट नहीं बदलते। बिना लेबल वाला L0 इस्तेमाल करें या transformers अथवा vLLM से किसी प्रश्न का L2 हेड फिट करें।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "किस काम आता है",
+          "text": "AnyJev खुले मॉडल की संभावनाएँ पढ़कर विकल्प, हाँ/नहीं और स्कोर वाले प्रश्नों का उत्तर देता है, बिना गद्य बनाए।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "यह स्वतंत्र Jev-जैसा तरीका है; इसके L2 हेड मूल मॉडल के वेट नहीं बदलते।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल कैसे करें",
+          "text": "बिना लेबल वाला L0 इस्तेमाल करें या transformers अथवा vLLM से किसी प्रश्न का L2 हेड फिट करें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "सीमाएँ",
+          "text": "L2 हेड प्रश्न और मॉडल पर निर्भर है; अक्षर-आधारित रीडआउट अधिकतम 26 विकल्प देता है और एजेंट-चक्र मूल्यांकन लंबित है।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "AnyJev: keputusan bertipe dari LLM terbuka",
+      "h1": "AnyJev: keputusan bertipe dari LLM terbuka",
+      "description": "AnyJev memakai pembacaan tanpa label atau head L2 per pertanyaan untuk keputusan bergaya Jev dari LLM terbuka, melalui transformers dan vLLM.",
+      "summary": "AnyJev membaca probabilitas model terbuka untuk menjawab pilihan, ya/tidak, dan penilaian tanpa menghasilkan prosa. Pendekatan independen bergaya Jev ini memakai head L2 tanpa mengubah bobot model dasar. Gunakan L0 tanpa label atau sesuaikan head L2 untuk pertanyaan tertentu melalui transformers atau vLLM.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "AnyJev membaca probabilitas model terbuka untuk menjawab pilihan, ya/tidak, dan penilaian tanpa menghasilkan prosa.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Pendekatan independen bergaya Jev ini memakai head L2 tanpa mengubah bobot model dasar.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Gunakan L0 tanpa label atau sesuaikan head L2 untuk pertanyaan tertentu melalui transformers atau vLLM.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Batasan",
+          "text": "L2 khusus untuk setiap pertanyaan dan model; pembacaan huruf mendukung maksimal 26 opsi, dan evaluasi siklus agen masih tertunda.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "AnyJev: quyết định có kiểu từ LLM mở",
+      "h1": "AnyJev: quyết định có kiểu từ LLM mở",
+      "description": "AnyJev dùng cách đọc không nhãn hoặc đầu L2 theo câu hỏi để tạo quyết định kiểu Jev từ LLM mở, qua transformers và vLLM.",
+      "summary": "AnyJev đọc xác suất từ mô hình mở để trả lời câu hỏi lựa chọn, có/không và chấm điểm mà không tạo văn xuôi. Đây là cách tiếp cận độc lập theo hướng Jev; đầu dự đoán L2 giữ nguyên trọng số mô hình nền. Dùng L0 không cần nhãn hoặc khớp đầu L2 cho một câu hỏi qua transformers hay vLLM.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích",
+          "text": "AnyJev đọc xác suất từ mô hình mở để trả lời câu hỏi lựa chọn, có/không và chấm điểm mà không tạo văn xuôi.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Đây là cách tiếp cận độc lập theo hướng Jev; đầu dự đoán L2 giữ nguyên trọng số mô hình nền.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Dùng L0 không cần nhãn hoặc khớp đầu L2 cho một câu hỏi qua transformers hay vLLM.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Giới hạn",
+          "text": "L2 phụ thuộc từng câu hỏi và mô hình; cách đọc bằng chữ cái tối đa 26 lựa chọn, còn đánh giá vòng lặp tác tử chưa hoàn tất.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "AnyJev: açık LLM’lerden türlenmiş kararlar",
+      "h1": "AnyJev: açık LLM’lerden türlenmiş kararlar",
+      "description": "AnyJev açık LLM’leri etiketsiz okuma veya soruya özel L2 başlıklarıyla Jev benzeri kararlara uyarlar; transformers ve vLLM desteklenir.",
+      "summary": "AnyJev açık modellerin olasılıklarını okuyarak metin üretmeden seçim, evet/hayır ve puanlama sorularını yanıtlar. Bağımsız Jev benzeri yaklaşımdır; L2 başlıkları temel modelin ağırlıklarını değiştirmez. Etiketsiz L0 okumasını kullanın veya transformers ya da vLLM ile belirli bir soruya L2 başlığı uyarlayın.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "AnyJev açık modellerin olasılıklarını okuyarak metin üretmeden seçim, evet/hayır ve puanlama sorularını yanıtlar.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Bağımsız Jev benzeri yaklaşımdır; L2 başlıkları temel modelin ağırlıklarını değiştirmez.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Etiketsiz L0 okumasını kullanın veya transformers ya da vLLM ile belirli bir soruya L2 başlığı uyarlayın.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Sınırlamalar",
+          "text": "L2 soru ve modele özeldir; harf okuması en fazla 26 seçenek destekler, ajan döngüsü değerlendirmesi henüz yapılmamıştır.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "AnyJev: decisioni tipizzate da LLM aperti",
+      "h1": "AnyJev: decisioni tipizzate da LLM aperti",
+      "description": "AnyJev adatta LLM aperti a decisioni in stile Jev con letture senza etichette o teste L2 per domanda, tramite transformers e vLLM.",
+      "summary": "AnyJev legge probabilità da modelli aperti per rispondere a scelte, domande sì/no e punteggi senza generare prosa. È un approccio indipendente ispirato a Jev; le teste L2 non modificano i pesi del modello base. Usa L0 senza etichette o adatta una testa L2 a una domanda tramite transformers o vLLM.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "AnyJev legge probabilità da modelli aperti per rispondere a scelte, domande sì/no e punteggi senza generare prosa.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Il ruolo di Jev",
+          "text": "È un approccio indipendente ispirato a Jev; le teste L2 non modificano i pesi del modello base.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come usarlo",
+          "text": "Usa L0 senza etichette o adatta una testa L2 a una domanda tramite transformers o vLLM.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limiti",
+          "text": "L2 dipende da domanda e modello; la lettura per lettere ammette 26 opzioni e manca ancora la valutazione nei cicli degli agenti.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

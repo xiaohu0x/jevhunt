@@ -1,0 +1,762 @@
+{
+  "version": "source-content-v1",
+  "repo": "Mapika/decider",
+  "repositoryId": 1372665897,
+  "relationship": "local-alternative",
+  "category": "research",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "23579f7a7e8f10e1045be492af3c1c05a005d67c",
+      "url": "https://github.com/Mapika/decider/blob/23579f7a7e8f10e1045be492af3c1c05a005d67c/README.md",
+      "sha256": "9647eeb36afde63f249e2191564eae2cd8d3ba8893fba4d6997c6b1e9db03546",
+      "accessedAt": "2026-09-30T07:33:48.519Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "kind": "documented",
+      "text": "decider returns Choice, Score and Noul probabilities from a state and typed questions in one forward pass.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 7,
+          "end": 11,
+          "quote": "A language model that does not generate text. It reads a **state** and a set of **typed questions** and returns, from one\nforward pass, a probability distribution for every question.\n\nA typed decision is a question with a fixed answer set: **Choice** over 2 to 255 options, **Score** over 2 to 10 described\nlevels, or **Noul**, the probability of yes. There is no decoding, no parsing, and no output outside the options you defined."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "kind": "documented",
+      "text": "This independent Jev-style model family uses Qwen bases; its training data was not distilled from Jev.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 20,
+          "end": 23,
+          "quote": "**Independence.** This is an independent project. It is not affiliated with or endorsed by TypeSafe AI. It is an open\nreproduction of the \"System One\" model class (TypeSafe AI's *Jev*): a 2B model built on `Qwen/Qwen3.5-2B-Base`, a 4B model built on\n`Qwen/Qwen3.5-4B-Base` and a 35B mixture-of-experts model built on `Qwen/Qwen3.5-35B-A3B-Base`. The training mixture is public datasets plus data labelled by a\nlocal Qwen3.5-27B teacher (`teacher_data/`, `decider/data/mixture.py`). Nothing was distilled from Jev."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "kind": "documented",
+      "text": "Call the Python Decider interface or point TypeSafe SDKs at its compatible local HTTP endpoint.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 178,
+          "end": 194,
+          "quote": "```python\nfrom decider.infer import Decider\nd = Decider(\"Mapika/decider-2b\")                             # one CUDA GPU, bf16, about 4 GB; downloads the weights on first use\nd.system_one(\n    {\"ticket\": {\"messages\": [{\"from\": \"customer\", \"text\": \"I was charged twice for order A-104. Please refund the duplicate.\"}]},\n     \"refund_policy\": \"Duplicate charges are eligible for a refund.\"},\n    {\"department\": {\"type\": \"choice\", \"instructions\": \"Which team should handle this?\",\n                    \"criteria\": {\"returns\": \"Exchanges, refunds, wrong or damaged items\", \"billing\": {\"what\": \"Charges, invoices\", \"not_for\": \"delivery\"}, \"other\": None}},\n     \"refund_requested\": {\"type\": \"noul\", \"instructions\": \"Does `ticket.messages[0].text` request a refund?\"},\n     \"frustration\": {\"type\": \"score\", \"instructions\": \"How frustrated is the customer?\", \"criteria\": [\"calm\", \"frustrated\", \"very frustrated\"]}})\n# {\"answers\": {\"department\": {\"choice\": \"billing\", \"confidence\": 0.34, \"x_p_max\": 0.56, \"certainty\": 0.37, \"probabilities\": {\"returns\": 0.44, \"billing\": 0.56, \"other\": 0.00}},\n#              \"refund_requested\": {\"noul\": 0.99},\n#              \"frustration\": {\"score\": 0.76, \"probabilities\": {\"0\": 0.34, \"1\": 0.55, \"2\": 0.10}, \"level_fit\": {\"0\": 0.34, \"1\": 0.55, \"2\": 0.10}, \"fit_mass\": 0.99}}}\n#                                                             (v10 weights; \"returns\" also mentions refunds, so the mass is split)\n\nd.decide(\"My card was charged twice.\", [{\"question\": \"Which team?\", \"options\": [\"billing\", \"technical\", \"sales\"]}])\n# [{\"choice\": \"billing\", \"confidence\": 0.77, \"probs\": {\"billing\": 0.77, \"technical\": 0.19, \"sales\": 0.04}}]      the plain form"
+        },
+        {
+          "source": "source-1",
+          "start": 232,
+          "end": 233,
+          "quote": "`POST /v1/systemone` is TypeSafe's wire format, so their SDKs work unchanged with `TYPESAFE_BASE_URL=http://localhost:8000`;\n`POST /decide` is the plain form. The server picks its device as `Decider` does (CUDA, else MPS, else CPU; `DECIDER_DEVICE`"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "kind": "documented",
+      "text": "The README identifies English-only coverage, weak calibration on difficult items and limits on multi-step arithmetic.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 328,
+          "end": 333,
+          "quote": "* **One pass cannot do multi-step arithmetic.** There is no chain of thought and no intermediate state, so GSM8K-type items,\n  temporal arithmetic and multi-hop chains are out of reach. Split such a judgment into several questions.\n* **Calibration on hard items is the weak axis.** decider-2b v10's top-label ECE on JevBench's public hard items is 0.31: it is\n  confident where it is wrong there, and its calibration score on the JevBench leaderboard is 46.6. decider-2b v11 is at 0.18 there, decider-4b\n  v2.1 at 0.18, the 35B at 0.15 and decider-4b v2 at 0.10 (0.07 at its release temperature). On our own held-out generated\n  families v2.1 and v11 are at 0.15 and 0.16 against a limit of 0.08 that we set for release."
+        },
+        {
+          "source": "source-1",
+          "start": 341,
+          "end": 342,
+          "quote": "* **English only.** Calibration is measured on public datasets and teacher-labelled probes, not on your traffic.\n* **The schema cache costs accuracy.** Use it for fixed classification-style schemas with short states; see docs/RESULTS.md."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "decider: local typed decisions inspired by Jev",
+      "h1": "decider: local typed decisions inspired by Jev",
+      "description": "decider is an independent Qwen-based Jev-style model family for local Choice, Score and Noul probabilities, with Python and compatible HTTP interfaces.",
+      "summary": "decider returns Choice, Score and Noul probabilities from a state and typed questions in one forward pass. This independent Jev-style model family uses Qwen bases; its training data was not distilled from Jev. Call the Python Decider interface or point TypeSafe SDKs at its compatible local HTTP endpoint.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose",
+          "text": "decider returns Choice, Score and Noul probabilities from a state and typed questions in one forward pass.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’s role",
+          "text": "This independent Jev-style model family uses Qwen bases; its training data was not distilled from Jev.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "How to use it",
+          "text": "Call the Python Decider interface or point TypeSafe SDKs at its compatible local HTTP endpoint.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limits to consider",
+          "text": "The README identifies English-only coverage, weak calibration on difficult items and limits on multi-step arithmetic.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "decider：受 Jev 启发的本地类型化决策",
+      "h1": "decider：受 Jev 启发的本地类型化决策",
+      "description": "decider 是基于 Qwen 的独立 Jev 风格模型，在本地输出 Choice、Score 和 Noul 概率，提供 Python 与兼容 HTTP 接口；困难题校准和多步计算有明确限制。",
+      "summary": "decider 根据状态和类型化问题，在一次前向计算中返回 Choice、Score 和 Noul 概率。 这是基于 Qwen 的独立 Jev 风格模型系列，训练数据并非从 Jev 蒸馏而来。 可调用 Python Decider 接口，或让 TypeSafe SDK 连接兼容的本地 HTTP 端点。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "decider 根据状态和类型化问题，在一次前向计算中返回 Choice、Score 和 Noul 概率。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "这是基于 Qwen 的独立 Jev 风格模型系列，训练数据并非从 Jev 蒸馏而来。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "可调用 Python Decider 接口，或让 TypeSafe SDK 连接兼容的本地 HTTP 端点。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用边界",
+          "text": "README 明确指出仅覆盖英语、困难题校准较弱，且不擅长多步算术。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "decider：受 Jev 啟發的本地型別化決策",
+      "h1": "decider：受 Jev 啟發的本地型別化決策",
+      "description": "decider 是以 Qwen 為基礎的獨立 Jev 風格模型，在本地輸出 Choice、Score 與 Noul 機率，提供 Python 和相容 HTTP 介面；困難題校準與多步計算有限制。",
+      "summary": "decider 根據狀態與型別化問題，在一次前向運算中回傳 Choice、Score 與 Noul 機率。 這是以 Qwen 為基礎的獨立 Jev 風格模型系列，訓練資料並非從 Jev 蒸餾而來。 可呼叫 Python Decider 介面，或讓 TypeSafe SDK 連接相容的本地 HTTP 端點。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "decider 根據狀態與型別化問題，在一次前向運算中回傳 Choice、Score 與 Noul 機率。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "這是以 Qwen 為基礎的獨立 Jev 風格模型系列，訓練資料並非從 Jev 蒸餾而來。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "可呼叫 Python Decider 介面，或讓 TypeSafe SDK 連接相容的本地 HTTP 端點。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用限制",
+          "text": "README 明確指出僅涵蓋英語、困難題校準較弱，且不擅長多步算術。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "decider：Jev に着想を得たローカル型付き判断",
+      "h1": "decider：Jev に着想を得たローカル型付き判断",
+      "description": "decider は Qwen ベースの独立した Jev 風モデルです。ローカルの Choice、Score、Noul 判断を Python または互換 HTTP API で使えます。",
+      "summary": "decider は状態と型付き質問から、1 回の順伝播で Choice、Score、Noul の確率を返します。 Qwen を基盤とする独立した Jev 風モデル群で、Jev から蒸留した学習データは使用していません。 Python の Decider を呼び出すか、TypeSafe SDK を互換のローカル HTTP エンドポイントへ接続します。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "何ができるか",
+          "text": "decider は状態と型付き質問から、1 回の順伝播で Choice、Score、Noul の確率を返します。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "Qwen を基盤とする独立した Jev 風モデル群で、Jev から蒸留した学習データは使用していません。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "Python の Decider を呼び出すか、TypeSafe SDK を互換のローカル HTTP エンドポイントへ接続します。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "制約と注意点",
+          "text": "README は英語のみの対応、難問での校正の弱さ、多段階計算の限界を明示しています。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "decider: Jev에서 영감을 받은 로컬 판단 모델",
+      "h1": "decider: Jev에서 영감을 받은 로컬 판단 모델",
+      "description": "decider는 Qwen 기반의 독립 Jev 방식 모델입니다. 로컬 Choice, Score, Noul 확률을 Python 또는 호환 HTTP API로 제공합니다.",
+      "summary": "decider는 상태와 타입이 지정된 질문을 받아 한 번의 순전파로 Choice, Score, Noul 확률을 반환합니다. Qwen 기반의 독립적인 Jev 방식 모델 제품군이며 Jev에서 증류한 학습 데이터는 사용하지 않습니다. Python Decider 인터페이스를 호출하거나 TypeSafe SDK를 호환 로컬 HTTP 엔드포인트에 연결합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "decider는 상태와 타입이 지정된 질문을 받아 한 번의 순전파로 Choice, Score, Noul 확률을 반환합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Qwen 기반의 독립적인 Jev 방식 모델 제품군이며 Jev에서 증류한 학습 데이터는 사용하지 않습니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "Python Decider 인터페이스를 호출하거나 TypeSafe SDK를 호환 로컬 HTTP 엔드포인트에 연결합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "제약 사항",
+          "text": "README는 영어만 지원하며 어려운 문제의 보정과 다단계 산술에 한계가 있다고 밝힙니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "decider: decisiones locales inspiradas en Jev",
+      "h1": "decider: decisiones locales inspiradas en Jev",
+      "description": "decider es una familia independiente basada en Qwen para probabilidades Choice, Score y Noul locales, con Python y HTTP compatible con Jev.",
+      "summary": "decider devuelve probabilidades Choice, Score y Noul a partir de un estado y preguntas tipadas en una pasada. Esta familia independiente, inspirada en Jev, usa bases Qwen; sus datos no se destilaron de Jev. Usa la interfaz Python Decider o conecta los SDK de TypeSafe a su endpoint HTTP local compatible.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "decider devuelve probabilidades Choice, Score y Noul a partir de un estado y preguntas tipadas en una pasada.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "El papel de Jev",
+          "text": "Esta familia independiente, inspirada en Jev, usa bases Qwen; sus datos no se destilaron de Jev.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo usarlo",
+          "text": "Usa la interfaz Python Decider o conecta los SDK de TypeSafe a su endpoint HTTP local compatible.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Límites a considerar",
+          "text": "El README limita la cobertura al inglés y señala problemas de calibración en casos difíciles y aritmética de varios pasos.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "decider : décisions locales inspirées de Jev",
+      "h1": "decider : décisions locales inspirées de Jev",
+      "description": "decider est une famille indépendante fondée sur Qwen pour Choice, Score et Noul en local, avec Python et une interface HTTP compatible Jev.",
+      "summary": "decider renvoie des probabilités Choice, Score et Noul à partir d’un état et de questions typées en une passe. Cette famille indépendante de modèles de type Jev repose sur Qwen, sans données distillées depuis Jev. Utilisez l’interface Python Decider ou connectez les SDK TypeSafe au point d’accès HTTP local compatible.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "decider renvoie des probabilités Choice, Score et Noul à partir d’un état et de questions typées en une passe.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Le rôle de Jev",
+          "text": "Cette famille indépendante de modèles de type Jev repose sur Qwen, sans données distillées depuis Jev.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Utilisation",
+          "text": "Utilisez l’interface Python Decider ou connectez les SDK TypeSafe au point d’accès HTTP local compatible.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limites à connaître",
+          "text": "Le README précise une couverture uniquement anglaise, une calibration fragile sur les cas difficiles et des limites en calcul à plusieurs étapes.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "decider: lokale Entscheidungen nach Jev-Vorbild",
+      "h1": "decider: lokale Entscheidungen nach Jev-Vorbild",
+      "description": "decider liefert lokale Choice-, Score- und Noul-Wahrscheinlichkeiten über Python und Jev-kompatibles HTTP, als unabhängige Qwen-Modellfamilie.",
+      "summary": "decider liefert Choice-, Score- und Noul-Wahrscheinlichkeiten aus Zustand und typisierten Fragen in einem Vorwärtsdurchlauf. Die unabhängige Modellfamilie nach Jev-Vorbild basiert auf Qwen; ihre Trainingsdaten wurden nicht aus Jev destilliert. Python Decider aufrufen oder TypeSafe-SDKs mit dem kompatiblen lokalen HTTP-Endpunkt verbinden.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "decider liefert Choice-, Score- und Noul-Wahrscheinlichkeiten aus Zustand und typisierten Fragen in einem Vorwärtsdurchlauf.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Die Rolle von Jev",
+          "text": "Die unabhängige Modellfamilie nach Jev-Vorbild basiert auf Qwen; ihre Trainingsdaten wurden nicht aus Jev destilliert.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Nutzung",
+          "text": "Python Decider aufrufen oder TypeSafe-SDKs mit dem kompatiblen lokalen HTTP-Endpunkt verbinden.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Grenzen",
+          "text": "Das README nennt ausschließlich englische Abdeckung, schwache Kalibrierung bei schwierigen Aufgaben und Grenzen bei mehrstufiger Arithmetik.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "decider: decisões locais inspiradas no Jev",
+      "h1": "decider: decisões locais inspiradas no Jev",
+      "description": "decider é uma família independente baseada em Qwen para Choice, Score e Noul locais, com Python e interface HTTP compatível com Jev.",
+      "summary": "decider retorna probabilidades Choice, Score e Noul a partir de estado e perguntas tipadas em uma passagem. A família independente inspirada no Jev usa bases Qwen; os dados de treinamento não foram destilados do Jev. Use a interface Python Decider ou conecte SDKs TypeSafe ao endpoint HTTP local compatível.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "decider retorna probabilidades Choice, Score e Noul a partir de estado e perguntas tipadas em uma passagem.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "O papel do Jev",
+          "text": "A família independente inspirada no Jev usa bases Qwen; os dados de treinamento não foram destilados do Jev.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Use a interface Python Decider ou conecte SDKs TypeSafe ao endpoint HTTP local compatível.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limitações",
+          "text": "O README indica cobertura apenas em inglês, calibração fraca em itens difíceis e limitações em aritmética com várias etapas.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "decider: локальные решения по образцу Jev",
+      "h1": "decider: локальные решения по образцу Jev",
+      "description": "decider — независимые модели на базе Qwen для локальных Choice, Score и Noul, доступные через Python и совместимый с Jev HTTP API.",
+      "summary": "decider возвращает вероятности Choice, Score и Noul по состоянию и типизированным вопросам за один прямой проход. Это независимое семейство на базе Qwen, вдохновлённое Jev; обучающие данные не получены дистилляцией Jev. Используйте Python-интерфейс Decider или направьте SDK TypeSafe на совместимую локальную HTTP-точку доступа.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "decider возвращает вероятности Choice, Score и Noul по состоянию и типизированным вопросам за один прямой проход.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Это независимое семейство на базе Qwen, вдохновлённое Jev; обучающие данные не получены дистилляцией Jev.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Используйте Python-интерфейс Decider или направьте SDK TypeSafe на совместимую локальную HTTP-точку доступа.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ограничения",
+          "text": "README отмечает поддержку только английского, слабую калибровку сложных задач и ограничения многошаговой арифметики.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "decider: Jev से प्रेरित स्थानीय निर्णय",
+      "h1": "decider: Jev से प्रेरित स्थानीय निर्णय",
+      "description": "decider स्वतंत्र Qwen-आधारित Jev-जैसा मॉडल है, जो Python और संगत HTTP से स्थानीय Choice, Score और Noul संभावनाएँ देता है।",
+      "summary": "decider स्थिति और निर्धारित उत्तर-प्रकार वाले प्रश्नों से एक फॉरवर्ड पास में Choice, Score और Noul की संभावनाएँ देता है। यह Qwen पर आधारित स्वतंत्र Jev-जैसा मॉडल परिवार है; प्रशिक्षण डेटा Jev से डिस्टिल नहीं किया गया। Python Decider इंटरफ़ेस इस्तेमाल करें या TypeSafe SDK को संगत स्थानीय HTTP एंडपॉइंट से जोड़ें।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "किस काम आता है",
+          "text": "decider स्थिति और निर्धारित उत्तर-प्रकार वाले प्रश्नों से एक फॉरवर्ड पास में Choice, Score और Noul की संभावनाएँ देता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "यह Qwen पर आधारित स्वतंत्र Jev-जैसा मॉडल परिवार है; प्रशिक्षण डेटा Jev से डिस्टिल नहीं किया गया।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल कैसे करें",
+          "text": "Python Decider इंटरफ़ेस इस्तेमाल करें या TypeSafe SDK को संगत स्थानीय HTTP एंडपॉइंट से जोड़ें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "सीमाएँ",
+          "text": "README केवल अंग्रेज़ी समर्थन, कठिन प्रश्नों में कमजोर कैलिब्रेशन और कई चरणों वाले हिसाब की सीमाएँ बताता है।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "decider: keputusan lokal terinspirasi Jev",
+      "h1": "decider: keputusan lokal terinspirasi Jev",
+      "description": "decider adalah keluarga model Qwen independen untuk probabilitas Choice, Score, dan Noul lokal melalui Python dan HTTP kompatibel Jev.",
+      "summary": "decider menghasilkan probabilitas Choice, Score, dan Noul dari status dan pertanyaan bertipe dalam satu lintasan maju. Keluarga model independen bergaya Jev ini berbasis Qwen; data pelatihannya tidak didistilasi dari Jev. Gunakan antarmuka Python Decider atau arahkan SDK TypeSafe ke endpoint HTTP lokal yang kompatibel.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "decider menghasilkan probabilitas Choice, Score, dan Noul dari status dan pertanyaan bertipe dalam satu lintasan maju.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Keluarga model independen bergaya Jev ini berbasis Qwen; data pelatihannya tidak didistilasi dari Jev.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Gunakan antarmuka Python Decider atau arahkan SDK TypeSafe ke endpoint HTTP lokal yang kompatibel.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Batasan",
+          "text": "README menyebut cakupan bahasa Inggris saja, kalibrasi lemah pada soal sulit, dan keterbatasan aritmetika bertahap.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "decider: quyết định cục bộ lấy cảm hứng từ Jev",
+      "h1": "decider: quyết định cục bộ lấy cảm hứng từ Jev",
+      "description": "decider là họ mô hình Qwen độc lập, cung cấp xác suất Choice, Score, Noul cục bộ qua Python và HTTP tương thích Jev.",
+      "summary": "decider trả về xác suất Choice, Score và Noul từ trạng thái và câu hỏi có kiểu qua một lượt truyền xuôi. Họ mô hình độc lập theo hướng Jev này dựa trên Qwen; dữ liệu huấn luyện không được chưng cất từ Jev. Dùng giao diện Python Decider hoặc kết nối SDK TypeSafe với điểm cuối HTTP cục bộ tương thích.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích",
+          "text": "decider trả về xác suất Choice, Score và Noul từ trạng thái và câu hỏi có kiểu qua một lượt truyền xuôi.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Họ mô hình độc lập theo hướng Jev này dựa trên Qwen; dữ liệu huấn luyện không được chưng cất từ Jev.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Dùng giao diện Python Decider hoặc kết nối SDK TypeSafe với điểm cuối HTTP cục bộ tương thích.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Giới hạn",
+          "text": "README nêu rõ chỉ hỗ trợ tiếng Anh, hiệu chỉnh yếu ở câu khó và hạn chế với phép tính nhiều bước.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "decider: Jev’den esinlenen yerel kararlar",
+      "h1": "decider: Jev’den esinlenen yerel kararlar",
+      "description": "decider, yerel Choice, Score ve Noul olasılıklarını Python ve Jev uyumlu HTTP ile sunan bağımsız Qwen tabanlı model ailesidir.",
+      "summary": "decider, durum ve türlenmiş sorulardan tek ileri geçişte Choice, Score ve Noul olasılıkları döndürür. Qwen tabanlı bağımsız Jev benzeri model ailesidir; eğitim verileri Jev’den damıtılmamıştır. Python Decider arayüzünü kullanın veya TypeSafe SDK’larını uyumlu yerel HTTP uç noktasına yönlendirin.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "decider, durum ve türlenmiş sorulardan tek ileri geçişte Choice, Score ve Noul olasılıkları döndürür.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Qwen tabanlı bağımsız Jev benzeri model ailesidir; eğitim verileri Jev’den damıtılmamıştır.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Python Decider arayüzünü kullanın veya TypeSafe SDK’larını uyumlu yerel HTTP uç noktasına yönlendirin.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Sınırlamalar",
+          "text": "README yalnızca İngilizce kapsamını, zor sorularda zayıf kalibrasyonu ve çok adımlı aritmetik sınırlarını belirtir.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "decider: decisioni locali ispirate a Jev",
+      "h1": "decider: decisioni locali ispirate a Jev",
+      "description": "decider è una famiglia indipendente basata su Qwen per Choice, Score e Noul locali, con Python e interfaccia HTTP compatibile Jev.",
+      "summary": "decider restituisce probabilità Choice, Score e Noul da stato e domande tipizzate in un solo passaggio. Questa famiglia indipendente ispirata a Jev usa basi Qwen; i dati non sono stati distillati da Jev. Usa l’interfaccia Python Decider oppure collega gli SDK TypeSafe all’endpoint HTTP locale compatibile.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "decider restituisce probabilità Choice, Score e Noul da stato e domande tipizzate in un solo passaggio.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Il ruolo di Jev",
+          "text": "Questa famiglia indipendente ispirata a Jev usa basi Qwen; i dati non sono stati distillati da Jev.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come usarlo",
+          "text": "Usa l’interfaccia Python Decider oppure collega gli SDK TypeSafe all’endpoint HTTP locale compatibile.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limiti",
+          "text": "Il README segnala copertura solo inglese, calibrazione debole sui casi difficili e limiti nell’aritmetica a più passaggi.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

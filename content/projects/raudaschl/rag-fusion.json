@@ -1,0 +1,774 @@
+{
+  "version": "source-content-v1",
+  "repo": "Raudaschl/rag-fusion",
+  "repositoryId": 696503950,
+  "relationship": "integration",
+  "category": "research",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "a9742c4aae95b097c1f715cf2350b569c9407872",
+      "url": "https://github.com/Raudaschl/rag-fusion/blob/a9742c4aae95b097c1f715cf2350b569c9407872/README.md",
+      "sha256": "d288a700fade236e57f12dc1927dbcedd9b753d9976fa07391f88bb0b3fe3bda",
+      "accessedAt": "2026-09-30T07:33:48.189Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "kind": "documented",
+      "text": "RAG-Fusion generates query variants and merges retrieval rankings with Reciprocal Rank Fusion to find material a single query may miss.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 9,
+          "end": 9,
+          "quote": "RAG-Fusion is a search methodology that aims to bridge the gap between traditional search paradigms and the multifaceted dimensions of human queries. Where Retrieval Augmented Generation (RAG) fuses vector search with generative models, RAG-Fusion goes a step further — employing multiple query generation and Reciprocal Rank Fusion to re-rank search results. The aim is to surface relevant material a single phrasing of the query would miss, particularly when the user's vocabulary doesn't match how the corpus is indexed."
+        },
+        {
+          "source": "source-1",
+          "start": 34,
+          "end": 39,
+          "quote": "1. **Query generation:** an LLM writes several rewrites of the user's query that come at it from different angles (synonyms, narrower and broader framings, related sub-topics).\n2. **Hybrid search:** the original query and every rewrite are searched twice, with BM25 (keywords) and with vector search, which gives ten ranked lists for four rewrites.\n3. **Reciprocal Rank Fusion:** the lists are merged, and each document scores 1 / (60 + rank) summed over every list it appears in, so documents that keep turning up rise.\n4. **Rerank:** a reranker (a cross-encoder, or a decision model such as Jev) re-scores the fused pool, and only the top results reach the model that writes the answer.\n\nThe original version of the technique used vector search only and no reranker, and that's what `main.py` still demonstrates. The hybrid-plus-rerank configuration above is what the experiments in this repo found works; its code is in `eval/`."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "kind": "documented",
+      "text": "Jev is an optional reranker in the evaluation pipeline; its experiments require JEV_API_KEY. The original demo remains vector-only.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 34,
+          "end": 39,
+          "quote": "1. **Query generation:** an LLM writes several rewrites of the user's query that come at it from different angles (synonyms, narrower and broader framings, related sub-topics).\n2. **Hybrid search:** the original query and every rewrite are searched twice, with BM25 (keywords) and with vector search, which gives ten ranked lists for four rewrites.\n3. **Reciprocal Rank Fusion:** the lists are merged, and each document scores 1 / (60 + rank) summed over every list it appears in, so documents that keep turning up rise.\n4. **Rerank:** a reranker (a cross-encoder, or a decision model such as Jev) re-scores the fused pool, and only the top results reach the model that writes the answer.\n\nThe original version of the technique used vector search only and no reranker, and that's what `main.py` still demonstrates. The hybrid-plus-rerank configuration above is what the experiments in this repo found works; its code is in `eval/`."
+        },
+        {
+          "source": "source-1",
+          "start": 109,
+          "end": 109,
+          "quote": "   Then edit `.env` and replace `your-key-here` with your actual key. `JEV_API_KEY` is only needed for the Jev experiments. The LLM used for rewrites, answers and judging defaults to `gpt-6-luna` at low reasoning effort; override it with `LLM_MODEL` and `LLM_REASONING_EFFORT`."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "kind": "documented",
+      "text": "Compare retrieval strategies on NFCorpus with the evaluation harness; the hybrid pipeline combines BM25, vector search, fusion and reranking.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 70,
+          "end": 87,
+          "quote": "├── main.py                 # Core RAG-Fusion pipeline\n├── evaluate.py             # Evaluation CLI (baseline + fusion variants, optional --rerank)\n├── test_main.py            # Unit tests\n├── eval/\n│   ├── dataset.py          # NFCorpus download & loading\n│   ├── metrics.py          # IR metrics (Precision, Recall, NDCG, MRR)\n│   ├── retrieval.py        # Retrieval methods (BM25, vector, hybrid, RAG-Fusion variants)\n│   ├── rerank.py           # Reranking stage: cross-encoders, FlashRank, or Jev\n│   ├── query_cache.py      # Disk-persisted cache for LLM query rewrites\n│   ├── sweep.py            # Pool-size and N-rewrites sweep driver\n│   ├── steelman.py         # Pipeline-ordering / truncation / difficulty tests\n│   ├── qualitative.py      # End-to-end answer-quality verbose log driver\n│   ├── answer_eval.py      # LLM-judge end-to-end answer eval driver\n│   ├── bootstrap_ci.py     # Paired-bootstrap CIs for steelman per-query metrics\n│   ├── saved_queries.py    # \"Saved queries\" metric (kohlrabi-class binary recovery)\n│   ├── eval_with_ci.py     # Retrieval-only headline table with paired-bootstrap CIs\n│   ├── jev.py              # Jev client: relevance, intent and query-type calls, cached per run\n│   ├── jev_arms.py         # Jev inside fusion: intent-weighted RRF, query-type router, evidence gate"
+        },
+        {
+          "source": "source-1",
+          "start": 123,
+          "end": 123,
+          "quote": "To move beyond toy examples, the repo includes a quantitative evaluation harness that compares multiple retrieval strategies on a real dataset. It uses [NFCorpus](https://www.cl.uni-heidelberg.de/statnlpgroup/nfcorpus/) (3,633 medical/nutrition documents, 323 test queries with graded relevance judgments) from the [BEIR benchmark](https://github.com/beir-cellar/beir)."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "kind": "documented",
+      "text": "Query rewrites add latency. The README flags precision-sensitive workloads as poor fits and warns that an older results table predates a parser fix.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 56,
+          "end": 65,
+          "quote": "Poor-fit examples:\n- FAQ chatbots and curated customer-support knowledge bases\n- Latency-critical retrieval (voice, autocomplete, sub-second-p95 chat)\n- High-volume / margin-thin consumer search\n- Code or identifier search (precision-dominated)\n- Structured data, knowledge graphs, SQL-backed retrieval\n\nWhat fusion costs is mostly latency, not money. With a small rewrite model the rewrite call is about $0.06 per 1,000 queries but adds about 1.5 seconds before the extra searches can run. Adding BM25 to vector search (hybrid, no rewrites) is close to free and worth doing everywhere. Measurements per configuration are in [`experiments/jev-in-the-pipeline/`](./experiments/jev-in-the-pipeline/README.md#6-what-each-option-costs).\n\nFor mixed workloads, routing is the obvious idea: run hybrid+rerank on every query and fire the rewrites only where they're likely to pay. It's still unproven here. The one router tested so far (Jev classifying each query's type) fused 78% of queries, saved about a fifth of the rewrite calls at no measurable cost, and didn't target the queries where fusion helps. A router keyed on a retrieval-weakness signal, such as a low top reranker score, is the next thing to test."
+        },
+        {
+          "source": "source-1",
+          "start": 127,
+          "end": 129,
+          "quote": "> **Note (September 2026):** this table predates the fix for a rewrite-parser bug that, for about half the queries, fused a preamble line and an empty string as if they were rewrites. It can't be regenerated exactly, because the model that produced its rewrites has since been retired. The post-rerank numbers in both write-ups have been re-run with the fix; there, the bug turned out to have cost fusion slightly rather than flattered it.\n\nThe table below is **retrieval-only** — no cross-encoder reranking, no end-to-end answer-quality eval. It's intended as a quick visual of how the fusion variants stack up in their pure retrieval form. For the production-relevant comparison (with cross-encoder rerank, hybrid variants, LLM-judge answer quality, and operational analysis by cost / latency / corpus / data type), see [`experiments/arxiv-2603-02153-replication/`](./experiments/arxiv-2603-02153-replication/README.md). Lifts in the rightmost column are bolded when the 95% CI excludes zero."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "RAG-Fusion: hybrid retrieval with optional Jev reranking",
+      "h1": "RAG-Fusion: hybrid retrieval with optional Jev reranking",
+      "description": "RAG-Fusion combines query rewrites, hybrid retrieval and rank fusion. Jev is an optional reranker in its NFCorpus evaluation pipeline.",
+      "summary": "RAG-Fusion generates query variants and merges retrieval rankings with Reciprocal Rank Fusion to find material a single query may miss. Jev is an optional reranker in the evaluation pipeline; its experiments require JEV_API_KEY. The original demo remains vector-only. Compare retrieval strategies on NFCorpus with the evaluation harness; the hybrid pipeline combines BM25, vector search, fusion and reranking.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose",
+          "text": "RAG-Fusion generates query variants and merges retrieval rankings with Reciprocal Rank Fusion to find material a single query may miss.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’s role",
+          "text": "Jev is an optional reranker in the evaluation pipeline; its experiments require JEV_API_KEY. The original demo remains vector-only.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "How to use it",
+          "text": "Compare retrieval strategies on NFCorpus with the evaluation harness; the hybrid pipeline combines BM25, vector search, fusion and reranking.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limits to consider",
+          "text": "Query rewrites add latency. The README flags precision-sensitive workloads as poor fits and warns that an older results table predates a parser fix.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "RAG-Fusion：混合检索与可选 Jev 重排",
+      "h1": "RAG-Fusion：混合检索与可选 Jev 重排",
+      "description": "RAG-Fusion 结合查询改写、BM25 与向量检索及排名融合；Jev 是 NFCorpus 评估流程中的可选重排器，原始演示仍只使用向量检索。",
+      "summary": "RAG-Fusion 生成多个查询变体，再用倒数排名融合合并结果，寻找单一查询可能遗漏的资料。 Jev 是评估流程中的可选重排器，相关实验需要 JEV_API_KEY；原始演示仍只使用向量检索。 可用评估工具在 NFCorpus 上比较检索策略；混合流程结合 BM25、向量检索、结果融合和重排。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "RAG-Fusion 生成多个查询变体，再用倒数排名融合合并结果，寻找单一查询可能遗漏的资料。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "Jev 是评估流程中的可选重排器，相关实验需要 JEV_API_KEY；原始演示仍只使用向量检索。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "可用评估工具在 NFCorpus 上比较检索策略；混合流程结合 BM25、向量检索、结果融合和重排。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用边界",
+          "text": "查询改写会增加延迟。README 指出重视精确率的场景并不适合，并提醒旧结果表早于解析器修复。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "RAG-Fusion：混合檢索與選用 Jev 重排",
+      "h1": "RAG-Fusion：混合檢索與選用 Jev 重排",
+      "description": "RAG-Fusion 結合查詢改寫、BM25 與向量檢索及排名融合；Jev 是 NFCorpus 評估流程中的選用重排器，原始示範仍只使用向量檢索。",
+      "summary": "RAG-Fusion 產生多個查詢變體，再以倒數排名融合合併結果，尋找單一查詢可能遺漏的資料。 Jev 是評估流程中可選用的重排器，相關實驗需要 JEV_API_KEY；原始示範仍僅使用向量檢索。 可用評估工具在 NFCorpus 上比較檢索策略；混合流程結合 BM25、向量檢索、結果融合與重排。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "RAG-Fusion 產生多個查詢變體，再以倒數排名融合合併結果，尋找單一查詢可能遺漏的資料。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "Jev 是評估流程中可選用的重排器，相關實驗需要 JEV_API_KEY；原始示範仍僅使用向量檢索。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "可用評估工具在 NFCorpus 上比較檢索策略；混合流程結合 BM25、向量檢索、結果融合與重排。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用限制",
+          "text": "查詢改寫會增加延遲。README 指出重視精確率的情境並不適合，也提醒舊結果表早於解析器修正。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "RAG-Fusion：ハイブリッド検索と任意の Jev 再ランキング",
+      "h1": "RAG-Fusion：ハイブリッド検索と任意の Jev 再ランキング",
+      "description": "RAG-Fusion はクエリの言い換え、ハイブリッド検索、順位統合を組み合わせます。Jev は NFCorpus 評価で選べる再ランキング手段です。",
+      "summary": "RAG-Fusion はクエリの言い換えを生成し、Reciprocal Rank Fusion で順位を統合して単一クエリの取りこぼしを補います。 Jev は評価処理で選べる再ランキング手段です。関連実験には JEV_API_KEY が必要で、元のデモはベクトル検索のみです。 評価ツールで NFCorpus 上の検索方式を比較できます。ハイブリッド構成は BM25、ベクトル検索、順位統合、再ランキングを組み合わせます。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "何ができるか",
+          "text": "RAG-Fusion はクエリの言い換えを生成し、Reciprocal Rank Fusion で順位を統合して単一クエリの取りこぼしを補います。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "Jev は評価処理で選べる再ランキング手段です。関連実験には JEV_API_KEY が必要で、元のデモはベクトル検索のみです。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "評価ツールで NFCorpus 上の検索方式を比較できます。ハイブリッド構成は BM25、ベクトル検索、順位統合、再ランキングを組み合わせます。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "制約と注意点",
+          "text": "言い換え生成は遅延を増やします。README は検索結果の適合率を重視する用途には不向きとし、古い結果表はパーサー修正前のものと明記しています。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "RAG-Fusion: 하이브리드 검색과 선택적 Jev 재순위화",
+      "h1": "RAG-Fusion: 하이브리드 검색과 선택적 Jev 재순위화",
+      "description": "RAG-Fusion은 질의 재작성, 하이브리드 검색, 순위 융합을 결합합니다. Jev는 NFCorpus 평가에서 선택 가능한 재순위화 모델입니다.",
+      "summary": "RAG-Fusion은 질의 변형을 생성하고 Reciprocal Rank Fusion으로 검색 순위를 합쳐 단일 질의가 놓친 자료를 찾습니다. Jev는 평가 파이프라인에서 선택할 수 있는 재순위화 모델입니다. 해당 실험에는 JEV_API_KEY가 필요하며 원래 데모는 벡터 검색만 사용합니다. 평가 도구로 NFCorpus에서 검색 전략을 비교할 수 있습니다. 하이브리드 구성은 BM25, 벡터 검색, 순위 융합, 재순위화를 결합합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "RAG-Fusion은 질의 변형을 생성하고 Reciprocal Rank Fusion으로 검색 순위를 합쳐 단일 질의가 놓친 자료를 찾습니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Jev는 평가 파이프라인에서 선택할 수 있는 재순위화 모델입니다. 해당 실험에는 JEV_API_KEY가 필요하며 원래 데모는 벡터 검색만 사용합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "평가 도구로 NFCorpus에서 검색 전략을 비교할 수 있습니다. 하이브리드 구성은 BM25, 벡터 검색, 순위 융합, 재순위화를 결합합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "제약 사항",
+          "text": "질의 재작성은 지연을 늘립니다. README는 정밀도가 중요한 작업에 부적합하다고 설명하며 이전 결과표가 파서 수정 전 자료임을 밝힙니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "RAG-Fusion: búsqueda híbrida con reordenación opcional de Jev",
+      "h1": "RAG-Fusion: búsqueda híbrida con reordenación opcional de Jev",
+      "description": "RAG-Fusion combina reformulación, búsqueda híbrida y fusión de rangos. Jev es un reordenador opcional en su evaluación NFCorpus.",
+      "summary": "RAG-Fusion genera variantes de consulta y combina sus clasificaciones mediante Reciprocal Rank Fusion para encontrar documentos que una sola consulta omite. Jev es un reordenador opcional de la evaluación; sus experimentos requieren JEV_API_KEY. La demostración original sigue usando solo búsqueda vectorial. El banco de evaluación compara estrategias en NFCorpus; la variante híbrida combina BM25, búsqueda vectorial, fusión y reordenación.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "RAG-Fusion genera variantes de consulta y combina sus clasificaciones mediante Reciprocal Rank Fusion para encontrar documentos que una sola consulta omite.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "El papel de Jev",
+          "text": "Jev es un reordenador opcional de la evaluación; sus experimentos requieren JEV_API_KEY. La demostración original sigue usando solo búsqueda vectorial.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo usarlo",
+          "text": "El banco de evaluación compara estrategias en NFCorpus; la variante híbrida combina BM25, búsqueda vectorial, fusión y reordenación.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Límites a considerar",
+          "text": "Las reformulaciones añaden latencia. El README desaconseja usos que priorizan precisión y advierte que una tabla antigua precede a una corrección del analizador.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "RAG-Fusion : recherche hybride avec reclassement Jev facultatif",
+      "h1": "RAG-Fusion : recherche hybride avec reclassement Jev facultatif",
+      "description": "RAG-Fusion associe reformulation, recherche hybride et fusion des classements. Jev est un reclasseur facultatif dans l’évaluation NFCorpus.",
+      "summary": "RAG-Fusion génère plusieurs formulations d’une requête et fusionne leurs classements avec Reciprocal Rank Fusion pour retrouver des documents autrement manqués. Jev est un outil de reclassement facultatif dans l’évaluation ; ses expériences nécessitent JEV_API_KEY. La démonstration originale reste purement vectorielle. Le banc d’évaluation compare les stratégies sur NFCorpus ; le parcours hybride associe BM25, recherche vectorielle, fusion et reclassement.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "RAG-Fusion génère plusieurs formulations d’une requête et fusionne leurs classements avec Reciprocal Rank Fusion pour retrouver des documents autrement manqués.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Le rôle de Jev",
+          "text": "Jev est un outil de reclassement facultatif dans l’évaluation ; ses expériences nécessitent JEV_API_KEY. La démonstration originale reste purement vectorielle.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Utilisation",
+          "text": "Le banc d’évaluation compare les stratégies sur NFCorpus ; le parcours hybride associe BM25, recherche vectorielle, fusion et reclassement.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limites à connaître",
+          "text": "Les reformulations ajoutent de la latence. Le README déconseille les usages privilégiant la précision et signale qu’un ancien tableau précède une correction du parseur.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "RAG-Fusion: hybride Suche mit optionalem Jev-Reranking",
+      "h1": "RAG-Fusion: hybride Suche mit optionalem Jev-Reranking",
+      "description": "RAG-Fusion kombiniert Suchumformulierungen, hybride Suche und Rangfusion. Jev ist ein optionaler Reranker in der NFCorpus-Evaluation.",
+      "summary": "RAG-Fusion erzeugt Suchvarianten und vereint ihre Ranglisten mit Reciprocal Rank Fusion, um bei einer einzelnen Anfrage übersehene Dokumente zu finden. Jev ist ein optionaler Reranker der Evaluationspipeline; seine Experimente benötigen JEV_API_KEY. Die ursprüngliche Demo verwendet weiterhin ausschließlich Vektorsuche. Die Evaluationswerkzeuge vergleichen Suchverfahren auf NFCorpus. Die hybride Pipeline kombiniert BM25, Vektorsuche, Fusion und Reranking.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "RAG-Fusion erzeugt Suchvarianten und vereint ihre Ranglisten mit Reciprocal Rank Fusion, um bei einer einzelnen Anfrage übersehene Dokumente zu finden.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Die Rolle von Jev",
+          "text": "Jev ist ein optionaler Reranker der Evaluationspipeline; seine Experimente benötigen JEV_API_KEY. Die ursprüngliche Demo verwendet weiterhin ausschließlich Vektorsuche.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Nutzung",
+          "text": "Die Evaluationswerkzeuge vergleichen Suchverfahren auf NFCorpus. Die hybride Pipeline kombiniert BM25, Vektorsuche, Fusion und Reranking.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Grenzen",
+          "text": "Suchumformulierungen erhöhen die Latenz. Laut README passen präzisionskritische Aufgaben schlecht; eine ältere Ergebnistabelle stammt zudem aus der Zeit vor einer Parserkorrektur.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "RAG-Fusion: busca híbrida com reordenação opcional por Jev",
+      "h1": "RAG-Fusion: busca híbrida com reordenação opcional por Jev",
+      "description": "RAG-Fusion combina reformulação, busca híbrida e fusão de rankings. Jev é um reordenador opcional na avaliação NFCorpus.",
+      "summary": "RAG-Fusion gera variações da consulta e combina classificações com Reciprocal Rank Fusion para encontrar documentos que uma única formulação pode perder. Jev é um reordenador opcional na avaliação; seus experimentos exigem JEV_API_KEY. A demonstração original continua usando apenas busca vetorial. O conjunto de avaliação compara estratégias no NFCorpus; a configuração híbrida combina BM25, busca vetorial, fusão e reordenação.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "RAG-Fusion gera variações da consulta e combina classificações com Reciprocal Rank Fusion para encontrar documentos que uma única formulação pode perder.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "O papel do Jev",
+          "text": "Jev é um reordenador opcional na avaliação; seus experimentos exigem JEV_API_KEY. A demonstração original continua usando apenas busca vetorial.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "O conjunto de avaliação compara estratégias no NFCorpus; a configuração híbrida combina BM25, busca vetorial, fusão e reordenação.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limitações",
+          "text": "As reformulações aumentam a latência. O README desaconselha usos que priorizam precisão e alerta que uma tabela antiga antecede uma correção do analisador.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "RAG-Fusion: гибридный поиск с необязательным Jev",
+      "h1": "RAG-Fusion: гибридный поиск с необязательным Jev",
+      "description": "RAG-Fusion сочетает переформулировки, гибридный поиск и слияние рейтингов. Jev — необязательный переранжировщик в оценке на NFCorpus.",
+      "summary": "RAG-Fusion создаёт варианты запроса и объединяет рейтинги методом Reciprocal Rank Fusion, находя документы, которые может пропустить одна формулировка. Jev служит необязательным переранжировщиком в оценочном конвейере; эксперименты с ним требуют JEV_API_KEY. Исходная демонстрация использует только векторный поиск. Инструменты оценки сравнивают стратегии на NFCorpus; гибридный конвейер сочетает BM25, векторный поиск, слияние и переранжирование.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "RAG-Fusion создаёт варианты запроса и объединяет рейтинги методом Reciprocal Rank Fusion, находя документы, которые может пропустить одна формулировка.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Jev служит необязательным переранжировщиком в оценочном конвейере; эксперименты с ним требуют JEV_API_KEY. Исходная демонстрация использует только векторный поиск.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Инструменты оценки сравнивают стратегии на NFCorpus; гибридный конвейер сочетает BM25, векторный поиск, слияние и переранжирование.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ограничения",
+          "text": "Переформулировки увеличивают задержку. README считает задачи с приоритетом точности неподходящими и предупреждает, что старая таблица результатов предшествует исправлению парсера.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "RAG-Fusion: हाइब्रिड खोज और वैकल्पिक Jev पुनःक्रमण",
+      "h1": "RAG-Fusion: हाइब्रिड खोज और वैकल्पिक Jev पुनःक्रमण",
+      "description": "RAG-Fusion प्रश्न के नए रूप, हाइब्रिड खोज और रैंक फ्यूज़न जोड़ता है। NFCorpus मूल्यांकन में Jev वैकल्पिक पुनःक्रमण करता है।",
+      "summary": "RAG-Fusion प्रश्न के कई रूप बनाकर Reciprocal Rank Fusion से खोज क्रम जोड़ता है, ताकि एक प्रश्न से छूटने वाले दस्तावेज़ मिल सकें। Jev मूल्यांकन प्रक्रिया में वैकल्पिक पुनःक्रमण मॉडल है; उसके प्रयोगों के लिए JEV_API_KEY चाहिए। मूल डेमो केवल वेक्टर खोज करता है। मूल्यांकन उपकरण NFCorpus पर रणनीतियाँ तुलना करता है; हाइब्रिड प्रक्रिया BM25, वेक्टर खोज, फ्यूज़न और पुनःक्रमण जोड़ती है।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "किस काम आता है",
+          "text": "RAG-Fusion प्रश्न के कई रूप बनाकर Reciprocal Rank Fusion से खोज क्रम जोड़ता है, ताकि एक प्रश्न से छूटने वाले दस्तावेज़ मिल सकें।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "Jev मूल्यांकन प्रक्रिया में वैकल्पिक पुनःक्रमण मॉडल है; उसके प्रयोगों के लिए JEV_API_KEY चाहिए। मूल डेमो केवल वेक्टर खोज करता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल कैसे करें",
+          "text": "मूल्यांकन उपकरण NFCorpus पर रणनीतियाँ तुलना करता है; हाइब्रिड प्रक्रिया BM25, वेक्टर खोज, फ्यूज़न और पुनःक्रमण जोड़ती है।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "सीमाएँ",
+          "text": "प्रश्न दोबारा लिखने से विलंब बढ़ता है। README सटीकता-प्रधान कामों को अनुपयुक्त बताता है और पुरानी तालिका को पार्सर सुधार से पहले का बताता है।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "RAG-Fusion: pencarian hibrida dengan pemeringkatan Jev opsional",
+      "h1": "RAG-Fusion: pencarian hibrida dengan pemeringkatan Jev opsional",
+      "description": "RAG-Fusion menggabungkan variasi kueri, pencarian hibrida, dan fusi peringkat. Jev menjadi pemeringkat ulang opsional dalam evaluasi NFCorpus.",
+      "summary": "RAG-Fusion membuat variasi kueri dan menggabungkan peringkat dengan Reciprocal Rank Fusion untuk menemukan dokumen yang mungkin terlewat oleh satu kueri. Jev merupakan pemeringkat ulang opsional dalam evaluasi; eksperimennya memerlukan JEV_API_KEY. Demo awal tetap hanya memakai pencarian vektor. Perangkat evaluasi membandingkan strategi di NFCorpus; alur hibrida menggabungkan BM25, pencarian vektor, fusi, dan pemeringkatan ulang.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "RAG-Fusion membuat variasi kueri dan menggabungkan peringkat dengan Reciprocal Rank Fusion untuk menemukan dokumen yang mungkin terlewat oleh satu kueri.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Jev merupakan pemeringkat ulang opsional dalam evaluasi; eksperimennya memerlukan JEV_API_KEY. Demo awal tetap hanya memakai pencarian vektor.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Perangkat evaluasi membandingkan strategi di NFCorpus; alur hibrida menggabungkan BM25, pencarian vektor, fusi, dan pemeringkatan ulang.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Batasan",
+          "text": "Penulisan ulang kueri menambah latensi. README menyebut tugas yang mengutamakan presisi kurang sesuai dan mengingatkan bahwa tabel lama mendahului perbaikan parser.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "RAG-Fusion: tìm kiếm kết hợp với Jev xếp hạng lại tùy chọn",
+      "h1": "RAG-Fusion: tìm kiếm kết hợp với Jev xếp hạng lại tùy chọn",
+      "description": "RAG-Fusion kết hợp viết lại truy vấn, tìm kiếm kết hợp và hợp nhất thứ hạng. Jev là lựa chọn xếp hạng lại trong đánh giá NFCorpus.",
+      "summary": "RAG-Fusion tạo các biến thể truy vấn rồi hợp nhất thứ hạng bằng Reciprocal Rank Fusion để tìm tài liệu mà một truy vấn có thể bỏ sót. Jev là lựa chọn xếp hạng lại trong quy trình đánh giá; thí nghiệm này cần JEV_API_KEY. Bản demo gốc vẫn chỉ tìm kiếm vectơ. Bộ đánh giá so sánh chiến lược trên NFCorpus; quy trình kết hợp gồm BM25, tìm kiếm vectơ, hợp nhất và xếp hạng lại.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích",
+          "text": "RAG-Fusion tạo các biến thể truy vấn rồi hợp nhất thứ hạng bằng Reciprocal Rank Fusion để tìm tài liệu mà một truy vấn có thể bỏ sót.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Jev là lựa chọn xếp hạng lại trong quy trình đánh giá; thí nghiệm này cần JEV_API_KEY. Bản demo gốc vẫn chỉ tìm kiếm vectơ.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Bộ đánh giá so sánh chiến lược trên NFCorpus; quy trình kết hợp gồm BM25, tìm kiếm vectơ, hợp nhất và xếp hạng lại.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Giới hạn",
+          "text": "Viết lại truy vấn làm tăng độ trễ. README cho biết tác vụ ưu tiên độ chính xác ít phù hợp và bảng kết quả cũ có trước bản sửa trình phân tích.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "RAG-Fusion: isteğe bağlı Jev sıralamasıyla hibrit arama",
+      "h1": "RAG-Fusion: isteğe bağlı Jev sıralamasıyla hibrit arama",
+      "description": "RAG-Fusion sorgu yazımı, hibrit arama ve sıralama birleştirmeyi kullanır. Jev, NFCorpus değerlendirmesinde isteğe bağlı yeniden sıralayıcıdır.",
+      "summary": "RAG-Fusion sorgu varyasyonları üretir ve tek sorgunun kaçırabileceği belgeleri bulmak için sıralamaları Reciprocal Rank Fusion ile birleştirir. Jev değerlendirme hattında isteğe bağlı bir yeniden sıralayıcıdır; deneyleri JEV_API_KEY gerektirir. İlk demo yalnızca vektör araması kullanır. Değerlendirme araçları NFCorpus üzerinde stratejileri karşılaştırır; hibrit hat BM25, vektör araması, birleştirme ve yeniden sıralamayı bir araya getirir.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "RAG-Fusion sorgu varyasyonları üretir ve tek sorgunun kaçırabileceği belgeleri bulmak için sıralamaları Reciprocal Rank Fusion ile birleştirir.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Jev değerlendirme hattında isteğe bağlı bir yeniden sıralayıcıdır; deneyleri JEV_API_KEY gerektirir. İlk demo yalnızca vektör araması kullanır.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Değerlendirme araçları NFCorpus üzerinde stratejileri karşılaştırır; hibrit hat BM25, vektör araması, birleştirme ve yeniden sıralamayı bir araya getirir.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Sınırlamalar",
+          "text": "Sorguyu yeniden yazmak gecikmeyi artırır. README, kesinlik öncelikli işleri uygunsuz bulur ve eski bir sonuç tablosunun ayrıştırıcı düzeltmesinden önce hazırlandığını belirtir.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "RAG-Fusion: ricerca ibrida con riordino Jev facoltativo",
+      "h1": "RAG-Fusion: ricerca ibrida con riordino Jev facoltativo",
+      "description": "RAG-Fusion combina riscrittura, ricerca ibrida e fusione dei ranking. Jev è un riordinatore facoltativo nella valutazione NFCorpus.",
+      "summary": "RAG-Fusion genera varianti della query e unisce le classifiche con Reciprocal Rank Fusion per trovare documenti che una sola formulazione può perdere. Jev è un riordinatore facoltativo nella valutazione; i suoi esperimenti richiedono JEV_API_KEY. La demo originale usa ancora solo la ricerca vettoriale. Il banco di valutazione confronta strategie su NFCorpus; la configurazione ibrida combina BM25, ricerca vettoriale, fusione e riordino.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "RAG-Fusion genera varianti della query e unisce le classifiche con Reciprocal Rank Fusion per trovare documenti che una sola formulazione può perdere.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Il ruolo di Jev",
+          "text": "Jev è un riordinatore facoltativo nella valutazione; i suoi esperimenti richiedono JEV_API_KEY. La demo originale usa ancora solo la ricerca vettoriale.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come usarlo",
+          "text": "Il banco di valutazione confronta strategie su NFCorpus; la configurazione ibrida combina BM25, ricerca vettoriale, fusione e riordino.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limiti",
+          "text": "Riscrivere le query aggiunge latenza. Il README sconsiglia gli usi che privilegiano la precisione e segnala che una vecchia tabella precede una correzione del parser.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

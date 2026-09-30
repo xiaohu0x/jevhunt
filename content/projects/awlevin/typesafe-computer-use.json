@@ -1,0 +1,768 @@
+{
+  "version": "source-content-v1",
+  "repo": "awlevin/typesafe-computer-use",
+  "repositoryId": 1373440611,
+  "relationship": "jev-app",
+  "category": "browser",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "d2df97dbc243b951023e94c574d41f1feab8ee33",
+      "url": "https://github.com/awlevin/typesafe-computer-use/blob/d2df97dbc243b951023e94c574d41f1feab8ee33/README.md",
+      "sha256": "f4944e284c939e52d336d4299ed8c6bf19dac7757f632c27d01279eeee21d718",
+      "accessedAt": "2026-09-30T07:33:48.187Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "kind": "documented",
+      "text": "typesafe-computer-use turns a written goal into desktop actions using OCR and accessibility controls on a Mac.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 14,
+          "end": 22,
+          "quote": "**typesafe-computer-use** (jev for short) drives a Mac toward a goal you type in plain English,\nfor about a fiftieth of a cent per step. It reads the screen deterministically, asks a small\nclassifier which action comes next, and only calls a writing model when a text field genuinely\nneeds free text or the classifier has stopped and the screen needs reading.\n\nOne idea runs through it: the classifier picks, code decides facts, and the writer only writes\nfree text. Anything a model would have to work out (a date, whether a field is focused, whether\na URL is clean) is computed in code and handed over as state. [VISION.md](VISION.md) says what\nit is for in a dozen lines."
+        },
+        {
+          "source": "source-1",
+          "start": 103,
+          "end": 112,
+          "quote": "## How a step works\n\n1. The screen is read deterministically: Vision OCR on a crop of the frontmost window, plus the\n   labelled controls from the accessibility tree, which sees the icons OCR cannot.\n2. Code adds the facts: the date on any block and how far off it is, the row of a repeated\n   label, the focused field, the app and URL, and the actions already tried on this screen.\n3. One TypeSafe request answers three `Choice`s: which kind of action, which item, which site.\n4. The action runs deterministically, the loop waits, and the next capture is the only witness\n   of what it did.\n5. When the classifier stops, the writer reads the screen and answers, or hands the run back"
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "kind": "documented",
+      "text": "TypeSafe Jev chooses the action, target and site; code supplies facts, while a separate writer handles free text.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 103,
+          "end": 112,
+          "quote": "## How a step works\n\n1. The screen is read deterministically: Vision OCR on a crop of the frontmost window, plus the\n   labelled controls from the accessibility tree, which sees the icons OCR cannot.\n2. Code adds the facts: the date on any block and how far off it is, the row of a repeated\n   label, the focused field, the app and URL, and the actions already tried on this screen.\n3. One TypeSafe request answers three `Choice`s: which kind of action, which item, which site.\n4. The action runs deterministically, the loop waits, and the next capture is the only witness\n   of what it did.\n5. When the classifier stops, the writer reads the screen and answers, or hands the run back"
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "kind": "documented",
+      "text": "Provide a TypeSafe key and screen-recording and accessibility permissions. The CLI offers a dry run before real mouse and keyboard control.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 60,
+          "end": 83,
+          "quote": "\nmacOS 14 or newer, Python 3.12 or newer, [uv](https://docs.astral.sh/uv/). Windows 10 and 11\nare experimental; see [Windows](docs/windows.md).\n\n```\ngit clone https://github.com/awlevin/typesafe-computer-use\ncd typesafe-computer-use\nuv sync\ncp .env.example .env     # fill in the keys\n```\n\n| variable | required | purpose |\n|---|---|---|\n| `TYPESAFE_API_KEY` | yes | every decision |\n| `ANTHROPIC_API_KEY` | no | `type_text`, writer-proposed URLs, and the final answer |\n| `CLICKER_EMAIL` | no | enables the `type_email` action |\n| `CLICKER_BROWSER` | no | defaults to `Google Chrome` |\n\n`.env` lives at the repo root and is read by every entry point (`clicker`, `clicker-inspect`).\nTo run the writer on another model or endpoint (LM Studio, Ollama, any OpenAI-compatible\nserver), see [writer endpoints](docs/writer-endpoints.md).\n\nGrant your terminal **Screen Recording** and **Accessibility** in System Settings >\nPrivacy & Security. Without the first, captures are wallpaper. Without the second,"
+        },
+        {
+          "source": "source-1",
+          "start": 85,
+          "end": 100,
+          "quote": "\n## First run\n\n```\nuv run clicker \"open the Playground\"                 # dry run: one step, prints what it would do\nuv run clicker \"open the Playground\" --act           # drives the machine, up to 100 steps\nuv run clicker \"log in\" --act --steps 20 --delay 3   # longer and slower\nuv run clicker \"log in\" --act --handoffs 0           # the classifier alone: its first stop ends the run\nuv run clicker-inspect \"any goal\"                    # 3-2-1, capture, open the annotated screen + payload\n```\n\nClear the terminal first. It is on screen, so its text is OCR input.\n\nTo stop a live run, press Ctrl-C in the terminal or slam the mouse into the top-left corner of\nthe screen. The loop also stops itself on `done`, low confidence, a stall, or the step limit,\nand the writer then reads the screen and prints the answer. Every run writes"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "kind": "documented",
+      "text": "The project is beta, requires macOS 14 and Python 3.12 or newer, and describes Windows support as experimental.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 28,
+          "end": 30,
+          "quote": "> **Beta.** This is under heavy development. Expect rough edges, and expect settings and\n> behavior to change between 0.x [releases](https://github.com/awlevin/typesafe-computer-use/releases).\n> It drives your real mouse and keyboard, so start with a dry run."
+        },
+        {
+          "source": "source-1",
+          "start": 60,
+          "end": 62,
+          "quote": "\nmacOS 14 or newer, Python 3.12 or newer, [uv](https://docs.astral.sh/uv/). Windows 10 and 11\nare experimental; see [Windows](docs/windows.md)."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "typesafe-computer-use: Mac automation with Jev",
+      "h1": "typesafe-computer-use: Mac automation with Jev",
+      "description": "typesafe-computer-use reads Mac controls through OCR and accessibility; Jev chooses actions while code computes facts and a separate model writes text.",
+      "summary": "typesafe-computer-use turns a written goal into desktop actions using OCR and accessibility controls on a Mac. TypeSafe Jev chooses the action, target and site; code supplies facts, while a separate writer handles free text. Provide a TypeSafe key and screen-recording and accessibility permissions. The CLI offers a dry run before real mouse and keyboard control.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose",
+          "text": "typesafe-computer-use turns a written goal into desktop actions using OCR and accessibility controls on a Mac.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’s role",
+          "text": "TypeSafe Jev chooses the action, target and site; code supplies facts, while a separate writer handles free text.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "How to use it",
+          "text": "Provide a TypeSafe key and screen-recording and accessibility permissions. The CLI offers a dry run before real mouse and keyboard control.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limits to consider",
+          "text": "The project is beta, requires macOS 14 and Python 3.12 or newer, and describes Windows support as experimental.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "typesafe-computer-use：用 Jev 自动操作 Mac",
+      "h1": "typesafe-computer-use：用 Jev 自动操作 Mac",
+      "description": "typesafe-computer-use 用 OCR 和辅助功能读取 Mac 控件，让 Jev 选择动作、代码计算事实、独立模型生成文字；可先预演，测试版支持以 macOS 为主。",
+      "summary": "typesafe-computer-use 根据文字目标操作 Mac，通过 OCR 和辅助功能控件读取桌面。 TypeSafe Jev 选择动作、目标和网站；代码提供事实，独立的写作模型负责自由文本。 需要 TypeSafe 密钥、屏幕录制和辅助功能权限。命令行支持先预演，再实际控制鼠标和键盘。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "typesafe-computer-use 根据文字目标操作 Mac，通过 OCR 和辅助功能控件读取桌面。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "TypeSafe Jev 选择动作、目标和网站；代码提供事实，独立的写作模型负责自由文本。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "需要 TypeSafe 密钥、屏幕录制和辅助功能权限。命令行支持先预演，再实际控制鼠标和键盘。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用边界",
+          "text": "项目处于测试阶段，要求 macOS 14、Python 3.12 或更高版本；Windows 支持仍属实验性质。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "typesafe-computer-use：以 Jev 自動操作 Mac",
+      "h1": "typesafe-computer-use：以 Jev 自動操作 Mac",
+      "description": "typesafe-computer-use 以 OCR 與輔助使用資訊讀取 Mac 控制項，由 Jev 選動作、程式計算事實、獨立模型產生文字；可先預演，目前以 macOS 為主。",
+      "summary": "typesafe-computer-use 根據文字目標操作 Mac，透過 OCR 與輔助使用控制項讀取桌面。 TypeSafe Jev 選擇動作、目標與網站；程式碼提供事實，獨立的寫作模型負責自由文字。 需要 TypeSafe 金鑰、螢幕錄製及輔助使用權限。命令列支援先預演，再實際控制滑鼠與鍵盤。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "typesafe-computer-use 根據文字目標操作 Mac，透過 OCR 與輔助使用控制項讀取桌面。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "TypeSafe Jev 選擇動作、目標與網站；程式碼提供事實，獨立的寫作模型負責自由文字。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "需要 TypeSafe 金鑰、螢幕錄製及輔助使用權限。命令列支援先預演，再實際控制滑鼠與鍵盤。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用限制",
+          "text": "專案仍在測試階段，要求 macOS 14、Python 3.12 或更新版本；Windows 支援屬於實驗性質。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "typesafe-computer-use：Jev で Mac を操作",
+      "h1": "typesafe-computer-use：Jev で Mac を操作",
+      "description": "typesafe-computer-use は OCR とアクセシビリティで Mac を読み取り、Jev が操作を選びます。計算はコード、文章作成は別モデルが担当します。",
+      "summary": "typesafe-computer-use は文章で指定した目標を Mac の操作に変え、OCR とアクセシビリティ情報で画面を読み取ります。 TypeSafe Jev が動作、対象、サイトを選びます。事実はコードで計算し、自由な文章は別のモデルが生成します。 TypeSafe キーと画面収録・アクセシビリティ権限が必要です。CLI でドライランしてからマウスやキーボードを実際に操作できます。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "何ができるか",
+          "text": "typesafe-computer-use は文章で指定した目標を Mac の操作に変え、OCR とアクセシビリティ情報で画面を読み取ります。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "TypeSafe Jev が動作、対象、サイトを選びます。事実はコードで計算し、自由な文章は別のモデルが生成します。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "TypeSafe キーと画面収録・アクセシビリティ権限が必要です。CLI でドライランしてからマウスやキーボードを実際に操作できます。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "制約と注意点",
+          "text": "ベータ版で、macOS 14 以降と Python 3.12 以降が必要です。Windows 対応は実験段階です。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "typesafe-computer-use: Jev로 Mac 자동화",
+      "h1": "typesafe-computer-use: Jev로 Mac 자동화",
+      "description": "typesafe-computer-use는 OCR과 접근성 정보로 Mac 화면을 읽고 Jev가 동작을 선택합니다. 사실 계산은 코드, 문장 작성은 별도 모델이 담당합니다.",
+      "summary": "typesafe-computer-use는 글로 지정한 목표에 따라 Mac을 조작하며 OCR과 손쉬운 사용 컨트롤로 화면을 읽습니다. TypeSafe Jev가 동작, 대상, 사이트를 고릅니다. 사실은 코드가 계산하고 자유 형식 문장은 별도 작성 모델이 처리합니다. TypeSafe 키와 화면 기록 및 손쉬운 사용 권한이 필요합니다. CLI에서 미리 실행해 본 뒤 실제 마우스와 키보드를 제어할 수 있습니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "typesafe-computer-use는 글로 지정한 목표에 따라 Mac을 조작하며 OCR과 손쉬운 사용 컨트롤로 화면을 읽습니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "TypeSafe Jev가 동작, 대상, 사이트를 고릅니다. 사실은 코드가 계산하고 자유 형식 문장은 별도 작성 모델이 처리합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "TypeSafe 키와 화면 기록 및 손쉬운 사용 권한이 필요합니다. CLI에서 미리 실행해 본 뒤 실제 마우스와 키보드를 제어할 수 있습니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "제약 사항",
+          "text": "베타 프로젝트이며 macOS 14와 Python 3.12 이상이 필요합니다. Windows 지원은 실험 단계입니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "typesafe-computer-use: automatizar un Mac con Jev",
+      "h1": "typesafe-computer-use: automatizar un Mac con Jev",
+      "description": "typesafe-computer-use lee el Mac con OCR y accesibilidad; Jev elige acciones, el código calcula hechos y otro modelo escribe texto.",
+      "summary": "typesafe-computer-use convierte un objetivo escrito en acciones de escritorio y lee el Mac mediante OCR y controles de accesibilidad. TypeSafe Jev elige la acción, el destino y el sitio; el código aporta los hechos y otro modelo redacta el texto libre. Requiere una clave de TypeSafe y permisos de grabación de pantalla y accesibilidad. La CLI permite simular antes de controlar ratón y teclado.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "typesafe-computer-use convierte un objetivo escrito en acciones de escritorio y lee el Mac mediante OCR y controles de accesibilidad.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "El papel de Jev",
+          "text": "TypeSafe Jev elige la acción, el destino y el sitio; el código aporta los hechos y otro modelo redacta el texto libre.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo usarlo",
+          "text": "Requiere una clave de TypeSafe y permisos de grabación de pantalla y accesibilidad. La CLI permite simular antes de controlar ratón y teclado.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Límites a considerar",
+          "text": "Está en beta, exige macOS 14 y Python 3.12 o posteriores y considera experimental la compatibilidad con Windows.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "typesafe-computer-use : automatiser un Mac avec Jev",
+      "h1": "typesafe-computer-use : automatiser un Mac avec Jev",
+      "description": "typesafe-computer-use lit le Mac par OCR et accessibilité ; Jev choisit les actions, le code calcule les faits et un autre modèle rédige.",
+      "summary": "typesafe-computer-use transforme un objectif écrit en actions sur Mac, en lisant l’écran par OCR et les contrôles d’accessibilité. TypeSafe Jev choisit l’action, la cible et le site ; le code fournit les faits et un autre modèle rédige le texte libre. Une clé TypeSafe et les autorisations d’enregistrement d’écran et d’accessibilité sont nécessaires. La CLI propose une simulation avant toute commande réelle.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "typesafe-computer-use transforme un objectif écrit en actions sur Mac, en lisant l’écran par OCR et les contrôles d’accessibilité.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Le rôle de Jev",
+          "text": "TypeSafe Jev choisit l’action, la cible et le site ; le code fournit les faits et un autre modèle rédige le texte libre.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Utilisation",
+          "text": "Une clé TypeSafe et les autorisations d’enregistrement d’écran et d’accessibilité sont nécessaires. La CLI propose une simulation avant toute commande réelle.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limites à connaître",
+          "text": "Le projet est en bêta, nécessite macOS 14 et Python 3.12 ou ultérieurs ; la prise en charge de Windows est expérimentale.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "typesafe-computer-use: Mac-Automatisierung mit Jev",
+      "h1": "typesafe-computer-use: Mac-Automatisierung mit Jev",
+      "description": "typesafe-computer-use liest den Mac per OCR und Bedienungshilfen; Jev wählt Aktionen, Code berechnet Fakten und ein separates Modell schreibt.",
+      "summary": "typesafe-computer-use setzt schriftliche Ziele in Mac-Aktionen um und liest den Bildschirm über OCR und Bedienungshilfen. TypeSafe Jev wählt Aktion, Ziel und Website. Der Code berechnet Fakten; ein separates Schreibmodell erzeugt freien Text. Erforderlich sind ein TypeSafe-Schlüssel sowie Bildschirmaufnahme- und Bedienungshilfenrechte. Die CLI bietet einen Probelauf vor der tatsächlichen Maus- und Tastatursteuerung.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "typesafe-computer-use setzt schriftliche Ziele in Mac-Aktionen um und liest den Bildschirm über OCR und Bedienungshilfen.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Die Rolle von Jev",
+          "text": "TypeSafe Jev wählt Aktion, Ziel und Website. Der Code berechnet Fakten; ein separates Schreibmodell erzeugt freien Text.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Nutzung",
+          "text": "Erforderlich sind ein TypeSafe-Schlüssel sowie Bildschirmaufnahme- und Bedienungshilfenrechte. Die CLI bietet einen Probelauf vor der tatsächlichen Maus- und Tastatursteuerung.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Grenzen",
+          "text": "Das Projekt ist eine Beta und benötigt mindestens macOS 14 und Python 3.12. Windows wird experimentell unterstützt.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "typesafe-computer-use: automação do Mac com Jev",
+      "h1": "typesafe-computer-use: automação do Mac com Jev",
+      "description": "typesafe-computer-use lê o Mac com OCR e acessibilidade; Jev escolhe ações, o código calcula fatos e outro modelo escreve o texto.",
+      "summary": "typesafe-computer-use transforma um objetivo escrito em ações no Mac, lendo a tela com OCR e controles de acessibilidade. O TypeSafe Jev escolhe ação, alvo e site; o código fornece os fatos e um modelo separado escreve o texto livre. É preciso fornecer uma chave TypeSafe e permissões de gravação de tela e acessibilidade. A CLI permite simular antes de controlar mouse e teclado.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "typesafe-computer-use transforma um objetivo escrito em ações no Mac, lendo a tela com OCR e controles de acessibilidade.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "O papel do Jev",
+          "text": "O TypeSafe Jev escolhe ação, alvo e site; o código fornece os fatos e um modelo separado escreve o texto livre.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "É preciso fornecer uma chave TypeSafe e permissões de gravação de tela e acessibilidade. A CLI permite simular antes de controlar mouse e teclado.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limitações",
+          "text": "O projeto está em beta, exige macOS 14 e Python 3.12 ou superiores e oferece suporte experimental ao Windows.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "typesafe-computer-use: автоматизация Mac с Jev",
+      "h1": "typesafe-computer-use: автоматизация Mac с Jev",
+      "description": "typesafe-computer-use читает Mac через OCR и универсальный доступ; Jev выбирает действия, код вычисляет факты, отдельная модель пишет текст.",
+      "summary": "typesafe-computer-use превращает текстовую цель в действия на Mac, считывая экран через OCR и элементы универсального доступа. TypeSafe Jev выбирает действие, объект и сайт; код вычисляет факты, а отдельная модель создаёт свободный текст. Нужны ключ TypeSafe и разрешения на запись экрана и универсальный доступ. CLI позволяет выполнить пробный запуск перед управлением мышью и клавиатурой.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "typesafe-computer-use превращает текстовую цель в действия на Mac, считывая экран через OCR и элементы универсального доступа.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "TypeSafe Jev выбирает действие, объект и сайт; код вычисляет факты, а отдельная модель создаёт свободный текст.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Нужны ключ TypeSafe и разрешения на запись экрана и универсальный доступ. CLI позволяет выполнить пробный запуск перед управлением мышью и клавиатурой.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ограничения",
+          "text": "Проект находится в бета-стадии, требует macOS 14 и Python 3.12 или новее. Поддержка Windows экспериментальная.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "typesafe-computer-use: Jev से Mac का संचालन",
+      "h1": "typesafe-computer-use: Jev से Mac का संचालन",
+      "description": "typesafe-computer-use OCR और एक्सेसिबिलिटी से Mac पढ़ता है; Jev कार्रवाई चुनता, कोड तथ्य निकालता और अलग मॉडल पाठ लिखता है।",
+      "summary": "typesafe-computer-use लिखित लक्ष्य के अनुसार Mac चलाता है और OCR तथा एक्सेसिबिलिटी कंट्रोल से स्क्रीन पढ़ता है। TypeSafe Jev कार्रवाई, लक्ष्य और साइट चुनता है; कोड तथ्य निकालता है और अलग लेखन मॉडल खुला पाठ लिखता है। TypeSafe कुंजी तथा स्क्रीन रिकॉर्डिंग और एक्सेसिबिलिटी अनुमतियाँ चाहिए। CLI से पहले ड्राई रन, फिर वास्तविक माउस और कीबोर्ड नियंत्रण किया जा सकता है।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "किस काम आता है",
+          "text": "typesafe-computer-use लिखित लक्ष्य के अनुसार Mac चलाता है और OCR तथा एक्सेसिबिलिटी कंट्रोल से स्क्रीन पढ़ता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "TypeSafe Jev कार्रवाई, लक्ष्य और साइट चुनता है; कोड तथ्य निकालता है और अलग लेखन मॉडल खुला पाठ लिखता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल कैसे करें",
+          "text": "TypeSafe कुंजी तथा स्क्रीन रिकॉर्डिंग और एक्सेसिबिलिटी अनुमतियाँ चाहिए। CLI से पहले ड्राई रन, फिर वास्तविक माउस और कीबोर्ड नियंत्रण किया जा सकता है।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "सीमाएँ",
+          "text": "यह बीटा परियोजना है; macOS 14 और Python 3.12 या नए संस्करण चाहिए। Windows समर्थन प्रयोगात्मक है।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "typesafe-computer-use: otomatisasi Mac dengan Jev",
+      "h1": "typesafe-computer-use: otomatisasi Mac dengan Jev",
+      "description": "typesafe-computer-use membaca Mac lewat OCR dan aksesibilitas; Jev memilih tindakan, kode menghitung fakta, dan model lain menulis teks.",
+      "summary": "typesafe-computer-use mengubah tujuan tertulis menjadi tindakan di Mac, dengan membaca layar melalui OCR dan kontrol aksesibilitas. TypeSafe Jev memilih tindakan, sasaran, dan situs; kode menghitung fakta, sedangkan model penulis terpisah menangani teks bebas. Diperlukan kunci TypeSafe serta izin perekaman layar dan aksesibilitas. CLI menyediakan simulasi sebelum mengendalikan mouse dan keyboard sungguhan.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "typesafe-computer-use mengubah tujuan tertulis menjadi tindakan di Mac, dengan membaca layar melalui OCR dan kontrol aksesibilitas.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "TypeSafe Jev memilih tindakan, sasaran, dan situs; kode menghitung fakta, sedangkan model penulis terpisah menangani teks bebas.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Diperlukan kunci TypeSafe serta izin perekaman layar dan aksesibilitas. CLI menyediakan simulasi sebelum mengendalikan mouse dan keyboard sungguhan.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Batasan",
+          "text": "Proyek ini masih beta, memerlukan macOS 14 dan Python 3.12 atau lebih baru; dukungan Windows bersifat eksperimental.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "typesafe-computer-use: tự động hóa Mac bằng Jev",
+      "h1": "typesafe-computer-use: tự động hóa Mac bằng Jev",
+      "description": "typesafe-computer-use đọc Mac qua OCR và trợ năng; Jev chọn thao tác, mã tính dữ kiện và mô hình riêng viết văn bản.",
+      "summary": "typesafe-computer-use biến mục tiêu bằng văn bản thành thao tác trên Mac, đọc màn hình qua OCR và các điều khiển trợ năng. TypeSafe Jev chọn hành động, đối tượng và trang web; mã tính toán dữ kiện, còn mô hình viết riêng tạo văn bản tự do. Cần khóa TypeSafe cùng quyền ghi màn hình và trợ năng. CLI cho phép chạy thử trước khi điều khiển chuột và bàn phím thật.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích",
+          "text": "typesafe-computer-use biến mục tiêu bằng văn bản thành thao tác trên Mac, đọc màn hình qua OCR và các điều khiển trợ năng.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "TypeSafe Jev chọn hành động, đối tượng và trang web; mã tính toán dữ kiện, còn mô hình viết riêng tạo văn bản tự do.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Cần khóa TypeSafe cùng quyền ghi màn hình và trợ năng. CLI cho phép chạy thử trước khi điều khiển chuột và bàn phím thật.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Giới hạn",
+          "text": "Dự án đang ở bản beta, yêu cầu macOS 14 và Python 3.12 trở lên; hỗ trợ Windows còn mang tính thử nghiệm.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "typesafe-computer-use: Jev ile Mac otomasyonu",
+      "h1": "typesafe-computer-use: Jev ile Mac otomasyonu",
+      "description": "typesafe-computer-use Mac’i OCR ve erişilebilirlikle okur; Jev eylemi seçer, kod gerçekleri hesaplar, ayrı model metni yazar.",
+      "summary": "typesafe-computer-use yazılı bir hedefi Mac üzerindeki işlemlere dönüştürür; ekranı OCR ve erişilebilirlik denetimleriyle okur. TypeSafe Jev eylemi, hedefi ve siteyi seçer; gerçekleri kod hesaplar, serbest metni ayrı bir yazım modeli üretir. TypeSafe anahtarı, ekran kaydı ve erişilebilirlik izinleri gerekir. CLI, gerçek fare ve klavye kontrolünden önce deneme çalıştırması sunar.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "typesafe-computer-use yazılı bir hedefi Mac üzerindeki işlemlere dönüştürür; ekranı OCR ve erişilebilirlik denetimleriyle okur.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "TypeSafe Jev eylemi, hedefi ve siteyi seçer; gerçekleri kod hesaplar, serbest metni ayrı bir yazım modeli üretir.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "TypeSafe anahtarı, ekran kaydı ve erişilebilirlik izinleri gerekir. CLI, gerçek fare ve klavye kontrolünden önce deneme çalıştırması sunar.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Sınırlamalar",
+          "text": "Proje beta aşamasındadır; macOS 14 ve Python 3.12 veya üzerini gerektirir. Windows desteği deneyseldir.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "typesafe-computer-use: automatizzare il Mac con Jev",
+      "h1": "typesafe-computer-use: automatizzare il Mac con Jev",
+      "description": "typesafe-computer-use legge il Mac con OCR e accessibilità; Jev sceglie azioni, il codice calcola i fatti e un altro modello scrive.",
+      "summary": "typesafe-computer-use traduce un obiettivo scritto in azioni sul Mac, leggendo lo schermo tramite OCR e controlli di accessibilità. TypeSafe Jev sceglie azione, bersaglio e sito; il codice calcola i fatti e un modello separato scrive il testo libero. Servono una chiave TypeSafe e i permessi di registrazione schermo e accessibilità. La CLI permette una simulazione prima del controllo effettivo.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "typesafe-computer-use traduce un obiettivo scritto in azioni sul Mac, leggendo lo schermo tramite OCR e controlli di accessibilità.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Il ruolo di Jev",
+          "text": "TypeSafe Jev sceglie azione, bersaglio e sito; il codice calcola i fatti e un modello separato scrive il testo libero.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come usarlo",
+          "text": "Servono una chiave TypeSafe e i permessi di registrazione schermo e accessibilità. La CLI permette una simulazione prima del controllo effettivo.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limiti",
+          "text": "Il progetto è in beta e richiede macOS 14 e Python 3.12 o successivi. Il supporto Windows è sperimentale.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

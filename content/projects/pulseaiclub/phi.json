@@ -1,0 +1,762 @@
+{
+  "version": "source-content-v1",
+  "repo": "pulseaiclub/phi",
+  "repositoryId": 1321152436,
+  "relationship": "integration",
+  "category": "agents",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "463c21cccffd4c8b2ee392f7567b094b8fd7b456",
+      "url": "https://github.com/pulseaiclub/phi/blob/463c21cccffd4c8b2ee392f7567b094b8fd7b456/README.md",
+      "sha256": "ffacee4cfc0c70acb74a53085093ba5ec983e81e39418651f24b083d27586668",
+      "accessedAt": "2026-09-30T07:33:50.554Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "phi is a Go terminal coding harness with file tools, subagents, diff review and on-demand MCP tool discovery.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 14,
+          "end": 25,
+          "quote": "A lean, high-performance terminal coding agent harness in Go — a sibling to Pi.\n\n**Docs:** [pulseaiclub.github.io](https://pulseaiclub.github.io/)\n\n- **Fast and small** — ~15 MB release binary, ~21 MB idle RSS, ~31 ms to first frame; no Node / Electron / Python runtime\n- **Sub-agents** — spawn isolated jobs and watch the full run unfold in the TUI / job logs, without stuffing every turn into the parent context\n- **Hashline edits** — edit by whole-file `@file path#TAG` plus line `LINE#HASH` anchors (same idea as [oh-my-pi](https://github.com/can1357/oh-my-pi)): the model points at anchors instead of rewriting whole files; stale tags/hashes are rejected so over-edits and silent corruption stop here\n- **Permission gate** — Gate / Ask before destructive tools fire; safety is not optional when an agent can touch your tree\n- **MCP without context death** — configure as many MCP servers as you want; their tool schemas **never** enter the model prompt. The system prompt lists **server names** only (like the Skills catalog); the agent uses three meta-tools (`mcp_list` / `mcp_inspect` / `mcp_call`) to discover and call on demand. Same Gate / Ask / Hooks path as built-in tools. See [MCP](#mcp)\n- **Extensions (Go or Rust)** — native binaries speak the **PXB** binary protocol over stdin/stdout; official author SDKs for Go ([`ext/go`](ext/go)) and Rust ([`ext/rust`](ext/rust)): LLM tools, slash commands, event intercepts, confirm dialogs — no reflection; JSON at the SDK edges via `serde_json`. See [Extensions](#extensions)\n- **In-TUI diff review** — `/diff` opens a full-screen git review (working tree / staged / HEAD): syntax-highlighted hunks, line notes, then `a` sends notes to the agent. See [Diff review](#diff-review)\n- **Any model** — OpenAI-compatible, Anthropic, or Gemini via an explicit `api` field; built-in presets fill endpoint, context window, and capabilities for known model names (GPT, DeepSeek, Gemini, Kimi, GLM). See [Supported models](doc/models.md)"
+        },
+        {
+          "source": "source-1",
+          "start": 96,
+          "end": 98,
+          "quote": "The TUI gives the model four core tools — `read`, `write`, `edit`, and\n`bash` — plus `grep`, `find`, and `ls`. The model uses these to\nfulfill your requests. External HTTP fetch is available via MCP when configured."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "Its optional optimizer sends history and context to TypeSafe for judging and ranking; the README does not identify a specific Jev model.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 206,
+          "end": 209,
+          "quote": "| `PHI_OPTIMIZER`  | Master on/off switch for optimizer features (`0`, `false`, `off`, `no` to disable) |\n| `TYPESAFE_API_KEY` | TypeSafe API key required for optimizer features |\n\n**Security:** When `PHI_OPTIMIZER` is enabled, command history and context are sent to an external TypeSafe service for judging and ranking. Avoid using the optimizer in environments where shell history may contain sensitive information (API keys, tokens, credentials)."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Configure a primary coding model with phi config, start phi, and supply TYPESAFE_API_KEY if enabling optimizer features.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 66,
+          "end": 84,
+          "quote": "First launch needs a model. Open the config editor (creates `~/.phi` layout\nand writes `~/.phi/config.yaml`):\n\n```sh\nphi config\n```\n\nOr set env vars for a one-off run:\n\n```sh\nexport PHI_MODEL=gpt-4o\nexport PHI_API_KEY=sk-...\n```\n\nThen start the TUI:\n\n```sh\nphi\n```"
+        },
+        {
+          "source": "source-1",
+          "start": 206,
+          "end": 207,
+          "quote": "| `PHI_OPTIMIZER`  | Master on/off switch for optimizer features (`0`, `false`, `off`, `no` to disable) |\n| `TYPESAFE_API_KEY` | TypeSafe API key required for optimizer features |"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "Optimizer use transfers command history and context to an external service. PHI_OPTIMIZER can disable it; sensitive shell history needs separate consideration.",
+      "kind": "source-limitation",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 206,
+          "end": 209,
+          "quote": "| `PHI_OPTIMIZER`  | Master on/off switch for optimizer features (`0`, `false`, `off`, `no` to disable) |\n| `TYPESAFE_API_KEY` | TypeSafe API key required for optimizer features |\n\n**Security:** When `PHI_OPTIMIZER` is enabled, command history and context are sent to an external TypeSafe service for judging and ranking. Avoid using the optimizer in environments where shell history may contain sensitive information (API keys, tokens, credentials)."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "phi — Terminal coding with optional TypeSafe judgments",
+      "h1": "phi — Terminal coding with optional TypeSafe judgments",
+      "description": "phi: Its optional optimizer sends history and context to TypeSafe for judging and ranking; the README does not identify a specific Jev model.",
+      "summary": "phi is a Go terminal coding harness with file tools, subagents, diff review and on-demand MCP tool discovery. Configure a primary coding model with phi config, start phi, and supply TYPESAFE_API_KEY if enabling optimizer features.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "What it does",
+          "text": "phi is a Go terminal coding harness with file tools, subagents, diff review and on-demand MCP tool discovery.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "Its optional optimizer sends history and context to TypeSafe for judging and ranking; the README does not identify a specific Jev model.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Getting started",
+          "text": "Configure a primary coding model with phi config, start phi, and supply TYPESAFE_API_KEY if enabling optimizer features.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "Optimizer use transfers command history and context to an external service. PHI_OPTIMIZER can disable it; sensitive shell history needs separate consideration.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "phi — 可选 TypeSafe 判断的终端编程代理",
+      "h1": "phi — 可选 TypeSafe 判断的终端编程代理",
+      "description": "phi: 可选优化器把历史与上下文发给 TypeSafe 作判断和排序；README 未指定具体 Jev 模型。",
+      "summary": "phi 是 Go 编写的终端编程框架，提供文件工具、子代理、差异审阅和按需发现 MCP 工具。 用 phi config 配置主要编程模型后启动 phi；启用优化器时需提供 TYPESAFE_API_KEY。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "phi 是 Go 编写的终端编程框架，提供文件工具、子代理、差异审阅和按需发现 MCP 工具。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "可选优化器把历史与上下文发给 TypeSafe 作判断和排序；README 未指定具体 Jev 模型。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "用 phi config 配置主要编程模型后启动 phi；启用优化器时需提供 TYPESAFE_API_KEY。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "优化器会将命令历史和上下文传至外部服务，可用 PHI_OPTIMIZER 关闭；应另行考虑 shell 历史中的敏感信息。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "phi — 搭配選用 TypeSafe 判斷的終端程式代理",
+      "h1": "phi — 搭配選用 TypeSafe 判斷的終端程式代理",
+      "description": "phi: 選用的最佳化器將歷史與上下文送至 TypeSafe 進行判斷和排序；README 未指定具體 Jev 模型。",
+      "summary": "phi 是以 Go 撰寫的終端程式開發框架，提供檔案工具、子代理、差異審閱及按需探索 MCP 工具。 以 phi config 設定主要程式模型後啟動 phi；啟用最佳化器需提供 TYPESAFE_API_KEY。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "phi 是以 Go 撰寫的終端程式開發框架，提供檔案工具、子代理、差異審閱及按需探索 MCP 工具。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "選用的最佳化器將歷史與上下文送至 TypeSafe 進行判斷和排序；README 未指定具體 Jev 模型。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "以 phi config 設定主要程式模型後啟動 phi；啟用最佳化器需提供 TYPESAFE_API_KEY。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "最佳化器會把命令歷史和上下文傳至外部服務，可用 PHI_OPTIMIZER 關閉；須另行考量 shell 歷史中的敏感資訊。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "phi — TypeSafe の判断機能を選べる端末型コーディング環境",
+      "h1": "phi — TypeSafe の判断機能を選べる端末型コーディング環境",
+      "description": "phi: 任意の最適化機能が履歴とコンテキストを TypeSafe に送り、判断と順位付けを行います。README は具体的な Jev モデルを特定していません。",
+      "summary": "phi は Go 製の端末型コーディング基盤で、ファイル操作、サブエージェント、差分レビュー、必要時の MCP ツール探索を備えます。 phi config で主モデルを設定して phi を起動します。最適化機能を有効にする場合は TYPESAFE_API_KEY が必要です。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "できること",
+          "text": "phi は Go 製の端末型コーディング基盤で、ファイル操作、サブエージェント、差分レビュー、必要時の MCP ツール探索を備えます。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "任意の最適化機能が履歴とコンテキストを TypeSafe に送り、判断と順位付けを行います。README は具体的な Jev モデルを特定していません。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い始めるには",
+          "text": "phi config で主モデルを設定して phi を起動します。最適化機能を有効にする場合は TYPESAFE_API_KEY が必要です。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "対象範囲と制約",
+          "text": "最適化ではコマンド履歴とコンテキストが外部に送られます。PHI_OPTIMIZER で無効化でき、履歴内の機密情報には別途配慮が必要です。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "phi — 선택적 TypeSafe 판단을 쓰는 터미널 코딩 도구",
+      "h1": "phi — 선택적 TypeSafe 판단을 쓰는 터미널 코딩 도구",
+      "description": "phi: 선택 기능인 최적화기는 기록과 맥락을 TypeSafe로 보내 판단하고 순위를 매깁니다. README는 구체적인 Jev 모델을 밝히지 않습니다.",
+      "summary": "phi는 파일 도구, 하위 에이전트, 변경 검토, 필요할 때 MCP 도구를 찾는 기능을 갖춘 Go 터미널 코딩 프레임워크입니다. phi config로 주 코딩 모델을 설정하고 phi를 실행합니다. 최적화기를 켜려면 TYPESAFE_API_KEY가 필요합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "phi는 파일 도구, 하위 에이전트, 변경 검토, 필요할 때 MCP 도구를 찾는 기능을 갖춘 Go 터미널 코딩 프레임워크입니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "선택 기능인 최적화기는 기록과 맥락을 TypeSafe로 보내 판단하고 순위를 매깁니다. README는 구체적인 Jev 모델을 밝히지 않습니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "phi config로 주 코딩 모델을 설정하고 phi를 실행합니다. 최적화기를 켜려면 TYPESAFE_API_KEY가 필요합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 제약",
+          "text": "최적화기를 쓰면 명령 기록과 맥락이 외부 서비스로 전송됩니다. PHI_OPTIMIZER로 끌 수 있으며 셸 기록의 민감 정보는 별도로 고려해야 합니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "phi — Programación en terminal con juicios TypeSafe opcionales",
+      "h1": "phi — Programación en terminal con juicios TypeSafe opcionales",
+      "description": "phi: Su optimizador opcional envía historial y contexto a TypeSafe para evaluar y ordenar; el README no identifica un modelo Jev concreto.",
+      "summary": "phi es un entorno de programación en Go con herramientas de archivos, subagentes, revisión de cambios y descubrimiento de herramientas MCP bajo demanda. Configura el modelo principal con phi config, inicia phi y proporciona TYPESAFE_API_KEY si activas el optimizador.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "phi es un entorno de programación en Go con herramientas de archivos, subagentes, revisión de cambios y descubrimiento de herramientas MCP bajo demanda.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Su optimizador opcional envía historial y contexto a TypeSafe para evaluar y ordenar; el README no identifica un modelo Jev concreto.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo empezar",
+          "text": "Configura el modelo principal con phi config, inicia phi y proporciona TYPESAFE_API_KEY si activas el optimizador.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "El optimizador transfiere historial de comandos y contexto a un servicio externo. PHI_OPTIMIZER permite desactivarlo; considera aparte los datos sensibles del historial.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "phi — Programmation en terminal avec jugements TypeSafe facultatifs",
+      "h1": "phi — Programmation en terminal avec jugements TypeSafe facultatifs",
+      "description": "phi: Son optimiseur facultatif envoie historique et contexte à TypeSafe pour juger et classer ; le README ne précise pas le modèle Jev utilisé.",
+      "summary": "phi est un environnement de programmation en Go avec outils de fichiers, sous-agents, revue des différences et découverte MCP à la demande. Configurez le modèle principal avec phi config, lancez phi et fournissez TYPESAFE_API_KEY si vous activez l’optimiseur.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "phi est un environnement de programmation en Go avec outils de fichiers, sous-agents, revue des différences et découverte MCP à la demande.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Son optimiseur facultatif envoie historique et contexte à TypeSafe pour juger et classer ; le README ne précise pas le modèle Jev utilisé.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Configurez le modèle principal avec phi config, lancez phi et fournissez TYPESAFE_API_KEY si vous activez l’optimiseur.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "L’optimiseur transmet historique des commandes et contexte à un service externe. PHI_OPTIMIZER permet de le désactiver ; examinez les données sensibles de l’historique.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "phi — Terminal-Coding mit optionalen TypeSafe-Urteilen",
+      "h1": "phi — Terminal-Coding mit optionalen TypeSafe-Urteilen",
+      "description": "phi: Der optionale Optimierer sendet Verlauf und Kontext zur Bewertung und Sortierung an TypeSafe; das README nennt kein bestimmtes Jev-Modell.",
+      "summary": "phi ist eine Go-basierte Coding-Umgebung mit Dateiwerkzeugen, Subagenten, Diff-Review und bedarfsweiser Ermittlung von MCP-Werkzeugen. Mit phi config das primäre Coding-Modell konfigurieren, phi starten und bei aktivem Optimierer TYPESAFE_API_KEY bereitstellen.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "phi ist eine Go-basierte Coding-Umgebung mit Dateiwerkzeugen, Subagenten, Diff-Review und bedarfsweiser Ermittlung von MCP-Werkzeugen.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Der optionale Optimierer sendet Verlauf und Kontext zur Bewertung und Sortierung an TypeSafe; das README nennt kein bestimmtes Jev-Modell.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Einstieg",
+          "text": "Mit phi config das primäre Coding-Modell konfigurieren, phi starten und bei aktivem Optimierer TYPESAFE_API_KEY bereitstellen.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Der Optimierer überträgt Befehlsverlauf und Kontext an einen externen Dienst. PHI_OPTIMIZER kann ihn deaktivieren; sensible Verlaufsdaten müssen gesondert berücksichtigt werden.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "phi — Programação no terminal com avaliações TypeSafe opcionais",
+      "h1": "phi — Programação no terminal com avaliações TypeSafe opcionais",
+      "description": "phi: Seu otimizador opcional envia histórico e contexto à TypeSafe para avaliação e ordenação; o README não identifica um modelo Jev específico.",
+      "summary": "O phi é um ambiente de programação em Go com ferramentas de arquivos, subagentes, revisão de diferenças e descoberta de ferramentas MCP sob demanda. Configure o modelo principal com phi config, inicie phi e forneça TYPESAFE_API_KEY ao habilitar o otimizador.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "O phi é um ambiente de programação em Go com ferramentas de arquivos, subagentes, revisão de diferenças e descoberta de ferramentas MCP sob demanda.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "Seu otimizador opcional envia histórico e contexto à TypeSafe para avaliação e ordenação; o README não identifica um modelo Jev específico.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como começar",
+          "text": "Configure o modelo principal com phi config, inicie phi e forneça TYPESAFE_API_KEY ao habilitar o otimizador.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "O otimizador transfere histórico de comandos e contexto a um serviço externo. PHI_OPTIMIZER permite desativá-lo; considere separadamente dados sensíveis no histórico.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "phi — Работа с кодом в терминале и необязательная оценка TypeSafe",
+      "h1": "phi — Работа с кодом в терминале и необязательная оценка TypeSafe",
+      "description": "phi: Необязательный оптимизатор отправляет историю и контекст в TypeSafe для оценки и ранжирования; конкретная модель Jev в README не указана.",
+      "summary": "phi — среда программирования на Go с файловыми инструментами, субагентами, просмотром изменений и поиском MCP-инструментов по запросу. Настройте основную модель через phi config, запустите phi и укажите TYPESAFE_API_KEY при включении оптимизатора.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "phi — среда программирования на Go с файловыми инструментами, субагентами, просмотром изменений и поиском MCP-инструментов по запросу.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Необязательный оптимизатор отправляет историю и контекст в TypeSafe для оценки и ранжирования; конкретная модель Jev в README не указана.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Начало работы",
+          "text": "Настройте основную модель через phi config, запустите phi и укажите TYPESAFE_API_KEY при включении оптимизатора.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Оптимизатор передаёт историю команд и контекст внешнему сервису. Его можно отключить через PHI_OPTIMIZER; секреты в истории оболочки требуют отдельного внимания.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "phi — वैकल्पिक TypeSafe निर्णयों वाला टर्मिनल कोडिंग साधन",
+      "h1": "phi — वैकल्पिक TypeSafe निर्णयों वाला टर्मिनल कोडिंग साधन",
+      "description": "phi: वैकल्पिक ऑप्टिमाइज़र इतिहास और संदर्भ TypeSafe को जाँच व क्रम निर्धारण के लिए भेजता है; README कोई खास Jev मॉडल नहीं बताता।",
+      "summary": "phi Go में बना टर्मिनल कोडिंग ढाँचा है, जिसमें फ़ाइल टूल, उप-एजेंट, बदलाव समीक्षा और ज़रूरत पर MCP टूल खोज शामिल हैं। phi config से मुख्य कोडिंग मॉडल तय करके phi शुरू करें; ऑप्टिमाइज़र चालू करने पर TYPESAFE_API_KEY दें।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "परियोजना का काम",
+          "text": "phi Go में बना टर्मिनल कोडिंग ढाँचा है, जिसमें फ़ाइल टूल, उप-एजेंट, बदलाव समीक्षा और ज़रूरत पर MCP टूल खोज शामिल हैं।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "वैकल्पिक ऑप्टिमाइज़र इतिहास और संदर्भ TypeSafe को जाँच व क्रम निर्धारण के लिए भेजता है; README कोई खास Jev मॉडल नहीं बताता।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "शुरुआत कैसे करें",
+          "text": "phi config से मुख्य कोडिंग मॉडल तय करके phi शुरू करें; ऑप्टिमाइज़र चालू करने पर TYPESAFE_API_KEY दें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "ऑप्टिमाइज़र कमांड इतिहास और संदर्भ बाहरी सेवा को भेजता है। PHI_OPTIMIZER से उसे बंद किया जा सकता है; इतिहास की संवेदनशील जानकारी अलग से देखें।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "phi — Pemrograman terminal dengan penilaian TypeSafe opsional",
+      "h1": "phi — Pemrograman terminal dengan penilaian TypeSafe opsional",
+      "description": "phi: Pengoptimal opsional mengirim riwayat dan konteks ke TypeSafe untuk penilaian dan pemeringkatan; README tidak menyebut model Jev tertentu.",
+      "summary": "phi adalah lingkungan pemrograman berbasis Go dengan alat berkas, subagen, tinjauan perbedaan, dan penemuan alat MCP saat dibutuhkan. Atur model utama lewat phi config, jalankan phi, dan sediakan TYPESAFE_API_KEY jika mengaktifkan pengoptimal.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "phi adalah lingkungan pemrograman berbasis Go dengan alat berkas, subagen, tinjauan perbedaan, dan penemuan alat MCP saat dibutuhkan.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Pengoptimal opsional mengirim riwayat dan konteks ke TypeSafe untuk penilaian dan pemeringkatan; README tidak menyebut model Jev tertentu.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara memulai",
+          "text": "Atur model utama lewat phi config, jalankan phi, dan sediakan TYPESAFE_API_KEY jika mengaktifkan pengoptimal.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Pengoptimal mengirim riwayat perintah dan konteks ke layanan luar. PHI_OPTIMIZER dapat menonaktifkannya; pertimbangkan data sensitif dalam riwayat shell secara terpisah.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "phi — Lập trình trong terminal với đánh giá TypeSafe tùy chọn",
+      "h1": "phi — Lập trình trong terminal với đánh giá TypeSafe tùy chọn",
+      "description": "phi: Bộ tối ưu tùy chọn gửi lịch sử và ngữ cảnh tới TypeSafe để đánh giá, xếp hạng; README không chỉ rõ mô hình Jev cụ thể.",
+      "summary": "phi là môi trường lập trình viết bằng Go, có công cụ tệp, tác tử con, xem thay đổi và khám phá công cụ MCP khi cần. Cấu hình mô hình chính bằng phi config, chạy phi và cung cấp TYPESAFE_API_KEY nếu bật bộ tối ưu.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Công dụng",
+          "text": "phi là môi trường lập trình viết bằng Go, có công cụ tệp, tác tử con, xem thay đổi và khám phá công cụ MCP khi cần.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Bộ tối ưu tùy chọn gửi lịch sử và ngữ cảnh tới TypeSafe để đánh giá, xếp hạng; README không chỉ rõ mô hình Jev cụ thể.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách bắt đầu",
+          "text": "Cấu hình mô hình chính bằng phi config, chạy phi và cung cấp TYPESAFE_API_KEY nếu bật bộ tối ưu.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Bộ tối ưu chuyển lịch sử lệnh và ngữ cảnh đến dịch vụ ngoài. Có thể tắt bằng PHI_OPTIMIZER; cần cân nhắc riêng dữ liệu nhạy cảm trong lịch sử shell.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "phi — İsteğe bağlı TypeSafe değerlendirmeli terminal kodlama",
+      "h1": "phi — İsteğe bağlı TypeSafe değerlendirmeli terminal kodlama",
+      "description": "phi: İsteğe bağlı iyileştirici, değerlendirme ve sıralama için geçmişi ve bağlamı TypeSafe’e gönderir; README belirli bir Jev modeli belirtmez.",
+      "summary": "phi; dosya araçları, alt ajanlar, fark incelemesi ve gerektiğinde MCP aracı keşfi sunan Go tabanlı terminal kodlama ortamıdır. Ana modeli phi config ile yapılandırıp phi’yi başlatın; iyileştiriciyi açacaksanız TYPESAFE_API_KEY sağlayın.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "phi; dosya araçları, alt ajanlar, fark incelemesi ve gerektiğinde MCP aracı keşfi sunan Go tabanlı terminal kodlama ortamıdır.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "İsteğe bağlı iyileştirici, değerlendirme ve sıralama için geçmişi ve bağlamı TypeSafe’e gönderir; README belirli bir Jev modeli belirtmez.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Başlangıç",
+          "text": "Ana modeli phi config ile yapılandırıp phi’yi başlatın; iyileştiriciyi açacaksanız TYPESAFE_API_KEY sağlayın.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "İyileştirici komut geçmişini ve bağlamı dış hizmete aktarır. PHI_OPTIMIZER ile kapatılabilir; kabuk geçmişindeki hassas bilgiler ayrıca değerlendirilmelidir.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "phi — Programmazione da terminale con valutazioni TypeSafe facoltative",
+      "h1": "phi — Programmazione da terminale con valutazioni TypeSafe facoltative",
+      "description": "phi: L’ottimizzatore facoltativo invia cronologia e contesto a TypeSafe per valutare e ordinare; il README non identifica uno specifico modello Jev.",
+      "summary": "phi è un ambiente di programmazione in Go con strumenti per file, sottoagenti, revisione delle differenze e scoperta MCP su richiesta. Configura il modello principale con phi config, avvia phi e fornisci TYPESAFE_API_KEY se attivi l’ottimizzatore.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "phi è un ambiente di programmazione in Go con strumenti per file, sottoagenti, revisione delle differenze e scoperta MCP su richiesta.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "L’ottimizzatore facoltativo invia cronologia e contesto a TypeSafe per valutare e ordinare; il README non identifica uno specifico modello Jev.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come iniziare",
+          "text": "Configura il modello principale con phi config, avvia phi e fornisci TYPESAFE_API_KEY se attivi l’ottimizzatore.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "L’ottimizzatore trasferisce cronologia dei comandi e contesto a un servizio esterno. PHI_OPTIMIZER può disattivarlo; considera separatamente i dati sensibili nella cronologia.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

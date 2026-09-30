@@ -1,0 +1,768 @@
+{
+  "version": "source-content-v1",
+  "repo": "TianyuCodings/NanoJev",
+  "repositoryId": 1374702542,
+  "relationship": "local-alternative",
+  "category": "research",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "path": "README.md",
+      "commit": "76fdfc9ecdca45a9bcef17991a07d3041a87685a",
+      "url": "https://github.com/TianyuCodings/NanoJev/blob/76fdfc9ecdca45a9bcef17991a07d3041a87685a/README.md",
+      "sha256": "4536f6769de55391a83a2282632f5ad66f16966a7204cf3278242fe5d2892809",
+      "accessedAt": "2026-09-30T07:33:47.607Z",
+      "id": "s1"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "The model answers choice, Boolean and ordered-score questions from states and candidates without decoding answer tokens.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 42,
+          "end": 50,
+          "quote": "## What NanoJev does\n\n- **Parallel decisions:** batch independent states, questions and candidate paths in one backbone forward.\n- **Dynamic candidates:** Choice returns a distribution over 2–255 supplied candidates using a shared scoring head.\n- **Boolean and ordered scores:** predict a proposition's probability, or a distribution and expectation over 2–10 ordered levels.\n- **Direct probabilities:** rank, select or sample actions without generating answer tokens.\n- **One small backbone:** Qwen3-0.6B with decision heads, reused across all four game tasks and a persistent inference service.\n\nEach request supplies a **state**, a **question** and its **candidates**. The backbone encodes candidate paths; shared heads produce the requested probabilities. Choice uses set attention and a softmax, Boolean uses a sigmoid, and Score returns a probability-weighted level."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "NanoJev is a separate local model inspired by Jev; recorded comparisons include Jev and untuned Qwen on the same game interfaces.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 1,
+          "end": 5,
+          "quote": "# NanoJev — A nano replica of [Jev](https://typesafe.ai/blog/introducing-system-one-models-and-jev)\n\n**English** | [简体中文](README.zh-CN.md)\n\n**A 0.6B parallel decision model: states and questions in, complete probability distributions out. Zero output-token decoding.**"
+        },
+        {
+          "source": "s1",
+          "start": 24,
+          "end": 26,
+          "quote": "## Three models, side by side\n\nReal browser replays of **[Jev](https://typesafe.ai/blog/introducing-system-one-models-and-jev), NanoJev and Untuned Qwen**. These animations loop automatically; click either one to open its interactive player. All four demos use the same current NanoJev checkpoint. The interactive development site currently requires access; all recordings can also be played locally using the commands below."
+        },
+        {
+          "source": "s1",
+          "start": 48,
+          "end": 48,
+          "quote": "- **One small backbone:** Qwen3-0.6B with decision heads, reused across all four game tasks and a persistent inference service."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Obtain the matching unified-games-v1 checkpoint and dataset, then use the CUDA service's /api/evaluate endpoint for state/question batches.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 105,
+          "end": 132,
+          "quote": "Download the current checkpoint and data:\n\n```python\nfrom huggingface_hub import snapshot_download\n\nsnapshot_download(\n    repo_id=\"C-Tianyu/NanoJev\",\n    revision=\"unified-games-v1\",\n    local_dir=\"checkpoints/NanoJev-unified\",\n    allow_patterns=[\"best.safetensors\", \"config.json\", \"tokenizer/*\", \"backbone_config/*\"],\n)\nsnapshot_download(\n    repo_id=\"C-Tianyu/NanoJev-Data\",\n    repo_type=\"dataset\",\n    revision=\"unified-games-v1\",\n    local_dir=\"data/NanoJev-unified\",\n)\n```\n\nStart inference in a CUDA environment:\n\n```bash\npython scripts/serve_decisions.py \\\n  --checkpoint-dir checkpoints/NanoJev-unified \\\n  --web-root web --port 8765 --disable-native-triton\n```\n\nThe service loads the model once. Send state/question batches to **`POST http://127.0.0.1:8765/api/evaluate`**."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "The interactive development site requires access. Broader shooting scenarios and structured-input support remain roadmap items.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 26,
+          "end": 26,
+          "quote": "Real browser replays of **[Jev](https://typesafe.ai/blog/introducing-system-one-models-and-jev), NanoJev and Untuned Qwen**. These animations loop automatically; click either one to open its interactive player. All four demos use the same current NanoJev checkpoint. The interactive development site currently requires access; all recordings can also be played locally using the commands below."
+        },
+        {
+          "source": "s1",
+          "start": 146,
+          "end": 153,
+          "quote": "## Roadmap\n\n- [x] One unified checkpoint for Maze, Snake and both shooting tasks.\n- [x] 50×50 Maze, long Snake games and synchronized three-model browser replays.\n- [x] Mixed-task SFT, reproducible data splits and independently replayed evaluation.\n- [ ] RLCD post-training for broader long-horizon tasks.\n- [ ] Shared-prefix inference and larger candidate batches.\n- [ ] Broader shooting scenarios and structured input support."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "NanoJev: local decision-model research through games",
+      "h1": "NanoJev: local decision-model research through games",
+      "description": "NanoJev uses a Qwen3-0.6B backbone to produce decision probabilities and compares its game policies with Jev.",
+      "summary": "The model answers choice, Boolean and ordered-score questions from states and candidates without decoding answer tokens. NanoJev is a separate local model inspired by Jev; recorded comparisons include Jev and untuned Qwen on the same game interfaces.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose and audience",
+          "text": "The model answers choice, Boolean and ordered-score questions from states and candidates without decoding answer tokens.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "NanoJev is a separate local model inspired by Jev; recorded comparisons include Jev and untuned Qwen on the same game interfaces.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Using the project",
+          "text": "Obtain the matching unified-games-v1 checkpoint and dataset, then use the CUDA service's /api/evaluate endpoint for state/question batches.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "The interactive development site requires access. Broader shooting scenarios and structured-input support remain roadmap items.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "NanoJev：通过游戏研究本地决策模型",
+      "h1": "NanoJev：通过游戏研究本地决策模型",
+      "description": "NanoJev 用 Qwen3-0.6B 骨干模型输出决策概率，并与 Jev 对比游戏策略。",
+      "summary": "模型根据状态与候选项回答选择、布尔和有序评分问题，无需解码回答词元。 NanoJev 是受 Jev 启发的独立本地模型，录像对比包含在同一游戏接口下运行的 Jev 和未微调 Qwen。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途与适用对象",
+          "text": "模型根据状态与候选项回答选择、布尔和有序评分问题，无需解码回答词元。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "NanoJev 是受 Jev 启发的独立本地模型，录像对比包含在同一游戏接口下运行的 Jev 和未微调 Qwen。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "获取匹配的 unified-games-v1 检查点与数据集，再通过 CUDA 服务的 /api/evaluate 提交状态和问题批次。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "交互开发站点需要访问权限；更广泛的射击场景与结构化输入支持仍在路线图中。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "NanoJev：以遊戲研究本機決策模型",
+      "h1": "NanoJev：以遊戲研究本機決策模型",
+      "description": "NanoJev 用 Qwen3-0.6B 骨幹模型輸出決策機率，並與 Jev 比較遊戲策略。",
+      "summary": "模型依狀態與候選項回答選擇、布林及有序評分問題，不必解碼答案詞元。 NanoJev 是受 Jev 啟發的獨立本機模型，錄影比較包含相同遊戲介面下的 Jev 與未微調 Qwen。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途與適用對象",
+          "text": "模型依狀態與候選項回答選擇、布林及有序評分問題，不必解碼答案詞元。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "NanoJev 是受 Jev 啟發的獨立本機模型，錄影比較包含相同遊戲介面下的 Jev 與未微調 Qwen。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "取得相符的 unified-games-v1 檢查點及資料集，再透過 CUDA 服務的 /api/evaluate 提交狀態與問題批次。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "互動開發網站需要存取權限；更多射擊情境與結構化輸入支援仍列於路線圖。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "NanoJev：ゲームで学ぶローカル判断モデル研究",
+      "h1": "NanoJev：ゲームで学ぶローカル判断モデル研究",
+      "description": "NanoJev は Qwen3-0.6B を基盤に判断確率を出力し、ゲーム方策を Jev と比較します。",
+      "summary": "状態と候補から選択、真偽、順序付き評価に答え、回答トークンのデコードは行いません。 Jev に着想を得た別個のローカルモデルです。同じゲーム入力で Jev と未調整 Qwen を比較した記録があります。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途と対象",
+          "text": "状態と候補から選択、真偽、順序付き評価に答え、回答トークンのデコードは行いません。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev との関係",
+          "text": "Jev に着想を得た別個のローカルモデルです。同じゲーム入力で Jev と未調整 Qwen を比較した記録があります。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "unified-games-v1 の対応する重みとデータを取得し、CUDA サービスの /api/evaluate に状態と質問のバッチを送ります。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範囲と制約",
+          "text": "対話型開発サイトにはアクセス権が必要です。射撃シナリオの拡大と構造化入力対応は今後の計画です。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "NanoJev: 게임을 통한 로컬 판단 모델 연구",
+      "h1": "NanoJev: 게임을 통한 로컬 판단 모델 연구",
+      "description": "NanoJev는 Qwen3-0.6B 기반으로 판단 확률을 출력하고 게임 정책을 Jev와 비교합니다.",
+      "summary": "상태와 후보에서 선택, 참·거짓, 순서형 점수 질문에 답하며 답변 토큰을 디코딩하지 않습니다. Jev에서 착안한 별도 로컬 모델이며 같은 게임 인터페이스의 Jev 및 미조정 Qwen과 비교한 기록을 제공합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "용도와 대상",
+          "text": "상태와 후보에서 선택, 참·거짓, 순서형 점수 질문에 답하며 답변 토큰을 디코딩하지 않습니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Jev에서 착안한 별도 로컬 모델이며 같은 게임 인터페이스의 Jev 및 미조정 Qwen과 비교한 기록을 제공합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "일치하는 unified-games-v1 체크포인트와 데이터셋을 받은 뒤 CUDA 서비스의 /api/evaluate에 상태·질문 배치를 보냅니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 한계",
+          "text": "대화형 개발 사이트는 접근 권한이 필요합니다. 더 다양한 사격 시나리오와 구조화 입력 지원은 로드맵 항목입니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "NanoJev: investigación local de decisiones mediante juegos",
+      "h1": "NanoJev: investigación local de decisiones mediante juegos",
+      "description": "NanoJev usa Qwen3-0.6B para producir probabilidades de decisión y compara sus políticas de juego con Jev.",
+      "summary": "Responde preguntas de elección, booleanas y de puntuación ordenada a partir de estados y candidatos, sin decodificar tokens de respuesta. Es un modelo local independiente inspirado en Jev; las grabaciones comparan Jev y Qwen sin ajustar con las mismas interfaces de juego.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "Responde preguntas de elección, booleanas y de puntuación ordenada a partir de estados y candidatos, sin decodificar tokens de respuesta.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Es un modelo local independiente inspirado en Jev; las grabaciones comparan Jev y Qwen sin ajustar con las mismas interfaces de juego.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo se usa",
+          "text": "Obtenga checkpoint y datos unified-games-v1 correspondientes y envíe lotes de estados y preguntas al servicio CUDA /api/evaluate.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "El sitio interactivo de desarrollo requiere acceso. Más escenarios de disparo y entradas estructuradas siguen en la hoja de ruta.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "NanoJev : recherche locale de décisions par le jeu",
+      "h1": "NanoJev : recherche locale de décisions par le jeu",
+      "description": "NanoJev utilise Qwen3-0.6B pour produire des probabilités de décision et comparer ses politiques de jeu à Jev.",
+      "summary": "Il répond aux questions à choix, booléennes et à scores ordonnés depuis états et candidats, sans décoder de tokens de réponse. Ce modèle local distinct s'inspire de Jev ; les enregistrements comparent Jev et Qwen non ajusté sur les mêmes interfaces de jeu.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Usage et public visé",
+          "text": "Il répond aux questions à choix, booléennes et à scores ordonnés depuis états et candidats, sans décoder de tokens de réponse.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Ce modèle local distinct s'inspire de Jev ; les enregistrements comparent Jev et Qwen non ajusté sur les mêmes interfaces de jeu.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Récupérez le checkpoint et les données unified-games-v1 correspondants, puis envoyez les lots état/question au service CUDA /api/evaluate.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "Le site interactif de développement exige un accès. Davantage de scénarios de tir et les entrées structurées restent prévus.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "NanoJev: lokale Entscheidungsforschung mit Spielen",
+      "h1": "NanoJev: lokale Entscheidungsforschung mit Spielen",
+      "description": "NanoJev erzeugt mit Qwen3-0.6B Entscheidungswahrscheinlichkeiten und vergleicht Spielstrategien mit Jev.",
+      "summary": "Das Modell beantwortet Auswahl-, Boolean- und geordnete Bewertungsfragen aus Zuständen und Kandidaten ohne Antworttoken-Decoding. NanoJev ist ein eigenständiges lokales Modell nach Jevs Vorbild; Aufzeichnungen vergleichen Jev und nicht feinabgestimmtes Qwen an denselben Spielschnittstellen.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Zweck und Zielgruppe",
+          "text": "Das Modell beantwortet Auswahl-, Boolean- und geordnete Bewertungsfragen aus Zuständen und Kandidaten ohne Antworttoken-Decoding.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "NanoJev ist ein eigenständiges lokales Modell nach Jevs Vorbild; Aufzeichnungen vergleichen Jev und nicht feinabgestimmtes Qwen an denselben Spielschnittstellen.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Verwendung",
+          "text": "Beziehen Sie passenden unified-games-v1-Checkpoint und Datensatz und senden Sie Zustands-/Fragebatches an den CUDA-Dienst /api/evaluate.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Die interaktive Entwicklungsseite erfordert Zugang. Weitere Schießszenarien und strukturierte Eingaben stehen noch auf der Roadmap.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "NanoJev: pesquisa local de decisões por jogos",
+      "h1": "NanoJev: pesquisa local de decisões por jogos",
+      "description": "NanoJev usa Qwen3-0.6B para produzir probabilidades de decisão e comparar suas políticas de jogo com Jev.",
+      "summary": "Responde perguntas de escolha, booleanas e de pontuação ordenada a partir de estados e candidatos, sem decodificar tokens de resposta. É um modelo local independente inspirado no Jev; gravações comparam Jev e Qwen sem ajuste nas mesmas interfaces de jogo.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Finalidade e público",
+          "text": "Responde perguntas de escolha, booleanas e de pontuação ordenada a partir de estados e candidatos, sem decodificar tokens de resposta.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "É um modelo local independente inspirado no Jev; gravações comparam Jev e Qwen sem ajuste nas mesmas interfaces de jogo.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Obtenha checkpoint e dados unified-games-v1 correspondentes e envie lotes de estados e perguntas ao serviço CUDA /api/evaluate.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "O site interativo de desenvolvimento exige acesso. Mais cenários de tiro e entradas estruturadas continuam no planejamento.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "NanoJev: локальные модели решений в игровых задачах",
+      "h1": "NanoJev: локальные модели решений в игровых задачах",
+      "description": "NanoJev использует Qwen3-0.6B для вероятностей решений и сравнивает игровые стратегии с Jev.",
+      "summary": "Модель отвечает на вопросы выбора, булевы вопросы и порядковые оценки по состояниям и кандидатам, не декодируя токены ответа. Это отдельная локальная модель по мотивам Jev; записи сравнивают Jev и Qwen без дообучения на одинаковых игровых интерфейсах.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Модель отвечает на вопросы выбора, булевы вопросы и порядковые оценки по состояниям и кандидатам, не декодируя токены ответа.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Это отдельная локальная модель по мотивам Jev; записи сравнивают Jev и Qwen без дообучения на одинаковых игровых интерфейсах.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Получите согласованные чекпойнт и данные unified-games-v1 и отправляйте пакеты состояний и вопросов на CUDA-сервис /api/evaluate.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Интерактивный сайт разработки требует доступа. Расширенные сценарии стрельбы и структурированные входы остаются в планах.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "NanoJev: खेलों के ज़रिए स्थानीय निर्णय मॉडल का शोध",
+      "h1": "NanoJev: खेलों के ज़रिए स्थानीय निर्णय मॉडल का शोध",
+      "description": "NanoJev, Qwen3-0.6B से निर्णय संभावनाएँ निकालता है और अपनी गेम नीतियों की तुलना Jev से करता है।",
+      "summary": "मॉडल स्थिति और उम्मीदवारों से विकल्प, बूलियन और क्रमबद्ध स्कोर प्रश्नों के उत्तर देता है, बिना उत्तर टोकन डिकोड किए। NanoJev, Jev से प्रेरित अलग स्थानीय मॉडल है; रिकॉर्डिंग समान गेम इंटरफ़ेस पर Jev और बिना ट्यून किए Qwen की तुलना करती हैं।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "उद्देश्य और उपयोगकर्ता",
+          "text": "मॉडल स्थिति और उम्मीदवारों से विकल्प, बूलियन और क्रमबद्ध स्कोर प्रश्नों के उत्तर देता है, बिना उत्तर टोकन डिकोड किए।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "NanoJev, Jev से प्रेरित अलग स्थानीय मॉडल है; रिकॉर्डिंग समान गेम इंटरफ़ेस पर Jev और बिना ट्यून किए Qwen की तुलना करती हैं।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल का तरीका",
+          "text": "मेल खाते unified-games-v1 चेकपॉइंट और डेटा लें, फिर CUDA सेवा के /api/evaluate पर स्थिति और प्रश्नों के बैच भेजें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "इंटरैक्टिव विकास साइट के लिए पहुँच चाहिए। अधिक शूटिंग परिस्थितियाँ और संरचित इनपुट समर्थन अभी रोडमैप में हैं।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "NanoJev: riset keputusan lokal melalui permainan",
+      "h1": "NanoJev: riset keputusan lokal melalui permainan",
+      "description": "NanoJev memakai Qwen3-0.6B untuk menghasilkan probabilitas keputusan dan membandingkan kebijakan permainannya dengan Jev.",
+      "summary": "Model menjawab pertanyaan pilihan, Boolean, dan skor berurutan dari status serta kandidat tanpa mendekode token jawaban. NanoJev adalah model lokal terpisah yang terinspirasi Jev; rekaman membandingkan Jev dan Qwen tanpa penyetelan pada antarmuka permainan yang sama.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Tujuan dan pengguna",
+          "text": "Model menjawab pertanyaan pilihan, Boolean, dan skor berurutan dari status serta kandidat tanpa mendekode token jawaban.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "NanoJev adalah model lokal terpisah yang terinspirasi Jev; rekaman membandingkan Jev dan Qwen tanpa penyetelan pada antarmuka permainan yang sama.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Ambil checkpoint dan data unified-games-v1 yang cocok, lalu kirim batch status/pertanyaan ke layanan CUDA /api/evaluate.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Situs pengembangan interaktif memerlukan akses. Skenario menembak lebih luas dan dukungan masukan terstruktur masih dalam rencana.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "NanoJev: nghiên cứu mô hình quyết định cục bộ qua trò chơi",
+      "h1": "NanoJev: nghiên cứu mô hình quyết định cục bộ qua trò chơi",
+      "description": "NanoJev dùng Qwen3-0.6B tạo xác suất quyết định và so sánh chính sách chơi với Jev.",
+      "summary": "Mô hình trả lời câu hỏi lựa chọn, Boolean và điểm có thứ tự từ trạng thái cùng ứng viên, không giải mã token trả lời. Đây là mô hình cục bộ riêng lấy ý tưởng từ Jev; bản ghi so sánh Jev và Qwen chưa tinh chỉnh trên cùng giao diện trò chơi.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích và đối tượng",
+          "text": "Mô hình trả lời câu hỏi lựa chọn, Boolean và điểm có thứ tự từ trạng thái cùng ứng viên, không giải mã token trả lời.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Đây là mô hình cục bộ riêng lấy ý tưởng từ Jev; bản ghi so sánh Jev và Qwen chưa tinh chỉnh trên cùng giao diện trò chơi.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Lấy checkpoint và dữ liệu unified-games-v1 tương ứng rồi gửi lô trạng thái/câu hỏi đến dịch vụ CUDA /api/evaluate.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Trang phát triển tương tác cần quyền truy cập. Các tình huống bắn rộng hơn và đầu vào có cấu trúc vẫn thuộc lộ trình.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "NanoJev: oyunlarla yerel karar modeli araştırması",
+      "h1": "NanoJev: oyunlarla yerel karar modeli araştırması",
+      "description": "NanoJev, Qwen3-0.6B ile karar olasılıkları üretir ve oyun politikalarını Jev ile karşılaştırır.",
+      "summary": "Durum ve adaylardan seçim, Boolean ve sıralı puan sorularını yanıtlar; yanıt tokenlerini çözmez. NanoJev, Jev’den esinlenen ayrı bir yerel modeldir; kayıtlar aynı oyun arayüzlerinde Jev ve ayarlanmamış Qwen’i karşılaştırır.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Amaç ve hedef kitle",
+          "text": "Durum ve adaylardan seçim, Boolean ve sıralı puan sorularını yanıtlar; yanıt tokenlerini çözmez.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "NanoJev, Jev’den esinlenen ayrı bir yerel modeldir; kayıtlar aynı oyun arayüzlerinde Jev ve ayarlanmamış Qwen’i karşılaştırır.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Eşleşen unified-games-v1 kontrol noktası ve veri kümesi alınır; durum/soru grupları CUDA hizmetindeki /api/evaluate uç noktasına gönderilir.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Etkileşimli geliştirme sitesi erişim izni gerektirir. Daha geniş atış senaryoları ve yapılandırılmış girdi desteği yol haritasındadır.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "NanoJev: ricerca locale sulle decisioni tramite giochi",
+      "h1": "NanoJev: ricerca locale sulle decisioni tramite giochi",
+      "description": "NanoJev usa Qwen3-0.6B per produrre probabilità decisionali e confronta le proprie politiche di gioco con Jev.",
+      "summary": "Risponde a domande di scelta, booleane e con punteggi ordinati da stati e candidati, senza decodificare token di risposta. È un modello locale distinto ispirato a Jev; le registrazioni confrontano Jev e Qwen non adattato sulle stesse interfacce di gioco.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Scopo e destinatari",
+          "text": "Risponde a domande di scelta, booleane e con punteggi ordinati da stati e candidati, senza decodificare token di risposta.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "È un modello locale distinto ispirato a Jev; le registrazioni confrontano Jev e Qwen non adattato sulle stesse interfacce di gioco.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come si usa",
+          "text": "Si ottengono checkpoint e dati unified-games-v1 corrispondenti, poi si inviano batch stato/domanda al servizio CUDA /api/evaluate.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "Il sito interattivo di sviluppo richiede accesso. Scenari di tiro più ampi e input strutturati restano nella roadmap.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

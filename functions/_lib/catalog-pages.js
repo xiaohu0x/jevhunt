@@ -5,6 +5,7 @@ import { ensureScheduler } from "./scheduler.js";
 import { LOCALES } from "../../shared/locales.js";
 import { readCatalogQuery, readCatalogPage } from "../../shared/catalog-query.js";
 import { renderCatalogPagination } from "../../shared/catalog-pagination.js";
+import { readProjectContent, localizeCatalogProjects } from "../../shared/project-content-store.js";
 
 async function localeData(context, locale) {
   const response = await context.env.ASSETS.fetch(new URL(`/assets/locales/${locale}.json`, context.request.url));
@@ -118,15 +119,17 @@ export async function projectPage(context, locale = "en") {
     return missing(context);
   }
   const p = JSON.parse(row.payload), meta = await catalogMeta(context.env.DB);
-  const [similarRows, localized, sameName] = await Promise.all([
+  const [similarRows, localized, sameName, content] = await Promise.all([
     context.env.DB.prepare(`SELECT preview AS data FROM catalog_entries WHERE ${activeClause} AND category=? AND repo!=? ORDER BY CASE WHEN relationship=? THEN 0 ELSE 1 END, stars DESC LIMIT 6`).bind(p.cat, key, p.relationship || "unclassified").all(),
     localeData(context, locale),
     context.env.DB.prepare(`SELECT repo FROM catalog_entries WHERE name = ? COLLATE NOCASE AND repo != ? AND ${activeClause} LIMIT 1`).bind(p.name, key).first(),
+    readProjectContent(context.env.DB, p),
   ]);
   const similar = similarRows.results.map(r => JSON.parse(r.data));
   const excluded = [key, ...similar.map(project => project.repo.toLowerCase())];
   const activeRows = await context.env.DB.prepare(`SELECT preview AS data FROM catalog_entries WHERE ${activeClause} AND repo NOT IN (${excluded.map(() => "?").join(",")}) AND json_extract(payload,'$.archived') = 0 AND json_extract(payload,'$.pushed') GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]' AND date(json_extract(payload,'$.pushed'), '+0 days') = json_extract(payload,'$.pushed') ORDER BY json_extract(payload,'$.pushed') DESC, stars DESC LIMIT 6`).bind(...excluded).all();
-  return htmlResponse(renderProject(p, meta, similar, activeRows.results.map(r => JSON.parse(r.data)), localized.messages, { localeKey: locale, localeInfo: localized.info, localePrefix: prefix, duplicateName: !!sameName }));
+  const localizedRecommendations = await localizeCatalogProjects(context.env.DB, [...similar, ...activeRows.results.map(r => JSON.parse(r.data))], locale);
+  return htmlResponse(renderProject(p, meta, localizedRecommendations.slice(0, similar.length), localizedRecommendations.slice(similar.length), localized.messages, { localeKey: locale, localeInfo: localized.info, localePrefix: prefix, duplicateName: !!sameName, content }));
 }
 
 export async function listingPage(context, category) {

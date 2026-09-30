@@ -1,0 +1,768 @@
+{
+  "version": "source-content-v1",
+  "repo": "walidboulanouar/awesome-jev-use-cases",
+  "repositoryId": 1377468874,
+  "relationship": "resource",
+  "category": "lists",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "path": "README.md",
+      "commit": "c70ef53c2cc80c21cf0d9ba06018195df60f6a27",
+      "url": "https://github.com/walidboulanouar/awesome-jev-use-cases/blob/c70ef53c2cc80c21cf0d9ba06018195df60f6a27/README.md",
+      "sha256": "9facb87d64e77f2c734e098068f36d30a36088ed5fa42473bd02556cb0f92510",
+      "accessedAt": "2026-09-30T07:33:51.793Z",
+      "id": "s1"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "This unofficial directory pairs public demos and repositories with author information, engagement metrics and source links.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 13,
+          "end": 23,
+          "quote": "# Awesome Jev use cases: TypeSafe AI Jev demos, repos, limits and examples\n\nA list of things built with Jev, TypeSafe's model for typed decisions, with the numbers behind them: who posted each demo, how many followers they have, how many likes it got, and what the limits of the model are. This list is open source (CC0), free to copy and reuse, and sponsored by [AY Automate](https://ayautomate.com). It is unofficial and is not affiliated with TypeSafe.\n\nEvery entry links to the original post or repository. Ideas that nobody has shipped are in their own section and marked as ideas.\n\n<p align=\"center\"><a href=\"https://ayautomate.com\"><img src=\"assets/sponsor.png\" alt=\"Sponsored by AY Automate\" width=\"100%\"></a></p>\n\n## Top 30 popular demos\n\nThe 30 most-liked demos, ranked. Click a card to open the original post. Each card shows the demo's rank, area, author, likes, reposts, and reach (likes divided by the author's followers). Preview frames are low-resolution stills from the builders' own videos and belong to them. If an author wants one removed, open an issue. Full metrics for every demo are in [docs](docs/README.md)."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "Its examples explore Jev's typed decisions in routing, classification, guardrails and games, including combinations with generative models.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 89,
+          "end": 90,
+          "quote": "**What is Jev?**\nJev is a model from TypeSafe AI that answers typed questions instead of writing text. Each question is a Choice, a Score or a Noul (yes or no with a probability), and the answer comes back as a number or a pick with a confidence. It does not generate text. See [What Jev is](#what-jev-is)."
+        },
+        {
+          "source": "s1",
+          "start": 101,
+          "end": 108,
+          "quote": "**What can I build with it?**\nRouters, classifiers, judges, guardrails, triage and game agents. The [Top 30 demos](#top-30-popular-demos) and [Browse by area](#browse-by-area) show real examples.\n\n**What are the limits of Jev?**\nIt reads literally, is weak at math, counting and dates, and accuracy drops with irrelevant state. See [Limits of Jev 1.13](#limits-of-jev-113).\n\n**Is Jev better than an LLM?**\nIt is a different tool. Use Jev for fast typed decisions and an LLM for writing. Many demos pair them."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Start with the demos, read model limits and implementation patterns, then inspect original sources or the accompanying CSV data.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 118,
+          "end": 124,
+          "quote": "Short on time? Read in this order.\n\n1. [Most-liked demos](#most-liked-demos) shows what people actually built.\n2. [Limits of Jev 1.13](#limits-of-jev-113) tells you what it cannot do, so you do not build the wrong thing.\n3. [Patterns](#patterns) shows how the working demos are put together.\n4. [Reported cost and latency](#reported-cost-and-latency) has the price and speed numbers.\n5. [Contributing](#contributing) shows how to add yours."
+        },
+        {
+          "source": "s1",
+          "start": 944,
+          "end": 948,
+          "quote": "| Path | What it holds |\n| --- | --- |\n| `README.md` | The list itself |\n| `docs/demos/` | One page per demo, with every metric and the source link |\n| `data/demos.csv`, `data/repos.csv` | The raw numbers behind the tables |"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "Popularity figures are a September 19, 2026 snapshot, not live rankings. Unbuilt ideas are labeled separately, and the list is not affiliated with TypeSafe.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 15,
+          "end": 17,
+          "quote": "A list of things built with Jev, TypeSafe's model for typed decisions, with the numbers behind them: who posted each demo, how many followers they have, how many likes it got, and what the limits of the model are. This list is open source (CC0), free to copy and reuse, and sponsored by [AY Automate](https://ayautomate.com). It is unofficial and is not affiliated with TypeSafe.\n\nEvery entry links to the original post or repository. Ideas that nobody has shipped are in their own section and marked as ideas."
+        },
+        {
+          "source": "s1",
+          "start": 928,
+          "end": 932,
+          "quote": "## How this list was made\n\nSnapshot taken 2026-09-19. Post metrics (likes, reposts, replies) come from the posts themselves, read with yt-dlp. Follower counts come from treg. Repository stars, languages and licenses come from the GitHub API, and every repository was opened to confirm its README mentions Jev or TypeSafe. Descriptions are written from the original posts and READMEs and checked so that no number appears that the source did not contain. Metrics change by the hour, so treat them as a dated snapshot. Followers are counted today, after most of these posts went out, so the follower ratios understate how small the accounts were at the time.\n\nThe two CSV files in [data](data) hold the same numbers, and [docs](docs/README.md) has one page per demo."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "awesome-jev-use-cases: demos, patterns and source links",
+      "h1": "awesome-jev-use-cases: demos, patterns and source links",
+      "description": "awesome-jev-use-cases collects Jev demos, repositories and decision patterns, with original sources and dated popularity data.",
+      "summary": "This unofficial directory pairs public demos and repositories with author information, engagement metrics and source links. Its examples explore Jev's typed decisions in routing, classification, guardrails and games, including combinations with generative models.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose and audience",
+          "text": "This unofficial directory pairs public demos and repositories with author information, engagement metrics and source links.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "Its examples explore Jev's typed decisions in routing, classification, guardrails and games, including combinations with generative models.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Using the project",
+          "text": "Start with the demos, read model limits and implementation patterns, then inspect original sources or the accompanying CSV data.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "Popularity figures are a September 19, 2026 snapshot, not live rankings. Unbuilt ideas are labeled separately, and the list is not affiliated with TypeSafe.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "awesome-jev-use-cases：演示、模式与原始来源",
+      "h1": "awesome-jev-use-cases：演示、模式与原始来源",
+      "description": "awesome-jev-use-cases 汇集 Jev 演示、仓库和决策模式，附原始来源及带日期的热度数据。",
+      "summary": "这个非官方目录为公开演示与仓库整理作者信息、互动指标和来源链接。 示例涵盖 Jev 在路由、分类、护栏和游戏中的类型化决策，以及与生成模型的组合。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途与适用对象",
+          "text": "这个非官方目录为公开演示与仓库整理作者信息、互动指标和来源链接。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "示例涵盖 Jev 在路由、分类、护栏和游戏中的类型化决策，以及与生成模型的组合。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "可先看演示，再读模型限制与实现模式，最后检查原始来源或配套 CSV 数据。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "热度指标为 2026 年 9 月 19 日快照，不是实时排名。未实现创意单独标注，目录与 TypeSafe 无隶属关系。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "awesome-jev-use-cases：示範、模式與原始來源",
+      "h1": "awesome-jev-use-cases：示範、模式與原始來源",
+      "description": "awesome-jev-use-cases 彙整 Jev 示範、儲存庫和決策模式，附原始來源及註明日期的人氣資料。",
+      "summary": "這個非官方目錄為公開示範及儲存庫整理作者資訊、互動指標與來源連結。 範例涵蓋 Jev 在分流、分類、護欄和遊戲中的型別化決策，以及搭配生成模型的做法。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途與適用對象",
+          "text": "這個非官方目錄為公開示範及儲存庫整理作者資訊、互動指標與來源連結。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "範例涵蓋 Jev 在分流、分類、護欄和遊戲中的型別化決策，以及搭配生成模型的做法。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "可先看示範，再讀模型限制與實作模式，最後檢查原始來源或配套 CSV 資料。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "人氣指標是 2026 年 9 月 19 日快照，並非即時排名。尚未實作的構想另有標示，目錄與 TypeSafe 無隸屬關係。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "awesome-jev-use-cases：デモ・実装パターン・出典の一覧",
+      "h1": "awesome-jev-use-cases：デモ・実装パターン・出典の一覧",
+      "description": "awesome-jev-use-cases は Jev のデモやリポジトリ、判断パターンを出典と日付付き人気データで整理します。",
+      "summary": "非公式の一覧で、公開デモとリポジトリに作者情報、反応指標、原資料のリンクを添えています。 振り分け、分類、ガードレール、ゲームでの Jev 判断と、生成モデルを組み合わせた例を紹介します。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途と対象",
+          "text": "非公式の一覧で、公開デモとリポジトリに作者情報、反応指標、原資料のリンクを添えています。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev との関係",
+          "text": "振り分け、分類、ガードレール、ゲームでの Jev 判断と、生成モデルを組み合わせた例を紹介します。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "デモから入り、制約と実装パターンを読んで、原資料や付属 CSV を確認できます。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範囲と制約",
+          "text": "人気指標は 2026 年 9 月 19 日時点の記録です。未実装の案は別に示され、TypeSafe の公式一覧ではありません。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "awesome-jev-use-cases: 데모·패턴·출처 모음",
+      "h1": "awesome-jev-use-cases: 데모·패턴·출처 모음",
+      "description": "awesome-jev-use-cases는 Jev 데모, 저장소, 판단 패턴을 원본 출처와 날짜가 있는 인기 데이터로 정리합니다.",
+      "summary": "비공식 목록으로 공개 데모와 저장소에 작성자 정보, 반응 지표, 원본 링크를 붙입니다. 라우팅, 분류, 가드레일, 게임에서 Jev의 형식화된 판단과 생성 모델을 조합한 사례를 소개합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "용도와 대상",
+          "text": "비공식 목록으로 공개 데모와 저장소에 작성자 정보, 반응 지표, 원본 링크를 붙입니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "라우팅, 분류, 가드레일, 게임에서 Jev의 형식화된 판단과 생성 모델을 조합한 사례를 소개합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "데모를 본 뒤 모델 한계와 구현 패턴을 읽고 원본 출처나 함께 제공되는 CSV를 확인합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 한계",
+          "text": "인기 지표는 2026년 9월 19일 스냅샷이며 실시간 순위가 아닙니다. 미구현 아이디어는 따로 표시하고 TypeSafe와 제휴하지 않습니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "awesome-jev-use-cases: demos, patrones y fuentes",
+      "h1": "awesome-jev-use-cases: demos, patrones y fuentes",
+      "description": "awesome-jev-use-cases reúne demos, repositorios y patrones Jev con fuentes originales y datos de popularidad fechados.",
+      "summary": "Este directorio no oficial acompaña demos y repositorios públicos con autores, métricas de interacción y enlaces originales. Sus ejemplos exploran decisiones Jev en rutas, clasificación, controles y juegos, incluidas combinaciones con modelos generativos.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "Este directorio no oficial acompaña demos y repositorios públicos con autores, métricas de interacción y enlaces originales.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Sus ejemplos exploran decisiones Jev en rutas, clasificación, controles y juegos, incluidas combinaciones con modelos generativos.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo se usa",
+          "text": "Empiece por demos, consulte límites y patrones y después examine fuentes originales o los CSV adjuntos.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "Las cifras son una instantánea del 19 de septiembre de 2026, no un ranking en vivo. Las ideas sin implementar se distinguen y no hay afiliación TypeSafe.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "awesome-jev-use-cases : démos, pratiques et sources",
+      "h1": "awesome-jev-use-cases : démos, pratiques et sources",
+      "description": "awesome-jev-use-cases rassemble démos, dépôts et pratiques Jev avec sources originales et popularité datée.",
+      "summary": "Ce répertoire non officiel associe démos et dépôts publics à leurs auteurs, indicateurs d'engagement et liens sources. Les exemples explorent routage, classification, garde-fous et jeux avec Jev, parfois associé à des modèles génératifs.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Usage et public visé",
+          "text": "Ce répertoire non officiel associe démos et dépôts publics à leurs auteurs, indicateurs d'engagement et liens sources.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Les exemples explorent routage, classification, garde-fous et jeux avec Jev, parfois associé à des modèles génératifs.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Commencez par les démos, lisez limites et pratiques, puis examinez les sources originales ou les CSV joints.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "Les chiffres datent du 19 septembre 2026, sans classement en direct. Les idées non réalisées sont distinguées ; le répertoire n'est pas affilié à TypeSafe.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "awesome-jev-use-cases: Demos, Muster und Quellen",
+      "h1": "awesome-jev-use-cases: Demos, Muster und Quellen",
+      "description": "awesome-jev-use-cases sammelt Jev-Demos, Repositories und Entscheidungsmuster mit Originalquellen und datierten Beliebtheitswerten.",
+      "summary": "Das inoffizielle Verzeichnis ergänzt öffentliche Demos und Repositories um Autorenangaben, Interaktionswerte und Quellenlinks. Die Beispiele behandeln Jev-Entscheidungen für Routing, Klassifikation, Schutzmechanismen und Spiele, auch kombiniert mit generativen Modellen.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Zweck und Zielgruppe",
+          "text": "Das inoffizielle Verzeichnis ergänzt öffentliche Demos und Repositories um Autorenangaben, Interaktionswerte und Quellenlinks.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Die Beispiele behandeln Jev-Entscheidungen für Routing, Klassifikation, Schutzmechanismen und Spiele, auch kombiniert mit generativen Modellen.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Verwendung",
+          "text": "Beginnen Sie mit Demos, lesen Sie Grenzen und Umsetzungsmuster und prüfen Sie danach Originalquellen oder beigefügte CSV-Daten.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Die Werte stammen vom 19. September 2026 und sind keine Live-Rangliste. Noch nicht umgesetzte Ideen sind getrennt markiert; es besteht keine TypeSafe-Zugehörigkeit.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "awesome-jev-use-cases: demos, padrões e fontes",
+      "h1": "awesome-jev-use-cases: demos, padrões e fontes",
+      "description": "awesome-jev-use-cases reúne demos, repositórios e padrões Jev com fontes originais e dados de popularidade datados.",
+      "summary": "O diretório não oficial associa demos e repositórios públicos a autores, métricas de interação e links de origem. Os exemplos exploram decisões Jev em roteamento, classificação, proteções e jogos, inclusive junto a modelos generativos.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Finalidade e público",
+          "text": "O diretório não oficial associa demos e repositórios públicos a autores, métricas de interação e links de origem.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "Os exemplos exploram decisões Jev em roteamento, classificação, proteções e jogos, inclusive junto a modelos generativos.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Comece pelas demos, leia limites e padrões e depois consulte fontes originais ou os CSVs fornecidos.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "Os números são um retrato de 19 de setembro de 2026, não um ranking ao vivo. Ideias não implementadas ficam separadas; não há vínculo com a TypeSafe.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "awesome-jev-use-cases: демо, схемы и первоисточники",
+      "h1": "awesome-jev-use-cases: демо, схемы и первоисточники",
+      "description": "awesome-jev-use-cases собирает демо, репозитории и схемы Jev с первоисточниками и датированными показателями популярности.",
+      "summary": "Неофициальный каталог дополняет публичные демо и репозитории сведениями об авторах, реакциях аудитории и ссылками на источники. Примеры показывают решения Jev для маршрутизации, классификации, защитных проверок и игр, включая сочетания с генеративными моделями.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Неофициальный каталог дополняет публичные демо и репозитории сведениями об авторах, реакциях аудитории и ссылками на источники.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Примеры показывают решения Jev для маршрутизации, классификации, защитных проверок и игр, включая сочетания с генеративными моделями.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Начните с демо, изучите ограничения и схемы реализации, затем откройте первоисточники или приложенные CSV.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Показатели относятся к 19 сентября 2026 года, а не к живому рейтингу. Нереализованные идеи помечены отдельно; каталог не связан с TypeSafe.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "awesome-jev-use-cases: डेमो, पैटर्न और मूल स्रोत",
+      "h1": "awesome-jev-use-cases: डेमो, पैटर्न और मूल स्रोत",
+      "description": "awesome-jev-use-cases मूल स्रोतों और तारीख वाले लोकप्रियता डेटा के साथ Jev डेमो, रिपॉज़िटरी और निर्णय पैटर्न इकट्ठा करता है।",
+      "summary": "यह अनौपचारिक सूची सार्वजनिक डेमो और रिपॉज़िटरी के लेखक, सहभागिता आँकड़े तथा मूल लिंक देती है। उदाहरण रूटिंग, वर्गीकरण, सुरक्षा जाँच और खेलों में Jev निर्णय दिखाते हैं, कभी जनरेटिव मॉडल के साथ।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "उद्देश्य और उपयोगकर्ता",
+          "text": "यह अनौपचारिक सूची सार्वजनिक डेमो और रिपॉज़िटरी के लेखक, सहभागिता आँकड़े तथा मूल लिंक देती है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "उदाहरण रूटिंग, वर्गीकरण, सुरक्षा जाँच और खेलों में Jev निर्णय दिखाते हैं, कभी जनरेटिव मॉडल के साथ।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल का तरीका",
+          "text": "डेमो से शुरू करें, सीमाएँ और कार्यान्वयन पैटर्न पढ़ें, फिर मूल स्रोत या साथ की CSV जाँचें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "आँकड़े 19 सितंबर 2026 का स्नैपशॉट हैं, लाइव रैंकिंग नहीं। अधूरे विचार अलग चिह्नित हैं और सूची TypeSafe से संबद्ध नहीं है।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "awesome-jev-use-cases: demo, pola, dan sumber asli",
+      "h1": "awesome-jev-use-cases: demo, pola, dan sumber asli",
+      "description": "awesome-jev-use-cases mengumpulkan demo, repositori, serta pola Jev dengan sumber asli dan data popularitas bertanggal.",
+      "summary": "Direktori tidak resmi ini menyertakan penulis, metrik interaksi, dan tautan sumber untuk demo serta repositori publik. Contohnya mengeksplorasi keputusan Jev untuk perutean, klasifikasi, pengaman, dan permainan, termasuk bersama model generatif.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Tujuan dan pengguna",
+          "text": "Direktori tidak resmi ini menyertakan penulis, metrik interaksi, dan tautan sumber untuk demo serta repositori publik.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Contohnya mengeksplorasi keputusan Jev untuk perutean, klasifikasi, pengaman, dan permainan, termasuk bersama model generatif.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Mulai dari demo, baca batas dan pola penerapan, lalu periksa sumber asli atau data CSV yang disertakan.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Angka popularitas adalah snapshot 19 September 2026, bukan peringkat langsung. Ide yang belum dibuat ditandai terpisah; daftar tidak berafiliasi dengan TypeSafe.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "awesome-jev-use-cases: demo, mẫu ứng dụng và nguồn gốc",
+      "h1": "awesome-jev-use-cases: demo, mẫu ứng dụng và nguồn gốc",
+      "description": "awesome-jev-use-cases tập hợp demo, kho mã và mẫu Jev với nguồn gốc cùng dữ liệu phổ biến có ngày ghi nhận.",
+      "summary": "Danh mục không chính thức kèm tác giả, chỉ số tương tác và liên kết nguồn cho demo cùng kho mã công khai. Ví dụ khám phá quyết định Jev trong định tuyến, phân loại, kiểm soát và trò chơi, kể cả kết hợp mô hình sinh.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích và đối tượng",
+          "text": "Danh mục không chính thức kèm tác giả, chỉ số tương tác và liên kết nguồn cho demo cùng kho mã công khai.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Ví dụ khám phá quyết định Jev trong định tuyến, phân loại, kiểm soát và trò chơi, kể cả kết hợp mô hình sinh.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Bắt đầu bằng demo, đọc giới hạn và cách triển khai rồi xem nguồn gốc hoặc dữ liệu CSV đi kèm.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Chỉ số là ảnh chụp ngày 19 tháng 9 năm 2026, không phải xếp hạng trực tiếp. Ý tưởng chưa làm được đánh dấu riêng; danh mục không liên kết TypeSafe.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "awesome-jev-use-cases: demolar, örüntüler ve kaynaklar",
+      "h1": "awesome-jev-use-cases: demolar, örüntüler ve kaynaklar",
+      "description": "awesome-jev-use-cases, özgün kaynaklar ve tarihli popülerlik verileriyle Jev demolarını, depolarını ve karar örüntülerini toplar.",
+      "summary": "Resmî olmayan dizin, açık demo ve depoları yazar bilgileri, etkileşim ölçümleri ve kaynak bağlantılarıyla sunar. Örnekler yönlendirme, sınıflandırma, koruma ve oyunlarda Jev kararlarını, bazen üretken modellerle birlikte ele alır.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Amaç ve hedef kitle",
+          "text": "Resmî olmayan dizin, açık demo ve depoları yazar bilgileri, etkileşim ölçümleri ve kaynak bağlantılarıyla sunar.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Örnekler yönlendirme, sınıflandırma, koruma ve oyunlarda Jev kararlarını, bazen üretken modellerle birlikte ele alır.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Demolardan başlanıp sınırlar ve uygulama örüntüleri okunur; ardından özgün kaynaklar veya eşlik eden CSV’ler incelenir.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Sayılar 19 Eylül 2026 anlık görüntüsüdür, canlı sıralama değildir. Yapılmamış fikirler ayrı işaretlidir; liste TypeSafe ile bağlantılı değildir.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "awesome-jev-use-cases: demo, schemi e fonti",
+      "h1": "awesome-jev-use-cases: demo, schemi e fonti",
+      "description": "awesome-jev-use-cases raccoglie demo, repository e schemi Jev con fonti originali e dati di popolarità datati.",
+      "summary": "Il catalogo non ufficiale affianca demo e repository pubblici ad autori, metriche d'interazione e collegamenti originali. Gli esempi esplorano decisioni Jev per instradamento, classificazione, controlli e giochi, anche insieme a modelli generativi.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Scopo e destinatari",
+          "text": "Il catalogo non ufficiale affianca demo e repository pubblici ad autori, metriche d'interazione e collegamenti originali.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Gli esempi esplorano decisioni Jev per instradamento, classificazione, controlli e giochi, anche insieme a modelli generativi.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come si usa",
+          "text": "Si parte dalle demo, si leggono limiti e schemi e poi si consultano fonti originali o CSV allegati.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "I numeri sono un'istantanea del 19 settembre 2026, non una classifica in tempo reale. Le idee non realizzate sono separate; non c'è affiliazione TypeSafe.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

@@ -1,0 +1,782 @@
+{
+  "version": "source-content-v1",
+  "repo": "lakeday-org/perch",
+  "repositoryId": 1372535054,
+  "relationship": "jev-app",
+  "category": "agents",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "path": "README.md",
+      "commit": "eaa137bf229ba5947740ea0c82820bd5517b17fb",
+      "url": "https://github.com/lakeday-org/perch/blob/eaa137bf229ba5947740ea0c82820bd5517b17fb/README.md",
+      "sha256": "48b9be20decd008d455c866ad89cfef284922a74d7b4bbb3cfdcac2fb213c2d2",
+      "accessedAt": "2026-09-30T07:33:51.804Z",
+      "id": "s1"
+    },
+    {
+      "path": "src/systemone.js",
+      "commit": "eaa137bf229ba5947740ea0c82820bd5517b17fb",
+      "url": "https://github.com/lakeday-org/perch/blob/eaa137bf229ba5947740ea0c82820bd5517b17fb/src/systemone.js",
+      "sha256": "506ed2134d91ea21ce528645be614a6849b4a2cdde45f37590f8124f8de35f79",
+      "accessedAt": "2026-09-30T07:33:52.186Z",
+      "id": "s2"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "Define semantic expectations in perch.yaml, scoped to files or methods, and inspect the resulting code findings.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 23,
+          "end": 23,
+          "quote": "Semantic code linting with Jev."
+        },
+        {
+          "source": "s1",
+          "start": 64,
+          "end": 76,
+          "quote": "## Semantic linting\n\nExtend perch with custom rules, in `perch.yaml`:\n\n```yaml\n- name: env-read-once\n  where: \"src/**/*.js\"\n  each: method\n  min: 70\n  ensure: >\n    This method takes its configuration as arguments. Reading process.env is the\n    command line's job.\n```"
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "The System One client asks typed questions about supplied state, defaults to jev-latest and calls TypeSafe's API.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s2",
+          "start": 1,
+          "end": 5,
+          "quote": "/** TypeSafe System One client: typed questions over a state, answered with probabilities. */\nimport { createHash } from 'node:crypto';\nimport { questionBatches, estimateTokens, TOKEN_LIMITS, ContextLimitError } from './tokens.js';\n\nexport const DEFAULT_SYSTEM_ONE_MODEL = 'jev-latest';"
+        },
+        {
+          "source": "s2",
+          "start": 15,
+          "end": 25,
+          "quote": "export function createSystemOne({\n  apiKey,\n  model = DEFAULT_SYSTEM_ONE_MODEL,\n  fetchImpl = globalThis.fetch,\n  baseUrl = 'https://api.typesafe.ai/v1/systemone',\n  retryDelayMs = 2000,\n  sleep = ms => new Promise(resolve => setTimeout(resolve, ms)),\n  log = () => {},\n  limits = TOKEN_LIMITS,\n} = {}) {\n  if (!apiKey) throw new Error('PERCH_API_KEY is not set. Export an API key before running perch scan or perch check.');"
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Run a scan, inspect ranked issues, then recheck an issue after a change; setup commands add instructions for supported coding assistants.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 37,
+          "end": 53,
+          "quote": "```console\n$ perch scan\ncheckout.py\n  ID        Line  Severity  Type    Confidence  Problem                     Method\n  bdc67421    14  P1 (0.8)  defect         81%  wrong_order                 place_order\n  ddc5c917    24  P1 (0.8)  defect         92%  inverted_condition          can_fulfil\n\ncart.py\n  ID        Line  Severity  Type    Confidence  Problem             Method\n  287bfb9d     9  P1 (1.0)  defect         90%  off_by_one          subtotal\n  80d6ebbb    29  P1 (1.4)  defect         89%  unhandled_null      cheapest\n\n✖ 20 problems in 5 files, all failing\n```\n\n`perch issues` lists them worst first. `perch issues <id>` opens one up. `perch check\n<id>` asks again after a fix, and records what it finds nowhere."
+        },
+        {
+          "source": "s1",
+          "start": 55,
+          "end": 62,
+          "quote": "## Agent skills\n\n```sh\nperch setup claude-code   # .claude/skills/perch/SKILL.md\nperch setup codex         # .codex/skills/perch/SKILL.md\nperch setup pi            # .pi/skills/perch/SKILL.md\nperch setup cursor        # .cursor/rules/perch.mdc\n```"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "Scans and checks require PERCH_API_KEY. A follow-up perch check does not save its findings into the recorded results.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 52,
+          "end": 53,
+          "quote": "`perch issues` lists them worst first. `perch issues <id>` opens one up. `perch check\n<id>` asks again after a fix, and records what it finds nowhere."
+        },
+        {
+          "source": "s2",
+          "start": 25,
+          "end": 25,
+          "quote": "  if (!apiKey) throw new Error('PERCH_API_KEY is not set. Export an API key before running perch scan or perch check.');"
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "perch: semantic code linting with Jev",
+      "h1": "perch: semantic code linting with Jev",
+      "description": "perch uses Jev to inspect code and supports natural-language rules with ranked findings and follow-up checks.",
+      "summary": "Define semantic expectations in perch.yaml, scoped to files or methods, and inspect the resulting code findings. The System One client asks typed questions about supplied state, defaults to jev-latest and calls TypeSafe's API.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose and audience",
+          "text": "Define semantic expectations in perch.yaml, scoped to files or methods, and inspect the resulting code findings.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "The System One client asks typed questions about supplied state, defaults to jev-latest and calls TypeSafe's API.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Using the project",
+          "text": "Run a scan, inspect ranked issues, then recheck an issue after a change; setup commands add instructions for supported coding assistants.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "Scans and checks require PERCH_API_KEY. A follow-up perch check does not save its findings into the recorded results.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "perch：用 Jev 进行语义代码检查",
+      "h1": "perch：用 Jev 进行语义代码检查",
+      "description": "perch 用 Jev 检查代码，支持自然语言规则、问题排序和修改后的复查。",
+      "summary": "在 perch.yaml 中定义语义要求，并按文件或方法限定范围，再查看代码检查结果。 System One 客户端针对给定状态提交类型化问题，默认使用 jev-latest 并调用 TypeSafe API。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途与适用对象",
+          "text": "在 perch.yaml 中定义语义要求，并按文件或方法限定范围，再查看代码检查结果。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "System One 客户端针对给定状态提交类型化问题，默认使用 jev-latest 并调用 TypeSafe API。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "扫描后按排名查看问题，修改后复查指定条目；setup 命令可为支持的编程助手添加使用说明。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "扫描与检查需要 PERCH_API_KEY；后续 perch check 的发现不会写入已记录结果。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "perch：以 Jev 進行語意程式碼檢查",
+      "h1": "perch：以 Jev 進行語意程式碼檢查",
+      "description": "perch 用 Jev 檢查程式碼，支援自然語言規則、問題排序及修改後複查。",
+      "summary": "在 perch.yaml 定義語意要求，限定檔案或方法範圍後查看程式碼檢查結果。 System One 用戶端針對給定狀態提出型別化問題，預設採 jev-latest 並呼叫 TypeSafe API。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途與適用對象",
+          "text": "在 perch.yaml 定義語意要求，限定檔案或方法範圍後查看程式碼檢查結果。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "System One 用戶端針對給定狀態提出型別化問題，預設採 jev-latest 並呼叫 TypeSafe API。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "掃描後依排序查看問題，修改後複查指定項目；setup 指令可為支援的開發助手加入使用說明。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "掃描與檢查需要 PERCH_API_KEY；後續 perch check 的發現不會寫入既有結果紀錄。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "perch：Jev でコードを意味的に検査",
+      "h1": "perch：Jev でコードを意味的に検査",
+      "description": "perch は Jev でコードを調べ、自然言語ルール、問題の順位付け、変更後の再確認に対応します。",
+      "summary": "perch.yaml に意味上の要件を記述し、対象ファイルやメソッドを限定して検出結果を確認します。 System One クライアントが状態への型付き質問を送り、既定の jev-latest で TypeSafe API を呼びます。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途と対象",
+          "text": "perch.yaml に意味上の要件を記述し、対象ファイルやメソッドを限定して検出結果を確認します。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev との関係",
+          "text": "System One クライアントが状態への型付き質問を送り、既定の jev-latest で TypeSafe API を呼びます。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "スキャン後に順位付きの問題を開き、修正後に再検査します。setup は対応する開発助手へ利用説明を追加します。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範囲と制約",
+          "text": "スキャンと検査には PERCH_API_KEY が必要です。perch check の再検査結果は保存済みの記録へ書き込まれません。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "perch: Jev 기반 의미 코드 검사",
+      "h1": "perch: Jev 기반 의미 코드 검사",
+      "description": "perch는 Jev로 코드를 검사하며 자연어 규칙, 문제 순위, 변경 후 재검사를 지원합니다.",
+      "summary": "perch.yaml에 의미상 요구를 정의하고 파일이나 메서드로 범위를 좁혀 코드 검사 결과를 확인합니다. System One 클라이언트는 상태에 대한 형식화된 질문을 보내며 기본 jev-latest로 TypeSafe API를 호출합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "용도와 대상",
+          "text": "perch.yaml에 의미상 요구를 정의하고 파일이나 메서드로 범위를 좁혀 코드 검사 결과를 확인합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "System One 클라이언트는 상태에 대한 형식화된 질문을 보내며 기본 jev-latest로 TypeSafe API를 호출합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "스캔한 뒤 순위별 문제를 확인하고 변경 후 해당 항목을 재검사합니다. setup 명령은 지원 코딩 도우미에 지침을 추가합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 한계",
+          "text": "스캔과 검사에는 PERCH_API_KEY가 필요합니다. 후속 perch check 결과는 기존 기록에 저장되지 않습니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "perch: análisis semántico de código con Jev",
+      "h1": "perch: análisis semántico de código con Jev",
+      "description": "perch inspecciona código con Jev y admite reglas en lenguaje natural, hallazgos ordenados y comprobaciones posteriores.",
+      "summary": "Defina expectativas semánticas en perch.yaml con alcance por archivo o método y revise los hallazgos. El cliente System One envía preguntas tipadas sobre el estado a TypeSafe, usando jev-latest por defecto.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "Defina expectativas semánticas en perch.yaml con alcance por archivo o método y revise los hallazgos.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "El cliente System One envía preguntas tipadas sobre el estado a TypeSafe, usando jev-latest por defecto.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo se usa",
+          "text": "Ejecute un escaneo, revise incidencias ordenadas y compruebe una tras el cambio; setup añade instrucciones para asistentes compatibles.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "Escaneos y comprobaciones requieren PERCH_API_KEY. perch check no guarda sus hallazgos en los resultados registrados.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "perch : analyse sémantique du code avec Jev",
+      "h1": "perch : analyse sémantique du code avec Jev",
+      "description": "perch inspecte le code avec Jev et propose règles en langage naturel, résultats classés et vérifications après modification.",
+      "summary": "Définissez les attentes sémantiques dans perch.yaml, par fichiers ou méthodes, puis examinez les problèmes détectés. Le client System One envoie des questions typées sur l'état à TypeSafe avec jev-latest par défaut.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Usage et public visé",
+          "text": "Définissez les attentes sémantiques dans perch.yaml, par fichiers ou méthodes, puis examinez les problèmes détectés.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Le client System One envoie des questions typées sur l'état à TypeSafe avec jev-latest par défaut.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Lancez un scan, consultez les problèmes classés et revérifiez après correction ; setup ajoute des instructions pour les assistants compatibles.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "Scans et vérifications nécessitent PERCH_API_KEY. perch check n'enregistre pas ses observations dans les résultats sauvegardés.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "perch: semantische Codeprüfung mit Jev",
+      "h1": "perch: semantische Codeprüfung mit Jev",
+      "description": "perch untersucht Code mit Jev und unterstützt natürlichsprachliche Regeln, priorisierte Funde und Nachprüfungen.",
+      "summary": "Definieren Sie semantische Erwartungen in perch.yaml für Dateien oder Methoden und prüfen Sie die gefundenen Probleme. Der System-One-Client sendet typisierte Fragen zum Zustand an TypeSafe und nutzt standardmäßig jev-latest.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Zweck und Zielgruppe",
+          "text": "Definieren Sie semantische Erwartungen in perch.yaml für Dateien oder Methoden und prüfen Sie die gefundenen Probleme.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Der System-One-Client sendet typisierte Fragen zum Zustand an TypeSafe und nutzt standardmäßig jev-latest.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Verwendung",
+          "text": "Scannen Sie, öffnen Sie priorisierte Probleme und prüfen Sie nach Änderungen erneut; setup ergänzt Anweisungen für unterstützte Coding-Assistenten.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Scans und Prüfungen benötigen PERCH_API_KEY. perch check schreibt neue Funde nicht in die gespeicherten Ergebnisse.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "perch: análise semântica de código com Jev",
+      "h1": "perch: análise semântica de código com Jev",
+      "description": "perch inspeciona código com Jev e oferece regras em linguagem natural, achados ordenados e verificações posteriores.",
+      "summary": "Defina expectativas semânticas em perch.yaml por arquivos ou métodos e examine os problemas encontrados. O cliente System One envia perguntas tipadas sobre o estado à TypeSafe, usando jev-latest por padrão.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Finalidade e público",
+          "text": "Defina expectativas semânticas em perch.yaml por arquivos ou métodos e examine os problemas encontrados.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "O cliente System One envia perguntas tipadas sobre o estado à TypeSafe, usando jev-latest por padrão.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Execute uma varredura, veja problemas ordenados e confira após a alteração; setup adiciona instruções para assistentes compatíveis.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "Varreduras e verificações exigem PERCH_API_KEY. perch check não salva seus achados nos resultados registrados.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "perch: семантическая проверка кода через Jev",
+      "h1": "perch: семантическая проверка кода через Jev",
+      "description": "perch проверяет код через Jev, поддерживая правила на естественном языке, ранжированные находки и повторные проверки.",
+      "summary": "Задайте семантические требования в perch.yaml для файлов или методов и изучите найденные проблемы. Клиент System One отправляет типизированные вопросы о состоянии в TypeSafe, по умолчанию используя jev-latest.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Задайте семантические требования в perch.yaml для файлов или методов и изучите найденные проблемы.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Клиент System One отправляет типизированные вопросы о состоянии в TypeSafe, по умолчанию используя jev-latest.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Запустите сканирование, изучите ранжированные проблемы и перепроверьте после изменения; setup добавляет инструкции совместимым агентам.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Сканирование и проверки требуют PERCH_API_KEY. perch check не сохраняет новые находки в записанные результаты.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "perch: Jev से अर्थ-आधारित कोड जाँच",
+      "h1": "perch: Jev से अर्थ-आधारित कोड जाँच",
+      "description": "perch, Jev से कोड जाँचता है और प्राकृतिक भाषा नियम, क्रमबद्ध समस्याएँ तथा बदलाव के बाद जाँच देता है।",
+      "summary": "perch.yaml में फ़ाइल या मेथड के दायरे में अर्थ-संबंधी अपेक्षाएँ तय करें और मिली समस्याएँ देखें। System One क्लाइंट स्थिति पर निश्चित प्रकार के प्रश्न TypeSafe को भेजता है और डिफ़ॉल्ट jev-latest इस्तेमाल करता है।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "उद्देश्य और उपयोगकर्ता",
+          "text": "perch.yaml में फ़ाइल या मेथड के दायरे में अर्थ-संबंधी अपेक्षाएँ तय करें और मिली समस्याएँ देखें।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "System One क्लाइंट स्थिति पर निश्चित प्रकार के प्रश्न TypeSafe को भेजता है और डिफ़ॉल्ट jev-latest इस्तेमाल करता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल का तरीका",
+          "text": "स्कैन करें, समस्याएँ क्रम से देखें और बदलाव के बाद फिर जाँचें; setup समर्थित कोडिंग सहायकों में निर्देश जोड़ता है।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "स्कैन और जाँच के लिए PERCH_API_KEY चाहिए। perch check के नए निष्कर्ष पहले से दर्ज परिणामों में सहेजे नहीं जाते।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "perch: lint kode semantik dengan Jev",
+      "h1": "perch: lint kode semantik dengan Jev",
+      "description": "perch memeriksa kode memakai Jev dengan aturan bahasa alami, temuan berperingkat, dan pemeriksaan lanjutan.",
+      "summary": "Tentukan harapan semantik dalam perch.yaml untuk berkas atau metode, lalu periksa temuan kodenya. Klien System One mengirim pertanyaan bertipe tentang status ke TypeSafe dengan jev-latest sebagai bawaan.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Tujuan dan pengguna",
+          "text": "Tentukan harapan semantik dalam perch.yaml untuk berkas atau metode, lalu periksa temuan kodenya.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Klien System One mengirim pertanyaan bertipe tentang status ke TypeSafe dengan jev-latest sebagai bawaan.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Jalankan pemindaian, lihat masalah berperingkat, lalu periksa lagi setelah perubahan; setup menambah petunjuk bagi asisten yang didukung.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Pemindaian dan pemeriksaan memerlukan PERCH_API_KEY. perch check tidak menyimpan temuan barunya ke hasil yang telah dicatat.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "perch: kiểm tra mã theo ngữ nghĩa bằng Jev",
+      "h1": "perch: kiểm tra mã theo ngữ nghĩa bằng Jev",
+      "description": "perch kiểm tra mã bằng Jev, hỗ trợ quy tắc ngôn ngữ tự nhiên, xếp hạng phát hiện và kiểm tra sau thay đổi.",
+      "summary": "Định nghĩa yêu cầu ngữ nghĩa trong perch.yaml theo tệp hoặc phương thức rồi xem vấn đề được phát hiện. Ứng dụng khách System One gửi câu hỏi có kiểu về trạng thái đến TypeSafe, mặc định dùng jev-latest.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích và đối tượng",
+          "text": "Định nghĩa yêu cầu ngữ nghĩa trong perch.yaml theo tệp hoặc phương thức rồi xem vấn đề được phát hiện.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Ứng dụng khách System One gửi câu hỏi có kiểu về trạng thái đến TypeSafe, mặc định dùng jev-latest.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Quét, xem vấn đề theo thứ tự rồi kiểm tra lại sau sửa đổi; setup thêm chỉ dẫn cho trợ lý lập trình được hỗ trợ.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Quét và kiểm tra cần PERCH_API_KEY. perch check không lưu phát hiện mới vào kết quả đã ghi.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "perch: Jev ile anlamsal kod denetimi",
+      "h1": "perch: Jev ile anlamsal kod denetimi",
+      "description": "perch, Jev ile kod inceler; doğal dil kuralları, sıralı bulgular ve değişiklik sonrası kontroller sunar.",
+      "summary": "perch.yaml içinde dosya veya metot kapsamlı anlamsal beklentiler belirlenir ve bulunan sorunlar incelenir. System One istemcisi durumla ilgili türü belirli soruları TypeSafe’e gönderir; varsayılanı jev-latest’tir.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Amaç ve hedef kitle",
+          "text": "perch.yaml içinde dosya veya metot kapsamlı anlamsal beklentiler belirlenir ve bulunan sorunlar incelenir.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "System One istemcisi durumla ilgili türü belirli soruları TypeSafe’e gönderir; varsayılanı jev-latest’tir.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Tarama yapılır, sıralı sorunlar incelenir ve değişiklikten sonra yeniden kontrol edilir; setup desteklenen asistanlara talimat ekler.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Tarama ve kontroller PERCH_API_KEY gerektirir. perch check bulgularını kayıtlı sonuçlara eklemez.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "perch: controllo semantico del codice con Jev",
+      "h1": "perch: controllo semantico del codice con Jev",
+      "description": "perch esamina il codice con Jev e offre regole in linguaggio naturale, risultati ordinati e verifiche successive.",
+      "summary": "Si definiscono aspettative semantiche in perch.yaml per file o metodi e si esaminano i problemi trovati. Il client System One invia domande tipizzate sullo stato a TypeSafe, usando jev-latest per impostazione predefinita.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Scopo e destinatari",
+          "text": "Si definiscono aspettative semantiche in perch.yaml per file o metodi e si esaminano i problemi trovati.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Il client System One invia domande tipizzate sullo stato a TypeSafe, usando jev-latest per impostazione predefinita.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come si usa",
+          "text": "Si esegue una scansione, si consultano problemi ordinati e si ricontrolla dopo la modifica; setup aggiunge istruzioni agli assistenti supportati.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "Scansioni e verifiche richiedono PERCH_API_KEY. perch check non salva le nuove osservazioni nei risultati registrati.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

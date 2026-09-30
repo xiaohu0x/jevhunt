@@ -1,0 +1,776 @@
+{
+  "version": "source-content-v1",
+  "repo": "vercel/eve",
+  "repositoryId": 1271113810,
+  "relationship": "integration",
+  "category": "integrations",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "path": "README.md",
+      "commit": "a7b0fb2bf24d57e6bb3613d557c0af53a171d558",
+      "url": "https://github.com/vercel/eve/blob/a7b0fb2bf24d57e6bb3613d557c0af53a171d558/README.md",
+      "sha256": "fdcb584463c09905a08cbc8290251263482257d82e28a63ce5c0acfa534086b0",
+      "accessedAt": "2026-09-30T07:33:45.197Z",
+      "id": "s1"
+    },
+    {
+      "path": "packages/eve/src/ai/evaluate.ts",
+      "commit": "a7b0fb2bf24d57e6bb3613d557c0af53a171d558",
+      "url": "https://github.com/vercel/eve/blob/a7b0fb2bf24d57e6bb3613d557c0af53a171d558/packages/eve/src/ai/evaluate.ts",
+      "sha256": "e287fa2ccee333c1b94a701c40cf756d0230a54518fafbdab414a0ef991972d3",
+      "accessedAt": "2026-09-30T07:33:47.801Z",
+      "id": "s2"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "Instructions, tools, skills, channels and schedules live in conventional directories, making an agent project inspectable and extensible.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 17,
+          "end": 36,
+          "quote": "[eve](https://eve.dev/) is a filesystem-first framework for durable AI agents. Core agent capabilities live in\nconventional locations, so projects are easier to inspect, extend, and operate.\n\n## The filesystem is the authoring interface\n\nA typical eve agent has this structure:\n\n```text\nmy-agent/\n└── agent/\n    ├── agent.ts            # Optional: model and runtime config\n    ├── instructions.md     # Required: the always-on system prompt\n    ├── tools/              # Optional: typed functions the model can call\n    │   └── get_weather.ts\n    ├── skills/             # Optional: procedures loaded on demand\n    │   └── plan_a_trip.md\n    ├── channels/           # Optional: message channels (HTTP, Slack, Discord)\n    │   └── slack.ts\n    └── schedules/          # Optional: recurring cron jobs\n        └── weekly_recap.ts"
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "The evaluate helper sends typed questions about supplied state through eve's model authentication, defaulting to Jev.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s2",
+          "start": 10,
+          "end": 21,
+          "quote": "export const DEFAULT_EVALUATION_MODEL = \"typesafe-ai/jev\";\n\n/** Evaluate typed questions about the state you pass to it using eve's model authentication. */\nexport function evaluate<const Questions extends Record<string, EvaluationQuestion>>({\n  model = DEFAULT_EVALUATION_MODEL,\n  ...options\n}: Omit<Parameters<typeof evaluateWithAiSdk<Questions>>[0], \"model\"> & {\n  /** Evaluation model instance or ID. Defaults to TypeSafe Jev. */\n  model?: EvaluationModel;\n}) {\n  ensureAiSdkWarningLogger();\n  return evaluateWithAiSdk({"
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Initialize an agent project, edit agent/instructions.md, add typed tools and configure the conversational model in agent/agent.ts.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 41,
+          "end": 48,
+          "quote": "## Quick start\n\n```bash\nnpx eve@latest init my-agent\n```\n\nThis creates a new `my-agent` directory, installs its dependencies, initializes Git, and starts\nthe interactive terminal UI. The generated agent uses `openai/gpt-6-luna-fast` with high reasoning."
+        },
+        {
+          "source": "s1",
+          "start": 71,
+          "end": 100,
+          "quote": "The generated project includes an `agent` directory. Replace `agent/instructions.md` with:\n\n```md\nYou are a concise weather demo assistant. Tell users that the weather data is mocked.\n```\n\nAdd a mock weather tool at `agent/tools/get_weather.ts`:\n\n```ts\nimport { defineTool } from \"eve/tools\";\nimport { z } from \"zod\";\n\nexport default defineTool({\n  description: \"Return mock weather data for a city.\",\n  inputSchema: z.object({ city: z.string().min(1) }),\n  async execute({ city }) {\n    return { city, condition: \"Sunny\", temperatureF: 72 };\n  },\n});\n```\n\nChoose the model in `agent/agent.ts`:\n\n```ts\nimport { defineAgent } from \"eve\";\n\nexport default defineAgent({\n  model: \"openai/gpt-6-luna-fast\",\n  reasoning: \"high\",\n});"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "Evaluation uses the AI SDK's experimental_evaluate interface with an overridable model; the conversational model has separate configuration.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 92,
+          "end": 100,
+          "quote": "Choose the model in `agent/agent.ts`:\n\n```ts\nimport { defineAgent } from \"eve\";\n\nexport default defineAgent({\n  model: \"openai/gpt-6-luna-fast\",\n  reasoning: \"high\",\n});"
+        },
+        {
+          "source": "s2",
+          "start": 1,
+          "end": 5,
+          "quote": "import {\n  experimental_evaluate as evaluateWithAiSdk,\n  type Experimental_EvaluationModel as EvaluationModel,\n  type Experimental_EvaluationQuestion as EvaluationQuestion,\n} from \"ai\";"
+        },
+        {
+          "source": "s2",
+          "start": 13,
+          "end": 18,
+          "quote": "export function evaluate<const Questions extends Record<string, EvaluationQuestion>>({\n  model = DEFAULT_EVALUATION_MODEL,\n  ...options\n}: Omit<Parameters<typeof evaluateWithAiSdk<Questions>>[0], \"model\"> & {\n  /** Evaluation model instance or ID. Defaults to TypeSafe Jev. */\n  model?: EvaluationModel;"
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "eve: filesystem agents with Jev evaluation",
+      "h1": "eve: filesystem agents with Jev evaluation",
+      "description": "eve organizes durable agents in files and defaults its typed evaluation helper to typesafe-ai/jev.",
+      "summary": "Instructions, tools, skills, channels and schedules live in conventional directories, making an agent project inspectable and extensible. The evaluate helper sends typed questions about supplied state through eve's model authentication, defaulting to Jev.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose and audience",
+          "text": "Instructions, tools, skills, channels and schedules live in conventional directories, making an agent project inspectable and extensible.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "The evaluate helper sends typed questions about supplied state through eve's model authentication, defaulting to Jev.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Using the project",
+          "text": "Initialize an agent project, edit agent/instructions.md, add typed tools and configure the conversational model in agent/agent.ts.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "Evaluation uses the AI SDK's experimental_evaluate interface with an overridable model; the conversational model has separate configuration.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "eve：结合 Jev 评估的文件式智能体框架",
+      "h1": "eve：结合 Jev 评估的文件式智能体框架",
+      "description": "eve 用文件组织持久运行的智能体，其类型化评估辅助函数默认使用 typesafe-ai/jev。",
+      "summary": "指令、工具、技能、消息渠道和定时任务放在约定目录中，便于检查与扩展智能体项目。 evaluate 辅助函数通过 eve 的模型认证机制评估给定状态下的类型化问题，默认调用 Jev。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途与适用对象",
+          "text": "指令、工具、技能、消息渠道和定时任务放在约定目录中，便于检查与扩展智能体项目。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "evaluate 辅助函数通过 eve 的模型认证机制评估给定状态下的类型化问题，默认调用 Jev。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "初始化项目后编辑 agent/instructions.md，添加类型化工具，并在 agent/agent.ts 配置对话模型。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "评估使用 AI SDK 的 experimental_evaluate 接口，模型可以覆盖；对话模型另行配置。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "eve：結合 Jev 評估的檔案式代理框架",
+      "h1": "eve：結合 Jev 評估的檔案式代理框架",
+      "description": "eve 以檔案組織持久執行的代理，型別化評估輔助函式預設使用 typesafe-ai/jev。",
+      "summary": "指令、工具、技能、訊息管道與排程放在約定目錄內，方便檢視與擴充代理專案。 evaluate 輔助函式透過 eve 的模型身分驗證機制評估給定狀態下的型別化問題，預設呼叫 Jev。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途與適用對象",
+          "text": "指令、工具、技能、訊息管道與排程放在約定目錄內，方便檢視與擴充代理專案。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "evaluate 輔助函式透過 eve 的模型身分驗證機制評估給定狀態下的型別化問題，預設呼叫 Jev。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "初始化專案後編輯 agent/instructions.md，加入型別化工具，並在 agent/agent.ts 設定對話模型。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "評估使用 AI SDK 的 experimental_evaluate 介面，可指定其他模型；對話模型需另外設定。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "eve：ファイルで構築するエージェントと Jev 評価",
+      "h1": "eve：ファイルで構築するエージェントと Jev 評価",
+      "description": "eve は永続的なエージェントをファイルで整理し、型付き評価ヘルパーは既定で typesafe-ai/jev を使います。",
+      "summary": "指示、ツール、スキル、チャネル、スケジュールを決まったディレクトリに置き、構成を確認・拡張しやすくします。 evaluate ヘルパーは eve のモデル認証を利用して状態に関する型付き質問を評価し、既定では Jev を呼びます。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途と対象",
+          "text": "指示、ツール、スキル、チャネル、スケジュールを決まったディレクトリに置き、構成を確認・拡張しやすくします。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev との関係",
+          "text": "evaluate ヘルパーは eve のモデル認証を利用して状態に関する型付き質問を評価し、既定では Jev を呼びます。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "プロジェクトを初期化し、agent/instructions.md を編集してツールを追加し、agent/agent.ts に会話モデルを設定します。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範囲と制約",
+          "text": "評価には AI SDK の experimental_evaluate を使い、モデルは変更可能です。会話モデルは別設定です。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "eve: 파일 기반 에이전트와 Jev 평가",
+      "h1": "eve: 파일 기반 에이전트와 Jev 평가",
+      "description": "eve는 지속 실행 에이전트를 파일로 구성하며 형식화된 평가 헬퍼는 기본적으로 typesafe-ai/jev를 사용합니다.",
+      "summary": "지침, 도구, 스킬, 채널, 일정을 정해진 디렉터리에 두어 에이전트 구성을 살피고 확장할 수 있게 합니다. evaluate 헬퍼는 eve의 모델 인증으로 주어진 상태에 대한 형식화된 질문을 평가하며 기본 모델은 Jev입니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "용도와 대상",
+          "text": "지침, 도구, 스킬, 채널, 일정을 정해진 디렉터리에 두어 에이전트 구성을 살피고 확장할 수 있게 합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "evaluate 헬퍼는 eve의 모델 인증으로 주어진 상태에 대한 형식화된 질문을 평가하며 기본 모델은 Jev입니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "프로젝트를 초기화하고 agent/instructions.md를 편집하며 도구를 추가한 뒤 agent/agent.ts에 대화 모델을 설정합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 한계",
+          "text": "평가는 AI SDK의 experimental_evaluate를 사용하고 모델을 바꿀 수 있습니다. 대화 모델은 별도로 설정합니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "eve: agentes en archivos con evaluación Jev",
+      "h1": "eve: agentes en archivos con evaluación Jev",
+      "description": "eve organiza agentes duraderos en archivos y usa typesafe-ai/jev por defecto en su función de evaluación tipada.",
+      "summary": "Instrucciones, herramientas, habilidades, canales y horarios viven en directorios convencionales que facilitan inspeccionar y ampliar el agente. evaluate usa la autenticación de modelos de eve para evaluar preguntas tipadas sobre un estado, con Jev por defecto.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "Instrucciones, herramientas, habilidades, canales y horarios viven en directorios convencionales que facilitan inspeccionar y ampliar el agente.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "evaluate usa la autenticación de modelos de eve para evaluar preguntas tipadas sobre un estado, con Jev por defecto.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo se usa",
+          "text": "Inicialice el proyecto, edite agent/instructions.md, añada herramientas tipadas y configure el modelo conversacional en agent/agent.ts.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "La evaluación utiliza experimental_evaluate del AI SDK y permite cambiar el modelo; el modelo conversacional se configura por separado.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "eve : agents en fichiers avec évaluation Jev",
+      "h1": "eve : agents en fichiers avec évaluation Jev",
+      "description": "eve organise des agents durables dans des fichiers et utilise typesafe-ai/jev par défaut pour son évaluation typée.",
+      "summary": "Instructions, outils, compétences, canaux et planifications occupent des répertoires conventionnels pour faciliter inspection et extension. evaluate emploie l'authentification de modèles d'eve pour évaluer des questions typées sur un état, avec Jev par défaut.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Usage et public visé",
+          "text": "Instructions, outils, compétences, canaux et planifications occupent des répertoires conventionnels pour faciliter inspection et extension.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "evaluate emploie l'authentification de modèles d'eve pour évaluer des questions typées sur un état, avec Jev par défaut.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Initialisez le projet, modifiez agent/instructions.md, ajoutez des outils typés et configurez le modèle conversationnel dans agent/agent.ts.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "L'évaluation utilise experimental_evaluate de l'AI SDK avec un modèle remplaçable ; le modèle conversationnel possède sa propre configuration.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "eve: Agenten in Dateien mit Jev-Auswertung",
+      "h1": "eve: Agenten in Dateien mit Jev-Auswertung",
+      "description": "eve organisiert dauerhafte Agenten in Dateien und verwendet typesafe-ai/jev als Standard für typisierte Auswertungen.",
+      "summary": "Anweisungen, Werkzeuge, Skills, Kanäle und Zeitpläne liegen in festgelegten Verzeichnissen, sodass Agenten sich prüfen und erweitern lassen. evaluate nutzt eves Modellauthentifizierung für typisierte Fragen über einen Zustand; standardmäßig wird Jev verwendet.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Zweck und Zielgruppe",
+          "text": "Anweisungen, Werkzeuge, Skills, Kanäle und Zeitpläne liegen in festgelegten Verzeichnissen, sodass Agenten sich prüfen und erweitern lassen.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "evaluate nutzt eves Modellauthentifizierung für typisierte Fragen über einen Zustand; standardmäßig wird Jev verwendet.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Verwendung",
+          "text": "Initialisieren Sie ein Projekt, bearbeiten Sie agent/instructions.md, ergänzen Sie Werkzeuge und konfigurieren Sie das Gesprächsmodell in agent/agent.ts.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Die Auswertung verwendet experimental_evaluate des AI SDK mit austauschbarem Modell; das Gesprächsmodell wird separat konfiguriert.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "eve: agentes em arquivos com avaliação Jev",
+      "h1": "eve: agentes em arquivos com avaliação Jev",
+      "description": "eve organiza agentes duráveis em arquivos e usa typesafe-ai/jev por padrão na função de avaliação tipada.",
+      "summary": "Instruções, ferramentas, habilidades, canais e agendamentos ficam em diretórios convencionais, facilitando a inspeção e extensão do agente. evaluate usa a autenticação de modelos do eve para avaliar perguntas tipadas sobre um estado, com Jev por padrão.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Finalidade e público",
+          "text": "Instruções, ferramentas, habilidades, canais e agendamentos ficam em diretórios convencionais, facilitando a inspeção e extensão do agente.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "evaluate usa a autenticação de modelos do eve para avaliar perguntas tipadas sobre um estado, com Jev por padrão.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Inicialize o projeto, edite agent/instructions.md, adicione ferramentas tipadas e configure o modelo conversacional em agent/agent.ts.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "A avaliação usa experimental_evaluate do AI SDK e permite substituir o modelo; o modelo conversacional tem configuração separada.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "eve: файловая структура агентов и оценка Jev",
+      "h1": "eve: файловая структура агентов и оценка Jev",
+      "description": "eve хранит долговременных агентов в файлах и по умолчанию использует typesafe-ai/jev для типизированной оценки.",
+      "summary": "Инструкции, инструменты, навыки, каналы и расписания размещаются в стандартных каталогах, упрощая изучение и расширение проекта. evaluate оценивает типизированные вопросы о состоянии через механизм авторизации моделей eve; модель по умолчанию — Jev.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Инструкции, инструменты, навыки, каналы и расписания размещаются в стандартных каталогах, упрощая изучение и расширение проекта.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "evaluate оценивает типизированные вопросы о состоянии через механизм авторизации моделей eve; модель по умолчанию — Jev.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Инициализируйте проект, измените agent/instructions.md, добавьте типизированные инструменты и задайте разговорную модель в agent/agent.ts.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Оценка использует experimental_evaluate из AI SDK и допускает замену модели; разговорная модель настраивается отдельно.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "eve: फ़ाइल आधारित एजेंट और Jev मूल्यांकन",
+      "h1": "eve: फ़ाइल आधारित एजेंट और Jev मूल्यांकन",
+      "description": "eve स्थायी एजेंटों को फ़ाइलों में व्यवस्थित करता है और निश्चित प्रकार के मूल्यांकन के लिए typesafe-ai/jev डिफ़ॉल्ट रखता है।",
+      "summary": "निर्देश, टूल, स्किल, चैनल और शेड्यूल तय डायरेक्टरी में रहते हैं, जिससे एजेंट प्रोजेक्ट देखना और बढ़ाना आसान होता है। evaluate, eve के मॉडल प्रमाणीकरण से दी गई स्थिति पर निश्चित प्रकार के प्रश्नों का मूल्यांकन करता है; डिफ़ॉल्ट मॉडल Jev है।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "उद्देश्य और उपयोगकर्ता",
+          "text": "निर्देश, टूल, स्किल, चैनल और शेड्यूल तय डायरेक्टरी में रहते हैं, जिससे एजेंट प्रोजेक्ट देखना और बढ़ाना आसान होता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "evaluate, eve के मॉडल प्रमाणीकरण से दी गई स्थिति पर निश्चित प्रकार के प्रश्नों का मूल्यांकन करता है; डिफ़ॉल्ट मॉडल Jev है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल का तरीका",
+          "text": "प्रोजेक्ट शुरू करें, agent/instructions.md बदलें, टाइप वाले टूल जोड़ें और agent/agent.ts में संवाद मॉडल चुनें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "मूल्यांकन AI SDK के experimental_evaluate पर आधारित है और मॉडल बदला जा सकता है; संवाद मॉडल का अलग कॉन्फ़िगरेशन है।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "eve: agen berbasis berkas dengan evaluasi Jev",
+      "h1": "eve: agen berbasis berkas dengan evaluasi Jev",
+      "description": "eve mengatur agen persisten dalam berkas dan memakai typesafe-ai/jev sebagai model evaluasi bertipe bawaan.",
+      "summary": "Instruksi, alat, keterampilan, kanal, dan jadwal berada di direktori konvensional agar proyek mudah diperiksa dan diperluas. evaluate memakai autentikasi model eve untuk menilai pertanyaan bertipe atas suatu status, dengan Jev sebagai bawaan.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Tujuan dan pengguna",
+          "text": "Instruksi, alat, keterampilan, kanal, dan jadwal berada di direktori konvensional agar proyek mudah diperiksa dan diperluas.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "evaluate memakai autentikasi model eve untuk menilai pertanyaan bertipe atas suatu status, dengan Jev sebagai bawaan.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Inisialisasi proyek, edit agent/instructions.md, tambahkan alat bertipe, dan atur model percakapan di agent/agent.ts.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Evaluasi memakai experimental_evaluate dari AI SDK dengan model yang dapat diganti; model percakapan dikonfigurasi terpisah.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "eve: tác tử theo cấu trúc tệp với đánh giá Jev",
+      "h1": "eve: tác tử theo cấu trúc tệp với đánh giá Jev",
+      "description": "eve tổ chức tác tử bền vững bằng tệp và mặc định dùng typesafe-ai/jev cho hàm đánh giá có kiểu.",
+      "summary": "Chỉ dẫn, công cụ, kỹ năng, kênh và lịch chạy nằm trong thư mục quy ước để dễ kiểm tra và mở rộng dự án. evaluate dùng cơ chế xác thực mô hình của eve để đánh giá câu hỏi có kiểu về trạng thái, mặc định qua Jev.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích và đối tượng",
+          "text": "Chỉ dẫn, công cụ, kỹ năng, kênh và lịch chạy nằm trong thư mục quy ước để dễ kiểm tra và mở rộng dự án.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "evaluate dùng cơ chế xác thực mô hình của eve để đánh giá câu hỏi có kiểu về trạng thái, mặc định qua Jev.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Khởi tạo dự án, sửa agent/instructions.md, thêm công cụ có kiểu và cấu hình mô hình hội thoại trong agent/agent.ts.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Đánh giá dùng experimental_evaluate của AI SDK và cho phép đổi mô hình; mô hình hội thoại có cấu hình riêng.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "eve: dosya tabanlı ajanlar ve Jev değerlendirmesi",
+      "h1": "eve: dosya tabanlı ajanlar ve Jev değerlendirmesi",
+      "description": "eve kalıcı ajanları dosyalarda düzenler; türü belirli değerlendirme yardımcısında varsayılan olarak typesafe-ai/jev kullanır.",
+      "summary": "Talimatlar, araçlar, beceriler, kanallar ve zamanlamalar standart dizinlerde bulunur; ajan projesi kolayca incelenip genişletilebilir. evaluate, durumla ilgili türü belirli soruları eve model kimlik doğrulaması üzerinden değerlendirir; varsayılan model Jev’dir.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Amaç ve hedef kitle",
+          "text": "Talimatlar, araçlar, beceriler, kanallar ve zamanlamalar standart dizinlerde bulunur; ajan projesi kolayca incelenip genişletilebilir.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "evaluate, durumla ilgili türü belirli soruları eve model kimlik doğrulaması üzerinden değerlendirir; varsayılan model Jev’dir.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Proje başlatılır, agent/instructions.md düzenlenir, türü belirli araçlar eklenir ve agent/agent.ts içinde sohbet modeli ayarlanır.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Değerlendirme AI SDK’nin experimental_evaluate arayüzünü kullanır ve model değiştirilebilir; sohbet modeli ayrı yapılandırılır.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "eve: agenti in file con valutazione Jev",
+      "h1": "eve: agenti in file con valutazione Jev",
+      "description": "eve organizza agenti durevoli in file e usa typesafe-ai/jev come modello predefinito per la valutazione tipizzata.",
+      "summary": "Istruzioni, strumenti, skill, canali e pianificazioni sono in directory convenzionali, facilitando ispezione ed estensione del progetto. evaluate usa l'autenticazione dei modelli di eve per valutare domande tipizzate sullo stato, con Jev come impostazione predefinita.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Scopo e destinatari",
+          "text": "Istruzioni, strumenti, skill, canali e pianificazioni sono in directory convenzionali, facilitando ispezione ed estensione del progetto.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "evaluate usa l'autenticazione dei modelli di eve per valutare domande tipizzate sullo stato, con Jev come impostazione predefinita.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come si usa",
+          "text": "Si inizializza il progetto, si modifica agent/instructions.md, si aggiungono strumenti tipizzati e si configura il modello conversazionale in agent/agent.ts.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "La valutazione usa experimental_evaluate dell'AI SDK con un modello sostituibile; il modello conversazionale ha una configurazione separata.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

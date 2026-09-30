@@ -1,0 +1,768 @@
+{
+  "version": "source-content-v1",
+  "repo": "realZachi/pg-jev",
+  "repositoryId": 1375026016,
+  "relationship": "integration",
+  "category": "integrations",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "afd11fa856d7a2b831a1bfd8ee7f869ce8efcd62",
+      "url": "https://github.com/realZachi/pg-jev/blob/afd11fa856d7a2b831a1bfd8ee7f869ce8efcd62/README.md",
+      "sha256": "e8735928b57d89ee41482e9fc24d6301af2863765db4cc15fa11dd1cf3b1a192",
+      "accessedAt": "2026-09-30T07:33:51.442Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "kind": "documented",
+      "text": "pg-jev filters, ranks and classifies PostgreSQL rows using plain-language SQL conditions.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 14,
+          "end": 16,
+          "quote": "`jev` lets you filter, rank and classify rows with plain-language conditions. Every row is judged by\n[TypeSafe's Jev](https://docs.typesafe.ai), a System One model that returns calibrated probabilities\ninstead of generated text. No index, no embeddings, no vector column."
+        },
+        {
+          "source": "source-1",
+          "start": 37,
+          "end": 38,
+          "quote": "`jev()` is an ordinary boolean function, so it composes with everything else in SQL: `AND age > 40`,\njoins, `GROUP BY`, `LIMIT`, `ORDER BY jev_prob(...)`."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "kind": "documented",
+      "text": "Batched Jev questions judge rows; SQL functions expose boolean, probability, choice and rubric-score results.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 45,
+          "end": 48,
+          "quote": "2. Rows are packed `jev.batch_size` (20) per request into one shared *state*\n   (`{\"condition\": ..., \"rows\": [...]}`) with one yes/no [Noul](https://docs.typesafe.ai/primitives/noul)\n   question per row. Jev evaluates all questions over one state in parallel, which amortises the ~270-token\n   request overhead (about 435 tokens for one row alone vs 175 per row in batches of 20)."
+        },
+        {
+          "source": "source-1",
+          "start": 135,
+          "end": 141,
+          "quote": "| `jev(row, condition [, threshold])` | boolean | `WHERE` predicate. Threshold: argument → `jev.threshold` → 0.5 |\n| `jev_prob(row, condition)` | float8 | Probability 0..1 that the row satisfies the condition |\n| `jev_score(row, question, levels text[])` | float8 | Probability-weighted position on ordered levels (0 .. n-1) |\n| `jev_score_norm(row, question, levels)` | float8 | Same, normalised to 0..1 |\n| `jev_choice(row, question, options text[])` | text | The most likely option for the row |\n| `jev_confidence(row, question, kind, options)` | float8 | Confidence of a `score`/`choice` answer |\n| `jev_eval(row, question, kind, options)` | jsonb | Full raw answer (probabilities, legend, confidence) |"
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "kind": "documented",
+      "text": "Requires PostgreSQL 14–17, plpython3u, superuser access and a TypeSafe key.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 72,
+          "end": 75,
+          "quote": "Requirements: PostgreSQL 14–17 with `plpython3u` (package `postgresql-plpython3-NN` on Debian/Ubuntu,\nincluded in the EDB and Postgres.app builds), a superuser, and a TypeSafe API key from https://console.typesafe.ai.\nManaged hosts that withhold superuser or `plpython3u` (Supabase, Neon, RDS, …) cannot run it; see\n[Where it runs](https://pgjev.com/docs/getting-started/where-it-runs)."
+        },
+        {
+          "source": "source-1",
+          "start": 123,
+          "end": 128,
+          "quote": "Either export `TYPESAFE_API_KEY` in the environment of the PostgreSQL server process, or set it per session\nor per role:\n\n```sql\nSET jev.api_key = 'your-key';\nALTER ROLE analyst SET jev.api_key = 'your-key';   -- persistent, per role"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "kind": "documented",
+      "text": "Judged rows leave the database for a third-party API. Queries scan rows, and caches belong to individual database sessions.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 180,
+          "end": 188,
+          "quote": "## Caveats\n\n- This is a full scan by design: every row the executor asks about goes to the API. Cheaper predicates in the same\n  `WHERE` run first and their rejects are skipped; a `LIMIT` stops early; `jev.max_rows_per_statement` caps spend.\n- Row contents are sent to a third-party API. Do not use it on data you may not share.\n- The cache lives in the backend session (PL/Python `GD`). Connection pools with many sessions each warm their\n  own cache.\n- `plpython3u` is an untrusted language: only superusers can create the extension, and functions run with the\n  server's OS privileges."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "pg-jev: semantic PostgreSQL queries with Jev",
+      "h1": "pg-jev: semantic PostgreSQL queries with Jev",
+      "description": "pg-jev adds Jev-based filtering, ranking and classification to PostgreSQL SQL, with batched row judgments and explicit API data-sharing requirements.",
+      "summary": "pg-jev filters, ranks and classifies PostgreSQL rows using plain-language SQL conditions. Batched Jev questions judge rows; SQL functions expose boolean, probability, choice and rubric-score results. Requires PostgreSQL 14–17, plpython3u, superuser access and a TypeSafe key.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose",
+          "text": "pg-jev filters, ranks and classifies PostgreSQL rows using plain-language SQL conditions.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’s role",
+          "text": "Batched Jev questions judge rows; SQL functions expose boolean, probability, choice and rubric-score results.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "How to use it",
+          "text": "Requires PostgreSQL 14–17, plpython3u, superuser access and a TypeSafe key.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limits to consider",
+          "text": "Judged rows leave the database for a third-party API. Queries scan rows, and caches belong to individual database sessions.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "pg-jev：用 Jev 进行 PostgreSQL 语义查询",
+      "h1": "pg-jev：用 Jev 进行 PostgreSQL 语义查询",
+      "description": "pg-jev 将 Jev 判断接入 PostgreSQL SQL，实现自然语言筛选、排序与分类；批量请求会将数据行发送给外部 API，安装需要超级用户权限及 plpython3u。",
+      "summary": "pg-jev 用自然语言 SQL 条件筛选、排序和分类 PostgreSQL 数据行。 批量 Jev 问题判断各行，SQL 函数返回布尔值、概率、选项或量表评分。 需要 PostgreSQL 14–17、plpython3u、超级用户权限和 TypeSafe 密钥。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "pg-jev 用自然语言 SQL 条件筛选、排序和分类 PostgreSQL 数据行。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "批量 Jev 问题判断各行，SQL 函数返回布尔值、概率、选项或量表评分。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "需要 PostgreSQL 14–17、plpython3u、超级用户权限和 TypeSafe 密钥。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用边界",
+          "text": "待判断行会发送给第三方 API；查询采用行扫描，缓存属于各数据库会话。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "pg-jev：以 Jev 進行 PostgreSQL 語義查詢",
+      "h1": "pg-jev：以 Jev 進行 PostgreSQL 語義查詢",
+      "description": "pg-jev 將 Jev 判斷接入 PostgreSQL SQL，實現自然語言篩選、排序及分類；批次請求會將資料列傳給外部 API，安裝需要超級使用者權限和 plpython3u。",
+      "summary": "pg-jev 用自然語言 SQL 條件篩選、排序與分類 PostgreSQL 資料列。 批次 Jev 問題判斷各列，SQL 函式回傳布林值、機率、選項或量表評分。 需要 PostgreSQL 14–17、plpython3u、超級使用者權限與 TypeSafe 金鑰。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "pg-jev 用自然語言 SQL 條件篩選、排序與分類 PostgreSQL 資料列。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "批次 Jev 問題判斷各列，SQL 函式回傳布林值、機率、選項或量表評分。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "需要 PostgreSQL 14–17、plpython3u、超級使用者權限與 TypeSafe 金鑰。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用限制",
+          "text": "待判斷資料列會傳給第三方 API；查詢採資料列掃描，快取屬於各資料庫連線階段。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "pg-jev：Jev で PostgreSQL を意味検索",
+      "h1": "pg-jev：Jev で PostgreSQL を意味検索",
+      "description": "pg-jev は Jev のバッチ判断を PostgreSQL に組み込み、自然言語で行を絞り込み・順位付け・分類します。行データは外部 API に送信されます。",
+      "summary": "pg-jev は自然言語の SQL 条件で PostgreSQL の行を絞り込み、順位付け、分類します。 バッチ化した Jev の質問が各行を評価し、SQL 関数が真偽、確率、選択、段階評価を返します。 PostgreSQL 14〜17、plpython3u、スーパーユーザー権限、TypeSafe キーが必要です。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "何ができるか",
+          "text": "pg-jev は自然言語の SQL 条件で PostgreSQL の行を絞り込み、順位付け、分類します。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "バッチ化した Jev の質問が各行を評価し、SQL 関数が真偽、確率、選択、段階評価を返します。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "PostgreSQL 14〜17、plpython3u、スーパーユーザー権限、TypeSafe キーが必要です。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "制約と注意点",
+          "text": "評価対象の行は外部 API に送られます。行走査を行い、キャッシュはデータベースのセッションごとです。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "pg-jev: Jev로 PostgreSQL 의미 쿼리",
+      "h1": "pg-jev: Jev로 PostgreSQL 의미 쿼리",
+      "description": "pg-jev는 Jev 묶음 판단으로 PostgreSQL 행을 자연어로 필터링·정렬·분류합니다. 행 데이터는 외부 API로 전송되며 plpython3u와 슈퍼유저 권한이 필요합니다.",
+      "summary": "pg-jev는 자연어 SQL 조건으로 PostgreSQL 행을 필터링하고 순위를 매기며 분류합니다. Jev가 묶음 질문으로 행을 판단하고 SQL 함수는 참거짓, 확률, 선택, 기준별 점수를 반환합니다. PostgreSQL 14–17, plpython3u, 슈퍼유저 권한, TypeSafe 키가 필요합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "pg-jev는 자연어 SQL 조건으로 PostgreSQL 행을 필터링하고 순위를 매기며 분류합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Jev가 묶음 질문으로 행을 판단하고 SQL 함수는 참거짓, 확률, 선택, 기준별 점수를 반환합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "PostgreSQL 14–17, plpython3u, 슈퍼유저 권한, TypeSafe 키가 필요합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "제약 사항",
+          "text": "판단할 행이 타사 API로 전송됩니다. 행 스캔을 수행하며 캐시는 데이터베이스 세션별로 유지됩니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "pg-jev: consultas semánticas PostgreSQL con Jev",
+      "h1": "pg-jev: consultas semánticas PostgreSQL con Jev",
+      "description": "pg-jev incorpora filtros, rankings y clasificación Jev a PostgreSQL, con evaluación por lotes y envío explícito de filas a una API externa.",
+      "summary": "pg-jev filtra, ordena y clasifica filas PostgreSQL mediante condiciones SQL en lenguaje natural. Jev evalúa filas en lotes; las funciones SQL devuelven booleanos, probabilidades, opciones y puntuaciones. Requiere PostgreSQL 14–17, plpython3u, acceso de superusuario y una clave TypeSafe.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "pg-jev filtra, ordena y clasifica filas PostgreSQL mediante condiciones SQL en lenguaje natural.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "El papel de Jev",
+          "text": "Jev evalúa filas en lotes; las funciones SQL devuelven booleanos, probabilidades, opciones y puntuaciones.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo usarlo",
+          "text": "Requiere PostgreSQL 14–17, plpython3u, acceso de superusuario y una clave TypeSafe.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Límites a considerar",
+          "text": "Las filas evaluadas se envían a una API externa; las consultas escanean filas y las cachés pertenecen a cada sesión.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "pg-jev : requêtes PostgreSQL sémantiques avec Jev",
+      "h1": "pg-jev : requêtes PostgreSQL sémantiques avec Jev",
+      "description": "pg-jev ajoute filtrage, classement et catégorisation Jev à PostgreSQL, par lots, avec transmission des lignes à une API externe.",
+      "summary": "pg-jev filtre, classe et catégorise les lignes PostgreSQL avec des conditions SQL en langage naturel. Jev évalue les lignes par lots ; les fonctions SQL renvoient booléens, probabilités, choix et scores. Il faut PostgreSQL 14–17, plpython3u, des droits superutilisateur et une clé TypeSafe.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "pg-jev filtre, classe et catégorise les lignes PostgreSQL avec des conditions SQL en langage naturel.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Le rôle de Jev",
+          "text": "Jev évalue les lignes par lots ; les fonctions SQL renvoient booléens, probabilités, choix et scores.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Utilisation",
+          "text": "Il faut PostgreSQL 14–17, plpython3u, des droits superutilisateur et une clé TypeSafe.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limites à connaître",
+          "text": "Les lignes évaluées partent vers une API tierce ; les requêtes les parcourent et les caches restent propres aux sessions.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "pg-jev: semantische PostgreSQL-Abfragen mit Jev",
+      "h1": "pg-jev: semantische PostgreSQL-Abfragen mit Jev",
+      "description": "pg-jev ergänzt PostgreSQL um Jev-Filter, Ranking und Klassifikation mit gebündelten Zeilenbewertungen; Daten werden an eine externe API gesendet.",
+      "summary": "pg-jev filtert, sortiert und klassifiziert PostgreSQL-Zeilen mit natürlichsprachlichen SQL-Bedingungen. Jev bewertet Zeilen gebündelt; SQL-Funktionen liefern Wahrheitswerte, Wahrscheinlichkeiten, Auswahlwerte und Rubrikwerte. PostgreSQL 14–17, plpython3u, Superuser-Rechte und ein TypeSafe-Schlüssel werden benötigt.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "pg-jev filtert, sortiert und klassifiziert PostgreSQL-Zeilen mit natürlichsprachlichen SQL-Bedingungen.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Die Rolle von Jev",
+          "text": "Jev bewertet Zeilen gebündelt; SQL-Funktionen liefern Wahrheitswerte, Wahrscheinlichkeiten, Auswahlwerte und Rubrikwerte.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Nutzung",
+          "text": "PostgreSQL 14–17, plpython3u, Superuser-Rechte und ein TypeSafe-Schlüssel werden benötigt.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Grenzen",
+          "text": "Bewertete Zeilen gehen an eine externe API. Abfragen durchsuchen Zeilen; Caches gehören jeweils einer Datenbanksitzung.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "pg-jev: consultas semânticas PostgreSQL com Jev",
+      "h1": "pg-jev: consultas semânticas PostgreSQL com Jev",
+      "description": "pg-jev adiciona filtros, ordenação e classificação Jev ao PostgreSQL, com avaliações em lote e envio de linhas a uma API externa.",
+      "summary": "pg-jev filtra, ordena e classifica linhas PostgreSQL com condições SQL em linguagem natural. Jev avalia linhas em lotes; funções SQL retornam booleanos, probabilidades, opções e pontuações. Exige PostgreSQL 14–17, plpython3u, acesso de superusuário e chave TypeSafe.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "pg-jev filtra, ordena e classifica linhas PostgreSQL com condições SQL em linguagem natural.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "O papel do Jev",
+          "text": "Jev avalia linhas em lotes; funções SQL retornam booleanos, probabilidades, opções e pontuações.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Exige PostgreSQL 14–17, plpython3u, acesso de superusuário e chave TypeSafe.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limitações",
+          "text": "Linhas avaliadas são enviadas a uma API externa; consultas percorrem linhas e caches pertencem a cada sessão.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "pg-jev: семантические запросы PostgreSQL с Jev",
+      "h1": "pg-jev: семантические запросы PostgreSQL с Jev",
+      "description": "pg-jev добавляет в PostgreSQL фильтрацию, ранжирование и классификацию через Jev с пакетной оценкой строк и передачей данных внешнему API.",
+      "summary": "pg-jev фильтрует, ранжирует и классифицирует строки PostgreSQL условиями SQL на естественном языке. Jev оценивает строки пакетами; SQL-функции возвращают булевы значения, вероятности, варианты и оценки. Нужны PostgreSQL 14–17, plpython3u, права суперпользователя и ключ TypeSafe.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "pg-jev фильтрует, ранжирует и классифицирует строки PostgreSQL условиями SQL на естественном языке.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Jev оценивает строки пакетами; SQL-функции возвращают булевы значения, вероятности, варианты и оценки.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Нужны PostgreSQL 14–17, plpython3u, права суперпользователя и ключ TypeSafe.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ограничения",
+          "text": "Проверяемые строки уходят внешнему API; запросы сканируют строки, а кеши принадлежат отдельным сессиям.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "pg-jev: Jev के साथ PostgreSQL अर्थ-आधारित क्वेरी",
+      "h1": "pg-jev: Jev के साथ PostgreSQL अर्थ-आधारित क्वेरी",
+      "description": "pg-jev PostgreSQL में Jev से पंक्ति फ़िल्टरिंग, रैंकिंग और वर्गीकरण जोड़ता है; बैच मूल्यांकन डेटा को बाहरी API पर भेजता है।",
+      "summary": "pg-jev प्राकृतिक भाषा वाली SQL शर्तों से PostgreSQL पंक्तियाँ छाँटता, क्रम देता और वर्गीकृत करता है। Jev बैच में पंक्तियाँ जाँचता है; SQL फ़ंक्शन बूलियन, संभावना, विकल्प और स्कोर लौटाते हैं। PostgreSQL 14–17, plpython3u, सुपरयूज़र अधिकार और TypeSafe कुंजी चाहिए।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "किस काम आता है",
+          "text": "pg-jev प्राकृतिक भाषा वाली SQL शर्तों से PostgreSQL पंक्तियाँ छाँटता, क्रम देता और वर्गीकृत करता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "Jev बैच में पंक्तियाँ जाँचता है; SQL फ़ंक्शन बूलियन, संभावना, विकल्प और स्कोर लौटाते हैं।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल कैसे करें",
+          "text": "PostgreSQL 14–17, plpython3u, सुपरयूज़र अधिकार और TypeSafe कुंजी चाहिए।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "सीमाएँ",
+          "text": "जाँची पंक्तियाँ बाहरी API को जाती हैं; क्वेरी पंक्तियाँ स्कैन करती है और कैश हर सत्र का अलग है।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "pg-jev: kueri PostgreSQL semantik dengan Jev",
+      "h1": "pg-jev: kueri PostgreSQL semantik dengan Jev",
+      "description": "pg-jev menambahkan penyaringan, peringkat, dan klasifikasi Jev ke PostgreSQL melalui penilaian berkelompok dan pengiriman baris ke API eksternal.",
+      "summary": "pg-jev menyaring, mengurutkan, dan mengklasifikasikan baris PostgreSQL dengan kondisi SQL berbahasa alami. Jev menilai baris secara berkelompok; fungsi SQL menghasilkan boolean, probabilitas, pilihan, dan skor rubrik. Memerlukan PostgreSQL 14–17, plpython3u, akses superuser, dan kunci TypeSafe.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "pg-jev menyaring, mengurutkan, dan mengklasifikasikan baris PostgreSQL dengan kondisi SQL berbahasa alami.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Jev menilai baris secara berkelompok; fungsi SQL menghasilkan boolean, probabilitas, pilihan, dan skor rubrik.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Memerlukan PostgreSQL 14–17, plpython3u, akses superuser, dan kunci TypeSafe.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Batasan",
+          "text": "Baris yang dinilai dikirim ke API pihak ketiga; kueri memindai baris dan cache dimiliki tiap sesi database.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "pg-jev: truy vấn PostgreSQL theo nghĩa với Jev",
+      "h1": "pg-jev: truy vấn PostgreSQL theo nghĩa với Jev",
+      "description": "pg-jev thêm lọc, xếp hạng và phân loại bằng Jev vào PostgreSQL, đánh giá theo lô và gửi hàng dữ liệu đến API bên ngoài.",
+      "summary": "pg-jev lọc, xếp hạng và phân loại hàng PostgreSQL bằng điều kiện SQL ngôn ngữ tự nhiên. Jev đánh giá hàng theo lô; hàm SQL trả giá trị logic, xác suất, lựa chọn và điểm theo tiêu chí. Cần PostgreSQL 14–17, plpython3u, quyền siêu người dùng và khóa TypeSafe.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích",
+          "text": "pg-jev lọc, xếp hạng và phân loại hàng PostgreSQL bằng điều kiện SQL ngôn ngữ tự nhiên.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Jev đánh giá hàng theo lô; hàm SQL trả giá trị logic, xác suất, lựa chọn và điểm theo tiêu chí.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Cần PostgreSQL 14–17, plpython3u, quyền siêu người dùng và khóa TypeSafe.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Giới hạn",
+          "text": "Hàng được đánh giá gửi đến API bên thứ ba; truy vấn quét hàng và bộ nhớ đệm thuộc từng phiên cơ sở dữ liệu.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "pg-jev: Jev ile anlamsal PostgreSQL sorguları",
+      "h1": "pg-jev: Jev ile anlamsal PostgreSQL sorguları",
+      "description": "pg-jev PostgreSQL’e toplu Jev değerlendirmesiyle filtreleme, sıralama ve sınıflandırma ekler; satır verileri dış API’ye gönderilir.",
+      "summary": "pg-jev doğal dilde SQL koşullarıyla PostgreSQL satırlarını filtreler, sıralar ve sınıflandırır. Jev satırları toplu değerlendirir; SQL işlevleri mantıksal değer, olasılık, seçim ve ölçüt puanı döndürür. PostgreSQL 14–17, plpython3u, süper kullanıcı erişimi ve TypeSafe anahtarı gerekir.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "pg-jev doğal dilde SQL koşullarıyla PostgreSQL satırlarını filtreler, sıralar ve sınıflandırır.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Jev satırları toplu değerlendirir; SQL işlevleri mantıksal değer, olasılık, seçim ve ölçüt puanı döndürür.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "PostgreSQL 14–17, plpython3u, süper kullanıcı erişimi ve TypeSafe anahtarı gerekir.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Sınırlamalar",
+          "text": "Değerlendirilen satırlar üçüncü taraf API’ye gider; sorgular satır tarar, önbellekler veritabanı oturumuna özeldir.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "pg-jev: query PostgreSQL semantiche con Jev",
+      "h1": "pg-jev: query PostgreSQL semantiche con Jev",
+      "description": "pg-jev aggiunge filtri, ranking e classificazione Jev a PostgreSQL, con valutazioni in lotti e invio delle righe a un’API esterna.",
+      "summary": "pg-jev filtra, ordina e classifica righe PostgreSQL con condizioni SQL in linguaggio naturale. Jev valuta righe in lotti; le funzioni SQL restituiscono booleani, probabilità, scelte e punteggi. Servono PostgreSQL 14–17, plpython3u, accesso superutente e chiave TypeSafe.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "pg-jev filtra, ordina e classifica righe PostgreSQL con condizioni SQL in linguaggio naturale.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Il ruolo di Jev",
+          "text": "Jev valuta righe in lotti; le funzioni SQL restituiscono booleani, probabilità, scelte e punteggi.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come usarlo",
+          "text": "Servono PostgreSQL 14–17, plpython3u, accesso superutente e chiave TypeSafe.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limiti",
+          "text": "Le righe valutate vanno a un’API esterna; le query le scandiscono e ogni sessione ha la propria cache.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

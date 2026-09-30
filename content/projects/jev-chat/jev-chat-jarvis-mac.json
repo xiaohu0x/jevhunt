@@ -1,0 +1,774 @@
+{
+  "version": "source-content-v1",
+  "repo": "jev-chat/jev-chat-jarvis-mac",
+  "repositoryId": 1379617146,
+  "relationship": "integration",
+  "category": "apps",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "f827bb81175bb590c7c61ba5d6142ddb5aee8a65",
+      "url": "https://github.com/jev-chat/jev-chat-jarvis-mac/blob/f827bb81175bb590c7c61ba5d6142ddb5aee8a65/README.md",
+      "sha256": "401befbe04cc4f8f2c75225a7825e07ac2b08a7fc0901cf4425e7c0c0821a826",
+      "accessedAt": "2026-09-30T07:33:50.935Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "The floating chat panel displays intent and risk judgments and candidate replies that users can copy or insert into the chat input.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 21,
+          "end": 31,
+          "quote": "## 它能做什么\n\n- **意图 + 风险**：8 类意图零样本 **86.4%**（22 条回归口径），风险 0–9 分级 + 行动建议，本地模型一次前向出全分布\n- **候选回复**：内置 14 种话术并发生成（含恋爱向「狗头军师」三件套：稳健 / 会撩 / 抽离；每种话术候选数 1—5 条可配置，默认 2 条）→ 先上屏 → 本地模型排序后原位重排；换话术立刻按当前消息重新生成\n- **窗口层级**：状态栏菜单「固定在最前面」可即时切换悬浮窗是否盖在其他窗口上，默认开启；关闭后其他窗口可以盖住面板\n- **快**：消息一出现判断 + 生成同时起跑，M1 Pro 出意图 ~1.5 s、出候选 ~1.5–2 s（端到端为机制推算口径，以日志实测为准）\n- **YOLO 检测框**（可选，`JEV_BOXES=1` 启动即开、菜单栏可切）：OCR 命中的消息实时框在聊天窗口上，对方/我分色 + 置信度\n\n## 面板读法\n\n面板使用 macOS 原生浅色磨砂材质：顶部是当前聊天、分析状态、正在处理的消息与上下文；中间依次显示意图、识别率、风险等级和行动建议；底部按话术分组展示候选回复。当前风险圆点会轻微呼吸提示。每条候选左侧是本地排序概率，右侧仍只有「复制」和「填入」；候选行会随完整文字自动增高，不截断内容，发送始终由用户在聊天应用里手动完成。"
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "The judgment layer can use hosted Jev or local decider-2b; a separately configured language model generates replies.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 109,
+          "end": 124,
+          "quote": "# 判断层（可选）：TypeSafe Jev，不填用本地 decider-2b\nexport TYPESAFE_API_KEY=\"\"\n\n# 生成层：任意 OpenAI 兼容端点\nexport OPENAI_API_KEY=\"sk-你的key\"\nexport OPENAI_BASE_URL=\"https://api.deepseek.com\"\nexport OPENAI_MODEL=\"deepseek-chat\"\n# 端点的思考模式要靠额外字段关时填（Qwen3 这类不关会慢几十倍）\n# export OPENAI_EXTRA_BODY='{\"enable_thinking\":false}'\nENV\nchmod 600 ~/.config/jev-jarvis/env\n```\n\n- **凭据解析以 key 为准**：提供 key 的来源同时决定端点和模型。实测可用：DeepSeek `deepseek-chat`（最快）；智谱 `glm-4-flash`（换 `ANTHROPIC_API_KEY`/`ANTHROPIC_BASE_URL`/`ANTHROPIC_MODEL`，两组都填 OpenAI 组优先）；本地 Ollama `qwen2.5:7b`（完全不出网）\n- **判断层网关**：`TYPESAFE_BASE_URL` 三种填法等价可用——只到主机（`https://api.typesafe.ai`）、带版本段（`…/v1`，自动补动作段，不会出现 `/v1/v1/…`）、或填完整动作路径（填到动作段为止，原样使用、不再拼接）。第三方 TypeSafe 兼容网关填网关地址 + 网关 key，模型名按网关填写（如 Vercel AI Gateway 填 `https://ai-gateway.vercel.sh/v1/evaluate`、模型 `typesafe-ai/jev`；OpenRouter 填 `https://openrouter.ai/api/alpha/decisions`、模型 `typesafe/jev-1.13`，key 用 OpenRouter 的 `sk-or-…`，响应同为 systemone 形状）\n- **判断方式选择（`JUDGE_BACKEND`）**：首次启动（未配判断层 key 且离线模型未下载）会弹一次选择，结果写进 env：`cloud`=在线判断（不下载、不加载本地模型）、`local`=离线判断（预热时下载，选过就不再问）、`skip`=稍后再说（不再弹，消息时面板提示）。不写此键时：模型已在本地就照常使用，未下载则**不会自动下载**，面板提示引导。模型设置的「判断 · Jev」页可删除离线模型（显示实际占用）或启用离线判断"
+        },
+        {
+          "source": "source-1",
+          "start": 148,
+          "end": 148,
+          "quote": "| 判断层本地模型 `decider-2b`（首次启动引导选择后才下载，判断+排序共用） | `~/.cache/huggingface/hub/models--Mapika--decider-2b` | ~3.8 GB | 模型设置 →「判断 · Jev」页「删除模型…」；或 `rm -rf ~/.cache/huggingface/hub/models--Mapika--decider-2b`；之后走本地判断会重新下载 |"
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Use an Apple Silicon Mac with macOS 13 or newer. Grant Screen Recording for screenshot-based reading and Accessibility for text access or insertion, then choose judgment and generation providers in settings.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 54,
+          "end": 70,
+          "quote": "## 用法\n\n**仅支持 Apple Silicon（M 系列）Mac**，macOS 13+。不支持 Intel Mac，也不要通过 Rosetta 运行（本地判断模型依赖的 torch 没有 Intel 版本，#19）；启动时会检测并以中文提示原因。\n\n**只想用**：[Releases](https://github.com/jev-chat/jev-chat-jarvis-mac/releases/latest/download/jev-jarvis-macos-latest.zip) 下载 `.app`，解压拖进「应用程序」，**第一次右键 → 打开**（没做公证，双击会被 Gatekeeper 拦）。\n\n![「已损坏，无法打开」的报错弹窗](docs/troubleshoot-damaged.png)\n\n弹窗若显示「**已损坏，无法打开，你应该将它移到废纸篓**」（浏览器下载的 zip 常见，右键打开也绕不过），别删——在终端清掉隔离属性即可：\n\n```bash\nsudo xattr -r -d com.apple.quarantine /Applications/jev-jarvis.app\n```\n\n`.app` 若改过名（如「jev-jarvis 2.app」），把命令里的目录名换成实际路径。\n\n首次启动按提示授予「屏幕录制」权限（系统设置 › 隐私与安全性 › 录屏与系统录音，给 **jev-jarvis** 打开），**退出重开**生效；「填入」另需「辅助功能」权限，第一次点会弹系统授权框。v0.3.1 及更早的旧版本还需把 **python3.12** 那条一并打开。只用文本接口路径的应用不需要屏幕录制权限，辅助功能一项即可。"
+        },
+        {
+          "source": "source-1",
+          "start": 89,
+          "end": 99,
+          "quote": "### 可视化配置（#18）\n\n点击悬浮窗右上角 **齿轮图标（模型设置）**，或菜单栏 **J → 模型设置…**，可编辑 Jev、OpenAI 兼容、Anthropic 兼容三组密钥、服务地址与模型。\n设置窗口显示在悬浮窗上方，不会被面板遮挡。各页统一使用底部「保存配置」：**模型配置保存后必须退出并重新打开应用**；「会话记录与背景」页的修改保存后立即生效。\n\n- 窗口编辑 `$XDG_CONFIG_HOME/jev-jarvis/env`（未设置时为 `~/.config/jev-jarvis/env`），显示具体路径。只修改所编辑服务的字段，保留其他配置、注释和未识别行，文件权限设为 `600`。文件被其他程序修改时拒绝覆盖，需重新打开窗口。\n- 填好地址与密钥，点击「获取模型列表」从该服务的 `/models` 接口动态获取，再下拉选择；不内置模型清单。Jev 按官方 `models[].name` 读取（当前列表为别名，未列出的版本号仍可手填）；OpenAI/Anthropic 按 `data[].id` 读取。接口不支持、失败或返回空列表时明确提示，仍可手填，不自动换模型或服务。空下拉显示「暂无」（仅作提示，不作为模型保存或调用），仍可手填；底部动态提示以蓝色显示进行状态、绿色显示成功、红色显示错误。列表可见不代表一定有生成权限，选定后再测试。\n- 「测试连接」使用窗口内**尚未保存**的地址、密钥和模型发起实际调用，仅发送固定问候语，不读取聊天内容；可能产生少量服务费用。生成层必须返回非空文字才算成功，不能用 `--check` 的配置解析成功代替连接成功。\n- 密钥掩码显示；窗口仅读取所编辑文件中的值，不把环境变量、项目 `.env` 或内置共享密钥复制进用户文件。各配置页顶部突出显示本次启动正在使用自己的密钥、内置共享密钥或本地判断，以及实际来源；生成页同时标明当前启用的服务，优先级保留在窗口下方。\n- 环境变量优先于用户 env，用户 env 优先于项目 `.env`；生成层 OpenAI 组优先于 Anthropic 组，均未配置才使用内置共享密钥。清空当前文件的密钥不会禁用其他来源中的密钥。由终端或启动器导出的值也显示为「环境变量」。\n- API 格式由密钥组决定：`OPENAI_*` 使用 OpenAI 格式，`ANTHROPIC_*` 使用 Anthropic 格式；自定义地址不需要包含服务名称。Ollama 可填 `http://localhost:11434/v1`、密钥 `ollama`，模型从本地服务获取或手填。Jev 地址带不带末尾 `/v1` 都行，与手动配置共用同一条拼接规则。"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "Sending remains manual. Images and layout changes can break message reading, and configured remote models receive the context used for inference.",
+      "kind": "source-limitation",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 31,
+          "end": 31,
+          "quote": "面板使用 macOS 原生浅色磨砂材质：顶部是当前聊天、分析状态、正在处理的消息与上下文；中间依次显示意图、识别率、风险等级和行动建议；底部按话术分组展示候选回复。当前风险圆点会轻微呼吸提示。每条候选左侧是本地排序概率，右侧仍只有「复制」和「填入」；候选行会随完整文字自动增高，不截断内容，发送始终由用户在聊天应用里手动完成。"
+        },
+        {
+          "source": "source-1",
+          "start": 142,
+          "end": 142,
+          "quote": "历史和背景仅保存在本机，但推理时会发给当前选择的模型服务及配置的中转；服务地址可在对应模型设置页配置，修改后需重启生效，服务方的留存政策由其决定。应用不增加历史云同步或项目后台存档，详见 [隐私说明](PRIVACY.md)。"
+        },
+        {
+          "source": "source-1",
+          "start": 156,
+          "end": 159,
+          "quote": "- 悬浮窗只在目标聊天应用位于前台时显示和分析；切到浏览器等其他应用会立即隐藏并丢弃未完成的旧结果，返回后强制重新读取当前聊天，避免把旧面板误认为正在识别其他应用\n- 收发方向靠文字位置判断：横跨左右或居中、无法确认方向的文本标「方向未确认」，**不作为回复目标**（很宽的对方消息可能被跳过）；只有明确识别为「对方」的消息才触发判断与生成，只有自己消息时面板显示「等待可确认的对方消息…」\n- 图片/表情包读不出内容；引用回复当普通文本；应用内卡片消息可能被当消息解读；全屏布局下识别可能失效（布局常量待动态化，见 #17）\n- 应用改版会让布局常量失效（`src/perception.py` 顶部常量需重新校准）；多窗口优先识别主窗口，且只认配置的应用名列表——名字相近的兄弟应用不参与窗口选择"
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "jev-chat-jarvis-mac — macOS chat assistance with optional Jev judgments",
+      "h1": "jev-chat-jarvis-mac — macOS chat assistance with optional Jev judgments",
+      "description": "jev-chat-jarvis-mac: The judgment layer can use hosted Jev or local decider-2b; a separately configured language model generates replies.",
+      "summary": "The floating chat panel displays intent and risk judgments and candidate replies that users can copy or insert into the chat input. Use an Apple Silicon Mac with macOS 13 or newer. Grant Screen Recording for screenshot-based reading and Accessibility for text access or insertion, then choose judgment and generation providers in settings.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "What it does",
+          "text": "The floating chat panel displays intent and risk judgments and candidate replies that users can copy or insert into the chat input.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "The judgment layer can use hosted Jev or local decider-2b; a separately configured language model generates replies.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Getting started",
+          "text": "Use an Apple Silicon Mac with macOS 13 or newer. Grant Screen Recording for screenshot-based reading and Accessibility for text access or insertion, then choose judgment and generation providers in settings.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "Sending remains manual. Images and layout changes can break message reading, and configured remote models receive the context used for inference.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "jev-chat-jarvis-mac — 可选 Jev 判断的 macOS 聊天助手",
+      "h1": "jev-chat-jarvis-mac — 可选 Jev 判断的 macOS 聊天助手",
+      "description": "jev-chat-jarvis-mac: 判断层可使用在线 Jev 或本地 decider-2b，回复由另行配置的语言模型生成。",
+      "summary": "悬浮聊天面板显示意图、风险判断和候选回复，用户可复制或填入聊天输入框。 使用 macOS 13 或更新系统的 Apple Silicon Mac。截图读取需要屏幕录制权限，文本接口读取或填入需要辅助功能权限；在设置中选择判断与生成服务。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "悬浮聊天面板显示意图、风险判断和候选回复，用户可复制或填入聊天输入框。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "判断层可使用在线 Jev 或本地 decider-2b，回复由另行配置的语言模型生成。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "使用 macOS 13 或更新系统的 Apple Silicon Mac。截图读取需要屏幕录制权限，文本接口读取或填入需要辅助功能权限；在设置中选择判断与生成服务。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "发送始终由用户手动完成。图片和布局变化可能影响消息读取，配置的远程模型会接收推理所用上下文。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "jev-chat-jarvis-mac — 可選 Jev 判斷的 macOS 聊天助手",
+      "h1": "jev-chat-jarvis-mac — 可選 Jev 判斷的 macOS 聊天助手",
+      "description": "jev-chat-jarvis-mac: 判斷層可用線上 Jev 或本機 decider-2b，回覆由另行設定的語言模型產生。",
+      "summary": "浮動聊天面板顯示意圖、風險判斷及候選回覆，使用者可複製或填入聊天輸入框。 使用 macOS 13 或更新系統的 Apple Silicon Mac。螢幕截圖讀取需要螢幕錄製權限，文字介面讀取或填入需要輔助使用權限；在設定中選擇判斷與生成服務。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "浮動聊天面板顯示意圖、風險判斷及候選回覆，使用者可複製或填入聊天輸入框。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "判斷層可用線上 Jev 或本機 decider-2b，回覆由另行設定的語言模型產生。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "使用 macOS 13 或更新系統的 Apple Silicon Mac。螢幕截圖讀取需要螢幕錄製權限，文字介面讀取或填入需要輔助使用權限；在設定中選擇判斷與生成服務。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "傳送始終由使用者手動完成。圖片和版面變動可能影響訊息讀取，設定的遠端模型會收到推論使用的上下文。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "jev-chat-jarvis-mac — Jev 判断を選べる macOS チャット補助",
+      "h1": "jev-chat-jarvis-mac — Jev 判断を選べる macOS チャット補助",
+      "description": "jev-chat-jarvis-mac: 判断にはホストされた Jev またはローカルの decider-2b を使い、返信文は別に設定した言語モデルが生成します。",
+      "summary": "フローティングパネルが発言の意図、リスク、返信候補を表示し、候補をコピーしたり入力欄へ挿入したりできます。 macOS 13 以降の Apple Silicon Mac を使用します。画面画像の読み取りには画面収録、テキスト経由の読み取りや挿入にはアクセシビリティの権限を与え、設定で判断用と生成用の接続先を選びます。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "できること",
+          "text": "フローティングパネルが発言の意図、リスク、返信候補を表示し、候補をコピーしたり入力欄へ挿入したりできます。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "判断にはホストされた Jev またはローカルの decider-2b を使い、返信文は別に設定した言語モデルが生成します。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い始めるには",
+          "text": "macOS 13 以降の Apple Silicon Mac を使用します。画面画像の読み取りには画面収録、テキスト経由の読み取りや挿入にはアクセシビリティの権限を与え、設定で判断用と生成用の接続先を選びます。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "対象範囲と制約",
+          "text": "送信は手動です。画像や画面構成の変更で読み取りが失敗する場合があり、遠隔モデルには推論用のコンテキストが送られます。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "jev-chat-jarvis-mac — Jev 판단을 선택할 수 있는 macOS 채팅 도우미",
+      "h1": "jev-chat-jarvis-mac — Jev 판단을 선택할 수 있는 macOS 채팅 도우미",
+      "description": "jev-chat-jarvis-mac: 판단은 호스팅된 Jev 또는 로컬 decider-2b가 수행하고 별도로 설정한 언어 모델이 답장을 생성합니다.",
+      "summary": "떠 있는 채팅 패널이 의도, 위험, 답장 후보를 보여주며 사용자가 복사하거나 입력창에 넣을 수 있습니다. macOS 13 이상의 Apple Silicon Mac을 사용합니다. 화면 캡처로 읽을 때는 화면 기록 권한을, 텍스트 인터페이스로 읽거나 입력할 때는 손쉬운 사용 권한을 주고 설정에서 판단·생성 제공자를 선택합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "떠 있는 채팅 패널이 의도, 위험, 답장 후보를 보여주며 사용자가 복사하거나 입력창에 넣을 수 있습니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "판단은 호스팅된 Jev 또는 로컬 decider-2b가 수행하고 별도로 설정한 언어 모델이 답장을 생성합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "macOS 13 이상의 Apple Silicon Mac을 사용합니다. 화면 캡처로 읽을 때는 화면 기록 권한을, 텍스트 인터페이스로 읽거나 입력할 때는 손쉬운 사용 권한을 주고 설정에서 판단·생성 제공자를 선택합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 제약",
+          "text": "전송은 항상 수동입니다. 이미지나 레이아웃 변경으로 메시지 읽기가 실패할 수 있고 원격 모델에는 추론용 맥락이 전달됩니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "jev-chat-jarvis-mac — Asistente de chat macOS con Jev opcional",
+      "h1": "jev-chat-jarvis-mac — Asistente de chat macOS con Jev opcional",
+      "description": "jev-chat-jarvis-mac: La evaluación puede usar Jev alojado o decider-2b local; otro modelo de lenguaje configurado por separado genera las respuestas.",
+      "summary": "El panel flotante muestra intención, riesgo y respuestas candidatas que se pueden copiar o insertar en el chat. Usa un Mac Apple Silicon con macOS 13 o posterior. Concede grabación de pantalla para leer capturas y accesibilidad para leer texto o insertar respuestas; elige los proveedores en ajustes.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "El panel flotante muestra intención, riesgo y respuestas candidatas que se pueden copiar o insertar en el chat.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "La evaluación puede usar Jev alojado o decider-2b local; otro modelo de lenguaje configurado por separado genera las respuestas.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo empezar",
+          "text": "Usa un Mac Apple Silicon con macOS 13 o posterior. Concede grabación de pantalla para leer capturas y accesibilidad para leer texto o insertar respuestas; elige los proveedores en ajustes.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "El envío es manual. Imágenes o cambios de diseño pueden impedir leer mensajes, y los modelos remotos reciben el contexto de inferencia.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "jev-chat-jarvis-mac — Assistant de chat macOS avec Jev facultatif",
+      "h1": "jev-chat-jarvis-mac — Assistant de chat macOS avec Jev facultatif",
+      "description": "jev-chat-jarvis-mac: Le jugement peut utiliser Jev hébergé ou decider-2b local ; un modèle de langage configuré séparément rédige les réponses.",
+      "summary": "Le panneau flottant affiche intention, risque et réponses proposées, à copier ou insérer dans le champ de discussion. Utilisez un Mac Apple Silicon avec macOS 13 ou ultérieur. Autorisez l’enregistrement de l’écran pour lire les captures, et l’accessibilité pour lire du texte ou insérer une réponse ; choisissez les fournisseurs dans les réglages.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "Le panneau flottant affiche intention, risque et réponses proposées, à copier ou insérer dans le champ de discussion.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Le jugement peut utiliser Jev hébergé ou decider-2b local ; un modèle de langage configuré séparément rédige les réponses.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Utilisez un Mac Apple Silicon avec macOS 13 ou ultérieur. Autorisez l’enregistrement de l’écran pour lire les captures, et l’accessibilité pour lire du texte ou insérer une réponse ; choisissez les fournisseurs dans les réglages.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "L’envoi reste manuel. Images et changements de disposition peuvent perturber la lecture ; les modèles distants reçoivent le contexte d’inférence.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "jev-chat-jarvis-mac — macOS-Chatassistenz mit optionalen Jev-Urteilen",
+      "h1": "jev-chat-jarvis-mac — macOS-Chatassistenz mit optionalen Jev-Urteilen",
+      "description": "jev-chat-jarvis-mac: Die Bewertung nutzt gehostetes Jev oder lokales decider-2b; ein separat konfiguriertes Sprachmodell erzeugt die Antworten.",
+      "summary": "Das schwebende Chatfenster zeigt Absicht, Risiko und Antwortvorschläge, die sich kopieren oder ins Eingabefeld einsetzen lassen. Nutzen Sie einen Apple-Silicon-Mac mit macOS 13 oder neuer. Für Bildschirmaufnahmen ist die Bildschirmaufnahme-Berechtigung nötig, für Textzugriff oder Einfügen die Bedienungshilfen-Berechtigung; Anbieter wählen Sie in den Einstellungen.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "Das schwebende Chatfenster zeigt Absicht, Risiko und Antwortvorschläge, die sich kopieren oder ins Eingabefeld einsetzen lassen.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Die Bewertung nutzt gehostetes Jev oder lokales decider-2b; ein separat konfiguriertes Sprachmodell erzeugt die Antworten.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Einstieg",
+          "text": "Nutzen Sie einen Apple-Silicon-Mac mit macOS 13 oder neuer. Für Bildschirmaufnahmen ist die Bildschirmaufnahme-Berechtigung nötig, für Textzugriff oder Einfügen die Bedienungshilfen-Berechtigung; Anbieter wählen Sie in den Einstellungen.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Gesendet wird manuell. Bilder und Layoutänderungen können die Erfassung stören; entfernte Modelle erhalten den verwendeten Inferenzkontext.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "jev-chat-jarvis-mac — Assistente de chat macOS com Jev opcional",
+      "h1": "jev-chat-jarvis-mac — Assistente de chat macOS com Jev opcional",
+      "description": "jev-chat-jarvis-mac: A avaliação usa Jev hospedado ou decider-2b local; outro modelo de linguagem configurado separadamente gera respostas.",
+      "summary": "O painel flutuante mostra intenção, risco e respostas sugeridas que podem ser copiadas ou inseridas no campo de conversa. Use um Mac Apple Silicon com macOS 13 ou superior. Autorize gravação da tela para ler capturas e acessibilidade para ler texto ou inserir respostas; escolha os provedores nas configurações.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "O painel flutuante mostra intenção, risco e respostas sugeridas que podem ser copiadas ou inseridas no campo de conversa.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "A avaliação usa Jev hospedado ou decider-2b local; outro modelo de linguagem configurado separadamente gera respostas.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como começar",
+          "text": "Use um Mac Apple Silicon com macOS 13 ou superior. Autorize gravação da tela para ler capturas e acessibilidade para ler texto ou inserir respostas; escolha os provedores nas configurações.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "O envio continua manual. Imagens e mudanças de layout podem prejudicar a leitura; modelos remotos recebem o contexto usado na inferência.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "jev-chat-jarvis-mac — Помощник чата macOS с необязательным Jev",
+      "h1": "jev-chat-jarvis-mac — Помощник чата macOS с необязательным Jev",
+      "description": "jev-chat-jarvis-mac: Для оценки используется облачный Jev или локальный decider-2b; ответы пишет отдельно настроенная языковая модель.",
+      "summary": "Плавающая панель показывает намерение, риск и варианты ответов, которые можно скопировать или вставить в поле чата. Используйте Apple Silicon Mac с macOS 13 или новее. Для чтения снимков экрана разрешите запись экрана, для доступа к тексту или вставки — универсальный доступ; провайдеров выберите в настройках.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Плавающая панель показывает намерение, риск и варианты ответов, которые можно скопировать или вставить в поле чата.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Для оценки используется облачный Jev или локальный decider-2b; ответы пишет отдельно настроенная языковая модель.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Начало работы",
+          "text": "Используйте Apple Silicon Mac с macOS 13 или новее. Для чтения снимков экрана разрешите запись экрана, для доступа к тексту или вставки — универсальный доступ; провайдеров выберите в настройках.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Отправка остаётся ручной. Изображения и изменения интерфейса могут нарушить чтение; удалённым моделям передаётся контекст для инференса.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "jev-chat-jarvis-mac — वैकल्पिक Jev निर्णयों वाला macOS चैट सहायक",
+      "h1": "jev-chat-jarvis-mac — वैकल्पिक Jev निर्णयों वाला macOS चैट सहायक",
+      "description": "jev-chat-jarvis-mac: निर्णय के लिए होस्टेड Jev या स्थानीय decider-2b चुना जा सकता है; अलग भाषा मॉडल जवाब बनाता है।",
+      "summary": "फ्लोटिंग पैनल आशय, जोखिम और जवाब के विकल्प दिखाता है, जिन्हें उपयोगकर्ता कॉपी या चैट इनपुट में भर सकता है। macOS 13 या नए संस्करण वाला Apple Silicon Mac इस्तेमाल करें। स्क्रीनशॉट से पढ़ने के लिए स्क्रीन रिकॉर्डिंग और टेक्स्ट पढ़ने या भरने के लिए सुगम्यता अनुमति दें; सेटिंग में निर्णय और उत्तर बनाने वाले प्रदाता चुनें।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "परियोजना का काम",
+          "text": "फ्लोटिंग पैनल आशय, जोखिम और जवाब के विकल्प दिखाता है, जिन्हें उपयोगकर्ता कॉपी या चैट इनपुट में भर सकता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "निर्णय के लिए होस्टेड Jev या स्थानीय decider-2b चुना जा सकता है; अलग भाषा मॉडल जवाब बनाता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "शुरुआत कैसे करें",
+          "text": "macOS 13 या नए संस्करण वाला Apple Silicon Mac इस्तेमाल करें। स्क्रीनशॉट से पढ़ने के लिए स्क्रीन रिकॉर्डिंग और टेक्स्ट पढ़ने या भरने के लिए सुगम्यता अनुमति दें; सेटिंग में निर्णय और उत्तर बनाने वाले प्रदाता चुनें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "भेजना हमेशा हाथ से होता है। चित्र और लेआउट बदलाव पढ़ने में बाधा बन सकते हैं; दूरस्थ मॉडल को अनुमान का संदर्भ भेजा जाता है।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "jev-chat-jarvis-mac — Asisten chat macOS dengan penilaian Jev opsional",
+      "h1": "jev-chat-jarvis-mac — Asisten chat macOS dengan penilaian Jev opsional",
+      "description": "jev-chat-jarvis-mac: Lapisan penilaian memakai Jev terhosting atau decider-2b lokal; model bahasa terpisah menghasilkan balasan.",
+      "summary": "Panel mengambang menampilkan maksud, risiko, dan calon balasan yang dapat disalin atau dimasukkan ke kotak chat. Gunakan Mac Apple Silicon dengan macOS 13 atau lebih baru. Izinkan perekaman layar untuk membaca tangkapan layar dan aksesibilitas untuk membaca teks atau menyisipkan balasan; pilih penyedia di pengaturan.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "Panel mengambang menampilkan maksud, risiko, dan calon balasan yang dapat disalin atau dimasukkan ke kotak chat.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Lapisan penilaian memakai Jev terhosting atau decider-2b lokal; model bahasa terpisah menghasilkan balasan.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara memulai",
+          "text": "Gunakan Mac Apple Silicon dengan macOS 13 atau lebih baru. Izinkan perekaman layar untuk membaca tangkapan layar dan aksesibilitas untuk membaca teks atau menyisipkan balasan; pilih penyedia di pengaturan.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Pengiriman tetap manual. Gambar dan perubahan tata letak dapat mengganggu pembacaan; model jarak jauh menerima konteks inferensi.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "jev-chat-jarvis-mac — Trợ lý chat macOS với Jev tùy chọn",
+      "h1": "jev-chat-jarvis-mac — Trợ lý chat macOS với Jev tùy chọn",
+      "description": "jev-chat-jarvis-mac: Lớp đánh giá dùng Jev trên dịch vụ hoặc decider-2b cục bộ; mô hình ngôn ngữ cấu hình riêng tạo câu trả lời.",
+      "summary": "Bảng nổi hiển thị ý định, rủi ro và câu trả lời gợi ý để sao chép hoặc chèn vào ô chat. Dùng Mac Apple Silicon chạy macOS 13 trở lên. Cấp quyền ghi màn hình để đọc ảnh chụp và quyền trợ năng để truy cập văn bản hoặc chèn trả lời; chọn nhà cung cấp trong cài đặt.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Công dụng",
+          "text": "Bảng nổi hiển thị ý định, rủi ro và câu trả lời gợi ý để sao chép hoặc chèn vào ô chat.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Lớp đánh giá dùng Jev trên dịch vụ hoặc decider-2b cục bộ; mô hình ngôn ngữ cấu hình riêng tạo câu trả lời.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách bắt đầu",
+          "text": "Dùng Mac Apple Silicon chạy macOS 13 trở lên. Cấp quyền ghi màn hình để đọc ảnh chụp và quyền trợ năng để truy cập văn bản hoặc chèn trả lời; chọn nhà cung cấp trong cài đặt.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Việc gửi vẫn thủ công. Ảnh và thay đổi bố cục có thể làm đọc sai tin nhắn; mô hình từ xa nhận ngữ cảnh suy luận.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "jev-chat-jarvis-mac — İsteğe bağlı Jev kararlarıyla macOS sohbet yardımcısı",
+      "h1": "jev-chat-jarvis-mac — İsteğe bağlı Jev kararlarıyla macOS sohbet yardımcısı",
+      "description": "jev-chat-jarvis-mac: Değerlendirme katmanı barındırılan Jev veya yerel decider-2b kullanır; ayrı yapılandırılan dil modeli yanıt üretir.",
+      "summary": "Yüzen panel niyet, risk ve kopyalanabilen ya da sohbet girişine eklenebilen yanıt adaylarını gösterir. macOS 13 veya üstü Apple Silicon Mac kullanın. Ekran görüntülerini okumak için ekran kaydı, metne erişmek veya yanıt eklemek için erişilebilirlik izni verin; sağlayıcıları ayarlardan seçin.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "Yüzen panel niyet, risk ve kopyalanabilen ya da sohbet girişine eklenebilen yanıt adaylarını gösterir.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Değerlendirme katmanı barındırılan Jev veya yerel decider-2b kullanır; ayrı yapılandırılan dil modeli yanıt üretir.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Başlangıç",
+          "text": "macOS 13 veya üstü Apple Silicon Mac kullanın. Ekran görüntülerini okumak için ekran kaydı, metne erişmek veya yanıt eklemek için erişilebilirlik izni verin; sağlayıcıları ayarlardan seçin.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Gönderim elle yapılır. Görseller ve düzen değişiklikleri mesaj okumayı bozabilir; uzak modeller çıkarım bağlamını alır.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "jev-chat-jarvis-mac — Assistente chat macOS con Jev facoltativo",
+      "h1": "jev-chat-jarvis-mac — Assistente chat macOS con Jev facoltativo",
+      "description": "jev-chat-jarvis-mac: Il livello di giudizio usa Jev ospitato oppure decider-2b locale; un modello linguistico separato genera le risposte.",
+      "summary": "Il pannello flottante mostra intento, rischio e risposte candidate da copiare o inserire nel campo della chat. Usa un Mac Apple Silicon con macOS 13 o successivo. Autorizza la registrazione dello schermo per leggere le catture e l’accessibilità per leggere testo o inserire risposte; scegli i fornitori nelle impostazioni.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "Il pannello flottante mostra intento, rischio e risposte candidate da copiare o inserire nel campo della chat.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Il livello di giudizio usa Jev ospitato oppure decider-2b locale; un modello linguistico separato genera le risposte.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come iniziare",
+          "text": "Usa un Mac Apple Silicon con macOS 13 o successivo. Autorizza la registrazione dello schermo per leggere le catture e l’accessibilità per leggere testo o inserire risposte; scegli i fornitori nelle impostazioni.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "L’invio resta manuale. Immagini e modifiche al layout possono disturbare la lettura; i modelli remoti ricevono il contesto d’inferenza.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

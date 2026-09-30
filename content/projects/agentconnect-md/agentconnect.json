@@ -1,0 +1,769 @@
+{
+  "version": "source-content-v1",
+  "repo": "agentconnect-md/agentconnect",
+  "repositoryId": 1310543401,
+  "relationship": "integration",
+  "category": "agents",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "path": "README.md",
+      "commit": "ca75dad80d38c10702fd6882f952f3e7866657ea",
+      "url": "https://github.com/agentconnect-md/agentconnect/blob/ca75dad80d38c10702fd6882f952f3e7866657ea/README.md",
+      "sha256": "634d407fa609fa77241add7c5ca59bc9281b34d33ecca385b46a37aaff6f2e37",
+      "accessedAt": "2026-09-30T07:33:47.770Z",
+      "id": "s1"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "Teams collaborate with multiple agents across chat and development platforms, starting work from messages, issues, pull requests, webhooks or schedules.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 73,
+          "end": 81,
+          "quote": "AgentConnect is an open-source platform where teams and multiple AI agents work\ntogether across Slack, Telegram, Discord, Lark, Google Chat, GitHub, GitLab,\nGitea, and Linear. Bring Claude Code, Codex, Grok Build, DeepSeek, Pi, or any\nACP-compatible agent into the conversations and workflows your team already has\nopen. Use Jev for agent routing and model selection.\n\nGive each agent a role, then let people and agents collaborate in shared\nconversations. Agents can call one another and remember what they learn, and\nwork can begin from a message, issue, pull request, webhook, or schedule."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "Jev helps choose the agent and model, including routing support conversations to the appropriate specialist.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 75,
+          "end": 77,
+          "quote": "Gitea, and Linear. Bring Claude Code, Codex, Grok Build, DeepSeek, Pi, or any\nACP-compatible agent into the conversations and workflows your team already has\nopen. Use Jev for agent routing and model selection."
+        },
+        {
+          "source": "s1",
+          "start": 107,
+          "end": 109,
+          "quote": "- **Triage issues together.** Use Jev to route new support conversations\n  to the right specialists. People and agents investigate in one shared thread\n  and keep the fix and verification visible from start to finish."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Add a daemon in the console, create agents with roles, and use them in shared conversations and workflows.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 79,
+          "end": 81,
+          "quote": "Give each agent a role, then let people and agents collaborate in shared\nconversations. Agents can call one another and remember what they learn, and\nwork can begin from a message, issue, pull request, webhook, or schedule."
+        },
+        {
+          "source": "s1",
+          "start": 179,
+          "end": 181,
+          "quote": "Open `http://localhost:3000`, add a daemon from the console, run its generated\ncommand, and create your first agent. The default stack listens only on\n`127.0.0.1` and uses local no-auth mode for evaluation."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "The default local stack binds to loopback and has no authentication for evaluation; shared deployment authentication and provider apps need separate configuration.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 179,
+          "end": 181,
+          "quote": "Open `http://localhost:3000`, add a daemon from the console, run its generated\ncommand, and create your first agent. The default stack listens only on\n`127.0.0.1` and uses local no-auth mode for evaluation."
+        },
+        {
+          "source": "s1",
+          "start": 198,
+          "end": 215,
+          "quote": "### Configure the deployment\n\n**Setup Server** runs in the base stack at `http://localhost:8091`, always on\nloopback. It configures browser authentication through Logto, the deployment's\nGitHub, Slack, Google, and Lark / Feishu apps, the sign-in methods you show, and\npreset-agent behavior. Deployment topology — images, ports, public URLs,\ndatabase and bootstrap secrets — stays in `compose.env` or your Helm values.\n\nPrefer to be walked through it? This repository ships a **setup skill** at\n`.claude/skills/agentconnect-setup`, also exposed at `.agents/skills`, so Claude\nCode, Codex, and other agent harnesses pick it up. Open your coding agent in the\ncheckout and ask it to set up AgentConnect: it runs the guide as an interactive\ntutorial and verifies each checkpoint before continuing, and never asks you to\npaste secrets into chat.\n\nFor authentication, public URLs, Linux sandbox requirements, provider apps,\nimage pinning, secrets, and optional Mem0 configuration, follow the\n[AgentConnect OSS guide](https://www.agentconnect.md/docs/self-hosting)."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "AgentConnect: team agent workflows with Jev routing",
+      "h1": "AgentConnect: team agent workflows with Jev routing",
+      "description": "AgentConnect brings agents into team conversations and issue workflows, with Jev for agent routing and model selection.",
+      "summary": "Teams collaborate with multiple agents across chat and development platforms, starting work from messages, issues, pull requests, webhooks or schedules. Jev helps choose the agent and model, including routing support conversations to the appropriate specialist.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose and audience",
+          "text": "Teams collaborate with multiple agents across chat and development platforms, starting work from messages, issues, pull requests, webhooks or schedules.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "Jev helps choose the agent and model, including routing support conversations to the appropriate specialist.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Using the project",
+          "text": "Add a daemon in the console, create agents with roles, and use them in shared conversations and workflows.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "The default local stack binds to loopback and has no authentication for evaluation; shared deployment authentication and provider apps need separate configuration.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "AgentConnect：用 Jev 路由团队智能体任务",
+      "h1": "AgentConnect：用 Jev 路由团队智能体任务",
+      "description": "AgentConnect 将智能体接入团队对话与问题处理流程，使用 Jev 进行智能体路由和模型选择。",
+      "summary": "团队可在聊天与开发平台协同多个智能体，由消息、问题、拉取请求、Webhook 或计划任务触发工作。 Jev 帮助选择智能体和模型，包括将支持对话分配给合适的专长角色。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途与适用对象",
+          "text": "团队可在聊天与开发平台协同多个智能体，由消息、问题、拉取请求、Webhook 或计划任务触发工作。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "Jev 帮助选择智能体和模型，包括将支持对话分配给合适的专长角色。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "在控制台添加守护进程，创建带角色的智能体，再用于共享对话与工作流。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "默认本地栈仅监听回环地址，并为评估关闭认证；共享部署的身份验证和平台应用需另外配置。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "AgentConnect：以 Jev 分派團隊代理任務",
+      "h1": "AgentConnect：以 Jev 分派團隊代理任務",
+      "description": "AgentConnect 將代理帶入團隊對話與問題處理流程，以 Jev 進行代理路由和模型選擇。",
+      "summary": "團隊能跨聊天與開發平台協作多個代理，由訊息、議題、拉取請求、Webhook 或排程啟動工作。 Jev 協助選擇代理與模型，包括將支援對話分派給適合的專長角色。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途與適用對象",
+          "text": "團隊能跨聊天與開發平台協作多個代理，由訊息、議題、拉取請求、Webhook 或排程啟動工作。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "Jev 協助選擇代理與模型，包括將支援對話分派給適合的專長角色。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "在主控台加入背景服務，建立具有角色的代理，再用於共享對話與工作流程。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "預設本機環境僅監聽回環位址，供評估的模式不驗證身分；共用部署的驗證與平台應用須另行設定。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "AgentConnect：Jev でチームのエージェントを振り分け",
+      "h1": "AgentConnect：Jev でチームのエージェントを振り分け",
+      "description": "AgentConnect はチームの会話や課題処理にエージェントを参加させ、Jev で担当とモデルを選びます。",
+      "summary": "複数のエージェントと人がチャット・開発基盤で協働し、メッセージ、課題、プルリクエスト、Webhook、予定から作業を開始できます。 Jev はエージェントとモデルの選択を担い、問い合わせを適切な専門担当へ振り分ける用途があります。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途と対象",
+          "text": "複数のエージェントと人がチャット・開発基盤で協働し、メッセージ、課題、プルリクエスト、Webhook、予定から作業を開始できます。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev との関係",
+          "text": "Jev はエージェントとモデルの選択を担い、問い合わせを適切な専門担当へ振り分ける用途があります。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "コンソールでデーモンを追加して役割を持つエージェントを作り、共有会話やワークフローで利用します。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範囲と制約",
+          "text": "既定のローカル構成はループバックだけで待ち受け、評価用に認証を省いています。共有環境の認証とプロバイダーアプリは別途設定します。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "AgentConnect: Jev로 팀 에이전트 작업 라우팅",
+      "h1": "AgentConnect: Jev로 팀 에이전트 작업 라우팅",
+      "description": "AgentConnect는 팀 대화와 이슈 흐름에 에이전트를 연결하고 Jev로 에이전트와 모델을 선택합니다.",
+      "summary": "채팅·개발 플랫폼에서 여러 에이전트와 협업하며 메시지, 이슈, 풀 리퀘스트, 웹훅, 일정으로 작업을 시작합니다. Jev는 에이전트와 모델 선택을 돕고 지원 대화를 적절한 전문 역할로 라우팅합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "용도와 대상",
+          "text": "채팅·개발 플랫폼에서 여러 에이전트와 협업하며 메시지, 이슈, 풀 리퀘스트, 웹훅, 일정으로 작업을 시작합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Jev는 에이전트와 모델 선택을 돕고 지원 대화를 적절한 전문 역할로 라우팅합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "콘솔에서 데몬을 추가하고 역할이 있는 에이전트를 만든 뒤 공유 대화와 작업 흐름에서 사용합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 한계",
+          "text": "기본 로컬 스택은 루프백에만 바인딩하며 평가용으로 인증이 없습니다. 공유 배포의 인증과 제공자 앱은 별도로 설정해야 합니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "AgentConnect: flujos de equipo con enrutamiento Jev",
+      "h1": "AgentConnect: flujos de equipo con enrutamiento Jev",
+      "description": "AgentConnect incorpora agentes a conversaciones y gestión de incidencias, usando Jev para elegir agente y modelo.",
+      "summary": "Equipos y agentes colaboran en plataformas de chat y desarrollo; mensajes, incidencias, solicitudes de cambios, webhooks o horarios inician el trabajo. Jev ayuda a seleccionar agente y modelo, por ejemplo dirigiendo conversaciones de soporte al especialista adecuado.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "Equipos y agentes colaboran en plataformas de chat y desarrollo; mensajes, incidencias, solicitudes de cambios, webhooks o horarios inician el trabajo.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Jev ayuda a seleccionar agente y modelo, por ejemplo dirigiendo conversaciones de soporte al especialista adecuado.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo se usa",
+          "text": "Añada un daemon desde la consola, cree agentes con roles y úselos en conversaciones y flujos compartidos.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "El entorno local predeterminado escucha solo en loopback y no autentica para evaluación; autenticación compartida y apps de proveedores se configuran aparte.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "AgentConnect : travail d'équipe avec routage Jev",
+      "h1": "AgentConnect : travail d'équipe avec routage Jev",
+      "description": "AgentConnect intègre des agents aux conversations et au traitement des tickets, avec Jev pour choisir agents et modèles.",
+      "summary": "Équipes et agents collaborent dans les outils de chat et développement ; messages, tickets, pull requests, webhooks ou horaires lancent le travail. Jev aide à choisir l'agent et le modèle, notamment pour orienter une demande d'assistance vers le bon spécialiste.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Usage et public visé",
+          "text": "Équipes et agents collaborent dans les outils de chat et développement ; messages, tickets, pull requests, webhooks ou horaires lancent le travail.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Jev aide à choisir l'agent et le modèle, notamment pour orienter une demande d'assistance vers le bon spécialiste.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Ajoutez un daemon dans la console, créez des agents avec des rôles et utilisez-les dans les conversations et processus partagés.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "La pile locale par défaut écoute seulement sur loopback, sans authentification pour l'évaluation ; un déploiement partagé nécessite une configuration distincte de l'authentification et des applications.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "AgentConnect: Teamarbeit mit Jev-Agentenrouting",
+      "h1": "AgentConnect: Teamarbeit mit Jev-Agentenrouting",
+      "description": "AgentConnect bindet Agenten in Teamgespräche und Aufgabenabläufe ein und nutzt Jev zur Agenten- und Modellauswahl.",
+      "summary": "Teams arbeiten mit mehreren Agenten in Chat- und Entwicklungsplattformen; Nachrichten, Issues, Pull Requests, Webhooks oder Zeitpläne starten Aufgaben. Jev hilft bei Agenten- und Modellauswahl, etwa indem Supportgespräche dem passenden Spezialisten zugewiesen werden.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Zweck und Zielgruppe",
+          "text": "Teams arbeiten mit mehreren Agenten in Chat- und Entwicklungsplattformen; Nachrichten, Issues, Pull Requests, Webhooks oder Zeitpläne starten Aufgaben.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Jev hilft bei Agenten- und Modellauswahl, etwa indem Supportgespräche dem passenden Spezialisten zugewiesen werden.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Verwendung",
+          "text": "Fügen Sie in der Konsole einen Daemon hinzu, erstellen Sie Agenten mit Rollen und nutzen Sie gemeinsame Gespräche und Abläufe.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Der lokale Standardstack bindet nur an Loopback und verzichtet für Evaluation auf Authentifizierung; gemeinsame Bereitstellung und Anbieter-Apps erfordern eigene Konfiguration.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "AgentConnect: fluxos de equipe com roteamento Jev",
+      "h1": "AgentConnect: fluxos de equipe com roteamento Jev",
+      "description": "AgentConnect leva agentes a conversas e fluxos de issues, usando Jev para selecionar agentes e modelos.",
+      "summary": "Equipes e agentes colaboram em plataformas de chat e desenvolvimento; mensagens, issues, pull requests, webhooks ou horários iniciam o trabalho. Jev ajuda a escolher agente e modelo, incluindo o encaminhamento de conversas de suporte ao especialista adequado.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Finalidade e público",
+          "text": "Equipes e agentes colaboram em plataformas de chat e desenvolvimento; mensagens, issues, pull requests, webhooks ou horários iniciam o trabalho.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "Jev ajuda a escolher agente e modelo, incluindo o encaminhamento de conversas de suporte ao especialista adequado.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Adicione um daemon no console, crie agentes com papéis e use-os em conversas e fluxos compartilhados.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "A pilha local padrão escuta apenas em loopback e não exige autenticação para avaliação; autenticação compartilhada e apps de provedores têm configuração separada.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "AgentConnect: командные агенты с маршрутизацией Jev",
+      "h1": "AgentConnect: командные агенты с маршрутизацией Jev",
+      "description": "AgentConnect подключает агентов к командным разговорам и задачам, используя Jev для выбора агента и модели.",
+      "summary": "Команды работают с несколькими агентами в чатах и системах разработки; запуск идёт от сообщений, задач, pull request, вебхуков или расписаний. Jev помогает выбрать агента и модель, в том числе направить обращение поддержки подходящему специалисту.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Команды работают с несколькими агентами в чатах и системах разработки; запуск идёт от сообщений, задач, pull request, вебхуков или расписаний.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Jev помогает выбрать агента и модель, в том числе направить обращение поддержки подходящему специалисту.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Добавьте демон в консоли, создайте агентов с ролями и используйте их в общих разговорах и процессах.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Локальная конфигурация по умолчанию слушает только loopback и не требует авторизации для оценки; общая установка и приложения провайдеров настраиваются отдельно.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "AgentConnect: Jev रूटिंग के साथ टीम एजेंट प्रवाह",
+      "h1": "AgentConnect: Jev रूटिंग के साथ टीम एजेंट प्रवाह",
+      "description": "AgentConnect एजेंटों को टीम संवाद और issue प्रवाह में जोड़ता है; Jev एजेंट और मॉडल चुनने में मदद करता है।",
+      "summary": "टीम चैट और विकास प्लेटफ़ॉर्म पर कई एजेंटों के साथ काम करती है; संदेश, issue, pull request, webhook या शेड्यूल से काम शुरू होता है। Jev एजेंट और मॉडल चुनता है, जैसे सहायता बातचीत को सही विशेषज्ञ के पास भेजना।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "उद्देश्य और उपयोगकर्ता",
+          "text": "टीम चैट और विकास प्लेटफ़ॉर्म पर कई एजेंटों के साथ काम करती है; संदेश, issue, pull request, webhook या शेड्यूल से काम शुरू होता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "Jev एजेंट और मॉडल चुनता है, जैसे सहायता बातचीत को सही विशेषज्ञ के पास भेजना।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल का तरीका",
+          "text": "कंसोल में daemon जोड़ें, भूमिका वाले एजेंट बनाएँ और साझा बातचीत तथा प्रवाह में उनका उपयोग करें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "डिफ़ॉल्ट स्थानीय स्टैक केवल loopback पर चलता है और मूल्यांकन के लिए प्रमाणीकरण नहीं रखता; साझा तैनाती और प्रदाता ऐप की अलग सेटिंग चाहिए।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "AgentConnect: alur tim dengan perutean Jev",
+      "h1": "AgentConnect: alur tim dengan perutean Jev",
+      "description": "AgentConnect membawa agen ke percakapan dan alur issue tim, memakai Jev untuk memilih agen serta model.",
+      "summary": "Tim bekerja dengan banyak agen di platform chat dan pengembangan; pesan, issue, pull request, webhook, atau jadwal memulai pekerjaan. Jev membantu memilih agen dan model, termasuk mengarahkan percakapan dukungan ke spesialis yang sesuai.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Tujuan dan pengguna",
+          "text": "Tim bekerja dengan banyak agen di platform chat dan pengembangan; pesan, issue, pull request, webhook, atau jadwal memulai pekerjaan.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Jev membantu memilih agen dan model, termasuk mengarahkan percakapan dukungan ke spesialis yang sesuai.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Tambahkan daemon di konsol, buat agen dengan peran, lalu gunakan dalam percakapan serta alur bersama.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Stack lokal bawaan hanya mendengarkan loopback dan tanpa autentikasi untuk evaluasi; autentikasi penggunaan bersama serta aplikasi penyedia dikonfigurasi terpisah.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "AgentConnect: luồng tác tử nhóm với định tuyến Jev",
+      "h1": "AgentConnect: luồng tác tử nhóm với định tuyến Jev",
+      "description": "AgentConnect đưa tác tử vào hội thoại và xử lý issue của nhóm, dùng Jev chọn tác tử và mô hình.",
+      "summary": "Nhóm phối hợp nhiều tác tử trên nền tảng chat và phát triển; tin nhắn, issue, pull request, webhook hoặc lịch chạy khởi động công việc. Jev hỗ trợ chọn tác tử và mô hình, chẳng hạn chuyển hội thoại hỗ trợ đến chuyên gia phù hợp.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích và đối tượng",
+          "text": "Nhóm phối hợp nhiều tác tử trên nền tảng chat và phát triển; tin nhắn, issue, pull request, webhook hoặc lịch chạy khởi động công việc.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Jev hỗ trợ chọn tác tử và mô hình, chẳng hạn chuyển hội thoại hỗ trợ đến chuyên gia phù hợp.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Thêm daemon trong bảng quản trị, tạo tác tử có vai trò rồi dùng trong hội thoại và quy trình chung.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Cấu hình cục bộ mặc định chỉ nghe loopback và không xác thực để đánh giá; xác thực triển khai chung cùng ứng dụng nhà cung cấp phải cấu hình riêng.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "AgentConnect: Jev yönlendirmeli ekip ajanları",
+      "h1": "AgentConnect: Jev yönlendirmeli ekip ajanları",
+      "description": "AgentConnect ajanları ekip konuşmalarına ve issue akışlarına katar; Jev ile ajan ve model seçimi yapar.",
+      "summary": "Ekipler sohbet ve geliştirme platformlarında çok sayıda ajanla çalışır; mesaj, issue, pull request, webhook veya takvim işi başlatabilir. Jev, destek konuşmalarını uygun uzmana yönlendirmek gibi işlerde ajan ve model seçimini destekler.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Amaç ve hedef kitle",
+          "text": "Ekipler sohbet ve geliştirme platformlarında çok sayıda ajanla çalışır; mesaj, issue, pull request, webhook veya takvim işi başlatabilir.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Jev, destek konuşmalarını uygun uzmana yönlendirmek gibi işlerde ajan ve model seçimini destekler.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Konsoldan daemon eklenir, rolleri olan ajanlar oluşturulur ve ortak konuşmalarda veya akışlarda kullanılır.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Varsayılan yerel kurulum yalnızca loopback dinler ve değerlendirme için kimlik doğrulamasızdır; ortak dağıtımın doğrulaması ile sağlayıcı uygulamaları ayrı yapılandırılır.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "AgentConnect: flussi di squadra con instradamento Jev",
+      "h1": "AgentConnect: flussi di squadra con instradamento Jev",
+      "description": "AgentConnect porta agenti nelle conversazioni e nei flussi di issue del team, usando Jev per scegliere agenti e modelli.",
+      "summary": "Team e agenti collaborano su piattaforme di chat e sviluppo; messaggi, issue, pull request, webhook o pianificazioni avviano il lavoro. Jev aiuta a scegliere agente e modello, per esempio instradando conversazioni di supporto allo specialista adatto.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Scopo e destinatari",
+          "text": "Team e agenti collaborano su piattaforme di chat e sviluppo; messaggi, issue, pull request, webhook o pianificazioni avviano il lavoro.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Jev aiuta a scegliere agente e modello, per esempio instradando conversazioni di supporto allo specialista adatto.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come si usa",
+          "text": "Si aggiunge un daemon nella console, si creano agenti con ruoli e li si usa in conversazioni e flussi condivisi.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "Lo stack locale predefinito ascolta solo su loopback e non autentica per la valutazione; autenticazione condivisa e app dei provider richiedono configurazione separata.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  },
+  "displayName": "AgentConnect"
+}

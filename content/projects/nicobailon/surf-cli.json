@@ -1,0 +1,769 @@
+{
+  "version": "source-content-v1",
+  "repo": "nicobailon/surf-cli",
+  "repositoryId": 1124070604,
+  "relationship": "integration",
+  "category": "browser",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "a71ce926f129f509122b5571476a47c687e777ea",
+      "url": "https://github.com/nicobailon/surf-cli/blob/a71ce926f129f509122b5571476a47c687e777ea/README.md",
+      "sha256": "ef93b203944b8366c762f9f8030982937669383bc159348e46aa17d1ff6ec826",
+      "accessedAt": "2026-09-30T07:33:49.426Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "kind": "documented",
+      "text": "Surf exposes Chrome navigation, page reading, clicks and screenshots as CLI commands for agents and scripts.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 7,
+          "end": 19,
+          "quote": "**The CLI for AI agents to control Chrome. Zero config, agent-agnostic, battle-tested.**\n\n[![npm version](https://img.shields.io/npm/v/surf-cli?style=for-the-badge)](https://www.npmjs.com/package/surf-cli)\n[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)\n[![Platform](https://img.shields.io/badge/Platform-macOS%20%7C%20Linux%20%7C%20Windows-blue?style=for-the-badge)]()\n\n> See [CHANGELOG](CHANGELOG.md) for current release notes.\n\n```bash\nsurf go \"https://example.com\"\nsurf read\nsurf click e5\nsurf snap"
+        },
+        {
+          "source": "source-1",
+          "start": 28,
+          "end": 34,
+          "quote": "**Agent-Agnostic** - Pure CLI commands over Unix socket. Works with Claude Code, GPT, Gemini, Cursor, custom agents, shell scripts - anything that can run commands.\n\n**Zero Config** - Install the extension, run commands. No MCP servers to configure, no relay processes, no subscriptions.\n\n**Battle-Tested** - Built by reverse-engineering production browser extensions and methodically working through agent-hostile pages like Discord settings. Falls back gracefully when CDP fails.\n\n**Smart Defaults** - Screenshots auto-resize to 1200px (saves tokens). Actions auto-capture screenshots (saves round-trips). Errors on restricted pages warn instead of fail."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "kind": "documented",
+      "text": "Optional semantic commands ask Jev to find controls, rank page regions, verify outcomes and select bounded actions.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 992,
+          "end": 998,
+          "quote": "## Optional Jev semantic commands\n\n`semantic.act` is a bounded, goal-driven website controller. Give it an outcome\nand it repeatedly observes the current page, asks Jev to select the next action\nfrom Surf's allowed menu, validates and executes that action, then checks whether\nthe overall goal is complete. It stops when the goal is satisfied, a decision is\nuncertain, or a step, provider-call, or time budget is exhausted."
+        },
+        {
+          "source": "source-1",
+          "start": 1014,
+          "end": 1032,
+          "quote": "The other semantic commands expose individual parts of that loop:\n\n```text\nsemantic.find     select one control matching a goal\nsemantic.filter   rank the page regions relevant to a goal\nsemantic.verify   check whether one outcome is visible\nsemantic.act      run the bounded observe/choose/act/verify loop\n```\n\nThis is most useful when the agent does not yet know a site's structure or happy\npath: Jev handles next-action selection and goal verification while Surf builds\nthe allowed action menu and enforces permissions, confidence thresholds, and\nelement freshness. The agent owns the goal and final confirmation. Once the path\nis known and stable, deterministic Surf commands are usually faster and more\nreliable for repeated execution.\n\nSemantic commands are an explicit remote-AI boundary: only `surf semantic.*`\nsends a bounded, value-free current-page observation to TypeSafe. Existing Surf\ncommands do not read a TypeSafe credential, load the SDK, or make provider calls."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "kind": "documented",
+      "text": "Use deterministic commands for known flows; semantic.act explores toward a goal with confidence, freshness and budget checks.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 1016,
+          "end": 1028,
+          "quote": "```text\nsemantic.find     select one control matching a goal\nsemantic.filter   rank the page regions relevant to a goal\nsemantic.verify   check whether one outcome is visible\nsemantic.act      run the bounded observe/choose/act/verify loop\n```\n\nThis is most useful when the agent does not yet know a site's structure or happy\npath: Jev handles next-action selection and goal verification while Surf builds\nthe allowed action menu and enforces permissions, confidence thresholds, and\nelement freshness. The agent owns the goal and final confirmation. Once the path\nis known and stable, deterministic Surf commands are usually faster and more\nreliable for repeated execution."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "kind": "documented",
+      "text": "Ordinary commands do not call Jev. Semantic writes require explicit authorization, and Chrome internal pages cannot be automated.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 1067,
+          "end": 1080,
+          "quote": "`semantic.act` is bounded to observed same-origin HTTP(S) links, fixed scrolling\nand waits, and observed refs. Every DOM click and fill is mutation-capable and is\nexcluded unless `--allow-write` is present. That flag intentionally permits\nhigh-impact submit, purchase, delete, send, and publish controls; repeat\n`--allow-ref <ref>` to narrow authorization to exact current refs. Fill values\ncome only from named `--input name=value` slots and are never sent to TypeSafe or\nincluded in traces. Broad and ambiguous writes require probability `0.95`. The\nthreshold is `0.65` only when exactly one `--allow-ref` names exactly one\napplicable click, or one fill with one input slot; the applied threshold appears\nin decision/trace output and never grants authority. Repeatable\n`--threshold name=value` overrides applicable confidence thresholds for one run\nonly; defaults remain safer, and overrides never replace `--allow-write` or\n`--allow-ref` authority. Actions are\nfreshness-guarded and uncertain writes are not replayed. Each provider choice is"
+        },
+        {
+          "source": "source-1",
+          "start": 1252,
+          "end": 1256,
+          "quote": "## Limitations\n\n- Cannot automate `chrome://` pages or the Chrome Web Store (Chrome restriction)\n- First CDP operation on a new tab takes ~100-500ms (debugger attachment)\n- Some operations on restricted pages return warnings instead of results"
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "Surf: Chrome automation with optional Jev commands",
+      "h1": "Surf: Chrome automation with optional Jev commands",
+      "description": "Surf automates Chrome through CLI commands. Optional Jev commands find controls, rank regions and run bounded action loops with explicit write authorization.",
+      "summary": "Surf exposes Chrome navigation, page reading, clicks and screenshots as CLI commands for agents and scripts. Optional semantic commands ask Jev to find controls, rank page regions, verify outcomes and select bounded actions. Use deterministic commands for known flows; semantic.act explores toward a goal with confidence, freshness and budget checks.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose",
+          "text": "Surf exposes Chrome navigation, page reading, clicks and screenshots as CLI commands for agents and scripts.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’s role",
+          "text": "Optional semantic commands ask Jev to find controls, rank page regions, verify outcomes and select bounded actions.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "How to use it",
+          "text": "Use deterministic commands for known flows; semantic.act explores toward a goal with confidence, freshness and budget checks.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limits to consider",
+          "text": "Ordinary commands do not call Jev. Semantic writes require explicit authorization, and Chrome internal pages cannot be automated.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "Surf：带可选 Jev 命令的 Chrome 自动化",
+      "h1": "Surf：带可选 Jev 命令的 Chrome 自动化",
+      "description": "Surf 通过命令行自动操作 Chrome；可选 Jev 语义命令查找控件、排序区域并运行有界行动循环。普通命令不调用 Jev，页面写入需要明确授权。",
+      "summary": "Surf 将 Chrome 导航、页面读取、点击和截图开放为智能体及脚本可用的命令行操作。 可选语义命令让 Jev 查找控件、排序页面区域、验证结果并选择有界动作。 已知流程可用确定性命令；semantic.act 按目标探索，并检查置信度、元素时效与预算。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "Surf 将 Chrome 导航、页面读取、点击和截图开放为智能体及脚本可用的命令行操作。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "可选语义命令让 Jev 查找控件、排序页面区域、验证结果并选择有界动作。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "已知流程可用确定性命令；semantic.act 按目标探索，并检查置信度、元素时效与预算。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用边界",
+          "text": "普通命令不会调用 Jev；语义写入需要显式授权，Chrome 内部页面无法自动化。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "Surf：具選用 Jev 命令的 Chrome 自動化",
+      "h1": "Surf：具選用 Jev 命令的 Chrome 自動化",
+      "description": "Surf 透過命令列自動操作 Chrome；可選用 Jev 語義命令尋找控制項、排序區域並執行有界行動迴圈。一般命令不呼叫 Jev，頁面寫入需要明確授權。",
+      "summary": "Surf 將 Chrome 導覽、頁面讀取、點擊與截圖開放為代理及腳本可用的命令列操作。 可選用的語義命令讓 Jev 尋找控制項、排序頁面區域、驗證結果並選擇有界動作。 已知流程可用確定性命令；semantic.act 依目標探索，並檢查信心、元素時效與預算。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "Surf 將 Chrome 導覽、頁面讀取、點擊與截圖開放為代理及腳本可用的命令列操作。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "可選用的語義命令讓 Jev 尋找控制項、排序頁面區域、驗證結果並選擇有界動作。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "已知流程可用確定性命令；semantic.act 依目標探索，並檢查信心、元素時效與預算。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用限制",
+          "text": "一般命令不會呼叫 Jev；語義寫入需要明確授權，Chrome 內部頁面無法自動化。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "Surf：任意の Jev コマンドで Chrome 自動操作",
+      "h1": "Surf：任意の Jev コマンドで Chrome 自動操作",
+      "description": "Surf は CLI で Chrome を操作します。任意の Jev が対象選択・領域順位付け・範囲内の操作を担い、変更には明示的な許可が必要です。",
+      "summary": "Surf は Chrome の移動、ページ読み取り、クリック、画像取得をエージェントやスクリプト用の CLI にします。 任意の意味判断コマンドが Jev にコントロール選択、領域順位付け、結果確認、範囲内の操作選択を依頼します。 既知の手順には通常コマンドを使い、semantic.act は確信度、要素の鮮度、予算を確認しながら目標を探索します。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "何ができるか",
+          "text": "Surf は Chrome の移動、ページ読み取り、クリック、画像取得をエージェントやスクリプト用の CLI にします。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "任意の意味判断コマンドが Jev にコントロール選択、領域順位付け、結果確認、範囲内の操作選択を依頼します。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "既知の手順には通常コマンドを使い、semantic.act は確信度、要素の鮮度、予算を確認しながら目標を探索します。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "制約と注意点",
+          "text": "通常コマンドは Jev を呼びません。変更操作には明示的な許可が必要で、Chrome 内部ページは自動化できません。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "Surf: 선택적 Jev 명령으로 Chrome 자동화",
+      "h1": "Surf: 선택적 Jev 명령으로 Chrome 자동화",
+      "description": "Surf는 CLI로 Chrome을 자동화합니다. 선택적 Jev 명령이 컨트롤을 찾고 영역을 정렬하며 제한된 동작 루프를 실행합니다. 쓰기는 명시적 권한이 필요합니다.",
+      "summary": "Surf는 Chrome 탐색, 페이지 읽기, 클릭, 스크린샷을 에이전트와 스크립트용 CLI 명령으로 제공합니다. 선택적 의미 판단 명령은 Jev로 컨트롤 찾기, 페이지 영역 순위화, 결과 검증, 제한된 동작 선택을 수행합니다. 알려진 흐름은 결정론적 명령을 사용하고 semantic.act는 신뢰도, 요소 최신성, 예산을 확인하며 목표를 탐색합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "Surf는 Chrome 탐색, 페이지 읽기, 클릭, 스크린샷을 에이전트와 스크립트용 CLI 명령으로 제공합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "선택적 의미 판단 명령은 Jev로 컨트롤 찾기, 페이지 영역 순위화, 결과 검증, 제한된 동작 선택을 수행합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "알려진 흐름은 결정론적 명령을 사용하고 semantic.act는 신뢰도, 요소 최신성, 예산을 확인하며 목표를 탐색합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "제약 사항",
+          "text": "일반 명령은 Jev를 호출하지 않습니다. 쓰기 동작은 명시적 권한이 필요하며 Chrome 내부 페이지는 자동화할 수 없습니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "Surf: automatizar Chrome con Jev opcional",
+      "h1": "Surf: automatizar Chrome con Jev opcional",
+      "description": "Surf automatiza Chrome por CLI. Jev opcional encuentra controles, ordena regiones y ejecuta bucles acotados con autorización explícita para escribir.",
+      "summary": "Surf ofrece navegación Chrome, lectura, clics y capturas como comandos CLI para agentes y scripts. Los comandos semánticos opcionales usan Jev para encontrar controles, ordenar regiones, verificar resultados y elegir acciones acotadas. Usa comandos deterministas en recorridos conocidos; semantic.act explora objetivos con controles de confianza, vigencia y presupuesto.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "Surf ofrece navegación Chrome, lectura, clics y capturas como comandos CLI para agentes y scripts.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "El papel de Jev",
+          "text": "Los comandos semánticos opcionales usan Jev para encontrar controles, ordenar regiones, verificar resultados y elegir acciones acotadas.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo usarlo",
+          "text": "Usa comandos deterministas en recorridos conocidos; semantic.act explora objetivos con controles de confianza, vigencia y presupuesto.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Límites a considerar",
+          "text": "Los comandos normales no llaman a Jev. Las escrituras requieren autorización explícita; las páginas internas de Chrome no se automatizan.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "Surf : automatisation Chrome avec Jev facultatif",
+      "h1": "Surf : automatisation Chrome avec Jev facultatif",
+      "description": "Surf automatise Chrome par CLI. Jev trouve des contrôles, classe des régions et pilote des actions bornées en option ; les écritures sont autorisées explicitement.",
+      "summary": "Surf expose navigation Chrome, lecture, clics et captures sous forme de commandes CLI pour agents et scripts. Les commandes sémantiques facultatives demandent à Jev de trouver des contrôles, classer des régions et choisir ou vérifier des actions. Utilisez les commandes déterministes pour les parcours connus ; semantic.act explore avec contrôles de confiance, fraîcheur et budget.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "Surf expose navigation Chrome, lecture, clics et captures sous forme de commandes CLI pour agents et scripts.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Le rôle de Jev",
+          "text": "Les commandes sémantiques facultatives demandent à Jev de trouver des contrôles, classer des régions et choisir ou vérifier des actions.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Utilisation",
+          "text": "Utilisez les commandes déterministes pour les parcours connus ; semantic.act explore avec contrôles de confiance, fraîcheur et budget.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limites à connaître",
+          "text": "Les commandes ordinaires n’appellent pas Jev. Les écritures exigent une autorisation explicite et les pages internes Chrome restent inaccessibles.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "Surf: Chrome-Automatisierung mit optionalem Jev",
+      "h1": "Surf: Chrome-Automatisierung mit optionalem Jev",
+      "description": "Surf automatisiert Chrome per CLI. Optionale Jev-Befehle finden Elemente, ordnen Bereiche und steuern begrenzte Abläufe mit expliziter Schreibfreigabe.",
+      "summary": "Surf stellt Chrome-Navigation, Seitenlesen, Klicks und Screenshots als CLI-Befehle für Agenten und Skripte bereit. Optionale semantische Befehle lassen Jev Steuerelemente finden, Bereiche ordnen, Ergebnisse prüfen und begrenzte Aktionen wählen. Bekannte Abläufe nutzen deterministische Befehle; semantic.act erkundet Ziele mit Konfidenz-, Aktualitäts- und Budgetprüfungen.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "Surf stellt Chrome-Navigation, Seitenlesen, Klicks und Screenshots als CLI-Befehle für Agenten und Skripte bereit.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Die Rolle von Jev",
+          "text": "Optionale semantische Befehle lassen Jev Steuerelemente finden, Bereiche ordnen, Ergebnisse prüfen und begrenzte Aktionen wählen.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Nutzung",
+          "text": "Bekannte Abläufe nutzen deterministische Befehle; semantic.act erkundet Ziele mit Konfidenz-, Aktualitäts- und Budgetprüfungen.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Grenzen",
+          "text": "Normale Befehle rufen Jev nicht auf. Schreibaktionen brauchen ausdrückliche Freigabe; interne Chrome-Seiten lassen sich nicht automatisieren.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "Surf: automação do Chrome com Jev opcional",
+      "h1": "Surf: automação do Chrome com Jev opcional",
+      "description": "Surf automatiza Chrome por CLI. Jev opcional localiza controles, ordena regiões e executa ciclos limitados com autorização explícita para escrita.",
+      "summary": "Surf oferece navegação Chrome, leitura, cliques e capturas como comandos CLI para agentes e scripts. Comandos semânticos opcionais usam Jev para localizar controles, ordenar regiões, verificar resultados e escolher ações delimitadas. Use comandos determinísticos em fluxos conhecidos; semantic.act explora objetivos verificando confiança, atualização dos elementos e orçamento.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "Surf oferece navegação Chrome, leitura, cliques e capturas como comandos CLI para agentes e scripts.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "O papel do Jev",
+          "text": "Comandos semânticos opcionais usam Jev para localizar controles, ordenar regiões, verificar resultados e escolher ações delimitadas.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Use comandos determinísticos em fluxos conhecidos; semantic.act explora objetivos verificando confiança, atualização dos elementos e orçamento.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limitações",
+          "text": "Comandos comuns não chamam Jev. Escritas exigem autorização explícita; páginas internas do Chrome não podem ser automatizadas.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "Surf: автоматизация Chrome с необязательным Jev",
+      "h1": "Surf: автоматизация Chrome с необязательным Jev",
+      "description": "Surf автоматизирует Chrome через CLI. Необязательные команды Jev находят элементы, ранжируют области и управляют ограниченными циклами с разрешением на запись.",
+      "summary": "Surf предоставляет навигацию Chrome, чтение страниц, клики и скриншоты через CLI для агентов и скриптов. Необязательные семантические команды используют Jev для выбора элементов, ранжирования областей, проверки результатов и ограниченных действий. Для известных сценариев используйте детерминированные команды; semantic.act исследует цель с проверкой уверенности, актуальности элементов и бюджета.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Surf предоставляет навигацию Chrome, чтение страниц, клики и скриншоты через CLI для агентов и скриптов.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Необязательные семантические команды используют Jev для выбора элементов, ранжирования областей, проверки результатов и ограниченных действий.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Для известных сценариев используйте детерминированные команды; semantic.act исследует цель с проверкой уверенности, актуальности элементов и бюджета.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ограничения",
+          "text": "Обычные команды не вызывают Jev. Изменения требуют явного разрешения; внутренние страницы Chrome автоматизировать нельзя.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "Surf: वैकल्पिक Jev कमांड से Chrome ऑटोमेशन",
+      "h1": "Surf: वैकल्पिक Jev कमांड से Chrome ऑटोमेशन",
+      "description": "Surf CLI से Chrome चलाता है। वैकल्पिक Jev कमांड कंट्रोल खोजते, क्षेत्र क्रम देते और सीमित कार्रवाई चक्र चलाते हैं; बदलाव हेतु स्पष्ट अनुमति चाहिए।",
+      "summary": "Surf एजेंट और स्क्रिप्ट के लिए Chrome नेविगेशन, पेज पढ़ना, क्लिक और स्क्रीनशॉट CLI कमांड में देता है। वैकल्पिक अर्थ-आधारित कमांड Jev से कंट्रोल खोजते, क्षेत्रों को क्रम देते, नतीजे जाँचते और सीमित कार्रवाई चुनते हैं। ज्ञात रास्तों के लिए निश्चित कमांड लें; semantic.act विश्वास, ताज़ा तत्व और बजट जाँचते हुए लक्ष्य तलाशता है।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "किस काम आता है",
+          "text": "Surf एजेंट और स्क्रिप्ट के लिए Chrome नेविगेशन, पेज पढ़ना, क्लिक और स्क्रीनशॉट CLI कमांड में देता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "वैकल्पिक अर्थ-आधारित कमांड Jev से कंट्रोल खोजते, क्षेत्रों को क्रम देते, नतीजे जाँचते और सीमित कार्रवाई चुनते हैं।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल कैसे करें",
+          "text": "ज्ञात रास्तों के लिए निश्चित कमांड लें; semantic.act विश्वास, ताज़ा तत्व और बजट जाँचते हुए लक्ष्य तलाशता है।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "सीमाएँ",
+          "text": "सामान्य कमांड Jev नहीं बुलाते। बदलाव की कार्रवाई स्पष्ट अनुमति माँगती है; Chrome के आंतरिक पेज ऑटोमेट नहीं होते।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "Surf: otomatisasi Chrome dengan Jev opsional",
+      "h1": "Surf: otomatisasi Chrome dengan Jev opsional",
+      "description": "Surf mengotomatisasi Chrome lewat CLI. Jev opsional mencari kontrol, mengurutkan wilayah, dan menjalankan siklus terbatas dengan izin tulis eksplisit.",
+      "summary": "Surf menyediakan navigasi Chrome, pembacaan halaman, klik, dan tangkapan layar melalui CLI untuk agen serta skrip. Perintah semantik opsional memakai Jev untuk mencari kontrol, mengurutkan wilayah, memverifikasi hasil, dan memilih tindakan terbatas. Gunakan perintah deterministik untuk alur dikenal; semantic.act mengejar tujuan dengan pemeriksaan keyakinan, kebaruan elemen, dan anggaran.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "Surf menyediakan navigasi Chrome, pembacaan halaman, klik, dan tangkapan layar melalui CLI untuk agen serta skrip.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Perintah semantik opsional memakai Jev untuk mencari kontrol, mengurutkan wilayah, memverifikasi hasil, dan memilih tindakan terbatas.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Gunakan perintah deterministik untuk alur dikenal; semantic.act mengejar tujuan dengan pemeriksaan keyakinan, kebaruan elemen, dan anggaran.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Batasan",
+          "text": "Perintah biasa tidak memanggil Jev. Perubahan membutuhkan izin eksplisit; halaman internal Chrome tidak bisa diotomatisasi.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "Surf: tự động hóa Chrome với lệnh Jev tùy chọn",
+      "h1": "Surf: tự động hóa Chrome với lệnh Jev tùy chọn",
+      "description": "Surf tự động hóa Chrome qua CLI. Jev tùy chọn tìm điều khiển, xếp hạng vùng và chạy vòng lặp giới hạn; thao tác ghi cần cấp quyền rõ ràng.",
+      "summary": "Surf cung cấp điều hướng Chrome, đọc trang, nhấp và chụp màn hình bằng CLI cho tác tử và tập lệnh. Lệnh ngữ nghĩa tùy chọn dùng Jev để tìm điều khiển, xếp hạng vùng, xác minh kết quả và chọn hành động giới hạn. Dùng lệnh xác định cho luồng đã biết; semantic.act khám phá mục tiêu với kiểm tra tin cậy, độ mới phần tử và ngân sách.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích",
+          "text": "Surf cung cấp điều hướng Chrome, đọc trang, nhấp và chụp màn hình bằng CLI cho tác tử và tập lệnh.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Lệnh ngữ nghĩa tùy chọn dùng Jev để tìm điều khiển, xếp hạng vùng, xác minh kết quả và chọn hành động giới hạn.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Dùng lệnh xác định cho luồng đã biết; semantic.act khám phá mục tiêu với kiểm tra tin cậy, độ mới phần tử và ngân sách.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Giới hạn",
+          "text": "Lệnh thường không gọi Jev. Thay đổi cần cấp quyền rõ ràng; không thể tự động hóa trang nội bộ Chrome.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "Surf: isteğe bağlı Jev komutlarıyla Chrome otomasyonu",
+      "h1": "Surf: isteğe bağlı Jev komutlarıyla Chrome otomasyonu",
+      "description": "Surf, Chrome’u CLI ile otomatikleştirir. İsteğe bağlı Jev kontrol bulur, bölgeleri sıralar ve açık yazma izniyle sınırlı eylem döngüleri yürütür.",
+      "summary": "Surf, Chrome gezinme, sayfa okuma, tıklama ve ekran görüntüsünü ajanlar ve betikler için CLI komutları olarak sunar. İsteğe bağlı anlamsal komutlar Jev ile kontrol bulur, bölgeleri sıralar, sonuç doğrular ve sınırlı eylemler seçer. Bilinen akışlarda deterministik komutlar kullanın; semantic.act güven, öğe güncelliği ve bütçe kontrolleriyle hedefi araştırır.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "Surf, Chrome gezinme, sayfa okuma, tıklama ve ekran görüntüsünü ajanlar ve betikler için CLI komutları olarak sunar.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "İsteğe bağlı anlamsal komutlar Jev ile kontrol bulur, bölgeleri sıralar, sonuç doğrular ve sınırlı eylemler seçer.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Bilinen akışlarda deterministik komutlar kullanın; semantic.act güven, öğe güncelliği ve bütçe kontrolleriyle hedefi araştırır.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Sınırlamalar",
+          "text": "Normal komutlar Jev çağırmaz. Yazma eylemleri açık yetki gerektirir; Chrome iç sayfaları otomatikleştirilemez.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "Surf: automazione Chrome con comandi Jev facoltativi",
+      "h1": "Surf: automazione Chrome con comandi Jev facoltativi",
+      "description": "Surf automatizza Chrome via CLI. Jev facoltativo trova controlli, ordina regioni e guida cicli limitati con autorizzazione esplicita alle modifiche.",
+      "summary": "Surf espone navigazione Chrome, lettura, clic e screenshot come comandi CLI per agenti e script. I comandi semantici facoltativi usano Jev per trovare controlli, ordinare regioni, verificare risultati e scegliere azioni circoscritte. Usa comandi deterministici per percorsi noti; semantic.act esplora obiettivi controllando confidenza, attualità degli elementi e budget.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "Surf espone navigazione Chrome, lettura, clic e screenshot come comandi CLI per agenti e script.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Il ruolo di Jev",
+          "text": "I comandi semantici facoltativi usano Jev per trovare controlli, ordinare regioni, verificare risultati e scegliere azioni circoscritte.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come usarlo",
+          "text": "Usa comandi deterministici per percorsi noti; semantic.act esplora obiettivi controllando confidenza, attualità degli elementi e budget.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limiti",
+          "text": "I comandi ordinari non chiamano Jev. Le modifiche richiedono autorizzazione esplicita; le pagine interne Chrome non sono automatizzabili.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  },
+  "displayName": "Surf"
+}

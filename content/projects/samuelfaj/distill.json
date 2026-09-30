@@ -1,0 +1,764 @@
+{
+  "version": "source-content-v1",
+  "repo": "samuelfaj/distill",
+  "repositoryId": 1174519898,
+  "relationship": "integration",
+  "category": "agents",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "3bb8c86150c22d6839c7cdd524a6a2126c708082",
+      "url": "https://github.com/samuelfaj/distill/blob/3bb8c86150c22d6839c7cdd524a6a2126c708082/README.md",
+      "sha256": "a0b520fb0f1b316862a2936f594961fce73fad394dc29c587f38d72ac6a642cc",
+      "accessedAt": "2026-09-30T07:33:49.157Z"
+    },
+    {
+      "id": "source-2",
+      "path": "crates/codegen/distill-shell/src/jev.rs",
+      "commit": "3bb8c86150c22d6839c7cdd524a6a2126c708082",
+      "url": "https://github.com/samuelfaj/distill/blob/3bb8c86150c22d6839c7cdd524a6a2126c708082/crates/codegen/distill-shell/src/jev.rs",
+      "sha256": "7abeff6e0d957d72f31644d97bfff5c33ac4494f3692cd5e6bd96e4dd9726d87",
+      "accessedAt": "2026-09-30T07:33:49.528Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "kind": "documented",
+      "text": "Distill is a terminal coding harness supporting Grok, Codex subscriptions and OpenAI-compatible models.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 6,
+          "end": 10,
+          "quote": "Distill is a lightweight coding agent harness and TUI, built to **get far more done\nwith far fewer tokens.**\n\nIt works with Grok and Codex subscriptions, and with any model that speaks the\nOpenAI-compatible protocol."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "kind": "documented",
+      "text": "Its Jev controls cover model tiers, skill suggestions and memory ranking; permissions remain the harness’s responsibility.",
+      "evidence": [
+        {
+          "source": "source-2",
+          "start": 55,
+          "end": 80,
+          "quote": "        JevLadderOverlay {\n            // Jev optimizes execution; only the harness decides permissions.\n            e_crushers: cfg.ladder.e_crushers,\n            e_retention: cfg.ladder.e_retention,\n            e_importance: cfg.ladder.e_importance,\n            e_cheap_compress: cfg.ladder.e_cheap_compress,\n            e_cheap_task: cfg.ladder.e_cheap_task,\n            e_read_reuse: cfg.ladder.e_read_reuse,\n            e_lane_choice: cfg.ladder.e_lane_choice,\n            e_cheap_agent: cfg.ladder.e_cheap_agent,\n            e_prompt_blocks: cfg.ladder.e_prompt_blocks,\n            e_breaker: cfg.ladder.e_breaker,\n            p1_tool_family: cfg.ladder.p1_tool_family,\n            p2_read_shortlist: cfg.ladder.p2_read_shortlist,\n            p3_compaction_recorte: cfg.ladder.p3_compaction_recorte,\n            p6_skill_suggestion: cfg.ladder.p6_skill_suggestion,\n            a1_file_to_edit: cfg.ladder.a1_file_to_edit,\n            a3_log_lines: cfg.ladder.a3_log_lines,\n            a4_web_results: cfg.ladder.a4_web_results,\n            a5_memory_rank: cfg.ladder.a5_memory_rank,\n            a6_test_to_run: cfg.ladder.a6_test_to_run,\n            b1_intent_routing: cfg.ladder.b1_intent_routing,\n            b2_model_tier: cfg.ladder.b2_model_tier,\n            b2_micro_effort: cfg.ladder.b2_micro_effort,\n            b2_local_model: cfg.ladder.b2_local_model,\n            b2_reasoning_model: cfg.ladder.b2_reasoning_model,"
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "kind": "documented",
+      "text": "Configure main, reasoning and utility models in Model tiers; the main model runs every session and step.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 47,
+          "end": 56,
+          "quote": "## Choose your models\n\nOpen **Model tiers** on the home screen, click **change** beside the current\nmodel, or enter `/tiers`. You can edit each tier in that screen.\n\n| Tier | Purpose | Picker |\n|---|---|---|\n| Main model | Required. Runs every session and every step. | `/model` or `/tiers main` |\n| Reasoning model | Optional. Plans and reviews the steps the main model cannot do alone. | `/reasoning-model` or `/tiers reasoning` |\n| Utility model | Handles bounded tasks such as extraction, summaries, and compression. | `/utility-model` or `/tiers utility` |"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "kind": "documented",
+      "text": "The Jev path defaults on but needs resolvable credentials to act; configuration or GROK_JEV=0 can disable it.",
+      "evidence": [
+        {
+          "source": "source-2",
+          "start": 43,
+          "end": 49,
+          "quote": "/// Tier-explicit form (hermetic for tests).\n///\n/// Owner override of the plan's invariant I-1: the harness ships with the Jev\n/// path **on**, so an unset `[jev]` (or an unset `GROK_JEV`) resolves to\n/// [`JevFlags::harness_default`]. The kill switch still works — `[jev] enabled =\n/// false` or `GROK_JEV=0` — and a lever whose evaluation gate fails can be\n/// turned off on its own key."
+        },
+        {
+          "source": "source-2",
+          "start": 151,
+          "end": 155,
+          "quote": "/// Whether the Jev path can act, for display: enabled, not shadowed, and a\n/// credential is resolvable under the configured environment variable.\npub fn status_from(cfg: &JevConfig) -> JevStatus {\n    let flags = flags_from(cfg);\n    flags.status(credential_in_env(&client_config_from(cfg).api_key_env))"
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "Distill: coding harness with configurable Jev decisions",
+      "h1": "Distill: coding harness with configurable Jev decisions",
+      "description": "Distill is a coding harness with configurable Jev decisions for model tiers, skill suggestions and memory ranking, while the harness retains permission control.",
+      "summary": "Distill is a terminal coding harness supporting Grok, Codex subscriptions and OpenAI-compatible models. Its Jev controls cover model tiers, skill suggestions and memory ranking; permissions remain the harness’s responsibility. Configure main, reasoning and utility models in Model tiers; the main model runs every session and step.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose",
+          "text": "Distill is a terminal coding harness supporting Grok, Codex subscriptions and OpenAI-compatible models.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’s role",
+          "text": "Its Jev controls cover model tiers, skill suggestions and memory ranking; permissions remain the harness’s responsibility.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "How to use it",
+          "text": "Configure main, reasoning and utility models in Model tiers; the main model runs every session and step.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limits to consider",
+          "text": "The Jev path defaults on but needs resolvable credentials to act; configuration or GROK_JEV=0 can disable it.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "Distill：带可配置 Jev 决策的编程框架",
+      "h1": "Distill：带可配置 Jev 决策的编程框架",
+      "description": "Distill 在终端编程框架中加入可配置的 Jev 决策，用于模型层级、技能建议和记忆排序；权限由框架掌握，Jev 路径默认开启但需要有效凭据才能生效。",
+      "summary": "Distill 是终端编程框架，支持 Grok、Codex 订阅和 OpenAI 兼容模型。 Jev 配置项涵盖模型层级、技能建议和记忆排序；权限仍由框架管理。 在 Model tiers 中配置主模型、推理模型和辅助模型；主模型负责每个会话和步骤。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "Distill 是终端编程框架，支持 Grok、Codex 订阅和 OpenAI 兼容模型。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "Jev 配置项涵盖模型层级、技能建议和记忆排序；权限仍由框架管理。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "在 Model tiers 中配置主模型、推理模型和辅助模型；主模型负责每个会话和步骤。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用边界",
+          "text": "Jev 路径默认开启，但实际生效需要可获取的凭据；可通过配置或 GROK_JEV=0 关闭。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "Distill：具可設定 Jev 決策的程式開發框架",
+      "h1": "Distill：具可設定 Jev 決策的程式開發框架",
+      "description": "Distill 在終端開發框架加入可設定的 Jev 決策，用於模型層級、技能建議與記憶排序；權限由框架掌握，Jev 路徑預設開啟但需要可用憑證才能生效。",
+      "summary": "Distill 是終端程式開發框架，支援 Grok、Codex 訂閱及 OpenAI 相容模型。 Jev 設定項涵蓋模型層級、技能建議與記憶排序；權限仍由框架管理。 在 Model tiers 設定主模型、推理模型及輔助模型；主模型負責每個工作階段與步驟。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "Distill 是終端程式開發框架，支援 Grok、Codex 訂閱及 OpenAI 相容模型。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "Jev 設定項涵蓋模型層級、技能建議與記憶排序；權限仍由框架管理。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "在 Model tiers 設定主模型、推理模型及輔助模型；主模型負責每個工作階段與步驟。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用限制",
+          "text": "Jev 路徑預設開啟，但實際生效需要可取得的憑證；可透過設定或 GROK_JEV=0 關閉。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "Distill：Jev 判断を設定できる開発ハーネス",
+      "h1": "Distill：Jev 判断を設定できる開発ハーネス",
+      "description": "Distill はモデル階層、スキル提案、記憶順位付けの Jev 判断を設定できる開発ハーネスです。権限管理はハーネスが保持します。",
+      "summary": "Distill は Grok、Codex のサブスクリプションと OpenAI 互換モデルに対応する端末開発ハーネスです。 Jev の設定対象はモデル階層、スキル提案、記憶の順位付けで、権限管理はハーネスが担当します。 Model tiers で主・推論・補助モデルを指定します。主モデルは全セッション、全ステップで使われます。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "何ができるか",
+          "text": "Distill は Grok、Codex のサブスクリプションと OpenAI 互換モデルに対応する端末開発ハーネスです。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "Jev の設定対象はモデル階層、スキル提案、記憶の順位付けで、権限管理はハーネスが担当します。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "Model tiers で主・推論・補助モデルを指定します。主モデルは全セッション、全ステップで使われます。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "制約と注意点",
+          "text": "Jev 経路は標準で有効ですが、動作には認証情報が必要です。設定または GROK_JEV=0 で無効化できます。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "Distill: Jev 판단을 설정하는 코딩 하네스",
+      "h1": "Distill: Jev 판단을 설정하는 코딩 하네스",
+      "description": "Distill은 모델 등급, 스킬 제안, 메모리 순위화를 위한 Jev 판단을 설정할 수 있는 코딩 하네스입니다. 권한은 하네스가 관리합니다.",
+      "summary": "Distill은 Grok, Codex 구독과 OpenAI 호환 모델을 지원하는 터미널 코딩 하네스입니다. Jev 설정은 모델 등급, 스킬 제안, 메모리 순위화를 다루며 권한 관리는 하네스가 담당합니다. Model tiers에서 주 모델, 추론 모델, 보조 모델을 설정합니다. 주 모델은 모든 세션과 단계에 사용됩니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "Distill은 Grok, Codex 구독과 OpenAI 호환 모델을 지원하는 터미널 코딩 하네스입니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Jev 설정은 모델 등급, 스킬 제안, 메모리 순위화를 다루며 권한 관리는 하네스가 담당합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "Model tiers에서 주 모델, 추론 모델, 보조 모델을 설정합니다. 주 모델은 모든 세션과 단계에 사용됩니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "제약 사항",
+          "text": "Jev 경로는 기본 활성화되지만 실제 작동에는 자격 증명이 필요합니다. 설정이나 GROK_JEV=0으로 끌 수 있습니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "Distill: entorno de programación con decisiones Jev",
+      "h1": "Distill: entorno de programación con decisiones Jev",
+      "description": "Distill incorpora decisiones Jev configurables para niveles de modelo, habilidades y memoria; el entorno conserva el control de permisos.",
+      "summary": "Distill es un entorno de programación en terminal compatible con Grok, suscripciones Codex y modelos compatibles con OpenAI. Sus controles Jev cubren niveles de modelo, sugerencias de habilidades y memoria; los permisos pertenecen al entorno. Configura modelos principal, de razonamiento y auxiliar en Model tiers; el principal interviene en cada sesión y paso.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "Distill es un entorno de programación en terminal compatible con Grok, suscripciones Codex y modelos compatibles con OpenAI.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "El papel de Jev",
+          "text": "Sus controles Jev cubren niveles de modelo, sugerencias de habilidades y memoria; los permisos pertenecen al entorno.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo usarlo",
+          "text": "Configura modelos principal, de razonamiento y auxiliar en Model tiers; el principal interviene en cada sesión y paso.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Límites a considerar",
+          "text": "Jev viene activado, pero necesita credenciales disponibles para actuar; la configuración o GROK_JEV=0 lo desactivan.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "Distill : environnement de développement avec décisions Jev",
+      "h1": "Distill : environnement de développement avec décisions Jev",
+      "description": "Distill propose des décisions Jev configurables pour modèles, compétences et mémoire ; l’environnement conserve le contrôle des permissions.",
+      "summary": "Distill est un environnement de développement en terminal compatible avec Grok, les abonnements Codex et les modèles compatibles OpenAI. Ses réglages Jev couvrent niveaux de modèle, suggestions de compétences et classement des souvenirs ; l’environnement contrôle les permissions. Configurez modèles principal, de raisonnement et utilitaire dans Model tiers ; le principal intervient à chaque session et étape.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "Distill est un environnement de développement en terminal compatible avec Grok, les abonnements Codex et les modèles compatibles OpenAI.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Le rôle de Jev",
+          "text": "Ses réglages Jev couvrent niveaux de modèle, suggestions de compétences et classement des souvenirs ; l’environnement contrôle les permissions.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Utilisation",
+          "text": "Configurez modèles principal, de raisonnement et utilitaire dans Model tiers ; le principal intervient à chaque session et étape.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limites à connaître",
+          "text": "Jev est activé par défaut mais exige des identifiants disponibles ; la configuration ou GROK_JEV=0 permet de le désactiver.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "Distill: Entwicklungsumgebung mit konfigurierbarem Jev",
+      "h1": "Distill: Entwicklungsumgebung mit konfigurierbarem Jev",
+      "description": "Distill bietet konfigurierbare Jev-Entscheidungen für Modellstufen, Skill-Vorschläge und Erinnerungsranking; die Umgebung kontrolliert Berechtigungen.",
+      "summary": "Distill ist eine Terminal-Entwicklungsumgebung für Grok, Codex-Abonnements und OpenAI-kompatible Modelle. Jev-Einstellungen betreffen Modellstufen, Skill-Vorschläge und Erinnerungsranking; Berechtigungen kontrolliert weiterhin die Umgebung. Haupt-, Reasoning- und Hilfsmodell in Model tiers konfigurieren; das Hauptmodell arbeitet in jeder Sitzung und jedem Schritt.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "Distill ist eine Terminal-Entwicklungsumgebung für Grok, Codex-Abonnements und OpenAI-kompatible Modelle.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Die Rolle von Jev",
+          "text": "Jev-Einstellungen betreffen Modellstufen, Skill-Vorschläge und Erinnerungsranking; Berechtigungen kontrolliert weiterhin die Umgebung.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Nutzung",
+          "text": "Haupt-, Reasoning- und Hilfsmodell in Model tiers konfigurieren; das Hauptmodell arbeitet in jeder Sitzung und jedem Schritt.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Grenzen",
+          "text": "Der Jev-Pfad ist standardmäßig an, benötigt aber verfügbare Zugangsdaten; Konfiguration oder GROK_JEV=0 schalten ihn aus.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "Distill: ambiente de programação com decisões Jev",
+      "h1": "Distill: ambiente de programação com decisões Jev",
+      "description": "Distill oferece decisões Jev configuráveis para modelos, habilidades e memória; o ambiente mantém o controle das permissões.",
+      "summary": "Distill é um ambiente de programação no terminal compatível com Grok, assinaturas Codex e modelos compatíveis com OpenAI. Os controles Jev cobrem níveis de modelo, sugestões de habilidades e ordenação de memórias; permissões continuam no ambiente. Configure modelos principal, de raciocínio e auxiliar em Model tiers; o principal participa de cada sessão e etapa.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "Distill é um ambiente de programação no terminal compatível com Grok, assinaturas Codex e modelos compatíveis com OpenAI.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "O papel do Jev",
+          "text": "Os controles Jev cobrem níveis de modelo, sugestões de habilidades e ordenação de memórias; permissões continuam no ambiente.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Configure modelos principal, de raciocínio e auxiliar em Model tiers; o principal participa de cada sessão e etapa.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limitações",
+          "text": "Jev vem ativado, mas precisa de credenciais disponíveis para agir; a configuração ou GROK_JEV=0 permite desativá-lo.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "Distill: среда разработки с настраиваемыми решениями Jev",
+      "h1": "Distill: среда разработки с настраиваемыми решениями Jev",
+      "description": "Distill — среда с настраиваемыми решениями Jev для уровней моделей, навыков и памяти; разрешения контролирует сама среда.",
+      "summary": "Distill — терминальная среда программирования с поддержкой Grok, подписок Codex и совместимых с OpenAI моделей. Настройки Jev охватывают уровни моделей, предложения навыков и ранжирование памяти; разрешениями управляет сама среда. Настройте основную, рассуждающую и вспомогательную модели в Model tiers; основная работает в каждой сессии и на каждом шаге.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Distill — терминальная среда программирования с поддержкой Grok, подписок Codex и совместимых с OpenAI моделей.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Настройки Jev охватывают уровни моделей, предложения навыков и ранжирование памяти; разрешениями управляет сама среда.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Настройте основную, рассуждающую и вспомогательную модели в Model tiers; основная работает в каждой сессии и на каждом шаге.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ограничения",
+          "text": "Путь Jev включён по умолчанию, но требует доступных учётных данных; его отключают настройкой или GROK_JEV=0.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "Distill: Jev निर्णयों वाला कोडिंग ढाँचा",
+      "h1": "Distill: Jev निर्णयों वाला कोडिंग ढाँचा",
+      "description": "Distill में मॉडल स्तर, स्किल सुझाव और मेमोरी रैंकिंग के Jev निर्णय सेट किए जा सकते हैं; अनुमति नियंत्रण ढाँचे के पास रहता है।",
+      "summary": "Distill टर्मिनल कोडिंग ढाँचा है, जो Grok, Codex सदस्यताओं और OpenAI-संगत मॉडल को सपोर्ट करता है। Jev सेटिंग मॉडल स्तर, स्किल सुझाव और मेमोरी रैंकिंग सँभालती हैं; अनुमति का निर्णय ढाँचे के पास रहता है। Model tiers में मुख्य, तर्क और सहायक मॉडल चुनें; मुख्य मॉडल हर सत्र और चरण में चलता है।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "किस काम आता है",
+          "text": "Distill टर्मिनल कोडिंग ढाँचा है, जो Grok, Codex सदस्यताओं और OpenAI-संगत मॉडल को सपोर्ट करता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "Jev सेटिंग मॉडल स्तर, स्किल सुझाव और मेमोरी रैंकिंग सँभालती हैं; अनुमति का निर्णय ढाँचे के पास रहता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल कैसे करें",
+          "text": "Model tiers में मुख्य, तर्क और सहायक मॉडल चुनें; मुख्य मॉडल हर सत्र और चरण में चलता है।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "सीमाएँ",
+          "text": "Jev पथ डिफ़ॉल्ट चालू है, लेकिन काम करने के लिए क्रेडेंशियल चाहिए; कॉन्फ़िगरेशन या GROK_JEV=0 से बंद कर सकते हैं।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "Distill: lingkungan coding dengan keputusan Jev",
+      "h1": "Distill: lingkungan coding dengan keputusan Jev",
+      "description": "Distill menyediakan keputusan Jev yang bisa diatur untuk tingkat model, saran keterampilan, dan memori; izin tetap dikendalikan lingkungan utama.",
+      "summary": "Distill adalah lingkungan coding terminal yang mendukung Grok, langganan Codex, dan model kompatibel OpenAI. Pengaturan Jev mencakup tingkat model, saran keterampilan, dan peringkat memori; izin tetap diatur lingkungan utama. Atur model utama, penalaran, dan utilitas di Model tiers; model utama berjalan pada setiap sesi dan langkah.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "Distill adalah lingkungan coding terminal yang mendukung Grok, langganan Codex, dan model kompatibel OpenAI.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Pengaturan Jev mencakup tingkat model, saran keterampilan, dan peringkat memori; izin tetap diatur lingkungan utama.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Atur model utama, penalaran, dan utilitas di Model tiers; model utama berjalan pada setiap sesi dan langkah.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Batasan",
+          "text": "Jalur Jev aktif secara bawaan tetapi memerlukan kredensial tersedia; konfigurasi atau GROK_JEV=0 dapat menonaktifkannya.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "Distill: môi trường lập trình với quyết định Jev",
+      "h1": "Distill: môi trường lập trình với quyết định Jev",
+      "description": "Distill cho cấu hình quyết định Jev về tầng mô hình, gợi ý kỹ năng và xếp hạng bộ nhớ; môi trường vẫn quản lý quyền hạn.",
+      "summary": "Distill là môi trường lập trình terminal hỗ trợ Grok, thuê bao Codex và mô hình tương thích OpenAI. Cấu hình Jev gồm tầng mô hình, gợi ý kỹ năng và xếp hạng bộ nhớ; quyền hạn vẫn do môi trường quản lý. Chọn mô hình chính, suy luận và phụ trợ trong Model tiers; mô hình chính chạy ở mọi phiên và bước.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích",
+          "text": "Distill là môi trường lập trình terminal hỗ trợ Grok, thuê bao Codex và mô hình tương thích OpenAI.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Cấu hình Jev gồm tầng mô hình, gợi ý kỹ năng và xếp hạng bộ nhớ; quyền hạn vẫn do môi trường quản lý.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Chọn mô hình chính, suy luận và phụ trợ trong Model tiers; mô hình chính chạy ở mọi phiên và bước.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Giới hạn",
+          "text": "Nhánh Jev mặc định bật nhưng cần thông tin xác thực để hoạt động; cấu hình hoặc GROK_JEV=0 có thể tắt nó.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "Distill: yapılandırılabilir Jev kararlarıyla kodlama ortamı",
+      "h1": "Distill: yapılandırılabilir Jev kararlarıyla kodlama ortamı",
+      "description": "Distill model seviyeleri, beceri önerileri ve bellek sıralaması için yapılandırılabilir Jev kararları sunar; izin kontrolü ortamda kalır.",
+      "summary": "Distill, Grok, Codex abonelikleri ve OpenAI uyumlu modelleri destekleyen bir terminal kodlama ortamıdır. Jev ayarları model seviyelerini, beceri önerilerini ve bellek sıralamasını kapsar; izinler ortamın sorumluluğunda kalır. Model tiers içinde ana, akıl yürütme ve yardımcı modelleri seçin; ana model her oturum ve adımda çalışır.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "Distill, Grok, Codex abonelikleri ve OpenAI uyumlu modelleri destekleyen bir terminal kodlama ortamıdır.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Jev ayarları model seviyelerini, beceri önerilerini ve bellek sıralamasını kapsar; izinler ortamın sorumluluğunda kalır.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Model tiers içinde ana, akıl yürütme ve yardımcı modelleri seçin; ana model her oturum ve adımda çalışır.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Sınırlamalar",
+          "text": "Jev yolu varsayılan olarak açıktır ancak çalışmak için kimlik bilgisi gerekir; yapılandırma veya GROK_JEV=0 ile kapatılabilir.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "Distill: ambiente di sviluppo con decisioni Jev configurabili",
+      "h1": "Distill: ambiente di sviluppo con decisioni Jev configurabili",
+      "description": "Distill offre decisioni Jev configurabili per modelli, abilità e memoria, mantenendo il controllo dei permessi nell’ambiente di sviluppo.",
+      "summary": "Distill è un ambiente di programmazione nel terminale per Grok, abbonamenti Codex e modelli compatibili OpenAI. I controlli Jev coprono livelli di modello, suggerimenti di abilità e memoria; i permessi restano all’ambiente. Configura modelli principale, di ragionamento e ausiliario in Model tiers; il principale opera in ogni sessione e passaggio.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "Distill è un ambiente di programmazione nel terminale per Grok, abbonamenti Codex e modelli compatibili OpenAI.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Il ruolo di Jev",
+          "text": "I controlli Jev coprono livelli di modello, suggerimenti di abilità e memoria; i permessi restano all’ambiente.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come usarlo",
+          "text": "Configura modelli principale, di ragionamento e ausiliario in Model tiers; il principale opera in ogni sessione e passaggio.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limiti",
+          "text": "Jev è attivo per impostazione predefinita ma richiede credenziali disponibili; configurazione o GROK_JEV=0 lo disattivano.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

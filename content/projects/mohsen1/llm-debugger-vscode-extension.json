@@ -1,0 +1,757 @@
+{
+  "version": "source-content-v1",
+  "repo": "mohsen1/llm-debugger-vscode-extension",
+  "repositoryId": 928126422,
+  "relationship": "integration",
+  "category": "agents",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "17522a386e16bbe21952345c9fc1bc1ba84ad418",
+      "url": "https://github.com/mohsen1/llm-debugger-vscode-extension/blob/17522a386e16bbe21952345c9fc1bc1ba84ad418/README.md",
+      "sha256": "6c01e7a4eb52bac7438d89e90188f8878313e7f55b97b82660c20a901e344b01",
+      "accessedAt": "2026-09-30T07:33:51.446Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "kind": "documented",
+      "text": "LLM Debugger drives VS Code’s debugger, setting breakpoints, stepping and inspecting live variable values.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 3,
+          "end": 5,
+          "quote": "A VSCode extension that finds bugs by *running* the code — driving the real\ndebugger, setting breakpoints, stepping, and reading live values — rather than\nreading the source and guessing."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "kind": "documented",
+      "text": "The Jev strategy selects next steps and checks evidence sufficiency; a generation model supplies hypotheses, expressions and fixes.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 164,
+          "end": 176,
+          "quote": "- **Jev** (`jev-latest`, `POST https://api.typesafe.ai/v1/systemone`) is a\n  System One model, not a generative one: you post the paused state plus typed\n  questions and get typed probabilistic answers back, every question evaluated\n  in parallel in one request. It routes each step and says whether the evidence\n  is enough yet.\n- **The generation model** (`gpt-5.4-nano`, via OpenAI's `/v1/responses`) is\n  woken only for what a classifier cannot produce:\n  the opening hypothesis, a breakpoint location, an expression to evaluate, and\n  the closing root cause and patch.\n- **Deterministic code owns policy** — the step budget, the wall-clock budget,\n  breakpoint validation, stall detection, never continuing with nothing bound,\n  and refusing a verdict that has not read a single runtime value. Neither model\n  gets a vote on those."
+        },
+        {
+          "source": "source-1",
+          "start": 182,
+          "end": 183,
+          "quote": "Which brain routes is a setting (`llmDebugger.strategy`), so the same loop runs\nboth arms of the benchmark and only the decision-maker differs."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "kind": "documented",
+      "text": "Configure model keys and use @debugger with a program or symptom; candidate programs are run to reproduce it.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 103,
+          "end": 118,
+          "quote": "First, the keys:\n\n```bash\ncp api.env.example api.env   # add OPENAI_API_KEY and TYPESAFE_API_KEY (never commit it)\n```\n\nThen in any chat sidebar:\n\n- `@debugger` — runs the open or attached file, takes its first failing check\n  and hunts that.\n- `@debugger the async order total comes out NaN` — hunt a symptom you name.\n- `@debugger run.js` — name the program.\n\nIt does not blindly trust the open editor: candidates are run once, and the one\nwhose output actually reproduces the symptom wins. Pointing it at a module that\nexports functions nobody calls gets you an explanation, not a silent empty run."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "kind": "documented",
+      "text": "The repository describes a research proof of concept, not a supported product.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 31,
+          "end": 33,
+          "quote": "This began as a **proof of concept** — a research experiment showing that an LLM\ngiven runtime context debugs better than one given source alone. It is not a\nsupported product."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "LLM Debugger: runtime debugging with a Jev strategy",
+      "h1": "LLM Debugger: runtime debugging with a Jev strategy",
+      "description": "LLM Debugger uses Jev to route real VS Code debugging steps while a generative model supplies hypotheses and fixes; the project remains a research prototype.",
+      "summary": "LLM Debugger drives VS Code’s debugger, setting breakpoints, stepping and inspecting live variable values. The Jev strategy selects next steps and checks evidence sufficiency; a generation model supplies hypotheses, expressions and fixes. Configure model keys and use @debugger with a program or symptom; candidate programs are run to reproduce it.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose",
+          "text": "LLM Debugger drives VS Code’s debugger, setting breakpoints, stepping and inspecting live variable values.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’s role",
+          "text": "The Jev strategy selects next steps and checks evidence sufficiency; a generation model supplies hypotheses, expressions and fixes.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "How to use it",
+          "text": "Configure model keys and use @debugger with a program or symptom; candidate programs are run to reproduce it.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limits to consider",
+          "text": "The repository describes a research proof of concept, not a supported product.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "LLM Debugger：用 Jev 策略进行运行时调试",
+      "h1": "LLM Debugger：用 Jev 策略进行运行时调试",
+      "description": "LLM Debugger 用 Jev 为真实 VS Code 调试步骤选择动作，由生成模型提出假设和修复；能观察运行时变量，但项目仍是研究原型，需实际运行目标程序。",
+      "summary": "LLM Debugger 控制 VS Code 调试器，设置断点、单步执行并读取实时变量值。 Jev 策略选择下一步并判断证据是否充分；生成模型负责假设、表达式和修复。 配置模型密钥，使用 @debugger 指定程序或症状；候选程序会实际运行以复现问题。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "LLM Debugger 控制 VS Code 调试器，设置断点、单步执行并读取实时变量值。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "Jev 策略选择下一步并判断证据是否充分；生成模型负责假设、表达式和修复。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "配置模型密钥，使用 @debugger 指定程序或症状；候选程序会实际运行以复现问题。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用边界",
+          "text": "仓库明确将其定位为研究概念验证，并非受支持的正式产品。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "LLM Debugger：以 Jev 策略進行執行期除錯",
+      "h1": "LLM Debugger：以 Jev 策略進行執行期除錯",
+      "description": "LLM Debugger 以 Jev 為真實 VS Code 除錯步驟選擇動作，由生成模型提出假設和修正；可觀察執行期變數，但專案仍為研究原型，需要實際執行目標程式。",
+      "summary": "LLM Debugger 控制 VS Code 除錯器，設定中斷點、逐步執行並讀取即時變數值。 Jev 策略選擇下一步並判斷證據是否充分；生成模型負責假設、運算式與修正。 設定模型金鑰，以 @debugger 指定程式或症狀；候選程式會實際執行以重現問題。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "LLM Debugger 控制 VS Code 除錯器，設定中斷點、逐步執行並讀取即時變數值。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "Jev 策略選擇下一步並判斷證據是否充分；生成模型負責假設、運算式與修正。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "設定模型金鑰，以 @debugger 指定程式或症狀；候選程式會實際執行以重現問題。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用限制",
+          "text": "儲存庫明確定位為研究概念驗證，並非提供正式支援的產品。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "LLM Debugger：Jev 戦略で実行時デバッグ",
+      "h1": "LLM Debugger：Jev 戦略で実行時デバッグ",
+      "description": "LLM Debugger は実際の VS Code デバッグを Jev で振り分け、生成モデルが仮説や修正案を作ります。研究段階のプロトタイプです。",
+      "summary": "LLM Debugger は VS Code のデバッガーで停止点設定、ステップ実行、実際の変数値の確認を行います。 Jev 戦略が次の操作と証拠の十分さを判断し、生成モデルが仮説、式、修正案を作ります。 モデルキーを設定し、@debugger にプログラムか症状を渡します。候補を実行して問題を再現します。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "何ができるか",
+          "text": "LLM Debugger は VS Code のデバッガーで停止点設定、ステップ実行、実際の変数値の確認を行います。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "Jev 戦略が次の操作と証拠の十分さを判断し、生成モデルが仮説、式、修正案を作ります。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "モデルキーを設定し、@debugger にプログラムか症状を渡します。候補を実行して問題を再現します。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "制約と注意点",
+          "text": "リポジトリは研究用の概念実証と明記しており、サポート対象の製品ではありません。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "LLM Debugger: Jev 전략으로 런타임 디버깅",
+      "h1": "LLM Debugger: Jev 전략으로 런타임 디버깅",
+      "description": "LLM Debugger는 Jev로 실제 VS Code 디버깅 단계를 선택하고 생성 모델로 가설과 수정안을 만듭니다. 정식 지원 제품이 아닌 연구 원형입니다.",
+      "summary": "LLM Debugger는 VS Code 디버거로 중단점 설정, 단계 실행, 실제 변수 값 확인을 수행합니다. Jev 전략이 다음 단계와 증거 충분성을 판단하고 생성 모델은 가설, 표현식, 수정안을 만듭니다. 모델 키를 설정하고 @debugger에 프로그램이나 증상을 지정합니다. 후보 프로그램을 실행해 문제를 재현합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "LLM Debugger는 VS Code 디버거로 중단점 설정, 단계 실행, 실제 변수 값 확인을 수행합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Jev 전략이 다음 단계와 증거 충분성을 판단하고 생성 모델은 가설, 표현식, 수정안을 만듭니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "모델 키를 설정하고 @debugger에 프로그램이나 증상을 지정합니다. 후보 프로그램을 실행해 문제를 재현합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "제약 사항",
+          "text": "저장소는 지원되는 제품이 아닌 연구용 개념 증명이라고 명시합니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "LLM Debugger: depuración en ejecución con Jev",
+      "h1": "LLM Debugger: depuración en ejecución con Jev",
+      "description": "LLM Debugger usa Jev para dirigir pasos reales del depurador VS Code; un modelo generativo aporta hipótesis y arreglos en este prototipo de investigación.",
+      "summary": "LLM Debugger maneja el depurador VS Code, pone puntos de interrupción, avanza y consulta variables reales. La estrategia Jev decide pasos y suficiencia de evidencia; otro modelo genera hipótesis, expresiones y correcciones. Configura claves y usa @debugger con un programa o síntoma; ejecuta candidatos para reproducirlo.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "LLM Debugger maneja el depurador VS Code, pone puntos de interrupción, avanza y consulta variables reales.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "El papel de Jev",
+          "text": "La estrategia Jev decide pasos y suficiencia de evidencia; otro modelo genera hipótesis, expresiones y correcciones.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo usarlo",
+          "text": "Configura claves y usa @debugger con un programa o síntoma; ejecuta candidatos para reproducirlo.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Límites a considerar",
+          "text": "El repositorio se presenta como prueba de concepto de investigación, no como producto con soporte.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "LLM Debugger : débogage à l’exécution avec Jev",
+      "h1": "LLM Debugger : débogage à l’exécution avec Jev",
+      "description": "LLM Debugger utilise Jev pour guider le vrai débogueur VS Code ; un modèle génératif apporte hypothèses et corrections. C’est un prototype de recherche.",
+      "summary": "LLM Debugger pilote le débogueur VS Code, pose des points d’arrêt, avance et inspecte les variables réelles. La stratégie Jev choisit les étapes et évalue les preuves ; un modèle génératif produit hypothèses, expressions et corrections. Configurez les clés et utilisez @debugger avec programme ou symptôme ; les candidats sont exécutés pour le reproduire.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "LLM Debugger pilote le débogueur VS Code, pose des points d’arrêt, avance et inspecte les variables réelles.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Le rôle de Jev",
+          "text": "La stratégie Jev choisit les étapes et évalue les preuves ; un modèle génératif produit hypothèses, expressions et corrections.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Utilisation",
+          "text": "Configurez les clés et utilisez @debugger avec programme ou symptôme ; les candidats sont exécutés pour le reproduire.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limites à connaître",
+          "text": "Le dépôt présente une preuve de concept de recherche, pas un produit pris en charge.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "LLM Debugger: Laufzeit-Debugging mit Jev-Strategie",
+      "h1": "LLM Debugger: Laufzeit-Debugging mit Jev-Strategie",
+      "description": "LLM Debugger steuert echte VS-Code-Debugging-Schritte mit Jev; ein generatives Modell liefert Hypothesen und Korrekturen. Das Projekt bleibt ein Forschungsprototyp.",
+      "summary": "LLM Debugger steuert den VS-Code-Debugger, setzt Haltepunkte, führt Schritte aus und liest echte Variablenwerte. Die Jev-Strategie wählt Schritte und prüft Belege; ein generatives Modell liefert Hypothesen, Ausdrücke und Korrekturen. Modellschlüssel einrichten und @debugger mit Programm oder Symptom nutzen; Kandidaten laufen zur Reproduktion.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "LLM Debugger steuert den VS-Code-Debugger, setzt Haltepunkte, führt Schritte aus und liest echte Variablenwerte.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Die Rolle von Jev",
+          "text": "Die Jev-Strategie wählt Schritte und prüft Belege; ein generatives Modell liefert Hypothesen, Ausdrücke und Korrekturen.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Nutzung",
+          "text": "Modellschlüssel einrichten und @debugger mit Programm oder Symptom nutzen; Kandidaten laufen zur Reproduktion.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Grenzen",
+          "text": "Das Repository beschreibt einen Forschungsprototyp, kein unterstütztes Produkt.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "LLM Debugger: depuração em execução com Jev",
+      "h1": "LLM Debugger: depuração em execução com Jev",
+      "description": "LLM Debugger usa Jev para orientar o depurador real do VS Code; um modelo generativo fornece hipóteses e correções neste protótipo de pesquisa.",
+      "summary": "LLM Debugger controla o depurador VS Code, define pontos de parada, avança e inspeciona variáveis reais. A estratégia Jev escolhe passos e avalia evidências; outro modelo gera hipóteses, expressões e correções. Configure chaves e use @debugger com programa ou sintoma; candidatos são executados para reproduzi-lo.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "LLM Debugger controla o depurador VS Code, define pontos de parada, avança e inspeciona variáveis reais.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "O papel do Jev",
+          "text": "A estratégia Jev escolhe passos e avalia evidências; outro modelo gera hipóteses, expressões e correções.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Configure chaves e use @debugger com programa ou sintoma; candidatos são executados para reproduzi-lo.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limitações",
+          "text": "O repositório se apresenta como prova de conceito de pesquisa, não como produto com suporte.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "LLM Debugger: отладка во время исполнения с Jev",
+      "h1": "LLM Debugger: отладка во время исполнения с Jev",
+      "description": "LLM Debugger направляет реальную отладку VS Code через Jev; гипотезы и исправления пишет генеративная модель. Это исследовательский прототип.",
+      "summary": "LLM Debugger управляет отладчиком VS Code, ставит точки останова, шагает и читает реальные значения переменных. Стратегия Jev выбирает шаги и оценивает достаточность данных; генеративная модель создаёт гипотезы, выражения и исправления. Укажите ключи и вызовите @debugger с программой или симптомом; кандидаты запускаются для воспроизведения.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "LLM Debugger управляет отладчиком VS Code, ставит точки останова, шагает и читает реальные значения переменных.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Стратегия Jev выбирает шаги и оценивает достаточность данных; генеративная модель создаёт гипотезы, выражения и исправления.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Укажите ключи и вызовите @debugger с программой или симптомом; кандидаты запускаются для воспроизведения.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ограничения",
+          "text": "Репозиторий описывает исследовательское доказательство концепции, а не поддерживаемый продукт.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "LLM Debugger: Jev रणनीति से रनटाइम डिबगिंग",
+      "h1": "LLM Debugger: Jev रणनीति से रनटाइम डिबगिंग",
+      "description": "LLM Debugger वास्तविक VS Code डिबगिंग कदम Jev से चुनता है; जनरेटिव मॉडल परिकल्पना और सुधार देता है। यह अभी शोध प्रोटोटाइप है।",
+      "summary": "LLM Debugger VS Code डिबगर चलाकर ब्रेकपॉइंट लगाता, कदम बढ़ाता और वास्तविक वेरिएबल पढ़ता है। Jev रणनीति अगला कदम और साक्ष्य की पर्याप्तता चुनती है; जनरेटिव मॉडल परिकल्पना, एक्सप्रेशन और सुधार लिखता है। मॉडल कुंजियाँ भरकर @debugger को प्रोग्राम या लक्षण दें; उम्मीदवार चलाकर समस्या दोहराई जाती है।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "किस काम आता है",
+          "text": "LLM Debugger VS Code डिबगर चलाकर ब्रेकपॉइंट लगाता, कदम बढ़ाता और वास्तविक वेरिएबल पढ़ता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "Jev रणनीति अगला कदम और साक्ष्य की पर्याप्तता चुनती है; जनरेटिव मॉडल परिकल्पना, एक्सप्रेशन और सुधार लिखता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल कैसे करें",
+          "text": "मॉडल कुंजियाँ भरकर @debugger को प्रोग्राम या लक्षण दें; उम्मीदवार चलाकर समस्या दोहराई जाती है।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "सीमाएँ",
+          "text": "रिपॉज़िटरी इसे शोध का अवधारणा प्रमाण बताती है, समर्थित उत्पाद नहीं।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "LLM Debugger: debugging runtime dengan Jev",
+      "h1": "LLM Debugger: debugging runtime dengan Jev",
+      "description": "LLM Debugger memakai Jev untuk mengarahkan debugger nyata VS Code, sementara model generatif memberi hipotesis dan perbaikan; masih berupa prototipe riset.",
+      "summary": "LLM Debugger mengendalikan debugger VS Code, memasang breakpoint, melangkah, dan memeriksa nilai variabel nyata. Strategi Jev memilih langkah dan kecukupan bukti; model generatif memasok hipotesis, ekspresi, dan perbaikan. Atur kunci dan gunakan @debugger dengan program atau gejala; kandidat dijalankan untuk mereproduksinya.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "LLM Debugger mengendalikan debugger VS Code, memasang breakpoint, melangkah, dan memeriksa nilai variabel nyata.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Strategi Jev memilih langkah dan kecukupan bukti; model generatif memasok hipotesis, ekspresi, dan perbaikan.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Atur kunci dan gunakan @debugger dengan program atau gejala; kandidat dijalankan untuk mereproduksinya.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Batasan",
+          "text": "Repositori menyebutnya pembuktian konsep penelitian, bukan produk dengan dukungan resmi.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "LLM Debugger: gỡ lỗi lúc chạy với chiến lược Jev",
+      "h1": "LLM Debugger: gỡ lỗi lúc chạy với chiến lược Jev",
+      "description": "LLM Debugger dùng Jev định hướng các bước gỡ lỗi VS Code thực, còn mô hình sinh cung cấp giả thuyết và bản sửa; dự án vẫn là nguyên mẫu nghiên cứu.",
+      "summary": "LLM Debugger điều khiển trình gỡ lỗi VS Code, đặt điểm dừng, chạy từng bước và đọc giá trị biến thực. Chiến lược Jev chọn bước tiếp và xét đủ bằng chứng; mô hình sinh tạo giả thuyết, biểu thức và bản sửa. Cấu hình khóa rồi dùng @debugger với chương trình hoặc triệu chứng; ứng viên được chạy để tái hiện lỗi.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích",
+          "text": "LLM Debugger điều khiển trình gỡ lỗi VS Code, đặt điểm dừng, chạy từng bước và đọc giá trị biến thực.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Chiến lược Jev chọn bước tiếp và xét đủ bằng chứng; mô hình sinh tạo giả thuyết, biểu thức và bản sửa.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Cấu hình khóa rồi dùng @debugger với chương trình hoặc triệu chứng; ứng viên được chạy để tái hiện lỗi.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Giới hạn",
+          "text": "Kho mã mô tả đây là nguyên mẫu nghiên cứu, không phải sản phẩm được hỗ trợ.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "LLM Debugger: Jev stratejisiyle çalışma zamanı hata ayıklama",
+      "h1": "LLM Debugger: Jev stratejisiyle çalışma zamanı hata ayıklama",
+      "description": "LLM Debugger gerçek VS Code hata ayıklama adımlarını Jev ile yönetir; üretici model hipotez ve düzeltmeleri sağlar. Proje araştırma prototipidir.",
+      "summary": "LLM Debugger VS Code hata ayıklayıcısını sürer, kesme noktası koyar, adımlar ve gerçek değişkenleri okur. Jev stratejisi sonraki adımı ve kanıt yeterliliğini seçer; üretici model hipotez, ifade ve düzeltme üretir. Anahtarları ayarlayıp @debugger ile program veya belirti verin; adaylar sorunu üretmek için çalıştırılır.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "LLM Debugger VS Code hata ayıklayıcısını sürer, kesme noktası koyar, adımlar ve gerçek değişkenleri okur.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Jev stratejisi sonraki adımı ve kanıt yeterliliğini seçer; üretici model hipotez, ifade ve düzeltme üretir.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Anahtarları ayarlayıp @debugger ile program veya belirti verin; adaylar sorunu üretmek için çalıştırılır.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Sınırlamalar",
+          "text": "Depo bunu desteklenen ürün değil, araştırma amaçlı kavram kanıtı olarak tanımlar.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "LLM Debugger: debug in esecuzione con strategia Jev",
+      "h1": "LLM Debugger: debug in esecuzione con strategia Jev",
+      "description": "LLM Debugger usa Jev per guidare il debugger reale di VS Code; un modello generativo fornisce ipotesi e correzioni. Rimane un prototipo di ricerca.",
+      "summary": "LLM Debugger guida il debugger VS Code, imposta breakpoint, avanza e legge valori reali delle variabili. La strategia Jev sceglie passi e sufficienza delle prove; un modello generativo crea ipotesi, espressioni e correzioni. Configura chiavi e usa @debugger con programma o sintomo; i candidati vengono eseguiti per riprodurlo.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "LLM Debugger guida il debugger VS Code, imposta breakpoint, avanza e legge valori reali delle variabili.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Il ruolo di Jev",
+          "text": "La strategia Jev sceglie passi e sufficienza delle prove; un modello generativo crea ipotesi, espressioni e correzioni.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come usarlo",
+          "text": "Configura chiavi e usa @debugger con programma o sintomo; i candidati vengono eseguiti per riprodurlo.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limiti",
+          "text": "Il repository descrive una prova di concetto di ricerca, non un prodotto supportato.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  },
+  "displayName": "LLM Debugger"
+}

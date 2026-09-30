@@ -1,0 +1,756 @@
+{
+  "version": "source-content-v1",
+  "repo": "thruwire/foreman",
+  "repositoryId": 1374349137,
+  "relationship": "jev-app",
+  "category": "agents",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "e5d1aa45183382390e388512dcbfebd747ec89ba",
+      "url": "https://github.com/thruwire/foreman/blob/e5d1aa45183382390e388512dcbfebd747ec89ba/README.md",
+      "sha256": "398361ca0d07c8960caf8cbd8ebabc093a3818f67e555ccfd6ed315c328c6ffe",
+      "accessedAt": "2026-09-30T07:33:49.563Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "kind": "documented",
+      "text": "Foreman supervises coding workers, assessing completion, requirements, test sufficiency and the need for human input.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 3,
+          "end": 10,
+          "quote": "Foreman watches the software factory floor with [TypeSafe AI's Jev](https://docs.typesafe.ai/introduction),\nplacing a fast decision model above slower coding agents.\n\nGive it a ticket, specification, bug report, or any free-form software job. A\n[Codex](https://learn.chatgpt.com/docs/developer-commands?surface=cli) or\n[OpenCode](https://opencode.ai) worker does the software engineering while Foreman independently\nassesses whether the implementation is complete, requirements are satisfied, tests are sufficient,\nverification is needed, or human input is required."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "kind": "documented",
+      "text": "Jev evaluates checks; a deterministic Python arbiter selects whether to continue, steer, verify, stop or escalate.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 214,
+          "end": 224,
+          "quote": "Jev only evaluates checks. Responsibilities propose directives, and a deterministic Python arbiter\nselects the one action that is permitted:\n\n- `CONTINUE`: let an active worker keep working.\n- `START_WORKER`: begin a coding pass because work remains.\n- `START_VERIFIER`: launch one independent verification pass.\n- `STEER_WORKER`: send Jev-informed guidance into the active Codex turn.\n- `STOP_WORKER`: gracefully terminate a stuck or off-track process.\n- `RETRY_WORKER`: launch a fresh coding worker after a stopped attempt.\n- `FINISH`: declare the job complete.\n- `ESCALATE`: stop autonomous work and request human attention."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "kind": "documented",
+      "text": "Supply a repository and job with Python 3.11+, a TypeSafe key and a configured coding-agent backend.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 274,
+          "end": 284,
+          "quote": "## Requirements\n\n- Python 3.11 or newer.\n- A TypeSafe API key for real runs. The deterministic demo and tests need neither service.\n- For the default Codex backend: the\n  [Codex CLI](https://learn.chatgpt.com/docs/developer-commands?surface=cli) on `PATH`, a version\n  that provides `codex app-server` for live steering, and Codex authentication (`codex login`,\n  then verify with `codex login status`).\n- For the OpenCode backend: the [OpenCode CLI](https://opencode.ai) on `PATH` with an available\n  provider and model.\n- For the Hermes backend: the Hermes Agent CLI (`hermes`) on `PATH`."
+        },
+        {
+          "source": "source-1",
+          "start": 317,
+          "end": 321,
+          "quote": "```bash\nforeman run \\\n  --repo ./my-project \\\n  --job \"Add rate limiting to the API and make sure it is properly tested.\"\n```"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "kind": "documented",
+      "text": "It runs one coding worker at a time without isolation. Assessment accuracy is unproven, and semantic scores require calibration.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 479,
+          "end": 488,
+          "quote": "- Jev assessment accuracy is unproven for this use case and the semantic scores need calibration.\n- False positives can stop useful workers; false negatives can allow bad work to continue.\n- Repository observations are necessarily incomplete and bounded.\n- The selected coding agent remains responsible for software-engineering reasoning and tool use.\n- Codex App Server is currently experimental and its protocol may change between CLI releases.\n- Foreman currently runs one coding worker at a time.\n- Local execution is not isolated.\n- Persistence is useful for inspection, not production-grade durable execution.\n- A verifier reports evidence through the same observation channel; there is no formal proof of\n  correctness."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "Foreman: Jev supervision for coding agents",
+      "h1": "Foreman: Jev supervision for coding agents",
+      "description": "Foreman supervises coding agents with Jev checks for progress, completion and verification. Python policy chooses interventions; assessment accuracy is unproven.",
+      "summary": "Foreman supervises coding workers, assessing completion, requirements, test sufficiency and the need for human input. Jev evaluates checks; a deterministic Python arbiter selects whether to continue, steer, verify, stop or escalate. Supply a repository and job with Python 3.11+, a TypeSafe key and a configured coding-agent backend.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose",
+          "text": "Foreman supervises coding workers, assessing completion, requirements, test sufficiency and the need for human input.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’s role",
+          "text": "Jev evaluates checks; a deterministic Python arbiter selects whether to continue, steer, verify, stop or escalate.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "How to use it",
+          "text": "Supply a repository and job with Python 3.11+, a TypeSafe key and a configured coding-agent backend.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limits to consider",
+          "text": "It runs one coding worker at a time without isolation. Assessment accuracy is unproven, and semantic scores require calibration.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "Foreman：用 Jev 监督编程智能体",
+      "h1": "Foreman：用 Jev 监督编程智能体",
+      "description": "Foreman 用 Jev 检查编程智能体的进展、完成情况和验证需求，由 Python 策略选择干预方式；当前同时仅运行一个执行者，评估准确性尚未证实，分数需校准。",
+      "summary": "Foreman 监督编程执行者，评估完成情况、需求满足度、测试充分性及是否需要人工介入。 Jev 评估检查项；确定性的 Python 仲裁器决定继续、引导、验证、停止或升级处理。 提供仓库和任务，并准备 Python 3.11+、TypeSafe 密钥及已配置的编程智能体后端。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "Foreman 监督编程执行者，评估完成情况、需求满足度、测试充分性及是否需要人工介入。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "Jev 评估检查项；确定性的 Python 仲裁器决定继续、引导、验证、停止或升级处理。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "提供仓库和任务，并准备 Python 3.11+、TypeSafe 密钥及已配置的编程智能体后端。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用边界",
+          "text": "同时仅运行一个编程执行者，且没有隔离；评估准确性尚未证实，语义分数需要校准。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "Foreman：以 Jev 監督程式開發代理",
+      "h1": "Foreman：以 Jev 監督程式開發代理",
+      "description": "Foreman 以 Jev 檢查程式開發代理的進度、完成情況與驗證需求，由 Python 策略選擇介入方式；目前同時僅執行一個工作者，評估準確性尚未證實，分數需校準。",
+      "summary": "Foreman 監督程式開發執行者，評估完成情況、需求滿足度、測試充分性與是否需要人工介入。 Jev 評估檢查項；確定性的 Python 仲裁器決定繼續、引導、驗證、停止或升級處理。 提供儲存庫與任務，並準備 Python 3.11+、TypeSafe 金鑰及已設定的開發代理後端。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "Foreman 監督程式開發執行者，評估完成情況、需求滿足度、測試充分性與是否需要人工介入。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "Jev 評估檢查項；確定性的 Python 仲裁器決定繼續、引導、驗證、停止或升級處理。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "提供儲存庫與任務，並準備 Python 3.11+、TypeSafe 金鑰及已設定的開發代理後端。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用限制",
+          "text": "同時僅執行一個開發工作者，且沒有隔離；評估準確性尚未證實，語義分數需要校準。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "Foreman：Jev で開発エージェントを監督",
+      "h1": "Foreman：Jev で開発エージェントを監督",
+      "description": "Foreman は Jev で開発の進行・完了・検証を評価し、Python のポリシーが介入を決めます。評価精度は未証明で校正が必要です。",
+      "summary": "Foreman は開発ワーカーを監督し、完了状況、要件、テストの十分さ、人の介入の必要性を評価します。 Jev は確認項目を評価し、継続・方向修正・検証・停止・人への引き継ぎは Python の決定論的処理が選びます。 リポジトリと仕事を指定し、Python 3.11 以降、TypeSafe キー、設定済み開発エージェントを用意します。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "何ができるか",
+          "text": "Foreman は開発ワーカーを監督し、完了状況、要件、テストの十分さ、人の介入の必要性を評価します。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "Jev は確認項目を評価し、継続・方向修正・検証・停止・人への引き継ぎは Python の決定論的処理が選びます。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "リポジトリと仕事を指定し、Python 3.11 以降、TypeSafe キー、設定済み開発エージェントを用意します。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "制約と注意点",
+          "text": "同時実行は開発ワーカー 1 つで、隔離はありません。評価精度は未証明で、意味評価スコアには校正が必要です。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "Foreman: Jev로 코딩 에이전트 감독",
+      "h1": "Foreman: Jev로 코딩 에이전트 감독",
+      "description": "Foreman은 Jev로 코딩 진행·완료·검증을 평가하고 Python 정책이 개입을 결정합니다. 평가 정확성은 아직 입증되지 않았습니다.",
+      "summary": "Foreman은 코딩 작업자를 감독하며 완료 상태, 요구 사항 충족, 테스트 충분성, 사람의 개입 필요를 평가합니다. Jev가 점검 항목을 평가하고 결정론적 Python 중재기가 계속, 방향 조정, 검증, 중지, 상위 처리를 선택합니다. 저장소와 작업을 지정하고 Python 3.11+, TypeSafe 키, 설정된 코딩 에이전트 백엔드를 준비합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "Foreman은 코딩 작업자를 감독하며 완료 상태, 요구 사항 충족, 테스트 충분성, 사람의 개입 필요를 평가합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Jev가 점검 항목을 평가하고 결정론적 Python 중재기가 계속, 방향 조정, 검증, 중지, 상위 처리를 선택합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "저장소와 작업을 지정하고 Python 3.11+, TypeSafe 키, 설정된 코딩 에이전트 백엔드를 준비합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "제약 사항",
+          "text": "격리 없이 코딩 작업자 하나만 실행합니다. 평가 정확성은 아직 입증되지 않았으며 의미 점수는 보정이 필요합니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "Foreman: supervisión Jev para agentes de programación",
+      "h1": "Foreman: supervisión Jev para agentes de programación",
+      "description": "Foreman supervisa agentes con Jev para progreso, finalización y verificación. La política Python decide intervenciones; la precisión no está demostrada.",
+      "summary": "Foreman supervisa agentes programadores y evalúa finalización, requisitos, suficiencia de pruebas y necesidad de intervención humana. Jev evalúa comprobaciones; un árbitro Python determinista decide continuar, orientar, verificar, detener o escalar. Proporciona repositorio y tarea con Python 3.11+, una clave TypeSafe y un agente de programación configurado.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "Foreman supervisa agentes programadores y evalúa finalización, requisitos, suficiencia de pruebas y necesidad de intervención humana.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "El papel de Jev",
+          "text": "Jev evalúa comprobaciones; un árbitro Python determinista decide continuar, orientar, verificar, detener o escalar.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo usarlo",
+          "text": "Proporciona repositorio y tarea con Python 3.11+, una clave TypeSafe y un agente de programación configurado.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Límites a considerar",
+          "text": "Ejecuta un solo trabajador sin aislamiento. La precisión de las evaluaciones no está demostrada y las puntuaciones requieren calibración.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "Foreman : supervision Jev des agents de développement",
+      "h1": "Foreman : supervision Jev des agents de développement",
+      "description": "Foreman supervise les agents avec Jev pour progression, achèvement et vérification. La politique Python choisit les interventions ; la précision reste non prouvée.",
+      "summary": "Foreman supervise les agents programmeurs et évalue achèvement, exigences, suffisance des tests et besoin d’intervention humaine. Jev évalue les contrôles ; un arbitre Python déterministe choisit de continuer, orienter, vérifier, arrêter ou solliciter une personne. Fournissez dépôt et tâche avec Python 3.11+, une clé TypeSafe et un agent de développement configuré.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "Foreman supervise les agents programmeurs et évalue achèvement, exigences, suffisance des tests et besoin d’intervention humaine.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Le rôle de Jev",
+          "text": "Jev évalue les contrôles ; un arbitre Python déterministe choisit de continuer, orienter, vérifier, arrêter ou solliciter une personne.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Utilisation",
+          "text": "Fournissez dépôt et tâche avec Python 3.11+, une clé TypeSafe et un agent de développement configuré.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limites à connaître",
+          "text": "Un seul agent de travail tourne à la fois, sans isolation. La précision reste non démontrée et les scores nécessitent une calibration.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "Foreman: Jev-Aufsicht für Programmieragenten",
+      "h1": "Foreman: Jev-Aufsicht für Programmieragenten",
+      "description": "Foreman überwacht Agenten per Jev auf Fortschritt, Abschluss und Prüfung. Python-Regeln wählen Eingriffe; die Bewertungsgenauigkeit ist unbewiesen.",
+      "summary": "Foreman überwacht Programmieragenten und bewertet Fertigstellung, Anforderungen, Testumfang sowie Bedarf an menschlicher Hilfe. Jev bewertet Prüfpunkte; ein deterministischer Python-Arbiter entscheidet über Fortsetzen, Lenken, Prüfen, Stoppen oder Eskalieren. Repository und Aufgabe mit Python 3.11+, TypeSafe-Schlüssel und konfiguriertem Programmieragenten-Backend bereitstellen.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "Foreman überwacht Programmieragenten und bewertet Fertigstellung, Anforderungen, Testumfang sowie Bedarf an menschlicher Hilfe.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Die Rolle von Jev",
+          "text": "Jev bewertet Prüfpunkte; ein deterministischer Python-Arbiter entscheidet über Fortsetzen, Lenken, Prüfen, Stoppen oder Eskalieren.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Nutzung",
+          "text": "Repository und Aufgabe mit Python 3.11+, TypeSafe-Schlüssel und konfiguriertem Programmieragenten-Backend bereitstellen.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Grenzen",
+          "text": "Es arbeitet jeweils ein Programmieragent ohne Isolation. Die Bewertungsgenauigkeit ist unbewiesen; semantische Scores benötigen Kalibrierung.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "Foreman: supervisão Jev para agentes de programação",
+      "h1": "Foreman: supervisão Jev para agentes de programação",
+      "description": "Foreman supervisiona agentes com Jev para progresso, conclusão e verificação. A política Python escolhe intervenções; a precisão não foi comprovada.",
+      "summary": "Foreman supervisiona agentes programadores e avalia conclusão, requisitos, suficiência dos testes e necessidade de intervenção humana. Jev avalia verificações; um árbitro Python determinístico decide continuar, orientar, verificar, parar ou escalar. Forneça repositório e tarefa com Python 3.11+, chave TypeSafe e um agente de programação configurado.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "Foreman supervisiona agentes programadores e avalia conclusão, requisitos, suficiência dos testes e necessidade de intervenção humana.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "O papel do Jev",
+          "text": "Jev avalia verificações; um árbitro Python determinístico decide continuar, orientar, verificar, parar ou escalar.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Forneça repositório e tarefa com Python 3.11+, chave TypeSafe e um agente de programação configurado.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limitações",
+          "text": "Executa um único trabalhador sem isolamento. A precisão das avaliações não foi comprovada e os escores precisam de calibração.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "Foreman: надзор Jev за агентами программирования",
+      "h1": "Foreman: надзор Jev за агентами программирования",
+      "description": "Foreman наблюдает за агентами через оценки Jev прогресса, завершения и проверки. Python выбирает вмешательства; точность оценок не доказана.",
+      "summary": "Foreman наблюдает за агентами, оценивая завершённость, требования, достаточность тестов и необходимость вмешательства человека. Jev оценивает проверки; детерминированный Python-арбитр решает продолжить, направить, проверить, остановить или передать человеку. Задайте репозиторий и работу, подготовив Python 3.11+, ключ TypeSafe и настроенный бэкенд агента программирования.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Foreman наблюдает за агентами, оценивая завершённость, требования, достаточность тестов и необходимость вмешательства человека.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Jev оценивает проверки; детерминированный Python-арбитр решает продолжить, направить, проверить, остановить или передать человеку.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Задайте репозиторий и работу, подготовив Python 3.11+, ключ TypeSafe и настроенный бэкенд агента программирования.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ограничения",
+          "text": "Одновременно работает один исполнитель без изоляции. Точность оценок не доказана, а семантические баллы требуют калибровки.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "Foreman: कोडिंग एजेंटों पर Jev की निगरानी",
+      "h1": "Foreman: कोडिंग एजेंटों पर Jev की निगरानी",
+      "description": "Foreman Jev से कोडिंग की प्रगति, पूर्णता और सत्यापन जाँचता है। Python नीति हस्तक्षेप चुनती है; मूल्यांकन की सटीकता अभी अप्रमाणित है।",
+      "summary": "Foreman कोडिंग एजेंटों की निगरानी कर पूर्णता, आवश्यकताओं, टेस्ट की पर्याप्तता और मानव सहायता की ज़रूरत आँकता है। Jev जाँच का मूल्यांकन करता है; निश्चित Python नीति जारी रखने, दिशा देने, जाँचने, रोकने या मानव तक पहुँचाने का निर्णय लेती है। रिपॉज़िटरी और काम दें; Python 3.11+, TypeSafe कुंजी और कॉन्फ़िगर किया कोडिंग एजेंट बैकएंड चाहिए।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "किस काम आता है",
+          "text": "Foreman कोडिंग एजेंटों की निगरानी कर पूर्णता, आवश्यकताओं, टेस्ट की पर्याप्तता और मानव सहायता की ज़रूरत आँकता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "Jev जाँच का मूल्यांकन करता है; निश्चित Python नीति जारी रखने, दिशा देने, जाँचने, रोकने या मानव तक पहुँचाने का निर्णय लेती है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल कैसे करें",
+          "text": "रिपॉज़िटरी और काम दें; Python 3.11+, TypeSafe कुंजी और कॉन्फ़िगर किया कोडिंग एजेंट बैकएंड चाहिए।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "सीमाएँ",
+          "text": "एक समय में एक ही कोडिंग कर्मी चलता है, बिना आइसोलेशन। मूल्यांकन सटीकता अप्रमाणित है और स्कोर कैलिब्रेशन माँगते हैं।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "Foreman: pengawasan Jev untuk agen pemrograman",
+      "h1": "Foreman: pengawasan Jev untuk agen pemrograman",
+      "description": "Foreman mengawasi agen dengan Jev untuk kemajuan, penyelesaian, dan verifikasi. Kebijakan Python menentukan intervensi; akurasi belum terbukti.",
+      "summary": "Foreman mengawasi agen pemrograman, menilai penyelesaian, persyaratan, kecukupan tes, dan kebutuhan campur tangan manusia. Jev menilai pemeriksaan; penentu Python deterministik memilih lanjut, arahkan, verifikasi, hentikan, atau eskalasi. Berikan repositori dan tugas dengan Python 3.11+, kunci TypeSafe, serta backend agen pemrograman yang dikonfigurasi.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "Foreman mengawasi agen pemrograman, menilai penyelesaian, persyaratan, kecukupan tes, dan kebutuhan campur tangan manusia.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Jev menilai pemeriksaan; penentu Python deterministik memilih lanjut, arahkan, verifikasi, hentikan, atau eskalasi.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Berikan repositori dan tugas dengan Python 3.11+, kunci TypeSafe, serta backend agen pemrograman yang dikonfigurasi.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Batasan",
+          "text": "Hanya satu pekerja berjalan sekaligus tanpa isolasi. Akurasi penilaian belum terbukti dan skor semantik memerlukan kalibrasi.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "Foreman: giám sát tác tử lập trình bằng Jev",
+      "h1": "Foreman: giám sát tác tử lập trình bằng Jev",
+      "description": "Foreman dùng Jev kiểm tra tiến độ, hoàn thành và xác minh của tác tử. Chính sách Python chọn can thiệp; độ chính xác chưa được chứng minh.",
+      "summary": "Foreman giám sát tác tử lập trình, đánh giá hoàn thành, yêu cầu, độ đầy đủ kiểm thử và nhu cầu con người can thiệp. Jev đánh giá kiểm tra; bộ phân xử Python xác định chọn tiếp tục, hướng dẫn, xác minh, dừng hoặc chuyển cấp. Cung cấp kho mã và nhiệm vụ cùng Python 3.11+, khóa TypeSafe và hệ thống tác tử lập trình đã cấu hình.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích",
+          "text": "Foreman giám sát tác tử lập trình, đánh giá hoàn thành, yêu cầu, độ đầy đủ kiểm thử và nhu cầu con người can thiệp.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Jev đánh giá kiểm tra; bộ phân xử Python xác định chọn tiếp tục, hướng dẫn, xác minh, dừng hoặc chuyển cấp.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Cung cấp kho mã và nhiệm vụ cùng Python 3.11+, khóa TypeSafe và hệ thống tác tử lập trình đã cấu hình.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Giới hạn",
+          "text": "Chỉ chạy một tác tử thực hiện mỗi lần, không cách ly. Độ chính xác đánh giá chưa được chứng minh và điểm cần hiệu chỉnh.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "Foreman: kodlama ajanlarına Jev gözetimi",
+      "h1": "Foreman: kodlama ajanlarına Jev gözetimi",
+      "description": "Foreman ajan ilerlemesini, tamamlanmayı ve doğrulamayı Jev ile denetler. Python politikası müdahaleyi seçer; değerlendirme doğruluğu kanıtlanmamıştır.",
+      "summary": "Foreman kodlama ajanlarını izleyip tamamlanmayı, gereksinimleri, test yeterliliğini ve insan müdahalesi ihtiyacını değerlendirir. Jev kontrolleri değerlendirir; deterministik Python hakemi devam, yönlendirme, doğrulama, durdurma veya üst seviyeye aktarmayı seçer. Python 3.11+, TypeSafe anahtarı ve yapılandırılmış kodlama ajanı arka ucuyla depo ve görevi belirtin.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "Foreman kodlama ajanlarını izleyip tamamlanmayı, gereksinimleri, test yeterliliğini ve insan müdahalesi ihtiyacını değerlendirir.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Jev kontrolleri değerlendirir; deterministik Python hakemi devam, yönlendirme, doğrulama, durdurma veya üst seviyeye aktarmayı seçer.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Python 3.11+, TypeSafe anahtarı ve yapılandırılmış kodlama ajanı arka ucuyla depo ve görevi belirtin.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Sınırlamalar",
+          "text": "İzolasyon olmadan aynı anda tek kodlama çalışanı yürütür. Değerlendirme doğruluğu kanıtlanmamıştır; anlamsal puanlar kalibrasyon gerektirir.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "Foreman: supervisione Jev per agenti di programmazione",
+      "h1": "Foreman: supervisione Jev per agenti di programmazione",
+      "description": "Foreman supervisiona agenti con Jev per progresso, completamento e verifica. La politica Python decide gli interventi; l’accuratezza non è dimostrata.",
+      "summary": "Foreman supervisiona agenti programmatori e valuta completamento, requisiti, sufficienza dei test e necessità di intervento umano. Jev valuta i controlli; un arbitro Python deterministico sceglie se continuare, orientare, verificare, fermare o coinvolgere una persona. Fornisci repository e compito con Python 3.11+, chiave TypeSafe e backend di un agente di programmazione configurato.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "Foreman supervisiona agenti programmatori e valuta completamento, requisiti, sufficienza dei test e necessità di intervento umano.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Il ruolo di Jev",
+          "text": "Jev valuta i controlli; un arbitro Python deterministico sceglie se continuare, orientare, verificare, fermare o coinvolgere una persona.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come usarlo",
+          "text": "Fornisci repository e compito con Python 3.11+, chiave TypeSafe e backend di un agente di programmazione configurato.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limiti",
+          "text": "Esegue un solo lavoratore alla volta senza isolamento. L’accuratezza delle valutazioni non è dimostrata e i punteggi richiedono calibrazione.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

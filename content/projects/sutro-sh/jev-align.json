@@ -1,0 +1,780 @@
+{
+  "version": "source-content-v1",
+  "repo": "sutro-sh/jev-align",
+  "repositoryId": 1376627816,
+  "relationship": "jev-app",
+  "category": "apps",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "path": "README.md",
+      "commit": "3d997fc76593036655c28d4964de43b55f81fe2c",
+      "url": "https://github.com/sutro-sh/jev-align/blob/3d997fc76593036655c28d4964de43b55f81fe2c/README.md",
+      "sha256": "009cbf42d65371e81f9fbdc669b91ea117b02484a417a5c6f020ce2adb24941e",
+      "accessedAt": "2026-09-30T07:33:51.993Z",
+      "id": "s1"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "This experimental CLI develops binary, multiclass, multilabel and scoring functions through repeated evaluation, labeling and definition proposals.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 3,
+          "end": 9,
+          "quote": "`jev-align` is an experimental CLI from [Sutro](https://sutro.sh/) for building\nAI Functions with [TypeSafe's Jev](https://docs.typesafe.ai/introduction).\n\nIt finds uncertain examples, asks you to label them, and uses\n[GEPA](https://gepa-ai.github.io/gepa/) to improve the function. Use it in your\napplication, keep learning from production examples, and share portable\nfunctions through [ai-functions.dev](https://ai-functions.dev/)."
+        },
+        {
+          "source": "s1",
+          "start": 34,
+          "end": 40,
+          "quote": "Each round:\n\n1. Evaluates the configured dataset and measures uncertainty.\n2. Selects ambiguous rows plus a random audit sample for you to label.\n3. Uses your accumulated labels and optional rationales to run GEPA.\n4. Shows the score, certainty change, and proposed definition diff.\n5. Lets you accept, reject, rewind, or resume later."
+        },
+        {
+          "source": "s1",
+          "start": 48,
+          "end": 53,
+          "quote": "| Type | Output |\n| --- | --- |\n| Binary | `True` or `False` |\n| Multiclass | Exactly one fixed label |\n| Multilabel | Zero or more fixed labels |\n| Score | One level from an ordered rubric |"
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "Jev evaluates the data through TypeSafe, Vercel or Cloudflare; GEPA uses a separately configured reflection model.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 80,
+          "end": 104,
+          "quote": "## Jev providers\n\nJev can run directly through TypeSafe AI, Vercel AI Gateway, or Cloudflare\nWorkers AI. The guided setup detects configured providers and lets you choose.\n\n```shell\n# Vercel AI Gateway\nexport AI_GATEWAY_API_KEY=\"...\"\njeva optimize data.csv --question \"Is this relevant?\" --column text \\\n  --backend vercel\n\n# Cloudflare Workers AI\nexport CLOUDFLARE_ACCOUNT_ID=\"...\"\nexport CLOUDFLARE_API_TOKEN=\"...\"\njeva optimize data.csv --question \"Is this relevant?\" --column text \\\n  --backend cloudflare\n```\n\nThese routes do not require a `TYPESAFE_API_KEY`. The chosen provider is saved\nwith the AI Function, so later runtime calls use the same provider. GEPA's\nreflection model is configured separately.\n\n## Reflection models\n\nGEPA's reflection model is separate from the JEV model evaluating your data."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Load CSV, Parquet or JSONL data, review ambiguous examples and audit samples, then accept, reject or revisit the proposed definition changes.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 26,
+          "end": 30,
+          "quote": "Start the CLI with either `jeva` or `jev-align`.\n\nUse `pip install jev-align` if you do not use\n[uv](https://docs.astral.sh/uv/). The guided setup discovers local CSV,\nParquet, and JSONL files and includes three ready-to-run examples."
+        },
+        {
+          "source": "s1",
+          "start": 34,
+          "end": 44,
+          "quote": "Each round:\n\n1. Evaluates the configured dataset and measures uncertainty.\n2. Selects ambiguous rows plus a random audit sample for you to label.\n3. Uses your accumulated labels and optional rationales to run GEPA.\n4. Shows the score, certainty change, and proposed definition diff.\n5. Lets you accept, reject, rewind, or resume later.\n\nThe guided workflow asks you to review every label. Labels may be human-created,\nsynthetic, imported, or agent-assisted; review them to the standard your use\ncase requires. A higher training score never accepts a proposal automatically."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "A higher training score never accepts a proposal automatically. Publishing to the public registry includes labeled inputs, labels and optional rationales.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 3,
+          "end": 4,
+          "quote": "`jev-align` is an experimental CLI from [Sutro](https://sutro.sh/) for building\nAI Functions with [TypeSafe's Jev](https://docs.typesafe.ai/introduction)."
+        },
+        {
+          "source": "s1",
+          "start": 42,
+          "end": 44,
+          "quote": "The guided workflow asks you to review every label. Labels may be human-created,\nsynthetic, imported, or agent-assisted; review them to the standard your use\ncase requires. A higher training score never accepts a proposal automatically."
+        },
+        {
+          "source": "s1",
+          "start": 148,
+          "end": 157,
+          "quote": "A published function includes everything another person needs to run it or\ncontinue improving it:\n\n- The accepted definition and input signature.\n- The runtime backend and learning configuration.\n- Labeled inputs, labels, splits, and optional rationales.\n\nIt does **not** contain unlabeled source rows, local dataset paths, API keys,\nreflection-provider credentials, or an unaccepted proposal. The registry is\ncurrently public, so do not publish labeled data you cannot share."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "jev-align: improve Jev functions with labeled examples",
+      "h1": "jev-align: improve Jev functions with labeled examples",
+      "description": "jev-align finds uncertain examples and uses reviewed labels with GEPA to propose better Jev function definitions.",
+      "summary": "This experimental CLI develops binary, multiclass, multilabel and scoring functions through repeated evaluation, labeling and definition proposals. Jev evaluates the data through TypeSafe, Vercel or Cloudflare; GEPA uses a separately configured reflection model.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose and audience",
+          "text": "This experimental CLI develops binary, multiclass, multilabel and scoring functions through repeated evaluation, labeling and definition proposals.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "Jev evaluates the data through TypeSafe, Vercel or Cloudflare; GEPA uses a separately configured reflection model.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Using the project",
+          "text": "Load CSV, Parquet or JSONL data, review ambiguous examples and audit samples, then accept, reject or revisit the proposed definition changes.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "A higher training score never accepts a proposal automatically. Publishing to the public registry includes labeled inputs, labels and optional rationales.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "jev-align：用标注样本改进 Jev 函数",
+      "h1": "jev-align：用标注样本改进 Jev 函数",
+      "description": "jev-align 查找不确定样本，结合经审核标签与 GEPA 提出 Jev 函数定义改进建议。",
+      "summary": "这个实验性 CLI 通过反复评估、标注和定义提案，开发二分类、多分类、多标签及评分函数。 Jev 通过 TypeSafe、Vercel 或 Cloudflare 评估数据；GEPA 的反思模型单独配置。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途与适用对象",
+          "text": "这个实验性 CLI 通过反复评估、标注和定义提案，开发二分类、多分类、多标签及评分函数。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "Jev 通过 TypeSafe、Vercel 或 Cloudflare 评估数据；GEPA 的反思模型单独配置。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "加载 CSV、Parquet 或 JSONL 数据，审核模糊样本和随机审计样本，再接受、拒绝或回看定义变更。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "训练分数提高不会自动接受提案。发布到公开注册表的内容包含已标注输入、标签及可选理由。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "jev-align：以標註範例改進 Jev 函式",
+      "h1": "jev-align：以標註範例改進 Jev 函式",
+      "description": "jev-align 找出不確定範例，結合經審查的標籤與 GEPA，提出 Jev 函式定義改進建議。",
+      "summary": "此實驗性 CLI 透過反覆評估、標註及定義提案，建立二元、多類別、多標籤和評分函式。 Jev 經 TypeSafe、Vercel 或 Cloudflare 評估資料；GEPA 的反思模型另外設定。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途與適用對象",
+          "text": "此實驗性 CLI 透過反覆評估、標註及定義提案，建立二元、多類別、多標籤和評分函式。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "Jev 經 TypeSafe、Vercel 或 Cloudflare 評估資料；GEPA 的反思模型另外設定。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "載入 CSV、Parquet 或 JSONL 資料，審查模糊範例與隨機稽核樣本，再接受、拒絕或回顧定義變更。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "訓練分數提高不會自動接受提案。發布到公開登錄庫時，內容包括已標註輸入、標籤及選填理由。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "jev-align：ラベル付き事例で Jev 関数を改善",
+      "h1": "jev-align：ラベル付き事例で Jev 関数を改善",
+      "description": "jev-align は不確実な事例を探し、確認済みラベルと GEPA で Jev 関数の定義改善を提案します。",
+      "summary": "実験的 CLI として、評価・ラベル付け・定義提案を繰り返し、二値、多クラス、多ラベル、採点の関数を作ります。 Jev は TypeSafe、Vercel、Cloudflare 経由でデータを評価し、GEPA の振り返り用モデルは別途設定します。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途と対象",
+          "text": "実験的 CLI として、評価・ラベル付け・定義提案を繰り返し、二値、多クラス、多ラベル、採点の関数を作ります。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev との関係",
+          "text": "Jev は TypeSafe、Vercel、Cloudflare 経由でデータを評価し、GEPA の振り返り用モデルは別途設定します。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "CSV、Parquet、JSONL を読み込み、曖昧な事例と無作為の監査サンプルを確認して、定義変更を受諾・拒否・見直しできます。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範囲と制約",
+          "text": "学習スコアが上がっても自動採用されません。公開レジストリへの公開にはラベル付き入力、ラベル、任意の理由が含まれます。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "jev-align: 레이블 예제로 Jev 함수 개선",
+      "h1": "jev-align: 레이블 예제로 Jev 함수 개선",
+      "description": "jev-align은 불확실한 예제를 찾고 검토된 레이블과 GEPA로 Jev 함수 정의의 개선을 제안합니다.",
+      "summary": "실험적 CLI로 평가, 레이블 작성, 정의 제안을 반복해 이진, 다중 클래스, 다중 레이블, 점수 함수를 개발합니다. Jev는 TypeSafe, Vercel, Cloudflare를 통해 데이터를 평가하며 GEPA의 성찰 모델은 별도 설정합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "용도와 대상",
+          "text": "실험적 CLI로 평가, 레이블 작성, 정의 제안을 반복해 이진, 다중 클래스, 다중 레이블, 점수 함수를 개발합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Jev는 TypeSafe, Vercel, Cloudflare를 통해 데이터를 평가하며 GEPA의 성찰 모델은 별도 설정합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "CSV, Parquet, JSONL을 읽고 모호한 예제와 무작위 감사 표본을 검토한 뒤 제안된 정의를 수락, 거절하거나 다시 살펴봅니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 한계",
+          "text": "학습 점수가 높아져도 자동으로 제안을 수락하지 않습니다. 공개 레지스트리에 게시하면 레이블 입력, 레이블, 선택적 근거가 포함됩니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "jev-align: mejorar funciones Jev con ejemplos etiquetados",
+      "h1": "jev-align: mejorar funciones Jev con ejemplos etiquetados",
+      "description": "jev-align encuentra casos inciertos y usa etiquetas revisadas con GEPA para proponer mejores definiciones de funciones Jev.",
+      "summary": "Esta CLI experimental desarrolla funciones binarias, multiclase, multietiqueta y de puntuación mediante evaluación, etiquetado y propuestas iterativas. Jev evalúa datos a través de TypeSafe, Vercel o Cloudflare; GEPA usa un modelo de reflexión configurado aparte.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "Esta CLI experimental desarrolla funciones binarias, multiclase, multietiqueta y de puntuación mediante evaluación, etiquetado y propuestas iterativas.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Jev evalúa datos a través de TypeSafe, Vercel o Cloudflare; GEPA usa un modelo de reflexión configurado aparte.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo se usa",
+          "text": "Cargue CSV, Parquet o JSONL, revise casos ambiguos y muestras aleatorias y acepte, rechace o reconsidere los cambios propuestos.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "Una mejor puntuación de entrenamiento nunca acepta propuestas automáticamente. Publicar en el registro público incluye entradas etiquetadas, etiquetas y razones opcionales.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "jev-align : améliorer les fonctions Jev avec des exemples annotés",
+      "h1": "jev-align : améliorer les fonctions Jev avec des exemples annotés",
+      "description": "jev-align repère les cas incertains et utilise annotations revues et GEPA pour proposer de meilleures définitions de fonctions Jev.",
+      "summary": "Cette CLI expérimentale développe fonctions binaires, multiclasses, multilabels et de notation par évaluations, annotations et propositions successives. Jev évalue les données via TypeSafe, Vercel ou Cloudflare ; le modèle de réflexion de GEPA se configure séparément.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Usage et public visé",
+          "text": "Cette CLI expérimentale développe fonctions binaires, multiclasses, multilabels et de notation par évaluations, annotations et propositions successives.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Jev évalue les données via TypeSafe, Vercel ou Cloudflare ; le modèle de réflexion de GEPA se configure séparément.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Chargez CSV, Parquet ou JSONL, examinez cas ambigus et échantillons aléatoires, puis acceptez, refusez ou revisitez les changements.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "Un meilleur score d'entraînement n'accepte jamais une proposition automatiquement. Une publication au registre public inclut entrées annotées, annotations et justifications facultatives.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "jev-align: Jev-Funktionen mit gelabelten Beispielen verbessern",
+      "h1": "jev-align: Jev-Funktionen mit gelabelten Beispielen verbessern",
+      "description": "jev-align findet unsichere Beispiele und schlägt mit geprüften Labels und GEPA bessere Jev-Funktionsdefinitionen vor.",
+      "summary": "Die experimentelle CLI entwickelt binäre, Mehrklassen-, Mehrlabel- und Bewertungsfunktionen durch wiederholte Auswertung, Beschriftung und Definitionsvorschläge. Jev bewertet Daten über TypeSafe, Vercel oder Cloudflare; GEPA verwendet ein separat konfiguriertes Reflexionsmodell.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Zweck und Zielgruppe",
+          "text": "Die experimentelle CLI entwickelt binäre, Mehrklassen-, Mehrlabel- und Bewertungsfunktionen durch wiederholte Auswertung, Beschriftung und Definitionsvorschläge.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Jev bewertet Daten über TypeSafe, Vercel oder Cloudflare; GEPA verwendet ein separat konfiguriertes Reflexionsmodell.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Verwendung",
+          "text": "Laden Sie CSV, Parquet oder JSONL, prüfen Sie mehrdeutige Beispiele und Zufallsstichproben und nehmen Sie Änderungen an, lehnen sie ab oder prüfen sie erneut.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Höhere Trainingswerte übernehmen Vorschläge nie automatisch. Eine Veröffentlichung im öffentlichen Register enthält gelabelte Eingaben, Labels und optionale Begründungen.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "jev-align: melhorar funções Jev com exemplos rotulados",
+      "h1": "jev-align: melhorar funções Jev com exemplos rotulados",
+      "description": "jev-align encontra exemplos incertos e usa rótulos revisados com GEPA para propor melhores definições de funções Jev.",
+      "summary": "A CLI experimental desenvolve funções binárias, multiclasse, multirrótulo e de pontuação por avaliações, rotulagem e propostas sucessivas. Jev avalia dados via TypeSafe, Vercel ou Cloudflare; GEPA usa um modelo de reflexão configurado separadamente.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Finalidade e público",
+          "text": "A CLI experimental desenvolve funções binárias, multiclasse, multirrótulo e de pontuação por avaliações, rotulagem e propostas sucessivas.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "Jev avalia dados via TypeSafe, Vercel ou Cloudflare; GEPA usa um modelo de reflexão configurado separadamente.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Carregue CSV, Parquet ou JSONL, revise casos ambíguos e amostras aleatórias e aceite, rejeite ou retome as mudanças propostas.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "Um melhor resultado de treinamento nunca aceita propostas automaticamente. Publicar no registro público inclui entradas rotuladas, rótulos e justificativas opcionais.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "jev-align: улучшение функций Jev по размеченным примерам",
+      "h1": "jev-align: улучшение функций Jev по размеченным примерам",
+      "description": "jev-align находит неоднозначные примеры и использует проверенные метки с GEPA для предложений по улучшению функций Jev.",
+      "summary": "Экспериментальная CLI развивает бинарные, многоклассовые, многометочные и оценочные функции через циклы оценки, разметки и изменения определений. Jev оценивает данные через TypeSafe, Vercel или Cloudflare; модель рефлексии GEPA настраивается отдельно.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Экспериментальная CLI развивает бинарные, многоклассовые, многометочные и оценочные функции через циклы оценки, разметки и изменения определений.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Jev оценивает данные через TypeSafe, Vercel или Cloudflare; модель рефлексии GEPA настраивается отдельно.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Загрузите CSV, Parquet или JSONL, проверьте неоднозначные и случайные контрольные примеры, затем примите, отклоните или пересмотрите изменения.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Рост обучающей оценки не принимает предложение автоматически. Публикация в открытом реестре включает размеченные входы, метки и необязательные обоснования.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "jev-align: लेबल वाले उदाहरणों से Jev फ़ंक्शन सुधारें",
+      "h1": "jev-align: लेबल वाले उदाहरणों से Jev फ़ंक्शन सुधारें",
+      "description": "jev-align अनिश्चित उदाहरण खोजकर समीक्षा किए लेबल और GEPA से बेहतर Jev फ़ंक्शन परिभाषाएँ सुझाता है।",
+      "summary": "यह प्रायोगिक CLI बार-बार मूल्यांकन, लेबलिंग और प्रस्तावों से बाइनरी, मल्टीक्लास, मल्टीलेबल तथा स्कोरिंग फ़ंक्शन बनाता है। Jev, TypeSafe, Vercel या Cloudflare से डेटा आँकता है; GEPA का चिंतन मॉडल अलग कॉन्फ़िगर होता है।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "उद्देश्य और उपयोगकर्ता",
+          "text": "यह प्रायोगिक CLI बार-बार मूल्यांकन, लेबलिंग और प्रस्तावों से बाइनरी, मल्टीक्लास, मल्टीलेबल तथा स्कोरिंग फ़ंक्शन बनाता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "Jev, TypeSafe, Vercel या Cloudflare से डेटा आँकता है; GEPA का चिंतन मॉडल अलग कॉन्फ़िगर होता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल का तरीका",
+          "text": "CSV, Parquet या JSONL लोड करें, अस्पष्ट तथा यादृच्छिक ऑडिट उदाहरण जाँचें और प्रस्तावित बदलाव स्वीकार, अस्वीकार या फिर देखें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "बेहतर प्रशिक्षण स्कोर से प्रस्ताव अपने-आप स्वीकार नहीं होता। सार्वजनिक रजिस्ट्री पर प्रकाशन में लेबल वाले इनपुट, लेबल और वैकल्पिक तर्क शामिल होते हैं।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "jev-align: perbaiki fungsi Jev dengan contoh berlabel",
+      "h1": "jev-align: perbaiki fungsi Jev dengan contoh berlabel",
+      "description": "jev-align mencari contoh tidak pasti dan memakai label yang ditinjau bersama GEPA untuk mengusulkan definisi fungsi Jev yang lebih baik.",
+      "summary": "CLI eksperimental ini mengembangkan fungsi biner, multikelas, multilabel, dan skor melalui evaluasi, pelabelan, serta usulan berulang. Jev mengevaluasi data lewat TypeSafe, Vercel, atau Cloudflare; model refleksi GEPA dikonfigurasi terpisah.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Tujuan dan pengguna",
+          "text": "CLI eksperimental ini mengembangkan fungsi biner, multikelas, multilabel, dan skor melalui evaluasi, pelabelan, serta usulan berulang.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Jev mengevaluasi data lewat TypeSafe, Vercel, atau Cloudflare; model refleksi GEPA dikonfigurasi terpisah.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Muat CSV, Parquet, atau JSONL, tinjau contoh ambigu dan sampel audit acak, lalu terima, tolak, atau tinjau ulang perubahan.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Skor pelatihan lebih tinggi tidak otomatis menerima usulan. Publikasi ke registri publik menyertakan masukan berlabel, label, dan alasan opsional.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "jev-align: cải thiện hàm Jev bằng ví dụ có nhãn",
+      "h1": "jev-align: cải thiện hàm Jev bằng ví dụ có nhãn",
+      "description": "jev-align tìm ví dụ không chắc chắn, dùng nhãn đã duyệt cùng GEPA để đề xuất định nghĩa hàm Jev tốt hơn.",
+      "summary": "CLI thử nghiệm phát triển hàm nhị phân, đa lớp, đa nhãn và chấm điểm qua đánh giá, gán nhãn và đề xuất lặp lại. Jev đánh giá dữ liệu qua TypeSafe, Vercel hoặc Cloudflare; mô hình phản tư GEPA được cấu hình riêng.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích và đối tượng",
+          "text": "CLI thử nghiệm phát triển hàm nhị phân, đa lớp, đa nhãn và chấm điểm qua đánh giá, gán nhãn và đề xuất lặp lại.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Jev đánh giá dữ liệu qua TypeSafe, Vercel hoặc Cloudflare; mô hình phản tư GEPA được cấu hình riêng.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Nạp CSV, Parquet hoặc JSONL, duyệt ví dụ mơ hồ và mẫu kiểm tra ngẫu nhiên rồi chấp nhận, từ chối hoặc xem lại thay đổi.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Điểm huấn luyện tăng không tự động chấp nhận đề xuất. Công bố lên kho công khai bao gồm đầu vào có nhãn, nhãn và lý do tùy chọn.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "jev-align: etiketli örneklerle Jev işlevlerini iyileştirme",
+      "h1": "jev-align: etiketli örneklerle Jev işlevlerini iyileştirme",
+      "description": "jev-align belirsiz örnekleri bulur, incelenmiş etiketler ve GEPA ile daha iyi Jev işlev tanımları önerir.",
+      "summary": "Deneysel CLI; tekrarlı değerlendirme, etiketleme ve önerilerle ikili, çok sınıflı, çok etiketli ve puanlama işlevleri geliştirir. Jev veriyi TypeSafe, Vercel veya Cloudflare üzerinden değerlendirir; GEPA’nın yansıtma modeli ayrı yapılandırılır.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Amaç ve hedef kitle",
+          "text": "Deneysel CLI; tekrarlı değerlendirme, etiketleme ve önerilerle ikili, çok sınıflı, çok etiketli ve puanlama işlevleri geliştirir.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Jev veriyi TypeSafe, Vercel veya Cloudflare üzerinden değerlendirir; GEPA’nın yansıtma modeli ayrı yapılandırılır.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "CSV, Parquet veya JSONL yüklenir, belirsiz örnekler ve rastgele denetim örnekleri incelenir; değişiklikler kabul edilir, reddedilir veya yeniden ele alınır.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Yüksek eğitim puanı öneriyi otomatik kabul etmez. Herkese açık kayıt sistemine yayın, etiketli girdileri, etiketleri ve isteğe bağlı gerekçeleri içerir.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "jev-align: migliorare funzioni Jev con esempi etichettati",
+      "h1": "jev-align: migliorare funzioni Jev con esempi etichettati",
+      "description": "jev-align trova esempi incerti e usa etichette revisionate con GEPA per proporre migliori definizioni di funzioni Jev.",
+      "summary": "La CLI sperimentale sviluppa funzioni binarie, multiclasse, multietichetta e di punteggio con valutazioni, etichette e proposte iterative. Jev valuta i dati tramite TypeSafe, Vercel o Cloudflare; il modello di riflessione GEPA si configura separatamente.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Scopo e destinatari",
+          "text": "La CLI sperimentale sviluppa funzioni binarie, multiclasse, multietichetta e di punteggio con valutazioni, etichette e proposte iterative.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Jev valuta i dati tramite TypeSafe, Vercel o Cloudflare; il modello di riflessione GEPA si configura separatamente.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come si usa",
+          "text": "Si caricano CSV, Parquet o JSONL, si rivedono casi ambigui e campioni casuali e si accettano, rifiutano o riesaminano i cambiamenti.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "Un punteggio di addestramento superiore non accetta automaticamente una proposta. Pubblicare nel registro pubblico include input etichettati, etichette e motivazioni facoltative.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

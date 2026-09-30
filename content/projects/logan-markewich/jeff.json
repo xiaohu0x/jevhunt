@@ -1,0 +1,762 @@
+{
+  "version": "source-content-v1",
+  "repo": "logan-markewich/jeff",
+  "repositoryId": 1376631227,
+  "relationship": "local-alternative",
+  "category": "apps",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "34b32f99a727c47b679adde33f4702a001e02979",
+      "url": "https://github.com/logan-markewich/jeff/blob/34b32f99a727c47b679adde33f4702a001e02979/README.md",
+      "sha256": "a5a85a5753682bf52bc6e0df3eba1ccf61bbb360aec2e006837f14954c8b1573",
+      "accessedAt": "2026-09-30T07:33:52.359Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "jeff serves a Jev-compatible System One API using GLiFormer weights for Choice, Score and Noul decisions.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 3,
+          "end": 8,
+          "quote": "A self-hosted implementation of TypeSafe's [jev System One API](https://docs.typesafe.ai/api),\npowered by [GLiFormer](https://huggingface.co/knowledgator/gliformer-large-v1) (400M parameters).\nUse the official `typesafe-sdk` by pointing `TYPESAFE_BASE_URL` at jeff.\n\nSupports `choice` (pick an option), `score` (rate on ordered levels), and `noul` (probability of yes).\nCheaper to self-host, but less accurate than jev on reasoning-heavy tasks. See [benchmarks](#benchmarks)."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "The official TypeSafe SDK can target this local server, but inference uses GLiFormer and its own probability and confidence calculations.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 3,
+          "end": 7,
+          "quote": "A self-hosted implementation of TypeSafe's [jev System One API](https://docs.typesafe.ai/api),\npowered by [GLiFormer](https://huggingface.co/knowledgator/gliformer-large-v1) (400M parameters).\nUse the official `typesafe-sdk` by pointing `TYPESAFE_BASE_URL` at jeff.\n\nSupports `choice` (pick an option), `score` (rate on ordered levels), and `noul` (probability of yes)."
+        },
+        {
+          "source": "source-1",
+          "start": 175,
+          "end": 183,
+          "quote": "The wire format works with the official SDK; model behavior differs:\n\n- **Probabilities:** normalized sigmoids, temperature-scaled at 3.2. `score` uses the raw\n  distribution, so it only matches the weighted average of displayed probabilities at\n  `JEFF_TEMPERATURE=1`. Confidence uses `(p_max - 1/n) / (1 - 1/n)`.\n- **Question independence:** nouls get separate encoder passes; choice and score questions\n  share a pass and can affect each other. Set `JEFF_ISOLATE=all` for independence at extra cost.\n- **Tokens:** `usage.input_tokens` counts DeBERTa prompt + text tokens; `output_tokens` is nominal.\n  Counts are not comparable to jev billing."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Use Python 3.12 and uv, download the checkpoint, set JEFF_API_KEYS and point the client at localhost:8000.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 14,
+          "end": 22,
+          "quote": "Requires [uv](https://docs.astral.sh/uv/) and Python 3.12. Run from the repository root:\n\n```bash\nuv sync --extra dev\nuv run hf download knowledgator/gliformer-large-v1 --local-dir models/gliformer-large-v1\nJEFF_API_KEYS=devkey uv run jeff\n```\n\nServes at `http://localhost:8000`. Device selection: CUDA → MPS → CPU."
+        },
+        {
+          "source": "source-1",
+          "start": 54,
+          "end": 55,
+          "quote": "For an existing SDK app, set `TYPESAFE_API_KEY=devkey` and\n`TYPESAFE_BASE_URL=http://localhost:8000` instead of passing client arguments."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "Choice and Score questions can affect one another unless isolation is enabled. Reported token counts are not comparable to Jev billing.",
+      "kind": "source-limitation",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 175,
+          "end": 183,
+          "quote": "The wire format works with the official SDK; model behavior differs:\n\n- **Probabilities:** normalized sigmoids, temperature-scaled at 3.2. `score` uses the raw\n  distribution, so it only matches the weighted average of displayed probabilities at\n  `JEFF_TEMPERATURE=1`. Confidence uses `(p_max - 1/n) / (1 - 1/n)`.\n- **Question independence:** nouls get separate encoder passes; choice and score questions\n  share a pass and can affect each other. Set `JEFF_ISOLATE=all` for independence at extra cost.\n- **Tokens:** `usage.input_tokens` counts DeBERTa prompt + text tokens; `output_tokens` is nominal.\n  Counts are not comparable to jev billing."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "jeff — Self-host the Jev API with GLiFormer",
+      "h1": "jeff — Self-host the Jev API with GLiFormer",
+      "description": "jeff: jeff serves a Jev-compatible System One API using GLiFormer weights for Choice, Score and Noul decisions.",
+      "summary": "jeff serves a Jev-compatible System One API using GLiFormer weights for Choice, Score and Noul decisions. Use Python 3.12 and uv, download the checkpoint, set JEFF_API_KEYS and point the client at localhost:8000.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "What it does",
+          "text": "jeff serves a Jev-compatible System One API using GLiFormer weights for Choice, Score and Noul decisions.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "The official TypeSafe SDK can target this local server, but inference uses GLiFormer and its own probability and confidence calculations.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Getting started",
+          "text": "Use Python 3.12 and uv, download the checkpoint, set JEFF_API_KEYS and point the client at localhost:8000.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "Choice and Score questions can affect one another unless isolation is enabled. Reported token counts are not comparable to Jev billing.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "jeff — 用 GLiFormer 自托管 Jev 兼容 API",
+      "h1": "jeff — 用 GLiFormer 自托管 Jev 兼容 API",
+      "description": "jeff: jeff 使用 GLiFormer 权重提供 Jev 兼容 System One API，支持 Choice、Score 和 Noul 决策。",
+      "summary": "jeff 使用 GLiFormer 权重提供 Jev 兼容 System One API，支持 Choice、Score 和 Noul 决策。 准备 Python 3.12 和 uv，下载检查点，设置 JEFF_API_KEYS 并将客户端指向 localhost:8000。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "jeff 使用 GLiFormer 权重提供 Jev 兼容 System One API，支持 Choice、Score 和 Noul 决策。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "官方 TypeSafe SDK 可连接该本地服务器，但推理采用 GLiFormer 及其自身概率和置信度算法。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "准备 Python 3.12 和 uv，下载检查点，设置 JEFF_API_KEYS 并将客户端指向 localhost:8000。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "除非启用隔离，Choice 和 Score 问题可能互相影响。报告的 token 数不能与 Jev 计费直接比较。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "jeff — 以 GLiFormer 自架 Jev 相容 API",
+      "h1": "jeff — 以 GLiFormer 自架 Jev 相容 API",
+      "description": "jeff: jeff 使用 GLiFormer 權重提供 Jev 相容 System One API，支援 Choice、Score 和 Noul 決策。",
+      "summary": "jeff 使用 GLiFormer 權重提供 Jev 相容 System One API，支援 Choice、Score 和 Noul 決策。 準備 Python 3.12 和 uv，下載檢查點，設定 JEFF_API_KEYS 並將用戶端指向 localhost:8000。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "jeff 使用 GLiFormer 權重提供 Jev 相容 System One API，支援 Choice、Score 和 Noul 決策。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "官方 TypeSafe SDK 可連至本機伺服器，但推論採 GLiFormer 及其自身機率與信心演算法。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "準備 Python 3.12 和 uv，下載檢查點，設定 JEFF_API_KEYS 並將用戶端指向 localhost:8000。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "未啟用隔離時，Choice 與 Score 問題可能互相影響。回報的 token 數不能直接對比 Jev 計費。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "jeff — GLiFormer で Jev 互換 API を自前運用",
+      "h1": "jeff — GLiFormer で Jev 互換 API を自前運用",
+      "description": "jeff: jeff は GLiFormer の重みで Jev 互換 System One API を提供し、Choice、Score、Noul を扱います。",
+      "summary": "jeff は GLiFormer の重みで Jev 互換 System One API を提供し、Choice、Score、Noul を扱います。 Python 3.12 と uv でモデルを取得し、JEFF_API_KEYS を設定して localhost:8000 に接続します。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "できること",
+          "text": "jeff は GLiFormer の重みで Jev 互換 System One API を提供し、Choice、Score、Noul を扱います。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "公式 TypeSafe SDK から接続できますが、推論と確率・信頼度計算は GLiFormer 側の実装です。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い始めるには",
+          "text": "Python 3.12 と uv でモデルを取得し、JEFF_API_KEYS を設定して localhost:8000 に接続します。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "対象範囲と制約",
+          "text": "分離を有効にしないと Choice と Score の質問は互いに影響し得ます。トークン数は Jev の請求と比較できません。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "jeff — GLiFormer로 Jev 호환 API 자체 운영",
+      "h1": "jeff — GLiFormer로 Jev 호환 API 자체 운영",
+      "description": "jeff: jeff는 GLiFormer 가중치로 Jev 호환 System One API를 제공해 Choice, Score, Noul을 처리합니다.",
+      "summary": "jeff는 GLiFormer 가중치로 Jev 호환 System One API를 제공해 Choice, Score, Noul을 처리합니다. Python 3.12와 uv로 체크포인트를 받고 JEFF_API_KEYS를 설정해 localhost:8000에 연결합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "jeff는 GLiFormer 가중치로 Jev 호환 System One API를 제공해 Choice, Score, Noul을 처리합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "공식 TypeSafe SDK로 연결할 수 있지만 추론과 확률·신뢰도 계산은 GLiFormer 구현을 사용합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "Python 3.12와 uv로 체크포인트를 받고 JEFF_API_KEYS를 설정해 localhost:8000에 연결합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 제약",
+          "text": "격리를 켜지 않으면 Choice와 Score 질문이 서로 영향을 줄 수 있습니다. 토큰 수는 Jev 과금과 직접 비교할 수 없습니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "jeff — Aloja la API Jev con GLiFormer",
+      "h1": "jeff — Aloja la API Jev con GLiFormer",
+      "description": "jeff: jeff sirve una API System One compatible con Jev usando GLiFormer para Choice, Score y Noul.",
+      "summary": "jeff sirve una API System One compatible con Jev usando GLiFormer para Choice, Score y Noul. Usa Python 3.12 y uv, descarga el checkpoint, configura JEFF_API_KEYS y conecta a localhost:8000.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "jeff sirve una API System One compatible con Jev usando GLiFormer para Choice, Score y Noul.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "El SDK oficial TypeSafe puede conectarse, pero la inferencia y los cálculos de probabilidad y confianza son propios de GLiFormer.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo empezar",
+          "text": "Usa Python 3.12 y uv, descarga el checkpoint, configura JEFF_API_KEYS y conecta a localhost:8000.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "Choice y Score pueden influirse sin aislamiento. Los tokens declarados no son comparables con la facturación Jev.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "jeff — Héberger l’API Jev avec GLiFormer",
+      "h1": "jeff — Héberger l’API Jev avec GLiFormer",
+      "description": "jeff: jeff sert une API System One compatible avec Jev sur GLiFormer pour Choice, Score et Noul.",
+      "summary": "jeff sert une API System One compatible avec Jev sur GLiFormer pour Choice, Score et Noul. Utilisez Python 3.12 et uv, téléchargez le modèle, configurez JEFF_API_KEYS et connectez-vous à localhost:8000.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "jeff sert une API System One compatible avec Jev sur GLiFormer pour Choice, Score et Noul.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Le SDK officiel TypeSafe peut s’y connecter, mais l’inférence et les calculs de probabilités et confiance sont ceux de GLiFormer.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Utilisez Python 3.12 et uv, téléchargez le modèle, configurez JEFF_API_KEYS et connectez-vous à localhost:8000.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "Choice et Score peuvent s’influencer sans isolation. Les tokens déclarés ne sont pas comparables à la facturation Jev.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "jeff — Jev-API mit GLiFormer selbst betreiben",
+      "h1": "jeff — Jev-API mit GLiFormer selbst betreiben",
+      "description": "jeff: jeff stellt mit GLiFormer eine Jev-kompatible System-One-API für Choice, Score und Noul bereit.",
+      "summary": "jeff stellt mit GLiFormer eine Jev-kompatible System-One-API für Choice, Score und Noul bereit. Python 3.12 und uv nutzen, Checkpoint laden, JEFF_API_KEYS setzen und localhost:8000 ansprechen.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "jeff stellt mit GLiFormer eine Jev-kompatible System-One-API für Choice, Score und Noul bereit.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Das offizielle TypeSafe-SDK kann sich verbinden; Inferenz, Wahrscheinlichkeiten und Konfidenz folgen jedoch der GLiFormer-Implementierung.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Einstieg",
+          "text": "Python 3.12 und uv nutzen, Checkpoint laden, JEFF_API_KEYS setzen und localhost:8000 ansprechen.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Choice- und Score-Fragen können sich ohne Isolation beeinflussen. Gemeldete Tokenzahlen sind nicht mit Jevs Abrechnung vergleichbar.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "jeff — Hospede a API Jev com GLiFormer",
+      "h1": "jeff — Hospede a API Jev com GLiFormer",
+      "description": "jeff: O jeff oferece API System One compatível com Jev usando GLiFormer para Choice, Score e Noul.",
+      "summary": "O jeff oferece API System One compatível com Jev usando GLiFormer para Choice, Score e Noul. Use Python 3.12 e uv, baixe o checkpoint, configure JEFF_API_KEYS e conecte a localhost:8000.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "O jeff oferece API System One compatível com Jev usando GLiFormer para Choice, Score e Noul.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "O SDK oficial TypeSafe pode conectar, mas inferência, probabilidades e confiança seguem a implementação GLiFormer.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como começar",
+          "text": "Use Python 3.12 e uv, baixe o checkpoint, configure JEFF_API_KEYS e conecte a localhost:8000.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "Choice e Score podem influenciar um ao outro sem isolamento. Os tokens informados não se comparam à cobrança Jev.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "jeff — Собственный API Jev на GLiFormer",
+      "h1": "jeff — Собственный API Jev на GLiFormer",
+      "description": "jeff: jeff предоставляет совместимый с Jev API System One на GLiFormer для Choice, Score и Noul.",
+      "summary": "jeff предоставляет совместимый с Jev API System One на GLiFormer для Choice, Score и Noul. Используйте Python 3.12 и uv, загрузите чекпойнт, задайте JEFF_API_KEYS и подключитесь к localhost:8000.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "jeff предоставляет совместимый с Jev API System One на GLiFormer для Choice, Score и Noul.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Официальный SDK TypeSafe может подключаться, но инференс, вероятности и уверенность рассчитываются реализацией GLiFormer.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Начало работы",
+          "text": "Используйте Python 3.12 и uv, загрузите чекпойнт, задайте JEFF_API_KEYS и подключитесь к localhost:8000.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Choice и Score могут влиять друг на друга без изоляции. Число токенов несопоставимо с тарификацией Jev.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "jeff — GLiFormer से अपना Jev API चलाएँ",
+      "h1": "jeff — GLiFormer से अपना Jev API चलाएँ",
+      "description": "jeff: jeff GLiFormer वेट से Jev-संगत System One API देता है, जिसमें Choice, Score और Noul हैं।",
+      "summary": "jeff GLiFormer वेट से Jev-संगत System One API देता है, जिसमें Choice, Score और Noul हैं। Python 3.12 और uv लें, चेकपॉइंट डाउनलोड करें, JEFF_API_KEYS सेट करके localhost:8000 से जोड़ें।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "परियोजना का काम",
+          "text": "jeff GLiFormer वेट से Jev-संगत System One API देता है, जिसमें Choice, Score और Noul हैं।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "आधिकारिक TypeSafe SDK जुड़ सकता है, लेकिन अनुमान, संभावना और विश्वास की गणना GLiFormer की है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "शुरुआत कैसे करें",
+          "text": "Python 3.12 और uv लें, चेकपॉइंट डाउनलोड करें, JEFF_API_KEYS सेट करके localhost:8000 से जोड़ें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "अलगाव बंद हो तो Choice और Score प्रश्न एक-दूसरे को प्रभावित कर सकते हैं। टोकन संख्या Jev बिलिंग से तुलनीय नहीं है।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "jeff — Hosting API Jev sendiri dengan GLiFormer",
+      "h1": "jeff — Hosting API Jev sendiri dengan GLiFormer",
+      "description": "jeff: jeff menyediakan API System One kompatibel Jev memakai GLiFormer untuk Choice, Score, dan Noul.",
+      "summary": "jeff menyediakan API System One kompatibel Jev memakai GLiFormer untuk Choice, Score, dan Noul. Gunakan Python 3.12 dan uv, unduh checkpoint, atur JEFF_API_KEYS, lalu hubungkan ke localhost:8000.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "jeff menyediakan API System One kompatibel Jev memakai GLiFormer untuk Choice, Score, dan Noul.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "SDK resmi TypeSafe dapat terhubung, tetapi inferensi, probabilitas, dan keyakinan memakai implementasi GLiFormer.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara memulai",
+          "text": "Gunakan Python 3.12 dan uv, unduh checkpoint, atur JEFF_API_KEYS, lalu hubungkan ke localhost:8000.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Choice dan Score dapat saling memengaruhi tanpa isolasi. Jumlah token tidak sebanding dengan tagihan Jev.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "jeff — Tự vận hành API Jev bằng GLiFormer",
+      "h1": "jeff — Tự vận hành API Jev bằng GLiFormer",
+      "description": "jeff: jeff cung cấp API System One tương thích Jev dùng GLiFormer cho Choice, Score và Noul.",
+      "summary": "jeff cung cấp API System One tương thích Jev dùng GLiFormer cho Choice, Score và Noul. Dùng Python 3.12 và uv, tải checkpoint, đặt JEFF_API_KEYS rồi trỏ tới localhost:8000.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Công dụng",
+          "text": "jeff cung cấp API System One tương thích Jev dùng GLiFormer cho Choice, Score và Noul.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "SDK TypeSafe chính thức kết nối được, nhưng suy luận, xác suất và độ tin cậy theo triển khai GLiFormer.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách bắt đầu",
+          "text": "Dùng Python 3.12 và uv, tải checkpoint, đặt JEFF_API_KEYS rồi trỏ tới localhost:8000.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Choice và Score có thể ảnh hưởng nhau nếu chưa bật cô lập. Số token báo cáo không so trực tiếp với tính phí Jev.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "jeff — GLiFormer ile kendi Jev API’nizi çalıştırın",
+      "h1": "jeff — GLiFormer ile kendi Jev API’nizi çalıştırın",
+      "description": "jeff: jeff, Choice, Score ve Noul için GLiFormer kullanan Jev uyumlu System One API’si sunar.",
+      "summary": "jeff, Choice, Score ve Noul için GLiFormer kullanan Jev uyumlu System One API’si sunar. Python 3.12 ve uv kullanın, kontrol noktasını indirip JEFF_API_KEYS ayarlayın ve localhost:8000’e bağlanın.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "jeff, Choice, Score ve Noul için GLiFormer kullanan Jev uyumlu System One API’si sunar.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Resmî TypeSafe SDK bağlanabilir; ancak çıkarım, olasılık ve güven hesabı GLiFormer uygulamasına aittir.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Başlangıç",
+          "text": "Python 3.12 ve uv kullanın, kontrol noktasını indirip JEFF_API_KEYS ayarlayın ve localhost:8000’e bağlanın.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Yalıtım açılmazsa Choice ve Score soruları birbirini etkileyebilir. Token sayıları Jev faturasıyla karşılaştırılamaz.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "jeff — Ospita l’API Jev con GLiFormer",
+      "h1": "jeff — Ospita l’API Jev con GLiFormer",
+      "description": "jeff: jeff offre un’API System One compatibile con Jev usando GLiFormer per Choice, Score e Noul.",
+      "summary": "jeff offre un’API System One compatibile con Jev usando GLiFormer per Choice, Score e Noul. Usa Python 3.12 e uv, scarica il checkpoint, configura JEFF_API_KEYS e punta a localhost:8000.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "jeff offre un’API System One compatibile con Jev usando GLiFormer per Choice, Score e Noul.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Lo SDK ufficiale TypeSafe può collegarsi, ma inferenza, probabilità e confidenza seguono l’implementazione GLiFormer.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come iniziare",
+          "text": "Usa Python 3.12 e uv, scarica il checkpoint, configura JEFF_API_KEYS e punta a localhost:8000.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "Choice e Score possono influenzarsi senza isolamento. I token dichiarati non sono confrontabili con la fatturazione Jev.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

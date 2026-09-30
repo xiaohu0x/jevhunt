@@ -1,0 +1,756 @@
+{
+  "version": "source-content-v1",
+  "repo": "razorback16/openjev",
+  "repositoryId": 1375639479,
+  "relationship": "local-alternative",
+  "category": "apps",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "a0ddd7d928298eccef2c17153b00b5636b6d996a",
+      "url": "https://github.com/razorback16/openjev/blob/a0ddd7d928298eccef2c17153b00b5636b6d996a/README.md",
+      "sha256": "d58cff95c1056839312bb2cd7d2dceabf3cddb0e2c22721478e4c2e86bfbb517",
+      "accessedAt": "2026-09-30T07:33:50.482Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "OpenJev reads typed answers from open-model probabilities and serves choices, scores and yes/no judgments, including image questions for its main model.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 3,
+          "end": 13,
+          "quote": "**Fast, calibrated, typed decisions from an open model.** OpenJev is an open-source\n\"System One\" decision server. Send it a state and typed questions (yes/no, choice, score). It\nreturns a probability and a confidence for each answer in tens of milliseconds. It reads the\nanswers directly from the model's probabilities and parses no text, so an answer cannot go\noff-schema. Questions can also ask about images.\n\nOpenJev uses the same wire API as TypeSafe's\n[Jev](https://typesafe.ai/blog/introducing-system-one-models-and-jev), so their SDKs work with it\nunchanged. It runs\n[DiffusionGemma 26B-A4B](https://huggingface.co/nvidia/diffusiongemma-26B-A4B-it-NVFP4)\n(Apache-2.0) through vLLM on an NVIDIA GPU, or through MLX on Apple silicon."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "It implements Jev’s wire API using DiffusionGemma through vLLM or MLX and is independent of TypeSafe.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 9,
+          "end": 18,
+          "quote": "OpenJev uses the same wire API as TypeSafe's\n[Jev](https://typesafe.ai/blog/introducing-system-one-models-and-jev), so their SDKs work with it\nunchanged. It runs\n[DiffusionGemma 26B-A4B](https://huggingface.co/nvidia/diffusiongemma-26B-A4B-it-NVFP4)\n(Apache-2.0) through vLLM on an NVIDIA GPU, or through MLX on Apple silicon.\n\n> **Hosted for free on [Codiv](https://codiv.ai)**, an inference platform for open System One\n> models. Sign up and get 100M input tokens, no card required. `https://api.codiv.ai/v1/systemone`\n\nOpenJev is an independent project. It is not affiliated with or endorsed by TypeSafe AI."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Point the TypeSafe SDK’s base URL at your server or the documented hosted endpoint, then call system_one with state and questions.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 34,
+          "end": 46,
+          "quote": "## Try it\n\n```bash\npip install typesafe-sdk\nexport TYPESAFE_BASE_URL=https://api.codiv.ai   # or http://127.0.0.1:8080 for your own server\nexport TYPESAFE_API_KEY=sk-codiv-...\n```\n\n```python\nfrom typesafe_sdk import TypeSafeClient\n\nclient = TypeSafeClient()\nr = client.system_one("
+        },
+        {
+          "source": "source-1",
+          "start": 74,
+          "end": 76,
+          "quote": "| `POST /v1/systemone` | `{state, model, questions}` → `{model, answers, usage}` |\n| `POST /v1/chat/completions` | OpenAI-style text generation with model `diffusiongemma-26b` ([below](#text-generation)) |\n| `GET /v1/models` | `openjev-0.1`, its alias `openjev-latest`, `diffusiongemma-26b`, and the [small encoder models](#small-encoder-models) when they run. The server also accepts `jev-latest` and `jev-preview`, so TypeSafe SDK defaults work. |"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "Model names belong to OpenJev. jev-latest and jev-preview are aliases, but a pinned Jev identifier such as jev-1.13.0 returns an unknown-model error.",
+      "kind": "source-limitation",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 108,
+          "end": 112,
+          "quote": "Differences from Jev:\n\n- Model names are OpenJev's own. `jev-latest` and `jev-preview` are aliases. A pinned Jev\n  version such as `jev-1.13.0` gets `400` `Unknown model`.\n- The server reads many questions in chunks of about 12 per read. The chunks run in parallel."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "openjev — Open models with a Jev-compatible API",
+      "h1": "openjev — An open decision server with a Jev-compatible API",
+      "description": "openjev: Serve a Jev-compatible decision API using open DiffusionGemma weights through vLLM or MLX; TypeSafe’s model is not included.",
+      "summary": "OpenJev reads typed answers from open-model probabilities and serves choices, scores and yes/no judgments, including image questions for its main model. Point the TypeSafe SDK’s base URL at your server or the documented hosted endpoint, then call system_one with state and questions.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "What it does",
+          "text": "OpenJev reads typed answers from open-model probabilities and serves choices, scores and yes/no judgments, including image questions for its main model.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "It implements Jev’s wire API using DiffusionGemma through vLLM or MLX and is independent of TypeSafe.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Getting started",
+          "text": "Point the TypeSafe SDK’s base URL at your server or the documented hosted endpoint, then call system_one with state and questions.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "Model names belong to OpenJev. jev-latest and jev-preview are aliases, but a pinned Jev identifier such as jev-1.13.0 returns an unknown-model error.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "openjev — 提供 Jev 兼容 API 的开放决策服务器",
+      "h1": "openjev — 提供 Jev 兼容 API 的开放决策服务器",
+      "description": "openjev: 以 vLLM 或 MLX 运行开放 DiffusionGemma 权重，提供 Jev 兼容决策 API，不包含 TypeSafe 模型。",
+      "summary": "OpenJev 从开放模型的概率中读取类型化答案，提供选择、评分和是非判断，主模型也支持图片问题。 将 TypeSafe SDK 的基础地址指向自建服务器或文档中的托管端点，再用状态与问题调用 system_one。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "OpenJev 从开放模型的概率中读取类型化答案，提供选择、评分和是非判断，主模型也支持图片问题。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "它用 vLLM 或 MLX 运行 DiffusionGemma 来实现 Jev 的传输 API，是独立于 TypeSafe 的项目。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "将 TypeSafe SDK 的基础地址指向自建服务器或文档中的托管端点，再用状态与问题调用 system_one。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "模型名称属于 OpenJev。jev-latest 和 jev-preview 是别名，但 jev-1.13.0 等固定 Jev 标识会返回未知模型错误。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "openjev — 提供 Jev 相容 API 的開放決策伺服器",
+      "h1": "openjev — 提供 Jev 相容 API 的開放決策伺服器",
+      "description": "openjev: 以 vLLM 或 MLX 執行開放 DiffusionGemma 權重，提供 Jev 相容決策 API，不包含 TypeSafe 模型。",
+      "summary": "OpenJev 從開放模型的機率讀取具型別答案，提供選擇、評分與是非判斷，主模型也支援圖片問題。 將 TypeSafe SDK 的基礎網址指向自建伺服器或文件中的代管端點，再以狀態與問題呼叫 system_one。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "OpenJev 從開放模型的機率讀取具型別答案，提供選擇、評分與是非判斷，主模型也支援圖片問題。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "它以 vLLM 或 MLX 執行 DiffusionGemma 來實作 Jev 的傳輸 API，是獨立於 TypeSafe 的專案。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "將 TypeSafe SDK 的基礎網址指向自建伺服器或文件中的代管端點，再以狀態與問題呼叫 system_one。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "模型名稱屬於 OpenJev。jev-latest 和 jev-preview 是別名，但 jev-1.13.0 等固定 Jev 識別碼會回傳未知模型錯誤。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "openjev — 公開モデルによる Jev 互換 API",
+      "h1": "openjev — Jev 互換 API を備える公開モデルの判断サーバー",
+      "description": "openjev: vLLM または MLX の公開 DiffusionGemma で Jev 互換判断 API を提供。TypeSafe のモデルは含みません。",
+      "summary": "OpenJev は公開モデルの確率から型付き回答を読み、選択、採点、真偽判断を返します。主モデルでは画像についても質問できます。 TypeSafe SDK の接続先を自前サーバーか記載のホスト先に変更し、状態と質問で system_one を呼びます。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "できること",
+          "text": "OpenJev は公開モデルの確率から型付き回答を読み、選択、採点、真偽判断を返します。主モデルでは画像についても質問できます。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "vLLM または MLX 上の DiffusionGemma で Jev の通信 API を実装する、TypeSafe とは独立したプロジェクトです。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い始めるには",
+          "text": "TypeSafe SDK の接続先を自前サーバーか記載のホスト先に変更し、状態と質問で system_one を呼びます。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "対象範囲と制約",
+          "text": "モデル名は OpenJev 独自です。jev-latest と jev-preview は別名ですが、jev-1.13.0 のような固定 Jev ID は未知モデルのエラーになります。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "openjev — 공개 모델의 Jev 호환 API",
+      "h1": "openjev — Jev 호환 API를 제공하는 공개 모델 판단 서버",
+      "description": "openjev: vLLM 또는 MLX의 공개 DiffusionGemma로 Jev 호환 판단 API를 제공하며 TypeSafe 모델은 포함하지 않습니다.",
+      "summary": "OpenJev는 공개 모델 확률에서 타입이 지정된 답을 읽어 선택, 점수, 참·거짓 판단을 반환하며 주 모델은 이미지 질문도 지원합니다. TypeSafe SDK의 기본 URL을 자체 서버나 문서의 호스팅 주소로 바꾼 뒤 상태와 질문을 system_one에 전달합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "OpenJev는 공개 모델 확률에서 타입이 지정된 답을 읽어 선택, 점수, 참·거짓 판단을 반환하며 주 모델은 이미지 질문도 지원합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "vLLM 또는 MLX로 DiffusionGemma를 실행해 Jev의 통신 API를 구현하는 TypeSafe와 독립된 프로젝트입니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "TypeSafe SDK의 기본 URL을 자체 서버나 문서의 호스팅 주소로 바꾼 뒤 상태와 질문을 system_one에 전달합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 제약",
+          "text": "모델명은 OpenJev 고유 이름입니다. jev-latest와 jev-preview는 별칭이지만 jev-1.13.0 같은 고정 Jev 식별자는 알 수 없는 모델 오류를 냅니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "openjev — Modelos abiertos con API compatible Jev",
+      "h1": "openjev — Servidor abierto de decisiones con API compatible con Jev",
+      "description": "openjev: API de decisiones compatible con Jev usando DiffusionGemma abierto mediante vLLM o MLX, sin el modelo TypeSafe.",
+      "summary": "OpenJev extrae respuestas tipadas de probabilidades de modelos abiertos: elecciones, puntuaciones y juicios binarios, con preguntas sobre imágenes en su modelo principal. Dirige la URL base del SDK TypeSafe a tu servidor o al servicio documentado y llama a system_one con estado y preguntas.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "OpenJev extrae respuestas tipadas de probabilidades de modelos abiertos: elecciones, puntuaciones y juicios binarios, con preguntas sobre imágenes en su modelo principal.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Implementa la API de Jev con DiffusionGemma sobre vLLM o MLX y es independiente de TypeSafe.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo empezar",
+          "text": "Dirige la URL base del SDK TypeSafe a tu servidor o al servicio documentado y llama a system_one con estado y preguntas.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "Los modelos son propios de OpenJev. jev-latest y jev-preview son alias; un identificador fijo como jev-1.13.0 produce un error de modelo desconocido.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "openjev — Modèles ouverts avec API compatible Jev",
+      "h1": "openjev — Serveur ouvert de décisions compatible avec l’API Jev",
+      "description": "openjev: API de décisions compatible avec Jev sur DiffusionGemma ouvert via vLLM ou MLX, sans le modèle TypeSafe.",
+      "summary": "OpenJev extrait des réponses typées des probabilités de modèles ouverts : choix, notes et jugements binaires, avec des questions sur images pour son modèle principal. Pointez l’URL de base du SDK TypeSafe vers votre serveur ou le service documenté, puis appelez system_one avec l’état et les questions.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "OpenJev extrait des réponses typées des probabilités de modèles ouverts : choix, notes et jugements binaires, avec des questions sur images pour son modèle principal.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Il implémente l’API Jev avec DiffusionGemma via vLLM ou MLX, indépendamment de TypeSafe.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Pointez l’URL de base du SDK TypeSafe vers votre serveur ou le service documenté, puis appelez system_one avec l’état et les questions.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "Les noms de modèles sont propres à OpenJev. jev-latest et jev-preview sont des alias ; jev-1.13.0 renvoie une erreur de modèle inconnu.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "openjev — Offene Modelle mit Jev-kompatibler API",
+      "h1": "openjev — Offener Entscheidungsserver mit Jev-kompatibler API",
+      "description": "openjev: Jev-kompatible Entscheidungs-API mit offenen DiffusionGemma-Gewichten über vLLM oder MLX, ohne TypeSafe-Modell.",
+      "summary": "OpenJev liest typisierte Antworten aus Wahrscheinlichkeiten offener Modelle: Auswahl, Bewertung und Ja/Nein-Urteile; das Hauptmodell erlaubt auch Bildfragen. Die Basis-URL des TypeSafe-SDK auf den eigenen Server oder den dokumentierten Dienst setzen und system_one mit Zustand und Fragen aufrufen.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "OpenJev liest typisierte Antworten aus Wahrscheinlichkeiten offener Modelle: Auswahl, Bewertung und Ja/Nein-Urteile; das Hauptmodell erlaubt auch Bildfragen.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Es implementiert Jevs Kommunikations-API mit DiffusionGemma über vLLM oder MLX und ist unabhängig von TypeSafe.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Einstieg",
+          "text": "Die Basis-URL des TypeSafe-SDK auf den eigenen Server oder den dokumentierten Dienst setzen und system_one mit Zustand und Fragen aufrufen.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Modellnamen gehören zu OpenJev. jev-latest und jev-preview sind Aliase; eine feste Jev-Kennung wie jev-1.13.0 führt zu einem Fehler wegen unbekannten Modells.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "openjev — Modelos abertos com API compatível Jev",
+      "h1": "openjev — Servidor aberto de decisões com API compatível com Jev",
+      "description": "openjev: API de decisões compatível com Jev usando DiffusionGemma aberto via vLLM ou MLX, sem o modelo TypeSafe.",
+      "summary": "O OpenJev lê respostas tipadas das probabilidades de modelos abertos: escolhas, notas e julgamentos binários, com perguntas sobre imagens no modelo principal. Aponte a URL base do SDK TypeSafe para seu servidor ou o serviço documentado e chame system_one com estado e perguntas.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "O OpenJev lê respostas tipadas das probabilidades de modelos abertos: escolhas, notas e julgamentos binários, com perguntas sobre imagens no modelo principal.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "Implementa a API do Jev com DiffusionGemma via vLLM ou MLX e é independente da TypeSafe.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como começar",
+          "text": "Aponte a URL base do SDK TypeSafe para seu servidor ou o serviço documentado e chame system_one com estado e perguntas.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "Os modelos usam nomes do OpenJev. jev-latest e jev-preview são aliases; um identificador fixo como jev-1.13.0 gera erro de modelo desconhecido.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "openjev — Открытые модели с API по формату Jev",
+      "h1": "openjev — Открытый сервер решений с API, совместимым с Jev",
+      "description": "openjev: API решений, совместимый с Jev, на открытых весах DiffusionGemma через vLLM или MLX, без модели TypeSafe.",
+      "summary": "OpenJev извлекает типизированные ответы из вероятностей открытых моделей: выбор, оценку и бинарные суждения; основная модель принимает вопросы об изображениях. Направьте базовый URL SDK TypeSafe на свой сервер или описанный сервис и вызовите system_one с состоянием и вопросами.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "OpenJev извлекает типизированные ответы из вероятностей открытых моделей: выбор, оценку и бинарные суждения; основная модель принимает вопросы об изображениях.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Он реализует API Jev на DiffusionGemma через vLLM или MLX и не связан с TypeSafe.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Начало работы",
+          "text": "Направьте базовый URL SDK TypeSafe на свой сервер или описанный сервис и вызовите system_one с состоянием и вопросами.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Названия моделей принадлежат OpenJev. jev-latest и jev-preview — псевдонимы, а фиксированный ID вроде jev-1.13.0 возвращает ошибку неизвестной модели.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "openjev — Jev-संगत API वाला खुला निर्णय सर्वर",
+      "h1": "openjev — Jev-संगत API वाला खुला निर्णय सर्वर",
+      "description": "openjev: vLLM या MLX पर खुले DiffusionGemma वेट से Jev-संगत निर्णय API चलाएँ; TypeSafe मॉडल शामिल नहीं है।",
+      "summary": "OpenJev खुले मॉडलों की संभावनाओं से निर्धारित प्रकार के चयन, अंक और हाँ/नहीं उत्तर पढ़ता है; मुख्य मॉडल चित्र संबंधी प्रश्न भी लेता है। TypeSafe SDK का आधार URL अपने सर्वर या बताए गए होस्टेड सेवा पर रखें और स्थिति तथा प्रश्नों के साथ system_one बुलाएँ।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "परियोजना का काम",
+          "text": "OpenJev खुले मॉडलों की संभावनाओं से निर्धारित प्रकार के चयन, अंक और हाँ/नहीं उत्तर पढ़ता है; मुख्य मॉडल चित्र संबंधी प्रश्न भी लेता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "यह vLLM या MLX पर DiffusionGemma से Jev का संचार API लागू करता है और TypeSafe से स्वतंत्र है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "शुरुआत कैसे करें",
+          "text": "TypeSafe SDK का आधार URL अपने सर्वर या बताए गए होस्टेड सेवा पर रखें और स्थिति तथा प्रश्नों के साथ system_one बुलाएँ।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "मॉडल नाम OpenJev के हैं। jev-latest और jev-preview उपनाम हैं; jev-1.13.0 जैसा निश्चित Jev ID अज्ञात मॉडल की त्रुटि देता है।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "openjev — Model terbuka dengan API kompatibel Jev",
+      "h1": "openjev — Server keputusan terbuka dengan API kompatibel Jev",
+      "description": "openjev: API keputusan kompatibel Jev memakai bobot terbuka DiffusionGemma via vLLM atau MLX, tanpa model TypeSafe.",
+      "summary": "OpenJev membaca jawaban bertipe dari probabilitas model terbuka: pilihan, skor, dan penilaian ya/tidak; model utamanya juga menerima pertanyaan gambar. Arahkan URL dasar SDK TypeSafe ke server sendiri atau layanan yang didokumentasikan, lalu panggil system_one dengan keadaan dan pertanyaan.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "OpenJev membaca jawaban bertipe dari probabilitas model terbuka: pilihan, skor, dan penilaian ya/tidak; model utamanya juga menerima pertanyaan gambar.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Proyek ini menerapkan API Jev memakai DiffusionGemma lewat vLLM atau MLX dan independen dari TypeSafe.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara memulai",
+          "text": "Arahkan URL dasar SDK TypeSafe ke server sendiri atau layanan yang didokumentasikan, lalu panggil system_one dengan keadaan dan pertanyaan.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Nama model milik OpenJev. jev-latest dan jev-preview adalah alias; ID Jev tetap seperti jev-1.13.0 menghasilkan galat model tidak dikenal.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "openjev — Mô hình mở, API tương thích Jev",
+      "h1": "openjev — Máy chủ quyết định mở với API tương thích Jev",
+      "description": "openjev: API quyết định tương thích Jev dùng trọng số mở DiffusionGemma qua vLLM hoặc MLX, không có mô hình TypeSafe.",
+      "summary": "OpenJev đọc câu trả lời có kiểu từ xác suất mô hình mở: lựa chọn, điểm số và nhận định đúng/sai; mô hình chính còn nhận câu hỏi về ảnh. Trỏ URL cơ sở của SDK TypeSafe đến máy chủ riêng hoặc dịch vụ trong tài liệu, rồi gọi system_one với trạng thái và câu hỏi.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Công dụng",
+          "text": "OpenJev đọc câu trả lời có kiểu từ xác suất mô hình mở: lựa chọn, điểm số và nhận định đúng/sai; mô hình chính còn nhận câu hỏi về ảnh.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Dự án triển khai API Jev bằng DiffusionGemma qua vLLM hoặc MLX và độc lập với TypeSafe.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách bắt đầu",
+          "text": "Trỏ URL cơ sở của SDK TypeSafe đến máy chủ riêng hoặc dịch vụ trong tài liệu, rồi gọi system_one với trạng thái và câu hỏi.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Tên mô hình thuộc OpenJev. jev-latest và jev-preview là bí danh; mã Jev cố định như jev-1.13.0 trả lỗi mô hình không xác định.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "openjev — Jev uyumlu API sunan açık karar sunucusu",
+      "h1": "openjev — Jev uyumlu API sunan açık karar sunucusu",
+      "description": "openjev: vLLM veya MLX üzerinde açık DiffusionGemma ağırlıklarıyla Jev uyumlu karar API’si; TypeSafe modeli içermez.",
+      "summary": "OpenJev açık modellerin olasılıklarından seçim, puan ve evet/hayır yanıtları okur; ana model görsellerle ilgili soruları da destekler. TypeSafe SDK’nin temel URL’sini kendi sunucunuza veya belgelenen hizmete yönlendirip durum ve sorularla system_one çağrısı yapın.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "OpenJev açık modellerin olasılıklarından seçim, puan ve evet/hayır yanıtları okur; ana model görsellerle ilgili soruları da destekler.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Jev’in iletişim API’sini vLLM veya MLX üzerinden DiffusionGemma ile uygular ve TypeSafe’ten bağımsızdır.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Başlangıç",
+          "text": "TypeSafe SDK’nin temel URL’sini kendi sunucunuza veya belgelenen hizmete yönlendirip durum ve sorularla system_one çağrısı yapın.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Model adları OpenJev’e aittir. jev-latest ve jev-preview takma addır; jev-1.13.0 gibi sabit Jev kimlikleri bilinmeyen model hatası döndürür.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "openjev — Modelli aperti con API compatibile Jev",
+      "h1": "openjev — Server aperto di decisioni con API compatibile con Jev",
+      "description": "openjev: API decisionale compatibile con Jev tramite DiffusionGemma aperto su vLLM o MLX, senza il modello TypeSafe.",
+      "summary": "OpenJev legge risposte tipizzate dalle probabilità di modelli aperti: scelte, punteggi e giudizi binari; il modello principale accetta anche domande su immagini. Punta l’URL base del SDK TypeSafe al tuo server o al servizio documentato, poi chiama system_one con stato e domande.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "OpenJev legge risposte tipizzate dalle probabilità di modelli aperti: scelte, punteggi e giudizi binari; il modello principale accetta anche domande su immagini.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Implementa l’API Jev con DiffusionGemma tramite vLLM o MLX ed è indipendente da TypeSafe.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come iniziare",
+          "text": "Punta l’URL base del SDK TypeSafe al tuo server o al servizio documentato, poi chiama system_one con stato e domande.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "I nomi dei modelli sono di OpenJev. jev-latest e jev-preview sono alias; un ID fisso come jev-1.13.0 restituisce un errore di modello sconosciuto.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

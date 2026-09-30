@@ -3,6 +3,7 @@ import overrides from "../../catalog/overrides.json" with { type: "json" };
 import { inspectRepository, POLICY_VERSION } from "../../shared/catalog-policy.js";
 import { validRepo, publicPreview, inferCategory, cleanText } from "../../shared/catalog-data.js";
 import { PublicGitHub } from "./github-public.js";
+import { attachProjectContent } from "../../shared/project-content-store.js";
 
 const epoch = () => Math.floor(Date.now() / 1000);
 const json = (data, status = 200) => Response.json(data, { status, headers: { "cache-control": "no-store" } });
@@ -98,7 +99,8 @@ async function verify(DB, github, candidate, prior, now) {
   const stableId = Number.isSafeInteger(Number(metadata.id)) && Number(metadata.id) > 0 ? Number(metadata.id) : null;
   const identityRow = stableId ? await DB.prepare("SELECT repo,payload FROM catalog_entries WHERE github_id=?").bind(stableId).first() : null;
   const canonicalRow = !prior || key !== canonical ? await DB.prepare("SELECT payload FROM catalog_entries WHERE repo=?").bind(canonical).first() : null;
-  const previous = [prior, canonicalRow ? JSON.parse(canonicalRow.payload) : null, identityRow ? JSON.parse(identityRow.payload) : null].filter(Boolean);
+  const previous = [prior, canonicalRow ? JSON.parse(canonicalRow.payload) : null, identityRow ? JSON.parse(identityRow.payload) : null]
+    .filter(item => item && (!stableId || !item.id || Number(item.id) === stableId));
   prior = previous.at(-1) || null;
   const previousRepos = [...new Set([key, canonical, identityRow?.repo].filter(Boolean))];
   const placeholders = previousRepos.map(() => "?").join(",");
@@ -143,6 +145,7 @@ async function verify(DB, github, candidate, prior, now) {
 }
 
 async function saveProject(DB, project, oldRepo, now, previousRepos = []) {
+  project = await attachProjectContent(DB, project, now);
   const key = project.repo.toLowerCase(), statements = [];
   statements.push(DB.prepare("DELETE FROM catalog_aliases WHERE old_repo=?").bind(key));
   const obsolete = [...new Set([oldRepo, ...previousRepos])].filter(value => value !== key);

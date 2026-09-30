@@ -1,0 +1,763 @@
+{
+  "version": "source-content-v1",
+  "repo": "EthanAlgoX/AIStock",
+  "repositoryId": 1120016879,
+  "relationship": "integration",
+  "category": "apps",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "73492a755ad75cc86c5eebae3e175c3a3d9a278e",
+      "url": "https://github.com/EthanAlgoX/AIStock/blob/73492a755ad75cc86c5eebae3e175c3a3d9a278e/README.md",
+      "sha256": "623a3fb384c883fcd797eb059bf876e88e2e1e38c01f3d20b65baab60ecc0d27",
+      "accessedAt": "2026-09-30T07:33:51.564Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "kind": "documented",
+      "text": "AI Stock combines market data, news and AI analysis for stock research, screening and simulated trading.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 9,
+          "end": 11,
+          "quote": "Your AI workspace for researching stocks, comparing ideas, and testing strategies with simulated money.\n\nResearch assistant · Expert roundtable · Stock research · Strategy screening · Trade simulation"
+        },
+        {
+          "source": "source-1",
+          "start": 23,
+          "end": 23,
+          "quote": "AI Stock brings market data, news, calculations, and AI analysis into one website. Ask about a stock, read the evidence and risks, compare different investing perspectives, and test a strategy through paper trading. Research supports **mainland China, Hong Kong, the US, Taiwan, Japan, Korea, the UK, Canada, Australia, India, Germany and France**. Paper simulation supports the first six markets. Data availability and bounded screening coverage depend on the provider and configuration; see the [market guide](docs/international-markets_EN.md)."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "kind": "documented",
+      "text": "Optional JEV Decisions only returns buy/sell/hold, probabilities and confidence; research chat and stock selection still need an LLM.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 139,
+          "end": 139,
+          "quote": "- **Try JEV decisions (optional):** configure its separate TypeSafe API key in **Settings → Models & runtime**, then select **JEV · Decisions only** for a new trading strategy. JEV returns buy/sell/hold, probabilities, and confidence without a research report; chat and stock-scope selection still need your LLM. Start with the [official access information](https://typesafe.ai/blog/introducing-system-one-models-and-jev), [TypeSafe console](https://console.typesafe.ai/), and [JEV setup guide](docs/jev-trading-decisions.md)."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "kind": "documented",
+      "text": "Configure models and data sources, select a stock and review the saved report’s evidence, dates and risks.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 117,
+          "end": 122,
+          "quote": "1. **Connect AI.** In **Settings → Models & runtime**, choose your provider, enter its API key and model details, save, and test the connection. You can also configure the provider in `.env`; see the [model guide](docs/LLM_CONFIG_GUIDE_EN.md).\n2. **Check available capabilities.** In the **Capability Center**, check enabled Skills, tools, and data sources. Configure a news source if your question needs recent news. A configured source is not necessarily reachable: use its availability check.\n3. **Run one stock.** Open **Stock research**, choose a market, and enter a code: `600519` for an A-share, `hk00700` for a Hong Kong stock, or `AAPL` for a US stock. Review the default plan, adjust your research goal, and start. The plan needs its model, published strategy, and tools to be available.\n4. **Read the saved report.** Check the conclusion, supporting evidence, data dates, and risks. Missing data or partial results matter. Use **Research assistant** for follow-up questions, or **Expert roundtable** to compare views.\n\nFor a first goal, try: “Explain this stock's recent trend and key risks. Show the evidence and flag anything you cannot verify.” Stock codes here are input examples, not recommendations."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "kind": "documented",
+      "text": "Trades use simulated funds, not live broker orders. Reports and historical replay do not prove future returns.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 53,
+          "end": 53,
+          "quote": "Built-in full-market screening rules mainly target A-shares. The “experts” are AI roles based on investment frameworks, not the actual people. Trading experiments use simulated funds and do not place live broker orders."
+        },
+        {
+          "source": "source-1",
+          "start": 167,
+          "end": 169,
+          "quote": "[MIT License](LICENSE). AI Stock is for investment research and controlled historical or paper-trading experiments. Reports and simulated performance do not guarantee future returns. Historical AI replay can be affected by knowledge in model training; it is not proof of a profitable strategy.\n\nPreviously named LLM TradeBot and InvestCrew; the current product name is **AI Stock** and the repository is `EthanAlgoX/AIStock`."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "AI Stock: research and simulation with optional Jev",
+      "h1": "AI Stock: research and simulation with optional Jev",
+      "description": "AI Stock supports research and paper trading, with optional Jev buy/sell/hold decisions; a separate LLM still handles chat and stock-scope selection.",
+      "summary": "AI Stock combines market data, news and AI analysis for stock research, screening and simulated trading. Optional JEV Decisions only returns buy/sell/hold, probabilities and confidence; research chat and stock selection still need an LLM. Configure models and data sources, select a stock and review the saved report’s evidence, dates and risks.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose",
+          "text": "AI Stock combines market data, news and AI analysis for stock research, screening and simulated trading.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’s role",
+          "text": "Optional JEV Decisions only returns buy/sell/hold, probabilities and confidence; research chat and stock selection still need an LLM.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "How to use it",
+          "text": "Configure models and data sources, select a stock and review the saved report’s evidence, dates and risks.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limits to consider",
+          "text": "Trades use simulated funds, not live broker orders. Reports and historical replay do not prove future returns.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "AI Stock：研究与模拟交易中的可选 Jev 决策",
+      "h1": "AI Stock：研究与模拟交易中的可选 Jev 决策",
+      "description": "AI Stock 支持股票研究和模拟交易，可选用 Jev 输出买入、卖出、持有及概率；研究聊天与股票范围选择仍依赖独立 LLM，不执行真实券商订单。",
+      "summary": "AI Stock 汇集行情、新闻和 AI 分析，用于股票研究、筛选及模拟交易。 可选 JEV Decisions only 返回买入、卖出、持有及概率、置信度；研究聊天与选股范围仍需 LLM。 配置模型和数据源，选择股票，再检查已保存报告的证据、日期与风险。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "AI Stock 汇集行情、新闻和 AI 分析，用于股票研究、筛选及模拟交易。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "可选 JEV Decisions only 返回买入、卖出、持有及概率、置信度；研究聊天与选股范围仍需 LLM。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "配置模型和数据源，选择股票，再检查已保存报告的证据、日期与风险。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用边界",
+          "text": "交易使用模拟资金，不向券商提交实盘订单；报告与历史回放不能证明未来收益。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "AI Stock：研究與模擬交易中的選用 Jev 決策",
+      "h1": "AI Stock：研究與模擬交易中的選用 Jev 決策",
+      "description": "AI Stock 支援股票研究與模擬交易，可選用 Jev 輸出買入、賣出、持有及機率；研究聊天和股票範圍選擇仍依賴獨立 LLM，不執行真實券商訂單。",
+      "summary": "AI Stock 彙整行情、新聞與 AI 分析，用於股票研究、篩選及模擬交易。 選用的 JEV Decisions only 回傳買入、賣出、持有及機率、信心值；研究聊天與選股範圍仍需 LLM。 設定模型與資料源，選擇股票，再檢查已儲存報告的證據、日期及風險。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "AI Stock 彙整行情、新聞與 AI 分析，用於股票研究、篩選及模擬交易。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "選用的 JEV Decisions only 回傳買入、賣出、持有及機率、信心值；研究聊天與選股範圍仍需 LLM。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "設定模型與資料源，選擇股票，再檢查已儲存報告的證據、日期及風險。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用限制",
+          "text": "交易使用模擬資金，不向券商提交實盤訂單；報告及歷史回放無法證明未來報酬。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "AI Stock：調査・模擬取引に任意の Jev 判断",
+      "h1": "AI Stock：調査・模擬取引に任意の Jev 判断",
+      "description": "AI Stock は株式調査と模擬取引に対応し、任意の Jev が売買・保有を判断します。チャットや銘柄範囲選択には別の LLM が必要です。",
+      "summary": "AI Stock は市場データ、ニュース、AI 分析をまとめ、株式調査、スクリーニング、模擬取引に使います。 任意の JEV Decisions only が売買・保有、確率、確信度を返します。調査チャットと銘柄範囲選択には LLM が必要です。 モデルとデータ源を設定して銘柄を選び、保存レポートの根拠、日付、リスクを確認します。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "何ができるか",
+          "text": "AI Stock は市場データ、ニュース、AI 分析をまとめ、株式調査、スクリーニング、模擬取引に使います。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "任意の JEV Decisions only が売買・保有、確率、確信度を返します。調査チャットと銘柄範囲選択には LLM が必要です。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "モデルとデータ源を設定して銘柄を選び、保存レポートの根拠、日付、リスクを確認します。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "制約と注意点",
+          "text": "取引は模擬資金で、実際の証券注文は出しません。報告や過去の再現は将来収益の証明になりません。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "AI Stock: 조사·모의 거래와 선택적 Jev",
+      "h1": "AI Stock: 조사·모의 거래와 선택적 Jev",
+      "description": "AI Stock은 주식 조사와 모의 거래를 지원하며 선택적 Jev가 매수·매도·보유를 판단합니다. 대화와 종목 범위 선택에는 별도 LLM이 필요합니다.",
+      "summary": "AI Stock은 시장 데이터, 뉴스, AI 분석을 모아 주식 조사, 종목 선별, 모의 거래에 활용합니다. 선택적 JEV Decisions only가 매수·매도·보유, 확률, 신뢰도를 반환합니다. 조사 대화와 종목 범위 선정에는 LLM이 필요합니다. 모델과 데이터 소스를 설정하고 종목을 고른 뒤 저장 보고서의 증거, 날짜, 위험을 검토합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "AI Stock은 시장 데이터, 뉴스, AI 분석을 모아 주식 조사, 종목 선별, 모의 거래에 활용합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "선택적 JEV Decisions only가 매수·매도·보유, 확률, 신뢰도를 반환합니다. 조사 대화와 종목 범위 선정에는 LLM이 필요합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "모델과 데이터 소스를 설정하고 종목을 고른 뒤 저장 보고서의 증거, 날짜, 위험을 검토합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "제약 사항",
+          "text": "거래는 모의 자금만 사용하며 실제 증권사 주문을 넣지 않습니다. 보고서와 과거 재현은 미래 수익을 증명하지 않습니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "AI Stock: investigación y simulación con Jev opcional",
+      "h1": "AI Stock: investigación y simulación con Jev opcional",
+      "description": "AI Stock combina investigación y operaciones simuladas con decisiones Jev opcionales de comprar/vender/mantener; el chat y el universo de acciones siguen usando un LLM.",
+      "summary": "AI Stock reúne datos de mercado, noticias y análisis IA para investigar, filtrar acciones y simular operaciones. JEV Decisions only opcional devuelve comprar/vender/mantener, probabilidades y confianza; chat y selección del universo aún requieren un LLM. Configura modelos y fuentes, elige una acción y revisa evidencia, fechas y riesgos del informe guardado.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "AI Stock reúne datos de mercado, noticias y análisis IA para investigar, filtrar acciones y simular operaciones.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "El papel de Jev",
+          "text": "JEV Decisions only opcional devuelve comprar/vender/mantener, probabilidades y confianza; chat y selección del universo aún requieren un LLM.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo usarlo",
+          "text": "Configura modelos y fuentes, elige una acción y revisa evidencia, fechas y riesgos del informe guardado.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Límites a considerar",
+          "text": "Las operaciones usan dinero simulado, sin órdenes reales al bróker. Informes y pruebas históricas no demuestran rentabilidad futura.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "AI Stock : recherche et simulation avec Jev facultatif",
+      "h1": "AI Stock : recherche et simulation avec Jev facultatif",
+      "description": "AI Stock associe recherche et trading simulé à des décisions Jev facultatives acheter/vendre/conserver ; le chat et la sélection du périmètre utilisent encore un LLM.",
+      "summary": "AI Stock réunit données de marché, actualités et analyse IA pour recherche, sélection d’actions et trading simulé. JEV Decisions only facultatif renvoie acheter/vendre/conserver, probabilités et confiance ; chat et périmètre de titres nécessitent encore un LLM. Configurez modèles et sources, choisissez une action puis examinez preuves, dates et risques du rapport enregistré.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "AI Stock réunit données de marché, actualités et analyse IA pour recherche, sélection d’actions et trading simulé.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Le rôle de Jev",
+          "text": "JEV Decisions only facultatif renvoie acheter/vendre/conserver, probabilités et confiance ; chat et périmètre de titres nécessitent encore un LLM.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Utilisation",
+          "text": "Configurez modèles et sources, choisissez une action puis examinez preuves, dates et risques du rapport enregistré.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limites à connaître",
+          "text": "Les opérations utilisent de l’argent simulé, sans ordres réels au courtier. Rapports et relectures historiques ne prouvent pas les rendements futurs.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "AI Stock: Recherche und Simulation mit optionalem Jev",
+      "h1": "AI Stock: Recherche und Simulation mit optionalem Jev",
+      "description": "AI Stock verbindet Recherche und simulierten Handel mit optionalen Jev-Entscheidungen zu Kaufen/Verkaufen/Halten; Chat und Aktienauswahl nutzen weiter ein LLM.",
+      "summary": "AI Stock vereint Marktdaten, Nachrichten und KI-Analyse für Aktienrecherche, Screening und simulierten Handel. Optional liefert JEV Decisions only Kaufen/Verkaufen/Halten samt Wahrscheinlichkeiten und Konfidenz; Chat und Aktienauswahl benötigen weiterhin ein LLM. Modelle und Datenquellen konfigurieren, Aktie wählen und Belege, Daten sowie Risiken gespeicherter Berichte prüfen.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "AI Stock vereint Marktdaten, Nachrichten und KI-Analyse für Aktienrecherche, Screening und simulierten Handel.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Die Rolle von Jev",
+          "text": "Optional liefert JEV Decisions only Kaufen/Verkaufen/Halten samt Wahrscheinlichkeiten und Konfidenz; Chat und Aktienauswahl benötigen weiterhin ein LLM.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Nutzung",
+          "text": "Modelle und Datenquellen konfigurieren, Aktie wählen und Belege, Daten sowie Risiken gespeicherter Berichte prüfen.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Grenzen",
+          "text": "Gehandelt wird mit simuliertem Geld ohne echte Brokerorders. Berichte und historische Wiederholungen belegen keine künftigen Renditen.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "AI Stock: pesquisa e simulação com Jev opcional",
+      "h1": "AI Stock: pesquisa e simulação com Jev opcional",
+      "description": "AI Stock oferece pesquisa e negociação simulada com decisões Jev opcionais de comprar/vender/manter; chat e seleção do universo ainda dependem de LLM.",
+      "summary": "AI Stock reúne dados de mercado, notícias e análise IA para pesquisa, seleção de ações e negociação simulada. JEV Decisions only opcional retorna comprar/vender/manter, probabilidades e confiança; chat e universo de ações ainda exigem LLM. Configure modelos e fontes, escolha uma ação e examine evidências, datas e riscos do relatório salvo.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "AI Stock reúne dados de mercado, notícias e análise IA para pesquisa, seleção de ações e negociação simulada.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "O papel do Jev",
+          "text": "JEV Decisions only opcional retorna comprar/vender/manter, probabilidades e confiança; chat e universo de ações ainda exigem LLM.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Configure modelos e fontes, escolha uma ação e examine evidências, datas e riscos do relatório salvo.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limitações",
+          "text": "Operações usam dinheiro simulado, sem ordens reais à corretora. Relatórios e reprodução histórica não comprovam retornos futuros.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "AI Stock: исследование и симуляция с необязательным Jev",
+      "h1": "AI Stock: исследование и симуляция с необязательным Jev",
+      "description": "AI Stock сочетает исследования и симуляцию с необязательными решениями Jev купить/продать/держать; чат и отбор набора акций остаются за отдельной LLM.",
+      "summary": "AI Stock объединяет рыночные данные, новости и ИИ-анализ для исследования, отбора акций и симуляции торговли. Необязательный JEV Decisions only возвращает купить/продать/держать с вероятностями; чат и выбор набора акций по-прежнему требуют LLM. Настройте модели и источники, выберите акцию и изучите доказательства, даты и риски сохранённого отчёта.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "AI Stock объединяет рыночные данные, новости и ИИ-анализ для исследования, отбора акций и симуляции торговли.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Необязательный JEV Decisions only возвращает купить/продать/держать с вероятностями; чат и выбор набора акций по-прежнему требуют LLM.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Настройте модели и источники, выберите акцию и изучите доказательства, даты и риски сохранённого отчёта.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ограничения",
+          "text": "Используются виртуальные средства без реальных брокерских ордеров. Отчёты и исторические воспроизведения не доказывают будущую доходность.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "AI Stock: शोध और सिमुलेशन में वैकल्पिक Jev",
+      "h1": "AI Stock: शोध और सिमुलेशन में वैकल्पिक Jev",
+      "description": "AI Stock शेयर शोध और पेपर ट्रेडिंग में वैकल्पिक Jev खरीदें/बेचें/रखें निर्णय देता है; चैट और शेयर दायरा अभी अलग LLM सँभालता है।",
+      "summary": "AI Stock बाज़ार डेटा, समाचार और AI विश्लेषण को शेयर शोध, छँटाई और नकली धन से ट्रेडिंग के लिए जोड़ता है। वैकल्पिक JEV Decisions only खरीदें/बेचें/रखें, संभावना और विश्वास देता है; शोध चैट और शेयर दायरा चुनने को LLM चाहिए। मॉडल और डेटा स्रोत सेट करें, शेयर चुनें और रिपोर्ट के साक्ष्य, तारीख और जोखिम देखें।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "किस काम आता है",
+          "text": "AI Stock बाज़ार डेटा, समाचार और AI विश्लेषण को शेयर शोध, छँटाई और नकली धन से ट्रेडिंग के लिए जोड़ता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "वैकल्पिक JEV Decisions only खरीदें/बेचें/रखें, संभावना और विश्वास देता है; शोध चैट और शेयर दायरा चुनने को LLM चाहिए।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल कैसे करें",
+          "text": "मॉडल और डेटा स्रोत सेट करें, शेयर चुनें और रिपोर्ट के साक्ष्य, तारीख और जोखिम देखें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "सीमाएँ",
+          "text": "ट्रेड नकली धन से होते हैं, वास्तविक ब्रोकर ऑर्डर नहीं। रिपोर्ट और ऐतिहासिक रीप्ले भविष्य के रिटर्न साबित नहीं करते।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "AI Stock: riset dan simulasi dengan Jev opsional",
+      "h1": "AI Stock: riset dan simulasi dengan Jev opsional",
+      "description": "AI Stock mendukung riset dan perdagangan simulasi dengan keputusan beli/jual/tahan Jev opsional; chat dan pemilihan cakupan saham tetap memakai LLM.",
+      "summary": "AI Stock menggabungkan data pasar, berita, dan analisis AI untuk riset saham, penyaringan, serta perdagangan simulasi. JEV Decisions only opsional menghasilkan beli/jual/tahan, probabilitas, dan keyakinan; chat serta cakupan saham tetap membutuhkan LLM. Atur model dan sumber data, pilih saham, lalu periksa bukti, tanggal, serta risiko laporan tersimpan.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "AI Stock menggabungkan data pasar, berita, dan analisis AI untuk riset saham, penyaringan, serta perdagangan simulasi.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "JEV Decisions only opsional menghasilkan beli/jual/tahan, probabilitas, dan keyakinan; chat serta cakupan saham tetap membutuhkan LLM.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Atur model dan sumber data, pilih saham, lalu periksa bukti, tanggal, serta risiko laporan tersimpan.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Batasan",
+          "text": "Transaksi memakai dana simulasi, bukan pesanan broker nyata. Laporan dan pemutaran historis tidak membuktikan hasil masa depan.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "AI Stock: nghiên cứu và mô phỏng với Jev tùy chọn",
+      "h1": "AI Stock: nghiên cứu và mô phỏng với Jev tùy chọn",
+      "description": "AI Stock hỗ trợ nghiên cứu và giao dịch mô phỏng với lựa chọn Jev mua/bán/giữ; chat và chọn phạm vi cổ phiếu vẫn do LLM riêng xử lý.",
+      "summary": "AI Stock kết hợp dữ liệu thị trường, tin tức và phân tích AI để nghiên cứu, lọc cổ phiếu và giao dịch mô phỏng. JEV Decisions only tùy chọn trả mua/bán/giữ, xác suất và độ tin cậy; chat và chọn phạm vi cổ phiếu vẫn cần LLM. Đặt mô hình và nguồn dữ liệu, chọn cổ phiếu rồi đọc bằng chứng, ngày và rủi ro trong báo cáo đã lưu.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích",
+          "text": "AI Stock kết hợp dữ liệu thị trường, tin tức và phân tích AI để nghiên cứu, lọc cổ phiếu và giao dịch mô phỏng.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "JEV Decisions only tùy chọn trả mua/bán/giữ, xác suất và độ tin cậy; chat và chọn phạm vi cổ phiếu vẫn cần LLM.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Đặt mô hình và nguồn dữ liệu, chọn cổ phiếu rồi đọc bằng chứng, ngày và rủi ro trong báo cáo đã lưu.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Giới hạn",
+          "text": "Giao dịch dùng tiền mô phỏng, không đặt lệnh môi giới thật. Báo cáo và tái hiện lịch sử không chứng minh lợi nhuận tương lai.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "AI Stock: isteğe bağlı Jev ile araştırma ve simülasyon",
+      "h1": "AI Stock: isteğe bağlı Jev ile araştırma ve simülasyon",
+      "description": "AI Stock araştırma ve sanal işlemi isteğe bağlı Jev al/sat/tut kararlarıyla sunar; sohbet ve hisse kapsamı seçimi ayrı LLM kullanır.",
+      "summary": "AI Stock piyasa verisini, haberleri ve AI analizini hisse araştırması, tarama ve simüle işlem için birleştirir. İsteğe bağlı JEV Decisions only al/sat/tut, olasılık ve güven döndürür; sohbet ve hisse kapsamı seçimi yine LLM ister. Model ve veri kaynaklarını ayarlayıp hisse seçin; kayıtlı raporun kanıtlarını, tarihlerini ve risklerini inceleyin.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "AI Stock piyasa verisini, haberleri ve AI analizini hisse araştırması, tarama ve simüle işlem için birleştirir.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "İsteğe bağlı JEV Decisions only al/sat/tut, olasılık ve güven döndürür; sohbet ve hisse kapsamı seçimi yine LLM ister.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Model ve veri kaynaklarını ayarlayıp hisse seçin; kayıtlı raporun kanıtlarını, tarihlerini ve risklerini inceleyin.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Sınırlamalar",
+          "text": "İşlemler simüle parayladır, gerçek aracı kurum emri verilmez. Raporlar ve geçmiş tekrarları gelecekteki getiriyi kanıtlamaz.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "AI Stock: ricerca e simulazione con Jev facoltativo",
+      "h1": "AI Stock: ricerca e simulazione con Jev facoltativo",
+      "description": "AI Stock offre ricerca e trading simulato con decisioni Jev facoltative compra/vendi/mantieni; chat e selezione dell’universo usano ancora un LLM.",
+      "summary": "AI Stock unisce dati di mercato, notizie e analisi IA per ricerca, selezione di azioni e trading simulato. JEV Decisions only facoltativo restituisce compra/vendi/mantieni, probabilità e confidenza; chat e universo di titoli richiedono ancora un LLM. Configura modelli e fonti, scegli un titolo e leggi prove, date e rischi del rapporto salvato.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "AI Stock unisce dati di mercato, notizie e analisi IA per ricerca, selezione di azioni e trading simulato.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Il ruolo di Jev",
+          "text": "JEV Decisions only facoltativo restituisce compra/vendi/mantieni, probabilità e confidenza; chat e universo di titoli richiedono ancora un LLM.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come usarlo",
+          "text": "Configura modelli e fonti, scegli un titolo e leggi prove, date e rischi del rapporto salvato.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limiti",
+          "text": "Gli scambi usano denaro simulato, senza ordini reali al broker. Rapporti e replay storici non dimostrano rendimenti futuri.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  },
+  "displayName": "AI Stock"
+}

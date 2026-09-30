@@ -1,0 +1,775 @@
+{
+  "version": "source-content-v1",
+  "repo": "LinklyAI/best-skills",
+  "repositoryId": 1330475010,
+  "relationship": "jev-app",
+  "category": "lists",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "a3452648988c7446a29384998cb967c7e24bc094",
+      "url": "https://github.com/LinklyAI/best-skills/blob/a3452648988c7446a29384998cb967c7e24bc094/README.md",
+      "sha256": "b221d24fd84f0ffabb2e52e90d854d6d2502f82246442dcdc68c9cbbf2579c95",
+      "accessedAt": "2026-09-30T07:33:49.553Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "kind": "documented",
+      "text": "Best Skills combines registry installations and social attention into daily agent-skill rankings with downloadable CSV data.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 5,
+          "end": 5,
+          "quote": "**Daily-updated Top 100 Agent Skills rankings — installs, growth, and social buzz aggregated from skills.sh, ClawHub, Tencent SkillHub, GitHub, X and more. Open data (CSV).**"
+        },
+        {
+          "source": "source-1",
+          "start": 31,
+          "end": 35,
+          "quote": "Every skills registry only sees its own ecosystem. skills.sh counts Claude/Vercel CLI installs, ClawHub counts OpenClaw downloads, Tencent SkillHub counts installs from China — and none of them see social buzz. **Best Skills merges all of these views into one cross-ecosystem picture**: for each skill you can see global installs, China installs, and social mentions side by side. No other ranking does this.\n\n- **9 rankings**, refreshed daily\n- **Raw numbers preserved** — every CSV keeps per-platform original counts so anyone can verify or re-rank\n- **Never adds apples to oranges** — cross-platform numbers are shown side by side, ranked by within-platform percentile composite (see [methodology](docs/methodology.md))"
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "kind": "documented",
+      "text": "Jev checks post relevance, listing maintenance and categories; the project publishes the judgment probabilities.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 36,
+          "end": 36,
+          "quote": "- **Judged by [jev](https://openrouter.ai/typesafe/jev-1.13), not keyword counts** — TypeSafe's decision model checks whether each social post is really about the skill, whether a listing is a real, maintained skill, and which category it belongs to; placeholders, deprecated and harmful listings are left out of the rankings, and every probability is published (see [methodology](docs/methodology.md#judgements-jev))"
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "kind": "documented",
+      "text": "Start with best-100, inspect registry coverage and compare original platform counts alongside composite scores.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 38,
+          "end": 48,
+          "quote": "## How to use the rankings\n\n**Reading it yourself.** Each list answers one question (see [What each list means](#what-each-list-means)); `best-100` is the place to start. The tables below show each list's Top 10, the CSVs hold the full Top 100, and [linkly.ai/skills](https://linkly.ai/skills) renders them for browsing. `Cov` tells you how many registries a score rests on (A = all three, C = one), and every CSV keeps the per-platform counts next to the score, so any number can be checked against its source.\n\n**Giving it to an AI agent.** Paste one line into Claude Code, Codex, Cursor, OpenClaw or any agent that can fetch a URL:\n\n```text\nRead https://linkly.ai/skills/llms.txt\n```\n\n[llms.txt](llms.txt) tells the agent where the CSVs are, what every column means, how to go from a question to the right file, and the rules for using the numbers. To make the rankings part of an agent's standing knowledge instead, install this repository as a skill:"
+        },
+        {
+          "source": "source-1",
+          "start": 272,
+          "end": 274,
+          "quote": "One folder per day, CSV only. Composite scores are always accompanied by the raw per-platform numbers they were derived from — start from `data/latest/` if you just want today's lists.\n\nSee [docs/methodology.md](docs/methodology.md) for data sources, normalization rules, and known limitations."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "kind": "documented",
+      "text": "Coverage varies by skill. Scores use within-platform percentiles; install and download counts from different platforms are never added together.",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 35,
+          "end": 35,
+          "quote": "- **Never adds apples to oranges** — cross-platform numbers are shown side by side, ranked by within-platform percentile composite (see [methodology](docs/methodology.md))"
+        },
+        {
+          "source": "source-1",
+          "start": 40,
+          "end": 40,
+          "quote": "**Reading it yourself.** Each list answers one question (see [What each list means](#what-each-list-means)); `best-100` is the place to start. The tables below show each list's Top 10, the CSVs hold the full Top 100, and [linkly.ai/skills](https://linkly.ai/skills) renders them for browsing. `Cov` tells you how many registries a score rests on (A = all three, C = one), and every CSV keeps the per-platform counts next to the score, so any number can be checked against its source."
+        },
+        {
+          "source": "source-1",
+          "start": 278,
+          "end": 278,
+          "quote": "Install/download counts are collected from public endpoints of [skills.sh](https://www.skills.sh), [ClawHub](https://clawhub.ai) (per its third-party directory policy; skill pages link back to their canonical ClawHub listing), [Tencent SkillHub](https://skillhub.cn), and the [GitHub API](https://docs.github.com). Social signals come from X, [Hacker News (Algolia)](https://hn.algolia.com), [Bluesky](https://bsky.app), and GitHub search. This project is not endorsed by or affiliated with any of these platforms. Counts reflect each platform's own methodology and are never summed across platforms."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "Best Skills: agent-skill rankings with Jev judgments",
+      "h1": "Best Skills: agent-skill rankings with Jev judgments",
+      "description": "Best Skills publishes daily agent-skill rankings and CSV data. Jev judges social relevance, maintenance and categories; platform counts remain separate.",
+      "summary": "Best Skills combines registry installations and social attention into daily agent-skill rankings with downloadable CSV data. Jev checks post relevance, listing maintenance and categories; the project publishes the judgment probabilities. Start with best-100, inspect registry coverage and compare original platform counts alongside composite scores.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose",
+          "text": "Best Skills combines registry installations and social attention into daily agent-skill rankings with downloadable CSV data.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’s role",
+          "text": "Jev checks post relevance, listing maintenance and categories; the project publishes the judgment probabilities.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "How to use it",
+          "text": "Start with best-100, inspect registry coverage and compare original platform counts alongside composite scores.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limits to consider",
+          "text": "Coverage varies by skill. Scores use within-platform percentiles; install and download counts from different platforms are never added together.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "Best Skills：加入 Jev 判断的智能体技能排行",
+      "h1": "Best Skills：加入 Jev 判断的智能体技能排行",
+      "description": "Best Skills 每日发布智能体技能排行与 CSV 数据；Jev 判断社交帖子相关性、条目维护状态和类别，并公开判断概率。各平台原始计数分别保留，不直接相加。",
+      "summary": "Best Skills 汇总注册平台安装量与社交关注度，生成每日智能体技能排行，并提供 CSV 数据。 Jev 判断帖子相关性、条目维护状态和类别；项目公开这些判断的概率。 可从 best-100 入手，查看平台覆盖情况，并对照综合分数与原始平台计数。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "Best Skills 汇总注册平台安装量与社交关注度，生成每日智能体技能排行，并提供 CSV 数据。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "Jev 判断帖子相关性、条目维护状态和类别；项目公开这些判断的概率。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "可从 best-100 入手，查看平台覆盖情况，并对照综合分数与原始平台计数。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用边界",
+          "text": "不同技能的覆盖范围不同；分数使用平台内百分位，不会把各平台安装和下载量直接相加。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "Best Skills：加入 Jev 判斷的代理技能排行",
+      "h1": "Best Skills：加入 Jev 判斷的代理技能排行",
+      "description": "Best Skills 每日發布代理技能排行與 CSV 資料；Jev 判斷社群貼文相關性、項目維護狀態和類別，並公開判斷機率。各平台原始計數分別保留，不直接相加。",
+      "summary": "Best Skills 彙整登錄平台安裝量與社群關注度，產生每日代理技能排行，並提供 CSV 資料。 Jev 判斷貼文相關性、項目維護狀態與類別；專案公開這些判斷的機率。 可從 best-100 入手，查看平台涵蓋情況，並對照綜合分數與原始平台計數。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "Best Skills 彙整登錄平台安裝量與社群關注度，產生每日代理技能排行，並提供 CSV 資料。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "Jev 判斷貼文相關性、項目維護狀態與類別；專案公開這些判斷的機率。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "可從 best-100 入手，查看平台涵蓋情況，並對照綜合分數與原始平台計數。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "使用限制",
+          "text": "不同技能的涵蓋範圍不同；分數使用平台內百分位，不會把各平台安裝與下載量直接相加。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "Best Skills：Jev 判断を使うエージェントスキル順位表",
+      "h1": "Best Skills：Jev 判断を使うエージェントスキル順位表",
+      "description": "Best Skills は日次のスキル順位表と CSV を公開します。Jev が投稿関連性、保守状態、分類を判断し、各サイトの数値は分けて保持します。",
+      "summary": "Best Skills は登録サイトの導入数とソーシャルでの注目をまとめ、日次の順位表と CSV を公開します。 Jev が投稿との関連、掲載スキルの保守状況、分類を判断し、その確率も公開されます。 best-100 から探し、対象レジストリの範囲と各プラットフォームの元データを総合スコアと比較できます。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "何ができるか",
+          "text": "Best Skills は登録サイトの導入数とソーシャルでの注目をまとめ、日次の順位表と CSV を公開します。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "Jev が投稿との関連、掲載スキルの保守状況、分類を判断し、その確率も公開されます。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "best-100 から探し、対象レジストリの範囲と各プラットフォームの元データを総合スコアと比較できます。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "制約と注意点",
+          "text": "スキルごとにデータ範囲が異なります。スコアは各サイト内の百分位を使い、異なるサイトの導入・ダウンロード数は加算しません。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "Best Skills: Jev 판단을 반영한 에이전트 스킬 순위",
+      "h1": "Best Skills: Jev 판단을 반영한 에이전트 스킬 순위",
+      "description": "Best Skills는 일별 스킬 순위와 CSV를 공개합니다. Jev가 게시물 관련성·유지 상태·범주를 판단하며 플랫폼별 원래 수치는 따로 보존합니다.",
+      "summary": "Best Skills는 레지스트리 설치 수와 소셜 관심도를 모아 일별 스킬 순위와 CSV 데이터를 제공합니다. Jev는 게시물 관련성, 항목의 유지 관리 상태, 범주를 판단하며 그 판단 확률도 공개합니다. best-100에서 시작해 레지스트리 범위를 확인하고 종합 점수와 원래 플랫폼 수치를 비교합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "Best Skills는 레지스트리 설치 수와 소셜 관심도를 모아 일별 스킬 순위와 CSV 데이터를 제공합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Jev는 게시물 관련성, 항목의 유지 관리 상태, 범주를 판단하며 그 판단 확률도 공개합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "best-100에서 시작해 레지스트리 범위를 확인하고 종합 점수와 원래 플랫폼 수치를 비교합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "제약 사항",
+          "text": "스킬마다 데이터 범위가 다릅니다. 플랫폼 내 백분위를 사용하며 서로 다른 플랫폼의 설치 수와 다운로드 수를 더하지 않습니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "Best Skills: rankings de habilidades con juicios Jev",
+      "h1": "Best Skills: rankings de habilidades con juicios Jev",
+      "description": "Best Skills publica rankings diarios y CSV. Jev evalúa relevancia social, mantenimiento y categorías; los recuentos de plataformas se mantienen separados.",
+      "summary": "Best Skills combina instalaciones de registros y atención social en rankings diarios de habilidades con datos CSV descargables. Jev evalúa relevancia de publicaciones, mantenimiento y categorías; el proyecto publica las probabilidades de sus juicios. Empieza por best-100, revisa la cobertura y compara los recuentos originales con las puntuaciones compuestas.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "Best Skills combina instalaciones de registros y atención social en rankings diarios de habilidades con datos CSV descargables.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "El papel de Jev",
+          "text": "Jev evalúa relevancia de publicaciones, mantenimiento y categorías; el proyecto publica las probabilidades de sus juicios.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo usarlo",
+          "text": "Empieza por best-100, revisa la cobertura y compara los recuentos originales con las puntuaciones compuestas.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Límites a considerar",
+          "text": "La cobertura varía. Se usan percentiles internos de cada plataforma; nunca se suman instalaciones y descargas de plataformas distintas.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "Best Skills : classement de compétences avec Jev",
+      "h1": "Best Skills : classement de compétences avec Jev",
+      "description": "Best Skills publie classements quotidiens et CSV. Jev juge pertinence sociale, maintenance et catégories ; les comptes des plateformes restent distincts.",
+      "summary": "Best Skills combine installations des registres et attention sociale dans des classements quotidiens, avec des données CSV téléchargeables. Jev évalue pertinence des publications, maintenance et catégories ; les probabilités de ces jugements sont publiées. Commencez par best-100, examinez la couverture et comparez les comptes d’origine aux scores composites.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "Best Skills combine installations des registres et attention sociale dans des classements quotidiens, avec des données CSV téléchargeables.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Le rôle de Jev",
+          "text": "Jev évalue pertinence des publications, maintenance et catégories ; les probabilités de ces jugements sont publiées.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Utilisation",
+          "text": "Commencez par best-100, examinez la couverture et comparez les comptes d’origine aux scores composites.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limites à connaître",
+          "text": "La couverture varie. Les scores utilisent les percentiles propres aux plateformes ; leurs installations et téléchargements ne sont jamais additionnés.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "Best Skills: Agenten-Skill-Rankings mit Jev-Urteilen",
+      "h1": "Best Skills: Agenten-Skill-Rankings mit Jev-Urteilen",
+      "description": "Best Skills veröffentlicht tägliche Skill-Rankings und CSVs. Jev prüft soziale Relevanz, Wartung und Kategorien; Plattformzahlen bleiben getrennt.",
+      "summary": "Best Skills kombiniert Registry-Installationen und soziale Aufmerksamkeit zu täglichen Skill-Ranglisten mit herunterladbaren CSV-Daten. Jev prüft Beitragsrelevanz, Wartungsstatus und Kategorien; die Wahrscheinlichkeiten dieser Urteile werden veröffentlicht. Mit best-100 beginnen, Registry-Abdeckung prüfen und ursprüngliche Plattformzahlen mit zusammengesetzten Scores vergleichen.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "Best Skills kombiniert Registry-Installationen und soziale Aufmerksamkeit zu täglichen Skill-Ranglisten mit herunterladbaren CSV-Daten.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Die Rolle von Jev",
+          "text": "Jev prüft Beitragsrelevanz, Wartungsstatus und Kategorien; die Wahrscheinlichkeiten dieser Urteile werden veröffentlicht.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Nutzung",
+          "text": "Mit best-100 beginnen, Registry-Abdeckung prüfen und ursprüngliche Plattformzahlen mit zusammengesetzten Scores vergleichen.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Grenzen",
+          "text": "Die Abdeckung variiert. Scores verwenden plattforminterne Perzentile; Installations- und Downloadzahlen verschiedener Plattformen werden nie addiert.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "Best Skills: rankings de habilidades com julgamentos Jev",
+      "h1": "Best Skills: rankings de habilidades com julgamentos Jev",
+      "description": "Best Skills publica rankings diários e CSVs. Jev avalia relevância social, manutenção e categorias; as contagens das plataformas ficam separadas.",
+      "summary": "Best Skills combina instalações de registros e atenção social em rankings diários de habilidades, com dados CSV para download. Jev avalia relevância de publicações, manutenção e categorias; o projeto publica as probabilidades desses julgamentos. Comece por best-100, confira a cobertura e compare contagens originais com pontuações compostas.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "Best Skills combina instalações de registros e atenção social em rankings diários de habilidades, com dados CSV para download.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "O papel do Jev",
+          "text": "Jev avalia relevância de publicações, manutenção e categorias; o projeto publica as probabilidades desses julgamentos.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Comece por best-100, confira a cobertura e compare contagens originais com pontuações compostas.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limitações",
+          "text": "A cobertura varia. As notas usam percentis internos de cada plataforma; instalações e downloads de plataformas diferentes nunca são somados.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "Best Skills: рейтинги навыков с оценками Jev",
+      "h1": "Best Skills: рейтинги навыков с оценками Jev",
+      "description": "Best Skills публикует ежедневные рейтинги и CSV. Jev оценивает релевантность постов, поддержку и категории; счётчики платформ хранятся отдельно.",
+      "summary": "Best Skills объединяет данные установок и социального внимания в ежедневные рейтинги навыков с выгружаемыми CSV. Jev проверяет релевантность постов, поддерживаемость записей и категории; вероятности этих оценок публикуются. Начните с best-100, изучите охват реестров и сравните исходные счётчики с составными оценками.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Best Skills объединяет данные установок и социального внимания в ежедневные рейтинги навыков с выгружаемыми CSV.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Jev проверяет релевантность постов, поддерживаемость записей и категории; вероятности этих оценок публикуются.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Начните с best-100, изучите охват реестров и сравните исходные счётчики с составными оценками.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ограничения",
+          "text": "Охват навыков различается. Используются внутриплатформенные процентили; установки и загрузки разных платформ никогда не складываются.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "Best Skills: Jev मूल्यांकन के साथ स्किल रैंकिंग",
+      "h1": "Best Skills: Jev मूल्यांकन के साथ स्किल रैंकिंग",
+      "description": "Best Skills रोज़ स्किल रैंकिंग और CSV देता है। Jev सोशल प्रासंगिकता, रखरखाव और श्रेणी जाँचता है; प्लेटफ़ॉर्म संख्या अलग रहती है।",
+      "summary": "Best Skills रजिस्ट्री इंस्टॉल और सोशल चर्चा जोड़कर रोज़ एजेंट स्किल रैंकिंग तथा डाउनलोड योग्य CSV देता है। Jev पोस्ट की प्रासंगिकता, रखरखाव की स्थिति और श्रेणी जाँचता है; इन निर्णयों की संभावनाएँ प्रकाशित होती हैं। best-100 से शुरू करें, रजिस्ट्री कवरेज देखें और संयुक्त स्कोर के साथ मूल प्लेटफ़ॉर्म संख्या तुलना करें।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "किस काम आता है",
+          "text": "Best Skills रजिस्ट्री इंस्टॉल और सोशल चर्चा जोड़कर रोज़ एजेंट स्किल रैंकिंग तथा डाउनलोड योग्य CSV देता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "Jev पोस्ट की प्रासंगिकता, रखरखाव की स्थिति और श्रेणी जाँचता है; इन निर्णयों की संभावनाएँ प्रकाशित होती हैं।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल कैसे करें",
+          "text": "best-100 से शुरू करें, रजिस्ट्री कवरेज देखें और संयुक्त स्कोर के साथ मूल प्लेटफ़ॉर्म संख्या तुलना करें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "सीमाएँ",
+          "text": "कवरेज अलग-अलग है। स्कोर हर प्लेटफ़ॉर्म के प्रतिशतक पर आधारित हैं; अलग प्लेटफ़ॉर्म के इंस्टॉल और डाउनलोड कभी जोड़े नहीं जाते।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "Best Skills: peringkat keterampilan dengan penilaian Jev",
+      "h1": "Best Skills: peringkat keterampilan dengan penilaian Jev",
+      "description": "Best Skills menerbitkan peringkat harian dan CSV. Jev menilai relevansi sosial, pemeliharaan, serta kategori; hitungan tiap platform tetap terpisah.",
+      "summary": "Best Skills menggabungkan data instalasi registri dan perhatian sosial menjadi peringkat harian dengan CSV yang dapat diunduh. Jev memeriksa relevansi posting, pemeliharaan entri, dan kategori; probabilitas penilaiannya dipublikasikan. Mulai dari best-100, periksa cakupan registri, lalu bandingkan hitungan asli dengan skor gabungan.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "Best Skills menggabungkan data instalasi registri dan perhatian sosial menjadi peringkat harian dengan CSV yang dapat diunduh.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Jev memeriksa relevansi posting, pemeliharaan entri, dan kategori; probabilitas penilaiannya dipublikasikan.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Mulai dari best-100, periksa cakupan registri, lalu bandingkan hitungan asli dengan skor gabungan.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Batasan",
+          "text": "Cakupan berbeda antar keterampilan. Skor memakai persentil per platform; instalasi dan unduhan lintas platform tidak pernah dijumlahkan.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "Best Skills: xếp hạng kỹ năng có đánh giá Jev",
+      "h1": "Best Skills: xếp hạng kỹ năng có đánh giá Jev",
+      "description": "Best Skills công bố xếp hạng kỹ năng hằng ngày và CSV. Jev xét liên quan xã hội, duy trì và danh mục; số liệu từng nền tảng giữ riêng.",
+      "summary": "Best Skills kết hợp lượt cài từ kho đăng ký và chú ý xã hội thành xếp hạng hằng ngày, kèm CSV tải được. Jev xét độ liên quan của bài đăng, tình trạng duy trì và danh mục; xác suất phán đoán được công bố. Bắt đầu với best-100, xem phạm vi kho dữ liệu rồi đối chiếu số gốc từng nền tảng với điểm tổng hợp.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích",
+          "text": "Best Skills kết hợp lượt cài từ kho đăng ký và chú ý xã hội thành xếp hạng hằng ngày, kèm CSV tải được.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Jev xét độ liên quan của bài đăng, tình trạng duy trì và danh mục; xác suất phán đoán được công bố.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Bắt đầu với best-100, xem phạm vi kho dữ liệu rồi đối chiếu số gốc từng nền tảng với điểm tổng hợp.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Giới hạn",
+          "text": "Phạm vi khác nhau theo kỹ năng. Điểm dùng phân vị trong từng nền tảng; không cộng lượt cài và tải của các nền tảng khác nhau.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "Best Skills: Jev yargılarıyla ajan becerisi sıralamaları",
+      "h1": "Best Skills: Jev yargılarıyla ajan becerisi sıralamaları",
+      "description": "Best Skills günlük beceri sıralamaları ve CSV yayımlar. Jev sosyal ilgiyi, bakım durumunu ve kategorileri değerlendirir; platform sayıları ayrı tutulur.",
+      "summary": "Best Skills kayıt platformu kurulumlarını ve sosyal ilgiyi günlük beceri sıralamalarında birleştirir; indirilebilir CSV verisi sunar. Jev gönderi ilgisini, bakım durumunu ve kategoriyi değerlendirir; karar olasılıkları yayımlanır. best-100 ile başlayın, kayıt kapsamını inceleyin ve özgün platform sayılarını birleşik puanlarla karşılaştırın.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "Best Skills kayıt platformu kurulumlarını ve sosyal ilgiyi günlük beceri sıralamalarında birleştirir; indirilebilir CSV verisi sunar.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Jev gönderi ilgisini, bakım durumunu ve kategoriyi değerlendirir; karar olasılıkları yayımlanır.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "best-100 ile başlayın, kayıt kapsamını inceleyin ve özgün platform sayılarını birleşik puanlarla karşılaştırın.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Sınırlamalar",
+          "text": "Kapsam beceriye göre değişir. Puanlar platform içi yüzdelikleri kullanır; farklı platformların kurulum ve indirme sayıları toplanmaz.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "Best Skills: classifiche di abilità con giudizi Jev",
+      "h1": "Best Skills: classifiche di abilità con giudizi Jev",
+      "description": "Best Skills pubblica classifiche giornaliere e CSV. Jev valuta pertinenza sociale, manutenzione e categorie; i conteggi delle piattaforme restano separati.",
+      "summary": "Best Skills combina installazioni dei registri e attenzione sociale in classifiche giornaliere, con dati CSV scaricabili. Jev valuta pertinenza dei post, manutenzione e categorie; il progetto pubblica le probabilità dei giudizi. Parti da best-100, verifica la copertura e confronta conteggi originali e punteggi compositi.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "Best Skills combina installazioni dei registri e attenzione sociale in classifiche giornaliere, con dati CSV scaricabili.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Il ruolo di Jev",
+          "text": "Jev valuta pertinenza dei post, manutenzione e categorie; il progetto pubblica le probabilità dei giudizi.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come usarlo",
+          "text": "Parti da best-100, verifica la copertura e confronta conteggi originali e punteggi compositi.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Limiti",
+          "text": "La copertura varia. I punteggi usano percentili interni alle piattaforme; installazioni e download di piattaforme diverse non vengono sommati.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  },
+  "displayName": "Best Skills"
+}

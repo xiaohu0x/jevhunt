@@ -1,0 +1,756 @@
+{
+  "version": "source-content-v1",
+  "repo": "robbyczgw-cla/hermes-web-search-plus",
+  "repositoryId": 1184318458,
+  "relationship": "integration",
+  "category": "integrations",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "6751abc222c9bbbeb88473e5293b535701d95f82",
+      "url": "https://github.com/robbyczgw-cla/hermes-web-search-plus/blob/6751abc222c9bbbeb88473e5293b535701d95f82/README.md",
+      "sha256": "770647069434185f8a296a6e9bc741b5f5a77791872ce11056a113b437b5ebd0",
+      "accessedAt": "2026-09-30T07:33:51.250Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "Web Search Plus adds web search and page extraction tools to Hermes, with routing and fallback across configured providers.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 13,
+          "end": 20,
+          "quote": "**Give your Hermes agent better web search and clean page reading.** Web Search Plus connects several search services behind one simple setup. It returns the original links and pages, can try another service when one fails, and works with just one configured provider.\n\nIt adds two Hermes tools:\n\n- `web_search_plus` — search the web and return useful sources\n- `web_extract_plus` — read and clean the pages you already have\n\n> Ported from [web-search-plus-plugin](https://github.com/robbyczgw-cla/web-search-plus-plugin) for the [Hermes Agent](https://github.com/NousResearch/hermes-agent) plugin API."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "Optional Jev confirms inferred news searches, judges extracted page quality and fills a missing language; it does not retrieve search results.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 44,
+          "end": 52,
+          "quote": "### What's new in 4.2.0\n\nOptional **Jev** can confirm a `news` search type, score extract bodies, and fill language when WSP inferred none. It is not a search provider and stays **off** until you pass `setup --jev`.\n\n- Search-type overlay: keywords may propose `news`; Jev confirms only at confidence ≥ 0.95; otherwise the request stays `search`. Explicit `--search-type news` is unchanged.\n- Extract quality: Jev may keep a long page that looked like a bot wall, or reject chrome.\n- Language fill: only when WSP inferred none.\n\nKeep the key in `TYPESAFE_API_KEY_FILE` (mode 600), never in `config.json`. If you enable Jev, install `typesafe-sdk` separately — the plugin stays stdlib-only. See the [4.2.0 release notes](docs/RELEASE_NOTES_V420.md)."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Install the Hermes plugin and configure a search provider. Enable Jev separately with setup --jev and install typesafe-sdk.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 103,
+          "end": 128,
+          "quote": "## Quick Start\n\n```bash\n# 1) Install and enable the plugin\nhermes plugins install robbyczgw-cla/hermes-web-search-plus --enable\n\n# 2) Inspect provider readiness and configure the providers you use\npython3 ~/.hermes/plugins/web-search-plus/setup.py status\npython3 ~/.hermes/plugins/web-search-plus/setup.py setup --preset starter\n\n# 3) Reload Hermes so the tools are registered\n# CLI: exit and start `hermes` again, or use /reset in-session\n# Gateway: /restart, then /reset\n\n# 4) Optional shell smoke test\ncd ~/.hermes/plugins/web-search-plus\npython3 search.py --query \"Hermes Agent latest release\" --provider auto --quality-report\n```\n\nWeb Search Plus supports 15 search and 9 extraction providers — you do **not** need them all. One search-capable key or configured local endpoint enables `web_search_plus`; one extraction-capable key or endpoint enables `web_extract_plus`; more providers just make controlled routing more flexible. The setup helper stores keys in the active Hermes environment file — never commit them to the repository.\n\nOptional Jev stays off unless you pass `--jev`:\n\n```bash\npython3 ~/.hermes/plugins/web-search-plus/setup.py setup --preset lean \\\n  --jev --jev-key-file \"$HOME/.hermes/secrets/typesafe_api_key\""
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "Jev is off by default and requires its own key-file setup. Provider privacy and retention terms differ, so enabling one route does not establish the same terms for all.",
+      "kind": "source-limitation",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 46,
+          "end": 52,
+          "quote": "Optional **Jev** can confirm a `news` search type, score extract bodies, and fill language when WSP inferred none. It is not a search provider and stays **off** until you pass `setup --jev`.\n\n- Search-type overlay: keywords may propose `news`; Jev confirms only at confidence ≥ 0.95; otherwise the request stays `search`. Explicit `--search-type news` is unchanged.\n- Extract quality: Jev may keep a long page that looked like a bot wall, or reject chrome.\n- Language fill: only when WSP inferred none.\n\nKeep the key in `TYPESAFE_API_KEY_FILE` (mode 600), never in `config.json`. If you enable Jev, install `typesafe-sdk` separately — the plugin stays stdlib-only. See the [4.2.0 release notes](docs/RELEASE_NOTES_V420.md)."
+        },
+        {
+          "source": "source-1",
+          "start": 131,
+          "end": 131,
+          "quote": "Provider privacy is not uniform. Before sending sensitive queries or URLs, review the maintained [Provider Privacy & Terms guide](https://websearchplus.xyz/providers.html#privacy-terms), which distinguishes standard self-serve terms from enterprise-only ZDR or no-training options."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "hermes-web-search-plus — Hermes search with optional Jev quality checks",
+      "h1": "hermes-web-search-plus — Hermes search with optional Jev quality checks",
+      "description": "hermes-web-search-plus: Optional Jev confirms inferred news searches, judges extracted page quality and fills a missing language; it does not retrieve search results.",
+      "summary": "Web Search Plus adds web search and page extraction tools to Hermes, with routing and fallback across configured providers. Install the Hermes plugin and configure a search provider. Enable Jev separately with setup --jev and install typesafe-sdk.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "What it does",
+          "text": "Web Search Plus adds web search and page extraction tools to Hermes, with routing and fallback across configured providers.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "Optional Jev confirms inferred news searches, judges extracted page quality and fills a missing language; it does not retrieve search results.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Getting started",
+          "text": "Install the Hermes plugin and configure a search provider. Enable Jev separately with setup --jev and install typesafe-sdk.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "Jev is off by default and requires its own key-file setup. Provider privacy and retention terms differ, so enabling one route does not establish the same terms for all.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "hermes-web-search-plus — 可选 Jev 质量判断的 Hermes 搜索插件",
+      "h1": "hermes-web-search-plus — 可选 Jev 质量判断的 Hermes 搜索插件",
+      "description": "hermes-web-search-plus: 可选 Jev 确认推断的新闻搜索、判断提取页面质量，并补充缺失语言；它不负责检索结果。",
+      "summary": "Web Search Plus 为 Hermes 添加网页搜索与提取工具，可在配置的服务商之间路由和回退。 安装 Hermes 插件并配置搜索服务，再用 setup --jev 单独启用 Jev 并安装 typesafe-sdk。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "Web Search Plus 为 Hermes 添加网页搜索与提取工具，可在配置的服务商之间路由和回退。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "可选 Jev 确认推断的新闻搜索、判断提取页面质量，并补充缺失语言；它不负责检索结果。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "安装 Hermes 插件并配置搜索服务，再用 setup --jev 单独启用 Jev 并安装 typesafe-sdk。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "Jev 默认关闭，需要单独配置密钥文件。服务商的隐私与保留条款各异，一条路径的条款不适用于所有服务。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "hermes-web-search-plus — 可選 Jev 品質檢查的 Hermes 搜尋外掛",
+      "h1": "hermes-web-search-plus — 可選 Jev 品質檢查的 Hermes 搜尋外掛",
+      "description": "hermes-web-search-plus: 選用的 Jev 確認推斷的新聞搜尋、判斷頁面擷取品質，並在尚未辨識語言時補上語言資訊；它不負責擷取搜尋結果。",
+      "summary": "Web Search Plus 為 Hermes 加入網頁搜尋與擷取工具，可在已設定服務商間路由及備援。 安裝 Hermes 外掛並設定搜尋服務，再用 setup --jev 個別啟用 Jev 並安裝 typesafe-sdk。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "Web Search Plus 為 Hermes 加入網頁搜尋與擷取工具，可在已設定服務商間路由及備援。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "選用的 Jev 確認推斷的新聞搜尋、判斷頁面擷取品質，並在尚未辨識語言時補上語言資訊；它不負責擷取搜尋結果。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "安裝 Hermes 外掛並設定搜尋服務，再用 setup --jev 個別啟用 Jev 並安裝 typesafe-sdk。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "Jev 預設關閉，須另設金鑰檔。服務商的隱私與保留條款不同，一條路徑的條款不能代表全部。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "hermes-web-search-plus — 任意の Jev 品質判定を備える Hermes 検索",
+      "h1": "hermes-web-search-plus — 任意の Jev 品質判定を備える Hermes 検索",
+      "description": "hermes-web-search-plus: 任意の Jev はニュース検索の推定を確認し、抽出品質を評価し、不明な言語を補います。検索結果を取得する役割ではありません。",
+      "summary": "Web Search Plus は Hermes に検索とページ抽出を追加し、設定済み提供元間で振り分けや代替処理を行います。 Hermes プラグインと検索先を設定し、setup --jev と typesafe-sdk の導入で Jev を個別に有効化します。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "できること",
+          "text": "Web Search Plus は Hermes に検索とページ抽出を追加し、設定済み提供元間で振り分けや代替処理を行います。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "任意の Jev はニュース検索の推定を確認し、抽出品質を評価し、不明な言語を補います。検索結果を取得する役割ではありません。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い始めるには",
+          "text": "Hermes プラグインと検索先を設定し、setup --jev と typesafe-sdk の導入で Jev を個別に有効化します。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "対象範囲と制約",
+          "text": "Jev は既定で無効で、キー用ファイルの設定が必要です。提供元ごとにプライバシーと保存条件は異なります。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "hermes-web-search-plus — 선택적 Jev 품질 검사를 갖춘 Hermes 검색",
+      "h1": "hermes-web-search-plus — 선택적 Jev 품질 검사를 갖춘 Hermes 검색",
+      "description": "hermes-web-search-plus: 선택적 Jev는 추정된 뉴스 검색을 확인하고 추출 품질을 판단하며 누락된 언어를 채웁니다. 검색 결과를 가져오는 역할은 아닙니다.",
+      "summary": "Web Search Plus는 Hermes에 검색과 페이지 추출 도구를 추가하고 설정된 제공자 간 라우팅과 대체 처리를 지원합니다. Hermes 플러그인과 검색 제공자를 설정하고 setup --jev 및 typesafe-sdk 설치로 Jev를 별도 활성화합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "Web Search Plus는 Hermes에 검색과 페이지 추출 도구를 추가하고 설정된 제공자 간 라우팅과 대체 처리를 지원합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "선택적 Jev는 추정된 뉴스 검색을 확인하고 추출 품질을 판단하며 누락된 언어를 채웁니다. 검색 결과를 가져오는 역할은 아닙니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "Hermes 플러그인과 검색 제공자를 설정하고 setup --jev 및 typesafe-sdk 설치로 Jev를 별도 활성화합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 제약",
+          "text": "Jev는 기본적으로 꺼져 있으며 키 파일 설정이 필요합니다. 제공자마다 개인정보 및 보존 조건이 다릅니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "hermes-web-search-plus — Búsqueda Hermes con controles Jev opcionales",
+      "h1": "hermes-web-search-plus — Búsqueda Hermes con controles Jev opcionales",
+      "description": "hermes-web-search-plus: Jev opcional confirma búsquedas de noticias inferidas, evalúa la extracción y completa el idioma ausente; no recupera resultados.",
+      "summary": "Web Search Plus añade búsqueda y extracción de páginas a Hermes, con enrutamiento y alternativas entre proveedores configurados. Instala el complemento y configura un buscador. Activa Jev por separado con setup --jev e instala typesafe-sdk.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "Web Search Plus añade búsqueda y extracción de páginas a Hermes, con enrutamiento y alternativas entre proveedores configurados.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Jev opcional confirma búsquedas de noticias inferidas, evalúa la extracción y completa el idioma ausente; no recupera resultados.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo empezar",
+          "text": "Instala el complemento y configura un buscador. Activa Jev por separado con setup --jev e instala typesafe-sdk.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "Jev está desactivado por defecto y requiere su archivo de clave. Las condiciones de privacidad y conservación varían entre proveedores.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "hermes-web-search-plus — Recherche Hermes avec contrôles Jev facultatifs",
+      "h1": "hermes-web-search-plus — Recherche Hermes avec contrôles Jev facultatifs",
+      "description": "hermes-web-search-plus: Jev facultatif confirme le type actualités déduit, évalue l’extraction et complète la langue absente ; il ne recherche pas les résultats.",
+      "summary": "Web Search Plus ajoute recherche et extraction de pages à Hermes, avec routage et repli entre fournisseurs configurés. Installez le module et configurez un moteur. Activez Jev séparément avec setup --jev et installez typesafe-sdk.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "Web Search Plus ajoute recherche et extraction de pages à Hermes, avec routage et repli entre fournisseurs configurés.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Jev facultatif confirme le type actualités déduit, évalue l’extraction et complète la langue absente ; il ne recherche pas les résultats.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Installez le module et configurez un moteur. Activez Jev séparément avec setup --jev et installez typesafe-sdk.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "Jev est désactivé par défaut et demande un fichier de clé. Confidentialité et conservation varient selon le fournisseur.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "hermes-web-search-plus — Hermes-Suche mit optionaler Jev-Qualitätsprüfung",
+      "h1": "hermes-web-search-plus — Hermes-Suche mit optionaler Jev-Qualitätsprüfung",
+      "description": "hermes-web-search-plus: Optionales Jev bestätigt vermutete Nachrichtensuche, bewertet Extrakte und ergänzt fehlende Sprache; es ruft selbst keine Suchergebnisse ab.",
+      "summary": "Web Search Plus ergänzt Hermes um Suche und Seitenextraktion mit Routing und Rückfallwegen zwischen konfigurierten Anbietern. Plugin und Suchanbieter einrichten, Jev separat mit setup --jev aktivieren und typesafe-sdk installieren.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "Web Search Plus ergänzt Hermes um Suche und Seitenextraktion mit Routing und Rückfallwegen zwischen konfigurierten Anbietern.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Optionales Jev bestätigt vermutete Nachrichtensuche, bewertet Extrakte und ergänzt fehlende Sprache; es ruft selbst keine Suchergebnisse ab.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Einstieg",
+          "text": "Plugin und Suchanbieter einrichten, Jev separat mit setup --jev aktivieren und typesafe-sdk installieren.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Jev ist standardmäßig aus und benötigt eine Schlüsseldatei. Datenschutz- und Aufbewahrungsbedingungen unterscheiden sich je nach Anbieter.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "hermes-web-search-plus — Busca Hermes com verificações Jev opcionais",
+      "h1": "hermes-web-search-plus — Busca Hermes com verificações Jev opcionais",
+      "description": "hermes-web-search-plus: O Jev opcional confirma buscas de notícias inferidas, avalia a extração e preenche idioma ausente; não busca os resultados.",
+      "summary": "O Web Search Plus adiciona busca e extração de páginas ao Hermes, com roteamento e alternativas entre provedores configurados. Instale o plugin e configure um buscador. Ative o Jev separadamente com setup --jev e instale typesafe-sdk.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "O Web Search Plus adiciona busca e extração de páginas ao Hermes, com roteamento e alternativas entre provedores configurados.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "O Jev opcional confirma buscas de notícias inferidas, avalia a extração e preenche idioma ausente; não busca os resultados.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como começar",
+          "text": "Instale o plugin e configure um buscador. Ative o Jev separadamente com setup --jev e instale typesafe-sdk.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "O Jev vem desligado e exige arquivo de chave. Termos de privacidade e retenção variam entre provedores.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "hermes-web-search-plus — Поиск Hermes с необязательной проверкой Jev",
+      "h1": "hermes-web-search-plus — Поиск Hermes с необязательной проверкой Jev",
+      "description": "hermes-web-search-plus: Необязательный Jev подтверждает предполагаемый новостной поиск, оценивает извлечённый текст и определяет отсутствующий язык; результаты он не ищет.",
+      "summary": "Web Search Plus добавляет Hermes поиск и извлечение страниц с маршрутизацией и резервными провайдерами. Установите плагин и поискового провайдера, отдельно включите Jev через setup --jev и установите typesafe-sdk.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Web Search Plus добавляет Hermes поиск и извлечение страниц с маршрутизацией и резервными провайдерами.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Необязательный Jev подтверждает предполагаемый новостной поиск, оценивает извлечённый текст и определяет отсутствующий язык; результаты он не ищет.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Начало работы",
+          "text": "Установите плагин и поискового провайдера, отдельно включите Jev через setup --jev и установите typesafe-sdk.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "По умолчанию Jev выключен и требует файла ключа. Условия конфиденциальности и хранения различаются у провайдеров.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "hermes-web-search-plus — वैकल्पिक Jev गुणवत्ता जाँच के साथ Hermes खोज",
+      "h1": "hermes-web-search-plus — वैकल्पिक Jev गुणवत्ता जाँच के साथ Hermes खोज",
+      "description": "hermes-web-search-plus: वैकल्पिक Jev अनुमानित समाचार खोज की पुष्टि, निकाले पाठ की जाँच और गायब भाषा भरता है; परिणाम स्वयं नहीं खोजता।",
+      "summary": "Web Search Plus Hermes में खोज और पृष्ठ निष्कर्षण जोड़ता है, साथ में चुने प्रदाताओं के बीच रूटिंग और विकल्प देता है। प्लगइन और खोज प्रदाता सेट करें, फिर setup --jev से Jev चालू करके typesafe-sdk स्थापित करें।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "परियोजना का काम",
+          "text": "Web Search Plus Hermes में खोज और पृष्ठ निष्कर्षण जोड़ता है, साथ में चुने प्रदाताओं के बीच रूटिंग और विकल्प देता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "वैकल्पिक Jev अनुमानित समाचार खोज की पुष्टि, निकाले पाठ की जाँच और गायब भाषा भरता है; परिणाम स्वयं नहीं खोजता।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "शुरुआत कैसे करें",
+          "text": "प्लगइन और खोज प्रदाता सेट करें, फिर setup --jev से Jev चालू करके typesafe-sdk स्थापित करें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "Jev डिफ़ॉल्ट में बंद है और कुंजी फ़ाइल चाहिए। गोपनीयता तथा डेटा रखने की शर्तें प्रदाताओं के अनुसार अलग हैं।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "hermes-web-search-plus — Pencarian Hermes dengan pemeriksaan Jev opsional",
+      "h1": "hermes-web-search-plus — Pencarian Hermes dengan pemeriksaan Jev opsional",
+      "description": "hermes-web-search-plus: Jev opsional mengonfirmasi dugaan pencarian berita, menilai ekstraksi, dan mengisi bahasa yang belum diketahui; bukan pengambil hasil pencarian.",
+      "summary": "Web Search Plus menambahkan pencarian dan ekstraksi halaman ke Hermes, dengan perutean serta cadangan antarpenyedia. Pasang plugin serta penyedia pencarian, lalu aktifkan Jev melalui setup --jev dan pasang typesafe-sdk.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "Web Search Plus menambahkan pencarian dan ekstraksi halaman ke Hermes, dengan perutean serta cadangan antarpenyedia.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Jev opsional mengonfirmasi dugaan pencarian berita, menilai ekstraksi, dan mengisi bahasa yang belum diketahui; bukan pengambil hasil pencarian.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara memulai",
+          "text": "Pasang plugin serta penyedia pencarian, lalu aktifkan Jev melalui setup --jev dan pasang typesafe-sdk.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Jev awalnya nonaktif dan memerlukan berkas kunci. Ketentuan privasi serta penyimpanan berbeda menurut penyedia.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "hermes-web-search-plus — Tìm kiếm Hermes với kiểm tra Jev tùy chọn",
+      "h1": "hermes-web-search-plus — Tìm kiếm Hermes với kiểm tra Jev tùy chọn",
+      "description": "hermes-web-search-plus: Jev tùy chọn xác nhận tìm kiếm tin tức suy đoán, đánh giá phần trích và bổ sung ngôn ngữ thiếu; không trực tiếp lấy kết quả.",
+      "summary": "Web Search Plus thêm tìm kiếm và trích xuất trang cho Hermes, có định tuyến và dự phòng giữa các nhà cung cấp. Cài plugin và nguồn tìm kiếm, rồi bật riêng Jev qua setup --jev và cài typesafe-sdk.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Công dụng",
+          "text": "Web Search Plus thêm tìm kiếm và trích xuất trang cho Hermes, có định tuyến và dự phòng giữa các nhà cung cấp.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Jev tùy chọn xác nhận tìm kiếm tin tức suy đoán, đánh giá phần trích và bổ sung ngôn ngữ thiếu; không trực tiếp lấy kết quả.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách bắt đầu",
+          "text": "Cài plugin và nguồn tìm kiếm, rồi bật riêng Jev qua setup --jev và cài typesafe-sdk.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Jev mặc định tắt và cần tệp khóa riêng. Điều khoản riêng tư, lưu giữ khác nhau giữa nhà cung cấp.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "hermes-web-search-plus — İsteğe bağlı Jev denetimli Hermes araması",
+      "h1": "hermes-web-search-plus — İsteğe bağlı Jev denetimli Hermes araması",
+      "description": "hermes-web-search-plus: İsteğe bağlı Jev, çıkarılan haber arama türünü doğrular, sayfa kalitesini değerlendirir ve eksik dili tamamlar; sonuçları getirmez.",
+      "summary": "Web Search Plus, Hermes’e yapılandırılmış sağlayıcılar arasında yönlendirme ve yedeklemeyle arama ve sayfa çıkarma ekler. Eklentiyi ve arama sağlayıcısını kurup setup --jev ile Jev’i ayrıca açın ve typesafe-sdk yükleyin.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "Web Search Plus, Hermes’e yapılandırılmış sağlayıcılar arasında yönlendirme ve yedeklemeyle arama ve sayfa çıkarma ekler.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "İsteğe bağlı Jev, çıkarılan haber arama türünü doğrular, sayfa kalitesini değerlendirir ve eksik dili tamamlar; sonuçları getirmez.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Başlangıç",
+          "text": "Eklentiyi ve arama sağlayıcısını kurup setup --jev ile Jev’i ayrıca açın ve typesafe-sdk yükleyin.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Jev varsayılan olarak kapalıdır ve anahtar dosyası ister. Gizlilik ve saklama şartları sağlayıcıya göre değişir.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "hermes-web-search-plus — Ricerca Hermes con controlli Jev facoltativi",
+      "h1": "hermes-web-search-plus — Ricerca Hermes con controlli Jev facoltativi",
+      "description": "hermes-web-search-plus: Jev facoltativo conferma ricerche di notizie dedotte, valuta l’estrazione e completa la lingua mancante; non recupera risultati.",
+      "summary": "Web Search Plus aggiunge ricerca ed estrazione di pagine a Hermes, con instradamento e ripiego tra fornitori configurati. Installa il plugin e un fornitore di ricerca, poi attiva Jev con setup --jev e installa typesafe-sdk.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "Web Search Plus aggiunge ricerca ed estrazione di pagine a Hermes, con instradamento e ripiego tra fornitori configurati.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Jev facoltativo conferma ricerche di notizie dedotte, valuta l’estrazione e completa la lingua mancante; non recupera risultati.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come iniziare",
+          "text": "Installa il plugin e un fornitore di ricerca, poi attiva Jev con setup --jev e installa typesafe-sdk.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "Jev è disattivato inizialmente e richiede un file chiave. Privacy e conservazione variano da fornitore a fornitore.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

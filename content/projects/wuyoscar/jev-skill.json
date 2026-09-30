@@ -1,0 +1,774 @@
+{
+  "version": "source-content-v1",
+  "repo": "wuyoscar/jev-skill",
+  "repositoryId": 1377820977,
+  "relationship": "integration",
+  "category": "agents",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "b7593a624a1b452769b554e0a688786089bd4bd7",
+      "url": "https://github.com/wuyoscar/jev-skill/blob/b7593a624a1b452769b554e0a688786089bd4bd7/README.md",
+      "sha256": "0ecf0d232b33ac36dee6d1ae9bc39210bef85f1bcbcf10330143712d794d3b01",
+      "accessedAt": "2026-09-30T07:33:50.201Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "The collection supplies skills for record triage, evidence checks, rubric evaluation and choosing legal actions.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 3,
+          "end": 17,
+          "quote": "# ⚡ Awesome Jev Skills\n\n**Jev demos, workflows and skills for coding agents.**\n\n[![Skills](https://img.shields.io/badge/skills-5-7c3aed?style=flat-square)](#install) [![Scenarios](https://img.shields.io/badge/scenarios-108-0d9488?style=flat-square)](#catalog) [![Tests](https://github.com/wuyoscar/jev-skill/actions/workflows/test.yml/badge.svg)](https://github.com/wuyoscar/jev-skill/actions/workflows/test.yml) [![MIT](https://img.shields.io/badge/license-MIT-ea580c?style=flat-square)](LICENSE)\n\n[English](README.md) · [简体中文](README.zh.md)\n\n[Projects](#projects) · [Skills](#skills) · [Examples](#catalog)\n\n</div>\n\n<a id=\"overview\"></a>\nJev chooses, classifies and scores. Your agent supplies evidence and takes action.\nBrowse **66 projects and resources, 5 skills and 108 scenarios**, with 14 recorded input/output pairs."
+        },
+        {
+          "source": "source-1",
+          "start": 221,
+          "end": 227,
+          "quote": "| Skill | Job | Examples |\n|---|---|---|\n| [`jev`](skills/jev/SKILL.md) | Design questions and batch calls | [Turn a plain-language task into editable questions](#sc-compile) · [Tool routing](#sc-a15) · [More](skills/jev/references/scenarios.md) |\n| [`jev-triage`](skills/jev-triage/SKILL.md) | Sort and label records | [Support queue routing](#sc-h02) · [Urgency screening](#sc-h03) · [More](skills/jev-triage/references/scenarios.md) |\n| [`jev-documents`](skills/jev-documents/SKILL.md) | Find and check source evidence | [Repository navigation](#sc-a20) · [Claim-to-source check](#sc-h08) · [More](skills/jev-documents/references/scenarios.md) |\n| [`jev-eval`](skills/jev-eval/SKILL.md) | Check outputs against a rubric | [Prioritize code review](#sc-a12) · [Review jailbreak evaluations in batches](#sc-redteam-batch) · [More](skills/jev-eval/references/scenarios.md) |\n| [`jev-act`](skills/jev-act/SKILL.md) | Choose the next legal action | [Next browser action](#sc-a23) · [Choose legal game and NPC actions](#sc-a28) · [More](skills/jev-act/references/scenarios.md) |"
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "Jev makes bounded judgments while the coding agent supplies evidence, checks results and executes actions.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 16,
+          "end": 16,
+          "quote": "Jev chooses, classifies and scores. Your agent supplies evidence and takes action."
+        },
+        {
+          "source": "source-1",
+          "start": 270,
+          "end": 275,
+          "quote": "need; you do not have to write JSON. Use real Jev through either supported provider, or an approved agent/model simulation.\n\n**A workflow library for your agent, not just an API wrapper.** Ask it to explore\nour [references](skills/jev/references/index.md) and examples, compare approaches,\nand design a workflow for your task. Jev helps with efficient judgments; your agent\nbrings the analysis, spot-checks and synthesis. This is a friendly reminder to learn"
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Follow the installation guide, choosing real Jev through TypeSafe or OpenRouter, or an explicitly labeled agent simulation.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 234,
+          "end": 242,
+          "quote": "Paste this into **Codex, Claude Code or OpenCode**:\n\n```text\nInstall Jev Skills for this coding agent, including all scenario skills:\nhttps://raw.githubusercontent.com/wuyoscar/jev-skill/main/docs/install.md\nCheck my environment and handle the installation. Use jev for setup to confirm with me:\nA: real Jev via my OpenRouter or official TypeSafe account; B: simulation with this agent.\nWait for my choice. Guide any key entry through local secret settings, never this chat.\nVerify offline first; ask before sending data or making a paid call."
+        },
+        {
+          "source": "source-1",
+          "start": 294,
+          "end": 306,
+          "quote": "| Tell your agent | What happens next |\n|---|---|\n| “I use OpenRouter.” | It checks `OPENROUTER_API_KEY` and guides you to [OpenRouter's key page](https://openrouter.ai/settings/keys) if needed. |\n| “I have / want an official Jev key.” | It uses `TYPESAFE_API_KEY` with `--provider typesafe` and the [TypeSafe console](https://console.typesafe.ai). No OpenRouter account needed. |\n| “I don't want to apply for a key.” | It offers B, waits for your confirmation, then uses this agent to simulate. |\n\nYou only handle account sign-in, private key entry and approvals. **Do not send a key\nin chat.** The agent performs installation and offline checks; those checks do not\nprove a key is valid. It never switches provider or simulation mode silently.\n\nSimulation is labeled `agent_simulation` (or `model_simulation` for a model you\nselect), with `jev_called: false` and null probability/confidence. It uses your\nexisting agent/model access, not free Jev or DeepSeek credits."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "The five-skill layout is a source preview; published v0.2.0 has eleven entry points. Simulation sets jev_called to false and supplies no probability or confidence.",
+      "kind": "source-limitation",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 232,
+          "end": 232,
+          "quote": "> **The five-entry collection is a source preview, not a new release.** Published v0.2.0 still has 11 entry points. [Installation and upgrade](docs/install.md) · [Old-to-new names](docs/skill-migration.md)"
+        },
+        {
+          "source": "source-1",
+          "start": 300,
+          "end": 306,
+          "quote": "You only handle account sign-in, private key entry and approvals. **Do not send a key\nin chat.** The agent performs installation and offline checks; those checks do not\nprove a key is valid. It never switches provider or simulation mode silently.\n\nSimulation is labeled `agent_simulation` (or `model_simulation` for a model you\nselect), with `jev_called: false` and null probability/confidence. It uses your\nexisting agent/model access, not free Jev or DeepSeek credits."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "jev-skill — Jev workflows for coding agents",
+      "h1": "jev-skill — Jev workflows for coding agents",
+      "description": "jev-skill: Skills help coding agents use Jev for triage, evidence checks, evaluation and legal action selection, with explicitly labeled simulation.",
+      "summary": "The collection supplies skills for record triage, evidence checks, rubric evaluation and choosing legal actions. Follow the installation guide, choosing real Jev through TypeSafe or OpenRouter, or an explicitly labeled agent simulation.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "What it does",
+          "text": "The collection supplies skills for record triage, evidence checks, rubric evaluation and choosing legal actions.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "Jev makes bounded judgments while the coding agent supplies evidence, checks results and executes actions.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Getting started",
+          "text": "Follow the installation guide, choosing real Jev through TypeSafe or OpenRouter, or an explicitly labeled agent simulation.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "The five-skill layout is a source preview; published v0.2.0 has eleven entry points. Simulation sets jev_called to false and supplies no probability or confidence.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "jev-skill — 面向编程智能体的 Jev 工作流",
+      "h1": "jev-skill — 面向编程智能体的 Jev 工作流",
+      "description": "jev-skill: 为编程智能体提供 Jev 分流、证据检查、评估和合法动作选择技能，模拟模式会明确标注。",
+      "summary": "该集合提供记录分流、证据核查、按标准评估和合法动作选择等技能。 按安装指南选择通过 TypeSafe 或 OpenRouter 调用真实 Jev，或使用明确标注的智能体模拟。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "该集合提供记录分流、证据核查、按标准评估和合法动作选择等技能。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "Jev 作出有界判断，编程智能体负责提供证据、检查结果并执行动作。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "按安装指南选择通过 TypeSafe 或 OpenRouter 调用真实 Jev，或使用明确标注的智能体模拟。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "五技能布局是源码预览，已发布的 v0.2.0 有十一个入口。模拟会将 jev_called 设为 false，不提供概率或置信度。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "jev-skill — 供程式開發代理使用的 Jev 流程",
+      "h1": "jev-skill — 供程式開發代理使用的 Jev 流程",
+      "description": "jev-skill: 提供程式代理使用 Jev 分流、證據查核、評估與合法動作選擇的技能，模擬模式明確標示。",
+      "summary": "此集合提供紀錄分流、證據查核、規準評估及合法動作選擇等技能。 依安裝指南選擇透過 TypeSafe 或 OpenRouter 呼叫實際 Jev，或使用明確標示的代理模擬。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "此集合提供紀錄分流、證據查核、規準評估及合法動作選擇等技能。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "Jev 作出有界判斷，程式開發代理負責提供證據、檢查結果並執行動作。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "依安裝指南選擇透過 TypeSafe 或 OpenRouter 呼叫實際 Jev，或使用明確標示的代理模擬。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "五技能配置是原始碼預覽，已發布的 v0.2.0 有十一個入口。模擬將 jev_called 設為 false，不提供機率或信心值。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "jev-skill — コーディングエージェント向け Jev ワークフロー",
+      "h1": "jev-skill — コーディングエージェント向け Jev ワークフロー",
+      "description": "jev-skill: Jev による振り分け、証拠確認、評価、許可された行動選択をコーディングエージェントに追加。模擬実行は明示します。",
+      "summary": "記録の振り分け、証拠の確認、評価基準による採点、許可された行動選択のスキルを収録します。 導入ガイドに従い、TypeSafe または OpenRouter の実 Jev と、明示されたエージェントによる模擬実行から選びます。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "できること",
+          "text": "記録の振り分け、証拠の確認、評価基準による採点、許可された行動選択のスキルを収録します。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "Jev が範囲を定めた判断を行い、コーディングエージェントが証拠の提示、結果確認、行動実行を担います。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い始めるには",
+          "text": "導入ガイドに従い、TypeSafe または OpenRouter の実 Jev と、明示されたエージェントによる模擬実行から選びます。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "対象範囲と制約",
+          "text": "5スキル構成はソースのプレビューで、公開版 v0.2.0 は11入口です。模擬実行は jev_called が false となり、確率や信頼度は付きません。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "jev-skill — 코딩 에이전트용 Jev 작업 흐름",
+      "h1": "jev-skill — 코딩 에이전트용 Jev 작업 흐름",
+      "description": "jev-skill: Jev 분류, 근거 확인, 평가, 허용 행동 선택을 코딩 에이전트에 추가하며 시뮬레이션은 명시합니다.",
+      "summary": "기록 분류, 근거 확인, 평가 기준에 따른 채점, 허용된 행동 선택을 위한 스킬 모음입니다. 설치 안내에서 TypeSafe 또는 OpenRouter의 실제 Jev와 명시적으로 표시되는 에이전트 시뮬레이션 중 경로를 선택합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "기록 분류, 근거 확인, 평가 기준에 따른 채점, 허용된 행동 선택을 위한 스킬 모음입니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Jev가 범위가 정해진 판단을 내리면 코딩 에이전트가 근거 제공, 결과 확인, 행동 실행을 맡습니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "설치 안내에서 TypeSafe 또는 OpenRouter의 실제 Jev와 명시적으로 표시되는 에이전트 시뮬레이션 중 경로를 선택합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 제약",
+          "text": "스킬 5개 구성은 소스 미리보기이며 배포된 v0.2.0에는 진입점이 11개입니다. 시뮬레이션은 jev_called를 false로 두고 확률과 신뢰도를 제공하지 않습니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "jev-skill — Flujos Jev para agentes de programación",
+      "h1": "jev-skill — Flujos Jev para agentes de programación",
+      "description": "jev-skill: Habilidades para usar Jev en triaje, pruebas, evaluación y acciones permitidas, con simulación expresamente identificada.",
+      "summary": "La colección ofrece habilidades para triaje de registros, comprobación de pruebas, evaluación por rúbrica y selección de acciones permitidas. Sigue la guía y elige Jev real mediante TypeSafe u OpenRouter, o una simulación del agente identificada expresamente.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "La colección ofrece habilidades para triaje de registros, comprobación de pruebas, evaluación por rúbrica y selección de acciones permitidas.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Jev emite juicios acotados; el agente aporta las pruebas, comprueba resultados y ejecuta acciones.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo empezar",
+          "text": "Sigue la guía y elige Jev real mediante TypeSafe u OpenRouter, o una simulación del agente identificada expresamente.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "La estructura de cinco habilidades es una vista previa del código; v0.2.0 tiene once entradas. La simulación indica jev_called: false y no proporciona probabilidades ni confianza.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "jev-skill — Parcours Jev pour agents de programmation",
+      "h1": "jev-skill — Parcours Jev pour agents de programmation",
+      "description": "jev-skill: Des compétences pour utiliser Jev en triage, vérification, évaluation et choix d’actions, avec simulation signalée.",
+      "summary": "La collection fournit des compétences pour le tri de données, la vérification des preuves, l’évaluation par grille et le choix d’actions autorisées. Suivez le guide et choisissez Jev via TypeSafe ou OpenRouter, ou une simulation par l’agent clairement signalée.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "La collection fournit des compétences pour le tri de données, la vérification des preuves, l’évaluation par grille et le choix d’actions autorisées.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Jev rend des jugements bornés ; l’agent fournit les preuves, vérifie les résultats et exécute les actions.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Suivez le guide et choisissez Jev via TypeSafe ou OpenRouter, ou une simulation par l’agent clairement signalée.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "La structure à cinq compétences est un aperçu du code ; v0.2.0 comporte onze entrées. La simulation indique jev_called: false, sans probabilités ni confiance.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "jev-skill — Jev-Workflows für Coding-Agenten",
+      "h1": "jev-skill — Jev-Workflows für Coding-Agenten",
+      "description": "jev-skill: Skills für Jev-gestützte Sichtung, Belegprüfung, Bewertung und Aktionsauswahl mit gekennzeichneter Simulation.",
+      "summary": "Die Sammlung liefert Skills für Datensichtung, Belegprüfung, Bewertung anhand von Kriterien und Auswahl zulässiger Aktionen. Die Installationsanleitung lässt zwischen echtem Jev über TypeSafe oder OpenRouter und einer ausdrücklich gekennzeichneten Agentensimulation wählen.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "Die Sammlung liefert Skills für Datensichtung, Belegprüfung, Bewertung anhand von Kriterien und Auswahl zulässiger Aktionen.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Jev trifft eingegrenzte Urteile; der Coding-Agent liefert Belege, prüft Ergebnisse und führt Aktionen aus.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Einstieg",
+          "text": "Die Installationsanleitung lässt zwischen echtem Jev über TypeSafe oder OpenRouter und einer ausdrücklich gekennzeichneten Agentensimulation wählen.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Die fünf Skills sind eine Quellcodevorschau; die veröffentlichte v0.2.0 hat elf Einstiegspunkte. Simulation setzt jev_called auf false und liefert keine Wahrscheinlichkeiten oder Konfidenzwerte.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "jev-skill — Fluxos Jev para agentes de programação",
+      "h1": "jev-skill — Fluxos Jev para agentes de programação",
+      "description": "jev-skill: Habilidades para usar Jev em triagem, evidências, avaliação e ações permitidas, com simulação identificada.",
+      "summary": "A coleção traz habilidades para triagem de registros, verificação de evidências, avaliação por critérios e escolha de ações permitidas. Siga o guia e escolha Jev real via TypeSafe ou OpenRouter, ou uma simulação do agente claramente identificada.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "A coleção traz habilidades para triagem de registros, verificação de evidências, avaliação por critérios e escolha de ações permitidas.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "O Jev faz julgamentos delimitados; o agente fornece evidências, confere resultados e executa ações.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como começar",
+          "text": "Siga o guia e escolha Jev real via TypeSafe ou OpenRouter, ou uma simulação do agente claramente identificada.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "A estrutura com cinco habilidades é uma prévia do código; a v0.2.0 publicada tem onze entradas. A simulação marca jev_called como false, sem probabilidades ou confiança.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "jev-skill — Процессы Jev для агентов программирования",
+      "h1": "jev-skill — Процессы Jev для агентов программирования",
+      "description": "jev-skill: Навыки для сортировки, проверки доказательств, оценки и выбора действий через Jev, с явной маркировкой симуляции.",
+      "summary": "Коллекция содержит навыки сортировки записей, проверки доказательств, оценки по рубрике и выбора допустимых действий. Следуйте руководству установки и выберите настоящий Jev через TypeSafe или OpenRouter либо явно обозначенную симуляцию агентом.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Коллекция содержит навыки сортировки записей, проверки доказательств, оценки по рубрике и выбора допустимых действий.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Jev выносит ограниченные рамками суждения, а агент предоставляет данные, проверяет результаты и выполняет действия.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Начало работы",
+          "text": "Следуйте руководству установки и выберите настоящий Jev через TypeSafe или OpenRouter либо явно обозначенную симуляцию агентом.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Пять навыков — предварительная версия исходников; опубликованная v0.2.0 имеет одиннадцать входов. Симуляция ставит jev_called: false и не выдаёт вероятности или уверенность.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "jev-skill — कोडिंग एजेंटों के लिए Jev कार्यप्रवाह",
+      "h1": "jev-skill — कोडिंग एजेंटों के लिए Jev कार्यप्रवाह",
+      "description": "jev-skill: Jev से छँटाई, प्रमाण जाँच, मूल्यांकन और अनुमत कार्रवाई की स्किल; सिमुलेशन स्पष्ट चिह्नित रहता है।",
+      "summary": "इस संग्रह में रिकॉर्ड छँटाई, प्रमाण जाँच, तय मानदंडों से मूल्यांकन और अनुमत कार्रवाई चुनने की स्किल हैं। स्थापना मार्गदर्शिका में TypeSafe या OpenRouter से वास्तविक Jev, या स्पष्ट रूप से चिह्नित एजेंट सिमुलेशन चुनें।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "परियोजना का काम",
+          "text": "इस संग्रह में रिकॉर्ड छँटाई, प्रमाण जाँच, तय मानदंडों से मूल्यांकन और अनुमत कार्रवाई चुनने की स्किल हैं।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "Jev सीमित दायरे के निर्णय करता है; कोडिंग एजेंट प्रमाण देता, परिणाम जाँचता और कार्रवाई करता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "शुरुआत कैसे करें",
+          "text": "स्थापना मार्गदर्शिका में TypeSafe या OpenRouter से वास्तविक Jev, या स्पष्ट रूप से चिह्नित एजेंट सिमुलेशन चुनें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "पाँच स्किल वाला ढाँचा स्रोत पूर्वावलोकन है; प्रकाशित v0.2.0 में ग्यारह प्रवेश बिंदु हैं। सिमुलेशन jev_called को false रखता है और संभावना या विश्वास मान नहीं देता।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "jev-skill — Alur Jev untuk agen pemrograman",
+      "h1": "jev-skill — Alur Jev untuk agen pemrograman",
+      "description": "jev-skill: Keterampilan Jev untuk triase, pemeriksaan bukti, evaluasi, dan pemilihan tindakan yang diizinkan, dengan simulasi berlabel jelas.",
+      "summary": "Koleksi ini menyediakan keterampilan untuk triase data, pemeriksaan bukti, penilaian berdasarkan rubrik, dan pemilihan tindakan yang diizinkan. Ikuti panduan pemasangan lalu pilih Jev nyata melalui TypeSafe atau OpenRouter, atau simulasi agen yang diberi label jelas.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "Koleksi ini menyediakan keterampilan untuk triase data, pemeriksaan bukti, penilaian berdasarkan rubrik, dan pemilihan tindakan yang diizinkan.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Jev memberi penilaian terbatas; agen menyediakan bukti, memeriksa hasil, dan menjalankan tindakan.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara memulai",
+          "text": "Ikuti panduan pemasangan lalu pilih Jev nyata melalui TypeSafe atau OpenRouter, atau simulasi agen yang diberi label jelas.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Susunan lima keterampilan masih pratinjau sumber; v0.2.0 terbit memiliki sebelas pintu masuk. Simulasi menetapkan jev_called: false tanpa probabilitas atau keyakinan.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "jev-skill — Quy trình Jev cho tác tử lập trình",
+      "h1": "jev-skill — Quy trình Jev cho tác tử lập trình",
+      "description": "jev-skill: Kỹ năng dùng Jev phân luồng, kiểm chứng, đánh giá và chọn hành động hợp lệ, có nhãn mô phỏng rõ ràng.",
+      "summary": "Bộ sưu tập cung cấp kỹ năng phân luồng dữ liệu, kiểm tra bằng chứng, đánh giá theo tiêu chí và chọn hành động hợp lệ. Theo hướng dẫn cài đặt để chọn Jev thật qua TypeSafe hoặc OpenRouter, hoặc mô phỏng bằng tác tử được ghi nhãn rõ ràng.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Công dụng",
+          "text": "Bộ sưu tập cung cấp kỹ năng phân luồng dữ liệu, kiểm tra bằng chứng, đánh giá theo tiêu chí và chọn hành động hợp lệ.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Jev đưa ra phán đoán trong phạm vi xác định; tác tử cung cấp bằng chứng, kiểm tra kết quả và thực thi hành động.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách bắt đầu",
+          "text": "Theo hướng dẫn cài đặt để chọn Jev thật qua TypeSafe hoặc OpenRouter, hoặc mô phỏng bằng tác tử được ghi nhãn rõ ràng.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Cấu trúc năm kỹ năng là bản xem trước mã nguồn; v0.2.0 đã phát hành có mười một điểm vào. Mô phỏng đặt jev_called: false và không đưa ra xác suất hay độ tin cậy.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "jev-skill — Kodlama ajanları için Jev iş akışları",
+      "h1": "jev-skill — Kodlama ajanları için Jev iş akışları",
+      "description": "jev-skill: Jev ile sınıflandırma, kanıt denetimi, değerlendirme ve geçerli eylem seçimi becerileri; simülasyon açıkça etiketlenir.",
+      "summary": "Koleksiyon kayıt sınıflandırma, kanıt kontrolü, ölçütlerle değerlendirme ve izin verilen eylemleri seçme becerileri sunar. Kurulum kılavuzunda TypeSafe veya OpenRouter üzerinden gerçek Jev’i ya da açıkça etiketlenmiş ajan simülasyonunu seçin.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "Koleksiyon kayıt sınıflandırma, kanıt kontrolü, ölçütlerle değerlendirme ve izin verilen eylemleri seçme becerileri sunar.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Jev sınırlı kararlar verir; kodlama ajanı kanıt sağlar, sonuçları denetler ve eylemleri yürütür.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Başlangıç",
+          "text": "Kurulum kılavuzunda TypeSafe veya OpenRouter üzerinden gerçek Jev’i ya da açıkça etiketlenmiş ajan simülasyonunu seçin.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Beş becerilik düzen kaynak önizlemesidir; yayımlanmış v0.2.0’da on bir giriş vardır. Simülasyon jev_called değerini false yapar; olasılık veya güven değeri sunmaz.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "jev-skill — Flussi Jev per agenti di programmazione",
+      "h1": "jev-skill — Flussi Jev per agenti di programmazione",
+      "description": "jev-skill: Competenze Jev per triage, verifica, valutazione e azioni consentite, con simulazione dichiarata.",
+      "summary": "La raccolta offre competenze per smistare record, verificare prove, valutare secondo criteri e scegliere azioni consentite. Segui la guida e scegli Jev reale tramite TypeSafe o OpenRouter, oppure una simulazione dell’agente esplicitamente segnalata.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "La raccolta offre competenze per smistare record, verificare prove, valutare secondo criteri e scegliere azioni consentite.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Jev formula giudizi circoscritti; l’agente fornisce le prove, verifica i risultati ed esegue le azioni.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come iniziare",
+          "text": "Segui la guida e scegli Jev reale tramite TypeSafe o OpenRouter, oppure una simulazione dell’agente esplicitamente segnalata.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "La struttura a cinque competenze è un’anteprima del sorgente; v0.2.0 pubblicata ha undici ingressi. La simulazione imposta jev_called: false senza probabilità o confidenza.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

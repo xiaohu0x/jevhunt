@@ -1,0 +1,757 @@
+{
+  "version": "source-content-v1",
+  "repo": "hr98w/jev-visual",
+  "repositoryId": 1374829176,
+  "relationship": "local-alternative",
+  "category": "research",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "path": "README.md",
+      "commit": "4382bba455647400951429134ceb012ca155e3fe",
+      "url": "https://github.com/hr98w/jev-visual/blob/4382bba455647400951429134ceb012ca155e3fe/README.md",
+      "sha256": "ba93d7cb6429a74113c5676ed16f66933a364e44a17eb13d77d794df2ca8e893",
+      "accessedAt": "2026-09-30T07:33:51.995Z",
+      "id": "s1"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "This learning project answers choice, yes/no and ordered-score questions about one image by directly scoring candidate outputs.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 5,
+          "end": 7,
+          "quote": "A small, runnable project for learning **vision-language model inference on Apple Silicon**. Use Qwen3.5-0.8B with MLX to answer multiple questions about one image: choose an option, judge yes/no, or score ordered levels. Includes a local browser UI, CLI and HTTP API.\n\n> This project explores a Jev-like inference pattern for open multimodal language models. It avoids autoregressive structured generation by reusing shared multimodal context and directly scoring candidate outputs from model logits."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "It is an independent community exploration of Jev-like inference, without reproducing TypeSafe's proprietary architecture, training, calibration or serving system.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 7,
+          "end": 9,
+          "quote": "> This project explores a Jev-like inference pattern for open multimodal language models. It avoids autoregressive structured generation by reusing shared multimodal context and directly scoring candidate outputs from model logits.\n>\n> This is an independent community implementation and does not claim to reproduce TypeSafe Jev's proprietary model architecture, RLCD training, calibration, or serving system."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Use an Apple Silicon Mac with Metal, download the model, then analyze images through the local browser interface, CLI or HTTP API.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 54,
+          "end": 77,
+          "quote": "## Run locally\n\nRequires an **Apple Silicon Mac with Metal**. Tested on M4 / 16GB, macOS 15.1, Python 3.13.1. First setup downloads dependencies and approximately 596 MiB of model weights; inference then runs locally.\n\nFrom the repository root:\n\n```bash\n# If needed, install uv with Homebrew: brew install uv\nuv venv --python 3.13\nsource .venv/bin/activate\nuv pip install -r requirements-lock.txt\nuv pip install --no-deps -e .\njev-visual-download\n\nJEV_VISUAL_MODEL_PATH=.models/Qwen3.5-0.8B-4bit \\\n  uvicorn jev_visual.server:app --host 127.0.0.1 --port 8788\n```\n\nOpen **http://127.0.0.1:8788**, upload an image and click **Analyze image**. Use one worker; first inference may be slower. This server is for local use. API docs: `/docs`.\n\nOr try the included request:\n\n```bash\njev-visual examples/photo-request.json --model-path .models/Qwen3.5-0.8B-4bit"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "Candidate probabilities are uncalibrated relative scores. Only the Qwen3.5 adapter is verified; the published benchmark studies scaling, not accuracy or Jev equivalence.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "s1",
+          "start": 94,
+          "end": 94,
+          "quote": "This uses existing weights; no training or calibration. Candidate probabilities are relative to supplied options, **not correctness estimates**. Only the Qwen3.5 adapter is verified. Cache sharing is within one request and copies state; it is not zero-copy sharing. Supports 1–64 questions, 2–26 options each."
+        },
+        {
+          "source": "s1",
+          "start": 109,
+          "end": 111,
+          "quote": "The benchmark compares **generate JSON → independent candidate scoring → shared-prefix batched scoring**, at **1 / 4 / 16 / 64 decisions**, with three repetitions and model loading/warmup excluded. New outputs go to `artifacts/`.\n\nThe recorded M4 / 16GB run took **37.30s → 2.40s** for independent versus shared scoring at 64 decisions (medians). Generated JSON failed the complete schema at 4/16/64 decisions; its timing is not successful-completion latency. This is a scaling experiment, not an accuracy evaluation or Jev comparison."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "Jev Visual: local image decisions with Qwen and MLX",
+      "h1": "Jev Visual: local image decisions with Qwen and MLX",
+      "description": "Jev Visual explores Jev-like visual decisions on Apple Silicon using Qwen3.5-0.8B and MLX, with local UI, CLI and API access.",
+      "summary": "This learning project answers choice, yes/no and ordered-score questions about one image by directly scoring candidate outputs. It is an independent community exploration of Jev-like inference, without reproducing TypeSafe's proprietary architecture, training, calibration or serving system.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Purpose and audience",
+          "text": "This learning project answers choice, yes/no and ordered-score questions about one image by directly scoring candidate outputs.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "It is an independent community exploration of Jev-like inference, without reproducing TypeSafe's proprietary architecture, training, calibration or serving system.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Using the project",
+          "text": "Use an Apple Silicon Mac with Metal, download the model, then analyze images through the local browser interface, CLI or HTTP API.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "Candidate probabilities are uncalibrated relative scores. Only the Qwen3.5 adapter is verified; the published benchmark studies scaling, not accuracy or Jev equivalence.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "Jev Visual：用 Qwen 与 MLX 进行本地图像决策",
+      "h1": "Jev Visual：用 Qwen 与 MLX 进行本地图像决策",
+      "description": "Jev Visual 在 Apple Silicon 上用 Qwen3.5-0.8B 和 MLX 探索类 Jev 视觉判断，提供本地界面、CLI 与 API。",
+      "summary": "这个学习项目直接为候选输出评分，回答同一图像的选择、是非和有序评分问题。 这是独立社区对类 Jev 推理的探索，不复现 TypeSafe 的专有架构、训练、校准或服务系统。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途与适用对象",
+          "text": "这个学习项目直接为候选输出评分，回答同一图像的选择、是非和有序评分问题。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "这是独立社区对类 Jev 推理的探索，不复现 TypeSafe 的专有架构、训练、校准或服务系统。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "使用带 Metal 的 Apple Silicon Mac，下载模型后通过本地浏览器界面、CLI 或 HTTP API 分析图像。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "候选概率是未经校准的相对分数。目前仅验证 Qwen3.5 适配器；公开基准研究扩展性，不代表准确率或与 Jev 等效。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "Jev Visual：以 Qwen 與 MLX 進行本機影像決策",
+      "h1": "Jev Visual：以 Qwen 與 MLX 進行本機影像決策",
+      "description": "Jev Visual 在 Apple Silicon 上以 Qwen3.5-0.8B 和 MLX 探索類 Jev 視覺判斷，提供本機介面、CLI 與 API。",
+      "summary": "此學習專案直接為候選輸出評分，回答同一影像的選擇、是非及有序評分問題。 這是獨立社群對類 Jev 推論的探索，並未重現 TypeSafe 的專有架構、訓練、校準或服務系統。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途與適用對象",
+          "text": "此學習專案直接為候選輸出評分，回答同一影像的選擇、是非及有序評分問題。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "這是獨立社群對類 Jev 推論的探索，並未重現 TypeSafe 的專有架構、訓練、校準或服務系統。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "使用支援 Metal 的 Apple Silicon Mac，下載模型後，透過本機瀏覽器介面、CLI 或 HTTP API 分析影像。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "候選機率是未校準的相對分數。目前僅驗證 Qwen3.5 介接器；公開基準研究擴展性，不代表準確率或與 Jev 等效。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "Jev Visual：Qwen と MLX でローカル画像判断",
+      "h1": "Jev Visual：Qwen と MLX でローカル画像判断",
+      "description": "Jev Visual は Apple Silicon 上の Qwen3.5-0.8B と MLX で Jev 型の画像判断を学ぶプロジェクトです。",
+      "summary": "一枚の画像に対する選択、真偽、順序付き評価の問いに、候補出力を直接採点して答えます。 独立したコミュニティの推論研究で、TypeSafe 独自の構造、学習、校正、提供基盤を再現するものではありません。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "用途と対象",
+          "text": "一枚の画像に対する選択、真偽、順序付き評価の問いに、候補出力を直接採点して答えます。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev との関係",
+          "text": "独立したコミュニティの推論研究で、TypeSafe 独自の構造、学習、校正、提供基盤を再現するものではありません。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い方",
+          "text": "Metal 対応 Apple Silicon Mac でモデルを取得し、ローカルのブラウザー画面、CLI、HTTP API から画像を分析します。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範囲と制約",
+          "text": "候補確率は未校正の相対値です。確認済みは Qwen3.5 アダプターのみで、公開実験は規模拡大を測り、精度や Jev 同等性は検証しません。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "Jev Visual: Qwen·MLX 기반 로컬 이미지 판단",
+      "h1": "Jev Visual: Qwen·MLX 기반 로컬 이미지 판단",
+      "description": "Jev Visual은 Apple Silicon에서 Qwen3.5-0.8B와 MLX로 Jev 방식의 시각 판단을 탐구하며 로컬 UI, CLI, API를 제공합니다.",
+      "summary": "한 이미지의 선택, 예·아니요, 순서형 점수 질문에 후보 출력을 직접 평가해 답하는 학습 프로젝트입니다. 독립 커뮤니티의 Jev 유사 추론 연구이며 TypeSafe의 독점 구조, 학습, 보정, 서비스 시스템을 재현하지 않습니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "용도와 대상",
+          "text": "한 이미지의 선택, 예·아니요, 순서형 점수 질문에 후보 출력을 직접 평가해 답하는 학습 프로젝트입니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "독립 커뮤니티의 Jev 유사 추론 연구이며 TypeSafe의 독점 구조, 학습, 보정, 서비스 시스템을 재현하지 않습니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "Metal 지원 Apple Silicon Mac에 모델을 받은 뒤 로컬 브라우저 화면, CLI 또는 HTTP API로 이미지를 분석합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 한계",
+          "text": "후보 확률은 보정되지 않은 상대 점수입니다. Qwen3.5 어댑터만 검증됐으며 공개 벤치마크는 확장성 연구이지 정확도나 Jev 동등성 검증이 아닙니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "Jev Visual: decisiones visuales locales con Qwen y MLX",
+      "h1": "Jev Visual: decisiones visuales locales con Qwen y MLX",
+      "description": "Jev Visual explora decisiones visuales tipo Jev en Apple Silicon con Qwen3.5-0.8B y MLX, mediante UI, CLI y API locales.",
+      "summary": "El proyecto educativo responde preguntas de elección, sí/no y puntuación ordenada sobre una imagen, evaluando directamente candidatos. Es una exploración comunitaria independiente; no reproduce arquitectura, entrenamiento, calibración ni servicio propietarios de TypeSafe.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "El proyecto educativo responde preguntas de elección, sí/no y puntuación ordenada sobre una imagen, evaluando directamente candidatos.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Es una exploración comunitaria independiente; no reproduce arquitectura, entrenamiento, calibración ni servicio propietarios de TypeSafe.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo se usa",
+          "text": "Use un Mac Apple Silicon con Metal, descargue el modelo y analice imágenes mediante navegador local, CLI o API HTTP.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "Las probabilidades son puntuaciones relativas sin calibrar. Solo se verificó el adaptador Qwen3.5; el benchmark estudia escalado, no precisión ni equivalencia con Jev.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "Jev Visual : décisions visuelles locales avec Qwen et MLX",
+      "h1": "Jev Visual : décisions visuelles locales avec Qwen et MLX",
+      "description": "Jev Visual explore des décisions visuelles de type Jev sur Apple Silicon avec Qwen3.5-0.8B et MLX, via UI, CLI et API locales.",
+      "summary": "Ce projet pédagogique répond à des questions à choix, oui/non et à scores ordonnés sur une image en évaluant directement les candidats. Cette exploration communautaire indépendante ne reproduit ni architecture, ni entraînement, ni calibration, ni service propriétaires de TypeSafe.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Usage et public visé",
+          "text": "Ce projet pédagogique répond à des questions à choix, oui/non et à scores ordonnés sur une image en évaluant directement les candidats.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Cette exploration communautaire indépendante ne reproduit ni architecture, ni entraînement, ni calibration, ni service propriétaires de TypeSafe.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Utilisez un Mac Apple Silicon avec Metal, téléchargez le modèle et analysez les images via navigateur local, CLI ou API HTTP.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "Les probabilités sont des scores relatifs non calibrés. Seul l'adaptateur Qwen3.5 est vérifié ; le benchmark étudie le passage à l'échelle, pas la précision ou l'équivalence Jev.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "Jev Visual: lokale Bildentscheidungen mit Qwen und MLX",
+      "h1": "Jev Visual: lokale Bildentscheidungen mit Qwen und MLX",
+      "description": "Jev Visual untersucht Jev-artige Bildentscheidungen auf Apple Silicon mit Qwen3.5-0.8B und MLX über lokale UI, CLI und API.",
+      "summary": "Das Lernprojekt beantwortet Auswahl-, Ja/Nein- und geordnete Bewertungsfragen zu einem Bild durch direktes Bewerten der Kandidaten. Es ist unabhängige Community-Forschung und reproduziert weder TypeSafes proprietäre Architektur noch Training, Kalibrierung oder Serverbetrieb.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Zweck und Zielgruppe",
+          "text": "Das Lernprojekt beantwortet Auswahl-, Ja/Nein- und geordnete Bewertungsfragen zu einem Bild durch direktes Bewerten der Kandidaten.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Es ist unabhängige Community-Forschung und reproduziert weder TypeSafes proprietäre Architektur noch Training, Kalibrierung oder Serverbetrieb.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Verwendung",
+          "text": "Nutzen Sie einen Apple-Silicon-Mac mit Metal, laden Sie das Modell und analysieren Sie Bilder per lokaler Browseroberfläche, CLI oder HTTP-API.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Kandidatenwahrscheinlichkeiten sind unkalibrierte relative Werte. Nur der Qwen3.5-Adapter ist geprüft; der Benchmark untersucht Skalierung, nicht Genauigkeit oder Jev-Gleichwertigkeit.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "Jev Visual: decisões visuais locais com Qwen e MLX",
+      "h1": "Jev Visual: decisões visuais locais com Qwen e MLX",
+      "description": "Jev Visual explora decisões visuais semelhantes ao Jev em Apple Silicon com Qwen3.5-0.8B e MLX, via UI, CLI e API locais.",
+      "summary": "O projeto educativo responde perguntas de escolha, sim/não e pontuação ordenada sobre uma imagem avaliando candidatos diretamente. É uma exploração comunitária independente, sem reproduzir arquitetura, treinamento, calibração ou sistema de serviço proprietários da TypeSafe.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Finalidade e público",
+          "text": "O projeto educativo responde perguntas de escolha, sim/não e pontuação ordenada sobre uma imagem avaliando candidatos diretamente.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "É uma exploração comunitária independente, sem reproduzir arquitetura, treinamento, calibração ou sistema de serviço proprietários da TypeSafe.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como usar",
+          "text": "Use um Mac Apple Silicon com Metal, baixe o modelo e analise imagens pelo navegador local, CLI ou API HTTP.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "As probabilidades são pontuações relativas não calibradas. Só o adaptador Qwen3.5 foi verificado; o benchmark estuda escala, não precisão ou equivalência ao Jev.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "Jev Visual: локальные решения по изображениям на Qwen и MLX",
+      "h1": "Jev Visual: локальные решения по изображениям на Qwen и MLX",
+      "description": "Jev Visual исследует визуальные решения по образцу Jev на Apple Silicon с Qwen3.5-0.8B и MLX, через локальные UI, CLI и API.",
+      "summary": "Учебный проект отвечает на вопросы выбора, да/нет и порядковой оценки по одному изображению, напрямую оценивая кандидатов. Это независимая общественная разработка без воспроизведения закрытых архитектуры, обучения, калибровки или сервиса TypeSafe.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Учебный проект отвечает на вопросы выбора, да/нет и порядковой оценки по одному изображению, напрямую оценивая кандидатов.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Это независимая общественная разработка без воспроизведения закрытых архитектуры, обучения, калибровки или сервиса TypeSafe.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Как использовать",
+          "text": "Используйте Apple Silicon Mac с Metal, загрузите модель и анализируйте изображения через локальный браузерный интерфейс, CLI или HTTP API.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Вероятности — некалиброванные относительные оценки. Проверен только адаптер Qwen3.5; бенчмарк изучает масштабирование, а не точность или эквивалентность Jev.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "Jev Visual: Qwen और MLX से स्थानीय चित्र निर्णय",
+      "h1": "Jev Visual: Qwen और MLX से स्थानीय चित्र निर्णय",
+      "description": "Jev Visual, Apple Silicon पर Qwen3.5-0.8B और MLX से Jev-जैसे दृश्य निर्णय खोजता है; स्थानीय UI, CLI और API उपलब्ध हैं।",
+      "summary": "यह सीखने का प्रोजेक्ट एक चित्र पर विकल्प, हाँ/नहीं और क्रमबद्ध स्कोर प्रश्नों के लिए उम्मीदवार आउटपुट सीधे आँकता है। यह स्वतंत्र सामुदायिक प्रयोग है; TypeSafe की निजी संरचना, प्रशिक्षण, कैलिब्रेशन या सर्विंग व्यवस्था दोहराने का दावा नहीं करता।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "उद्देश्य और उपयोगकर्ता",
+          "text": "यह सीखने का प्रोजेक्ट एक चित्र पर विकल्प, हाँ/नहीं और क्रमबद्ध स्कोर प्रश्नों के लिए उम्मीदवार आउटपुट सीधे आँकता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "यह स्वतंत्र सामुदायिक प्रयोग है; TypeSafe की निजी संरचना, प्रशिक्षण, कैलिब्रेशन या सर्विंग व्यवस्था दोहराने का दावा नहीं करता।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "इस्तेमाल का तरीका",
+          "text": "Metal वाले Apple Silicon Mac पर मॉडल डाउनलोड करके स्थानीय ब्राउज़र, CLI या HTTP API से चित्र विश्लेषित करें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "संभावनाएँ बिना कैलिब्रेशन के सापेक्ष स्कोर हैं। केवल Qwen3.5 अडैप्टर सत्यापित है; बेंचमार्क स्केलिंग जाँचता है, सटीकता या Jev समानता नहीं।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "Jev Visual: keputusan gambar lokal dengan Qwen dan MLX",
+      "h1": "Jev Visual: keputusan gambar lokal dengan Qwen dan MLX",
+      "description": "Jev Visual mengeksplorasi keputusan visual ala Jev di Apple Silicon dengan Qwen3.5-0.8B dan MLX melalui UI, CLI, serta API lokal.",
+      "summary": "Proyek pembelajaran ini menjawab pilihan, ya/tidak, dan skor berurutan tentang satu gambar dengan menilai kandidat secara langsung. Ini eksplorasi komunitas independen tanpa mereproduksi arsitektur, pelatihan, kalibrasi, atau sistem layanan milik TypeSafe.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Tujuan dan pengguna",
+          "text": "Proyek pembelajaran ini menjawab pilihan, ya/tidak, dan skor berurutan tentang satu gambar dengan menilai kandidat secara langsung.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Ini eksplorasi komunitas independen tanpa mereproduksi arsitektur, pelatihan, kalibrasi, atau sistem layanan milik TypeSafe.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara penggunaan",
+          "text": "Gunakan Mac Apple Silicon dengan Metal, unduh model, lalu analisis gambar melalui browser lokal, CLI, atau API HTTP.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Probabilitas kandidat adalah skor relatif tanpa kalibrasi. Hanya adaptor Qwen3.5 diverifikasi; benchmark menguji penskalaan, bukan akurasi atau kesetaraan Jev.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "Jev Visual: quyết định hình ảnh cục bộ với Qwen và MLX",
+      "h1": "Jev Visual: quyết định hình ảnh cục bộ với Qwen và MLX",
+      "description": "Jev Visual khám phá quyết định thị giác kiểu Jev trên Apple Silicon bằng Qwen3.5-0.8B và MLX, qua UI, CLI và API cục bộ.",
+      "summary": "Dự án học tập trả lời lựa chọn, có/không và điểm có thứ tự cho một ảnh bằng cách chấm trực tiếp đầu ra ứng viên. Đây là khám phá cộng đồng độc lập, không tái tạo kiến trúc, huấn luyện, hiệu chuẩn hoặc hệ thống phục vụ độc quyền của TypeSafe.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Mục đích và đối tượng",
+          "text": "Dự án học tập trả lời lựa chọn, có/không và điểm có thứ tự cho một ảnh bằng cách chấm trực tiếp đầu ra ứng viên.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Đây là khám phá cộng đồng độc lập, không tái tạo kiến trúc, huấn luyện, hiệu chuẩn hoặc hệ thống phục vụ độc quyền của TypeSafe.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách sử dụng",
+          "text": "Dùng Mac Apple Silicon có Metal, tải mô hình rồi phân tích ảnh qua giao diện trình duyệt cục bộ, CLI hoặc HTTP API.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Xác suất ứng viên là điểm tương đối chưa hiệu chuẩn. Chỉ bộ điều hợp Qwen3.5 được xác minh; benchmark khảo sát mở rộng, không đo độ chính xác hay tương đương Jev.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "Jev Visual: Qwen ve MLX ile yerel görüntü kararları",
+      "h1": "Jev Visual: Qwen ve MLX ile yerel görüntü kararları",
+      "description": "Jev Visual, Apple Silicon üzerinde Qwen3.5-0.8B ve MLX ile Jev benzeri görsel kararları yerel UI, CLI ve API üzerinden araştırır.",
+      "summary": "Öğrenme projesi, tek görüntü için seçim, evet/hayır ve sıralı puan sorularını aday çıktıları doğrudan değerlendirerek yanıtlar. Bağımsız topluluk çalışmasıdır; TypeSafe’in özel mimarisini, eğitimini, kalibrasyonunu veya model sunma altyapısını yeniden üretmez.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Amaç ve hedef kitle",
+          "text": "Öğrenme projesi, tek görüntü için seçim, evet/hayır ve sıralı puan sorularını aday çıktıları doğrudan değerlendirerek yanıtlar.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Bağımsız topluluk çalışmasıdır; TypeSafe’in özel mimarisini, eğitimini, kalibrasyonunu veya model sunma altyapısını yeniden üretmez.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Kullanım",
+          "text": "Metal destekli Apple Silicon Mac’e model indirilir; görüntüler yerel tarayıcı arayüzü, CLI veya HTTP API ile analiz edilir.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Aday olasılıkları kalibre edilmemiş göreli puanlardır. Yalnızca Qwen3.5 bağdaştırıcısı doğrulanmıştır; benchmark doğruluk veya Jev eşdeğerliğini değil ölçeklenmeyi inceler.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "Jev Visual: decisioni visive locali con Qwen e MLX",
+      "h1": "Jev Visual: decisioni visive locali con Qwen e MLX",
+      "description": "Jev Visual esplora decisioni visive sul modello di Jev su Apple Silicon con Qwen3.5-0.8B e MLX, tramite UI, CLI e API locali.",
+      "summary": "Il progetto didattico risponde a domande di scelta, sì/no e punteggi ordinati su un'immagine valutando direttamente i candidati. È un'esplorazione comunitaria indipendente e non riproduce architettura, addestramento, calibrazione o servizio proprietari di TypeSafe.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Scopo e destinatari",
+          "text": "Il progetto didattico risponde a domande di scelta, sì/no e punteggi ordinati su un'immagine valutando direttamente i candidati.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "È un'esplorazione comunitaria indipendente e non riproduce architettura, addestramento, calibrazione o servizio proprietari di TypeSafe.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come si usa",
+          "text": "Si usa un Mac Apple Silicon con Metal, si scarica il modello e si analizzano immagini tramite browser locale, CLI o API HTTP.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "Le probabilità sono punteggi relativi non calibrati. Solo l'adattatore Qwen3.5 è verificato; il benchmark studia la scalabilità, non accuratezza o equivalenza Jev.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  },
+  "displayName": "Jev Visual"
+}

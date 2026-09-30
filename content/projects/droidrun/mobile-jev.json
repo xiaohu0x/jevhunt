@@ -1,0 +1,756 @@
+{
+  "version": "source-content-v1",
+  "repo": "droidrun/mobile-jev",
+  "repositoryId": 1374280231,
+  "relationship": "jev-app",
+  "category": "agents",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "395fc222beac4f059f9a0beb337d114a2b066e99",
+      "url": "https://github.com/droidrun/mobile-jev/blob/395fc222beac4f059f9a0beb337d114a2b066e99/README.md",
+      "sha256": "d257fed2c5f7b6579c68a4474a385c14635ffb08349896fede3c3e64affae3fb",
+      "accessedAt": "2026-09-30T07:33:51.250Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "Mobile Jev controls an Android device through Mobilerun, with a live studio, CLI and execution traces.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 7,
+          "end": 9,
+          "quote": "**One goal. A real Android phone. Jev makes the decisions.**\n\nA standalone mobile agent for [Mobilerun](https://mobilerun.ai), powered by [TypeSafe's Jev](https://docs.typesafe.ai/) and the [Mobilerun API](https://docs.mobilerun.ai/). Includes a live React studio, a CLI, execution traces, and request-level latency measurements. No ADB connection is required."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "Jev selects operations and observed targets; Mobilerun executes them, while text inputs are copied from supplied goal spans.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 95,
+          "end": 99,
+          "quote": "Jev chooses `OPEN_APP`, `TAP`, `TYPE_TEXT`, scrolling, navigation, `WAIT`, `DONE`, or `BLOCKED`. Operation and compatible-target questions share one request; unused target answers cannot execute. App launch targets come from the installed-app API. When a goal names installed apps explicitly, exact name matching narrows that inventory; otherwise up to 200 apps are offered and the launcher remains available.\n\nThe executor resolves coordinates from observed bounds. It validates probability distributions, rejects stale targets, and never retries a device mutation after an uncertain transport failure. It records actions before the next observation, so a failed read cannot erase an executed action.\n\nText comes from exact spans in the goal. Jev selects a span; code copies it into the field. Supply `--text \"exact field value\"` to override those candidates. This implementation does not generate arbitrary prose or invent missing personal details. A separate text-generation model is not needed."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Configure both provider keys and a ready device ID, then use pnpm dev to open the local studio and submit a goal.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 15,
+          "end": 33,
+          "quote": "Requirements: **Node.js 24 recommended** (22.16+ supported), **pnpm 10.30.1**, **curl 7.70+**, a ready Mobilerun Android device, and API keys for Mobilerun and TypeSafe. Tested locally on macOS; CI runs offline tests and the build on Linux.\n\n```sh\ngit clone https://github.com/droidrun/mobile-jev.git\ncd mobile-jev\ncorepack enable\npnpm install --frozen-lockfile\ncp .env.example .env.local\n```\n\nAdd `MOBILERUN_API_KEY` and `TYPESAFE_API_KEY` to `.env.local`. List your devices, then set `MOBILERUN_DEVICE_ID` to the one you want to control:\n\n```sh\npnpm devices\npnpm doctor\npnpm dev\n```\n\nOpen **http://127.0.0.1:3040**. Enter a goal and press **Run task**."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "The studio is intended for one local operator. It cannot invent missing text, and a Jev DONE answer still needs verification against device state.",
+      "kind": "source-limitation",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 59,
+          "end": 59,
+          "quote": "The account API keys stay on the server. The browser receives device-scoped streaming credentials only. The app binds to localhost, validates request origins, and is intended for a single local operator. Public/multi-user hosting requires your own authentication and device authorization. Recent runs are held in memory and cleared on server restart."
+        },
+        {
+          "source": "source-1",
+          "start": 99,
+          "end": 103,
+          "quote": "Text comes from exact spans in the goal. Jev selects a span; code copies it into the field. Supply `--text \"exact field value\"` to override those candidates. This implementation does not generate arbitrary prose or invent missing personal details. A separate text-generation model is not needed.\n\nText replacement uses the API's faster `accepted` completion mode when the focused field can be read back. The agent verifies the complete field value in its next observation before asking Jev to continue; an unverified value stops the run without retyping. Appends, password fields, and fields without a readable target retain server-side `committed` completion. Set `MOBILERUN_TEXT_COMPLETION_MODE=committed` (or CLI `--text-completion committed`) to use that mode for every input.\n\nConfidence is visible and an optional `--confidence` cutoff is available. **Jev's DONE response is not independent proof of success.** Check the resulting device state, especially for numeric values, dates, and multi-part goals. The demo runner provides task-specific verification; see [the demo guide](docs/DEMO.md)."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "mobile-jev — Android actions chosen by Jev through Mobilerun",
+      "h1": "mobile-jev — Android actions chosen by Jev through Mobilerun",
+      "description": "mobile-jev: Jev selects operations and observed targets; Mobilerun executes them, while text inputs are copied from supplied goal spans.",
+      "summary": "Mobile Jev controls an Android device through Mobilerun, with a live studio, CLI and execution traces. Configure both provider keys and a ready device ID, then use pnpm dev to open the local studio and submit a goal.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "What it does",
+          "text": "Mobile Jev controls an Android device through Mobilerun, with a live studio, CLI and execution traces.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "Jev selects operations and observed targets; Mobilerun executes them, while text inputs are copied from supplied goal spans.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Getting started",
+          "text": "Configure both provider keys and a ready device ID, then use pnpm dev to open the local studio and submit a goal.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "The studio is intended for one local operator. It cannot invent missing text, and a Jev DONE answer still needs verification against device state.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "mobile-jev — Jev 选动作、Mobilerun 操作安卓设备",
+      "h1": "mobile-jev — Jev 选动作、Mobilerun 操作安卓设备",
+      "description": "mobile-jev: Jev 选择操作与已观察目标，Mobilerun 负责执行，输入文字则从给定目标中的片段复制。",
+      "summary": "Mobile Jev 通过 Mobilerun 控制安卓设备，提供实时工作台、CLI 和执行轨迹。 配置两个服务密钥及已就绪设备 ID，再运行 pnpm dev 打开本地工作台并提交目标。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "Mobile Jev 通过 Mobilerun 控制安卓设备，提供实时工作台、CLI 和执行轨迹。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "Jev 选择操作与已观察目标，Mobilerun 负责执行，输入文字则从给定目标中的片段复制。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "配置两个服务密钥及已就绪设备 ID，再运行 pnpm dev 打开本地工作台并提交目标。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "工作台面向单个本地操作员。它不能补造缺失文本，Jev 返回 DONE 后仍须核对实际设备状态。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "mobile-jev — Jev 選動作、Mobilerun 操作 Android 裝置",
+      "h1": "mobile-jev — Jev 選動作、Mobilerun 操作 Android 裝置",
+      "description": "mobile-jev: Jev 選擇操作與觀察到的目標，Mobilerun 負責執行，輸入文字則從提供的目標片段複製。",
+      "summary": "Mobile Jev 透過 Mobilerun 控制 Android 裝置，提供即時工作台、CLI 及執行軌跡。 設定兩個服務金鑰及就緒裝置 ID，再執行 pnpm dev 開啟本機工作台並提交目標。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "Mobile Jev 透過 Mobilerun 控制 Android 裝置，提供即時工作台、CLI 及執行軌跡。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "Jev 選擇操作與觀察到的目標，Mobilerun 負責執行，輸入文字則從提供的目標片段複製。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "設定兩個服務金鑰及就緒裝置 ID，再執行 pnpm dev 開啟本機工作台並提交目標。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "工作台供單一本機操作員使用。它不能補造缺少的文字，Jev 回傳 DONE 後仍須核對裝置實際狀態。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "mobile-jev — Jev が選び Mobilerun が動かす Android エージェント",
+      "h1": "mobile-jev — Jev が選び Mobilerun が動かす Android エージェント",
+      "description": "mobile-jev: Jev が操作と観測済み対象を選び、Mobilerun が実行します。入力文字は与えた目標の文字列からコピーします。",
+      "summary": "Mobile Jev は Mobilerun 経由で Android を操作し、ライブ画面、CLI、実行記録を提供します。 両サービスのキーと準備済みデバイス ID を設定し、pnpm dev でローカル画面を開いて目標を入力します。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "できること",
+          "text": "Mobile Jev は Mobilerun 経由で Android を操作し、ライブ画面、CLI、実行記録を提供します。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "Jev が操作と観測済み対象を選び、Mobilerun が実行します。入力文字は与えた目標の文字列からコピーします。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い始めるには",
+          "text": "両サービスのキーと準備済みデバイス ID を設定し、pnpm dev でローカル画面を開いて目標を入力します。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "対象範囲と制約",
+          "text": "1人のローカル操作者向けです。不足した文字を創作する機能はなく、Jev の DONE も実際の端末状態で確認する必要があります。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "mobile-jev — Jev가 선택하고 Mobilerun이 실행하는 Android 제어",
+      "h1": "mobile-jev — Jev가 선택하고 Mobilerun이 실행하는 Android 제어",
+      "description": "mobile-jev: Jev가 작업과 관찰된 대상을 고르면 Mobilerun이 실행하고 입력 텍스트는 제공된 목표 문구에서 복사합니다.",
+      "summary": "Mobile Jev는 Mobilerun으로 Android 기기를 제어하며 실시간 스튜디오, CLI, 실행 기록을 제공합니다. 두 제공자 키와 준비된 기기 ID를 설정한 뒤 pnpm dev로 로컬 스튜디오를 열어 목표를 입력합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "Mobile Jev는 Mobilerun으로 Android 기기를 제어하며 실시간 스튜디오, CLI, 실행 기록을 제공합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Jev가 작업과 관찰된 대상을 고르면 Mobilerun이 실행하고 입력 텍스트는 제공된 목표 문구에서 복사합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "두 제공자 키와 준비된 기기 ID를 설정한 뒤 pnpm dev로 로컬 스튜디오를 열어 목표를 입력합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 제약",
+          "text": "한 명의 로컬 사용자용입니다. 빠진 텍스트를 만들어내지 않으며 Jev의 DONE 응답도 실제 기기 상태로 확인해야 합니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "mobile-jev — Acciones Android elegidas por Jev mediante Mobilerun",
+      "h1": "mobile-jev — Acciones Android elegidas por Jev mediante Mobilerun",
+      "description": "mobile-jev: Jev elige operaciones y objetivos observados; Mobilerun ejecuta, y el texto se copia de fragmentos del objetivo suministrado.",
+      "summary": "Mobile Jev controla Android mediante Mobilerun, con estudio en vivo, CLI y trazas de ejecución. Configura ambas claves y un dispositivo listo; ejecuta pnpm dev para abrir el estudio local e introducir un objetivo.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "Mobile Jev controla Android mediante Mobilerun, con estudio en vivo, CLI y trazas de ejecución.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Jev elige operaciones y objetivos observados; Mobilerun ejecuta, y el texto se copia de fragmentos del objetivo suministrado.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo empezar",
+          "text": "Configura ambas claves y un dispositivo listo; ejecuta pnpm dev para abrir el estudio local e introducir un objetivo.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "El estudio es para un operador local. No inventa texto ausente, y una respuesta DONE necesita comprobarse contra el estado real del dispositivo.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "mobile-jev — Actions Android choisies par Jev via Mobilerun",
+      "h1": "mobile-jev — Actions Android choisies par Jev via Mobilerun",
+      "description": "mobile-jev: Jev choisit opérations et cibles observées ; Mobilerun exécute, et le texte est copié depuis l’objectif fourni.",
+      "summary": "Mobile Jev pilote Android via Mobilerun, avec studio en direct, CLI et traces d’exécution. Configurez les deux clés et un appareil prêt, puis lancez pnpm dev pour ouvrir le studio local et soumettre un objectif.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "Mobile Jev pilote Android via Mobilerun, avec studio en direct, CLI et traces d’exécution.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Jev choisit opérations et cibles observées ; Mobilerun exécute, et le texte est copié depuis l’objectif fourni.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Configurez les deux clés et un appareil prêt, puis lancez pnpm dev pour ouvrir le studio local et soumettre un objectif.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "Le studio vise un seul opérateur local. Il n’invente pas le texte manquant ; une réponse DONE doit être vérifiée sur l’état réel de l’appareil.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "mobile-jev — Android-Aktionen mit Jev und Mobilerun",
+      "h1": "mobile-jev — Android-Aktionen mit Jev und Mobilerun",
+      "description": "mobile-jev: Jev wählt Operationen und beobachtete Ziele; Mobilerun führt sie aus. Eingabetext wird aus vorgegebenen Zieltextstellen kopiert.",
+      "summary": "Mobile Jev steuert Android über Mobilerun und bietet Live-Studio, CLI und Ausführungsspuren. Beide Anbieterschlüssel und eine einsatzbereite Geräte-ID konfigurieren, dann mit pnpm dev das lokale Studio öffnen und ein Ziel eingeben.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "Mobile Jev steuert Android über Mobilerun und bietet Live-Studio, CLI und Ausführungsspuren.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Jev wählt Operationen und beobachtete Ziele; Mobilerun führt sie aus. Eingabetext wird aus vorgegebenen Zieltextstellen kopiert.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Einstieg",
+          "text": "Beide Anbieterschlüssel und eine einsatzbereite Geräte-ID konfigurieren, dann mit pnpm dev das lokale Studio öffnen und ein Ziel eingeben.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Das Studio ist für einen lokalen Bediener gedacht. Fehlender Text wird nicht erfunden; Jevs DONE muss am tatsächlichen Gerätezustand geprüft werden.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "mobile-jev — Ações Android escolhidas pelo Jev via Mobilerun",
+      "h1": "mobile-jev — Ações Android escolhidas pelo Jev via Mobilerun",
+      "description": "mobile-jev: O Jev escolhe operações e alvos observados; o Mobilerun executa, e o texto é copiado de trechos do objetivo fornecido.",
+      "summary": "O Mobile Jev controla Android pelo Mobilerun, com estúdio ao vivo, CLI e rastros de execução. Configure as duas chaves e um dispositivo pronto; execute pnpm dev para abrir o estúdio local e informar um objetivo.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "O Mobile Jev controla Android pelo Mobilerun, com estúdio ao vivo, CLI e rastros de execução.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "O Jev escolhe operações e alvos observados; o Mobilerun executa, e o texto é copiado de trechos do objetivo fornecido.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como começar",
+          "text": "Configure as duas chaves e um dispositivo pronto; execute pnpm dev para abrir o estúdio local e informar um objetivo.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "O estúdio é para um operador local. Não inventa texto ausente; uma resposta DONE exige conferir o estado real do dispositivo.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "mobile-jev — Действия Android через Jev и Mobilerun",
+      "h1": "mobile-jev — Действия Android через Jev и Mobilerun",
+      "description": "mobile-jev: Jev выбирает операции и наблюдаемые цели, Mobilerun выполняет их; вводимый текст копируется из фрагментов заданной цели.",
+      "summary": "Mobile Jev управляет Android через Mobilerun и предоставляет живую панель, CLI и трассы выполнения. Настройте оба ключа и ID готового устройства, затем запустите pnpm dev и задайте цель в локальной панели.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Mobile Jev управляет Android через Mobilerun и предоставляет живую панель, CLI и трассы выполнения.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Jev выбирает операции и наблюдаемые цели, Mobilerun выполняет их; вводимый текст копируется из фрагментов заданной цели.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Начало работы",
+          "text": "Настройте оба ключа и ID готового устройства, затем запустите pnpm dev и задайте цель в локальной панели.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "Панель рассчитана на одного локального оператора. Недостающий текст не выдумывается; ответ DONE нужно сверять с состоянием устройства.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "mobile-jev — Jev के चुने Android कार्य Mobilerun से चलाएँ",
+      "h1": "mobile-jev — Jev के चुने Android कार्य Mobilerun से चलाएँ",
+      "description": "mobile-jev: Jev कार्रवाई और देखे गए लक्ष्य चुनता है; Mobilerun उन्हें चलाता है और इनपुट पाठ दिए लक्ष्य के अंशों से कॉपी होता है।",
+      "summary": "Mobile Jev Mobilerun से Android नियंत्रित करता है और लाइव स्टूडियो, CLI तथा निष्पादन रिकॉर्ड देता है। दोनों सेवा कुंजियाँ और तैयार डिवाइस ID सेट करके pnpm dev चलाएँ और स्थानीय स्टूडियो में लक्ष्य दें।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "परियोजना का काम",
+          "text": "Mobile Jev Mobilerun से Android नियंत्रित करता है और लाइव स्टूडियो, CLI तथा निष्पादन रिकॉर्ड देता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "Jev कार्रवाई और देखे गए लक्ष्य चुनता है; Mobilerun उन्हें चलाता है और इनपुट पाठ दिए लक्ष्य के अंशों से कॉपी होता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "शुरुआत कैसे करें",
+          "text": "दोनों सेवा कुंजियाँ और तैयार डिवाइस ID सेट करके pnpm dev चलाएँ और स्थानीय स्टूडियो में लक्ष्य दें।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "स्टूडियो एक स्थानीय संचालक के लिए है। यह गायब पाठ नहीं गढ़ता; Jev के DONE उत्तर को डिवाइस की वास्तविक स्थिति से जाँचना ज़रूरी है।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "mobile-jev — Tindakan Android dipilih Jev lewat Mobilerun",
+      "h1": "mobile-jev — Tindakan Android dipilih Jev lewat Mobilerun",
+      "description": "mobile-jev: Jev memilih operasi serta target teramati; Mobilerun mengeksekusi, sementara teks disalin dari bagian tujuan yang diberikan.",
+      "summary": "Mobile Jev mengendalikan Android lewat Mobilerun, dengan studio langsung, CLI, dan jejak eksekusi. Atur kedua kunci dan ID perangkat siap pakai, lalu jalankan pnpm dev untuk membuka studio lokal dan memasukkan tujuan.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "Mobile Jev mengendalikan Android lewat Mobilerun, dengan studio langsung, CLI, dan jejak eksekusi.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Jev memilih operasi serta target teramati; Mobilerun mengeksekusi, sementara teks disalin dari bagian tujuan yang diberikan.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara memulai",
+          "text": "Atur kedua kunci dan ID perangkat siap pakai, lalu jalankan pnpm dev untuk membuka studio lokal dan memasukkan tujuan.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Studio ditujukan bagi satu operator lokal. Teks yang hilang tidak dibuat-buat; jawaban DONE perlu diverifikasi terhadap keadaan perangkat.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "mobile-jev — Jev chọn thao tác Android qua Mobilerun",
+      "h1": "mobile-jev — Jev chọn thao tác Android qua Mobilerun",
+      "description": "mobile-jev: Jev chọn thao tác và mục tiêu đã quan sát; Mobilerun thực thi, còn văn bản nhập được chép từ các đoạn mục tiêu đã cung cấp.",
+      "summary": "Mobile Jev điều khiển Android qua Mobilerun, có studio trực tiếp, CLI và dấu vết thực thi. Cấu hình hai khóa và ID thiết bị sẵn sàng, rồi chạy pnpm dev để mở studio cục bộ và nhập mục tiêu.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Công dụng",
+          "text": "Mobile Jev điều khiển Android qua Mobilerun, có studio trực tiếp, CLI và dấu vết thực thi.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Jev chọn thao tác và mục tiêu đã quan sát; Mobilerun thực thi, còn văn bản nhập được chép từ các đoạn mục tiêu đã cung cấp.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách bắt đầu",
+          "text": "Cấu hình hai khóa và ID thiết bị sẵn sàng, rồi chạy pnpm dev để mở studio cục bộ và nhập mục tiêu.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Studio dành cho một người vận hành cục bộ. Công cụ không tự bịa văn bản thiếu; câu trả lời DONE vẫn cần đối chiếu trạng thái thiết bị.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "mobile-jev — Mobilerun üzerinden Jev’in seçtiği Android eylemleri",
+      "h1": "mobile-jev — Mobilerun üzerinden Jev’in seçtiği Android eylemleri",
+      "description": "mobile-jev: Jev işlemleri ve gözlenen hedefleri seçer; Mobilerun yürütür, giriş metni verilen hedefin parçalarından kopyalanır.",
+      "summary": "Mobile Jev, canlı stüdyo, CLI ve yürütme izleriyle Android’i Mobilerun üzerinden kontrol eder. İki anahtarı ve hazır cihaz kimliğini ayarlayıp pnpm dev ile yerel stüdyoyu açın ve hedef girin.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "Mobile Jev, canlı stüdyo, CLI ve yürütme izleriyle Android’i Mobilerun üzerinden kontrol eder.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Jev işlemleri ve gözlenen hedefleri seçer; Mobilerun yürütür, giriş metni verilen hedefin parçalarından kopyalanır.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Başlangıç",
+          "text": "İki anahtarı ve hazır cihaz kimliğini ayarlayıp pnpm dev ile yerel stüdyoyu açın ve hedef girin.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Stüdyo tek yerel operatör içindir. Eksik metin üretmez; Jev’in DONE yanıtı gerçek cihaz durumuyla doğrulanmalıdır.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "mobile-jev — Azioni Android scelte da Jev tramite Mobilerun",
+      "h1": "mobile-jev — Azioni Android scelte da Jev tramite Mobilerun",
+      "description": "mobile-jev: Jev sceglie operazioni e obiettivi osservati; Mobilerun esegue, mentre il testo viene copiato da parti dell’obiettivo fornito.",
+      "summary": "Mobile Jev controlla Android tramite Mobilerun, con studio dal vivo, CLI e tracce di esecuzione. Configura entrambe le chiavi e un dispositivo pronto, poi avvia pnpm dev per aprire lo studio locale e inserire un obiettivo.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "Mobile Jev controlla Android tramite Mobilerun, con studio dal vivo, CLI e tracce di esecuzione.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Jev sceglie operazioni e obiettivi osservati; Mobilerun esegue, mentre il testo viene copiato da parti dell’obiettivo fornito.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come iniziare",
+          "text": "Configura entrambe le chiavi e un dispositivo pronto, poi avvia pnpm dev per aprire lo studio locale e inserire un obiettivo.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "Lo studio è per un operatore locale. Non inventa testo mancante; una risposta DONE richiede verifica sullo stato reale del dispositivo.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

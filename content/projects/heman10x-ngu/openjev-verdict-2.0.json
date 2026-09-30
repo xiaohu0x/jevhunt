@@ -1,0 +1,786 @@
+{
+  "version": "source-content-v1",
+  "repo": "Heman10x-NGU/openJev-verdict-2.0",
+  "repositoryId": 1377115777,
+  "relationship": "local-alternative",
+  "category": "research",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "bff28567cff463b833bf044f351a8b7945d53e07",
+      "url": "https://github.com/Heman10x-NGU/openJev-verdict-2.0/blob/bff28567cff463b833bf044f351a8b7945d53e07/README.md",
+      "sha256": "4f75677f7f18cc7983e46ed15094b31fd531538ba2e014fee7fcda4907e1ab46",
+      "accessedAt": "2026-09-30T07:33:51.996Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "The repository offers open decision models for Jev-style Choice, Score and Noul workflows, including separate Verdict and Verdict 2.0 models.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 13,
+          "end": 18,
+          "quote": "## Two models in this project\n\nThis repository contains code and references for two distinct models:\n\n1. Verdict (the 151M model evaluated on JevBench): General-purpose decision model based on ModernBERT-base and GLiClass. The public checkpoint is hosted at [heman10x/rlcd-modernbert-151m](https://huggingface.co/heman10x/rlcd-modernbert-151m), now updated to v1.4 via inference engine fixes.\n2. Verdict 2.0: Specialized architecture for typed software workflows evaluated on `LocalLLaMA/typed-decisions`. The model weights are currently tracked via Git LFS pointers in `artifacts/verdict2-base/model.pt`. The benchmark numbers reported in the breakthrough section below were produced directly by `verdict2/evaluate.py` against its audited test receipt (`reports/verdict2_base_test.json`)."
+        },
+        {
+          "source": "source-1",
+          "start": 70,
+          "end": 70,
+          "quote": "openJev-verdict-2.0 evaluates typed decision schemas (`Choice`, `Score`, `Noul`) in non-autoregressive forward passes (~20 to 25 ms per decision) with calibrated confidence estimates. Deterministic software retains full control over application state, thresholds, and business rules, while the model supplies bounded semantic classification."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "Verdict uses ModernBERT and GLiClass; Verdict 2.0 targets typed software workflows. These are the project’s models, with Jev used as a comparison baseline.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 17,
+          "end": 18,
+          "quote": "1. Verdict (the 151M model evaluated on JevBench): General-purpose decision model based on ModernBERT-base and GLiClass. The public checkpoint is hosted at [heman10x/rlcd-modernbert-151m](https://huggingface.co/heman10x/rlcd-modernbert-151m), now updated to v1.4 via inference engine fixes.\n2. Verdict 2.0: Specialized architecture for typed software workflows evaluated on `LocalLLaMA/typed-decisions`. The model weights are currently tracked via Git LFS pointers in `artifacts/verdict2-base/model.pt`. The benchmark numbers reported in the breakthrough section below were produced directly by `verdict2/evaluate.py` against its audited test receipt (`reports/verdict2_base_test.json`)."
+        },
+        {
+          "source": "source-1",
+          "start": 70,
+          "end": 70,
+          "quote": "openJev-verdict-2.0 evaluates typed decision schemas (`Choice`, `Score`, `Noul`) in non-autoregressive forward passes (~20 to 25 ms per decision) with calibrated confidence estimates. Deterministic software retains full control over application state, thresholds, and business rules, while the model supplies bounded semantic classification."
+        },
+        {
+          "source": "source-1",
+          "start": 76,
+          "end": 88,
+          "quote": "Evaluated on the held-out test split of `LocalLLaMA/typed-decisions` (2,000 decisions across enterprise financial, security, customer support, and agent trace observability workflows):\n\n| Model | Parameters | Top-1 Accuracy ↑ | Brier Loss (Soft) ↓ | ECE (Correctness Head) ↓ | ECE (Distribution Channel) ↓ | Latency (Decision) ↓ | Option Flip Rate ↓ |\n| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |\n| **Verdict 1.0 Baseline** | 149.6M | 26.10% | 0.5851 | (none) | 0.4209 | ~35 ms | High |\n| **TF-IDF + Logistic Reg** | (none) | 66.10% | 0.1520 | (none) | 0.0207 | **~8 ms** | **0.00%** |\n| **TypeSafe Jev 1.13.0** <sup>†</sup> | ~150M | 72.70% | 0.1480 | (none) | 0.1440 | ~140 ms | (none) |\n| **Laya (ModernBERT-large)**| 421.3M | 76.60% | 0.0660 | (none) | 0.2140 | ~31 ms | (none) |\n| **openJev-verdict-2.0 (Ours)**| **149.6M** | **77.10%** | **0.0636** | **0.0144** | **0.1513** | **~20–25 ms** | **4.76%** |\n\n*Notes:*  \n<sup>†</sup> *Vendor baseline cataloged in Laya's published evaluation suite.*  \n*Kev published a 7.41% flip rate on its multi-task suite (N = 81); openJev-verdict-2.0 achieves 4.76% across N = 2,918 enterprise perturbations.*"
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Serve webgpu-demo with Python’s HTTP server and open the documented browser playground; model artifacts and evaluation receipts are linked separately.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 162,
+          "end": 169,
+          "quote": "### In-browser WebGPU playground\n\n1. Open `webgpu-demo/`:\n```bash\ncd webgpu-demo\npython3 -m http.server 8080\n```\n2. Navigate to `http://localhost:8080` in Chrome or Edge to test real customer service, security, and invoice decisions directly in your browser."
+        },
+        {
+          "source": "source-1",
+          "start": 17,
+          "end": 18,
+          "quote": "1. Verdict (the 151M model evaluated on JevBench): General-purpose decision model based on ModernBERT-base and GLiClass. The public checkpoint is hosted at [heman10x/rlcd-modernbert-151m](https://huggingface.co/heman10x/rlcd-modernbert-151m), now updated to v1.4 via inference engine fixes.\n2. Verdict 2.0: Specialized architecture for typed software workflows evaluated on `LocalLLaMA/typed-decisions`. The model weights are currently tracked via Git LFS pointers in `artifacts/verdict2-base/model.pt`. The benchmark numbers reported in the breakthrough section below were produced directly by `verdict2/evaluate.py` against its audited test receipt (`reports/verdict2_base_test.json`)."
+        },
+        {
+          "source": "source-1",
+          "start": 144,
+          "end": 145,
+          "quote": "Explore the interactive Pareto frontier scatter plot, KPI tiles, and complete metric receipts in the self-contained dashboard:\n- [Interactive Benchmark Dashboard](docs/index.html) (Live on GitHub Pages: `https://heman10x-ngu.github.io/openJev-verdict-2.0/`)"
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "The two models have different evaluations. The Verdict 2.0 table cites Jev’s baseline from Laya’s evaluation suite, so its headline is not a fresh universal comparison.",
+      "kind": "source-limitation",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 24,
+          "end": 24,
+          "quote": "These are inference fixes, not a retrain. The weights are byte-identical to the published checkpoint. Measured on the 231 public JevBench tasks."
+        },
+        {
+          "source": "source-1",
+          "start": 76,
+          "end": 88,
+          "quote": "Evaluated on the held-out test split of `LocalLLaMA/typed-decisions` (2,000 decisions across enterprise financial, security, customer support, and agent trace observability workflows):\n\n| Model | Parameters | Top-1 Accuracy ↑ | Brier Loss (Soft) ↓ | ECE (Correctness Head) ↓ | ECE (Distribution Channel) ↓ | Latency (Decision) ↓ | Option Flip Rate ↓ |\n| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |\n| **Verdict 1.0 Baseline** | 149.6M | 26.10% | 0.5851 | (none) | 0.4209 | ~35 ms | High |\n| **TF-IDF + Logistic Reg** | (none) | 66.10% | 0.1520 | (none) | 0.0207 | **~8 ms** | **0.00%** |\n| **TypeSafe Jev 1.13.0** <sup>†</sup> | ~150M | 72.70% | 0.1480 | (none) | 0.1440 | ~140 ms | (none) |\n| **Laya (ModernBERT-large)**| 421.3M | 76.60% | 0.0660 | (none) | 0.2140 | ~31 ms | (none) |\n| **openJev-verdict-2.0 (Ours)**| **149.6M** | **77.10%** | **0.0636** | **0.0144** | **0.1513** | **~20–25 ms** | **4.76%** |\n\n*Notes:*  \n<sup>†</sup> *Vendor baseline cataloged in Laya's published evaluation suite.*  \n*Kev published a 7.41% flip rate on its multi-task suite (N = 81); openJev-verdict-2.0 achieves 4.76% across N = 2,918 enterprise perturbations.*"
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "openJev-verdict-2.0 — Independent models for typed decisions",
+      "h1": "openJev-verdict-2.0 — Independent models for typed decisions",
+      "description": "openJev-verdict-2.0: The repository offers open decision models for Jev-style Choice, Score and Noul workflows, including separate Verdict and Verdict 2.0 models.",
+      "summary": "The repository offers open decision models for Jev-style Choice, Score and Noul workflows, including separate Verdict and Verdict 2.0 models. Serve webgpu-demo with Python’s HTTP server and open the documented browser playground; model artifacts and evaluation receipts are linked separately.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "What it does",
+          "text": "The repository offers open decision models for Jev-style Choice, Score and Noul workflows, including separate Verdict and Verdict 2.0 models.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "Verdict uses ModernBERT and GLiClass; Verdict 2.0 targets typed software workflows. These are the project’s models, with Jev used as a comparison baseline.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Getting started",
+          "text": "Serve webgpu-demo with Python’s HTTP server and open the documented browser playground; model artifacts and evaluation receipts are linked separately.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "The two models have different evaluations. The Verdict 2.0 table cites Jev’s baseline from Laya’s evaluation suite, so its headline is not a fresh universal comparison.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "openJev-verdict-2.0 — 用于类型化决策的独立开放模型",
+      "h1": "openJev-verdict-2.0 — 用于类型化决策的独立开放模型",
+      "description": "openJev-verdict-2.0: 仓库提供面向 Jev 风格 Choice、Score 和 Noul 工作流的开放模型，区分 Verdict 与 Verdict 2.0。",
+      "summary": "仓库提供面向 Jev 风格 Choice、Score 和 Noul 工作流的开放模型，区分 Verdict 与 Verdict 2.0。 用 Python HTTP 服务器托管 webgpu-demo，打开文档中的浏览器演示；模型产物与评估记录另有链接。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "仓库提供面向 Jev 风格 Choice、Score 和 Noul 工作流的开放模型，区分 Verdict 与 Verdict 2.0。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "Verdict 基于 ModernBERT 和 GLiClass，Verdict 2.0 面向类型化软件工作流；两者都是项目模型，Jev 用作对比基线。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "用 Python HTTP 服务器托管 webgpu-demo，打开文档中的浏览器演示；模型产物与评估记录另有链接。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "两个模型使用不同评估。Verdict 2.0 表中的 Jev 基线来自 Laya 评估套件，不能视为新做的普适对比。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "openJev-verdict-2.0 — 用於型別化決策的獨立開放模型",
+      "h1": "openJev-verdict-2.0 — 用於型別化決策的獨立開放模型",
+      "description": "openJev-verdict-2.0: 儲存庫提供 Jev 風格 Choice、Score 和 Noul 流程的開放模型，區分 Verdict 與 Verdict 2.0。",
+      "summary": "儲存庫提供 Jev 風格 Choice、Score 和 Noul 流程的開放模型，區分 Verdict 與 Verdict 2.0。 以 Python HTTP 伺服器提供 webgpu-demo，再開啟文件中的瀏覽器展示；模型產物與評估紀錄另附連結。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "儲存庫提供 Jev 風格 Choice、Score 和 Noul 流程的開放模型，區分 Verdict 與 Verdict 2.0。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "Verdict 基於 ModernBERT 和 GLiClass，Verdict 2.0 面向型別化軟體流程；兩者是專案模型，Jev 作為比較基準。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "以 Python HTTP 伺服器提供 webgpu-demo，再開啟文件中的瀏覽器展示；模型產物與評估紀錄另附連結。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "兩個模型採用不同評估。Verdict 2.0 表中的 Jev 基準取自 Laya 評估套件，並非全新且普遍適用的比較。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "openJev-verdict-2.0 — 型付き判断のための独立した公開モデル",
+      "h1": "openJev-verdict-2.0 — 型付き判断のための独立した公開モデル",
+      "description": "openJev-verdict-2.0: Jev 形式の Choice、Score、Noul を扱う公開モデルを提供し、Verdict と Verdict 2.0 を別モデルとして収録します。",
+      "summary": "Jev 形式の Choice、Score、Noul を扱う公開モデルを提供し、Verdict と Verdict 2.0 を別モデルとして収録します。 webgpu-demo を Python の HTTP サーバーで公開し、記載のブラウザーデモを開きます。モデル成果物と評価記録も参照できます。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "できること",
+          "text": "Jev 形式の Choice、Score、Noul を扱う公開モデルを提供し、Verdict と Verdict 2.0 を別モデルとして収録します。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "Verdict は ModernBERT と GLiClass を使い、Verdict 2.0 はソフトウェア判断向けです。Jev は比較対象の役割です。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い始めるには",
+          "text": "webgpu-demo を Python の HTTP サーバーで公開し、記載のブラウザーデモを開きます。モデル成果物と評価記録も参照できます。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "対象範囲と制約",
+          "text": "両モデルの評価は異なります。Verdict 2.0 の表は Laya 評価集の Jev 値を引用しており、新規の一般比較ではありません。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "openJev-verdict-2.0 — 타입 기반 판단을 위한 독립 공개 모델",
+      "h1": "openJev-verdict-2.0 — 타입 기반 판단을 위한 독립 공개 모델",
+      "description": "openJev-verdict-2.0: Jev 방식 Choice, Score, Noul 작업을 위한 공개 모델을 제공하며 Verdict와 Verdict 2.0을 구분합니다.",
+      "summary": "Jev 방식 Choice, Score, Noul 작업을 위한 공개 모델을 제공하며 Verdict와 Verdict 2.0을 구분합니다. Python HTTP 서버로 webgpu-demo를 제공하고 문서의 브라우저 데모를 엽니다. 모델 산출물과 평가 기록은 별도 링크로 확인합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "Jev 방식 Choice, Score, Noul 작업을 위한 공개 모델을 제공하며 Verdict와 Verdict 2.0을 구분합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Verdict는 ModernBERT와 GLiClass를 사용하고 Verdict 2.0은 소프트웨어 판단을 목표로 합니다. Jev는 비교 기준입니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "Python HTTP 서버로 webgpu-demo를 제공하고 문서의 브라우저 데모를 엽니다. 모델 산출물과 평가 기록은 별도 링크로 확인합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 제약",
+          "text": "두 모델의 평가가 다릅니다. Verdict 2.0 표는 Laya 평가 모음의 Jev 기준값을 인용하므로 새롭고 보편적인 비교가 아닙니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "openJev-verdict-2.0 — Modelos independientes para decisiones tipadas",
+      "h1": "openJev-verdict-2.0 — Modelos independientes para decisiones tipadas",
+      "description": "openJev-verdict-2.0: Ofrece modelos abiertos para Choice, Score y Noul al estilo Jev, separando Verdict y Verdict 2.0.",
+      "summary": "Ofrece modelos abiertos para Choice, Score y Noul al estilo Jev, separando Verdict y Verdict 2.0. Sirve webgpu-demo con el servidor HTTP de Python y abre el ejemplo del navegador; consulta aparte artefactos y registros de evaluación.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "Ofrece modelos abiertos para Choice, Score y Noul al estilo Jev, separando Verdict y Verdict 2.0.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Verdict usa ModernBERT y GLiClass; Verdict 2.0 se dirige a flujos de software. Jev se usa como referencia de comparación, mientras que Verdict y Verdict 2.0 son modelos independientes.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo empezar",
+          "text": "Sirve webgpu-demo con el servidor HTTP de Python y abre el ejemplo del navegador; consulta aparte artefactos y registros de evaluación.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "Las evaluaciones de ambos modelos difieren. La tabla de Verdict 2.0 toma Jev de la evaluación de Laya, no de una nueva comparación universal.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "openJev-verdict-2.0 — Modèles indépendants pour décisions typées",
+      "h1": "openJev-verdict-2.0 — Modèles indépendants pour décisions typées",
+      "description": "openJev-verdict-2.0: Le dépôt propose des modèles ouverts pour Choice, Score et Noul à la manière de Jev, en distinguant Verdict et Verdict 2.0.",
+      "summary": "Le dépôt propose des modèles ouverts pour Choice, Score et Noul à la manière de Jev, en distinguant Verdict et Verdict 2.0. Servez webgpu-demo avec le serveur HTTP Python et ouvrez la démonstration du navigateur ; artefacts et évaluations sont liés séparément.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "Le dépôt propose des modèles ouverts pour Choice, Score et Noul à la manière de Jev, en distinguant Verdict et Verdict 2.0.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Verdict utilise ModernBERT et GLiClass ; Verdict 2.0 vise les décisions logicielles. Jev sert de référence comparative.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Servez webgpu-demo avec le serveur HTTP Python et ouvrez la démonstration du navigateur ; artefacts et évaluations sont liés séparément.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "Les deux modèles ont des évaluations différentes. Le tableau Verdict 2.0 reprend Jev dans l’évaluation Laya, sans nouvelle comparaison universelle.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "openJev-verdict-2.0 — Unabhängige Modelle für typisierte Entscheidungen",
+      "h1": "openJev-verdict-2.0 — Unabhängige Modelle für typisierte Entscheidungen",
+      "description": "openJev-verdict-2.0: Das Repository bietet offene Modelle für Choice, Score und Noul nach Jevs Vorbild und unterscheidet Verdict von Verdict 2.0.",
+      "summary": "Das Repository bietet offene Modelle für Choice, Score und Noul nach Jevs Vorbild und unterscheidet Verdict von Verdict 2.0. webgpu-demo über Pythons HTTP-Server bereitstellen und das dokumentierte Browserbeispiel öffnen; Artefakte und Auswertungen sind separat verlinkt.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "Das Repository bietet offene Modelle für Choice, Score und Noul nach Jevs Vorbild und unterscheidet Verdict von Verdict 2.0.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Verdict nutzt ModernBERT und GLiClass; Verdict 2.0 richtet sich an Softwareentscheidungen. Jev dient als Vergleichsbasis.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Einstieg",
+          "text": "webgpu-demo über Pythons HTTP-Server bereitstellen und das dokumentierte Browserbeispiel öffnen; Artefakte und Auswertungen sind separat verlinkt.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Die Modelle haben unterschiedliche Auswertungen. Die Verdict-2.0-Tabelle übernimmt Jev aus Layas Evaluationssuite, ohne neuen universellen Vergleich.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "openJev-verdict-2.0 — Modelos independentes para decisões tipadas",
+      "h1": "openJev-verdict-2.0 — Modelos independentes para decisões tipadas",
+      "description": "openJev-verdict-2.0: O repositório oferece modelos abertos para Choice, Score e Noul no estilo Jev, separando Verdict e Verdict 2.0.",
+      "summary": "O repositório oferece modelos abertos para Choice, Score e Noul no estilo Jev, separando Verdict e Verdict 2.0. Sirva webgpu-demo pelo servidor HTTP do Python e abra o exemplo no navegador; artefatos e avaliações têm links separados.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "O repositório oferece modelos abertos para Choice, Score e Noul no estilo Jev, separando Verdict e Verdict 2.0.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "Verdict usa ModernBERT e GLiClass; Verdict 2.0 foca decisões de software. Jev é uma referência de comparação.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como começar",
+          "text": "Sirva webgpu-demo pelo servidor HTTP do Python e abra o exemplo no navegador; artefatos e avaliações têm links separados.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "Os modelos têm avaliações diferentes. A tabela Verdict 2.0 usa a referência Jev da avaliação Laya, sem nova comparação universal.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "openJev-verdict-2.0 — Независимые модели типизированных решений",
+      "h1": "openJev-verdict-2.0 — Независимые модели типизированных решений",
+      "description": "openJev-verdict-2.0: Репозиторий предлагает открытые модели для Choice, Score и Noul по образцу Jev, разделяя Verdict и Verdict 2.0.",
+      "summary": "Репозиторий предлагает открытые модели для Choice, Score и Noul по образцу Jev, разделяя Verdict и Verdict 2.0. Запустите webgpu-demo через HTTP-сервер Python и откройте браузерный пример; артефакты и оценки доступны по отдельным ссылкам.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "Репозиторий предлагает открытые модели для Choice, Score и Noul по образцу Jev, разделяя Verdict и Verdict 2.0.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Verdict использует ModernBERT и GLiClass, Verdict 2.0 ориентирован на программные процессы. Jev служит базой сравнения.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Начало работы",
+          "text": "Запустите webgpu-demo через HTTP-сервер Python и откройте браузерный пример; артефакты и оценки доступны по отдельным ссылкам.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "У моделей разные оценки. Таблица Verdict 2.0 берёт Jev из оценки Laya, а не из нового универсального сравнения.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "openJev-verdict-2.0 — निर्धारित प्रकार के निर्णयों के स्वतंत्र मॉडल",
+      "h1": "openJev-verdict-2.0 — निर्धारित प्रकार के निर्णयों के स्वतंत्र मॉडल",
+      "description": "openJev-verdict-2.0: रिपॉज़िटरी Jev-शैली Choice, Score और Noul के खुले मॉडल देती है और Verdict तथा Verdict 2.0 अलग रखती है।",
+      "summary": "रिपॉज़िटरी Jev-शैली Choice, Score और Noul के खुले मॉडल देती है और Verdict तथा Verdict 2.0 अलग रखती है। Python HTTP सर्वर से webgpu-demo चलाकर ब्राउज़र उदाहरण खोलें; मॉडल सामग्री और मूल्यांकन रिकॉर्ड अलग लिंक पर हैं।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "परियोजना का काम",
+          "text": "रिपॉज़िटरी Jev-शैली Choice, Score और Noul के खुले मॉडल देती है और Verdict तथा Verdict 2.0 अलग रखती है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "Verdict ModernBERT और GLiClass उपयोग करता है; Verdict 2.0 सॉफ़्टवेयर निर्णयों के लिए है। Jev तुलना का आधार है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "शुरुआत कैसे करें",
+          "text": "Python HTTP सर्वर से webgpu-demo चलाकर ब्राउज़र उदाहरण खोलें; मॉडल सामग्री और मूल्यांकन रिकॉर्ड अलग लिंक पर हैं।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "दोनों मॉडलों के मूल्यांकन अलग हैं। Verdict 2.0 तालिका Jev आँकड़े Laya मूल्यांकन से लेती है, नई सार्वभौमिक तुलना से नहीं।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "openJev-verdict-2.0 — Model independen untuk keputusan bertipe",
+      "h1": "openJev-verdict-2.0 — Model independen untuk keputusan bertipe",
+      "description": "openJev-verdict-2.0: Repositori menyediakan model terbuka Choice, Score, dan Noul bergaya Jev, dengan Verdict dan Verdict 2.0 yang berbeda.",
+      "summary": "Repositori menyediakan model terbuka Choice, Score, dan Noul bergaya Jev, dengan Verdict dan Verdict 2.0 yang berbeda. Sajikan webgpu-demo dengan server HTTP Python dan buka contoh browser; artefak serta evaluasi ditautkan terpisah.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "Repositori menyediakan model terbuka Choice, Score, dan Noul bergaya Jev, dengan Verdict dan Verdict 2.0 yang berbeda.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Verdict memakai ModernBERT dan GLiClass; Verdict 2.0 menyasar alur perangkat lunak. Jev menjadi pembanding.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara memulai",
+          "text": "Sajikan webgpu-demo dengan server HTTP Python dan buka contoh browser; artefak serta evaluasi ditautkan terpisah.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Evaluasi kedua model berbeda. Tabel Verdict 2.0 mengambil acuan Jev dari evaluasi Laya, bukan perbandingan universal baru.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "openJev-verdict-2.0 — Mô hình độc lập cho quyết định có kiểu",
+      "h1": "openJev-verdict-2.0 — Mô hình độc lập cho quyết định có kiểu",
+      "description": "openJev-verdict-2.0: Kho cung cấp mô hình mở cho Choice, Score và Noul theo kiểu Jev, phân biệt Verdict với Verdict 2.0.",
+      "summary": "Kho cung cấp mô hình mở cho Choice, Score và Noul theo kiểu Jev, phân biệt Verdict với Verdict 2.0. Chạy webgpu-demo bằng HTTP server Python rồi mở ví dụ trình duyệt; sản phẩm mô hình và đánh giá có liên kết riêng.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Công dụng",
+          "text": "Kho cung cấp mô hình mở cho Choice, Score và Noul theo kiểu Jev, phân biệt Verdict với Verdict 2.0.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Verdict dùng ModernBERT và GLiClass; Verdict 2.0 hướng tới quy trình phần mềm. Jev là mốc so sánh.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách bắt đầu",
+          "text": "Chạy webgpu-demo bằng HTTP server Python rồi mở ví dụ trình duyệt; sản phẩm mô hình và đánh giá có liên kết riêng.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Hai mô hình có đánh giá khác nhau. Bảng Verdict 2.0 lấy mốc Jev từ đánh giá Laya, không phải so sánh phổ quát mới.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "openJev-verdict-2.0 — Türlenmiş kararlar için bağımsız modeller",
+      "h1": "openJev-verdict-2.0 — Türlenmiş kararlar için bağımsız modeller",
+      "description": "openJev-verdict-2.0: Depo Jev tarzı Choice, Score ve Noul için açık modeller sunar; Verdict ve Verdict 2.0 ayrıdır.",
+      "summary": "Depo Jev tarzı Choice, Score ve Noul için açık modeller sunar; Verdict ve Verdict 2.0 ayrıdır. webgpu-demo dizinini Python HTTP sunucusuyla açıp belgelenen tarayıcı örneğini kullanın; model ve değerlendirme kayıtları ayrıca bağlantılıdır.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "Depo Jev tarzı Choice, Score ve Noul için açık modeller sunar; Verdict ve Verdict 2.0 ayrıdır.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Verdict ModernBERT ve GLiClass kullanır; Verdict 2.0 yazılım iş akışlarını hedefler. Jev karşılaştırma temelidir.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Başlangıç",
+          "text": "webgpu-demo dizinini Python HTTP sunucusuyla açıp belgelenen tarayıcı örneğini kullanın; model ve değerlendirme kayıtları ayrıca bağlantılıdır.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Modellerin değerlendirmeleri farklıdır. Verdict 2.0 tablosu Jev’i Laya değerlendirmesinden alır; yeni, genel bir karşılaştırma değildir.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "openJev-verdict-2.0 — Modelli indipendenti per decisioni tipizzate",
+      "h1": "openJev-verdict-2.0 — Modelli indipendenti per decisioni tipizzate",
+      "description": "openJev-verdict-2.0: Il repository offre modelli aperti Choice, Score e Noul in stile Jev, distinguendo Verdict da Verdict 2.0.",
+      "summary": "Il repository offre modelli aperti Choice, Score e Noul in stile Jev, distinguendo Verdict da Verdict 2.0. Servi webgpu-demo con il server HTTP Python e apri l’esempio nel browser; artefatti e valutazioni hanno link separati.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "Il repository offre modelli aperti Choice, Score e Noul in stile Jev, distinguendo Verdict da Verdict 2.0.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Verdict usa ModernBERT e GLiClass; Verdict 2.0 punta ai flussi software. Jev è il riferimento di confronto.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come iniziare",
+          "text": "Servi webgpu-demo con il server HTTP Python e apri l’esempio nel browser; artefatti e valutazioni hanno link separati.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "Le valutazioni dei modelli differiscono. La tabella Verdict 2.0 riprende Jev dalla valutazione Laya, non da un nuovo confronto universale.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}

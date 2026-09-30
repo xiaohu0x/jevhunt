@@ -1,0 +1,774 @@
+{
+  "version": "source-content-v1",
+  "repo": "BillionsBobby/JevRouter",
+  "repositoryId": 1375641268,
+  "relationship": "integration",
+  "category": "agents",
+  "status": "reviewed",
+  "reviewedAt": "2026-09-30",
+  "sources": [
+    {
+      "id": "source-1",
+      "path": "README.md",
+      "commit": "3fb725f86e4927df02d3c5d91c218f32e7aedf84",
+      "url": "https://github.com/BillionsBobby/JevRouter/blob/3fb725f86e4927df02d3c5d91c218f32e7aedf84/README.md",
+      "sha256": "ceaa3ff7d16b778cc79aafd402ffe8d9ff923b0167539ebe7e61c6c5bc24d8d4",
+      "accessedAt": "2026-09-30T07:33:52.301Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "purpose",
+      "text": "JevRouter selects among models, agents, skills, MCP tools and CLIs, exposing single decisions or multistep capability plans.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 7,
+          "end": 7,
+          "quote": "**Faster agent decisions.** Models, subagents, skills, MCP tools, CLIs and plugins become one candidate set — Jev answers one typed Choice question, JevRouter enforces availability, permissions, risk and confirmation around it."
+        },
+        {
+          "source": "source-1",
+          "start": 28,
+          "end": 32,
+          "quote": "- **Decision-only by default** — nothing executes implicitly; medium/high/critical capabilities require confirmation.\n- **One call or a plan** — `route` answers one question; `plan` answers \"which capability handles step 1..N\" with serial, batch, and decomposed strategies.\n- **Every surface** — models, subagents, Skills, MCP tools, CLIs, DSH plugins share one routing contract.\n- **Receipts by default** — append-only decision/plan files with provenance hashes; what was decided, why, and at what confidence is always auditable.\n- **Capability trust is explicit** — discovered and caller-supplied candidates carry verification status; strict projects can set `require_verified_candidates` to prevent unverified descriptions from being selected."
+        }
+      ]
+    },
+    {
+      "id": "jev",
+      "text": "Jev provides Choice probabilities; the router checks availability, permissions, risk and confirmation while preserving the raw response.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 24,
+          "end": 32,
+          "quote": "Agents waste reasoning tokens on a question a fast decision model answers better: **which capability should handle this next?** JevRouter puts [Jev](https://www.jevrouter.co/) — a System One model that turns structured state into typed decisions with probability distributions — in front of your tools, while your reasoning model stays the execution and fallback layer.\n\nThe key contract is simple: **Jev owns the decision probabilities; JevRouter owns availability, permissions, risk and confirmation.** Router fields live under `router`, while the original `probabilities`, `confidence`, and complete provider response remain intact. Filtered candidates are never re-normalized.\n\n- **Decision-only by default** — nothing executes implicitly; medium/high/critical capabilities require confirmation.\n- **One call or a plan** — `route` answers one question; `plan` answers \"which capability handles step 1..N\" with serial, batch, and decomposed strategies.\n- **Every surface** — models, subagents, Skills, MCP tools, CLIs, DSH plugins share one routing contract.\n- **Receipts by default** — append-only decision/plan files with provenance hashes; what was decided, why, and at what confidence is always auditable.\n- **Capability trust is explicit** — discovered and caller-supplied candidates carry verification status; strict projects can set `require_verified_candidates` to prevent unverified descriptions from being selected."
+        },
+        {
+          "source": "source-1",
+          "start": 119,
+          "end": 119,
+          "quote": "Single decisions go through one Jev Choice call. When `single_stage_max_candidates` is exceeded, JevRouter keeps the coarse Top-K first, then asks Jev for a final Choice over the reduced set; both raw responses are preserved in `raw_jev_stages`."
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "text": "Use the route or plan CLI, SDK or agent setup with TypeSafe or OpenRouter credentials; a labeled demo provider works offline.",
+      "kind": "documented",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 51,
+          "end": 71,
+          "quote": "Node.js 20+ required. JevRouter accepts either the official Jev API or an OpenRouter key. The key is entered interactively when no matching environment variable is already exported.\n\n**Give your agent the router** (installs the Skill + project instructions, checks Jev, launches the host):\n\n```bash\nnpx --yes github:BillionsBobby/JevRouter agent start --agent codex\n```\n\nChoose `typesafe` for the official Jev API or `openrouter` at the prompt, then paste the corresponding key. The key stays in the current process environment and is never written to project files. For Claude Code use `--agent claude`, and for Cursor use `--agent cursor`. Setup automatically adds `.jevrouter/` to `.gitignore` to keep local decision receipts from being accidentally committed. To install without launching a host, export `TYPESAFE_API_KEY`, `JEV_API_KEY`, or `OPENROUTER_API_KEY` first and use `agent setup`; to verify later, use `agent doctor` (`--live` adds a small paid probe):\n\n```bash\nnpx --yes github:BillionsBobby/JevRouter agent setup          # Skill + project instructions only\nnpx --yes github:BillionsBobby/JevRouter agent doctor --live  # configuration + connectivity check\n```\n\n**Route one decision** (no registry needed — pass candidates inline):\n\n```bash\nOPENROUTER_API_KEY=\"your-key\" npx --yes github:BillionsBobby/JevRouter route --provider openrouter \\\n  --request \"Find original sources before summarizing\" \\\n  --candidates '[{\"name\":\"search_web\",\"description\":\"Find web sources\"},{\"name\":\"summarize\",\"description\":\"Summarize existing sources\"}]'"
+        },
+        {
+          "source": "source-1",
+          "start": 82,
+          "end": 95,
+          "quote": "**SDK**:\n\n```bash\nnpm install github:BillionsBobby/JevRouter\n```\n\n```ts\nimport { route, plan } from \"jevrouter\";\n\nconst decision = await route({ request, candidates: agentTools });\nconst planResult = await plan({ request, candidates: agentTools }, { steps: 3, mode: \"batch\", sequence: \"beam\" });\n```\n\nTry everything offline with the labelled demo provider (`--provider demo`) — no key required."
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "Routing is decision-only by default. Published experiments measure ordered capability choices, not successful end-to-end task execution.",
+      "kind": "source-limitation",
+      "evidence": [
+        {
+          "source": "source-1",
+          "start": 28,
+          "end": 32,
+          "quote": "- **Decision-only by default** — nothing executes implicitly; medium/high/critical capabilities require confirmation.\n- **One call or a plan** — `route` answers one question; `plan` answers \"which capability handles step 1..N\" with serial, batch, and decomposed strategies.\n- **Every surface** — models, subagents, Skills, MCP tools, CLIs, DSH plugins share one routing contract.\n- **Receipts by default** — append-only decision/plan files with provenance hashes; what was decided, why, and at what confidence is always auditable.\n- **Capability trust is explicit** — discovered and caller-supplied candidates carry verification status; strict projects can set `require_verified_candidates` to prevent unverified descriptions from being selected."
+        },
+        {
+          "source": "source-1",
+          "start": 47,
+          "end": 47,
+          "quote": "Batch mode with beam sequence selection (`--sequence beam`) lifts position-wise hits 28% → 36% at **zero extra provider calls**. The same decompose+thread configuration scores 44% hits / 69% overlap on MCP-Atlas. This experiment measures ordered routing decisions, not end-to-end task completion; method and per-task data in [issue #2](https://github.com/BillionsBobby/JevRouter/issues/2), strategies in [PR #9](https://github.com/BillionsBobby/JevRouter/pull/9)."
+        }
+      ]
+    }
+  ],
+  "locales": {
+    "en": {
+      "title": "JevRouter — Jev tool choices, local policy",
+      "h1": "JevRouter — Jev routes tools, skills and models under local policy",
+      "description": "JevRouter: JevRouter selects among models, agents, skills, MCP tools and CLIs, exposing single decisions or multistep capability plans.",
+      "summary": "JevRouter selects among models, agents, skills, MCP tools and CLIs, exposing single decisions or multistep capability plans. Use the route or plan CLI, SDK or agent setup with TypeSafe or OpenRouter credentials; a labeled demo provider works offline.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "What it does",
+          "text": "JevRouter selects among models, agents, skills, MCP tools and CLIs, exposing single decisions or multistep capability plans.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "How Jev fits",
+          "text": "Jev provides Choice probabilities; the router checks availability, permissions, risk and confirmation while preserving the raw response.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Getting started",
+          "text": "Use the route or plan CLI, SDK or agent setup with TypeSafe or OpenRouter credentials; a labeled demo provider works offline.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Scope and limits",
+          "text": "Routing is decision-only by default. Published experiments measure ordered capability choices, not successful end-to-end task execution.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-cn": {
+      "title": "JevRouter — 本地策略约束下的 Jev 工具与模型路由",
+      "h1": "JevRouter — 本地策略约束下的 Jev 工具与模型路由",
+      "description": "JevRouter: JevRouter 从模型、代理、技能、MCP 工具和 CLI 中选择，提供单次决策或多步能力计划。",
+      "summary": "JevRouter 从模型、代理、技能、MCP 工具和 CLI 中选择，提供单次决策或多步能力计划。 用 TypeSafe 或 OpenRouter 凭据使用 route、plan、SDK 或代理设置；标注的 demo 服务可离线运行。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "项目用途",
+          "text": "JevRouter 从模型、代理、技能、MCP 工具和 CLI 中选择，提供单次决策或多步能力计划。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的作用",
+          "text": "Jev 提供 Choice 概率，路由器检查可用性、权限、风险及确认，并保留原始响应。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "用 TypeSafe 或 OpenRouter 凭据使用 route、plan、SDK 或代理设置；标注的 demo 服务可离线运行。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "范围与限制",
+          "text": "默认只做决策。公开实验测量能力选择顺序，不代表端到端任务成功执行。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "zh-tw": {
+      "title": "JevRouter — 本機策略約束下的 Jev 工具與模型路由",
+      "h1": "JevRouter — 本機策略約束下的 Jev 工具與模型路由",
+      "description": "JevRouter: JevRouter 從模型、代理、技能、MCP 工具及 CLI 中選擇，提供單次決策或多步能力計畫。",
+      "summary": "JevRouter 從模型、代理、技能、MCP 工具及 CLI 中選擇，提供單次決策或多步能力計畫。 以 TypeSafe 或 OpenRouter 憑證使用 route、plan、SDK 或代理設定；標示的 demo 服務可離線執行。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "專案用途",
+          "text": "JevRouter 從模型、代理、技能、MCP 工具及 CLI 中選擇，提供單次決策或多步能力計畫。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev 的角色",
+          "text": "Jev 提供 Choice 機率，路由器檢查可用性、權限、風險及確認，並保留原始回應。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使用方式",
+          "text": "以 TypeSafe 或 OpenRouter 憑證使用 route、plan、SDK 或代理設定；標示的 demo 服務可離線執行。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "範圍與限制",
+          "text": "預設只做決策。公開實驗測量能力選擇順序，不代表端對端任務成功執行。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ja": {
+      "title": "JevRouter — Jev のツール選択とローカル方針",
+      "h1": "JevRouter — ローカル方針に従う Jev の能力ルーティング",
+      "description": "JevRouter: JevRouter はモデル、エージェント、スキル、MCP ツール、CLI から選び、単一判断や複数ステップの計画を返します。",
+      "summary": "JevRouter はモデル、エージェント、スキル、MCP ツール、CLI から選び、単一判断や複数ステップの計画を返します。 TypeSafe または OpenRouter の認証で CLI、SDK、エージェント設定を使います。明示された demo はオフラインで動きます。",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "できること",
+          "text": "JevRouter はモデル、エージェント、スキル、MCP ツール、CLI から選び、単一判断や複数ステップの計画を返します。",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev の役割",
+          "text": "Jev が Choice 確率を出し、ルーターが利用可否、権限、リスク、確認を管理し、元の回答を保持します。",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "使い始めるには",
+          "text": "TypeSafe または OpenRouter の認証で CLI、SDK、エージェント設定を使います。明示された demo はオフラインで動きます。",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "対象範囲と制約",
+          "text": "既定では判断のみです。公開実験は能力選択の順序を測り、タスク全体の実行成功を測ってはいません。",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ko": {
+      "title": "JevRouter — 로컬 정책을 따르는 Jev 기능 라우팅",
+      "h1": "JevRouter — 로컬 정책을 따르는 Jev 기능 라우팅",
+      "description": "JevRouter: JevRouter는 모델, 에이전트, 스킬, MCP 도구, CLI 중에서 선택해 단일 판단이나 여러 단계 계획을 제공합니다.",
+      "summary": "JevRouter는 모델, 에이전트, 스킬, MCP 도구, CLI 중에서 선택해 단일 판단이나 여러 단계 계획을 제공합니다. TypeSafe 또는 OpenRouter 인증으로 CLI, SDK, 에이전트 설정을 사용합니다. 표시된 demo 제공자는 오프라인으로 동작합니다.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "프로젝트 용도",
+          "text": "JevRouter는 모델, 에이전트, 스킬, MCP 도구, CLI 중에서 선택해 단일 판단이나 여러 단계 계획을 제공합니다.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev의 역할",
+          "text": "Jev가 Choice 확률을 제공하고 라우터가 가용성, 권한, 위험, 확인을 검사하며 원응답을 보존합니다.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "사용 방법",
+          "text": "TypeSafe 또는 OpenRouter 인증으로 CLI, SDK, 에이전트 설정을 사용합니다. 표시된 demo 제공자는 오프라인으로 동작합니다.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "범위와 제약",
+          "text": "기본값은 판단만 수행합니다. 공개 실험은 기능 선택 순서를 측정하며 전체 작업의 실행 성공을 측정하지 않습니다.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "es": {
+      "title": "JevRouter — Jev elige herramientas; política local",
+      "h1": "JevRouter — Jev enruta capacidades bajo políticas locales",
+      "description": "JevRouter: JevRouter elige entre modelos, agentes, habilidades, herramientas MCP y CLI, con decisiones únicas o planes de varios pasos.",
+      "summary": "JevRouter elige entre modelos, agentes, habilidades, herramientas MCP y CLI, con decisiones únicas o planes de varios pasos. Usa route, plan, SDK o configuración de agentes con TypeSafe u OpenRouter; el proveedor demo identificado funciona offline.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para qué sirve",
+          "text": "JevRouter elige entre modelos, agentes, habilidades, herramientas MCP y CLI, con decisiones únicas o planes de varios pasos.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel de Jev",
+          "text": "Jev da probabilidades Choice; el router comprueba disponibilidad, permisos, riesgo y confirmación, conservando la respuesta original.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cómo empezar",
+          "text": "Usa route, plan, SDK o configuración de agentes con TypeSafe u OpenRouter; el proveedor demo identificado funciona offline.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Alcance y límites",
+          "text": "Por defecto solo decide. Los experimentos publicados miden elecciones ordenadas, no ejecución exitosa de tareas completas.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "fr": {
+      "title": "JevRouter — Outils choisis par Jev, règles locales",
+      "h1": "JevRouter — Jev aiguille les capacités sous politique locale",
+      "description": "JevRouter: JevRouter choisit modèles, agents, compétences, outils MCP et CLI, en décision unique ou plan à plusieurs étapes.",
+      "summary": "JevRouter choisit modèles, agents, compétences, outils MCP et CLI, en décision unique ou plan à plusieurs étapes. Utilisez route, plan, SDK ou configuration d’agents avec TypeSafe ou OpenRouter ; le fournisseur demo signalé fonctionne hors ligne.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "À quoi sert le projet",
+          "text": "JevRouter choisit modèles, agents, compétences, outils MCP et CLI, en décision unique ou plan à plusieurs étapes.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rôle de Jev",
+          "text": "Jev fournit les probabilités Choice ; le routeur vérifie disponibilité, droits, risques et confirmation, en conservant la réponse brute.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Prise en main",
+          "text": "Utilisez route, plan, SDK ou configuration d’agents avec TypeSafe ou OpenRouter ; le fournisseur demo signalé fonctionne hors ligne.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Périmètre et limites",
+          "text": "Par défaut, il décide seulement. Les expériences mesurent l’ordre des capacités choisies, pas la réussite des tâches complètes.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "de": {
+      "title": "JevRouter — Jev-Werkzeugwahl mit lokalen Regeln",
+      "h1": "JevRouter — Jev routet Fähigkeiten unter lokalen Regeln",
+      "description": "JevRouter: JevRouter wählt Modelle, Agenten, Skills, MCP-Werkzeuge und CLIs für einzelne Entscheidungen oder mehrstufige Pläne.",
+      "summary": "JevRouter wählt Modelle, Agenten, Skills, MCP-Werkzeuge und CLIs für einzelne Entscheidungen oder mehrstufige Pläne. route, plan, SDK oder Agenteneinrichtung mit TypeSafe oder OpenRouter verwenden; der gekennzeichnete Demoanbieter läuft offline.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Einsatzzweck",
+          "text": "JevRouter wählt Modelle, Agenten, Skills, MCP-Werkzeuge und CLIs für einzelne Entscheidungen oder mehrstufige Pläne.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Rolle von Jev",
+          "text": "Jev liefert Choice-Wahrscheinlichkeiten; der Router prüft Verfügbarkeit, Berechtigungen, Risiko und Bestätigung und erhält die Rohantwort.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Einstieg",
+          "text": "route, plan, SDK oder Agenteneinrichtung mit TypeSafe oder OpenRouter verwenden; der gekennzeichnete Demoanbieter läuft offline.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Umfang und Grenzen",
+          "text": "Standardmäßig wird nur entschieden. Veröffentlichte Experimente messen geordnete Auswahl, nicht die erfolgreiche Ausführung vollständiger Aufgaben.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "pt-br": {
+      "title": "JevRouter — Ferramentas por Jev, regras locais",
+      "h1": "JevRouter — Jev roteia capacidades sob políticas locais",
+      "description": "JevRouter: JevRouter escolhe modelos, agentes, habilidades, ferramentas MCP e CLIs, com decisões únicas ou planos em etapas.",
+      "summary": "JevRouter escolhe modelos, agentes, habilidades, ferramentas MCP e CLIs, com decisões únicas ou planos em etapas. Use route, plan, SDK ou configuração de agentes com TypeSafe ou OpenRouter; o provedor demo identificado funciona offline.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Para que serve",
+          "text": "JevRouter escolhe modelos, agentes, habilidades, ferramentas MCP e CLIs, com decisões únicas ou planos em etapas.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Papel do Jev",
+          "text": "Jev fornece probabilidades Choice; o roteador verifica disponibilidade, permissões, risco e confirmação, preservando a resposta bruta.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Como começar",
+          "text": "Use route, plan, SDK ou configuração de agentes com TypeSafe ou OpenRouter; o provedor demo identificado funciona offline.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Escopo e limites",
+          "text": "Por padrão, apenas decide. Experimentos publicados medem escolhas ordenadas, não a execução bem-sucedida de tarefas completas.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "ru": {
+      "title": "JevRouter — Выбор инструментов Jev, локальные правила",
+      "h1": "JevRouter — Jev маршрутизирует возможности по локальным правилам",
+      "description": "JevRouter: JevRouter выбирает модели, агентов, навыки, MCP-инструменты и CLI для отдельных решений или многошаговых планов.",
+      "summary": "JevRouter выбирает модели, агентов, навыки, MCP-инструменты и CLI для отдельных решений или многошаговых планов. Используйте route, plan, SDK или настройку агентов с TypeSafe либо OpenRouter; помеченный demo работает офлайн.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Назначение",
+          "text": "JevRouter выбирает модели, агентов, навыки, MCP-инструменты и CLI для отдельных решений или многошаговых планов.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Роль Jev",
+          "text": "Jev даёт вероятности Choice; маршрутизатор проверяет доступность, права, риск и подтверждение, сохраняя исходный ответ.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Начало работы",
+          "text": "Используйте route, plan, SDK или настройку агентов с TypeSafe либо OpenRouter; помеченный demo работает офлайн.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Область применения и ограничения",
+          "text": "По умолчанию выполняется только выбор. Опубликованные эксперименты измеряют порядок выбора возможностей, а не успех выполнения всей задачи.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "hi": {
+      "title": "JevRouter — स्थानीय नीति के तहत Jev क्षमता रूटिंग",
+      "h1": "JevRouter — स्थानीय नीति के तहत Jev क्षमता रूटिंग",
+      "description": "JevRouter: JevRouter मॉडल, एजेंट, स्किल, MCP टूल और CLI चुनकर एकल निर्णय या कई चरण की योजना देता है।",
+      "summary": "JevRouter मॉडल, एजेंट, स्किल, MCP टूल और CLI चुनकर एकल निर्णय या कई चरण की योजना देता है। TypeSafe या OpenRouter से route, plan, SDK या एजेंट सेटअप उपयोग करें; चिह्नित demo प्रदाता ऑफलाइन चलता है।",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "परियोजना का काम",
+          "text": "JevRouter मॉडल, एजेंट, स्किल, MCP टूल और CLI चुनकर एकल निर्णय या कई चरण की योजना देता है।",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev की भूमिका",
+          "text": "Jev Choice संभावनाएँ देता है; राउटर उपलब्धता, अनुमति, जोखिम और पुष्टि जाँचकर मूल उत्तर सुरक्षित रखता है।",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "शुरुआत कैसे करें",
+          "text": "TypeSafe या OpenRouter से route, plan, SDK या एजेंट सेटअप उपयोग करें; चिह्नित demo प्रदाता ऑफलाइन चलता है।",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "दायरा और सीमाएँ",
+          "text": "डिफ़ॉल्ट में केवल निर्णय होता है। प्रकाशित प्रयोग क्रमबद्ध चयन मापते हैं, पूरी कार्य सफलता नहीं।",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "id": {
+      "title": "JevRouter — Pilihan alat Jev, kebijakan lokal",
+      "h1": "JevRouter — Jev merutekan kemampuan dengan kebijakan lokal",
+      "description": "JevRouter: JevRouter memilih model, agen, keterampilan, alat MCP, dan CLI untuk keputusan tunggal atau rencana bertahap.",
+      "summary": "JevRouter memilih model, agen, keterampilan, alat MCP, dan CLI untuk keputusan tunggal atau rencana bertahap. Gunakan route, plan, SDK, atau pengaturan agen dengan TypeSafe atau OpenRouter; penyedia demo berlabel bekerja luring.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Kegunaan proyek",
+          "text": "JevRouter memilih model, agen, keterampilan, alat MCP, dan CLI untuk keputusan tunggal atau rencana bertahap.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Peran Jev",
+          "text": "Jev memberi probabilitas Choice; router memeriksa ketersediaan, izin, risiko, dan konfirmasi sambil menjaga respons asli.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cara memulai",
+          "text": "Gunakan route, plan, SDK, atau pengaturan agen dengan TypeSafe atau OpenRouter; penyedia demo berlabel bekerja luring.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Cakupan dan batasan",
+          "text": "Bawaan hanya menghasilkan keputusan. Eksperimen mengukur urutan pilihan kemampuan, bukan keberhasilan eksekusi tugas menyeluruh.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "vi": {
+      "title": "JevRouter — Jev chọn công cụ, chính sách cục bộ",
+      "h1": "JevRouter — Jev định tuyến năng lực theo chính sách cục bộ",
+      "description": "JevRouter: JevRouter chọn mô hình, tác tử, kỹ năng, công cụ MCP và CLI cho quyết định đơn hoặc kế hoạch nhiều bước.",
+      "summary": "JevRouter chọn mô hình, tác tử, kỹ năng, công cụ MCP và CLI cho quyết định đơn hoặc kế hoạch nhiều bước. Dùng route, plan, SDK hoặc cấu hình tác tử với TypeSafe hay OpenRouter; nhà cung cấp demo có nhãn chạy ngoại tuyến.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Công dụng",
+          "text": "JevRouter chọn mô hình, tác tử, kỹ năng, công cụ MCP và CLI cho quyết định đơn hoặc kế hoạch nhiều bước.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Vai trò của Jev",
+          "text": "Jev đưa xác suất Choice; bộ định tuyến kiểm tra khả dụng, quyền, rủi ro và xác nhận, giữ nguyên phản hồi gốc.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Cách bắt đầu",
+          "text": "Dùng route, plan, SDK hoặc cấu hình tác tử với TypeSafe hay OpenRouter; nhà cung cấp demo có nhãn chạy ngoại tuyến.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Phạm vi và giới hạn",
+          "text": "Mặc định chỉ quyết định. Thí nghiệm công bố đo thứ tự chọn năng lực, không đo thành công thực thi toàn bộ nhiệm vụ.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "tr": {
+      "title": "JevRouter — Jev araç seçer, yerel politika denetler",
+      "h1": "JevRouter — Yerel politika altında Jev yetenek yönlendirmesi",
+      "description": "JevRouter: JevRouter model, ajan, beceri, MCP aracı ve CLI seçerek tek karar veya çok adımlı plan sunar.",
+      "summary": "JevRouter model, ajan, beceri, MCP aracı ve CLI seçerek tek karar veya çok adımlı plan sunar. TypeSafe veya OpenRouter ile route, plan, SDK ya da ajan kurulumunu kullanın; etiketli demo çevrimdışı çalışır.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "Ne işe yarar",
+          "text": "JevRouter model, ajan, beceri, MCP aracı ve CLI seçerek tek karar veya çok adımlı plan sunar.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Jev’in rolü",
+          "text": "Jev Choice olasılıkları verir; yönlendirici kullanılabilirlik, izin, risk ve onayı denetlerken ham yanıtı korur.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Başlangıç",
+          "text": "TypeSafe veya OpenRouter ile route, plan, SDK ya da ajan kurulumunu kullanın; etiketli demo çevrimdışı çalışır.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Kapsam ve sınırlar",
+          "text": "Varsayılan davranış yalnızca karardır. Deneyler sıralı yetenek seçimini ölçer, görevin baştan sona başarıyla yürütülmesini değil.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    },
+    "it": {
+      "title": "JevRouter — Jev sceglie strumenti, regole locali",
+      "h1": "JevRouter — Jev instrada capacità secondo regole locali",
+      "description": "JevRouter: JevRouter sceglie modelli, agenti, competenze, strumenti MCP e CLI per decisioni singole o piani a più passi.",
+      "summary": "JevRouter sceglie modelli, agenti, competenze, strumenti MCP e CLI per decisioni singole o piani a più passi. Usa route, plan, SDK o configurazione agenti con TypeSafe o OpenRouter; il fornitore demo dichiarato funziona offline.",
+      "sections": [
+        {
+          "kind": "purpose",
+          "heading": "A cosa serve",
+          "text": "JevRouter sceglie modelli, agenti, competenze, strumenti MCP e CLI per decisioni singole o piani a più passi.",
+          "claims": [
+            "purpose"
+          ]
+        },
+        {
+          "kind": "jev",
+          "heading": "Ruolo di Jev",
+          "text": "Jev fornisce probabilità Choice; il router controlla disponibilità, permessi, rischio e conferma, preservando la risposta originale.",
+          "claims": [
+            "jev"
+          ]
+        },
+        {
+          "kind": "usage",
+          "heading": "Come iniziare",
+          "text": "Usa route, plan, SDK o configurazione agenti con TypeSafe o OpenRouter; il fornitore demo dichiarato funziona offline.",
+          "claims": [
+            "usage"
+          ]
+        },
+        {
+          "kind": "limits",
+          "heading": "Ambito e limiti",
+          "text": "Per impostazione iniziale decide soltanto. Gli esperimenti misurano scelte ordinate, non il successo dell’esecuzione completa.",
+          "claims": [
+            "limits"
+          ]
+        }
+      ],
+      "review": {
+        "language": "model-reviewed",
+        "semantic": "source-checked",
+        "searchIntent": "inferred"
+      }
+    }
+  }
+}
