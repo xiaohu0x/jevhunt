@@ -151,6 +151,11 @@ html[data-theme="dark"] .directory-home #dirFilters .fchip.is-active{background:
 .directory-home .card__links .card__details{color:var(--accent-2);font-weight:600;}
 .directory-home .card__links a:hover{color:var(--accent);text-decoration:underline;text-underline-offset:3px;}
 .directory-home .dir__empty{padding:40px 20px;border:1px dashed var(--line-2);border-radius:16px;color:var(--muted);background:var(--panel);font-family:var(--sans);}
+.directory-home .dir__empty p{margin:0;}
+.directory-home .dir__empty-guidance{padding:0 20px 24px;border:1px dashed var(--line-2);border-top:0;border-radius:0 0 16px 16px;color:var(--muted);background:var(--panel);font-family:var(--sans);text-align:center;}
+.directory-home .dir__empty-hint{margin:0!important;padding-top:20px;font-size:13px;}
+.directory-home .dir__empty-guides{display:flex;justify-content:center;flex-wrap:wrap;gap:8px 14px;margin-top:18px;font-size:13px;}
+.directory-home .dir__empty-guides a{color:var(--ink);text-decoration:underline;text-decoration-color:var(--line-2);text-underline-offset:3px;}
 .directory-home .catalog-pages--directory{border:0;padding:30px 0 16px;justify-content:center;gap:12px;}
 .directory-home .catalog-pages__summary{flex-basis:100%;text-align:center;font-size:13px;}
 .directory-home .catalog-pages__range{font-family:var(--sans);font-size:12px;}

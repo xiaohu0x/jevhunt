@@ -534,7 +534,7 @@
   "inLanguage": "fr"
 }
 </script>
-<link rel="stylesheet" href="/assets/css/directory.css?v=6e41d9de04" />
+<link rel="stylesheet" href="/assets/css/directory.css?v=389be52bca" />
 </head>
 <body class="directory-home">
 <aside class="api-guide home-announcement" aria-label="Guide d'intégration de l'API JEV" data-i18n-aria-label="guide.aria">
@@ -581,16 +581,16 @@
 </header>
 <main id="top">
 <section class="home-hero wrap" aria-labelledby="homeTitle">
-  <div class="home-eyebrow"><span data-i18n="home.eyebrow">Répertoire indépendant</span><span aria-hidden="true">·</span><span class="home-eyebrow__count"><span id="statApps" data-count="5191">5,191</span> <span data-i18n="home.projects">projets</span></span></div>
-  <h1 id="homeTitle" data-i18n="home.title">Tout l’écosystème JEV AI, au même endroit.</h1>
-  <p class="home-hero__lead" data-i18n="home.lead">Applications, intégrations, SDK, alternatives locales et recherche. Chaque fiche renvoie à sa source.</p>
+  <div class="home-eyebrow"><span data-i18n="home.eyebrow">Répertoire fondé sur les sources</span><span aria-hidden="true">·</span><span class="home-eyebrow__count"><span id="statApps" data-count="5191">5,191</span> <span data-i18n="home.projects">projets</span></span></div>
+  <h1 id="homeTitle" data-i18n="home.title">Trouvez des projets JEV AI vérifiables</h1>
+  <p class="home-hero__lead" data-i18n="home.lead">Recherchez des applications, intégrations, SDK, alternatives locales et travaux de recherche, puis comparez la relation avec Jev, les sources et la mise à jour de chaque fiche.</p>
   <form class="home-search" id="directorySearchForm" role="search">
     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
     <label class="sr-only" for="dirSearch" data-i18n="a11y.search">Rechercher des projets</label>
-    <input id="dirSearch" type="search" name="q" autocomplete="off" aria-label="Rechercher des projets" data-i18n-aria-label="a11y.search" data-i18n-ph="apps.search" placeholder="Rechercher par nom, dépôt, langage ou catégorie..." />
+    <input id="dirSearch" type="search" name="q" autocomplete="off" aria-label="Rechercher des projets" data-i18n-aria-label="a11y.search" data-i18n-ph="apps.search" placeholder="Recherchez un projet, une tâche ou une stack, par exemple browser agent ou JEV-MLX…" />
     <kbd aria-hidden="true">/</kbd><button type="submit" data-i18n="a11y.search">Rechercher des projets</button>
   </form>
-  <div class="home-trust"><span class="home-trust__main"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5c0 4.5 3 8.5 7 10 4-1.5 7-5.5 7-10V6z"/><path d="m9 12 2 2 4-4"/></svg><span data-i18n="home.trust">Aucun compte requis. Nous ne demandons ni mot de passe, ni clé API, ni paiement.</span></span><span class="home-trust__independent" data-i18n="home.independent">Sans affiliation avec TypeSafe AI</span></div>
+  <div class="home-trust"><span class="home-trust__main"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5c0 4.5 3 8.5 7 10 4-1.5 7-5.5 7-10V6z"/><path d="m9 12 2 2 4-4"/></svg><span data-i18n="home.trust">La navigation ne nécessite aucun compte. Nous ne demandons ni mot de passe, ni clé API, ni paiement. Chaque fiche indique sa relation avec Jev, ses sources et sa mise à jour.</span></span><span class="home-trust__independent" data-i18n="home.independent">Indépendant de TypeSafe AI</span></div>
 </section>
 <section class="home-directory wrap" id="apps" aria-label="Projets" data-i18n-aria-label="nav.apps">
   <aside class="directory-sidebar">
@@ -679,7 +679,16 @@
 <a class="card__descLink" href="/fr/projects/szczyglis-dev/py-gpt/"><p class="card__desc">Cet assistant multiprestataire pour Linux, Windows et macOS propose chat, agents, RAG et intégrations d&#39;outils. Le plugin expose jev_evaluate(state, questions) et renvoie des résultats Choice, Score ou Noul au modèle courant.</p></a><div class="card__tags"><span class="badge badge--catalog" data-kind="integration">Intégration</span><span class="tag tag--language">Python</span><time class="tag tag--updated" datetime="2026-09-27">mis à jour le 2026-09-27</time></div>
 <div class="card__foot"><span class="card__links"><a class="card__details" href="/fr/projects/szczyglis-dev/py-gpt/">Détails <span aria-hidden="true">→</span></a><a class="card__go" href="https://github.com/szczyglis-dev/py-gpt" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a><a class="card__site" href="https://github.com/szczyglis-dev/py-gpt/blob/013b327608677defa60f1c102bdabd4a5c128f86/README.md#L1581-L1589" title="Documenté" target="_blank" rel="ugc nofollow noopener noreferrer">Sources <span aria-hidden="true">↗</span></a></span></div></article>
 <!-- catalog-prerender:end --></div>
-    <div class="dir__empty" id="dirEmpty" hidden data-i18n="apps.empty">Aucun projet ne correspond à cette recherche.</div>
+    <div class="dir__empty" id="dirEmpty" hidden><p data-i18n="apps.empty">Aucun projet ne correspond à cette recherche.</p></div>
+    <div class="dir__empty-guidance" id="dirEmptyGuidance" hidden>
+      <p class="dir__empty-hint" data-i18n="apps.emptyHint">Essayez moins de mots, le nom du dépôt ou une tâche comme browser agent ou semantic search.</p>
+      <nav class="dir__empty-guides" aria-label="Related guides">
+        <a href="/blog/jev-demo-showcase/" lang="en">Jev demos and showcases ↗</a>
+        <a href="/blog/jev-semantic-search-rag/" lang="en">Jev search and RAG ↗</a>
+        <a href="/blog/jev-mlx-local/" lang="en">Jev MLX and local models ↗</a>
+        <a href="/blog/jev-paper-workflows/" lang="en">Jev paper workflows ↗</a>
+      </nav>
+    </div>
     <nav class="catalog-pages catalog-pages--directory" id="directoryPagesBottom" aria-label="Pagination"><a href="/browse/" data-i18n="apps.browseAll">Voir tous les projets</a></nav>
     <div class="directory-about"><span><span id="statCats" data-count="10">10</span> <span data-i18n="stat.cats">Catégories</span></span><span><span id="statStars" data-count="383817">383,817</span> <span data-i18n="stat.stars">Stars GitHub</span></span><a href="/methodology/" data-i18n="apps.methodology">Notre méthode de vérification</a><a href="/status/" data-i18n="apps.status">État des mises à jour</a></div>
     <div class="dir__source"><span><span data-i18n="apps.source">Sources de découverte</span> <a href="/methodology/" data-i18n="apps.discoverySources">Recherche GitHub et sources communautaires</a></span><a href="/catalog-audit.json" data-i18n="apps.audit">Rapport sur les sources et les preuves ↗</a></div>
@@ -916,12 +925,12 @@
   </div>
 </footer>
 
-<script src="/assets/js/locales/fr.js?v=ad1ace04ad"></script>
+<script src="/assets/js/locales/fr.js?v=b6f6ddd6ea"></script>
 <script src="/assets/js/data.js?v=442a3e084a"></script>
 <script src="/assets/js/projects.js?v=a4c5c58266"></script>
 <script id="liveCatalogSeed" type="application/json">null</script>
 <script src="/assets/js/analytics.js?v=b3a8b122f8" defer></script>
-<script type="module" src="/assets/js/main.js?v=ab1fb015c9"></script>
+<script type="module" src="/assets/js/main.js?v=a70a4c4dc7"></script>
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 </body>

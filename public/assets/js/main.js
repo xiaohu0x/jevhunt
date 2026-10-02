@@ -463,7 +463,9 @@ import { localizeStaticProjects, staticCatalogIndexUrl } from "./catalog-locales
     }
     renderDirectoryPages(total);
     const empty = $("#dirEmpty");
+    const emptyGuidance = $("#dirEmptyGuidance");
     if (empty) empty.hidden = list.length !== 0;
+    if (emptyGuidance) emptyGuidance.hidden = list.length !== 0;
     const more = $("#loadMore");
     if (more) more.hidden = true;
     const viewSignature = JSON.stringify([state.page, state.query.trim(), state.filter, state.kind, state.language, state.activity, state.sort, total]);

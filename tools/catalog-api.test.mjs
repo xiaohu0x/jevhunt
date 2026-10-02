@@ -74,6 +74,17 @@ test("database filters combine correctly while metadata retains whole-catalog fa
   assert.deepEqual(empty.pagination, { page: 1, pageSize: 20, total: 0, totalPages: 1, start: 0, end: 0 });
 });
 
+test("natural queries split repository punctuation and rank matching project names first", async t => {
+  const { add, get } = setup(t);
+  add({ repo: "CoderInPajamas/JEV-MLX", name: "JEV-MLX", desc: "JEV-inspired local decisions for Apple Silicon", stars: 2 });
+  add({ repo: "andrewdeng318/paperclip-plugin-jev", name: "paperclip-plugin-jev", desc: "Community Paperclip plugin for Jev", stars: 1 });
+  add({ repo: "Eliot5566/JEV-Paper-Radar", name: "JEV-Paper-Radar", desc: "Reads new papers against plain-language interests", stars: 3 });
+  add({ repo: "owner/broad-paper", name: "Broad paper helper", desc: "A Jev tool for papers", stars: 900 });
+  assert.deepEqual((await get("q=jev%20mlx")).apps.map(project => project.name), ["JEV-MLX"]);
+  assert.deepEqual((await get("q=paperclip%20jev")).apps.map(project => project.name), ["paperclip-plugin-jev"]);
+  assert.deepEqual((await get("q=jev%20paper")).apps.slice(0, 2).map(project => project.name), ["JEV-Paper-Radar", "Broad paper helper"]);
+});
+
 test("category names match English and the requested locale without downloading the catalog", async t => {
   const { env, add, get } = setup(t);
   add({ repo: "owner/agent", cat: "agents" });
