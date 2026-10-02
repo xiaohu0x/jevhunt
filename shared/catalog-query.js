@@ -27,6 +27,7 @@ const searchTerms = value => {
   return [...q.toLowerCase().matchAll(/[\p{L}\p{N}]+/gu)].map(match => match[0]).filter(Boolean);
 };
 const normalizedWords = expression => `LOWER(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(${expression}, '-', ' '), '_', ' '), '/', ' '), '.', ' '), ':', ' '))`;
+const cjkTerm = term => /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Hangul}]/u.test(term);
 
 export function readCatalogQuery(params) {
   const all = params.get("all") === "1";
@@ -80,11 +81,13 @@ function filters(query, messages) {
       terms.every(term => [id, CATEGORY_NAMES[i], messages[`category.${id}.name`]].filter(Boolean).join(" ").toLowerCase().includes(term)));
     const text = "name || ' ' || repo || ' ' || COALESCE(json_extract(payload, '$.desc'), '') || ' ' || COALESCE(json_extract(payload, '$.content.summary'), '') || ' ' || COALESCE((SELECT l.search_text FROM project_content_locales l JOIN project_content c ON c.repo=l.repo AND c.content_hash=l.content_hash WHERE l.repo=catalog_entries.repo AND c.github_id=catalog_entries.github_id AND l.locale=?), '') || ' ' || COALESCE(language, '')";
     const literal = /[\\%_']/u.test(query.q);
-    const searchable = literal ? `LOWER(${text})` : `(' ' || ${normalizedWords(text)} || ' ')`;
-    const tokenClauses = terms.map(() => `${searchable} LIKE ? ESCAPE '\\'`).join(" AND ");
+    const termClause = term => literal
+      ? `LOWER(${text}) LIKE ? ESCAPE '\\'`
+      : cjkTerm(term) ? `${normalizedWords(text)} LIKE ? ESCAPE '\\'` : `(' ' || ${normalizedWords(text)} || ' ') LIKE ? ESCAPE '\\'`;
+    const tokenClauses = terms.map(termClause).join(" AND ");
     const categoryClause = categoryMatches.length ? ` OR category IN (${categoryMatches.map(() => "?").join(",")})` : "";
     clauses.push(`((${tokenClauses})${categoryClause})`);
-    for (const term of terms) values.push(query.locale, literal ? pattern(term) : `% ${term} %`);
+    for (const term of terms) values.push(query.locale, literal ? pattern(term) : cjkTerm(term) ? `%${term}%` : `% ${term} %`);
     values.push(...categoryMatches);
   }
   return { where: clauses.join(" AND "), values };
@@ -94,10 +97,12 @@ function searchOrder(query) {
   if (!query.q || !query.terms?.length) return { sql: SORT_SQL[query.sort], values: [] };
   const source = "LOWER(name || ' ' || repo)";
   const literal = /[\\%_']/u.test(query.q);
-  const searchable = literal ? source : `(' ' || ${normalizedWords("name || ' ' || repo")} || ' ')`;
-  const allNameTerms = query.terms.map(() => `${searchable} LIKE ? ESCAPE '\\'`).join(" AND ");
-  const anyNameTerm = query.terms.map(() => `${searchable} LIKE ? ESCAPE '\\'`).join(" OR ");
-  const patterns = query.terms.map(term => literal ? "%" + term.replace(/[\\%_]/g, "\\$&") + "%" : `% ${term} %`);
+  const termClause = term => literal
+    ? `${source} LIKE ? ESCAPE '\\'`
+    : cjkTerm(term) ? `${normalizedWords("name || ' ' || repo")} LIKE ? ESCAPE '\\'` : `(' ' || ${normalizedWords("name || ' ' || repo")} || ' ') LIKE ? ESCAPE '\\'`;
+  const allNameTerms = query.terms.map(termClause).join(" AND ");
+  const anyNameTerm = query.terms.map(termClause).join(" OR ");
+  const patterns = query.terms.map(term => literal ? "%" + term.replace(/[\\%_]/g, "\\$&") + "%" : cjkTerm(term) ? `%${term}%` : `% ${term} %`);
   return {
     sql: `CASE WHEN (${allNameTerms}) THEN 0 WHEN (${anyNameTerm}) THEN 1 ELSE 2 END, ${SORT_SQL[query.sort]}`,
     values: [...patterns, ...patterns],
