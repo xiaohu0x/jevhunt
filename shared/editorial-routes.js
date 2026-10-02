@@ -2,7 +2,7 @@ import editorial from "../content/editorial.json" with { type: "json" };
 
 export const EDITORIAL_ROUTES = [
   { path: "/blog/", modified: editorial.date },
-  ...editorial.articles.map(article => ({ path: `/blog/${article.slug}/`, modified: editorial.date })),
+  ...editorial.articles.map(article => ({ path: `/blog/${article.slug}/`, modified: article.modified || editorial.date })),
   ...editorial.faqPages.map(page => ({ path: page.path, modified: editorial.date })),
 ];
 

@@ -1,4 +1,6 @@
 <p>Jev can judge the relevance of retrieved text, select source context or decide whether evidence supports an answer. It does not replace every retrieval step or generate the final response. Separate candidate discovery, relevance decisions and answer generation.</p>
+<h2 id="jev-search">What a Jev search layer should decide</h2>
+<p>A Jev search layer sits after retrieval and before generation. Give it a bounded set of passages, files or lines and ask the relevance or answerability question your application can act on. Keep the search index, source identifiers and final response in deterministic code.</p>
 <h2 id="retrieval">Retrieve candidates before judging them</h2>
 <p>A search engine, lexical index, embedding retriever or repository scan supplies candidate material. Jev can then judge those candidates against the user's question. If the relevant passage never reaches the candidate set, a better reranker cannot recover it.</p>
 <pre><code>query -> candidate retrieval -> Jev relevance/evidence checks

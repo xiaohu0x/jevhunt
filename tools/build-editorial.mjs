@@ -47,10 +47,10 @@ function contents(document, locale = "en") {
   return `<aside class="article-contents"><nav aria-label="${esc(copy[locale].contents)}"><h2>${esc(copy[locale].contents)}</h2><ol>${[...document.querySelectorAll("h2[id]")].map(heading => `<li><a href="#${esc(heading.id)}">${esc(heading.textContent)}</a></li>`).join("")}</ol></nav></aside>`;
 }
 
-function header({ title, lead, locale = "en", topic = "FAQ", path }) {
+function header({ title, lead, locale = "en", topic = "FAQ", path, modified = editorial.date }) {
   const c = copy[locale];
-  const date = new Intl.DateTimeFormat(i18n.locales[locale].lang, { dateStyle: "long", timeZone: "UTC" }).format(new Date(editorial.date + "T12:00:00Z"));
-  return `<header class="article-header"><div class="article-kicker"><img src="/icon-192.png" alt="" width="36" height="36"/><span>JevHunt / ${esc(topic)}</span></div><h1>${esc(title)}</h1><p class="article-lead">${esc(lead)}</p><p class="article-byline">${esc(c.author)} <a href="/methodology/">JevHunt</a><span>${esc(c.reviewed)}: <time datetime="${editorial.date}">${esc(date)}</time></span></p><nav class="article-breadcrumb" aria-label="${locale === "en" ? "Breadcrumb" : c.contents}"><a href="${i18n.locales[locale].path}">JevHunt</a><span>/</span><a href="${topic === "FAQ" ? path : "/blog/"}">${esc(topic === "FAQ" ? c.faq : "Guides")}</a></nav></header>`;
+  const date = new Intl.DateTimeFormat(i18n.locales[locale].lang, { dateStyle: "long", timeZone: "UTC" }).format(new Date(modified + "T12:00:00Z"));
+  return `<header class="article-header"><div class="article-kicker"><img src="/icon-192.png" alt="" width="36" height="36"/><span>JevHunt / ${esc(topic)}</span></div><h1>${esc(title)}</h1><p class="article-lead">${esc(lead)}</p><p class="article-byline">${esc(c.author)} <a href="/methodology/">JevHunt</a><span>${esc(c.reviewed)}: <time datetime="${modified}">${esc(date)}</time></span></p><nav class="article-breadcrumb" aria-label="${locale === "en" ? "Breadcrumb" : c.contents}"><a href="${i18n.locales[locale].path}">JevHunt</a><span>/</span><a href="${topic === "FAQ" ? path : "/blog/"}">${esc(topic === "FAQ" ? c.faq : "Guides")}</a></nav></header>`;
 }
 
 function notes(locale = "en") {
@@ -60,6 +60,8 @@ function notes(locale = "en") {
 
 for (const article of editorial.articles) {
   if (article.description.length > 160) throw new Error("Description would be truncated: " + article.slug);
+  const modified = article.modified || editorial.date;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(modified)) throw new Error("Invalid article modified date: " + article.slug);
   const document = bodyDocument(readFileSync(`content/blog/${article.slug}.html`, "utf8"));
   const lead = document.querySelector("p")?.textContent;
   if (!lead) throw new Error("Missing article lead: " + article.slug);
@@ -72,7 +74,7 @@ for (const article of editorial.articles) {
   }).join("");
   const schema = { "@context": "https://schema.org", "@graph": [
     { "@type": "BlogPosting", headline: article.title, description: article.description, url: ORIGIN + path,
-      mainEntityOfPage: ORIGIN + path, inLanguage: "en", datePublished: editorial.date, dateModified: editorial.date,
+      mainEntityOfPage: ORIGIN + path, inLanguage: "en", datePublished: modified, dateModified: modified,
       author: { "@type": "Organization", name: "JevHunt", url: ORIGIN + "/methodology/" },
       publisher: { "@type": "Organization", name: "JevHunt", url: ORIGIN + "/", logo: { "@type": "ImageObject", url: ORIGIN + "/icon-512.png" } },
       image: ORIGIN + "/og.png?v=3" },
@@ -83,7 +85,7 @@ for (const article of editorial.articles) {
     ] },
   ] };
   write(path, page({ title: article.title, description: article.description, path, schema, styles, bodyClass: "editorial-page", ogType: "article", localeLinks: false,
-    body: header({ title: article.title, lead, topic: article.topic, path }) + `<div class="article-layout">${contents(document)}<article class="article-prose">${document.body.innerHTML}</article></div><section class="article-related"><h2>Related guides</h2><ul>${related}</ul><a href="/faq/">Jev FAQ</a></section>` + notes() }));
+    body: header({ title: article.title, lead, topic: article.topic, path, modified }) + `<div class="article-layout">${contents(document)}<article class="article-prose">${document.body.innerHTML}</article></div><section class="article-related"><h2>Related guides</h2><ul>${related}</ul><a href="/faq/">Jev FAQ</a></section>` + notes() }));
 }
 
 for (const faq of editorial.faqPages) {
