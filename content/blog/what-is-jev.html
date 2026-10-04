@@ -1,7 +1,7 @@
 <p>Jev is TypeSafe AI's decision model for software. Give it text as state and questions with a defined answer space; receive choices, scores or yes/no probabilities that your application can use.</p>
 <h2 id="decision-model">A decision model has a different job from a chat model</h2>
 <p>The <a href="https://docs.typesafe.ai/introduction">official introduction</a> describes Jev as a System One model. Its output is a typed judgment, rather than a paragraph, code completion or explanation. That makes it useful at a decision point: which queue receives a ticket, whether a retrieved passage is relevant, or which handler should take a request.</p>
-<p>A surrounding application can still generate text. For example, Jev can select the support team while a separate language model writes a draft response. The routing judgment and the generated response have different responsibilities and need separate evaluation.</p>
+<p>A surrounding application can still generate text. For example, Jev can select the support team while a separate language model writes a draft response. The routing judgment and the generated response have different responsibilities and need separate evaluation. The wider software category is described in <a href="/blog/what-is-a-decision-engine/">What is a decision engine?</a></p>
 <h2 id="state">What does state mean?</h2>
 <p><a href="https://docs.typesafe.ai/concepts/state">State</a> is the material being judged: a message, a document excerpt, a record, or a JSON object containing the relevant facts. It is not automatically a persistent memory store. Your application decides which context to send on each request.</p>
 <pre><code>{

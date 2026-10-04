@@ -1,0 +1,28 @@
+<p>OpenRouter exposes Jev through a typed Decisions endpoint, while its catalogue also lists a router model. Those are different products, and mixing them is the most common mistake when someone searches for "Jev on OpenRouter." This guide separates them and lists what to verify before you ship.</p>
+<h2 id="decisions-endpoint">The Decisions endpoint</h2>
+<p>OpenRouter's <a href="https://openrouter.ai/docs/cookbook/evaluate-and-optimize/jev-classification">official classification cookbook</a> calls <code>https://openrouter.ai/api/alpha/decisions</code> with an <code>OPENROUTER_API_KEY</code> and the model id <code>typesafe/jev-1.13</code>. It sends state and typed questions, then validates the returned answers — the same request shape as the direct TypeSafe API, covered in the <a href="/blog/jev-api-sdk-guide/">API and SDK guide</a>.</p>
+<pre><code>{
+  "model": "typesafe/jev-1.13",
+  "state": { "message": "The upload fails after I choose a PDF." },
+  "questions": {
+    "team": {
+      "type": "choice",
+      "instructions": "Which team should handle this message?",
+      "criteria": { "technical": "Errors and broken product functionality", "billing": "Invoices and charges", "other": "None of those" }
+    }
+  }
+}</code></pre>
+<p>This is a request-shape example, not a captured model result. The endpoint is an alpha surface, so check the current cookbook for the version and provider-specific error behavior rather than pinning this page's values forever.</p>
+<h2 id="router-model">jev-router is a different product</h2>
+<p>The <a href="https://openrouter.ai/api/v1/models">public OpenRouter model catalogue</a> also lists <code>typesafe/jev-router</code>, which selects a model for a request. That is routing, not a typed decision: it returns "which model should answer," not a Choice, Score or Noul for your question. A normal chat-model selector therefore does not tell you which Decisions models or aliases the decision endpoint will accept.</p>
+<p>Keep the two roles apart when you write tests. A routing call is evaluated by whether the chosen model was a good fit; a decision call is evaluated by whether the answer was correct and calibrated.</p>
+<h2 id="clients">Community clients and recipes</h2>
+<p>Because the endpoint follows the System One shape, community clients wrap it for many hosts. <a href="/projects/nexibeo/jev-cookbook/">jev-cookbook</a> documents tested recipes such as support triage and database indexing over OpenRouter. <a href="/projects/alexadark/jev-openrouter-skill/">jev-openrouter-skill</a> and <a href="/projects/ctmx/openrouter-jev-mcp/">openrouter-jev-mcp</a> document an agent skill and an MCP server. <a href="/projects/markusbug/jevymarket/">jevymarket</a> documents a prediction-market bot driven by Jev via OpenRouter, <a href="/projects/digitalfrost84/openclaw-jev-openrouter/">openclaw-jev-openrouter</a> documents another integration, and <a href="/projects/philippdubach/pi-jev-router/">philippdubach/pi-jev-router</a> uses OpenRouter as the transport for a Pi router.</p>
+<p>These are community projects, not official OpenRouter or TypeSafe products. Their READMEs own the compatibility and cost claims; the <a href="/blog/jev-coding-agent-integrations/">coding-agent overview</a> explains how a router differs from a decision tool.</p>
+<h2 id="errors">Authentication, versions and errors</h2>
+<p>Decide up front which credential you will use. The direct TypeSafe endpoint reads <code>TYPESAFE_API_KEY</code>; the OpenRouter route reads <code>OPENROUTER_API_KEY</code>. Do not ship either key in a browser bundle, and keep the call on a server or in a local process.</p>
+<ul><li>Pin the model id you tested, and know whether an alias can move to a new release.</li><li>Handle a timeout, a quota or rate-limit response, and a malformed or missing answer.</li><li>Log which model actually answered so comparisons stay honest.</li><li>Validate the returned answers against the questions you sent before your code uses them.</li></ul>
+<h2 id="compare">TypeSafe direct vs OpenRouter</h2>
+<table><caption>Two routes to the same decision model</caption><thead><tr><th>Consideration</th><th>Direct TypeSafe API</th><th>OpenRouter Decisions</th></tr></thead><tbody><tr><td>Endpoint</td><td><code>POST https://api.typesafe.ai/v1/systemone</code></td><td><code>https://openrouter.ai/api/alpha/decisions</code></td></tr><tr><td>Credential</td><td>TypeSafe console key</td><td>OpenRouter key</td></tr><tr><td>Maturity</td><td>Documented product API</td><td>Documented alpha surface</td></tr><tr><td>Model id</td><td>TypeSafe model selector</td><td>Versioned id such as <code>typesafe/jev-1.13</code></td></tr><tr><td>Extra options</td><td>Direct SDKs and adapters</td><td>Provider routing and billing across models</td></tr></tbody></table>
+<h2 id="checklist">A small first integration</h2>
+<p>Begin with one decision and a labeled set of your own examples, and validate transport and response handling without granting the model authority over an external action. Then test ambiguous inputs, missing confidence, malformed responses and retries. If your goal is a chat model router rather than a typed decision, read <a href="/blog/jev-coding-agent-integrations/">the integrations overview</a> first; if your goal is a pip-installable client, start with the <a href="/blog/jev-api-sdk-guide/#sdk">SDK section</a>.</p>
