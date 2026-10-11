@@ -12,15 +12,20 @@ test("all supported locale routes read the live catalog; unrelated paths fall th
   assert.deepEqual(Object.keys(LOCALES), Object.keys(i18n.locales));
   const DB = database();
   t.after(() => DB.db.close());
+  // The catalogue metadata is now materialised per publish revision, so a
+  // request may read the snapshot instead of the aggregate scans. Count any
+  // statement that touches a catalogue table as a catalog read.
   let catalogReads = 0;
-  const originalBatch = DB.batch.bind(DB);
-  DB.batch = statements => { catalogReads++; return originalBatch(statements); };
+  const originalPrepare = DB.prepare.bind(DB);
+  DB.prepare = sql => { if (/catalog_control|catalog_snapshot|catalog_sources|catalog_entries/.test(sql)) catalogReads++; return originalPrepare(sql); };
   for (const key of [...Object.keys(LOCALES).filter(key => key !== "en"), "ar", "fa", "en", "unknown", "constructor", "toString"]) {
     const before = catalogReads;
     const fallback = new Response("static fallback");
     const response = await localeRoute({ params: { locale: key }, env: { DB }, next: () => fallback });
     assert.equal(response, fallback, key);
-    assert.equal(catalogReads - before, Object.hasOwn(LOCALES, key) && key !== "en" ? 1 : 0, key);
+    const reads = catalogReads - before;
+    if (Object.hasOwn(LOCALES, key) && key !== "en") assert.ok(reads >= 1, `${key} should read the catalogue (${reads})`);
+    else assert.equal(reads, 0, key);
   }
 });
 

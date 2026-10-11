@@ -15,24 +15,70 @@ export function inferCategory(project) {
   if (/plugin|mcp|agent|router|context|skill/i.test(text)) return "agents";
   return "apps";
 }
-export const activeClause = "active = 1 AND NOT EXISTS (SELECT 1 FROM catalog_withdrawals w WHERE w.repo = catalog_entries.repo OR EXISTS (SELECT 1 FROM catalog_aliases a WHERE a.old_repo=w.repo AND a.new_repo=catalog_entries.repo))";
-export async function catalogMeta(DB) {
-  const [state, groups, languages, sources] = await DB.batch([
-    DB.prepare("SELECT * FROM catalog_control WHERE id = 1"),
+// Hidden rows are withdrawn repos plus the destinations of retired aliases. Two
+// separate NOT EXISTS clauses keep each lookup indexable: the single OR form let
+// the planner fall back to scanning catalog_withdrawals for every row.
+export const activeClause = "active = 1 AND NOT EXISTS (SELECT 1 FROM catalog_withdrawals w WHERE w.repo = catalog_entries.repo) AND NOT EXISTS (SELECT 1 FROM catalog_withdrawals w JOIN catalog_aliases a ON a.old_repo = w.repo WHERE a.new_repo = catalog_entries.repo)";
+
+const RECENT_PUSHED_SQL = `SELECT preview FROM catalog_entries WHERE ${activeClause} AND json_extract(payload,'$.archived') = 0 AND json_extract(payload,'$.pushed') GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]' AND date(json_extract(payload,'$.pushed'), '+0 days') = json_extract(payload,'$.pushed') ORDER BY json_extract(payload,'$.pushed') DESC, stars DESC LIMIT 40`;
+
+/**
+ * Recompute the materialised snapshot. Only run when the publish revision has
+ * moved on (or the snapshot table does not exist yet), so the aggregate scans
+ * that used to run on every request now run once per publish.
+ */
+async function refreshSnapshot(DB, revision) {
+  const [groups, languages, recent] = await DB.batch([
     DB.prepare(`SELECT category, COUNT(*) AS n, SUM(stars) AS stars FROM catalog_entries WHERE ${activeClause} GROUP BY category`),
     DB.prepare(`SELECT DISTINCT COALESCE(language, 'unknown') AS language FROM catalog_entries WHERE ${activeClause} ORDER BY language`),
-    DB.prepare("SELECT id,state,status,last_success_at,last_checked_at,error FROM catalog_sources ORDER BY id"),
+    DB.prepare(RECENT_PUSHED_SQL),
   ]);
-  const control = state.results[0];
-  if (!control || !groups.results.length) return null;
+  const snapshot = {
+    revision,
+    categoryRows: groups.results,
+    languages: languages.results.map(row => row.language),
+    recentlyPushed: recent.results.map(row => row.preview),
+  };
+  // Best effort: without the snapshot table the reads above still serve the request.
+  await DB.prepare("INSERT INTO catalog_snapshot(id,revision,payload,computed_at) VALUES(1,?,?,unixepoch()) ON CONFLICT(id) DO UPDATE SET revision=excluded.revision,payload=excluded.payload,computed_at=excluded.computed_at")
+    .bind(revision, JSON.stringify(snapshot)).run().catch(() => {});
+  return snapshot;
+}
+
+async function loadSnapshot(DB, revision) {
+  const row = await DB.prepare("SELECT revision, payload FROM catalog_snapshot WHERE id = 1").first().catch(() => null);
+  if (row && row.revision === revision) {
+    try {
+      const snapshot = JSON.parse(row.payload);
+      if (Array.isArray(snapshot.categoryRows) && Array.isArray(snapshot.languages) && Array.isArray(snapshot.recentlyPushed)) return snapshot;
+    } catch { /* fall through and recompute */ }
+  }
+  return refreshSnapshot(DB, revision);
+}
+
+/** Recently-pushed active projects, newest first, parsed from the snapshot. */
+export async function catalogRecentPushed(DB) {
+  const control = await DB.prepare("SELECT revision FROM catalog_control WHERE id = 1").first();
+  if (!control) return [];
+  const snapshot = await loadSnapshot(DB, control.revision);
+  return snapshot.recentlyPushed.map(data => JSON.parse(data));
+}
+
+export async function catalogMeta(DB) {
+  const control = await DB.prepare("SELECT * FROM catalog_control WHERE id = 1").first();
+  if (!control) return null;
   let previous = {};
   try { previous = JSON.parse(control.meta); } catch { /* empty bootstrap */ }
+  const snapshot = await loadSnapshot(DB, control.revision);
+  const groups = snapshot.categoryRows;
+  if (!groups.length) return null;
+  const sources = await DB.prepare("SELECT id,state,status,last_success_at,last_checked_at,error FROM catalog_sources ORDER BY id").all();
   return {
     ...previous,
-    projectCount: groups.results.reduce((n, row) => n + row.n, 0),
-    totalStars: groups.results.reduce((n, row) => n + (row.stars || 0), 0),
-    categoryCounts: Object.fromEntries(groups.results.map(row => [row.category, row.n])),
-    languages: languages.results.map(row => row.language),
+    projectCount: groups.reduce((n, row) => n + row.n, 0),
+    totalStars: groups.reduce((n, row) => n + (row.stars || 0), 0),
+    categoryCounts: Object.fromEntries(groups.map(row => [row.category, row.n])),
+    languages: snapshot.languages,
     catalogHash: control.revision,
     syncedAt: new Date(control.published_at * 1000).toISOString(),
     publishedAt: new Date(control.published_at * 1000).toISOString(),
