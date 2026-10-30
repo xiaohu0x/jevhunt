@@ -30,6 +30,8 @@ public/categories/
 public/browse/
 public/admin/
 public/tasks/
+public/*/tasks/
+public/*/categories/
 public/collections/
 public/alternatives/
 public/compare/

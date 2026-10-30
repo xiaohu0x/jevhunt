@@ -1,5 +1,5 @@
 import { CATEGORIES } from "./catalog-sections.js";
-import { TASK_LIST } from "./catalog-tasks.js";
+import { TASK_LIST, taskName, taskBlurb } from "./catalog-tasks.js";
 import { renderCard } from "./catalog-view.js";
 import { esc, projectPath, ORIGIN } from "./render.js";
 
@@ -65,4 +65,56 @@ export function taskPageView({ task, projects, total, number, pages, messages = 
       breadcrumbs([{ name: "JevHunt", path: "/" }, { name: "Tasks", path: "/tasks/" }, { name: task.name, path }]),
     ] },
   };
+}
+
+
+const fmt = value => new Intl.NumberFormat("en-US").format(Number(value) || 0);
+
+function localizedPagination({ base, number, pages, messages }) {
+  if (pages <= 1) return "";
+  const t = (key, fallback) => messages[key] || fallback;
+  const prev = number === 2 ? base : `${base}${number - 1}/`;
+  const next = `${base}${number + 1}/`;
+  return `<nav class="catalog-pages" aria-label="Pagination">${number > 1 ? `<a rel="prev" href="${prev}">← ${esc(t("apps.previous", "Previous"))}</a>` : ""} <span>${esc(t("apps.page", "Page {page} of {pages}").replace("{page}", number).replace("{pages}", pages))}</span> ${number < pages ? `<a rel="next" href="${next}">${esc(t("apps.next", "Next"))} →</a>` : ""}</nav>`;
+}
+
+export function localizedTasksIndexView({ localeKey, messages = {} }) {
+  const base = `/${localeKey}`;
+  const t = (key, fallback) => messages[key] || fallback;
+  const title = t("home.tasks", "Start with a task");
+  const description = t("home.tasksLead", "Pick what you want to build, then compare the Jev projects that do it.");
+  const cards = TASK_LIST.map(task => `<a class="task-card" href="${base}/tasks/${esc(task.id)}/"><span class="task-card__name">${esc(taskName(task, localeKey))}</span><span class="task-card__blurb">${esc(taskBlurb(task, localeKey))}</span><span class="task-card__arrow" aria-hidden="true">→</span></a>`).join("");
+  return { title, description, path: `${base}/tasks/`, noindex: true,
+    body: `<header class="legal__header"><nav class="breadcrumbs" aria-label="${esc(t("project.breadcrumb", "Breadcrumb"))}"><a href="${base}/">JevHunt</a> / ${esc(title)}</nav><h1>${esc(title)}</h1><p class="legal__summary">${esc(description)}</p><p><a href="${base}/#apps">${esc(t("home.allProjects", "All projects"))} →</a></p></header><div class="task-index">${cards}</div>` };
+}
+
+export function localizedTaskPageView({ task, localeKey, messages = {}, projects, total, number, pages }) {
+  const base = `/${localeKey}/tasks/${task.id}/`;
+  const path = number === 1 ? base : `${base}${number}/`;
+  const t = (key, fallback) => messages[key] || fallback;
+  const name = taskName(task, localeKey);
+  const blurb = taskBlurb(task, localeKey);
+  const projectWord = t("home.projects", "projects");
+  const nav = localizedPagination({ base, number, pages, messages });
+  return {
+    title: `${name} — ${t("home.tasks", "Tasks")}`,
+    description: blurb,
+    path,
+    noindex: true,
+    body: `<header class="legal__header"><nav class="breadcrumbs" aria-label="${esc(t("project.breadcrumb", "Breadcrumb"))}"><a href="${base.split("/tasks/")[0]}/">JevHunt</a> / <a href="/${localeKey}/tasks/">${esc(t("home.tasks", "Tasks"))}</a> / ${esc(name)}</nav><h1>${esc(name)}</h1><p class="legal__summary">${esc(blurb)}</p><p><strong>${fmt(total)}</strong> ${esc(projectWord)} · <a href="/${localeKey}/#apps">${esc(t("home.allProjects", "All projects"))} →</a></p></header>${nav}<div class="app-grid">${projects.map(project => renderCard(project, messages, { basePath: `/${localeKey}` })).join("")}</div>${nav}`,
+    schema: { "@context": "https://schema.org", "@type": "CollectionPage", name: `${name} — JevHunt`, inLanguage: localeKey, url: ORIGIN + path },
+  };
+}
+
+export function localizedCategoriesIndexView({ localeKey, messages = {}, counts = {} }) {
+  const base = `/${localeKey}`;
+  const t = (key, fallback) => messages[key] || fallback;
+  const title = t("home.categories", "Browse by category");
+  const projectWord = t("home.projects", "projects");
+  const cards = CATEGORIES.filter(category => Object.hasOwn(counts, category.id)).map(category => {
+    const name = messages[`category.${category.id}.name`] || category.name;
+    return `<a class="category-card" href="${base}/?category=${encodeURIComponent(category.id)}#apps"><span class="category-card__name">${esc(name)}</span><span class="category-card__count">${fmt(counts[category.id])} ${esc(projectWord)}</span></a>`;
+  }).join("");
+  return { title, description: t("home.tasksLead", ""), path: `${base}/categories/`, noindex: true,
+    body: `<header class="legal__header"><nav class="breadcrumbs" aria-label="${esc(t("project.breadcrumb", "Breadcrumb"))}"><a href="${base}/">JevHunt</a> / ${esc(title)}</nav><h1>${esc(title)}</h1><p><a href="${base}/#apps">${esc(t("home.allProjects", "All projects"))} →</a></p></header><div class="category-grid">${cards}</div>` };
 }

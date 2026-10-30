@@ -11,6 +11,7 @@ import { alternativesView, compareView, pickAlternatives } from "../shared/catal
 import { isFeatured } from "../shared/catalog-featured.js";
 import { COLLECTION_LIST, collectionMatches } from "../shared/catalog-collections.js";
 import { collectionsIndexView, collectionPageView } from "../shared/catalog-collection-pages.js";
+import { localizedTasksIndexView, localizedTaskPageView, localizedCategoriesIndexView } from "../shared/catalog-section-pages.js";
 
 const { apps, categories, catalogMeta: meta, i18n, projectContents } = loadData();
 const catalog = JSON.parse(readFileSync("public/catalog.json", "utf8"));
@@ -84,6 +85,24 @@ for (const project of projects) {
   if (!reviewed && !isFeatured(project)) continue;
   const alternatives = pickAlternatives(project, categoryProjects.get(project.cat) || [], 10);
   write(alternativesPath(project.repo), page(alternativesView({ project, alternatives, categoryName: categoryNames.get(project.cat) || project.cat })));
+}
+
+for (const [localeKey, locale] of Object.entries(i18n.locales)) {
+  if (localeKey === "en") continue;
+  const prefix = locale.path.replace(/\/$/, "");
+  const messages = locale.messages;
+  const writeLocalized = (path, view) => {
+    write(path, page({ ...view, messages, localeKey, localeInfo: locale, localePrefix: prefix }));
+    paths.pop(); // Localized utility pages are noindex and stay out of the sitemap.
+  };
+  writeLocalized(`${prefix}/tasks/`, localizedTasksIndexView({ localeKey, messages }));
+  for (const task of TASK_LIST) {
+    const items = projects.filter(project => taskMatches(task, project));
+    const pages = Math.max(1, Math.ceil(items.length / 24));
+    const slice = items.slice(0, 24).map(project => localizedProjectPreview(project, projectContents, localeKey));
+    writeLocalized(`${prefix}/tasks/${task.id}/`, localizedTaskPageView({ task, localeKey, messages, projects: slice, total: items.length, number: 1, pages }));
+  }
+  writeLocalized(`${prefix}/categories/`, localizedCategoriesIndexView({ localeKey, messages, counts: meta.categoryCounts }));
 }
 
 for (const collection of COLLECTION_LIST) {

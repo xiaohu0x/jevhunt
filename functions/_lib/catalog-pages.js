@@ -9,7 +9,7 @@ import { readProjectContent, localizeCatalogProjects } from "../../shared/projec
 import { FEATURED_WHERE, FEATURED_ORDER_SQL } from "../../shared/catalog-featured.js";
 import { taskCardsHtml, featuredCardsHtml, newListHtml, categoryCardsHtml, searchHintsHtml, CATEGORIES } from "../../shared/catalog-sections.js";
 import { taskById, taskClause } from "../../shared/catalog-tasks.js";
-import { categoriesIndexView, tasksIndexView, taskPageView } from "../../shared/catalog-section-pages.js";
+import { categoriesIndexView, tasksIndexView, taskPageView, localizedTasksIndexView, localizedTaskPageView, localizedCategoriesIndexView } from "../../shared/catalog-section-pages.js";
 import { compareView, alternativesView, pickAlternatives } from "../../shared/catalog-compare.js";
 import { collectionsIndexView, collectionPageView } from "../../shared/catalog-collection-pages.js";
 import { COLLECTION_LIST, collectionById, collectionWhere } from "../../shared/catalog-collections.js";
@@ -123,8 +123,8 @@ async function landingUncached(context, locale = "en") {
     .on("#kindFilter option", selectedOption(query.kind))
     .on("#activityFilter option", selectedOption(query.activity))
     .on("#dirSort option", selectedOption(query.sort))
-    .on("#taskGrid", { element: el => el.setInnerContent(taskCardsHtml({ localeKey: locale }), { html: true }) })
-    .on("#searchHints", { element: el => el.setInnerContent(searchHintsHtml(locale), { html: true }) })
+    .on("#taskGrid", { element: el => el.setInnerContent(taskCardsHtml({ localeKey: locale, basePath: locale === "en" ? "" : `/${locale}` }), { html: true }) })
+    .on("#searchHints", { element: el => el.setInnerContent(searchHintsHtml(locale, locale === "en" ? "" : `/${locale}`), { html: true }) })
     .on("#featuredGrid", { element: el => el.setInnerContent(featuredCardsHtml(featured, localeMessages, { basePath: sectionBase, locale: sectionLang }), { html: true }) })
     .on("#newGrid", { element: el => el.setInnerContent(newListHtml(fresh, localeMessages, { basePath: sectionBase, locale, lang: sectionLang }), { html: true }) })
     .on("#categoryGrid", { element: el => el.setInnerContent(categoryCardsHtml(meta.categoryCounts, localeMessages, { localePrefix: sectionBase, lang: sectionLang }), { html: true }) })
@@ -360,4 +360,54 @@ export function collectionsIndex(context) {
 export function collectionPage(context, collectionId) {
   const pathname = new URL(context.request?.url || "https://jevhunt.com/").pathname;
   return cachedPage(context, `collection:${collectionId}:${pathname}`, () => collectionPageUncached(context, collectionId), 300);
+}
+
+
+async function localizedTasksIndexUncached(context, locale) {
+  const localized = await localeData(context, locale);
+  const view = localizedTasksIndexView({ localeKey: locale, messages: localized.messages });
+  return htmlResponse(page({ ...view, messages: localized.messages, localeKey: locale, localeInfo: localized.info, localePrefix: `/${locale}` }));
+}
+
+async function localizedTaskPageUncached(context, locale, taskId) {
+  const task = taskById(taskId);
+  if (!task) return missing(context);
+  const tail = context.params.page;
+  const raw = Array.isArray(tail) ? tail.join("/") : tail || "1";
+  if (raw && !/^\d+$/.test(raw)) return missing(context);
+  const number = Number(raw || 1);
+  const localized = await localeData(context, locale);
+  const { sql, values } = taskClause(task);
+  const where = `${activeClause} AND ${sql}`;
+  const [countRow, rows] = await Promise.all([
+    context.env.DB.prepare(`SELECT COUNT(*) AS n FROM catalog_entries WHERE ${where}`).bind(...values).first(),
+    context.env.DB.prepare(`SELECT preview AS data FROM catalog_entries WHERE ${where} ORDER BY stars DESC, name COLLATE NOCASE LIMIT 24 OFFSET ?`).bind(...values, (number - 1) * 24).all(),
+  ]);
+  const total = Number(countRow?.n || 0);
+  const pages = Math.max(1, Math.ceil(total / 24));
+  if (number < 1 || number > pages) return missing(context);
+  const projects = await localizeCatalogProjects(context.env.DB, rows.results.map(row => JSON.parse(row.data)), locale);
+  const view = localizedTaskPageView({ task, localeKey: locale, messages: localized.messages, projects, total, number, pages });
+  return htmlResponse(page({ ...view, messages: localized.messages, localeKey: locale, localeInfo: localized.info, localePrefix: `/${locale}` }));
+}
+
+async function localizedCategoriesIndexUncached(context, locale) {
+  const meta = await catalogMeta(context.env.DB).catch(() => null);
+  if (!meta) return context.next();
+  const localized = await localeData(context, locale);
+  const view = localizedCategoriesIndexView({ localeKey: locale, messages: localized.messages, counts: meta.categoryCounts });
+  return htmlResponse(page({ ...view, messages: localized.messages, localeKey: locale, localeInfo: localized.info, localePrefix: `/${locale}` }));
+}
+
+export function localizedTasksIndex(context, locale) {
+  return cachedPage(context, `ltasks:${locale}`, () => localizedTasksIndexUncached(context, locale), 300);
+}
+
+export function localizedTaskPage(context, locale, taskId) {
+  const pathname = new URL(context.request?.url || "https://jevhunt.com/").pathname;
+  return cachedPage(context, `ltask:${locale}:${taskId}:${pathname}`, () => localizedTaskPageUncached(context, locale, taskId), 300);
+}
+
+export function localizedCategoriesIndex(context, locale) {
+  return cachedPage(context, `lcats:${locale}`, () => localizedCategoriesIndexUncached(context, locale), 300);
 }

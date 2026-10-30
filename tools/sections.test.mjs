@@ -259,3 +259,23 @@ test("the live sitemap lists the task, collection and submission entry points", 
   }
   assert.ok(!xml.includes("/compare/"), "comparison pages stay out of the sitemap");
 });
+
+
+test("localized directory pages keep visitors inside their locale", () => {
+  const home = new JSDOM(readFileSync("public/zh-cn/index.html", "utf8")).window.document;
+  assert.ok(home.querySelector("#taskGrid .task-card").getAttribute("href").startsWith("/zh-cn/tasks/"));
+  assert.equal(home.querySelector('.nav__links a[data-i18n="nav.tasks"]').getAttribute("href"), "tasks/");
+  assert.equal(home.querySelector('.footer__col a[data-i18n="nav.tasks"]').getAttribute("href"), "tasks/");
+  const recent = home.querySelector('.home-section-link[data-i18n="home.recentlyAdded"]');
+  assert.equal(recent.getAttribute("href"), "?sort=added-desc#apps");
+  const task = new JSDOM(readFileSync("public/zh-cn/tasks/browser-automation/index.html", "utf8")).window.document;
+  assert.equal(task.querySelector("h1").textContent, "浏览器自动化");
+  assert.equal(task.querySelector('meta[name="robots"]').content, "noindex, nofollow");
+  assert.ok(task.querySelector(".app-grid .card__name").getAttribute("href").startsWith("/zh-cn/projects/"));
+  const categories = new JSDOM(readFileSync("public/zh-cn/categories/index.html", "utf8")).window.document;
+  assert.equal(categories.querySelector("h1").textContent, "按分类浏览");
+  assert.ok(categories.querySelector(".category-card").getAttribute("href").startsWith("/zh-cn/?category="));
+  const sitemap = readFileSync("public/sitemap.xml", "utf8");
+  assert.ok(!sitemap.includes("/zh-cn/tasks/"));
+  assert.ok(!sitemap.includes("/zh-cn/categories/"));
+});

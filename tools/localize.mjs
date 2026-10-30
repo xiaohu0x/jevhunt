@@ -76,6 +76,14 @@ function translateElements(source, messages) {
   return html;
 }
 
+function applyLocaleHrefs(source, localeKey) {
+  if (localeKey === defaultLocale) return source;
+  return source.replace(/<a\b[^>]*\bdata-locale-href="[^"]*"[^>]*>/g, tag => {
+    const target = tag.match(/data-locale-href="([^"]*)"/)[1];
+    return tag.replace(/\shref="[^"]*"/, ` href="${target}"`);
+  });
+}
+
 function localizePrerenderedCatalog(source, messages) {
   let html = source;
   const countPattern = /(<span id="dirCount"[^>]*>)Showing ([\d,]+) of ([\d,]+) projects(<\/span>)/;
@@ -185,8 +193,8 @@ function localizeHomeSections(source, localeKey, locale) {
   const basePath = localeKey === defaultLocale ? "" : "/" + localeKey;
   const localize = project => localizedProjectPreview(project, projectContents, localeKey);
   const sections = {
-    task: taskCardsHtml({ localeKey }),
-    hints: searchHintsHtml(localeKey),
+    task: taskCardsHtml({ localeKey, basePath }),
+    hints: searchHintsHtml(localeKey, basePath),
     featured: featuredCardsHtml(homeFeatured.map(localize), locale.messages, { basePath, locale: locale.lang }),
     new: newListHtml(homeFresh.map(localize), locale.messages, { basePath, locale: localeKey, lang: locale.lang }),
     category: categoryCardsHtml(homeCounts, locale.messages, { localePrefix: basePath, lang: locale.lang }),
@@ -223,6 +231,7 @@ function renderLocale(source, localeKey, locale) {
     `<!-- locale-alternates:start -->\n${localeAlternates(localeKey)}\n<!-- locale-alternates:end -->`,
     "locale alternate markers");
   html = translateElements(html, locale.messages);
+  html = applyLocaleHrefs(html, localeKey);
   html = localizePrerenderedCatalog(html, locale.messages);
   html = html.replace(/(<!-- catalog-prerender:start -->)[\s\S]*?(<!-- catalog-prerender:end -->)/,
     (_match, start, end) => `${start}\n${sandbox.window.JH.apps.map(project => renderCard(localizedProjectPreview(project, projectContents, localeKey), locale.messages, { basePath: localeKey === defaultLocale ? "" : "/" + localeKey })).join("\n")}\n${end}`);
