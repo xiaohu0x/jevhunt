@@ -1,0 +1,1150 @@
+{
+  "zh-cn": {
+    "browser-automation": {
+      "name": "浏览器自动化",
+      "blurb": "用类型化决策驱动 Chrome 或 Playwright"
+    },
+    "computer-use": {
+      "name": "电脑与桌面操作",
+      "blurb": "控制应用、屏幕和鼠标"
+    },
+    "agent-routing": {
+      "name": "Agent 路由与工具选择",
+      "blurb": "选择下一个工具、模型或分支"
+    },
+    "classification": {
+      "name": "分类与标注",
+      "blurb": "对文本、工单和意图分类"
+    },
+    "reranking": {
+      "name": "重排与相关性",
+      "blurb": "重新排序搜索和检索结果"
+    },
+    "rag-retrieval": {
+      "name": "RAG 与检索",
+      "blurb": "用自己的数据支撑回答"
+    },
+    "agent-evaluation": {
+      "name": "评估与基准",
+      "blurb": "给 Agent、提示和输出打分"
+    },
+    "guardrails": {
+      "name": "护栏与安全",
+      "blurb": "允许、阻止或升级操作"
+    },
+    "coding-agents": {
+      "name": "编码 Agent 与审查",
+      "blurb": "审查 diff、计划和工具调用"
+    },
+    "data-extraction": {
+      "name": "数据抽取与文档",
+      "blurb": "解析网页、PDF 和表单"
+    },
+    "trading-finance": {
+      "name": "交易与金融",
+      "blurb": "决定入场、风险和仓位"
+    },
+    "games-simulations": {
+      "name": "游戏与模拟",
+      "blurb": "游戏 Agent 的策略与裁判"
+    },
+    "local-models": {
+      "name": "本地与离线模型",
+      "blurb": "在自己的硬件上运行决策模型"
+    },
+    "sdk-integration": {
+      "name": "SDK 与框架集成",
+      "blurb": "从你的语言或框架调用 Jev"
+    },
+    "content-writing": {
+      "name": "内容与写作",
+      "blurb": "规划、评判和改进生成内容"
+    },
+    "support-chat": {
+      "name": "客服与会话",
+      "blurb": "路由并解决客户对话"
+    },
+    "workflow-automation": {
+      "name": "工作流自动化",
+      "blurb": "分支流水线与后台任务"
+    },
+    "observability": {
+      "name": "可观测性与运维",
+      "blurb": "追踪、监控和排障"
+    },
+    "science-health": {
+      "name": "科学与健康",
+      "blurb": "研究、生物和临床工作流"
+    },
+    "search-discovery": {
+      "name": "搜索与发现",
+      "blurb": "查询、索引和推荐"
+    }
+  },
+  "zh-tw": {
+    "browser-automation": {
+      "name": "瀏覽器自動化",
+      "blurb": "用型別化決策驅動 Chrome 或 Playwright"
+    },
+    "computer-use": {
+      "name": "電腦與桌面操作",
+      "blurb": "控制應用程式、螢幕和滑鼠"
+    },
+    "agent-routing": {
+      "name": "Agent 路由與工具選擇",
+      "blurb": "選擇下一個工具、模型或分支"
+    },
+    "classification": {
+      "name": "分類與標註",
+      "blurb": "對文字、工單和意圖分類"
+    },
+    "reranking": {
+      "name": "重排與相關性",
+      "blurb": "重新排序搜尋和檢索結果"
+    },
+    "rag-retrieval": {
+      "name": "RAG 與檢索",
+      "blurb": "用自己的資料支撐回答"
+    },
+    "agent-evaluation": {
+      "name": "評估與基準",
+      "blurb": "為 Agent、提示和輸出評分"
+    },
+    "guardrails": {
+      "name": "護欄與安全",
+      "blurb": "允許、阻擋或升級操作"
+    },
+    "coding-agents": {
+      "name": "編碼 Agent 與審查",
+      "blurb": "審查 diff、計畫和工具呼叫"
+    },
+    "data-extraction": {
+      "name": "資料抽取與文件",
+      "blurb": "解析網頁、PDF 和表單"
+    },
+    "trading-finance": {
+      "name": "交易與金融",
+      "blurb": "決定進場、風險和倉位"
+    },
+    "games-simulations": {
+      "name": "遊戲與模擬",
+      "blurb": "遊戲 Agent 的策略與裁判"
+    },
+    "local-models": {
+      "name": "本地與離線模型",
+      "blurb": "在自己的硬體上執行決策模型"
+    },
+    "sdk-integration": {
+      "name": "SDK 與框架整合",
+      "blurb": "從你的語言或框架呼叫 Jev"
+    },
+    "content-writing": {
+      "name": "內容與寫作",
+      "blurb": "規劃、評判和改進生成內容"
+    },
+    "support-chat": {
+      "name": "客服與會話",
+      "blurb": "路由並解決客戶對話"
+    },
+    "workflow-automation": {
+      "name": "工作流程自動化",
+      "blurb": "分支流程與背景工作"
+    },
+    "observability": {
+      "name": "可觀測性與維運",
+      "blurb": "追蹤、監控和排障"
+    },
+    "science-health": {
+      "name": "科學與健康",
+      "blurb": "研究、生物和臨床工作流程"
+    },
+    "search-discovery": {
+      "name": "搜尋與探索",
+      "blurb": "查詢、索引和推薦"
+    }
+  },
+  "ja": {
+    "browser-automation": {
+      "name": "ブラウザ自動化",
+      "blurb": "型付きの判断で Chrome や Playwright を操作"
+    },
+    "computer-use": {
+      "name": "コンピューター・デスクトップ操作",
+      "blurb": "アプリ、画面、マウスを操作"
+    },
+    "agent-routing": {
+      "name": "エージェントのルーティングとツール選択",
+      "blurb": "次のツール・モデル・分岐を選ぶ"
+    },
+    "classification": {
+      "name": "分類とラベリング",
+      "blurb": "テキスト、チケット、意図を分類"
+    },
+    "reranking": {
+      "name": "再ランキングと関連性",
+      "blurb": "検索・検索結果を並べ替え"
+    },
+    "rag-retrieval": {
+      "name": "RAG と検索",
+      "blurb": "自分のデータに基づいて回答"
+    },
+    "agent-evaluation": {
+      "name": "評価とベンチマーク",
+      "blurb": "エージェント、プロンプト、出力を採点"
+    },
+    "guardrails": {
+      "name": "ガードレールと安全性",
+      "blurb": "操作を許可・ブロック・エスカレーション"
+    },
+    "coding-agents": {
+      "name": "コーディングエージェントとレビュー",
+      "blurb": "diff、計画、ツール呼び出しをレビュー"
+    },
+    "data-extraction": {
+      "name": "データ抽出と文書",
+      "blurb": "ページ、PDF、フォームを解析"
+    },
+    "trading-finance": {
+      "name": "トレーディングと金融",
+      "blurb": "エントリー、リスク、配分を判断"
+    },
+    "games-simulations": {
+      "name": "ゲームとシミュレーション",
+      "blurb": "ゲームエージェントのポリシーと審判"
+    },
+    "local-models": {
+      "name": "ローカル・オフラインモデル",
+      "blurb": "自分のハードウェアで判断モデルを実行"
+    },
+    "sdk-integration": {
+      "name": "SDK とフレームワーク統合",
+      "blurb": "自分の言語やフレームワークから Jev を呼ぶ"
+    },
+    "content-writing": {
+      "name": "コンテンツと執筆",
+      "blurb": "生成コンテンツを計画・評価・改善"
+    },
+    "support-chat": {
+      "name": "サポートと会話",
+      "blurb": "顧客の会話をルーティングし解決"
+    },
+    "workflow-automation": {
+      "name": "ワークフロー自動化",
+      "blurb": "パイプラインの分岐とバックグラウンド処理"
+    },
+    "observability": {
+      "name": "可観測性と運用",
+      "blurb": "トレース、監視、トリアージ"
+    },
+    "science-health": {
+      "name": "科学と医療",
+      "blurb": "研究、生物学、臨床ワークフロー"
+    },
+    "search-discovery": {
+      "name": "検索と発見",
+      "blurb": "クエリ、インデックス、推薦"
+    }
+  },
+  "ko": {
+    "browser-automation": {
+      "name": "브라우저 자동화",
+      "blurb": "타입이 있는 결정으로 Chrome 또는 Playwright 제어"
+    },
+    "computer-use": {
+      "name": "컴퓨터 및 데스크톱 사용",
+      "blurb": "앱, 화면, 마우스 제어"
+    },
+    "agent-routing": {
+      "name": "에이전트 라우팅 및 도구 선택",
+      "blurb": "다음 도구, 모델 또는 분기 선택"
+    },
+    "classification": {
+      "name": "분류 및 라벨링",
+      "blurb": "텍스트, 티켓, 의도 분류"
+    },
+    "reranking": {
+      "name": "재순위 및 관련성",
+      "blurb": "검색 및 검색 결과 재정렬"
+    },
+    "rag-retrieval": {
+      "name": "RAG 및 검색",
+      "blurb": "자체 데이터로 답변 근거 확보"
+    },
+    "agent-evaluation": {
+      "name": "평가 및 벤치마크",
+      "blurb": "에이전트, 프롬프트, 출력 채점"
+    },
+    "guardrails": {
+      "name": "가드레일 및 안전",
+      "blurb": "작업 허용, 차단 또는 에스컬레이션"
+    },
+    "coding-agents": {
+      "name": "코딩 에이전트 및 리뷰",
+      "blurb": "diff, 계획, 도구 호출 검토"
+    },
+    "data-extraction": {
+      "name": "데이터 추출 및 문서",
+      "blurb": "페이지, PDF, 양식 파싱"
+    },
+    "trading-finance": {
+      "name": "트레이딩 및 금융",
+      "blurb": "진입, 리스크, 배분 결정"
+    },
+    "games-simulations": {
+      "name": "게임 및 시뮬레이션",
+      "blurb": "게임 에이전트의 정책과 심판"
+    },
+    "local-models": {
+      "name": "로컬 및 오프라인 모델",
+      "blurb": "자체 하드웨어에서 결정 모델 실행"
+    },
+    "sdk-integration": {
+      "name": "SDK 및 프레임워크 통합",
+      "blurb": "사용 중인 언어나 프레임워크에서 Jev 호출"
+    },
+    "content-writing": {
+      "name": "콘텐츠 및 글쓰기",
+      "blurb": "생성 콘텐츠 계획, 평가, 개선"
+    },
+    "support-chat": {
+      "name": "지원 및 대화",
+      "blurb": "고객 대화 라우팅 및 해결"
+    },
+    "workflow-automation": {
+      "name": "워크플로 자동화",
+      "blurb": "파이프라인 분기와 백그라운드 작업"
+    },
+    "observability": {
+      "name": "관측성 및 운영",
+      "blurb": "추적, 모니터링, 트리아지"
+    },
+    "science-health": {
+      "name": "과학 및 건강",
+      "blurb": "연구, 생물학, 임상 워크플로"
+    },
+    "search-discovery": {
+      "name": "검색 및 발견",
+      "blurb": "쿼리, 색인, 추천"
+    }
+  },
+  "es": {
+    "browser-automation": {
+      "name": "Automatización del navegador",
+      "blurb": "Controla Chrome o Playwright con decisiones tipadas"
+    },
+    "computer-use": {
+      "name": "Uso de ordenador y escritorio",
+      "blurb": "Controla aplicaciones, pantalla y ratón"
+    },
+    "agent-routing": {
+      "name": "Enrutado de agentes y elección de herramientas",
+      "blurb": "Elige la siguiente herramienta, modelo o rama"
+    },
+    "classification": {
+      "name": "Clasificación y etiquetado",
+      "blurb": "Ordena texto, tickets e intención"
+    },
+    "reranking": {
+      "name": "Reordenación y relevancia",
+      "blurb": "Reordena resultados de búsqueda y recuperación"
+    },
+    "rag-retrieval": {
+      "name": "RAG y recuperación",
+      "blurb": "Fundamenta respuestas en tus propios datos"
+    },
+    "agent-evaluation": {
+      "name": "Evaluación y benchmarks",
+      "blurb": "Puntúa agentes, prompts y salidas"
+    },
+    "guardrails": {
+      "name": "Guardarraíles y seguridad",
+      "blurb": "Permitir, bloquear o escalar acciones"
+    },
+    "coding-agents": {
+      "name": "Agentes de código y revisión",
+      "blurb": "Revisa diffs, planes y llamadas a herramientas"
+    },
+    "data-extraction": {
+      "name": "Extracción de datos y documentos",
+      "blurb": "Analiza páginas, PDF y formularios"
+    },
+    "trading-finance": {
+      "name": "Trading y finanzas",
+      "blurb": "Decide entradas, riesgo y asignación"
+    },
+    "games-simulations": {
+      "name": "Juegos y simulaciones",
+      "blurb": "Políticas y jueces para agentes de juego"
+    },
+    "local-models": {
+      "name": "Modelos locales y sin conexión",
+      "blurb": "Ejecuta modelos de decisión en tu hardware"
+    },
+    "sdk-integration": {
+      "name": "SDK e integración de frameworks",
+      "blurb": "Llama a Jev desde tu lenguaje o framework"
+    },
+    "content-writing": {
+      "name": "Contenido y redacción",
+      "blurb": "Planifica, evalúa y mejora contenido generado"
+    },
+    "support-chat": {
+      "name": "Soporte y conversación",
+      "blurb": "Enruta y resuelve conversaciones de clientes"
+    },
+    "workflow-automation": {
+      "name": "Automatización de flujos",
+      "blurb": "Ramifica pipelines y trabajos en segundo plano"
+    },
+    "observability": {
+      "name": "Observabilidad y operaciones",
+      "blurb": "Traza, monitoriza y triaja sistemas"
+    },
+    "science-health": {
+      "name": "Ciencia y salud",
+      "blurb": "Investigación, biología y flujos clínicos"
+    },
+    "search-discovery": {
+      "name": "Búsqueda y descubrimiento",
+      "blurb": "Consulta, indexa y recomienda"
+    }
+  },
+  "fr": {
+    "browser-automation": {
+      "name": "Automatisation du navigateur",
+      "blurb": "Pilotez Chrome ou Playwright avec des décisions typées"
+    },
+    "computer-use": {
+      "name": "Ordinateur et bureau",
+      "blurb": "Contrôlez applications, écran et souris"
+    },
+    "agent-routing": {
+      "name": "Routage d'agents et choix d'outils",
+      "blurb": "Choisissez l'outil, le modèle ou la branche suivante"
+    },
+    "classification": {
+      "name": "Classification et étiquetage",
+      "blurb": "Classez textes, tickets et intentions"
+    },
+    "reranking": {
+      "name": "Reclassement et pertinence",
+      "blurb": "Réordonnez les résultats de recherche"
+    },
+    "rag-retrieval": {
+      "name": "RAG et récupération",
+      "blurb": "Ancrez les réponses dans vos données"
+    },
+    "agent-evaluation": {
+      "name": "Évaluation et benchmarks",
+      "blurb": "Notez agents, prompts et sorties"
+    },
+    "guardrails": {
+      "name": "Garde-fous et sécurité",
+      "blurb": "Autorisez, bloquez ou escaladez les actions"
+    },
+    "coding-agents": {
+      "name": "Agents de code et revue",
+      "blurb": "Révisez diffs, plans et appels d'outils"
+    },
+    "data-extraction": {
+      "name": "Extraction de données et documents",
+      "blurb": "Analysez pages, PDF et formulaires"
+    },
+    "trading-finance": {
+      "name": "Trading et finance",
+      "blurb": "Décidez entrées, risque et allocation"
+    },
+    "games-simulations": {
+      "name": "Jeux et simulations",
+      "blurb": "Politiques et juges pour agents de jeu"
+    },
+    "local-models": {
+      "name": "Modèles locaux et hors ligne",
+      "blurb": "Exécutez des modèles de décision sur votre matériel"
+    },
+    "sdk-integration": {
+      "name": "SDK et intégration de frameworks",
+      "blurb": "Appelez Jev depuis votre langage ou framework"
+    },
+    "content-writing": {
+      "name": "Contenu et rédaction",
+      "blurb": "Planifiez, évaluez et améliorez le contenu généré"
+    },
+    "support-chat": {
+      "name": "Support et conversation",
+      "blurb": "Routez et résolvez les conversations clients"
+    },
+    "workflow-automation": {
+      "name": "Automatisation des workflows",
+      "blurb": "Branchez pipelines et tâches d'arrière-plan"
+    },
+    "observability": {
+      "name": "Observabilité et ops",
+      "blurb": "Tracez, surveillez et triagez les systèmes"
+    },
+    "science-health": {
+      "name": "Science et santé",
+      "blurb": "Recherche, biologie et workflows cliniques"
+    },
+    "search-discovery": {
+      "name": "Recherche et découverte",
+      "blurb": "Interrogez, indexez et recommandez"
+    }
+  },
+  "de": {
+    "browser-automation": {
+      "name": "Browser-Automatisierung",
+      "blurb": "Chrome oder Playwright mit typisierten Entscheidungen steuern"
+    },
+    "computer-use": {
+      "name": "Computer- und Desktop-Nutzung",
+      "blurb": "Apps, Bildschirm und Maus steuern"
+    },
+    "agent-routing": {
+      "name": "Agent-Routing und Tool-Auswahl",
+      "blurb": "Nächstes Tool, Modell oder Branch wählen"
+    },
+    "classification": {
+      "name": "Klassifikation und Kennzeichnung",
+      "blurb": "Text, Tickets und Absicht sortieren"
+    },
+    "reranking": {
+      "name": "Reranking und Relevanz",
+      "blurb": "Suchergebnisse neu ordnen"
+    },
+    "rag-retrieval": {
+      "name": "RAG und Retrieval",
+      "blurb": "Antworten auf eigene Daten stützen"
+    },
+    "agent-evaluation": {
+      "name": "Evaluation und Benchmarks",
+      "blurb": "Agenten, Prompts und Ausgaben bewerten"
+    },
+    "guardrails": {
+      "name": "Guardrails und Sicherheit",
+      "blurb": "Aktionen erlauben, blockieren oder eskalieren"
+    },
+    "coding-agents": {
+      "name": "Coding-Agenten und Review",
+      "blurb": "Diffs, Pläne und Tool-Aufrufe prüfen"
+    },
+    "data-extraction": {
+      "name": "Datenextraktion und Dokumente",
+      "blurb": "Seiten, PDFs und Formulare parsen"
+    },
+    "trading-finance": {
+      "name": "Trading und Finanzen",
+      "blurb": "Einstieg, Risiko und Allokation entscheiden"
+    },
+    "games-simulations": {
+      "name": "Spiele und Simulationen",
+      "blurb": "Strategien und Richter für Spielagenten"
+    },
+    "local-models": {
+      "name": "Lokale und Offline-Modelle",
+      "blurb": "Entscheidungsmodelle auf eigener Hardware"
+    },
+    "sdk-integration": {
+      "name": "SDKs und Framework-Integration",
+      "blurb": "Jev aus Sprache oder Framework aufrufen"
+    },
+    "content-writing": {
+      "name": "Inhalte und Schreiben",
+      "blurb": "Generierte Inhalte planen, bewerten, verbessern"
+    },
+    "support-chat": {
+      "name": "Support und Konversation",
+      "blurb": "Kundenkonversationen routen und lösen"
+    },
+    "workflow-automation": {
+      "name": "Workflow-Automatisierung",
+      "blurb": "Pipelines und Hintergrundjobs verzweigen"
+    },
+    "observability": {
+      "name": "Observability und Ops",
+      "blurb": "Systeme tracen, überwachen und triagieren"
+    },
+    "science-health": {
+      "name": "Wissenschaft und Gesundheit",
+      "blurb": "Forschung, Biologie und klinische Workflows"
+    },
+    "search-discovery": {
+      "name": "Suche und Entdeckung",
+      "blurb": "Abfragen, indexieren und empfehlen"
+    }
+  },
+  "pt-br": {
+    "browser-automation": {
+      "name": "Automação de navegador",
+      "blurb": "Controle Chrome ou Playwright com decisões tipadas"
+    },
+    "computer-use": {
+      "name": "Uso de computador e desktop",
+      "blurb": "Controle apps, tela e mouse"
+    },
+    "agent-routing": {
+      "name": "Roteamento de agentes e escolha de ferramentas",
+      "blurb": "Escolha a próxima ferramenta, modelo ou ramo"
+    },
+    "classification": {
+      "name": "Classificação e rotulagem",
+      "blurb": "Ordene texto, tickets e intenção"
+    },
+    "reranking": {
+      "name": "Reordenação e relevância",
+      "blurb": "Reordene resultados de busca e recuperação"
+    },
+    "rag-retrieval": {
+      "name": "RAG e recuperação",
+      "blurb": "Fundamente respostas nos seus dados"
+    },
+    "agent-evaluation": {
+      "name": "Avaliação e benchmarks",
+      "blurb": "Pontue agentes, prompts e saídas"
+    },
+    "guardrails": {
+      "name": "Guardrails e segurança",
+      "blurb": "Permitir, bloquear ou escalar ações"
+    },
+    "coding-agents": {
+      "name": "Agentes de código e revisão",
+      "blurb": "Revise diffs, planos e chamadas de ferramentas"
+    },
+    "data-extraction": {
+      "name": "Extração de dados e documentos",
+      "blurb": "Analise páginas, PDFs e formulários"
+    },
+    "trading-finance": {
+      "name": "Trading e finanças",
+      "blurb": "Decida entradas, risco e alocação"
+    },
+    "games-simulations": {
+      "name": "Jogos e simulações",
+      "blurb": "Políticas e juízes para agentes de jogo"
+    },
+    "local-models": {
+      "name": "Modelos locais e offline",
+      "blurb": "Rode modelos de decisão no seu hardware"
+    },
+    "sdk-integration": {
+      "name": "SDKs e integração de frameworks",
+      "blurb": "Chame Jev da sua linguagem ou framework"
+    },
+    "content-writing": {
+      "name": "Conteúdo e escrita",
+      "blurb": "Planeje, avalie e melhore conteúdo gerado"
+    },
+    "support-chat": {
+      "name": "Suporte e conversa",
+      "blurb": "Roteie e resolva conversas de clientes"
+    },
+    "workflow-automation": {
+      "name": "Automação de fluxos",
+      "blurb": "Ramifique pipelines e jobs em segundo plano"
+    },
+    "observability": {
+      "name": "Observabilidade e ops",
+      "blurb": "Rastreie, monitore e triagem sistemas"
+    },
+    "science-health": {
+      "name": "Ciência e saúde",
+      "blurb": "Pesquisa, biologia e fluxos clínicos"
+    },
+    "search-discovery": {
+      "name": "Busca e descoberta",
+      "blurb": "Consulte, indexe e recomende"
+    }
+  },
+  "ru": {
+    "browser-automation": {
+      "name": "Автоматизация браузера",
+      "blurb": "Управляйте Chrome или Playwright типизированными решениями"
+    },
+    "computer-use": {
+      "name": "Компьютер и рабочий стол",
+      "blurb": "Управление приложениями, экраном и мышью"
+    },
+    "agent-routing": {
+      "name": "Маршрутизация агентов и выбор инструментов",
+      "blurb": "Выберите следующий инструмент, модель или ветку"
+    },
+    "classification": {
+      "name": "Классификация и разметка",
+      "blurb": "Сортируйте текст, тикеты и интенты"
+    },
+    "reranking": {
+      "name": "Переранжирование и релевантность",
+      "blurb": "Переупорядочивайте результаты поиска"
+    },
+    "rag-retrieval": {
+      "name": "RAG и поиск",
+      "blurb": "Опирайте ответы на свои данные"
+    },
+    "agent-evaluation": {
+      "name": "Оценка и бенчмарки",
+      "blurb": "Оценивайте агентов, промпты и выводы"
+    },
+    "guardrails": {
+      "name": "Ограничители и безопасность",
+      "blurb": "Разрешать, блокировать или эскалировать действия"
+    },
+    "coding-agents": {
+      "name": "Кодинг-агенты и ревью",
+      "blurb": "Проверяйте диффы, планы и вызовы инструментов"
+    },
+    "data-extraction": {
+      "name": "Извлечение данных и документы",
+      "blurb": "Разбирайте страницы, PDF и формы"
+    },
+    "trading-finance": {
+      "name": "Трейдинг и финансы",
+      "blurb": "Решайте входы, риск и распределение"
+    },
+    "games-simulations": {
+      "name": "Игры и симуляции",
+      "blurb": "Политики и судьи для игровых агентов"
+    },
+    "local-models": {
+      "name": "Локальные и офлайн-модели",
+      "blurb": "Запускайте модели решений на своём железе"
+    },
+    "sdk-integration": {
+      "name": "SDK и интеграция с фреймворками",
+      "blurb": "Вызывайте Jev из своего языка или фреймворка"
+    },
+    "content-writing": {
+      "name": "Контент и письмо",
+      "blurb": "Планируйте, оценивайте и улучшайте сгенерированный контент"
+    },
+    "support-chat": {
+      "name": "Поддержка и диалоги",
+      "blurb": "Маршрутизируйте и решайте клиентские диалоги"
+    },
+    "workflow-automation": {
+      "name": "Автоматизация процессов",
+      "blurb": "Ветвление пайплайнов и фоновые задачи"
+    },
+    "observability": {
+      "name": "Наблюдаемость и эксплуатация",
+      "blurb": "Трассировка, мониторинг и триаж систем"
+    },
+    "science-health": {
+      "name": "Наука и здоровье",
+      "blurb": "Исследования, биология и клинические процессы"
+    },
+    "search-discovery": {
+      "name": "Поиск и обнаружение",
+      "blurb": "Запросы, индексация и рекомендации"
+    }
+  },
+  "hi": {
+    "browser-automation": {
+      "name": "ब्राउज़र ऑटोमेशन",
+      "blurb": "टाइप्ड निर्णयों से Chrome या Playwright चलाएँ"
+    },
+    "computer-use": {
+      "name": "कंप्यूटर और डेस्कटॉप उपयोग",
+      "blurb": "ऐप, स्क्रीन और माउस नियंत्रित करें"
+    },
+    "agent-routing": {
+      "name": "एजेंट रूटिंग और टूल चयन",
+      "blurb": "अगला टूल, मॉडल या शाखा चुनें"
+    },
+    "classification": {
+      "name": "वर्गीकरण और लेबलिंग",
+      "blurb": "टेक्स्ट, टिकट और इरादे छाँटें"
+    },
+    "reranking": {
+      "name": "पुनः क्रमण और प्रासंगिकता",
+      "blurb": "खोज और पुनर्प्राप्ति परिणाम फिर से क्रमबद्ध करें"
+    },
+    "rag-retrieval": {
+      "name": "RAG और पुनर्प्राप्ति",
+      "blurb": "अपने डेटा पर उत्तर आधारित करें"
+    },
+    "agent-evaluation": {
+      "name": "मूल्यांकन और बेंचमार्क",
+      "blurb": "एजेंट, प्रॉम्प्ट और आउटपुट को स्कोर करें"
+    },
+    "guardrails": {
+      "name": "गार्डरेल और सुरक्षा",
+      "blurb": "क्रियाओं को अनुमति दें, रोकें या बढ़ाएँ"
+    },
+    "coding-agents": {
+      "name": "कोडिंग एजेंट और समीक्षा",
+      "blurb": "diff, योजना और टूल कॉल की समीक्षा करें"
+    },
+    "data-extraction": {
+      "name": "डेटा निष्कर्षण और दस्तावेज़",
+      "blurb": "पेज, PDF और फ़ॉर्म पार्स करें"
+    },
+    "trading-finance": {
+      "name": "ट्रेडिंग और वित्त",
+      "blurb": "एंट्री, जोखिम और आवंटन तय करें"
+    },
+    "games-simulations": {
+      "name": "गेम और सिमुलेशन",
+      "blurb": "गेम एजेंट के लिए नीतियाँ और निर्णायक"
+    },
+    "local-models": {
+      "name": "लोकल और ऑफ़लाइन मॉडल",
+      "blurb": "अपने हार्डवेयर पर निर्णय मॉडल चलाएँ"
+    },
+    "sdk-integration": {
+      "name": "SDK और फ्रेमवर्क एकीकरण",
+      "blurb": "अपनी भाषा या फ्रेमवर्क से Jev कॉल करें"
+    },
+    "content-writing": {
+      "name": "सामग्री और लेखन",
+      "blurb": "जनरेटेड सामग्री की योजना, मूल्यांकन और सुधार करें"
+    },
+    "support-chat": {
+      "name": "सहायता और बातचीत",
+      "blurb": "ग्राहक बातचीत रूट और हल करें"
+    },
+    "workflow-automation": {
+      "name": "वर्कफ़्लो ऑटोमेशन",
+      "blurb": "पाइपलाइन शाखाएँ और बैकग्राउंड जॉब"
+    },
+    "observability": {
+      "name": "अवलोकनशीलता और संचालन",
+      "blurb": "सिस्टम ट्रेस, मॉनिटर और ट्रायाज करें"
+    },
+    "science-health": {
+      "name": "विज्ञान और स्वास्थ्य",
+      "blurb": "अनुसंधान, जीव विज्ञान और क्लिनिकल वर्कफ़्लो"
+    },
+    "search-discovery": {
+      "name": "खोज और खोज-प्रक्रिया",
+      "blurb": "क्वेरी, इंडेक्स और सुझाव"
+    }
+  },
+  "id": {
+    "browser-automation": {
+      "name": "Otomasi browser",
+      "blurb": "Jalankan Chrome atau Playwright dengan keputusan bertipe"
+    },
+    "computer-use": {
+      "name": "Penggunaan komputer dan desktop",
+      "blurb": "Kontrol aplikasi, layar, dan mouse"
+    },
+    "agent-routing": {
+      "name": "Routing agen dan pemilihan alat",
+      "blurb": "Pilih alat, model, atau cabang berikutnya"
+    },
+    "classification": {
+      "name": "Klasifikasi dan pelabelan",
+      "blurb": "Urutkan teks, tiket, dan niat"
+    },
+    "reranking": {
+      "name": "Peringkat ulang dan relevansi",
+      "blurb": "Urutkan ulang hasil pencarian dan pengambilan"
+    },
+    "rag-retrieval": {
+      "name": "RAG dan pengambilan",
+      "blurb": "Dasari jawaban pada data Anda sendiri"
+    },
+    "agent-evaluation": {
+      "name": "Evaluasi dan benchmark",
+      "blurb": "Nilai agen, prompt, dan keluaran"
+    },
+    "guardrails": {
+      "name": "Guardrail dan keamanan",
+      "blurb": "Izinkan, blokir, atau eskalasi tindakan"
+    },
+    "coding-agents": {
+      "name": "Agen koding dan tinjauan",
+      "blurb": "Tinjau diff, rencana, dan panggilan alat"
+    },
+    "data-extraction": {
+      "name": "Ekstraksi data dan dokumen",
+      "blurb": "Urai halaman, PDF, dan formulir"
+    },
+    "trading-finance": {
+      "name": "Trading dan keuangan",
+      "blurb": "Putuskan entri, risiko, dan alokasi"
+    },
+    "games-simulations": {
+      "name": "Game dan simulasi",
+      "blurb": "Kebijakan dan juri untuk agen game"
+    },
+    "local-models": {
+      "name": "Model lokal dan offline",
+      "blurb": "Jalankan model keputusan di perangkat Anda"
+    },
+    "sdk-integration": {
+      "name": "SDK dan integrasi framework",
+      "blurb": "Panggil Jev dari bahasa atau framework Anda"
+    },
+    "content-writing": {
+      "name": "Konten dan penulisan",
+      "blurb": "Rencanakan, nilai, dan perbaiki konten yang dihasilkan"
+    },
+    "support-chat": {
+      "name": "Dukungan dan percakapan",
+      "blurb": "Rutekan dan selesaikan percakapan pelanggan"
+    },
+    "workflow-automation": {
+      "name": "Otomasi alur kerja",
+      "blurb": "Cabang pipeline dan pekerjaan latar belakang"
+    },
+    "observability": {
+      "name": "Observabilitas dan operasi",
+      "blurb": "Lacak, pantau, dan triase sistem"
+    },
+    "science-health": {
+      "name": "Sains dan kesehatan",
+      "blurb": "Riset, biologi, dan alur kerja klinis"
+    },
+    "search-discovery": {
+      "name": "Pencarian dan penemuan",
+      "blurb": "Kueri, indeks, dan rekomendasi"
+    }
+  },
+  "vi": {
+    "browser-automation": {
+      "name": "Tự động hóa trình duyệt",
+      "blurb": "Điều khiển Chrome hoặc Playwright bằng quyết định có kiểu"
+    },
+    "computer-use": {
+      "name": "Máy tính và màn hình nền",
+      "blurb": "Điều khiển ứng dụng, màn hình và chuột"
+    },
+    "agent-routing": {
+      "name": "Định tuyến agent và chọn công cụ",
+      "blurb": "Chọn công cụ, mô hình hoặc nhánh tiếp theo"
+    },
+    "classification": {
+      "name": "Phân loại và gắn nhãn",
+      "blurb": "Sắp xếp văn bản, ticket và ý định"
+    },
+    "reranking": {
+      "name": "Xếp hạng lại và độ liên quan",
+      "blurb": "Sắp xếp lại kết quả tìm kiếm và truy xuất"
+    },
+    "rag-retrieval": {
+      "name": "RAG và truy xuất",
+      "blurb": "Neo câu trả lời vào dữ liệu của bạn"
+    },
+    "agent-evaluation": {
+      "name": "Đánh giá và benchmark",
+      "blurb": "Chấm điểm agent, prompt và đầu ra"
+    },
+    "guardrails": {
+      "name": "Guardrail và an toàn",
+      "blurb": "Cho phép, chặn hoặc leo thang hành động"
+    },
+    "coding-agents": {
+      "name": "Agent lập trình và đánh giá",
+      "blurb": "Xem xét diff, kế hoạch và lệnh gọi công cụ"
+    },
+    "data-extraction": {
+      "name": "Trích xuất dữ liệu và tài liệu",
+      "blurb": "Phân tích trang, PDF và biểu mẫu"
+    },
+    "trading-finance": {
+      "name": "Giao dịch và tài chính",
+      "blurb": "Quyết định vào lệnh, rủi ro và phân bổ"
+    },
+    "games-simulations": {
+      "name": "Trò chơi và mô phỏng",
+      "blurb": "Chính sách và trọng tài cho agent trò chơi"
+    },
+    "local-models": {
+      "name": "Mô hình cục bộ và ngoại tuyến",
+      "blurb": "Chạy mô hình quyết định trên máy của bạn"
+    },
+    "sdk-integration": {
+      "name": "SDK và tích hợp framework",
+      "blurb": "Gọi Jev từ ngôn ngữ hoặc framework của bạn"
+    },
+    "content-writing": {
+      "name": "Nội dung và viết lách",
+      "blurb": "Lập kế hoạch, đánh giá và cải thiện nội dung tạo"
+    },
+    "support-chat": {
+      "name": "Hỗ trợ và hội thoại",
+      "blurb": "Định tuyến và giải quyết hội thoại khách hàng"
+    },
+    "workflow-automation": {
+      "name": "Tự động hóa quy trình",
+      "blurb": "Phân nhánh pipeline và tác vụ nền"
+    },
+    "observability": {
+      "name": "Khả năng quan sát và vận hành",
+      "blurb": "Theo dõi, giám sát và phân loại hệ thống"
+    },
+    "science-health": {
+      "name": "Khoa học và sức khỏe",
+      "blurb": "Nghiên cứu, sinh học và quy trình lâm sàng"
+    },
+    "search-discovery": {
+      "name": "Tìm kiếm và khám phá",
+      "blurb": "Truy vấn, lập chỉ mục và gợi ý"
+    }
+  },
+  "tr": {
+    "browser-automation": {
+      "name": "Tarayıcı otomasyonu",
+      "blurb": "Chrome veya Playwright'ı tipli kararlarla yönetin"
+    },
+    "computer-use": {
+      "name": "Bilgisayar ve masaüstü kullanımı",
+      "blurb": "Uygulamaları, ekranı ve fareyi kontrol edin"
+    },
+    "agent-routing": {
+      "name": "Ajan yönlendirme ve araç seçimi",
+      "blurb": "Sonraki aracı, modeli veya dalı seçin"
+    },
+    "classification": {
+      "name": "Sınıflandırma ve etiketleme",
+      "blurb": "Metni, biletleri ve niyeti sınıflandırın"
+    },
+    "reranking": {
+      "name": "Yeniden sıralama ve alaka",
+      "blurb": "Arama ve getirme sonuçlarını yeniden sıralayın"
+    },
+    "rag-retrieval": {
+      "name": "RAG ve getirme",
+      "blurb": "Yanıtları kendi verinize dayandırın"
+    },
+    "agent-evaluation": {
+      "name": "Değerlendirme ve kıyaslama",
+      "blurb": "Ajanları, istemleri ve çıktıları puanlayın"
+    },
+    "guardrails": {
+      "name": "Korkuluklar ve güvenlik",
+      "blurb": "Eylemleri izin verin, engelleyin veya yükseltin"
+    },
+    "coding-agents": {
+      "name": "Kodlama ajanları ve inceleme",
+      "blurb": "Diff, plan ve araç çağrılarını inceleyin"
+    },
+    "data-extraction": {
+      "name": "Veri çıkarma ve belgeler",
+      "blurb": "Sayfaları, PDF'leri ve formları ayrıştırın"
+    },
+    "trading-finance": {
+      "name": "Ticaret ve finans",
+      "blurb": "Giriş, risk ve tahsise karar verin"
+    },
+    "games-simulations": {
+      "name": "Oyunlar ve simülasyonlar",
+      "blurb": "Oyun ajanları için politikalar ve hakemler"
+    },
+    "local-models": {
+      "name": "Yerel ve çevrimdışı modeller",
+      "blurb": "Karar modellerini kendi donanımınızda çalıştırın"
+    },
+    "sdk-integration": {
+      "name": "SDK ve çerçeve entegrasyonu",
+      "blurb": "Jev'i kendi dilinizden veya çerçevenizden çağırın"
+    },
+    "content-writing": {
+      "name": "İçerik ve yazarlık",
+      "blurb": "Üretilen içeriği planlayın, değerlendirin ve iyileştirin"
+    },
+    "support-chat": {
+      "name": "Destek ve konuşma",
+      "blurb": "Müşteri konuşmalarını yönlendirin ve çözün"
+    },
+    "workflow-automation": {
+      "name": "İş akışı otomasyonu",
+      "blurb": "Boru hatlarını dallandırın ve arka plan işleri"
+    },
+    "observability": {
+      "name": "Gözlemlenebilirlik ve operasyon",
+      "blurb": "Sistemleri izleyin, takip edin ve triyaj yapın"
+    },
+    "science-health": {
+      "name": "Bilim ve sağlık",
+      "blurb": "Araştırma, biyoloji ve klinik iş akışları"
+    },
+    "search-discovery": {
+      "name": "Arama ve keşif",
+      "blurb": "Sorgulayın, dizinleyin ve önerin"
+    }
+  },
+  "it": {
+    "browser-automation": {
+      "name": "Automazione del browser",
+      "blurb": "Guida Chrome o Playwright con decisioni tipizzate"
+    },
+    "computer-use": {
+      "name": "Uso di computer e desktop",
+      "blurb": "Controlla app, schermo e mouse"
+    },
+    "agent-routing": {
+      "name": "Routing degli agenti e scelta degli strumenti",
+      "blurb": "Scegli il prossimo strumento, modello o ramo"
+    },
+    "classification": {
+      "name": "Classificazione ed etichettatura",
+      "blurb": "Ordina testo, ticket e intenti"
+    },
+    "reranking": {
+      "name": "Riordinamento e pertinenza",
+      "blurb": "Riordina risultati di ricerca e recupero"
+    },
+    "rag-retrieval": {
+      "name": "RAG e recupero",
+      "blurb": "Basa le risposte sui tuoi dati"
+    },
+    "agent-evaluation": {
+      "name": "Valutazione e benchmark",
+      "blurb": "Valuta agenti, prompt e output"
+    },
+    "guardrails": {
+      "name": "Guardrail e sicurezza",
+      "blurb": "Consenti, blocca o escala azioni"
+    },
+    "coding-agents": {
+      "name": "Agenti di coding e revisione",
+      "blurb": "Rivedi diff, piani e chiamate agli strumenti"
+    },
+    "data-extraction": {
+      "name": "Estrazione dati e documenti",
+      "blurb": "Analizza pagine, PDF e moduli"
+    },
+    "trading-finance": {
+      "name": "Trading e finanza",
+      "blurb": "Decidi ingressi, rischio e allocazione"
+    },
+    "games-simulations": {
+      "name": "Giochi e simulazioni",
+      "blurb": "Politiche e giudici per agenti di gioco"
+    },
+    "local-models": {
+      "name": "Modelli locali e offline",
+      "blurb": "Esegui modelli decisionali sul tuo hardware"
+    },
+    "sdk-integration": {
+      "name": "SDK e integrazione di framework",
+      "blurb": "Chiama Jev dal tuo linguaggio o framework"
+    },
+    "content-writing": {
+      "name": "Contenuti e scrittura",
+      "blurb": "Pianifica, valuta e migliora contenuti generati"
+    },
+    "support-chat": {
+      "name": "Supporto e conversazione",
+      "blurb": "Instrada e risolvi conversazioni dei clienti"
+    },
+    "workflow-automation": {
+      "name": "Automazione dei flussi",
+      "blurb": "Dirama pipeline e job in background"
+    },
+    "observability": {
+      "name": "Osservabilità e operations",
+      "blurb": "Traccia, monitora e triage dei sistemi"
+    },
+    "science-health": {
+      "name": "Scienza e salute",
+      "blurb": "Ricerca, biologia e flussi clinici"
+    },
+    "search-discovery": {
+      "name": "Ricerca e scoperta",
+      "blurb": "Interroga, indicizza e consiglia"
+    }
+  }
+}

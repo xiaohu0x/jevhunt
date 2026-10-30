@@ -123,7 +123,7 @@ async function landingUncached(context, locale = "en") {
     .on("#kindFilter option", selectedOption(query.kind))
     .on("#activityFilter option", selectedOption(query.activity))
     .on("#dirSort option", selectedOption(query.sort))
-    .on("#taskGrid", { element: el => el.setInnerContent(taskCardsHtml(), { html: true }) })
+    .on("#taskGrid", { element: el => el.setInnerContent(taskCardsHtml({ localeKey: locale }), { html: true }) })
     .on("#featuredGrid", { element: el => el.setInnerContent(featuredCardsHtml(featured, localeMessages, { basePath: sectionBase, locale: sectionLang }), { html: true }) })
     .on("#newGrid", { element: el => el.setInnerContent(newListHtml(fresh, localeMessages, { basePath: sectionBase, locale, lang: sectionLang }), { html: true }) })
     .on("#categoryGrid", { element: el => el.setInnerContent(categoryCardsHtml(meta.categoryCounts, localeMessages, { localePrefix: sectionBase, lang: sectionLang }), { html: true }) })

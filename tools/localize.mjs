@@ -185,7 +185,7 @@ function localizeHomeSections(source, localeKey, locale) {
   const basePath = localeKey === defaultLocale ? "" : "/" + localeKey;
   const localize = project => localizedProjectPreview(project, projectContents, localeKey);
   const sections = {
-    task: taskCardsHtml(),
+    task: taskCardsHtml({ localeKey }),
     featured: featuredCardsHtml(homeFeatured.map(localize), locale.messages, { basePath, locale: locale.lang }),
     new: newListHtml(homeFresh.map(localize), locale.messages, { basePath, locale: localeKey, lang: locale.lang }),
     category: categoryCardsHtml(homeCounts, locale.messages, { localePrefix: basePath, lang: locale.lang }),

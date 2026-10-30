@@ -1,5 +1,5 @@
 import { renderCard } from "./catalog-view.js";
-import { TASK_LIST } from "./catalog-tasks.js";
+import { TASK_LIST, taskName, taskBlurb } from "./catalog-tasks.js";
 import CATEGORIES from "../catalog/categories.json" with { type: "json" };
 import { esc, projectPath } from "./render.js";
 
@@ -15,8 +15,8 @@ const RELATION_LABELS = {
 
 const number = lang => new Intl.NumberFormat(lang || "en");
 
-export function taskCardsHtml({ limit = TASK_LIST.length } = {}) {
-  return TASK_LIST.slice(0, limit).map(task => `<a class="task-card" href="/tasks/${esc(task.id)}/" lang="en"><span class="task-card__name">${esc(task.name)}</span><span class="task-card__blurb">${esc(task.blurb)}</span><span class="task-card__arrow" aria-hidden="true">→</span></a>`).join("");
+export function taskCardsHtml({ limit = TASK_LIST.length, localeKey = "en" } = {}) {
+  return TASK_LIST.slice(0, limit).map(task => `<a class="task-card" href="/tasks/${esc(task.id)}/" hreflang="en"><span class="task-card__name">${esc(taskName(task, localeKey))}</span><span class="task-card__blurb">${esc(taskBlurb(task, localeKey))}</span><span class="task-card__arrow" aria-hidden="true">→</span></a>`).join("");
 }
 
 export function featuredCardsHtml(projects, messages = {}, { basePath = "", locale = "en" } = {}) {

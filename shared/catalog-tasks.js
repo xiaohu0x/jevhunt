@@ -1,4 +1,5 @@
 import TASKS from "../catalog/tasks.json" with { type: "json" };
+import TASK_COPY from "../catalog/task-copy.json" with { type: "json" };
 
 /**
  * Task ("what do you want to build?") taxonomy.
@@ -11,6 +12,17 @@ import TASKS from "../catalog/tasks.json" with { type: "json" };
 export const TASK_LIST = [...TASKS].sort((a, b) => (a.priority || 99) - (b.priority || 99) || a.name.localeCompare(b.name));
 export const TASK_IDS = TASK_LIST.map(task => task.id);
 export const taskById = id => TASK_LIST.find(task => task.id === id) || null;
+
+/** Localized task name/blurb, falling back to the English taxonomy. */
+export function taskName(task, localeKey = "en") {
+  if (!task) return "";
+  return TASK_COPY[localeKey]?.[task.id]?.name || task.name;
+}
+
+export function taskBlurb(task, localeKey = "en") {
+  if (!task) return "";
+  return TASK_COPY[localeKey]?.[task.id]?.blurb || task.blurb;
+}
 
 const normalize = value => String(value ?? "")
   .toLowerCase()
