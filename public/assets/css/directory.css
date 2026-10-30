@@ -478,3 +478,11 @@ html[data-theme="dark"] .directory-detail .project-notes{background:#2E2718;bord
   .directory-home #appGrid.is-mobile-collapsed .card:nth-child(n+13){display:none;}
   .directory-home .mobile-show-all{display:block;width:100%;margin:14px 0 4px;min-height:44px;}
 }
+
+/* Keep the primary directory navigation on one line; marketing anchors step aside earlier. */
+.directory-home .nav__links{flex-wrap:nowrap;}
+.directory-home .nav__links a{white-space:nowrap;}
+.directory-home .nav__actions{flex-wrap:nowrap;}
+@media(max-width:1100px){
+  .directory-home .nav__links .nav__link--secondary{display:none;}
+}
