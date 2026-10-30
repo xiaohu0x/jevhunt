@@ -10,7 +10,10 @@ export class CatalogClock extends DurableObject {
     if (request.method !== 'POST') return json({ error: 'method_not_allowed' }, 405);
     if (path === '/start') {
       let next = await this.ctx.storage.getAlarm();
-      if (next === null || next < Date.now() - 180000) {
+      // A cron wake-up is also a repair path: if the stored alarm is missing,
+      // stale, or implausibly far in the future, move it back to "soon" so a
+      // single stuck alarm cannot stop the clock indefinitely.
+      if (next === null || next < Date.now() - 180000 || next > Date.now() + 120000) {
         next = Date.now() + 2000;
         await this.ctx.storage.setAlarm(next);
       }
