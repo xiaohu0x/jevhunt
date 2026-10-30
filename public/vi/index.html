@@ -592,7 +592,9 @@
     <input id="dirSearch" type="search" name="q" autocomplete="off" aria-label="Tìm dự án" data-i18n-aria-label="a11y.search" data-i18n-ph="apps.search" placeholder="Tìm dự án, tác vụ hoặc stack, ví dụ browser agent hoặc JEV-MLX…" />
     <kbd aria-hidden="true">/</kbd><button type="submit" data-i18n="a11y.search">Tìm dự án</button>
   </form>
-  <div class="home-search-hints" aria-label="Popular tasks"><a href="/tasks/browser-automation/" lang="en">browser automation</a><a href="/tasks/rag-retrieval/" lang="en">RAG</a><a href="/tasks/classification/" lang="en">classification</a><a href="/tasks/local-models/" lang="en">local models</a><a href="/tasks/agent-routing/" lang="en">routing</a></div>
+  <div class="home-search-hints" id="searchHints" aria-label="Bắt đầu với một tác vụ" data-i18n-aria-label="home.tasks"><!-- hints-prerender:start -->
+<a href="/tasks/browser-automation/" hreflang="en">Tự động hóa trình duyệt</a><a href="/tasks/rag-retrieval/" hreflang="en">RAG và truy xuất</a><a href="/tasks/classification/" hreflang="en">Phân loại và gắn nhãn</a><a href="/tasks/local-models/" hreflang="en">Mô hình cục bộ và ngoại tuyến</a><a href="/tasks/agent-routing/" hreflang="en">Định tuyến agent và chọn công cụ</a>
+  <!-- hints-prerender:end --></div>
   <div class="home-trust"><span class="home-trust__main"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5c0 4.5 3 8.5 7 10 4-1.5 7-5.5 7-10V6z"/><path d="m9 12 2 2 4-4"/></svg><span data-i18n="home.trust">Xem không cần tài khoản. Chúng tôi không yêu cầu mật khẩu, khóa API hay thanh toán. Mỗi mục nêu rõ quan hệ với Jev, nguồn và trạng thái cập nhật.</span></span><span class="home-trust__independent" data-i18n="home.independent">Độc lập với TypeSafe AI</span></div>
 </section>
 <section class="home-tasks wrap" id="tasks" aria-labelledby="tasksTitle">
@@ -630,7 +632,7 @@
 <section class="home-new wrap" id="new-projects" aria-labelledby="newTitle">
   <div class="home-section-head">
     <h2 id="newTitle" data-i18n="home.new">Mới và mới xác minh</h2>
-    <a class="home-section-link" href="/browse/?sort=added-desc">Recently added →</a>
+    <a class="home-section-link" href="/browse/?sort=added-desc" data-i18n="home.recentlyAdded">Mới thêm →</a>
   </div>
   <ul class="new-list" id="newGrid"><!-- new-prerender:start -->
 <li class="new-item"><a class="new-item__name" href="/vi/projects/tauricresearch/tradingagents/">TradingAgents</a><span class="new-item__meta">Tích hợp · Python</span><time class="new-item__date" datetime="2026-09-30">30 thg 9, 2026</time></li><li class="new-item"><a class="new-item__name" href="/vi/projects/assafelovic/gpt-researcher/">GPT Researcher</a><span class="new-item__meta">Tích hợp · Python</span><time class="new-item__date" datetime="2026-09-30">30 thg 9, 2026</time></li><li class="new-item"><a class="new-item__name" href="/vi/projects/mohsen1/llm-debugger-vscode-extension/">LLM Debugger</a><span class="new-item__meta">Tích hợp · TypeScript</span><time class="new-item__date" datetime="2026-09-30">30 thg 9, 2026</time></li><li class="new-item"><a class="new-item__name" href="/vi/projects/sregym/sregym/">SREGym</a><span class="new-item__meta">Tích hợp · Python</span><time class="new-item__date" datetime="2026-09-30">30 thg 9, 2026</time></li><li class="new-item"><a class="new-item__name" href="/vi/projects/chainreactors/fingers/">fingers</a><span class="new-item__meta">Tích hợp · Go</span><time class="new-item__date" datetime="2026-09-30">30 thg 9, 2026</time></li><li class="new-item"><a class="new-item__name" href="/vi/projects/vinilana/jev-gateway/">jev-gateway</a><span class="new-item__meta">Tích hợp · TypeScript</span><time class="new-item__date" datetime="2026-09-30">30 thg 9, 2026</time></li>
@@ -639,7 +641,7 @@
 <section class="home-cats wrap" id="browse-categories" aria-labelledby="catsTitle">
   <div class="home-section-head">
     <h2 id="catsTitle" data-i18n="home.categories">Duyệt theo danh mục</h2>
-    <a class="home-section-link" href="/categories/" lang="en">All categories →</a>
+    <a class="home-section-link" href="/categories/" hreflang="en" data-i18n="home.allCategories">Tất cả danh mục →</a>
   </div>
   <div class="category-grid" id="categoryGrid"><!-- category-prerender:start -->
 <a class="category-card" href="/vi/?category=official#apps"><span class="category-card__name">Chính thức</span><span class="category-card__count">3</span></a><a class="category-card" href="/vi/?category=sdks#apps"><span class="category-card__name">SDK và thư viện máy khách</span><span class="category-card__count">191</span></a><a class="category-card" href="/vi/?category=integrations#apps"><span class="category-card__name">Tích hợp</span><span class="category-card__count">48</span></a><a class="category-card" href="/vi/?category=agents#apps"><span class="category-card__name">Công cụ cho tác tử</span><span class="category-card__count">1.206</span></a><a class="category-card" href="/vi/?category=browser#apps"><span class="category-card__name">Trình duyệt và máy tính</span><span class="category-card__count">255</span></a><a class="category-card" href="/vi/?category=apps#apps"><span class="category-card__name">Ứng dụng</span><span class="category-card__count">2.602</span></a><a class="category-card" href="/vi/?category=games#apps"><span class="category-card__name">Trò chơi và mô phỏng</span><span class="category-card__count">177</span></a><a class="category-card" href="/vi/?category=demos#apps"><span class="category-card__name">Demo và môi trường thử nghiệm</span><span class="category-card__count">74</span></a><a class="category-card" href="/vi/?category=research#apps"><span class="category-card__name">Đánh giá và nghiên cứu</span><span class="category-card__count">537</span></a><a class="category-card" href="/vi/?category=lists#apps"><span class="category-card__name">Danh bạ và danh sách</span><span class="category-card__count">98</span></a>
@@ -649,12 +651,12 @@
   <aside class="directory-sidebar">
     <div class="directory-categories"><h2 class="directory-filter-heading" data-i18n="form.category">Danh mục dự án</h2><div class="dir__filters" id="dirFilters"></div></div>
     <div class="dir__facets" id="directoryFacets" hidden>
-        <label><span data-i18n="apps.language">Ngôn ngữ lập trình</span><select id="languageFilter" aria-label="Ngôn ngữ lập trình" data-i18n-aria-label="apps.language"><option value="all">All languages</option></select></label>
+        <label><span data-i18n="apps.language">Ngôn ngữ lập trình</span><select id="languageFilter" aria-label="Ngôn ngữ lập trình" data-i18n-aria-label="apps.language"><option value="all" data-i18n="apps.allLanguages">Tất cả ngôn ngữ</option></select></label>
         <label><span data-i18n="apps.type">Loại dự án</span><select id="kindFilter" aria-label="Loại dự án" data-i18n-aria-label="apps.type"><option value="all" data-i18n="apps.allTypes">Tất cả loại</option><option value="jev-app" data-i18n="relationship.jev-app">Ứng dụng Jev</option><option value="integration" data-i18n="relationship.integration">Tích hợp</option><option value="sdk" data-i18n="relationship.sdk">SDK / thư viện máy khách</option><option value="local-alternative" data-i18n="relationship.local-alternative">Giải pháp thay thế cục bộ</option><option value="research" data-i18n="relationship.research">Nghiên cứu</option><option value="resource" data-i18n="relationship.resource">Tài nguyên / danh bạ</option><option value="unclassified" data-i18n="relationship.unclassified">Đang xem xét mối liên hệ</option></select></label>
         <label><span data-i18n="apps.activity">Trạng thái</span><select id="activityFilter" aria-label="Trạng thái" data-i18n-aria-label="apps.activity"><option value="all" data-i18n="apps.allActivity">Tất cả trạng thái</option><option value="active" data-i18n="apps.active">Chưa lưu trữ</option><option value="archived" data-i18n="apps.archived">Đã lưu trữ</option></select></label>
         <button class="fchip" id="resetFilters" data-i18n="apps.reset">Đặt lại bộ lọc</button>
       </div>
-    <aside class="directory-submit"><h2 data-i18n="home.submitTitle">Bạn đã tạo gì với JEV?</h2><p data-i18n="home.submitLead">Gửi kho mã GitHub. Biên tập viên kiểm tra nguồn trước khi công bố.</p><a class="btn btn--primary" href="#submit" data-i18n="home.submitCta">Gửi dự án của bạn</a><a class="directory-submit__how" href="/submit/">How review works →</a></aside>
+    <aside class="directory-submit"><h2 data-i18n="home.submitTitle">Bạn đã tạo gì với JEV?</h2><p data-i18n="home.submitLead">Gửi kho mã GitHub. Biên tập viên kiểm tra nguồn trước khi công bố.</p><a class="btn btn--primary" href="#submit" data-i18n="home.submitCta">Gửi dự án của bạn</a><a class="directory-submit__how" href="/submit/" data-i18n="home.howReview">Cách chúng tôi đánh giá →</a></aside>
   </aside>
   <div class="directory-results">
     <div class="home-section-head home-all-head">
@@ -745,13 +747,11 @@
         <a href="/blog/jev-mlx-local/" lang="en">Jev MLX and local models ↗</a>
         <a href="/blog/jev-paper-workflows/" lang="en">Jev paper workflows ↗</a>
       </nav>
-      <nav class="dir__empty-tasks" aria-label="Browse by task">
-        <a href="/tasks/browser-automation/" lang="en">Browser automation</a>
-        <a href="/tasks/classification/" lang="en">Classification</a>
-        <a href="/tasks/rag-retrieval/" lang="en">RAG</a>
-        <a href="/tasks/local-models/" lang="en">Local models</a>
+      <nav class="dir__empty-tasks" aria-label="Tất cả tác vụ" data-i18n-aria-label="home.allTasks">
+        <a href="/tasks/" data-i18n="home.allTasks">Tất cả tác vụ</a>
+        <a href="/categories/" data-i18n="home.allCategories">Tất cả danh mục →</a>
       </nav>
-      <p class="dir__empty-submit"><a href="#submit">Submit this project →</a></p>
+      <p class="dir__empty-submit"><a href="#submit" data-i18n="apps.submitThis">Gửi dự án này →</a></p>
     </div>
     <nav class="catalog-pages catalog-pages--directory" id="directoryPagesBottom" aria-label="Pagination"><a href="/browse/" data-i18n="apps.browseAll">Xem tất cả dự án</a></nav>
     <div class="directory-about"><span><span id="statCats" data-count="10">10</span> <span data-i18n="stat.cats">Danh mục</span></span><span><span id="statStars" data-count="383817">383,817</span> <span data-i18n="stat.stars">Sao GitHub</span></span><a href="/methodology/" data-i18n="apps.methodology">Cách chúng tôi đánh giá</a><a href="/status/" data-i18n="apps.status">Trạng thái cập nhật</a></div>
@@ -980,7 +980,7 @@
     <div class="footer__col">
       <h4 data-i18n="foot.community">Cộng đồng</h4>
       <a href="#submit" data-i18n="nav.submit">Gửi dự án</a>
-      <a href="/submit/">Submission guidelines</a>
+      <a href="/submit/" data-i18n="foot.submitGuide">Hướng dẫn gửi</a>
       <a href="/privacy/" data-i18n="foot.privacy">Quyền riêng tư</a>
       <a href="/terms/" data-i18n="foot.terms">Điều khoản</a>
       <a href="/security/" data-i18n="foot.security">Bảo mật</a>
@@ -994,7 +994,7 @@
   </div>
 </footer>
 
-<script src="/assets/js/locales/vi.js?v=fe24923cd9"></script>
+<script src="/assets/js/locales/vi.js?v=458dd757e8"></script>
 <script src="/assets/js/data.js?v=442a3e084a"></script>
 <script src="/assets/js/projects.js?v=a4c5c58266"></script>
 <script id="liveCatalogSeed" type="application/json">null</script>

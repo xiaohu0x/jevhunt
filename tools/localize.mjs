@@ -6,7 +6,7 @@ import { runInNewContext } from "node:vm";
 import { renderCard } from "../shared/catalog-view.js";
 import { loadProjectContents, localizedProjectPreview } from "./lib/project-content.mjs";
 import { buildSummaryOverlay, summaryOverlayScript } from "./lib/static-catalog.mjs";
-import { taskCardsHtml, featuredCardsHtml, newListHtml, categoryCardsHtml } from "../shared/catalog-sections.js";
+import { taskCardsHtml, featuredCardsHtml, newListHtml, searchHintsHtml, categoryCardsHtml } from "../shared/catalog-sections.js";
 import { isFeatured, compareFeatured } from "../shared/catalog-featured.js";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -186,6 +186,7 @@ function localizeHomeSections(source, localeKey, locale) {
   const localize = project => localizedProjectPreview(project, projectContents, localeKey);
   const sections = {
     task: taskCardsHtml({ localeKey }),
+    hints: searchHintsHtml(localeKey),
     featured: featuredCardsHtml(homeFeatured.map(localize), locale.messages, { basePath, locale: locale.lang }),
     new: newListHtml(homeFresh.map(localize), locale.messages, { basePath, locale: localeKey, lang: locale.lang }),
     category: categoryCardsHtml(homeCounts, locale.messages, { localePrefix: basePath, lang: locale.lang }),

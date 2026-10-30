@@ -592,7 +592,9 @@
     <input id="dirSearch" type="search" name="q" autocomplete="off" aria-label="プロジェクトを検索" data-i18n-aria-label="a11y.search" data-i18n-ph="apps.search" placeholder="プロジェクト、用途、技術スタックを検索（例：browser agent、JEV-MLX）…" />
     <kbd aria-hidden="true">/</kbd><button type="submit" data-i18n="a11y.search">プロジェクトを検索</button>
   </form>
-  <div class="home-search-hints" aria-label="Popular tasks"><a href="/tasks/browser-automation/" lang="en">browser automation</a><a href="/tasks/rag-retrieval/" lang="en">RAG</a><a href="/tasks/classification/" lang="en">classification</a><a href="/tasks/local-models/" lang="en">local models</a><a href="/tasks/agent-routing/" lang="en">routing</a></div>
+  <div class="home-search-hints" id="searchHints" aria-label="タスクから探す" data-i18n-aria-label="home.tasks"><!-- hints-prerender:start -->
+<a href="/tasks/browser-automation/" hreflang="en">ブラウザ自動化</a><a href="/tasks/rag-retrieval/" hreflang="en">RAG と検索</a><a href="/tasks/classification/" hreflang="en">分類とラベリング</a><a href="/tasks/local-models/" hreflang="en">ローカル・オフラインモデル</a><a href="/tasks/agent-routing/" hreflang="en">エージェントのルーティングとツール選択</a>
+  <!-- hints-prerender:end --></div>
   <div class="home-trust"><span class="home-trust__main"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5c0 4.5 3 8.5 7 10 4-1.5 7-5.5 7-10V6z"/><path d="m9 12 2 2 4-4"/></svg><span data-i18n="home.trust">閲覧にアカウントは不要です。パスワード、API キー、お支払いは求めません。すべての項目に Jev との関係、出典、更新状況を掲載しています。</span></span><span class="home-trust__independent" data-i18n="home.independent">TypeSafe AI から独立した一覧</span></div>
 </section>
 <section class="home-tasks wrap" id="tasks" aria-labelledby="tasksTitle">
@@ -630,7 +632,7 @@
 <section class="home-new wrap" id="new-projects" aria-labelledby="newTitle">
   <div class="home-section-head">
     <h2 id="newTitle" data-i18n="home.new">新着・最近確認済み</h2>
-    <a class="home-section-link" href="/browse/?sort=added-desc">Recently added →</a>
+    <a class="home-section-link" href="/browse/?sort=added-desc" data-i18n="home.recentlyAdded">最近追加 →</a>
   </div>
   <ul class="new-list" id="newGrid"><!-- new-prerender:start -->
 <li class="new-item"><a class="new-item__name" href="/ja/projects/tauricresearch/tradingagents/">TradingAgents</a><span class="new-item__meta">連携 · Python</span><time class="new-item__date" datetime="2026-09-30">2026/09/30</time></li><li class="new-item"><a class="new-item__name" href="/ja/projects/assafelovic/gpt-researcher/">GPT Researcher</a><span class="new-item__meta">連携 · Python</span><time class="new-item__date" datetime="2026-09-30">2026/09/30</time></li><li class="new-item"><a class="new-item__name" href="/ja/projects/mohsen1/llm-debugger-vscode-extension/">LLM Debugger</a><span class="new-item__meta">連携 · TypeScript</span><time class="new-item__date" datetime="2026-09-30">2026/09/30</time></li><li class="new-item"><a class="new-item__name" href="/ja/projects/sregym/sregym/">SREGym</a><span class="new-item__meta">連携 · Python</span><time class="new-item__date" datetime="2026-09-30">2026/09/30</time></li><li class="new-item"><a class="new-item__name" href="/ja/projects/chainreactors/fingers/">fingers</a><span class="new-item__meta">連携 · Go</span><time class="new-item__date" datetime="2026-09-30">2026/09/30</time></li><li class="new-item"><a class="new-item__name" href="/ja/projects/vinilana/jev-gateway/">jev-gateway</a><span class="new-item__meta">連携 · TypeScript</span><time class="new-item__date" datetime="2026-09-30">2026/09/30</time></li>
@@ -639,7 +641,7 @@
 <section class="home-cats wrap" id="browse-categories" aria-labelledby="catsTitle">
   <div class="home-section-head">
     <h2 id="catsTitle" data-i18n="home.categories">カテゴリから探す</h2>
-    <a class="home-section-link" href="/categories/" lang="en">All categories →</a>
+    <a class="home-section-link" href="/categories/" hreflang="en" data-i18n="home.allCategories">すべてのカテゴリ →</a>
   </div>
   <div class="category-grid" id="categoryGrid"><!-- category-prerender:start -->
 <a class="category-card" href="/ja/?category=official#apps"><span class="category-card__name">公式</span><span class="category-card__count">3</span></a><a class="category-card" href="/ja/?category=sdks#apps"><span class="category-card__name">SDK・クライアント</span><span class="category-card__count">191</span></a><a class="category-card" href="/ja/?category=integrations#apps"><span class="category-card__name">連携</span><span class="category-card__count">48</span></a><a class="category-card" href="/ja/?category=agents#apps"><span class="category-card__name">エージェントツール</span><span class="category-card__count">1,206</span></a><a class="category-card" href="/ja/?category=browser#apps"><span class="category-card__name">ブラウザ・PC操作</span><span class="category-card__count">255</span></a><a class="category-card" href="/ja/?category=apps#apps"><span class="category-card__name">アプリケーション</span><span class="category-card__count">2,602</span></a><a class="category-card" href="/ja/?category=games#apps"><span class="category-card__name">ゲーム・シミュレーション</span><span class="category-card__count">177</span></a><a class="category-card" href="/ja/?category=demos#apps"><span class="category-card__name">デモ・プレイグラウンド</span><span class="category-card__count">74</span></a><a class="category-card" href="/ja/?category=research#apps"><span class="category-card__name">ベンチマーク・研究</span><span class="category-card__count">537</span></a><a class="category-card" href="/ja/?category=lists#apps"><span class="category-card__name">ディレクトリ・リスト</span><span class="category-card__count">98</span></a>
@@ -649,12 +651,12 @@
   <aside class="directory-sidebar">
     <div class="directory-categories"><h2 class="directory-filter-heading" data-i18n="form.category">カテゴリ</h2><div class="dir__filters" id="dirFilters"></div></div>
     <div class="dir__facets" id="directoryFacets" hidden>
-        <label><span data-i18n="apps.language">言語</span><select id="languageFilter" aria-label="言語" data-i18n-aria-label="apps.language"><option value="all">All languages</option></select></label>
+        <label><span data-i18n="apps.language">言語</span><select id="languageFilter" aria-label="言語" data-i18n-aria-label="apps.language"><option value="all" data-i18n="apps.allLanguages">すべての言語</option></select></label>
         <label><span data-i18n="apps.type">種類</span><select id="kindFilter" aria-label="種類" data-i18n-aria-label="apps.type"><option value="all" data-i18n="apps.allTypes">すべての種類</option><option value="jev-app" data-i18n="relationship.jev-app">Jev アプリ</option><option value="integration" data-i18n="relationship.integration">連携</option><option value="sdk" data-i18n="relationship.sdk">SDK / クライアント</option><option value="local-alternative" data-i18n="relationship.local-alternative">ローカル代替モデル</option><option value="research" data-i18n="relationship.research">研究</option><option value="resource" data-i18n="relationship.resource">資料 / ディレクトリ</option><option value="unclassified" data-i18n="relationship.unclassified">関係を確認中</option></select></label>
         <label><span data-i18n="apps.activity">状態</span><select id="activityFilter" aria-label="状態" data-i18n-aria-label="apps.activity"><option value="all" data-i18n="apps.allActivity">すべての状態</option><option value="active" data-i18n="apps.active">未アーカイブ</option><option value="archived" data-i18n="apps.archived">アーカイブ済み</option></select></label>
         <button class="fchip" id="resetFilters" data-i18n="apps.reset">絞り込みをリセット</button>
       </div>
-    <aside class="directory-submit"><h2 data-i18n="home.submitTitle">JEV で何か作りましたか？</h2><p data-i18n="home.submitLead">GitHub リポジトリを送信してください。編集者が出典を確認して掲載します。</p><a class="btn btn--primary" href="#submit" data-i18n="home.submitCta">プロジェクトを送信</a><a class="directory-submit__how" href="/submit/">How review works →</a></aside>
+    <aside class="directory-submit"><h2 data-i18n="home.submitTitle">JEV で何か作りましたか？</h2><p data-i18n="home.submitLead">GitHub リポジトリを送信してください。編集者が出典を確認して掲載します。</p><a class="btn btn--primary" href="#submit" data-i18n="home.submitCta">プロジェクトを送信</a><a class="directory-submit__how" href="/submit/" data-i18n="home.howReview">審査方法 →</a></aside>
   </aside>
   <div class="directory-results">
     <div class="home-section-head home-all-head">
@@ -745,13 +747,11 @@
         <a href="/blog/jev-mlx-local/" lang="en">Jev MLX and local models ↗</a>
         <a href="/blog/jev-paper-workflows/" lang="en">Jev paper workflows ↗</a>
       </nav>
-      <nav class="dir__empty-tasks" aria-label="Browse by task">
-        <a href="/tasks/browser-automation/" lang="en">Browser automation</a>
-        <a href="/tasks/classification/" lang="en">Classification</a>
-        <a href="/tasks/rag-retrieval/" lang="en">RAG</a>
-        <a href="/tasks/local-models/" lang="en">Local models</a>
+      <nav class="dir__empty-tasks" aria-label="すべてのタスク" data-i18n-aria-label="home.allTasks">
+        <a href="/tasks/" data-i18n="home.allTasks">すべてのタスク</a>
+        <a href="/categories/" data-i18n="home.allCategories">すべてのカテゴリ →</a>
       </nav>
-      <p class="dir__empty-submit"><a href="#submit">Submit this project →</a></p>
+      <p class="dir__empty-submit"><a href="#submit" data-i18n="apps.submitThis">このプロジェクトを投稿 →</a></p>
     </div>
     <nav class="catalog-pages catalog-pages--directory" id="directoryPagesBottom" aria-label="Pagination"><a href="/browse/" data-i18n="apps.browseAll">すべてのプロジェクトを見る</a></nav>
     <div class="directory-about"><span><span id="statCats" data-count="10">10</span> <span data-i18n="stat.cats">カテゴリ</span></span><span><span id="statStars" data-count="383817">383,817</span> <span data-i18n="stat.stars">GitHub Star</span></span><a href="/methodology/" data-i18n="apps.methodology">審査方法</a><a href="/status/" data-i18n="apps.status">更新状況</a></div>
@@ -980,7 +980,7 @@
     <div class="footer__col">
       <h4 data-i18n="foot.community">コミュニティ</h4>
       <a href="#submit" data-i18n="nav.submit">プロジェクトを登録</a>
-      <a href="/submit/">Submission guidelines</a>
+      <a href="/submit/" data-i18n="foot.submitGuide">投稿ガイドライン</a>
       <a href="/privacy/" data-i18n="foot.privacy">プライバシー</a>
       <a href="/terms/" data-i18n="foot.terms">利用規約</a>
       <a href="/security/" data-i18n="foot.security">セキュリティ</a>
@@ -994,7 +994,7 @@
   </div>
 </footer>
 
-<script src="/assets/js/locales/ja.js?v=53c97b0177"></script>
+<script src="/assets/js/locales/ja.js?v=c9369af10c"></script>
 <script src="/assets/js/data.js?v=442a3e084a"></script>
 <script src="/assets/js/projects.js?v=a4c5c58266"></script>
 <script id="liveCatalogSeed" type="application/json">null</script>

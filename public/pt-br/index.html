@@ -592,7 +592,9 @@
     <input id="dirSearch" type="search" name="q" autocomplete="off" aria-label="Buscar projetos" data-i18n-aria-label="a11y.search" data-i18n-ph="apps.search" placeholder="Pesquise um projeto, tarefa ou stack, por exemplo browser agent ou JEV-MLX…" />
     <kbd aria-hidden="true">/</kbd><button type="submit" data-i18n="a11y.search">Buscar projetos</button>
   </form>
-  <div class="home-search-hints" aria-label="Popular tasks"><a href="/tasks/browser-automation/" lang="en">browser automation</a><a href="/tasks/rag-retrieval/" lang="en">RAG</a><a href="/tasks/classification/" lang="en">classification</a><a href="/tasks/local-models/" lang="en">local models</a><a href="/tasks/agent-routing/" lang="en">routing</a></div>
+  <div class="home-search-hints" id="searchHints" aria-label="Comece por uma tarefa" data-i18n-aria-label="home.tasks"><!-- hints-prerender:start -->
+<a href="/tasks/browser-automation/" hreflang="en">Automação de navegador</a><a href="/tasks/rag-retrieval/" hreflang="en">RAG e recuperação</a><a href="/tasks/classification/" hreflang="en">Classificação e rotulagem</a><a href="/tasks/local-models/" hreflang="en">Modelos locais e offline</a><a href="/tasks/agent-routing/" hreflang="en">Roteamento de agentes e escolha de ferramentas</a>
+  <!-- hints-prerender:end --></div>
   <div class="home-trust"><span class="home-trust__main"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5c0 4.5 3 8.5 7 10 4-1.5 7-5.5 7-10V6z"/><path d="m9 12 2 2 4-4"/></svg><span data-i18n="home.trust">Navegue sem conta. Nunca pedimos senhas, chaves de API ou pagamentos. Cada item mostra a relação com Jev, as fontes e a atualização.</span></span><span class="home-trust__independent" data-i18n="home.independent">Independente da TypeSafe AI</span></div>
 </section>
 <section class="home-tasks wrap" id="tasks" aria-labelledby="tasksTitle">
@@ -630,7 +632,7 @@
 <section class="home-new wrap" id="new-projects" aria-labelledby="newTitle">
   <div class="home-section-head">
     <h2 id="newTitle" data-i18n="home.new">Novos e recém-verificados</h2>
-    <a class="home-section-link" href="/browse/?sort=added-desc">Recently added →</a>
+    <a class="home-section-link" href="/browse/?sort=added-desc" data-i18n="home.recentlyAdded">Adicionados recentemente →</a>
   </div>
   <ul class="new-list" id="newGrid"><!-- new-prerender:start -->
 <li class="new-item"><a class="new-item__name" href="/pt-br/projects/tauricresearch/tradingagents/">TradingAgents</a><span class="new-item__meta">Integração · Python</span><time class="new-item__date" datetime="2026-09-30">30 de set. de 2026</time></li><li class="new-item"><a class="new-item__name" href="/pt-br/projects/assafelovic/gpt-researcher/">GPT Researcher</a><span class="new-item__meta">Integração · Python</span><time class="new-item__date" datetime="2026-09-30">30 de set. de 2026</time></li><li class="new-item"><a class="new-item__name" href="/pt-br/projects/mohsen1/llm-debugger-vscode-extension/">LLM Debugger</a><span class="new-item__meta">Integração · TypeScript</span><time class="new-item__date" datetime="2026-09-30">30 de set. de 2026</time></li><li class="new-item"><a class="new-item__name" href="/pt-br/projects/sregym/sregym/">SREGym</a><span class="new-item__meta">Integração · Python</span><time class="new-item__date" datetime="2026-09-30">30 de set. de 2026</time></li><li class="new-item"><a class="new-item__name" href="/pt-br/projects/chainreactors/fingers/">fingers</a><span class="new-item__meta">Integração · Go</span><time class="new-item__date" datetime="2026-09-30">30 de set. de 2026</time></li><li class="new-item"><a class="new-item__name" href="/pt-br/projects/vinilana/jev-gateway/">jev-gateway</a><span class="new-item__meta">Integração · TypeScript</span><time class="new-item__date" datetime="2026-09-30">30 de set. de 2026</time></li>
@@ -639,7 +641,7 @@
 <section class="home-cats wrap" id="browse-categories" aria-labelledby="catsTitle">
   <div class="home-section-head">
     <h2 id="catsTitle" data-i18n="home.categories">Navegar por categoria</h2>
-    <a class="home-section-link" href="/categories/" lang="en">All categories →</a>
+    <a class="home-section-link" href="/categories/" hreflang="en" data-i18n="home.allCategories">Todas as categorias →</a>
   </div>
   <div class="category-grid" id="categoryGrid"><!-- category-prerender:start -->
 <a class="category-card" href="/pt-br/?category=official#apps"><span class="category-card__name">Oficial</span><span class="category-card__count">3</span></a><a class="category-card" href="/pt-br/?category=sdks#apps"><span class="category-card__name">SDKs e clientes</span><span class="category-card__count">191</span></a><a class="category-card" href="/pt-br/?category=integrations#apps"><span class="category-card__name">Integrações</span><span class="category-card__count">48</span></a><a class="category-card" href="/pt-br/?category=agents#apps"><span class="category-card__name">Ferramentas para agentes</span><span class="category-card__count">1.206</span></a><a class="category-card" href="/pt-br/?category=browser#apps"><span class="category-card__name">Navegador e uso do computador</span><span class="category-card__count">255</span></a><a class="category-card" href="/pt-br/?category=apps#apps"><span class="category-card__name">Aplicativos</span><span class="category-card__count">2.602</span></a><a class="category-card" href="/pt-br/?category=games#apps"><span class="category-card__name">Jogos e simulações</span><span class="category-card__count">177</span></a><a class="category-card" href="/pt-br/?category=demos#apps"><span class="category-card__name">Demos e playgrounds</span><span class="category-card__count">74</span></a><a class="category-card" href="/pt-br/?category=research#apps"><span class="category-card__name">Benchmarks e pesquisa</span><span class="category-card__count">537</span></a><a class="category-card" href="/pt-br/?category=lists#apps"><span class="category-card__name">Diretórios e listas</span><span class="category-card__count">98</span></a>
@@ -649,12 +651,12 @@
   <aside class="directory-sidebar">
     <div class="directory-categories"><h2 class="directory-filter-heading" data-i18n="form.category">Categoria</h2><div class="dir__filters" id="dirFilters"></div></div>
     <div class="dir__facets" id="directoryFacets" hidden>
-        <label><span data-i18n="apps.language">Linguagem</span><select id="languageFilter" aria-label="Linguagem" data-i18n-aria-label="apps.language"><option value="all">All languages</option></select></label>
+        <label><span data-i18n="apps.language">Linguagem</span><select id="languageFilter" aria-label="Linguagem" data-i18n-aria-label="apps.language"><option value="all" data-i18n="apps.allLanguages">Todas as linguagens</option></select></label>
         <label><span data-i18n="apps.type">Tipo</span><select id="kindFilter" aria-label="Tipo" data-i18n-aria-label="apps.type"><option value="all" data-i18n="apps.allTypes">Todos os tipos</option><option value="jev-app" data-i18n="relationship.jev-app">App Jev</option><option value="integration" data-i18n="relationship.integration">Integração</option><option value="sdk" data-i18n="relationship.sdk">SDK / cliente</option><option value="local-alternative" data-i18n="relationship.local-alternative">Alternativa local</option><option value="research" data-i18n="relationship.research">Pesquisa</option><option value="resource" data-i18n="relationship.resource">Recurso / diretório</option><option value="unclassified" data-i18n="relationship.unclassified">Relação em análise</option></select></label>
         <label><span data-i18n="apps.activity">Estado</span><select id="activityFilter" aria-label="Estado" data-i18n-aria-label="apps.activity"><option value="all" data-i18n="apps.allActivity">Todos os estados</option><option value="active" data-i18n="apps.active">Não arquivado</option><option value="archived" data-i18n="apps.archived">Arquivado</option></select></label>
         <button class="fchip" id="resetFilters" data-i18n="apps.reset">Redefinir filtros</button>
       </div>
-    <aside class="directory-submit"><h2 data-i18n="home.submitTitle">Criou algo com JEV?</h2><p data-i18n="home.submitLead">Envie seu repositório GitHub. Revisamos as fontes antes da publicação.</p><a class="btn btn--primary" href="#submit" data-i18n="home.submitCta">Envie seu projeto</a><a class="directory-submit__how" href="/submit/">How review works →</a></aside>
+    <aside class="directory-submit"><h2 data-i18n="home.submitTitle">Criou algo com JEV?</h2><p data-i18n="home.submitLead">Envie seu repositório GitHub. Revisamos as fontes antes da publicação.</p><a class="btn btn--primary" href="#submit" data-i18n="home.submitCta">Envie seu projeto</a><a class="directory-submit__how" href="/submit/" data-i18n="home.howReview">Como revisamos →</a></aside>
   </aside>
   <div class="directory-results">
     <div class="home-section-head home-all-head">
@@ -745,13 +747,11 @@
         <a href="/blog/jev-mlx-local/" lang="en">Jev MLX and local models ↗</a>
         <a href="/blog/jev-paper-workflows/" lang="en">Jev paper workflows ↗</a>
       </nav>
-      <nav class="dir__empty-tasks" aria-label="Browse by task">
-        <a href="/tasks/browser-automation/" lang="en">Browser automation</a>
-        <a href="/tasks/classification/" lang="en">Classification</a>
-        <a href="/tasks/rag-retrieval/" lang="en">RAG</a>
-        <a href="/tasks/local-models/" lang="en">Local models</a>
+      <nav class="dir__empty-tasks" aria-label="Todas as tarefas" data-i18n-aria-label="home.allTasks">
+        <a href="/tasks/" data-i18n="home.allTasks">Todas as tarefas</a>
+        <a href="/categories/" data-i18n="home.allCategories">Todas as categorias →</a>
       </nav>
-      <p class="dir__empty-submit"><a href="#submit">Submit this project →</a></p>
+      <p class="dir__empty-submit"><a href="#submit" data-i18n="apps.submitThis">Enviar este projeto →</a></p>
     </div>
     <nav class="catalog-pages catalog-pages--directory" id="directoryPagesBottom" aria-label="Pagination"><a href="/browse/" data-i18n="apps.browseAll">Ver todos os projetos</a></nav>
     <div class="directory-about"><span><span id="statCats" data-count="10">10</span> <span data-i18n="stat.cats">Categorias</span></span><span><span id="statStars" data-count="383817">383,817</span> <span data-i18n="stat.stars">Stars no GitHub</span></span><a href="/methodology/" data-i18n="apps.methodology">Como revisamos</a><a href="/status/" data-i18n="apps.status">Estado das atualizações</a></div>
@@ -980,7 +980,7 @@
     <div class="footer__col">
       <h4 data-i18n="foot.community">Comunidade</h4>
       <a href="#submit" data-i18n="nav.submit">Enviar projeto</a>
-      <a href="/submit/">Submission guidelines</a>
+      <a href="/submit/" data-i18n="foot.submitGuide">Guia de envio</a>
       <a href="/privacy/" data-i18n="foot.privacy">Privacidade</a>
       <a href="/terms/" data-i18n="foot.terms">Termos</a>
       <a href="/security/" data-i18n="foot.security">Segurança</a>
@@ -994,7 +994,7 @@
   </div>
 </footer>
 
-<script src="/assets/js/locales/pt-br.js?v=0c976ee9fd"></script>
+<script src="/assets/js/locales/pt-br.js?v=d13ea3bbc4"></script>
 <script src="/assets/js/data.js?v=442a3e084a"></script>
 <script src="/assets/js/projects.js?v=a4c5c58266"></script>
 <script id="liveCatalogSeed" type="application/json">null</script>

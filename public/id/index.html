@@ -592,7 +592,9 @@
     <input id="dirSearch" type="search" name="q" autocomplete="off" aria-label="Cari proyek" data-i18n-aria-label="a11y.search" data-i18n-ph="apps.search" placeholder="Cari proyek, tugas, atau stack, misalnya browser agent atau JEV-MLX…" />
     <kbd aria-hidden="true">/</kbd><button type="submit" data-i18n="a11y.search">Cari proyek</button>
   </form>
-  <div class="home-search-hints" aria-label="Popular tasks"><a href="/tasks/browser-automation/" lang="en">browser automation</a><a href="/tasks/rag-retrieval/" lang="en">RAG</a><a href="/tasks/classification/" lang="en">classification</a><a href="/tasks/local-models/" lang="en">local models</a><a href="/tasks/agent-routing/" lang="en">routing</a></div>
+  <div class="home-search-hints" id="searchHints" aria-label="Mulai dari tugas" data-i18n-aria-label="home.tasks"><!-- hints-prerender:start -->
+<a href="/tasks/browser-automation/" hreflang="en">Otomasi browser</a><a href="/tasks/rag-retrieval/" hreflang="en">RAG dan pengambilan</a><a href="/tasks/classification/" hreflang="en">Klasifikasi dan pelabelan</a><a href="/tasks/local-models/" hreflang="en">Model lokal dan offline</a><a href="/tasks/agent-routing/" hreflang="en">Routing agen dan pemilihan alat</a>
+  <!-- hints-prerender:end --></div>
   <div class="home-trust"><span class="home-trust__main"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5c0 4.5 3 8.5 7 10 4-1.5 7-5.5 7-10V6z"/><path d="m9 12 2 2 4-4"/></svg><span data-i18n="home.trust">Jelajahi tanpa akun. Kami tidak meminta sandi, kunci API, atau pembayaran. Setiap entri memuat hubungan Jev, sumber, dan status pembaruan.</span></span><span class="home-trust__independent" data-i18n="home.independent">Independen dari TypeSafe AI</span></div>
 </section>
 <section class="home-tasks wrap" id="tasks" aria-labelledby="tasksTitle">
@@ -630,7 +632,7 @@
 <section class="home-new wrap" id="new-projects" aria-labelledby="newTitle">
   <div class="home-section-head">
     <h2 id="newTitle" data-i18n="home.new">Baru dan baru diverifikasi</h2>
-    <a class="home-section-link" href="/browse/?sort=added-desc">Recently added →</a>
+    <a class="home-section-link" href="/browse/?sort=added-desc" data-i18n="home.recentlyAdded">Baru ditambahkan →</a>
   </div>
   <ul class="new-list" id="newGrid"><!-- new-prerender:start -->
 <li class="new-item"><a class="new-item__name" href="/id/projects/tauricresearch/tradingagents/">TradingAgents</a><span class="new-item__meta">Integrasi · Python</span><time class="new-item__date" datetime="2026-09-30">30 Sep 2026</time></li><li class="new-item"><a class="new-item__name" href="/id/projects/assafelovic/gpt-researcher/">GPT Researcher</a><span class="new-item__meta">Integrasi · Python</span><time class="new-item__date" datetime="2026-09-30">30 Sep 2026</time></li><li class="new-item"><a class="new-item__name" href="/id/projects/mohsen1/llm-debugger-vscode-extension/">LLM Debugger</a><span class="new-item__meta">Integrasi · TypeScript</span><time class="new-item__date" datetime="2026-09-30">30 Sep 2026</time></li><li class="new-item"><a class="new-item__name" href="/id/projects/sregym/sregym/">SREGym</a><span class="new-item__meta">Integrasi · Python</span><time class="new-item__date" datetime="2026-09-30">30 Sep 2026</time></li><li class="new-item"><a class="new-item__name" href="/id/projects/chainreactors/fingers/">fingers</a><span class="new-item__meta">Integrasi · Go</span><time class="new-item__date" datetime="2026-09-30">30 Sep 2026</time></li><li class="new-item"><a class="new-item__name" href="/id/projects/vinilana/jev-gateway/">jev-gateway</a><span class="new-item__meta">Integrasi · TypeScript</span><time class="new-item__date" datetime="2026-09-30">30 Sep 2026</time></li>
@@ -639,7 +641,7 @@
 <section class="home-cats wrap" id="browse-categories" aria-labelledby="catsTitle">
   <div class="home-section-head">
     <h2 id="catsTitle" data-i18n="home.categories">Jelajahi menurut kategori</h2>
-    <a class="home-section-link" href="/categories/" lang="en">All categories →</a>
+    <a class="home-section-link" href="/categories/" hreflang="en" data-i18n="home.allCategories">Semua kategori →</a>
   </div>
   <div class="category-grid" id="categoryGrid"><!-- category-prerender:start -->
 <a class="category-card" href="/id/?category=official#apps"><span class="category-card__name">Resmi</span><span class="category-card__count">3</span></a><a class="category-card" href="/id/?category=sdks#apps"><span class="category-card__name">SDK dan klien</span><span class="category-card__count">191</span></a><a class="category-card" href="/id/?category=integrations#apps"><span class="category-card__name">Integrasi</span><span class="category-card__count">48</span></a><a class="category-card" href="/id/?category=agents#apps"><span class="category-card__name">Alat agen</span><span class="category-card__count">1.206</span></a><a class="category-card" href="/id/?category=browser#apps"><span class="category-card__name">Browser dan komputer</span><span class="category-card__count">255</span></a><a class="category-card" href="/id/?category=apps#apps"><span class="category-card__name">Aplikasi</span><span class="category-card__count">2.602</span></a><a class="category-card" href="/id/?category=games#apps"><span class="category-card__name">Game dan simulasi</span><span class="category-card__count">177</span></a><a class="category-card" href="/id/?category=demos#apps"><span class="category-card__name">Demo dan ruang uji</span><span class="category-card__count">74</span></a><a class="category-card" href="/id/?category=research#apps"><span class="category-card__name">Tolok ukur dan riset</span><span class="category-card__count">537</span></a><a class="category-card" href="/id/?category=lists#apps"><span class="category-card__name">Direktori dan daftar</span><span class="category-card__count">98</span></a>
@@ -649,12 +651,12 @@
   <aside class="directory-sidebar">
     <div class="directory-categories"><h2 class="directory-filter-heading" data-i18n="form.category">Kategori proyek</h2><div class="dir__filters" id="dirFilters"></div></div>
     <div class="dir__facets" id="directoryFacets" hidden>
-        <label><span data-i18n="apps.language">Bahasa pemrograman</span><select id="languageFilter" aria-label="Bahasa pemrograman" data-i18n-aria-label="apps.language"><option value="all">All languages</option></select></label>
+        <label><span data-i18n="apps.language">Bahasa pemrograman</span><select id="languageFilter" aria-label="Bahasa pemrograman" data-i18n-aria-label="apps.language"><option value="all" data-i18n="apps.allLanguages">Semua bahasa</option></select></label>
         <label><span data-i18n="apps.type">Jenis proyek</span><select id="kindFilter" aria-label="Jenis proyek" data-i18n-aria-label="apps.type"><option value="all" data-i18n="apps.allTypes">Semua jenis</option><option value="jev-app" data-i18n="relationship.jev-app">Aplikasi Jev</option><option value="integration" data-i18n="relationship.integration">Integrasi</option><option value="sdk" data-i18n="relationship.sdk">SDK / klien</option><option value="local-alternative" data-i18n="relationship.local-alternative">Alternatif lokal</option><option value="research" data-i18n="relationship.research">Riset</option><option value="resource" data-i18n="relationship.resource">Sumber daya / direktori</option><option value="unclassified" data-i18n="relationship.unclassified">Hubungan sedang ditinjau</option></select></label>
         <label><span data-i18n="apps.activity">Status</span><select id="activityFilter" aria-label="Status" data-i18n-aria-label="apps.activity"><option value="all" data-i18n="apps.allActivity">Semua status</option><option value="active" data-i18n="apps.active">Tidak diarsipkan</option><option value="archived" data-i18n="apps.archived">Diarsipkan</option></select></label>
         <button class="fchip" id="resetFilters" data-i18n="apps.reset">Reset filter</button>
       </div>
-    <aside class="directory-submit"><h2 data-i18n="home.submitTitle">Membuat sesuatu dengan JEV?</h2><p data-i18n="home.submitLead">Kirim repositori GitHub Anda. Editor memeriksa sumber sebelum diterbitkan.</p><a class="btn btn--primary" href="#submit" data-i18n="home.submitCta">Kirim proyek Anda</a><a class="directory-submit__how" href="/submit/">How review works →</a></aside>
+    <aside class="directory-submit"><h2 data-i18n="home.submitTitle">Membuat sesuatu dengan JEV?</h2><p data-i18n="home.submitLead">Kirim repositori GitHub Anda. Editor memeriksa sumber sebelum diterbitkan.</p><a class="btn btn--primary" href="#submit" data-i18n="home.submitCta">Kirim proyek Anda</a><a class="directory-submit__how" href="/submit/" data-i18n="home.howReview">Cara kami meninjau →</a></aside>
   </aside>
   <div class="directory-results">
     <div class="home-section-head home-all-head">
@@ -745,13 +747,11 @@
         <a href="/blog/jev-mlx-local/" lang="en">Jev MLX and local models ↗</a>
         <a href="/blog/jev-paper-workflows/" lang="en">Jev paper workflows ↗</a>
       </nav>
-      <nav class="dir__empty-tasks" aria-label="Browse by task">
-        <a href="/tasks/browser-automation/" lang="en">Browser automation</a>
-        <a href="/tasks/classification/" lang="en">Classification</a>
-        <a href="/tasks/rag-retrieval/" lang="en">RAG</a>
-        <a href="/tasks/local-models/" lang="en">Local models</a>
+      <nav class="dir__empty-tasks" aria-label="Semua tugas" data-i18n-aria-label="home.allTasks">
+        <a href="/tasks/" data-i18n="home.allTasks">Semua tugas</a>
+        <a href="/categories/" data-i18n="home.allCategories">Semua kategori →</a>
       </nav>
-      <p class="dir__empty-submit"><a href="#submit">Submit this project →</a></p>
+      <p class="dir__empty-submit"><a href="#submit" data-i18n="apps.submitThis">Kirim proyek ini →</a></p>
     </div>
     <nav class="catalog-pages catalog-pages--directory" id="directoryPagesBottom" aria-label="Pagination"><a href="/browse/" data-i18n="apps.browseAll">Lihat semua proyek</a></nav>
     <div class="directory-about"><span><span id="statCats" data-count="10">10</span> <span data-i18n="stat.cats">Kategori</span></span><span><span id="statStars" data-count="383817">383,817</span> <span data-i18n="stat.stars">Bintang GitHub</span></span><a href="/methodology/" data-i18n="apps.methodology">Cara kami meninjau</a><a href="/status/" data-i18n="apps.status">Status pembaruan</a></div>
@@ -980,7 +980,7 @@
     <div class="footer__col">
       <h4 data-i18n="foot.community">Komunitas</h4>
       <a href="#submit" data-i18n="nav.submit">Kirim proyek</a>
-      <a href="/submit/">Submission guidelines</a>
+      <a href="/submit/" data-i18n="foot.submitGuide">Panduan pengiriman</a>
       <a href="/privacy/" data-i18n="foot.privacy">Privasi</a>
       <a href="/terms/" data-i18n="foot.terms">Ketentuan</a>
       <a href="/security/" data-i18n="foot.security">Keamanan</a>
@@ -994,7 +994,7 @@
   </div>
 </footer>
 
-<script src="/assets/js/locales/id.js?v=dc7cefa73a"></script>
+<script src="/assets/js/locales/id.js?v=4ab490c222"></script>
 <script src="/assets/js/data.js?v=442a3e084a"></script>
 <script src="/assets/js/projects.js?v=a4c5c58266"></script>
 <script id="liveCatalogSeed" type="application/json">null</script>

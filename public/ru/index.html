@@ -592,7 +592,9 @@
     <input id="dirSearch" type="search" name="q" autocomplete="off" aria-label="Поиск проектов" data-i18n-aria-label="a11y.search" data-i18n-ph="apps.search" placeholder="Ищите проект, задачу или стек, например browser agent или JEV-MLX…" />
     <kbd aria-hidden="true">/</kbd><button type="submit" data-i18n="a11y.search">Поиск проектов</button>
   </form>
-  <div class="home-search-hints" aria-label="Popular tasks"><a href="/tasks/browser-automation/" lang="en">browser automation</a><a href="/tasks/rag-retrieval/" lang="en">RAG</a><a href="/tasks/classification/" lang="en">classification</a><a href="/tasks/local-models/" lang="en">local models</a><a href="/tasks/agent-routing/" lang="en">routing</a></div>
+  <div class="home-search-hints" id="searchHints" aria-label="Начните с задачи" data-i18n-aria-label="home.tasks"><!-- hints-prerender:start -->
+<a href="/tasks/browser-automation/" hreflang="en">Автоматизация браузера</a><a href="/tasks/rag-retrieval/" hreflang="en">RAG и поиск</a><a href="/tasks/classification/" hreflang="en">Классификация и разметка</a><a href="/tasks/local-models/" hreflang="en">Локальные и офлайн-модели</a><a href="/tasks/agent-routing/" hreflang="en">Маршрутизация агентов и выбор инструментов</a>
+  <!-- hints-prerender:end --></div>
   <div class="home-trust"><span class="home-trust__main"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5c0 4.5 3 8.5 7 10 4-1.5 7-5.5 7-10V6z"/><path d="m9 12 2 2 4-4"/></svg><span data-i18n="home.trust">Просмотр без аккаунта. Мы не просим пароли, ключи API или оплату. У каждой записи указаны связь с Jev, источники и актуальность.</span></span><span class="home-trust__independent" data-i18n="home.independent">Независимый от TypeSafe AI</span></div>
 </section>
 <section class="home-tasks wrap" id="tasks" aria-labelledby="tasksTitle">
@@ -630,7 +632,7 @@
 <section class="home-new wrap" id="new-projects" aria-labelledby="newTitle">
   <div class="home-section-head">
     <h2 id="newTitle" data-i18n="home.new">Новые и недавно проверенные</h2>
-    <a class="home-section-link" href="/browse/?sort=added-desc">Recently added →</a>
+    <a class="home-section-link" href="/browse/?sort=added-desc" data-i18n="home.recentlyAdded">Недавно добавленные →</a>
   </div>
   <ul class="new-list" id="newGrid"><!-- new-prerender:start -->
 <li class="new-item"><a class="new-item__name" href="/ru/projects/tauricresearch/tradingagents/">TradingAgents</a><span class="new-item__meta">Интеграция · Python</span><time class="new-item__date" datetime="2026-09-30">30 сент. 2026 г.</time></li><li class="new-item"><a class="new-item__name" href="/ru/projects/assafelovic/gpt-researcher/">GPT Researcher</a><span class="new-item__meta">Интеграция · Python</span><time class="new-item__date" datetime="2026-09-30">30 сент. 2026 г.</time></li><li class="new-item"><a class="new-item__name" href="/ru/projects/mohsen1/llm-debugger-vscode-extension/">LLM Debugger</a><span class="new-item__meta">Интеграция · TypeScript</span><time class="new-item__date" datetime="2026-09-30">30 сент. 2026 г.</time></li><li class="new-item"><a class="new-item__name" href="/ru/projects/sregym/sregym/">SREGym</a><span class="new-item__meta">Интеграция · Python</span><time class="new-item__date" datetime="2026-09-30">30 сент. 2026 г.</time></li><li class="new-item"><a class="new-item__name" href="/ru/projects/chainreactors/fingers/">fingers</a><span class="new-item__meta">Интеграция · Go</span><time class="new-item__date" datetime="2026-09-30">30 сент. 2026 г.</time></li><li class="new-item"><a class="new-item__name" href="/ru/projects/vinilana/jev-gateway/">jev-gateway</a><span class="new-item__meta">Интеграция · TypeScript</span><time class="new-item__date" datetime="2026-09-30">30 сент. 2026 г.</time></li>
@@ -639,7 +641,7 @@
 <section class="home-cats wrap" id="browse-categories" aria-labelledby="catsTitle">
   <div class="home-section-head">
     <h2 id="catsTitle" data-i18n="home.categories">Просмотр по категориям</h2>
-    <a class="home-section-link" href="/categories/" lang="en">All categories →</a>
+    <a class="home-section-link" href="/categories/" hreflang="en" data-i18n="home.allCategories">Все категории →</a>
   </div>
   <div class="category-grid" id="categoryGrid"><!-- category-prerender:start -->
 <a class="category-card" href="/ru/?category=official#apps"><span class="category-card__name">Официальные</span><span class="category-card__count">3</span></a><a class="category-card" href="/ru/?category=sdks#apps"><span class="category-card__name">SDK и клиенты</span><span class="category-card__count">191</span></a><a class="category-card" href="/ru/?category=integrations#apps"><span class="category-card__name">Интеграции</span><span class="category-card__count">48</span></a><a class="category-card" href="/ru/?category=agents#apps"><span class="category-card__name">Инструменты для агентов</span><span class="category-card__count">1 206</span></a><a class="category-card" href="/ru/?category=browser#apps"><span class="category-card__name">Браузер и компьютер</span><span class="category-card__count">255</span></a><a class="category-card" href="/ru/?category=apps#apps"><span class="category-card__name">Приложения</span><span class="category-card__count">2 602</span></a><a class="category-card" href="/ru/?category=games#apps"><span class="category-card__name">Игры и симуляции</span><span class="category-card__count">177</span></a><a class="category-card" href="/ru/?category=demos#apps"><span class="category-card__name">Демо и песочницы</span><span class="category-card__count">74</span></a><a class="category-card" href="/ru/?category=research#apps"><span class="category-card__name">Тесты и исследования</span><span class="category-card__count">537</span></a><a class="category-card" href="/ru/?category=lists#apps"><span class="category-card__name">Каталоги и списки</span><span class="category-card__count">98</span></a>
@@ -649,12 +651,12 @@
   <aside class="directory-sidebar">
     <div class="directory-categories"><h2 class="directory-filter-heading" data-i18n="form.category">Категория проекта</h2><div class="dir__filters" id="dirFilters"></div></div>
     <div class="dir__facets" id="directoryFacets" hidden>
-        <label><span data-i18n="apps.language">Язык программирования</span><select id="languageFilter" aria-label="Язык программирования" data-i18n-aria-label="apps.language"><option value="all">All languages</option></select></label>
+        <label><span data-i18n="apps.language">Язык программирования</span><select id="languageFilter" aria-label="Язык программирования" data-i18n-aria-label="apps.language"><option value="all" data-i18n="apps.allLanguages">Все языки</option></select></label>
         <label><span data-i18n="apps.type">Тип проекта</span><select id="kindFilter" aria-label="Тип проекта" data-i18n-aria-label="apps.type"><option value="all" data-i18n="apps.allTypes">Все типы</option><option value="jev-app" data-i18n="relationship.jev-app">Приложение Jev</option><option value="integration" data-i18n="relationship.integration">Интеграция</option><option value="sdk" data-i18n="relationship.sdk">SDK / клиент</option><option value="local-alternative" data-i18n="relationship.local-alternative">Локальная альтернатива</option><option value="research" data-i18n="relationship.research">Исследования</option><option value="resource" data-i18n="relationship.resource">Ресурс / каталог</option><option value="unclassified" data-i18n="relationship.unclassified">Связь проверяется</option></select></label>
         <label><span data-i18n="apps.activity">Состояние</span><select id="activityFilter" aria-label="Состояние" data-i18n-aria-label="apps.activity"><option value="all" data-i18n="apps.allActivity">Все состояния</option><option value="active" data-i18n="apps.active">Не архивирован</option><option value="archived" data-i18n="apps.archived">Архивирован</option></select></label>
         <button class="fchip" id="resetFilters" data-i18n="apps.reset">Сбросить фильтры</button>
       </div>
-    <aside class="directory-submit"><h2 data-i18n="home.submitTitle">Создали что-то с JEV?</h2><p data-i18n="home.submitLead">Отправьте репозиторий GitHub. Редакторы проверят источники перед публикацией.</p><a class="btn btn--primary" href="#submit" data-i18n="home.submitCta">Предложить проект</a><a class="directory-submit__how" href="/submit/">How review works →</a></aside>
+    <aside class="directory-submit"><h2 data-i18n="home.submitTitle">Создали что-то с JEV?</h2><p data-i18n="home.submitLead">Отправьте репозиторий GitHub. Редакторы проверят источники перед публикацией.</p><a class="btn btn--primary" href="#submit" data-i18n="home.submitCta">Предложить проект</a><a class="directory-submit__how" href="/submit/" data-i18n="home.howReview">Как мы проверяем →</a></aside>
   </aside>
   <div class="directory-results">
     <div class="home-section-head home-all-head">
@@ -745,13 +747,11 @@
         <a href="/blog/jev-mlx-local/" lang="en">Jev MLX and local models ↗</a>
         <a href="/blog/jev-paper-workflows/" lang="en">Jev paper workflows ↗</a>
       </nav>
-      <nav class="dir__empty-tasks" aria-label="Browse by task">
-        <a href="/tasks/browser-automation/" lang="en">Browser automation</a>
-        <a href="/tasks/classification/" lang="en">Classification</a>
-        <a href="/tasks/rag-retrieval/" lang="en">RAG</a>
-        <a href="/tasks/local-models/" lang="en">Local models</a>
+      <nav class="dir__empty-tasks" aria-label="Все задачи" data-i18n-aria-label="home.allTasks">
+        <a href="/tasks/" data-i18n="home.allTasks">Все задачи</a>
+        <a href="/categories/" data-i18n="home.allCategories">Все категории →</a>
       </nav>
-      <p class="dir__empty-submit"><a href="#submit">Submit this project →</a></p>
+      <p class="dir__empty-submit"><a href="#submit" data-i18n="apps.submitThis">Отправить этот проект →</a></p>
     </div>
     <nav class="catalog-pages catalog-pages--directory" id="directoryPagesBottom" aria-label="Pagination"><a href="/browse/" data-i18n="apps.browseAll">Все проекты</a></nav>
     <div class="directory-about"><span><span id="statCats" data-count="10">10</span> <span data-i18n="stat.cats">Категории</span></span><span><span id="statStars" data-count="383817">383,817</span> <span data-i18n="stat.stars">Звёзды GitHub</span></span><a href="/methodology/" data-i18n="apps.methodology">Как мы проверяем</a><a href="/status/" data-i18n="apps.status">Статус обновлений</a></div>
@@ -980,7 +980,7 @@
     <div class="footer__col">
       <h4 data-i18n="foot.community">Сообщество</h4>
       <a href="#submit" data-i18n="nav.submit">Отправить проект</a>
-      <a href="/submit/">Submission guidelines</a>
+      <a href="/submit/" data-i18n="foot.submitGuide">Руководство по отправке</a>
       <a href="/privacy/" data-i18n="foot.privacy">Конфиденциальность</a>
       <a href="/terms/" data-i18n="foot.terms">Условия</a>
       <a href="/security/" data-i18n="foot.security">Безопасность</a>
@@ -994,7 +994,7 @@
   </div>
 </footer>
 
-<script src="/assets/js/locales/ru.js?v=78c32caabc"></script>
+<script src="/assets/js/locales/ru.js?v=06394c888b"></script>
 <script src="/assets/js/data.js?v=442a3e084a"></script>
 <script src="/assets/js/projects.js?v=a4c5c58266"></script>
 <script id="liveCatalogSeed" type="application/json">null</script>

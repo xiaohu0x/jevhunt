@@ -7,7 +7,7 @@ import { readCatalogQuery, readCatalogPage } from "../../shared/catalog-query.js
 import { renderCatalogPagination } from "../../shared/catalog-pagination.js";
 import { readProjectContent, localizeCatalogProjects } from "../../shared/project-content-store.js";
 import { FEATURED_WHERE, FEATURED_ORDER_SQL } from "../../shared/catalog-featured.js";
-import { taskCardsHtml, featuredCardsHtml, newListHtml, categoryCardsHtml, CATEGORIES } from "../../shared/catalog-sections.js";
+import { taskCardsHtml, featuredCardsHtml, newListHtml, categoryCardsHtml, searchHintsHtml, CATEGORIES } from "../../shared/catalog-sections.js";
 import { taskById, taskClause } from "../../shared/catalog-tasks.js";
 import { categoriesIndexView, tasksIndexView, taskPageView } from "../../shared/catalog-section-pages.js";
 import { compareView, alternativesView, pickAlternatives } from "../../shared/catalog-compare.js";
@@ -124,6 +124,7 @@ async function landingUncached(context, locale = "en") {
     .on("#activityFilter option", selectedOption(query.activity))
     .on("#dirSort option", selectedOption(query.sort))
     .on("#taskGrid", { element: el => el.setInnerContent(taskCardsHtml({ localeKey: locale }), { html: true }) })
+    .on("#searchHints", { element: el => el.setInnerContent(searchHintsHtml(locale), { html: true }) })
     .on("#featuredGrid", { element: el => el.setInnerContent(featuredCardsHtml(featured, localeMessages, { basePath: sectionBase, locale: sectionLang }), { html: true }) })
     .on("#newGrid", { element: el => el.setInnerContent(newListHtml(fresh, localeMessages, { basePath: sectionBase, locale, lang: sectionLang }), { html: true }) })
     .on("#categoryGrid", { element: el => el.setInnerContent(categoryCardsHtml(meta.categoryCounts, localeMessages, { localePrefix: sectionBase, lang: sectionLang }), { html: true }) })

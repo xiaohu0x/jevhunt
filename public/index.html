@@ -592,7 +592,9 @@
     <input id="dirSearch" type="search" name="q" autocomplete="off" aria-label="Search projects" data-i18n-aria-label="a11y.search" data-i18n-ph="apps.search" placeholder="Search a project, task or stack — e.g. browser agent or JEV-MLX..." />
     <kbd aria-hidden="true">/</kbd><button type="submit" data-i18n="a11y.search">Search projects</button>
   </form>
-  <div class="home-search-hints" aria-label="Popular tasks"><a href="/tasks/browser-automation/" lang="en">browser automation</a><a href="/tasks/rag-retrieval/" lang="en">RAG</a><a href="/tasks/classification/" lang="en">classification</a><a href="/tasks/local-models/" lang="en">local models</a><a href="/tasks/agent-routing/" lang="en">routing</a></div>
+  <div class="home-search-hints" id="searchHints" aria-label="Start with a task" data-i18n-aria-label="home.tasks"><!-- hints-prerender:start -->
+<a href="/tasks/browser-automation/" hreflang="en">Browser automation</a><a href="/tasks/rag-retrieval/" hreflang="en">RAG &amp; retrieval</a><a href="/tasks/classification/" hreflang="en">Classification &amp; labelling</a><a href="/tasks/local-models/" hreflang="en">Local &amp; offline models</a><a href="/tasks/agent-routing/" hreflang="en">Agent routing &amp; tool choice</a>
+  <!-- hints-prerender:end --></div>
   <div class="home-trust"><span class="home-trust__main"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5c0 4.5 3 8.5 7 10 4-1.5 7-5.5 7-10V6z"/><path d="m9 12 2 2 4-4"/></svg><span data-i18n="home.trust">No account needed to browse. We never ask for passwords, API keys or payment. Every listing shows its Jev relationship, source evidence and freshness.</span></span><span class="home-trust__independent" data-i18n="home.independent">Independent from TypeSafe AI</span></div>
 </section>
 <section class="home-tasks wrap" id="tasks" aria-labelledby="tasksTitle">
@@ -630,7 +632,7 @@
 <section class="home-new wrap" id="new-projects" aria-labelledby="newTitle">
   <div class="home-section-head">
     <h2 id="newTitle" data-i18n="home.new">New and recently verified</h2>
-    <a class="home-section-link" href="/browse/?sort=added-desc">Recently added →</a>
+    <a class="home-section-link" href="/browse/?sort=added-desc" data-i18n="home.recentlyAdded">Recently added →</a>
   </div>
   <ul class="new-list" id="newGrid"><!-- new-prerender:start -->
 <li class="new-item"><a class="new-item__name" href="/projects/tauricresearch/tradingagents/">TradingAgents</a><span class="new-item__meta">Integration · Python</span><time class="new-item__date" datetime="2026-09-30">Sep 30, 2026</time></li><li class="new-item"><a class="new-item__name" href="/projects/assafelovic/gpt-researcher/">GPT Researcher</a><span class="new-item__meta">Integration · Python</span><time class="new-item__date" datetime="2026-09-30">Sep 30, 2026</time></li><li class="new-item"><a class="new-item__name" href="/projects/mohsen1/llm-debugger-vscode-extension/">LLM Debugger</a><span class="new-item__meta">Integration · TypeScript</span><time class="new-item__date" datetime="2026-09-30">Sep 30, 2026</time></li><li class="new-item"><a class="new-item__name" href="/projects/sregym/sregym/">SREGym</a><span class="new-item__meta">Integration · Python</span><time class="new-item__date" datetime="2026-09-30">Sep 30, 2026</time></li><li class="new-item"><a class="new-item__name" href="/projects/chainreactors/fingers/">fingers</a><span class="new-item__meta">Integration · Go</span><time class="new-item__date" datetime="2026-09-30">Sep 30, 2026</time></li><li class="new-item"><a class="new-item__name" href="/projects/vinilana/jev-gateway/">jev-gateway</a><span class="new-item__meta">Integration · TypeScript</span><time class="new-item__date" datetime="2026-09-30">Sep 30, 2026</time></li>
@@ -639,7 +641,7 @@
 <section class="home-cats wrap" id="browse-categories" aria-labelledby="catsTitle">
   <div class="home-section-head">
     <h2 id="catsTitle" data-i18n="home.categories">Browse by category</h2>
-    <a class="home-section-link" href="/categories/" lang="en">All categories →</a>
+    <a class="home-section-link" href="/categories/" hreflang="en" data-i18n="home.allCategories">All categories →</a>
   </div>
   <div class="category-grid" id="categoryGrid"><!-- category-prerender:start -->
 <a class="category-card" href="/categories/official/"><span class="category-card__name">Official</span><span class="category-card__count">3</span><span class="category-card__blurb">TypeSafe-owned SDKs and resources</span></a><a class="category-card" href="/categories/sdks/"><span class="category-card__name">SDKs &amp; Clients</span><span class="category-card__count">191</span><span class="category-card__blurb">Call Jev from your language</span></a><a class="category-card" href="/categories/integrations/"><span class="category-card__name">Integrations</span><span class="category-card__count">48</span><span class="category-card__blurb">Optional Jev inside existing tools</span></a><a class="category-card" href="/categories/agents/"><span class="category-card__name">Agent Tooling</span><span class="category-card__count">1,206</span><span class="category-card__blurb">Routers, frameworks and agent utilities</span></a><a class="category-card" href="/categories/browser/"><span class="category-card__name">Browser &amp; Computer Use</span><span class="category-card__count">255</span><span class="category-card__blurb">Agents that operate real interfaces</span></a><a class="category-card" href="/categories/apps/"><span class="category-card__name">Applications</span><span class="category-card__count">2,602</span><span class="category-card__blurb">End-user products built on Jev</span></a><a class="category-card" href="/categories/games/"><span class="category-card__name">Games &amp; Simulations</span><span class="category-card__count">177</span><span class="category-card__blurb">Play, policy and generated worlds</span></a><a class="category-card" href="/categories/demos/"><span class="category-card__name">Demos &amp; Playgrounds</span><span class="category-card__count">74</span><span class="category-card__blurb">Small runnable examples</span></a><a class="category-card" href="/categories/research/"><span class="category-card__name">Benchmarks &amp; Research</span><span class="category-card__count">537</span><span class="category-card__blurb">Evidence, evaluations and alternatives</span></a><a class="category-card" href="/categories/lists/"><span class="category-card__name">Directories &amp; Lists</span><span class="category-card__count">98</span><span class="category-card__blurb">Curated collections and awesome lists</span></a>
@@ -649,12 +651,12 @@
   <aside class="directory-sidebar">
     <div class="directory-categories"><h2 class="directory-filter-heading" data-i18n="form.category">Category</h2><div class="dir__filters" id="dirFilters"></div></div>
     <div class="dir__facets" id="directoryFacets" hidden>
-        <label><span data-i18n="apps.language">Language</span><select id="languageFilter" aria-label="Language" data-i18n-aria-label="apps.language"><option value="all">All languages</option></select></label>
+        <label><span data-i18n="apps.language">Language</span><select id="languageFilter" aria-label="Language" data-i18n-aria-label="apps.language"><option value="all" data-i18n="apps.allLanguages">All languages</option></select></label>
         <label><span data-i18n="apps.type">Project type</span><select id="kindFilter" aria-label="Project type" data-i18n-aria-label="apps.type"><option value="all" data-i18n="apps.allTypes">All types</option><option value="jev-app" data-i18n="relationship.jev-app">Jev application</option><option value="integration" data-i18n="relationship.integration">Integration</option><option value="sdk" data-i18n="relationship.sdk">SDK / client</option><option value="local-alternative" data-i18n="relationship.local-alternative">Local alternative</option><option value="research" data-i18n="relationship.research">Research</option><option value="resource" data-i18n="relationship.resource">Resource / directory</option><option value="unclassified" data-i18n="relationship.unclassified">Relationship under review</option></select></label>
         <label><span data-i18n="apps.activity">Activity</span><select id="activityFilter" aria-label="Activity" data-i18n-aria-label="apps.activity"><option value="all" data-i18n="apps.allActivity">All statuses</option><option value="active" data-i18n="apps.active">Not archived</option><option value="archived" data-i18n="apps.archived">Archived</option></select></label>
         <button class="fchip" id="resetFilters" data-i18n="apps.reset">Reset filters</button>
       </div>
-    <aside class="directory-submit"><h2 data-i18n="home.submitTitle">Built something on JEV?</h2><p data-i18n="home.submitLead">Submit your GitHub repo. Editors review the source evidence before it goes live.</p><a class="btn btn--primary" href="#submit" data-i18n="home.submitCta">Get it hunted</a><a class="directory-submit__how" href="/submit/">How review works →</a></aside>
+    <aside class="directory-submit"><h2 data-i18n="home.submitTitle">Built something on JEV?</h2><p data-i18n="home.submitLead">Submit your GitHub repo. Editors review the source evidence before it goes live.</p><a class="btn btn--primary" href="#submit" data-i18n="home.submitCta">Get it hunted</a><a class="directory-submit__how" href="/submit/" data-i18n="home.howReview">How review works →</a></aside>
   </aside>
   <div class="directory-results">
     <div class="home-section-head home-all-head">
@@ -745,13 +747,11 @@
         <a href="/blog/jev-mlx-local/" lang="en">Jev MLX and local models ↗</a>
         <a href="/blog/jev-paper-workflows/" lang="en">Jev paper workflows ↗</a>
       </nav>
-      <nav class="dir__empty-tasks" aria-label="Browse by task">
-        <a href="/tasks/browser-automation/" lang="en">Browser automation</a>
-        <a href="/tasks/classification/" lang="en">Classification</a>
-        <a href="/tasks/rag-retrieval/" lang="en">RAG</a>
-        <a href="/tasks/local-models/" lang="en">Local models</a>
+      <nav class="dir__empty-tasks" aria-label="All tasks" data-i18n-aria-label="home.allTasks">
+        <a href="/tasks/" data-i18n="home.allTasks">All tasks</a>
+        <a href="/categories/" data-i18n="home.allCategories">All categories →</a>
       </nav>
-      <p class="dir__empty-submit"><a href="#submit">Submit this project →</a></p>
+      <p class="dir__empty-submit"><a href="#submit" data-i18n="apps.submitThis">Submit this project →</a></p>
     </div>
     <nav class="catalog-pages catalog-pages--directory" id="directoryPagesBottom" aria-label="Pagination"><a href="/browse/" data-i18n="apps.browseAll">Browse all projects</a></nav>
     <div class="directory-about"><span><span id="statCats" data-count="10">10</span> <span data-i18n="stat.cats">Categories</span></span><span><span id="statStars" data-count="383817">383,817</span> <span data-i18n="stat.stars">GitHub stars</span></span><a href="/methodology/" data-i18n="apps.methodology">How we review</a><a href="/status/" data-i18n="apps.status">Update status</a></div>
@@ -980,7 +980,7 @@
     <div class="footer__col">
       <h4 data-i18n="foot.community">Community</h4>
       <a href="#submit" data-i18n="nav.submit">Submit app</a>
-      <a href="/submit/">Submission guidelines</a>
+      <a href="/submit/" data-i18n="foot.submitGuide">Submission guidelines</a>
       <a href="/privacy/" data-i18n="foot.privacy">Privacy</a>
       <a href="/terms/" data-i18n="foot.terms">Terms</a>
       <a href="/security/" data-i18n="foot.security">Security</a>
@@ -994,7 +994,7 @@
   </div>
 </footer>
 
-<script src="/assets/js/locales/en.js?v=dd6711c138"></script>
+<script src="/assets/js/locales/en.js?v=0d4149c60d"></script>
 <script src="/assets/js/data.js?v=442a3e084a"></script>
 <script src="/assets/js/projects.js?v=a4c5c58266"></script>
 <script id="liveCatalogSeed" type="application/json">null</script>

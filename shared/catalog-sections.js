@@ -1,5 +1,5 @@
 import { renderCard } from "./catalog-view.js";
-import { TASK_LIST, taskName, taskBlurb } from "./catalog-tasks.js";
+import { TASK_LIST, taskById, taskName, taskBlurb } from "./catalog-tasks.js";
 import CATEGORIES from "../catalog/categories.json" with { type: "json" };
 import { esc, projectPath } from "./render.js";
 
@@ -17,6 +17,15 @@ const number = lang => new Intl.NumberFormat(lang || "en");
 
 export function taskCardsHtml({ limit = TASK_LIST.length, localeKey = "en" } = {}) {
   return TASK_LIST.slice(0, limit).map(task => `<a class="task-card" href="/tasks/${esc(task.id)}/" hreflang="en"><span class="task-card__name">${esc(taskName(task, localeKey))}</span><span class="task-card__blurb">${esc(taskBlurb(task, localeKey))}</span><span class="task-card__arrow" aria-hidden="true">→</span></a>`).join("");
+}
+
+const HINT_TASKS = ["browser-automation", "rag-retrieval", "classification", "local-models", "agent-routing"];
+
+export function searchHintsHtml(localeKey = "en") {
+  return HINT_TASKS.map(id => {
+    const task = taskById(id);
+    return task ? `<a href="/tasks/${esc(id)}/" hreflang="en">${esc(taskName(task, localeKey))}</a>` : "";
+  }).filter(Boolean).join("");
 }
 
 export function featuredCardsHtml(projects, messages = {}, { basePath = "", locale = "en" } = {}) {
