@@ -5,6 +5,7 @@ export const ORIGIN = "https://jevhunt.com";
 export const esc = value => String(value ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 export const projectPath = (repo, prefix = "") => `${prefix}/projects/` + repo.toLowerCase().split("/").map(encodeURIComponent).join("/") + "/";
 export const repoUrl = repo => "https://github.com/" + repo.split("/").map(encodeURIComponent).join("/");
+export const alternativesPath = repo => "/alternatives/" + repo.toLowerCase().split("/").map(encodeURIComponent).join("/") + "/";
 export const jsonLd = value => JSON.stringify(value).replace(/</g, "\\u003c");
 
 
@@ -38,12 +39,12 @@ ${alternates}
 ${noindex ? '<meta name="robots" content="noindex, nofollow"/>' : ''}
 <meta property="og:title" content="${esc(title)} | JevHunt"/><meta property="og:description" content="${esc(description)}"/>
 <meta property="og:type" content="${esc(ogType)}"/><meta property="og:url" content="${ORIGIN}${esc(path)}"/><meta property="og:image" content="${ORIGIN}/og.png?v=3"/>
-<meta name="twitter:card" content="summary_large_image"/><meta name="twitter:title" content="${esc(title)} | JevHunt"/><meta name="twitter:description" content="${esc(description)}"/><link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml"/>
+<meta name="twitter:card" content="summary_large_image"/><meta name="twitter:title" content="${esc(title)} | JevHunt"/><meta name="twitter:description" content="${esc(description)}"/><link rel="preload" href="/assets/fonts/bricolage-grotesque-latin.woff2" as="font" type="font/woff2" crossorigin/><link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml"/>
 <link rel="stylesheet" href="${asset("/assets/css/fonts.css")}"/><link rel="stylesheet" href="${asset("/assets/css/style.css")}"/><link rel="stylesheet" href="${asset("/assets/css/directory.css")}"/>
 ${styles.map(path => `<link rel="stylesheet" href="${esc(asset(path))}"/>`).join("")}
 ${schema ? `<script type="application/ld+json">${jsonLd(schema)}</script>` : ''}
 </head><body class="directory-detail${bodyClass ? " " + esc(bodyClass) : ""}">
-<header class="legal-nav"><div class="nav__inner"><a class="brand" href="${link("/")}">JEV<span>HUNT</span></a><nav class="legal-nav__links" aria-label="${esc(t("nav.apps", "Main navigation"))}"><a href="${directory}">${esc(t("nav.apps", "Projects"))}</a>${editorialNavigation(localeKey).map(item => `<a href="${item.path}" lang="${esc(item.lang)}">${esc(item.label)}</a>`).join("")}<a href="/methodology/">${esc(t("apps.evidence", "Evidence"))}</a><a href="/status/">${esc(t("apps.status", "Updates"))}</a><a href="${link("/#submit")}">${esc(t("nav.submit", "Submit"))}</a></nav><button class="icon-btn" id="pageTheme" aria-label="${esc(t("a11y.theme", "Toggle theme"))}">◐</button></div></header>
+<header class="legal-nav"><div class="nav__inner"><a class="brand" href="${link("/")}">JEV<span>HUNT</span></a><nav class="legal-nav__links" aria-label="${esc(t("nav.apps", "Main navigation"))}"><a href="${directory}">${esc(t("nav.apps", "Projects"))}</a><a href="/tasks/" lang="en">Tasks</a><a href="/categories/" lang="en">Categories</a><a href="/collections/" lang="en">Collections</a>${editorialNavigation(localeKey).map(item => `<a href="${item.path}" lang="${esc(item.lang)}">${esc(item.label)}</a>`).join("")}<a href="/methodology/">${esc(t("apps.evidence", "Evidence"))}</a><a href="/status/">${esc(t("apps.status", "Updates"))}</a><a href="${link("/#submit")}">${esc(t("nav.submit", "Submit"))}</a></nav><button class="icon-btn" id="pageTheme" aria-label="${esc(t("a11y.theme", "Toggle theme"))}">◐</button></div></header>
 <main class="legal"><div class="wrap">${body}</div></main>
 <footer class="footer"><div class="wrap footer__base"><span>${esc(t("foot.blurb", "Independent Jev ecosystem directory"))}</span><a href="/privacy/">${esc(t("foot.privacy", "Privacy"))}</a><a href="/terms/">${esc(t("foot.terms", "Terms"))}</a><a href="/security/">${esc(t("foot.security", "Security"))}</a>${footerLocales}</div></footer>
 <script src="${asset("/assets/js/analytics.js")}" defer></script><script src="${asset("/assets/js/page.js")}"></script>${script ? `<script type="module" src="${esc(asset(script))}"></script>` : ''}

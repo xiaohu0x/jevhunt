@@ -87,7 +87,7 @@ function filters(query, messages) {
     const tokenClauses = terms.map(termClause).join(" AND ");
     const categoryClause = categoryMatches.length ? ` OR category IN (${categoryMatches.map(() => "?").join(",")})` : "";
     clauses.push(`((${tokenClauses})${categoryClause})`);
-    for (const term of terms) values.push(query.locale, literal ? pattern(term) : cjkTerm(term) ? `%${term}%` : `% ${term} %`);
+    for (const term of terms) values.push(query.locale, literal ? pattern(term) : cjkTerm(term) ? `%${term}%` : `% ${term}%`);
     values.push(...categoryMatches);
   }
   return { where: clauses.join(" AND "), values };
@@ -97,15 +97,17 @@ function searchOrder(query) {
   if (!query.q || !query.terms?.length) return { sql: SORT_SQL[query.sort], values: [] };
   const source = "LOWER(name || ' ' || repo)";
   const literal = /[\\%_']/u.test(query.q);
-  const termClause = term => literal
-    ? `${source} LIKE ? ESCAPE '\\'`
-    : cjkTerm(term) ? `${normalizedWords("name || ' ' || repo")} LIKE ? ESCAPE '\\'` : `(' ' || ${normalizedWords("name || ' ' || repo")} || ' ') LIKE ? ESCAPE '\\'`;
-  const allNameTerms = query.terms.map(termClause).join(" AND ");
-  const anyNameTerm = query.terms.map(termClause).join(" OR ");
-  const patterns = query.terms.map(term => literal ? "%" + term.replace(/[\\%_]/g, "\\$&") + "%" : cjkTerm(term) ? `%${term}%` : `% ${term} %`);
+  const paddedName = `(' ' || ${normalizedWords("name || ' ' || repo")} || ' ')`;
+  const exactClause = term => literal ? `${source} LIKE ? ESCAPE '\\'` : `${paddedName} LIKE ? ESCAPE '\\'`;
+  const prefixClause = term => literal ? `${source} LIKE ? ESCAPE '\\'` : `${paddedName} LIKE ? ESCAPE '\\'`;
+  const exactPattern = term => literal ? "%" + term.replace(/[\\%_]/g, "\\$&") + "%" : cjkTerm(term) ? `%${term}%` : `% ${term} %`;
+  const prefixPattern = term => literal ? exactPattern(term) : cjkTerm(term) ? `%${term}%` : `% ${term}%`;
+  const clause = (terms, fn) => terms.map(fn).join(" AND ");
+  const anyClause = (terms, fn) => terms.map(fn).join(" OR ");
+  const exactPatterns = query.terms.map(exactPattern), prefixPatterns = query.terms.map(prefixPattern);
   return {
-    sql: `CASE WHEN (${allNameTerms}) THEN 0 WHEN (${anyNameTerm}) THEN 1 ELSE 2 END, ${SORT_SQL[query.sort]}`,
-    values: [...patterns, ...patterns],
+    sql: `CASE WHEN (${clause(query.terms, exactClause)}) THEN 0 WHEN (${anyClause(query.terms, exactClause)}) THEN 1 WHEN (${clause(query.terms, prefixClause)}) THEN 2 WHEN (${anyClause(query.terms, prefixClause)}) THEN 3 ELSE 4 END, ${SORT_SQL[query.sort]}`,
+    values: [...exactPatterns, ...exactPatterns, ...prefixPatterns, ...prefixPatterns],
   };
 }
 

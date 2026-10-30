@@ -1,0 +1,162 @@
+[
+  {
+    "id": "browser-automation",
+    "name": "Browser automation",
+    "blurb": "Drive Chrome or Playwright with typed decisions",
+    "description": "Agents that click, type and navigate real pages. Jev selects the action and the target element, while the surrounding code executes it and verifies the result.",
+    "keywords": ["browser", "playwright", "puppeteer", "selenium", "chrome", "web agent", "headless", "web automation"],
+    "priority": 1
+  },
+  {
+    "id": "computer-use",
+    "name": "Computer & desktop use",
+    "blurb": "Control apps, screens and the mouse",
+    "description": "Desktop automation projects that read the screen or accessibility tree and act on native applications. Jev decides the next action and target.",
+    "keywords": ["computer use", "computer-use", "desktop", "screen", "mouse", "keyboard", "accessibility", "macos", "native app"],
+    "priority": 2
+  },
+  {
+    "id": "agent-routing",
+    "name": "Agent routing & tool choice",
+    "blurb": "Pick the next tool, model or branch",
+    "description": "Routers and orchestrators that choose between tools, models, agents or workflow branches. Jev returns a typed choice instead of a sentence.",
+    "keywords": ["routing", "router", "dispatch", "orchestrat", "tool selection", "tool choice", "model routing", "triage"],
+    "priority": 3
+  },
+  {
+    "id": "classification",
+    "name": "Classification & labelling",
+    "blurb": "Sort text, tickets and intent",
+    "description": "Classifiers for support tickets, documents, content and user intent. Jev returns a label and a confidence instead of generated text.",
+    "keywords": ["classif", "label", "tagging", "sentiment", "intent", "categoriz", "moderation label"],
+    "priority": 4
+  },
+  {
+    "id": "reranking",
+    "name": "Reranking & relevance",
+    "blurb": "Reorder search and retrieval results",
+    "description": "Projects that score passages, memories or candidates for relevance before an LLM reads them. Score and Noul answers replace generated judgements.",
+    "keywords": ["rerank", "re-rank", "relevance", "ranking", "order results", "score passage", "candidate score"],
+    "priority": 5
+  },
+  {
+    "id": "rag-retrieval",
+    "name": "RAG & retrieval",
+    "blurb": "Ground answers in your own data",
+    "description": "Retrieval, memory and knowledge-base projects with an optional Jev filtering or scoring step. Jev evaluates passages before the answer is written.",
+    "keywords": ["rag", "retrieval", "vector", "embedding", "knowledge base", "semantic search", "hybrid search", "memory"],
+    "priority": 6
+  },
+  {
+    "id": "agent-evaluation",
+    "name": "Evaluation & benchmarks",
+    "blurb": "Grade agents, prompts and outputs",
+    "description": "Evaluation harnesses, benchmarks and graders. Jev scores or chooses between candidate outputs with an explicit rubric.",
+    "keywords": ["benchmark", "eval", "evaluation", "grader", "leaderboard", "test suite", "rubric", "judge"],
+    "priority": 7
+  },
+  {
+    "id": "guardrails",
+    "name": "Guardrails & safety",
+    "blurb": "Allow, block or escalate actions",
+    "description": "Permission checks, moderation and safety filters for agents. Jev answers an explicit policy question before the action runs.",
+    "keywords": ["guardrail", "safety", "moderation", "policy", "prompt injection", "permission", "allowlist", "denylist"],
+    "priority": 8
+  },
+  {
+    "id": "coding-agents",
+    "name": "Coding agents & review",
+    "blurb": "Review diffs, plans and tool calls",
+    "description": "Coding assistants, IDE plugins and review tools that use Jev to gate edits, choose the next step or judge a diff.",
+    "keywords": ["code review", "coding agent", "claude code", "cursor", "pull request", "refactor", "ide", "developer tool"],
+    "priority": 9
+  },
+  {
+    "id": "data-extraction",
+    "name": "Data extraction & documents",
+    "blurb": "Parse pages, PDFs and forms",
+    "description": "Scrapers, OCR pipelines and document processors. Jev classifies fields or decides whether an extraction is usable.",
+    "keywords": ["extract", "scrape", "crawler", "parsing", "ocr", "pdf", "document", "invoice", "form"],
+    "priority": 10
+  },
+  {
+    "id": "trading-finance",
+    "name": "Trading & finance",
+    "blurb": "Decide entries, risk and allocation",
+    "description": "Trading bots, research desks and portfolio tools that use Jev for entry, risk or allocation decisions.",
+    "keywords": ["trading", "trader", "finance", "stock", "crypto", "portfolio", "market", "hedge", "quant"],
+    "priority": 11
+  },
+  {
+    "id": "games-simulations",
+    "name": "Games & simulations",
+    "blurb": "Policies and judges for game agents",
+    "description": "Games, sandboxes and simulations where Jev chooses moves, evaluates outcomes or judges generated content.",
+    "keywords": ["game", "gameplay", "minecraft", "mario", "pokemon", "chess", "simulation", "sandbox"],
+    "priority": 12
+  },
+  {
+    "id": "local-models",
+    "name": "Local & offline models",
+    "blurb": "Run decision models on your own hardware",
+    "description": "Local alternatives and on-device decision models that follow the System One interface, plus shims for existing Jev clients.",
+    "keywords": ["local", "offline", "on-device", "ollama", "llama.cpp", "onnx", "self-host", "self host"],
+    "priority": 13
+  },
+  {
+    "id": "sdk-integration",
+    "name": "SDKs & framework integration",
+    "blurb": "Call Jev from your language or framework",
+    "description": "Client libraries, framework adapters and plugins that expose Jev inside an existing stack.",
+    "keywords": ["sdk", "client library", "plugin", "integration", "mcp", "framework", "adapter"],
+    "priority": 14
+  },
+  {
+    "id": "content-writing",
+    "name": "Content & writing",
+    "blurb": "Plan, judge and improve generated content",
+    "description": "Writing assistants and content pipelines that use Jev to choose an outline, score a draft or classify a document.",
+    "keywords": ["writing", "content", "copy", "blog", "summar", "editorial", "draft"],
+    "priority": 15
+  },
+  {
+    "id": "support-chat",
+    "name": "Support & conversation",
+    "blurb": "Route and resolve customer conversations",
+    "description": "Support desks, chat assistants and CRM tools that use Jev for intent, routing or response selection.",
+    "keywords": ["support", "chat", "crm", "ticket", "customer", "assistant", "conversation"],
+    "priority": 16
+  },
+  {
+    "id": "workflow-automation",
+    "name": "Workflow automation",
+    "blurb": "Branch pipelines and background jobs",
+    "description": "Workflow engines, schedulers and batch jobs that use Jev to choose a branch, retry or escalation step.",
+    "keywords": ["workflow", "automation", "pipeline", "cron", "queue", "batch", "n8n", "zapier"],
+    "priority": 17
+  },
+  {
+    "id": "observability",
+    "name": "Observability & ops",
+    "blurb": "Trace, monitor and triage systems",
+    "description": "Tracing, logging and incident tooling with an optional Jev classification or triage step.",
+    "keywords": ["observability", "tracing", "monitoring", "logging", "llmops", "telemetry", "incident"],
+    "priority": 18
+  },
+  {
+    "id": "science-health",
+    "name": "Science & health",
+    "blurb": "Research, biology and clinical workflows",
+    "description": "Scientific and clinical projects that use Jev for screening, labelling or deciding the next experiment.",
+    "keywords": ["health", "medical", "clinical", "bio", "chemistry", "protein", "paper", "research assistant"],
+    "priority": 19
+  },
+  {
+    "id": "search-discovery",
+    "name": "Search & discovery",
+    "blurb": "Query, index and recommend",
+    "description": "Search front ends, indexes and recommenders that use Jev to rank or filter results.",
+    "keywords": ["search", "discovery", "recommend", "index", "query", "find"],
+    "priority": 20
+  }
+]

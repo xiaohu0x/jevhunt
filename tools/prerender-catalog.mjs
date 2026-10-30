@@ -5,6 +5,8 @@ import { dirname, resolve } from "node:path";
 import { runInNewContext } from "node:vm";
 import { fileURLToPath } from "node:url";
 import { loadProjectContents, localizedProjectPreview } from "./lib/project-content.mjs";
+import { taskCardsHtml, featuredCardsHtml, newListHtml, categoryCardsHtml } from "../shared/catalog-sections.js";
+import { isFeatured, compareFeatured } from "../shared/catalog-featured.js";
 
 export const PRERENDER_COUNT = 20;
 
@@ -58,6 +60,12 @@ const repoUrl = project =>
 
 const renderCard = project => projectCard(project, labels);
 
+const featured = [...apps].filter(isFeatured).sort(compareFeatured).slice(0, 6);
+const fresh = [...apps]
+  .filter(project => /^\d{4}-\d{2}-\d{2}$/.test(project.added || ""))
+  .sort((a, b) => (b.added || "").localeCompare(a.added || "") || b.stars - a.stars)
+  .slice(0, 6);
+
 const itemList = {
   "@context": "https://schema.org",
   "@type": "ItemList",
@@ -96,6 +104,16 @@ html = replaceRequired(
   `$1\n${cards}\n        $2`,
   "catalog prerender"
 );
+
+for (const [name, content] of [
+  ["task", taskCardsHtml()],
+  ["featured", featuredCardsHtml(featured, labels)],
+  ["new", newListHtml(fresh, labels)],
+  ["category", categoryCardsHtml(catalogMeta.categoryCounts || {}, labels)],
+]) {
+  const pattern = new RegExp("(<!-- " + name + "-prerender:start -->)[\\s\\S]*?(<!-- " + name + "-prerender:end -->)");
+  html = replaceRequired(html, pattern, (_match, start, end) => `${start}\n${content}\n  ${end}`, name + " prerender");
+}
 
 const structuredData = JSON.stringify(itemList, null, 2).replace(/</g, "\\u003c");
 html = replaceRequired(

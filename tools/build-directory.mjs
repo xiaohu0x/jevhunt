@@ -1,10 +1,16 @@
 import { readFileSync, writeFileSync, mkdirSync, rmSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { dirname } from "node:path";
-import { loadData, esc, page, ORIGIN, projectPath } from "./lib/site.mjs";
+import { loadData, esc, page, ORIGIN, projectPath, alternativesPath } from "./lib/site.mjs";
 import { renderProject, renderListing } from "../shared/catalog-view.js";
 import { duplicateProjectNames, projectNameKey } from "../shared/project-seo.js";
 import { localizedProjectPreview } from "./lib/project-content.mjs";
+import { categoriesIndexView, tasksIndexView, taskPageView } from "../shared/catalog-section-pages.js";
+import { TASK_LIST, taskMatches } from "../shared/catalog-tasks.js";
+import { alternativesView, compareView, pickAlternatives } from "../shared/catalog-compare.js";
+import { isFeatured } from "../shared/catalog-featured.js";
+import { COLLECTION_LIST, collectionMatches } from "../shared/catalog-collections.js";
+import { collectionsIndexView, collectionPageView } from "../shared/catalog-collection-pages.js";
 
 const { apps, categories, catalogMeta: meta, i18n, projectContents } = loadData();
 const catalog = JSON.parse(readFileSync("public/catalog.json", "utf8"));
@@ -69,6 +75,26 @@ for (const p of catalog.unavailable || []) {
   paths.pop();
 }
 
+write("/compare/", page(compareView({ projects: [] })));
+paths.pop(); // Comparison pages are intentionally noindex and excluded from the sitemap.
+
+const categoryNames = new Map(categories.map(category => [category.id, category.name]));
+for (const project of projects) {
+  const reviewed = projectContents.has(project.repo.toLowerCase());
+  if (!reviewed && !isFeatured(project)) continue;
+  const alternatives = pickAlternatives(project, categoryProjects.get(project.cat) || [], 10);
+  write(alternativesPath(project.repo), page(alternativesView({ project, alternatives, categoryName: categoryNames.get(project.cat) || project.cat })));
+}
+
+for (const collection of COLLECTION_LIST) {
+  const items = projects.filter(project => collectionMatches(collection, project));
+  const pages = Math.max(1, Math.ceil(items.length / 24));
+  for (let n = 1; n <= Math.min(pages, 3); n++) {
+    write(n === 1 ? `/collections/${collection.id}/` : `/collections/${collection.id}/${n}/`, page(collectionPageView({ collection, projects: items.slice((n - 1) * 24, n * 24), total: items.length, number: n, pages })));
+  }
+}
+write("/collections/", page(collectionsIndexView({ projectCount: projects.length, counts: Object.fromEntries(COLLECTION_LIST.map(collection => [collection.id, projects.filter(project => collectionMatches(collection, project)).length])) })));
+
 function listings(items, base, title) {
   const pages = Math.max(1, Math.ceil(items.length / 24));
   for (let n = 1; n <= pages; n++) {
@@ -79,9 +105,24 @@ function listings(items, base, title) {
 listings(projects, "/browse/", "Jev ecosystem projects");
 for (const category of categories) listings(categoryProjects.get(category.id) || [], `/categories/${category.id}/`, category.name + " for Jev");
 
+const categoryCounts = Object.fromEntries(categories.map(category => [category.id, (categoryProjects.get(category.id) || []).length]));
+const categorySamples = Object.fromEntries(categories.map(category => [category.id, (categoryProjects.get(category.id) || []).slice(0, 3)]));
+write("/categories/", page(categoriesIndexView({ projectCount: projects.length, categoryCounts, samples: categorySamples })));
+write("/tasks/", page(tasksIndexView({ projectCount: projects.length })));
+for (const task of TASK_LIST) {
+  const matched = projects.filter(project => taskMatches(task, project));
+  const pages = Math.max(1, Math.ceil(matched.length / 24));
+  for (let n = 1; n <= Math.min(pages, 3); n++) {
+    const slice = matched.slice((n - 1) * 24, n * 24).map(item => localizedProjectPreview(item, projectContents));
+    write(n === 1 ? `/tasks/${task.id}/` : `/tasks/${task.id}/${n}/`, page(taskPageView({ task, projects: slice, total: matched.length, number: n, pages })));
+  }
+}
+
 write("/methodology/", page({ title: "Sources and evidence policy", description: "How JevHunt discovers, classifies and reviews projects, handles stale data and distinguishes Jev integrations from independent alternatives.", path: "/methodology/", body: `<header class="legal__header"><h1>Sources and evidence</h1><p>JevHunt uses GitHub Repository Search as its primary discovery path and supplements it with community feeds, official repositories and approved submissions. Coverage is broad but cannot be guaranteed exhaustive.</p></header><div class="legal__content"><section><h2>What each label means</h2><ul><li><strong>Official:</strong> an allowlisted SDK or resource owned by TypeSafe.</li><li><strong>Documented:</strong> first-party documentation states a Jev use or includes an API / SDK reference.</li><li><strong>Code reference:</strong> a Jev API identifier was found in source, linked at a specific commit.</li><li><strong>Editor reviewed:</strong> an editor checked the linked source and project classification.</li><li><strong>Needs review:</strong> retained historical data awaiting a successful new check.</li></ul><p>These labels do not mean we executed the code, audited its security or reproduced its performance claims.</p></section><section><h2>Project types</h2><p>Applications, optional integrations, SDKs, local alternatives, research and resource directories have separate labels. A local alternative may reproduce the decision interface without calling TypeSafe Jev. Classification is based on project descriptions and source documentation and can be corrected by editors.</p></section><section><h2>Reviewed project explanations</h2><p>The first ${projectContents.size} projects have source-backed explanations in all 15 supported locales. Each covers the project purpose, the actual role of Jev, how to begin and material limits, with links to commit-pinned source passages. These explanations were drafted with AI assistance and separately checked by models for source fidelity and language. This is not native-human language review or a runtime test.</p><p>Project-name and task-based search intents are editorial hypotheses, not measured rankings or traffic. Source changes enter a review queue; repository metadata can update independently while explanations retain their stated source-review date.</p></section><section><h2>Discovery sources</h2><ul>${discoverySources.map(source => `<li>${esc(source.id)}${source.url ? ` — <a href="${esc(source.url)}" rel="noopener noreferrer">source</a>` : ''}${source.query ? `: <code>${esc(source.query)}</code>` : ''}</li>`).join("")}</ul><p>GitHub Search queries cover repository names, descriptions, README references, topics, SDK identifiers and model identifiers. Community directories add discovery links. Current metadata comes from GitHub. README and source references are pinned to commits. Search pages are partitioned by creation date when GitHub's 1,000-result limit is reached; partial results and request counts are disclosed in the audit report.</p></section><section><h2>Updates and corrections</h2><p>A Cloudflare scheduled worker advances small batches every minute and refreshes GitHub Search windows continuously. Failed individual checks retain the last known result with a stale label. Unavailable repositories are retained for rechecking. Editors may approve, reject, reclassify or withdraw submissions. Approvals are queued in D1 and appear after the worker checks their evidence; pages read the live catalog.</p><p><a href="/status/">Update status</a> · <a href="/catalog-audit.json">Machine-readable audit report</a> · <a href="/catalog.json">Catalog JSON</a> · <a href="https://github.com/xiaohu0x/jevhunt/issues">Report a correction</a></p></section></div>` }));
 
 write("/status/", page({ title: "Catalog update status", description: "Last successful catalog check, source freshness, changes and release identity for JevHunt.", path: "/status/", body: `<header class="legal__header"><h1>Catalog update status</h1><p id="freshnessStatus">Last catalog check: <time id="syncTime" datetime="${esc(meta.syncedAt || '')}">${esc(meta.syncedAt || meta.updated)}</time></p></header><dl class="facts"><div><dt>Listed repositories</dt><dd>${apps.length}</dd></div><div><dt>Discovery candidates</dt><dd>${meta.candidateCount}</dd></div><div><dt>Checks pending</dt><dd>${meta.staleCount || 0}</dd></div><div><dt>Snapshot</dt><dd><code>${esc(meta.catalogHash)}</code></dd></div><div><dt>Latest source date</dt><dd>${esc(meta.updated)}</dd></div></dl><h2>Discovery runs</h2><ul>${(meta.sources || []).map(s => `<li>${esc(s.id)}: ${esc(s.status)}${s.query ? ` — ${esc(s.query)}` : ''}${s.error ? ` — ${esc(s.error)}` : ''}</li>`).join("")}</ul><h2>Changes in this snapshot</h2><p>${meta.changes?.added?.length || 0} added · ${meta.changes?.removed?.length || 0} removed</p><p>The Cloudflare worker checks sources and repositories continuously. See the live status endpoint for its heartbeat and queue.</p><p><a href="/catalog-audit.json">Full audit</a> · <a href="/build-info.json">Build identity</a> · <a href="/api/health">Live health</a> · <a href="/api/catalog/status">Worker history</a></p>`, script: "/assets/js/status.js" }));
+
+write("/submit/", page({ title: "Submit a Jev project", description: "How to submit a public GitHub repository to JevHunt, what editors check, how long review takes and how maintainers claim a listing.", path: "/submit/", body: `<header class="legal__header"><nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">JevHunt</a> / Submit</nav><h1>Submit a Jev project</h1><p class="legal__summary">Send a public GitHub repository that uses Jev. An editor checks the linked source evidence and classification before it appears in a scheduled catalog update.</p><p><a class="btn btn--primary" href="/#submit">Submit with GitHub →</a></p></header><div class="legal__content"><section><h2>What we list</h2><ul><li>A public GitHub repository with a README or source that references Jev, TypeSafe or the System One interface.</li><li>Applications, integrations, SDKs, local alternatives, demos and research are all in scope.</li><li>Archived projects can be listed; withdrawn repositories cannot.</li><li>Submissions are free. We do not sell placement or ranking.</li></ul></section><section><h2>What an editor checks</h2><ul><li>The linked source evidence actually supports the claimed Jev relationship.</li><li>The project is classified as application, integration, SDK, local alternative, research or directory.</li><li>The repository is not a duplicate, withdrawn or renamed listing.</li><li>The description is factual. We do not run, benchmark or security-review the code.</li></ul></section><section><h2>Timing</h2><p>We aim to review within <strong>two business days</strong>. The target is not a guarantee: GitHub rate limits and review volume can delay a decision. Approved projects appear after the scheduled catalog check, usually within a few hours.</p></section><section><h2>Claim a listing</h2><p>If you maintain a listed repository, open a claim issue from the project page or use the <a href="https://github.com/xiaohu0x/jevhunt/issues/new?title=Claim%20listing&body=Repository%3A%20https%3A%2F%2Fgithub.com%2Fowner%2Frepo%0A%0AWhat%20should%20change%3A" rel="noopener noreferrer">claim template</a>. Claims are reviewed by the same editors; claiming does not change ranking.</p></section><section><h2>Badge</h2><p>Listed projects can embed this badge. It links back to the project page and is not a ranking signal.</p><p><img src="/badge.svg" alt="Listed on JevHunt" width="220" height="40" /></p><pre class="project-command"><code>&lt;a href="https://jevhunt.com/projects/owner/repo/"&gt;&lt;img src="https://jevhunt.com/badge.svg" alt="Listed on JevHunt" width="220" height="40"&gt;&lt;/a&gt;</code></pre></section><section><h2>Corrections</h2><p>Spotted a wrong relationship, stale description or missing license? Use the correction link on the project page or email the address in the repository's <a href="https://github.com/xiaohu0x/jevhunt" rel="noopener noreferrer">JevHunt repository</a>.</p></section></div>` }));
 
 write("/admin/", page({ title: "Submission review", description: "JevHunt editorial review queue.", path: "/admin/", noindex: true,
   body: `<header class="legal__header"><h1>Review submissions</h1><p><button class="btn btn--ghost" id="triggerDiscovery">Refresh discovery sources</button> <a href="/status/">Worker status</a></p><p><a href="/api/auth/google?next=%2Fadmin%2F">Sign in with your authorized Google account</a></p></header><label>Queue <select id="reviewStatus"><option value="pending">Pending</option><option value="approved">Approved</option><option value="rejected">Rejected</option></select></label><p id="adminNote" role="status">Loading…</p><div id="reviewQueue"></div><button id="reviewMore" class="btn btn--ghost" hidden>Load more</button><script>window.JH_REVIEW_CATEGORIES = ${JSON.stringify(categories).replace(/</g, "\\u003c")};</script>`, script: "/assets/js/admin.js" }));
@@ -94,7 +135,9 @@ for (const project of projects) {
   if (!record) continue;
   for (const [locale, info] of Object.entries(i18n.locales)) if (locale !== "en") sitemapEntries.push(`  <url><loc>${ORIGIN}${esc(projectPath(project.repo, info.path.slice(0, -1)))}</loc><lastmod>${record.reviewedAt}</lastmod></url>`);
 }
-const sitemap = readFileSync("public/sitemap.xml", "utf8").replace("</urlset>", sitemapEntries.join("\n") + "\n</urlset>");
+const generatedPath = /\/(?:projects|browse|categories|tasks|alternatives|collections)\//;
+const sitemapBase = readFileSync("public/sitemap.xml", "utf8").replace(/<url>\s*<loc>([^<]+)<\/loc>[\s\S]*?<\/url>\s*/g, (match, loc) => generatedPath.test(loc) ? "" : match);
+const sitemap = sitemapBase.replace("</urlset>", sitemapEntries.join("\n") + "\n</urlset>");
 writeFileSync("public/sitemap.xml", sitemap);
 writeFileSync("public/_redirects", [...new Set(redirects)].join("\n") + "\n");
 mkdirSync(".cache", { recursive: true });

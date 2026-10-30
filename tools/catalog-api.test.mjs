@@ -87,6 +87,18 @@ test("natural queries split repository punctuation and rank matching project nam
   assert.deepEqual((await get("q=" + encodeURIComponent("基本面"))).apps.map(project => project.name), ["Chinese summary"]);
 });
 
+test("partial words match longer terms while exact words keep ranking priority", async t => {
+  const { add, get } = setup(t);
+  add({ repo: "owner/doc-classification", name: "Document classification", desc: "Classify support tickets", stars: 10 });
+  add({ repo: "owner/classifier-kit", name: "Classifier toolkit", desc: "A classifier helper", stars: 100 });
+  const partial = await get("q=classif");
+  assert.deepEqual(partial.apps.map(project => project.name).sort(), ["Classifier toolkit", "Document classification"]);
+  const exact = await get("q=classification");
+  assert.deepEqual(exact.apps.map(project => project.name), ["Document classification"]);
+  const prefix = await get("q=brows");
+  assert.equal(prefix.pagination.total, 0);
+});
+
 test("category names match English and the requested locale without downloading the catalog", async t => {
   const { env, add, get } = setup(t);
   add({ repo: "owner/agent", cat: "agents" });

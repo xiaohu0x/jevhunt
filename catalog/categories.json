@@ -1,0 +1,62 @@
+[
+  {
+    "id": "official",
+    "name": "Official",
+    "blurb": "TypeSafe-owned SDKs and resources",
+    "description": "Repositories published by TypeSafe AI: SDKs, skills and reference resources that define how Jev is meant to be used."
+  },
+  {
+    "id": "sdks",
+    "name": "SDKs & Clients",
+    "blurb": "Call Jev from your language",
+    "description": "Client libraries and SDKs that wrap the Jev API for Python, TypeScript, Go, Rust and other stacks."
+  },
+  {
+    "id": "integrations",
+    "name": "Integrations",
+    "blurb": "Optional Jev inside existing tools",
+    "description": "Existing frameworks and tools with an optional, documented Jev path. The project works without Jev; the integration adds typed decisions."
+  },
+  {
+    "id": "agents",
+    "name": "Agent Tooling",
+    "blurb": "Routers, frameworks and agent utilities",
+    "description": "Agent frameworks, routers, memory layers and tooling that use Jev to choose tools or branches."
+  },
+  {
+    "id": "browser",
+    "name": "Browser & Computer Use",
+    "blurb": "Agents that operate real interfaces",
+    "description": "Browser and desktop agents that read a page or screen and act on it, with Jev selecting the operation."
+  },
+  {
+    "id": "apps",
+    "name": "Applications",
+    "blurb": "End-user products built on Jev",
+    "description": "Complete applications where Jev makes a product decision: routing, ranking, classification or approval."
+  },
+  {
+    "id": "games",
+    "name": "Games & Simulations",
+    "blurb": "Play, policy and generated worlds",
+    "description": "Games and simulations that use Jev as a player, policy or judge."
+  },
+  {
+    "id": "demos",
+    "name": "Demos & Playgrounds",
+    "blurb": "Small runnable examples",
+    "description": "Demos and playgrounds that show a Jev primitive with the smallest possible amount of code."
+  },
+  {
+    "id": "research",
+    "name": "Benchmarks & Research",
+    "blurb": "Evidence, evaluations and alternatives",
+    "description": "Benchmarks, replications, papers and independent alternatives that test or reproduce Jev behaviour."
+  },
+  {
+    "id": "lists",
+    "name": "Directories & Lists",
+    "blurb": "Curated collections and awesome lists",
+    "description": "Awesome lists and directories that index Jev projects. Useful for discovery, but they are not Jev applications themselves."
+  }
+]

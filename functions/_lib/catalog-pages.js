@@ -6,6 +6,39 @@ import { LOCALES } from "../../shared/locales.js";
 import { readCatalogQuery, readCatalogPage } from "../../shared/catalog-query.js";
 import { renderCatalogPagination } from "../../shared/catalog-pagination.js";
 import { readProjectContent, localizeCatalogProjects } from "../../shared/project-content-store.js";
+import { FEATURED_WHERE, FEATURED_ORDER_SQL } from "../../shared/catalog-featured.js";
+import { taskCardsHtml, featuredCardsHtml, newListHtml, categoryCardsHtml, CATEGORIES } from "../../shared/catalog-sections.js";
+import { taskById, taskClause } from "../../shared/catalog-tasks.js";
+import { categoriesIndexView, tasksIndexView, taskPageView } from "../../shared/catalog-section-pages.js";
+import { compareView, alternativesView, pickAlternatives } from "../../shared/catalog-compare.js";
+import { collectionsIndexView, collectionPageView } from "../../shared/catalog-collection-pages.js";
+import { COLLECTION_LIST, collectionById, collectionWhere } from "../../shared/catalog-collections.js";
+import { isFeatured } from "../../shared/catalog-featured.js";
+
+
+const CACHE_EPOCH = "edge-v1";
+
+/** Anonymous HTML is the same for every visitor: cache it at the edge per catalog revision. */
+async function cachedPage(context, key, build, ttl = 300) {
+  const cache = typeof caches !== "undefined" && caches.default ? caches.default : null;
+  if (!cache) return build();
+  const url = new URL(context.request?.url || "https://jevhunt.com/");
+  url.searchParams.set("__jh_cache", `${CACHE_EPOCH}:${context.env?.CF_PAGES_COMMIT_SHA || "dev"}:${key}`);
+  const request = new Request(url.toString(), { method: "GET", headers: { accept: "text/html" } });
+  const hit = await cache.match(request);
+  if (hit) {
+    const response = new Response(hit.body, hit);
+    response.headers.set("x-jh-cache", "hit");
+    return response;
+  }
+  const response = await build();
+  if (!response || response.status !== 200) return response;
+  const copy = new Response(response.body, response);
+  copy.headers.set("cache-control", `public, max-age=0, s-maxage=${ttl}`);
+  copy.headers.set("x-jh-cache", "miss");
+  if (context.waitUntil) context.waitUntil(cache.put(request, copy.clone()).catch(() => {}));
+  return copy;
+}
 
 async function localeData(context, locale) {
   const response = await context.env.ASSETS.fetch(new URL(`/assets/locales/${locale}.json`, context.request.url));
@@ -13,15 +46,29 @@ async function localeData(context, locale) {
   return { data, messages: data.messages || {}, info: LOCALES[locale] || LOCALES.en };
 }
 
-export async function landing(context, locale = "en") {
+async function landingUncached(context, locale = "en") {
   ensureScheduler(context);
   const response = await context.next();
   const meta = await catalogMeta(context.env.DB).catch(() => null);
   if (!meta || !response.ok) return response;
   const localized = await localeData(context, locale);
   const localeMessages = localized.messages;
-  const query = { ...readCatalogQuery(new URL(context.request.url).searchParams), mode: "page", full: false, pageSize: 20, locale };
+  const query = { ...readCatalogQuery(new URL(context.request?.url || "https://jevhunt.com/").searchParams), mode: "page", full: false, pageSize: 20, locale };
   const { apps, pagination } = await readCatalogPage(context.env.DB, query, localeMessages);
+  const [featuredRows, freshRows] = await Promise.all([
+    context.env.DB.prepare(`SELECT preview AS data FROM catalog_entries WHERE ${activeClause} AND ${FEATURED_WHERE} ORDER BY ${FEATURED_ORDER_SQL} LIMIT 6`).all(),
+    context.env.DB.prepare(`SELECT preview AS data FROM catalog_entries WHERE ${activeClause} AND json_extract(payload,'$.added') GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]' ORDER BY json_extract(payload,'$.added') DESC, stars DESC LIMIT 6`).all(),
+  ]);
+  let featured = featuredRows.results.map(row => JSON.parse(row.data));
+  let fresh = freshRows.results.map(row => JSON.parse(row.data));
+  if (locale !== "en" && (featured.length || fresh.length)) {
+    [featured, fresh] = await Promise.all([
+      localizeCatalogProjects(context.env.DB, featured, locale),
+      localizeCatalogProjects(context.env.DB, fresh, locale),
+    ]);
+  }
+  const sectionBase = locale === "en" ? "" : `/${locale}`;
+  const sectionLang = localized.info.lang || "en";
   query.page = pagination.page;
   const t = (key, fallback) => localeMessages[key] || fallback;
   const numbers = new Intl.NumberFormat(localized.info.lang);
@@ -71,11 +118,15 @@ export async function landing(context, locale = "en") {
     } })
     .on('script[type="application/ld+json"]:not([id])', { element: el => { if (siteSchema) el.setInnerContent(jsonLd(siteSchema), { html: true }); } })
     .on("#dirSearch", { element: el => el.setAttribute("value", query.q) })
-    .on("#dirFilters", { element: el => el.setInnerContent(categories.map(category => `<button class="fchip${query.category === category.id ? " is-active" : ""}" data-cat="${esc(category.id)}" aria-pressed="${query.category === category.id}">${esc(category.name)}</button>`).join(""), { html: true }) })
+    .on("#dirFilters", { element: el => el.setInnerContent(categories.map(category => `<button class="fchip${query.category === category.id ? " is-active" : ""}" data-cat="${esc(category.id)}" aria-pressed="${query.category === category.id}">${esc(category.name)}<span class="fchip__count">${numbers.format(category.id === "all" ? meta.projectCount : meta.categoryCounts[category.id] || 0)}</span></button>`).join(""), { html: true }) })
     .on("#languageFilter", { element: el => el.setInnerContent(languages.map(language => `<option value="${esc(language)}"${query.language === language ? " selected" : ""}>${esc(language === "all" ? t("apps.allLanguages", "All languages") : language === "unknown" ? t("apps.unknownLanguage", "Not reported") : language)}</option>`).join(""), { html: true }) })
     .on("#kindFilter option", selectedOption(query.kind))
     .on("#activityFilter option", selectedOption(query.activity))
     .on("#dirSort option", selectedOption(query.sort))
+    .on("#taskGrid", { element: el => el.setInnerContent(taskCardsHtml(), { html: true }) })
+    .on("#featuredGrid", { element: el => el.setInnerContent(featuredCardsHtml(featured, localeMessages, { basePath: sectionBase, locale: sectionLang }), { html: true }) })
+    .on("#newGrid", { element: el => el.setInnerContent(newListHtml(fresh, localeMessages, { basePath: sectionBase, locale, lang: sectionLang }), { html: true }) })
+    .on("#categoryGrid", { element: el => el.setInnerContent(categoryCardsHtml(meta.categoryCounts, localeMessages, { localePrefix: sectionBase, lang: sectionLang }), { html: true }) })
     .on("#appGrid", { element: el => el.setInnerContent(apps.map(p => renderCard(p, localeMessages, { basePath: locale === "en" ? "" : `/${locale}` })).join(""), { html: true }) })
     .on("#dirCount", { element: el => el.setInnerContent(count) })
     .on("#dirEmpty", { element: el => { if (pagination.total) el.setAttribute("hidden", ""); else el.removeAttribute("hidden"); } })
@@ -102,7 +153,7 @@ export async function landing(context, locale = "en") {
   return live;
 }
 
-export async function projectPage(context, locale = "en") {
+async function projectPageUncached(context, locale = "en") {
   const owner = String(context.params.owner), name = String(context.params.repo);
   const key = `${owner}/${name}`.toLowerCase();
   const prefix = locale === "en" ? "" : `/${locale}`;
@@ -135,7 +186,7 @@ export async function projectPage(context, locale = "en") {
   return htmlResponse(renderProject(p, meta, localizedRecommendations.slice(0, similar.length), localizedRecommendations.slice(similar.length), localized.messages, { localeKey: locale, localeInfo: localized.info, localePrefix: prefix, duplicateName: !!sameName, content }));
 }
 
-export async function listingPage(context, category) {
+async function listingPageUncached(context, category) {
   if (category && !CATEGORY_IDS.includes(category)) return missing(context);
   const tail = context.params.page;
   const raw = Array.isArray(tail) ? tail.join("/") : tail || "1";
@@ -153,4 +204,159 @@ export async function listingPage(context, category) {
 export async function missing(context) {
   const response = await context.env.ASSETS.fetch(new URL("/404.html", context.request.url));
   return new Response(response.body, { status: 404, headers: response.headers });
+}
+
+/** /categories/ — the missing index that made 400 category pages near-orphans. */
+async function categoriesIndexUncached(context) {
+  const meta = await catalogMeta(context.env.DB).catch(() => null);
+  if (!meta) return context.next();
+  const ids = CATEGORIES.map(category => category.id).filter(id => Object.hasOwn(meta.categoryCounts, id));
+  const rows = await Promise.all(ids.map(id => context.env.DB
+    .prepare(`SELECT preview AS data FROM catalog_entries WHERE ${activeClause} AND category=? ORDER BY stars DESC, name COLLATE NOCASE LIMIT 3`)
+    .bind(id).all()));
+  const samples = Object.fromEntries(ids.map((id, index) => [id, rows[index].results.map(row => JSON.parse(row.data))]));
+  return htmlResponse(page(categoriesIndexView({ projectCount: meta.projectCount, categoryCounts: meta.categoryCounts, samples })));
+}
+
+/** /tasks/ — discovery by intent ("what do you want to build?"). */
+async function tasksIndexUncached(context) {
+  const meta = await catalogMeta(context.env.DB).catch(() => null);
+  if (!meta) return context.next();
+  return htmlResponse(page(tasksIndexView({ projectCount: meta.projectCount })));
+}
+
+/** /tasks/<id>/ and /tasks/<id>/<page>/ — paginated task listings rendered from D1. */
+async function taskPageUncached(context, taskId) {
+  const task = taskById(taskId);
+  if (!task) return missing(context);
+  const tail = context.params.page;
+  const raw = Array.isArray(tail) ? tail.join("/") : tail || "1";
+  if (raw && !/^\d+$/.test(raw)) return missing(context);
+  const number = Number(raw || 1);
+  const meta = await catalogMeta(context.env.DB).catch(() => null);
+  if (!meta) return context.next();
+  const { sql, values } = taskClause(task);
+  const where = `${activeClause} AND ${sql}`;
+  const [countRow, rows] = await Promise.all([
+    context.env.DB.prepare(`SELECT COUNT(*) AS n FROM catalog_entries WHERE ${where}`).bind(...values).first(),
+    context.env.DB.prepare(`SELECT preview AS data FROM catalog_entries WHERE ${where} ORDER BY stars DESC, name COLLATE NOCASE LIMIT 24 OFFSET ?`).bind(...values, (number - 1) * 24).all(),
+  ]);
+  const total = Number(countRow?.n || 0);
+  const pages = Math.max(1, Math.ceil(total / 24));
+  if (number < 1 || number > pages) return missing(context);
+  const projects = rows.results.map(row => JSON.parse(row.data));
+  return htmlResponse(page(taskPageView({ task, projects, total, number, pages })));
+}
+
+
+/** /compare/?ids=owner/repo,owner/repo2 — noindex comparison table. */
+async function comparePageUncached(context) {
+  const url = new URL(context.request?.url || "https://jevhunt.com/");
+  const ids = String(url.searchParams.get("ids") || "").split(",").slice(0, 3).map(value => value.trim().toLowerCase()).filter(Boolean);
+  let projects = [];
+  if (ids.length) {
+    const placeholders = ids.map(() => "?").join(",");
+    const { results } = await context.env.DB.prepare(`SELECT payload AS data FROM catalog_entries WHERE repo IN (${placeholders}) AND ${activeClause}`).bind(...ids).all();
+    const byRepo = new Map(results.map(row => { const project = JSON.parse(row.data); return [project.repo.toLowerCase(), project]; }));
+    projects = ids.map(id => byRepo.get(id)).filter(Boolean);
+  }
+  return htmlResponse(page(compareView({ projects })));
+}
+
+/** /alternatives/<owner>/<repo>/ — indexable for featured or reviewed projects only. */
+async function alternativesPageUncached(context) {
+  const key = `${context.params.owner}/${context.params.repo}`.toLowerCase();
+  if (!/^[a-z0-9-]+\/[a-z0-9._-]+$/.test(key)) return missing(context);
+  const row = await context.env.DB.prepare(`SELECT payload FROM catalog_entries WHERE repo=? AND ${activeClause}`).bind(key).first();
+  if (!row) return missing(context);
+  const project = JSON.parse(row.payload);
+  const [{ results }, reviewed] = await Promise.all([
+    context.env.DB.prepare(`SELECT payload AS data FROM catalog_entries WHERE ${activeClause} AND category=? AND repo!=? ORDER BY stars DESC, name COLLATE NOCASE LIMIT 40`).bind(project.cat, key).all(),
+    context.env.DB.prepare("SELECT 1 AS present FROM project_content WHERE repo=? LIMIT 1").bind(key).first(),
+  ]);
+  const alternatives = pickAlternatives(project, results.map(item => JSON.parse(item.data)), 10);
+  const view = alternativesView({ project, alternatives, categoryName: CATEGORY_NAMES[CATEGORY_IDS.indexOf(project.cat)] || project.cat });
+  if (!reviewed && !isFeatured(project)) view.noindex = true;
+  return htmlResponse(page(view));
+}
+
+/* Public entry points. The anonymous HTML is identical for every visitor, so
+   check the edge cache before touching D1 and only render on a miss. */
+export function landing(context, locale = "en") {
+  ensureScheduler(context);
+  return cachedPage(context, `home:${locale}:${new URL(context.request?.url || "https://jevhunt.com/").search}`, () => landingUncached(context, locale), 120);
+}
+
+export function projectPage(context, locale = "en") {
+  const key = `${context.params.owner}/${context.params.repo}`.toLowerCase();
+  return cachedPage(context, `project:${locale}:${key}`, () => projectPageUncached(context, locale), 300);
+}
+
+export function listingPage(context, category) {
+  return cachedPage(context, `listing:${new URL(context.request?.url || "https://jevhunt.com/").pathname}`, () => listingPageUncached(context, category), 120);
+}
+
+export function categoriesIndex(context) {
+  return cachedPage(context, "categories", () => categoriesIndexUncached(context), 300);
+}
+
+export function tasksIndex(context) {
+  return cachedPage(context, "tasks", () => tasksIndexUncached(context), 300);
+}
+
+export function taskPage(context, taskId) {
+  return cachedPage(context, `task:${taskId}:${new URL(context.request?.url || "https://jevhunt.com/").pathname}`, () => taskPageUncached(context, taskId), 300);
+}
+
+export function comparePage(context) {
+  const ids = new URL(context.request?.url || "https://jevhunt.com/").searchParams.get("ids") || "";
+  return cachedPage(context, `compare:${ids}`, () => comparePageUncached(context), 60);
+}
+
+export function alternativesPage(context) {
+  const key = `${context.params.owner}/${context.params.repo}`.toLowerCase();
+  return cachedPage(context, `alternatives:${key}`, () => alternativesPageUncached(context), 300);
+}
+
+
+async function collectionsIndexUncached(context) {
+  const meta = await catalogMeta(context.env.DB).catch(() => null);
+  if (!meta) return context.next();
+  const counts = Object.fromEntries(await Promise.all(COLLECTION_LIST.map(async collection => {
+    const where = collectionWhere(collection);
+    const row = await context.env.DB.prepare(`SELECT COUNT(*) AS n FROM catalog_entries WHERE ${activeClause} AND ${where.sql}`).bind(...where.values).first();
+    return [collection.id, Number(row?.n || 0)];
+  })));
+  return htmlResponse(page(collectionsIndexView({ projectCount: meta.projectCount, counts })));
+}
+
+async function collectionPageUncached(context, collectionId) {
+  const collection = collectionById(collectionId);
+  if (!collection) return missing(context);
+  const tail = context.params.page;
+  const raw = Array.isArray(tail) ? tail.join("/") : tail || "1";
+  if (raw && !/^\d+$/.test(raw)) return missing(context);
+  const number = Number(raw || 1);
+  const meta = await catalogMeta(context.env.DB).catch(() => null);
+  if (!meta) return context.next();
+  const where = collectionWhere(collection);
+  const clause = `${activeClause} AND ${where.sql}`;
+  const [countRow, rows] = await Promise.all([
+    context.env.DB.prepare(`SELECT COUNT(*) AS n FROM catalog_entries WHERE ${clause}`).bind(...where.values).first(),
+    context.env.DB.prepare(`SELECT preview AS data FROM catalog_entries WHERE ${clause} ORDER BY stars DESC, name COLLATE NOCASE LIMIT 24 OFFSET ?`).bind(...where.values, (number - 1) * 24).all(),
+  ]);
+  const total = Number(countRow?.n || 0);
+  const pages = Math.max(1, Math.ceil(total / 24));
+  if (number < 1 || number > pages) return missing(context);
+  const projects = rows.results.map(row => JSON.parse(row.data));
+  return htmlResponse(page(collectionPageView({ collection, projects, total, number, pages })));
+}
+
+export function collectionsIndex(context) {
+  return cachedPage(context, "collections", () => collectionsIndexUncached(context), 300);
+}
+
+export function collectionPage(context, collectionId) {
+  const pathname = new URL(context.request?.url || "https://jevhunt.com/").pathname;
+  return cachedPage(context, `collection:${collectionId}:${pathname}`, () => collectionPageUncached(context, collectionId), 300);
 }

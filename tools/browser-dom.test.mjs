@@ -169,7 +169,9 @@ test("new locales initialize and search with translated labels and all 15 langua
     assert.equal(document.querySelector("#auth a").textContent.includes(messages["auth.continue"]), true, locale);
     assert.equal(document.getElementById("subDesc").getAttribute("aria-label"), messages["sub.desc"], locale);
     assert.match(document.getElementById("catalogUpdated").getAttribute("aria-label"), /UTC/);
-    assert.ok(document.querySelector("#appGrid .card__site").textContent.includes(messages["apps.evidence"]), locale);
+    const evidenceLabels = ["official", "documented", "code-reference", "reviewed", "legacy-unreviewed"].map(level => messages["evidence." + level]).filter(Boolean);
+    const evidenceLink = document.querySelector("#appGrid .card__site");
+    assert.ok(evidenceLabels.some(label => evidenceLink.textContent.includes(label)), locale);
     const input = document.getElementById("dirSearch");
     input.value = "no-project-can-match-this-unique-query";
     input.dispatchEvent(new window.Event("input", { bubbles: true }));

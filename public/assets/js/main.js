@@ -1,5 +1,5 @@
 import { readCatalogState, catalogUrl, matchesProject } from "./catalog-state.js?v=3a1701cd8f";
-import { renderProjectCard } from "./project-card.js?v=3e5057a044";
+import { renderProjectCard } from "./project-card.js?v=775f180c58";
 import { localizeStaticProjects, staticCatalogIndexUrl } from "./catalog-locales.js?v=2b9c2f1347";
 /* ==========================================================================
    JevHunt — interactions
@@ -216,9 +216,11 @@ import { localizeStaticProjects, staticCatalogIndexUrl } from "./catalog-locales
         .filter(c => counts.has(c.id))
         .map(c => ({ id: c.id, label: catLabel(c.id) })),
     ];
-    host.innerHTML = cats.map(c =>
-      `<button class="fchip${state.filter === c.id ? " is-active" : ""}" data-cat="${escAttr(c.id)}" aria-pressed="${state.filter === c.id}">${escAttr(c.label)}</button>`
-    ).join("");
+    const total = window.JH.catalogMeta?.projectCount || window.JH.apps.length;
+    host.innerHTML = cats.map(c => {
+      const count = c.id === "all" ? total : (counts.get(c.id) || 0);
+      return `<button class="fchip${state.filter === c.id ? " is-active" : ""}" data-cat="${escAttr(c.id)}" aria-pressed="${state.filter === c.id}">${escAttr(c.label)}<span class="fchip__count">${number.format(count)}</span></button>`;
+    }).join("");
     $$(".fchip", host).forEach(b => b.addEventListener("click", () => {
       state.filter = b.dataset.cat;
       resetCatalogWindow();
@@ -299,6 +301,26 @@ import { localizeStaticProjects, staticCatalogIndexUrl } from "./catalog-locales
     }
     if (notice) notice.hidden = !failed;
   }
+  function applyMobileDensity(grid) {
+    const mobile = window.matchMedia?.("(max-width: 760px)").matches;
+    const existing = document.getElementById("mobileShowAll");
+    if (!mobile) {
+      grid.classList.remove("is-mobile-collapsed");
+      existing?.remove();
+      return;
+    }
+    if (grid.querySelectorAll(".card").length <= 12) return;
+    grid.classList.add("is-mobile-collapsed");
+    if (existing) return;
+    const button = document.createElement("button");
+    button.id = "mobileShowAll";
+    button.type = "button";
+    button.className = "btn btn--ghost btn--sm mobile-show-all";
+    button.textContent = t("apps.showAllOnPage", {}, "Show all on this page");
+    button.addEventListener("click", () => { grid.classList.remove("is-mobile-collapsed"); button.remove(); });
+    grid.after(button);
+  }
+
   async function loadLiveCatalog() {
     const signature = catalogSignature();
     if (livePendingSignature === signature) return;
@@ -451,6 +473,7 @@ import { localizeStaticProjects, staticCatalogIndexUrl } from "./catalog-locales
       basePath: localeKey === "en" ? "" : `/${localeKey}`,
       locale: locale?.lang || "en",
     })).join("");
+    applyMobileDensity(grid);
 
     saveFilters();
     const count = $("#dirCount");

@@ -89,8 +89,12 @@ test("SSR restores localized search controls, category selection, and empty-resu
     assert.equal(document.querySelector('#languageFilter option[value="all"]').textContent, messages["apps.allLanguages"]);
     assert.deepEqual([...document.querySelectorAll("#dirFilters button")].map(button => button.dataset.cat), ["all", "apps"]);
     assert.equal(document.querySelector('#dirFilters [aria-pressed="true"]').dataset.cat, "apps");
-    assert.equal(document.querySelector('#dirFilters [data-cat="apps"]').textContent, messages["category.apps.name"]);
-    assert.equal(document.querySelector('#dirFilters [data-cat="all"]').textContent, messages["apps.all"]);
+    const appsChip = document.querySelector('#dirFilters [data-cat="apps"]');
+    assert.ok(appsChip.textContent.startsWith(messages["category.apps.name"]));
+    assert.match(appsChip.querySelector(".fchip__count").textContent, /^[\d,]+$/);
+    const allChip = document.querySelector('#dirFilters [data-cat="all"]');
+    assert.ok(allChip.textContent.startsWith(messages["apps.all"]));
+    assert.match(allChip.querySelector(".fchip__count").textContent, /^[\d,]+$/);
     assert.equal(document.getElementById("dirEmpty").hidden, true);
     assert.equal(document.querySelector('meta[name="robots"]').content, "noindex, follow");
     assert.equal(document.querySelector('link[rel="canonical"]').href, "https://jevhunt.com" + path);

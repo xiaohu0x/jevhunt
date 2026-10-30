@@ -6,6 +6,8 @@ import { runInNewContext } from "node:vm";
 import { renderCard } from "../shared/catalog-view.js";
 import { loadProjectContents, localizedProjectPreview } from "./lib/project-content.mjs";
 import { buildSummaryOverlay, summaryOverlayScript } from "./lib/static-catalog.mjs";
+import { taskCardsHtml, featuredCardsHtml, newListHtml, categoryCardsHtml } from "../shared/catalog-sections.js";
+import { isFeatured, compareFeatured } from "../shared/catalog-featured.js";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const publicDir = resolve(root, "public");
@@ -171,6 +173,31 @@ function selectCurrentLocale(source, localeKey) {
     (_match, opening, closing) => `${opening}\n${options}\n${closing}`, "language selector");
 }
 
+const homeCatalog = catalogProjects.map(project => localizedProjectPreview(project, projectContents, "en"));
+const homeCounts = Object.fromEntries([...new Set(homeCatalog.map(project => project.cat))].map(category => [category, homeCatalog.filter(project => project.cat === category).length]));
+const homeFeatured = homeCatalog.filter(isFeatured).sort(compareFeatured).slice(0, 6);
+const homeFresh = homeCatalog
+  .filter(project => /^\d{4}-\d{2}-\d{2}$/.test(project.added || ""))
+  .sort((a, b) => (b.added || "").localeCompare(a.added || "") || b.stars - a.stars)
+  .slice(0, 6);
+
+function localizeHomeSections(source, localeKey, locale) {
+  const basePath = localeKey === defaultLocale ? "" : "/" + localeKey;
+  const localize = project => localizedProjectPreview(project, projectContents, localeKey);
+  const sections = {
+    task: taskCardsHtml(),
+    featured: featuredCardsHtml(homeFeatured.map(localize), locale.messages, { basePath, locale: locale.lang }),
+    new: newListHtml(homeFresh.map(localize), locale.messages, { basePath, locale: localeKey, lang: locale.lang }),
+    category: categoryCardsHtml(homeCounts, locale.messages, { localePrefix: basePath, lang: locale.lang }),
+  };
+  let html = source;
+  for (const [name, content] of Object.entries(sections)) {
+    const pattern = new RegExp("(<!-- " + name + "-prerender:start -->)[\\s\\S]*?(<!-- " + name + "-prerender:end -->)");
+    html = replaceRequired(html, pattern, (_match, start, end) => `${start}\n${content}\n  ${end}`, name + " home section");
+  }
+  return html;
+}
+
 function renderLocale(source, localeKey, locale) {
   const canonical = `${origin}${locale.path}`;
   let html = source;
@@ -198,6 +225,7 @@ function renderLocale(source, localeKey, locale) {
   html = localizePrerenderedCatalog(html, locale.messages);
   html = html.replace(/(<!-- catalog-prerender:start -->)[\s\S]*?(<!-- catalog-prerender:end -->)/,
     (_match, start, end) => `${start}\n${sandbox.window.JH.apps.map(project => renderCard(localizedProjectPreview(project, projectContents, localeKey), locale.messages, { basePath: localeKey === defaultLocale ? "" : "/" + localeKey })).join("\n")}\n${end}`);
+  html = localizeHomeSections(html, localeKey, locale);
   html = updateStructuredData(html, locale, canonical, localeKey);
   html = selectCurrentLocale(html, localeKey);
   html = html.replace(/(<time\b[^>]*\bid="catalogUpdated"[^>]*>)[^<]*(<\/time>)/,

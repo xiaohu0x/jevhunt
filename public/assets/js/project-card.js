@@ -13,7 +13,13 @@ export function renderProjectCard(project, { messages = {}, basePath = "", local
   const level = Object.hasOwn(evidence, project.evidenceLevel) ? project.evidenceLevel : "legacy-unreviewed";
   const name = project.name || repo.split("/").at(-1);
   const stars = new Intl.NumberFormat(locale).format(Number(project.stars) || 0);
+  const verified = ["official", "documented"].includes(project.evidenceLevel)
+    && String(project.desc || "").trim().length >= 60
+    && project.archived !== true
+    && project.freshness !== "stale";
+  const evidenceLabel = text("evidence." + level, evidence[level]);
   const tags = [
+    verified ? `<span class="badge badge--verified" title="${escape(text("apps.verifiedHint", "Documented evidence, a description and a recent catalog check"))}">${escape(text("home.verified", "Verified"))}</span>` : "",
     `<span class="badge badge--catalog" data-kind="${relationship}">${escape(text("relationship." + relationship, relations[relationship]))}</span>`,
     project.language ? `<span class="tag tag--language">${escape(project.language)}</span>` : "",
     validDate(project.pushed) ? `<time class="tag tag--updated" datetime="${project.pushed}">${escape(text("apps.updated", "updated {date}").replace("{date}", project.pushed))}</time>` : `<span class="tag tag--updated">${escape(text("apps.unknownUpdate", "update date unknown"))}</span>`,
@@ -23,5 +29,5 @@ export function renderProjectCard(project, { messages = {}, basePath = "", local
   ].filter(Boolean).join("");
   return `<article class="card"><div class="card__top"><span class="card__avatar" data-kind="${relationship}" aria-hidden="true">${escape(Array.from(name)[0]?.toLocaleUpperCase(locale) || "J")}</span><div class="card__identity"><h2 class="card__heading"><a class="card__name" href="${path}">${escape(name)}</a></h2><div class="card__author">${escape(repo)}</div></div><span class="card__stat" aria-label="${escape(text("apps.starsLabel", "{count} GitHub stars").replace("{count}", stars))}"><span aria-hidden="true">★</span> ${stars}</span></div>
 <a class="card__descLink" href="${path}"><p class="card__desc">${escape(project.desc || text("apps.noDescription", "No project description available."))}</p></a><div class="card__tags">${tags}</div>
-<div class="card__foot"><span class="card__links"><a class="card__details" href="${path}">${escape(text("apps.details", "Details"))} <span aria-hidden="true">→</span></a><a class="card__go" href="${github}" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>${project.evidence ? `<a class="card__site" href="${escape(project.evidence)}" title="${escape(text("evidence." + level, evidence[level]))}" target="_blank" rel="ugc nofollow noopener noreferrer">${escape(text("apps.evidence", "Evidence"))} <span aria-hidden="true">↗</span></a>` : ""}</span></div></article>`;
+<div class="card__foot"><span class="card__links"><a class="card__details" href="${path}">${escape(text("apps.details", "Details"))} <span aria-hidden="true">→</span></a><a class="card__go" href="${github}" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>${project.evidence ? `<a class="card__site" href="${escape(project.evidence)}" title="${escape(evidenceLabel + " evidence")}" target="_blank" rel="ugc nofollow noopener noreferrer">${escape(evidenceLabel)} <span aria-hidden="true">↗</span></a>` : ""}</span></div></article>`;
 }

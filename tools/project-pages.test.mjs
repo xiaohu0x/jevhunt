@@ -6,6 +6,7 @@ import { onRequestGet as projectRoute } from "../functions/projects/[owner]/[rep
 import { onRequestGet as localizedProjectRoute } from "../functions/[locale]/projects/[owner]/[repo]/index.js";
 import { onRequestGet as browseRoute } from "../functions/browse/[[page]].js";
 import { onRequestGet as categoryRoute } from "../functions/categories/[category]/[[page]].js";
+import { onRequestGet as alternativesRoute } from "../functions/alternatives/[owner]/[repo]/index.js";
 import { LOCALES } from "../shared/locales.js";
 import { publicPreview } from "../shared/catalog-data.js";
 import { database } from "./helpers/d1.mjs";
@@ -44,6 +45,8 @@ function fixture(t) {
     if (match) return localizedProjectRoute({ ...context, params: { locale: match[1], owner: match[2], repo: match[3] } });
     match = url.pathname.match(/^\/browse\/(.*?)\/?$/);
     if (match) return browseRoute({ ...context, params: { page: match[1] } });
+    match = url.pathname.match(/^\/alternatives\/([^/]+)\/([^/]+)\/$/);
+    if (match) return alternativesRoute({ ...context, params: { owner: match[1], repo: match[2] } });
     match = url.pathname.match(/^\/categories\/([^/]+)\/(.*?)\/?$/);
     if (match) return categoryRoute({ ...context, params: { category: match[1], page: match[2] } });
     return assets.fetch(url);
