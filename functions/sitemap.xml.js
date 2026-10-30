@@ -2,6 +2,9 @@ import { activeClause, CATEGORY_IDS } from "../shared/catalog-data.js";
 import { ORIGIN, projectPath, esc } from "../shared/render.js";
 import { LOCALES } from "../shared/locales.js";
 import { EDITORIAL_ROUTES } from "../shared/editorial-routes.js";
+import { TASK_LIST } from "../shared/catalog-tasks.js";
+import { COLLECTION_LIST } from "../shared/catalog-collections.js";
+import { alternativesPath } from "../shared/render.js";
 export async function onRequestGet({ env }) {
   const rows = await env.DB.prepare(`SELECT catalog_entries.repo,catalog_entries.category,checked_at,c.reviewed_at AS content_reviewed_at
     FROM catalog_entries LEFT JOIN project_content c ON c.repo=catalog_entries.repo AND c.github_id=catalog_entries.github_id
@@ -9,16 +12,21 @@ export async function onRequestGet({ env }) {
   const localePaths = Object.values(LOCALES).map(locale => locale.path);
   const alternates = Object.values(LOCALES).map(locale => `<xhtml:link rel="alternate" hreflang="${locale.hreflang}" href="${ORIGIN}${locale.path}"/>`).join("") +
     `<xhtml:link rel="alternate" hreflang="x-default" href="${ORIGIN}/"/>`;
-  const staticPaths = [...localePaths, "/privacy/", "/terms/", "/security/", "/methodology/", "/status/"];
+  const staticPaths = [...localePaths, "/privacy/", "/terms/", "/security/", "/methodology/", "/status/", "/categories/", "/tasks/", "/collections/", "/submit/"];
   const urls = staticPaths.map(path => `<url><loc>${ORIGIN}${path}</loc>${localePaths.includes(path) ? alternates : ""}</url>`);
   for (const { path, modified } of EDITORIAL_ROUTES) urls.push(`<url><loc>${ORIGIN}${esc(path)}</loc><lastmod>${esc(modified)}</lastmod></url>`);
+  for (const task of TASK_LIST) urls.push(`<url><loc>${ORIGIN}/tasks/${esc(task.id)}/</loc></url>`);
+  for (const collection of COLLECTION_LIST) urls.push(`<url><loc>${ORIGIN}/collections/${esc(collection.id)}/</loc></url>`);
   const counts = Object.fromEntries(CATEGORY_IDS.map(id => [id, 0]));
   for (const row of rows.results) {
     counts[row.category] = (counts[row.category] || 0) + 1;
     const modified = row.content_reviewed_at || new Date(row.checked_at * 1000).toISOString().slice(0, 10);
     urls.push(`<url><loc>${ORIGIN}${esc(projectPath(row.repo))}</loc><lastmod>${esc(modified)}</lastmod></url>`);
-    if (row.content_reviewed_at) for (const [locale, info] of Object.entries(LOCALES)) {
-      if (locale !== "en") urls.push(`<url><loc>${ORIGIN}${esc(projectPath(row.repo, info.path.slice(0, -1)))}</loc><lastmod>${esc(modified)}</lastmod></url>`);
+    if (row.content_reviewed_at) {
+      urls.push(`<url><loc>${ORIGIN}${esc(alternativesPath(row.repo))}</loc><lastmod>${esc(modified)}</lastmod></url>`);
+      for (const [locale, info] of Object.entries(LOCALES)) {
+        if (locale !== "en") urls.push(`<url><loc>${ORIGIN}${esc(projectPath(row.repo, info.path.slice(0, -1)))}</loc><lastmod>${esc(modified)}</lastmod></url>`);
+      }
     }
   }
   for (const [base, count] of [["/browse/", rows.results.length], ...Object.entries(counts).map(([id, count]) => [`/categories/${id}/`, count])]) {

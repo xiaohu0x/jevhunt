@@ -16,6 +16,7 @@ import { COLLECTION_LIST, collectionMatches, collectionById } from "../shared/ca
 import { onRequestGet as collectionsRoute } from "../functions/collections/index.js";
 import { onRequestGet as collectionRoute } from "../functions/collections/[collection]/[[page]].js";
 import { onRequestGet as rssRoute } from "../functions/rss.xml.js";
+import { onRequestGet as sitemapRoute } from "../functions/sitemap.xml.js";
 
 const origin = "https://jevhunt.com";
 const evidence = "https://github.com/owner/example/blob/" + "a".repeat(40) + "/README.md";
@@ -246,4 +247,15 @@ test("the live RSS endpoint returns an RSS feed", async t => {
   const text = await response.text();
   assert.match(text, /<rss version="2.0">/);
   assert.match(text, /Recent Project/);
+});
+
+
+test("the live sitemap lists the task, collection and submission entry points", async t => {
+  const { DB } = setup(t);
+  const response = await sitemapRoute({ env: { DB } });
+  const xml = await response.text();
+  for (const path of ["/categories/", "/tasks/", "/tasks/browser-automation/", "/collections/", "/collections/browser-agents/", "/submit/"]) {
+    assert.ok(xml.includes(`<loc>https://jevhunt.com${path}</loc>`), path);
+  }
+  assert.ok(!xml.includes("/compare/"), "comparison pages stay out of the sitemap");
 });
