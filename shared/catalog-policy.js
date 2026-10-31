@@ -60,14 +60,18 @@ export async function inspectRepository(project, github, { codePaths = [], inspe
   if (inspectCode || !evidence) {
     let paths = [...codePaths];
     if (!paths.length) {
-      const tree = await github.api(`/repos/${repo}/git/trees/${commit}?recursive=1`, { immutable: true });
-      paths = (tree?.tree || []).filter(file => file.type === "blob" && file.size < 150000 &&
+      const listed = await github.filePaths?.(repo, commit);
+      const files = listed ? listed.map(path => ({ type: "blob", size: 0, path }))
+        : (await github.api(`/repos/${repo}/git/trees/${commit}?recursive=1`, { immutable: true }))?.tree || [];
+      paths = files.filter(file => file.type === "blob" && file.size < 150000 &&
         /(?:jev|typesafe|system.?one)/i.test(file.path) &&
         /\.(?:py|[cm]?js|[jt]sx?|go|rs|zig|java|kt|rb|php|swift|cs|cpp|h|sh)$/.test(file.path) &&
         !/(?:node_modules|vendor|fixtures|snapshots|tests?|__tests__|\.lock|dist)\//.test(file.path)).slice(0, 6).map(file => file.path);
     }
     for (const path of paths) {
-      const source = await github.raw(repo, commit, path);
+      let source;
+      try { source = await github.raw(repo, commit, path); }
+      catch (error) { if (error.message === "Response too large") continue; throw error; }
       if (source && codeEvidence(source)) {
         const line = source.split("\n").findIndex(text => IDENTIFIER.test(text)) + 1;
         const match = analyzeEvidence(source, { category: project.cat, description: project.desc, name: project.name });

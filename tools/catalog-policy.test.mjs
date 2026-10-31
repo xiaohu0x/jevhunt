@@ -38,6 +38,32 @@ test('source fallback pins evidence to the repository commit and ignores fixture
   assert.ok(calls.every(call => call.sha === commit));
   assert.ok(!calls.some(call => call.path.includes('fixtures')));
 });
+test('a public file list replaces the API tree, and an oversized source file is skipped rather than fatal', async () => {
+  const commit = 'a'.repeat(40), reads = [];
+  const result = await inspectRepository({ repo: 'sample/app', commit, cat: 'apps' }, {
+    async raw(repo, sha, path) {
+      reads.push(path);
+      if (path === 'README.md') return 'An extensible application.';
+      if (path === 'src/jev-huge.ts') throw new Error('Response too large');
+      if (path === 'src/jev.ts') return 'const model = "jev-latest"; client.systemOne({ model });';
+      return null;
+    },
+    async filePaths() { return ['tests/fixtures/jev.ts', 'src/jev-huge.ts', 'src/jev.ts', 'jev.md']; },
+    async api() { throw new Error('the metered API must not be used'); },
+  });
+  assert.equal(result.level, 'code-reference');
+  assert.equal(result.path, 'src/jev.ts');
+  assert.ok(!reads.some(path => path.includes('fixtures') || path === 'jev.md'));
+});
+test('an unavailable file list falls back to the API tree', async () => {
+  const commit = 'a'.repeat(40);
+  const github = {
+    async raw(repo, sha, path) { return path === 'README.md' ? 'An extensible application.' : path === 'src/jev.ts' ? 'const model = "jev-latest"; client.systemOne({ model });' : null; },
+    async filePaths() { return null; },
+    async api() { return { tree: [{ type: 'blob', path: 'src/jev-too-big.ts', size: 200000 }, { type: 'blob', path: 'src/jev.ts', size: 200 }] }; },
+  };
+  assert.equal((await inspectRepository({ repo: 'sample/app', commit, cat: 'apps' }, github)).path, 'src/jev.ts');
+});
 test('temporary source errors are surfaced rather than treated as an unrelated repository', async () => {
   await assert.rejects(inspectRepository({ repo: 'sample/app', commit: 'a'.repeat(40) }, { async raw() { throw new Error('HTTP 503'); } }), /503/);
 });

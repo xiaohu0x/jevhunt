@@ -58,18 +58,28 @@ export function parseCommitFeed(atom, expectedCommit = null) {
 }
 
 export class PublicGitHub {
-  constructor(fetcher = (url, options) => fetch(url, options), apiRetryAt = 0) { this.fetcher = fetcher; this.requests = 0; this.apiRetryAt = apiRetryAt; }
-  async request(url, { raw = false, html = false, limit = 1_500_000 } = {}) {
-    if (++this.requests > 35) throw new Error("Batch request budget reached");
+  constructor(fetcher = (url, options) => fetch(url, options), retryAt = {}) {
+    this.fetcher = fetcher; this.requests = 0;
+    // GitHub meters search and the rest of its API separately, so one running
+    // out must not stop the other.
+    this.retryAt = { core: retryAt.core || 0, search: retryAt.search || 0 };
+  }
+  spend() {
+    if (++this.requests > 35) throw Object.assign(new Error("Batch request budget reached"), { budget: true });
+  }
+  async request(url, { raw = false, html = false, accept, limit = 1_500_000 } = {}) {
+    this.spend();
     const response = await this.fetcher(url, {
-      headers: { accept: html ? "text/html" : raw ? "text/plain" : "application/vnd.github+json", "user-agent": "JevHunt public catalog (+https://jevhunt.com/methodology/)" },
+      headers: { accept: accept || (html ? "text/html" : raw ? "text/plain" : "application/vnd.github+json"), "user-agent": "JevHunt public catalog (+https://jevhunt.com/methodology/)" },
       signal: AbortSignal.timeout(12000),
     });
     if (response.status === 404) { await response.body?.cancel(); return null; }
     if (!response.ok) {
-      const retryAt = Number(response.headers.get("x-ratelimit-reset")) || (Number(response.headers.get("retry-after")) ? Math.floor(Date.now() / 1000) + Number(response.headers.get("retry-after")) : 0);
+      const retryAfter = Number(response.headers.get("retry-after"));
+      const retryAt = retryAfter ? Math.floor(Date.now() / 1000) + retryAfter : Number(response.headers.get("x-ratelimit-reset")) || 0;
+      const quotaLeft = !retryAfter && Number(response.headers.get("x-ratelimit-remaining")) > 0;
       await response.body?.cancel();
-      throw Object.assign(new Error(`Source returned HTTP ${response.status}: ${new URL(url).pathname}`), { retryAt, status: response.status });
+      throw Object.assign(new Error(`Source returned HTTP ${response.status}: ${new URL(url).pathname}`), { retryAt, quotaLeft, status: response.status });
     }
     const text = await limitedText(response, Math.min(MAX_PUBLIC_RESPONSE_BYTES, Math.max(1, Number(limit) || 1_500_000)));
     return raw || html ? text : JSON.parse(text);
@@ -78,7 +88,7 @@ export class PublicGitHub {
     return this.request(`https://raw.githubusercontent.com/${repo}/${commit}/${path.split("/").map(encodeURIComponent).join("/")}`, { raw: true, limit: 500_000 });
   }
   async exists(repo, commit, path) {
-    if (++this.requests > 35) throw new Error("Batch request budget reached");
+    this.spend();
     const response = await this.fetcher(`https://raw.githubusercontent.com/${repo}/${commit}/${path.split("/").map(encodeURIComponent).join("/")}`, {
       method: "HEAD", headers: { "user-agent": "JevHunt catalog verifier" }, signal: AbortSignal.timeout(12000),
     });
@@ -86,23 +96,40 @@ export class PublicGitHub {
     if (!response.ok) throw new Error(`Approved source returned HTTP ${response.status}`);
     return true;
   }
+  // The commit's file list from GitHub's public code browser. Unlike the REST
+  // tree endpoint it is not metered, so evidence checks keep moving when the
+  // anonymous API quota is gone. Null means it is unavailable: use the API.
+  async filePaths(repo, commit) {
+    try {
+      const listing = await this.request(`https://github.com/${repo}/tree-list/${commit}`, { accept: "application/json", limit: MAX_PUBLIC_RESPONSE_BYTES });
+      return Array.isArray(listing?.paths) ? listing.paths : null;
+    } catch (error) {
+      if (error.budget) throw error;
+      return error.message === "Response too large" ? [] : null;
+    }
+  }
   async api(path) {
-    const now = Math.floor(Date.now() / 1000);
-    if (this.apiRetryAt > now) throw Object.assign(new Error("GitHub API is waiting for its rate limit to reset"), { status: 429, retryAt: this.apiRetryAt });
-    try { return await this.request("https://api.github.com" + path, { limit: 2_000_000 }); }
+    const quota = path.startsWith("/search/") ? "search" : "core", now = Math.floor(Date.now() / 1000);
+    if (this.retryAt[quota] > now) throw Object.assign(new Error("GitHub API is waiting for its rate limit to reset"), { status: 429, rateLimited: true, retryAt: this.retryAt[quota] });
+    try { return await this.request("https://api.github.com" + path, { limit: MAX_PUBLIC_RESPONSE_BYTES }); }
     catch (error) {
-      if ([403, 429].includes(error.status)) this.apiRetryAt = Math.max(now + 900, error.retryAt || 0);
-      throw Object.assign(error, { retryAt: this.apiRetryAt || error.retryAt });
+      if (error.status === 429 || (error.status === 403 && !error.quotaLeft)) {
+        this.retryAt[quota] = error.retryAt > now ? error.retryAt : now + 900;
+        Object.assign(error, { rateLimited: true, retryAt: this.retryAt[quota] });
+      }
+      throw error;
     }
   }
   async metadata(candidate, prior) {
-    let metadata;
+    let metadata, page;
     try {
-      const page = await this.request("https://github.com/" + candidate.repo, { html: true, limit: MAX_PUBLIC_RESPONSE_BYTES });
+      page = await this.request("https://github.com/" + candidate.repo, { html: true, limit: MAX_PUBLIC_RESPONSE_BYTES });
       if (page === null) return null;
       metadata = parseRepositoryPage(page);
     } catch (error) {
       if ([403, 429].includes(error.status)) throw error;
+      // An empty repository has no commit to pin, and its feed is an HTML page.
+      if (page?.includes("This repository is empty")) return { empty: true };
       // The public commit feed is a versioned fallback if GitHub changes its
       // page layout. Metadata retains its stated upstream date in this case.
       const atom = await this.request(`https://github.com/${candidate.repo}/commits/HEAD.atom`, { raw: true, limit: 100_000 });

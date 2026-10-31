@@ -4,13 +4,15 @@ compatibility_date = "2026-09-01"
 workers_dev = false
 preview_urls = false
 
-# Each minute advances a small durable batch. Discovery sources refresh every
-# six hours; existing evidence is rechecked continuously across the day.
+# Each minute advances a small durable batch. New repositories, and those that
+# have reached the launch board's star floor, are searched for hourly; the full
+# scans refresh every six hours; existing evidence is rechecked continuously
+# across the day.
 [triggers]
 crons = ["* * * * *"]
 
 [vars]
-VERIFY_BATCH_SIZE = "3"
+VERIFY_BATCH_SIZE = "5"
 
 [[durable_objects.bindings]]
 name = "CLOCK"
