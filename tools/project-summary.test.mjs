@@ -88,3 +88,12 @@ test("a description that starts with the project name and a verb is not duplicat
   assert.doesNotMatch(seo.title, /Composio powers/i);
   assert.match(seo.title, /Jev Project$/);
 });
+
+test("emojis and adjective endings do not leak into a cut title", () => {
+  const project = { ...vector, name: "kestrel", repo: "lpliu-art/kestrel", desc: "🦅 AI code review with calibrated, line-anchored findings, not LLM guesswork. TS/JS and Python." };
+  assert.equal(projectSummary(project).startsWith("AI code review"), true);
+  assert.doesNotMatch(projectSummary(project), /🦅/u);
+  const seo = projectSeo(project);
+  assert.doesNotMatch(seo.title, /calibrated$/);
+  assert.match(seo.title, /findings|Code Review/);
+});

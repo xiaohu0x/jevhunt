@@ -90,7 +90,10 @@ export function projectSummary(project, { maxUnits = 160 } = {}) {
   const name = projectName(project);
   const repoName = clean(project.repo).split("/").at(-1);
   let text = sourceText(project.desc)
+    .replace(/[\p{Extended_Pictographic}\uFE0F\u200D]/gu, "")
     .replace(/^(?:archived|deprecated|unmaintained)\s*[—–:-]\s*/i, "")
+    .replace(/^[^\p{L}\p{N}"'“”‘’]+/u, "")
+    .replace(/\s+/g, " ")
     .trim();
   if (!text) return "";
   for (const candidate of [name, repoName]) {
@@ -117,6 +120,9 @@ export function projectSummary(project, { maxUnits = 160 } = {}) {
 }
 
 const TITLE_START_REJECT = /^(?:this|that|these|those|it|they|we|you|your|our|my|their|i|there|he|she)\b/i;
+// A title that stops on a participle/adjective ("calibrated", "available") reads
+// like a cut sentence. Fall back to the topic label when the phrase has no noun ending.
+const TITLE_END_REJECT = /(?:ed|ive|ous|able|ible|less|ful|ly|ic)$/i;
 const TITLE_SECOND_VERB = /^\S+\s+(?:is|are|was|were|has|have|had|can|will|would|should|may|might|must|define|defines|build|builds|power|powers|combine|combines|gather|gathers|turn|turns|provide|provides|offer|offers|help|helps|let|lets|support|supports|enable|enables|use|uses|make|makes|add|adds|cover|covers)\b/i;
 const titleSummaryEligible = value => !TITLE_START_REJECT.test(value) && !TITLE_SECOND_VERB.test(value);
 
@@ -291,7 +297,7 @@ export function projectSeo(project, { localeKey = "en", duplicateName = false, c
     const withConnection = fit(name + connection + ": ");
     const plain = connected && connection ? fit(name + ": ") : withConnection;
     const best = plain.units > withConnection.units + 2 ? plain : withConnection;
-    if (best.units >= SUMMARY_MIN_UNITS) summaryHeading = best.prefix + best.text;
+    if (best.units >= SUMMARY_MIN_UNITS && !TITLE_END_REJECT.test(best.text)) summaryHeading = best.prefix + best.text;
   }
   const neutral = locale === "en" && !summaryHeading && connected && intent.basis === "catalog-facts";
   let heading = summaryHeading;
