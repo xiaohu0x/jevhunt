@@ -706,30 +706,31 @@ import { localizeStaticProjects, staticCatalogIndexUrl } from "./catalog-locales
 
   function initResponsiveNavigation() {
     const mobile = window.matchMedia("(max-width: 760px)");
+    const compact = window.matchMedia("(max-width: 1180px)");
     const filterToggle = $("#filtersToggle"), facets = $("#directoryFacets");
     const menuToggle = $("#mobileMenuToggle"), menu = $("#mobileMenu");
     let filtersOpen = false;
     let menuOpen = false;
     function update() {
       if (facets) facets.hidden = mobile.matches && !filtersOpen;
-      if (menu) menu.hidden = mobile.matches && !menuOpen;
+      if (menu) menu.hidden = compact.matches && !menuOpen;
       filterToggle?.setAttribute("aria-expanded", String(!mobile.matches || filtersOpen));
-      menuToggle?.setAttribute("aria-expanded", String(!mobile.matches || menuOpen));
+      menuToggle?.setAttribute("aria-expanded", String(!compact.matches || menuOpen));
     }
     filterToggle?.addEventListener("click", () => { filtersOpen = !filtersOpen; menuOpen = false; update(); });
     menuToggle?.addEventListener("click", () => { menuOpen = !menuOpen; filtersOpen = false; update(); });
     document.addEventListener("keydown", event => {
-      if (event.key !== "Escape" || !mobile.matches) return;
+      if (event.key !== "Escape" || !compact.matches) return;
       const toggle = menuOpen ? menuToggle : filtersOpen ? filterToggle : null;
       if (!toggle) return;
       menuOpen = false; filtersOpen = false; update();
       toggle.focus();
     });
     for (const panel of [menu, facets].filter(Boolean)) panel.addEventListener("click", event => {
-      if (!mobile.matches || !event.target.closest("a[href]")) return;
+      if (!compact.matches || !event.target.closest("a[href]")) return;
       menuOpen = false; filtersOpen = false; update();
     });
-    mobile.addEventListener?.("change", () => { menuOpen = false; filtersOpen = false; update(); });
+    for (const query of [mobile, compact]) query.addEventListener?.("change", () => { menuOpen = false; filtersOpen = false; update(); });
     update();
 
     function revealHash(hash, scroll = false) {

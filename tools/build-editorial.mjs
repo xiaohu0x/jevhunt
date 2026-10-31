@@ -110,16 +110,24 @@ for (const [localeKey, locale] of Object.entries(i18n.locales)) {
   const source = readFileSync(target, "utf8");
   const dom = new JSDOM(source, { includeNodeLocations: true });
   const nav = dom.window.document.querySelector(".home-nav-panel .nav__links");
-  if (!nav) throw new Error("Missing landing navigation: " + localeKey);
-  const location = dom.nodeLocation(nav);
-  nav.querySelectorAll("[data-editorial-link]").forEach(link => link.remove());
-  for (const item of editorialNavigation(localeKey)) {
+  const footerAnchor = dom.window.document.querySelector(".footer__col .nav__link--en");
+  if (!nav || !footerAnchor) throw new Error("Missing landing navigation: " + localeKey);
+  const footer = footerAnchor.parentElement;
+  const links = () => editorialNavigation(localeKey).map(item => {
     const link = dom.window.document.createElement("a");
     link.href = item.path; link.textContent = item.label; link.lang = item.lang;
     link.setAttribute("data-editorial-link", "");
-    nav.append(link);
+    return link;
+  });
+  for (const list of [nav, footer]) list.querySelectorAll("[data-editorial-link]").forEach(link => link.remove());
+  nav.append(...links());
+  footerAnchor.after(...links());
+  let output = source;
+  for (const node of [footer, nav]) {
+    const location = dom.nodeLocation(node);
+    output = output.slice(0, location.startOffset) + node.outerHTML + output.slice(location.endOffset);
   }
-  writeFileSync(target, source.slice(0, location.startOffset) + nav.outerHTML + source.slice(location.endOffset));
+  writeFileSync(target, output);
 }
 
 const sitemap = new JSDOM(readFileSync("public/sitemap.xml", "utf8"), { contentType: "application/xml" });

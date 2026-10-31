@@ -7,7 +7,8 @@ import { readCatalogQuery, readCatalogPage } from "../../shared/catalog-query.js
 import { renderCatalogPagination } from "../../shared/catalog-pagination.js";
 import { readProjectContent, localizeCatalogProjects } from "../../shared/project-content-store.js";
 import { FEATURED_WHERE, FEATURED_ORDER_SQL } from "../../shared/catalog-featured.js";
-import { taskCardsHtml, featuredCardsHtml, newListHtml, categoryCardsHtml, searchHintsHtml, CATEGORIES } from "../../shared/catalog-sections.js";
+import { taskCardsHtml, featuredCardsHtml, categoryCardsHtml, searchHintsHtml, CATEGORIES } from "../../shared/catalog-sections.js";
+import { LAUNCH_PAGE_SIZE, isLaunchDate, latestLaunchDate, launchBoardHtml, launchDayView, launchProjects, mapLaunchProjects, readLaunchBoard, readLaunchDay, utcToday } from "../../shared/catalog-launches.js";
 import { taskById, taskClause } from "../../shared/catalog-tasks.js";
 import { categoriesIndexView, tasksIndexView, taskPageView, localizedTasksIndexView, localizedTaskPageView, localizedCategoriesIndexView } from "../../shared/catalog-section-pages.js";
 import { compareView, alternativesView, pickAlternatives } from "../../shared/catalog-compare.js";
@@ -55,17 +56,20 @@ async function landingUncached(context, locale = "en") {
   const localeMessages = localized.messages;
   const query = { ...readCatalogQuery(new URL(context.request?.url || "https://jevhunt.com/").searchParams), mode: "page", full: false, pageSize: 20, locale };
   const { apps, pagination } = await readCatalogPage(context.env.DB, query, localeMessages);
-  const [featuredRows, freshRows] = await Promise.all([
+  const [featuredRows, liveBoard] = await Promise.all([
     context.env.DB.prepare(`SELECT preview AS data FROM catalog_entries WHERE ${activeClause} AND ${FEATURED_WHERE} ORDER BY ${FEATURED_ORDER_SQL} LIMIT 6`).all(),
-    context.env.DB.prepare(`SELECT preview AS data FROM catalog_entries WHERE ${activeClause} AND json_extract(payload,'$.added') GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]' ORDER BY json_extract(payload,'$.added') DESC, stars DESC LIMIT 6`).all(),
+    readLaunchBoard(context.env.DB),
   ]);
   let featured = featuredRows.results.map(row => JSON.parse(row.data));
-  let fresh = freshRows.results.map(row => JSON.parse(row.data));
-  if (locale !== "en" && (featured.length || fresh.length)) {
-    [featured, fresh] = await Promise.all([
+  let board = liveBoard;
+  if (locale !== "en") {
+    const [localizedFeatured, localizedLaunches] = await Promise.all([
       localizeCatalogProjects(context.env.DB, featured, locale),
-      localizeCatalogProjects(context.env.DB, fresh, locale),
+      localizeCatalogProjects(context.env.DB, launchProjects(board), locale),
     ]);
+    const launchByRepo = new Map(localizedLaunches.map(project => [project.repo, project]));
+    featured = localizedFeatured;
+    board = mapLaunchProjects(board, project => launchByRepo.get(project.repo) || project);
   }
   const sectionBase = locale === "en" ? "" : `/${locale}`;
   const sectionLang = localized.info.lang || "en";
@@ -126,7 +130,7 @@ async function landingUncached(context, locale = "en") {
     .on("#taskGrid", { element: el => el.setInnerContent(taskCardsHtml({ localeKey: locale, basePath: locale === "en" ? "" : `/${locale}` }), { html: true }) })
     .on("#searchHints", { element: el => el.setInnerContent(searchHintsHtml(locale, locale === "en" ? "" : `/${locale}`), { html: true }) })
     .on("#featuredGrid", { element: el => el.setInnerContent(featuredCardsHtml(featured, localeMessages, { basePath: sectionBase, locale: sectionLang }), { html: true }) })
-    .on("#newGrid", { element: el => el.setInnerContent(newListHtml(fresh, localeMessages, { basePath: sectionBase, locale, lang: sectionLang }), { html: true }) })
+    .on("#launchBoard", { element: el => el.setInnerContent(launchBoardHtml(board, localeMessages, { basePath: sectionBase, lang: sectionLang }), { html: true }) })
     .on("#categoryGrid", { element: el => el.setInnerContent(categoryCardsHtml(meta.categoryCounts, localeMessages, { localePrefix: sectionBase, lang: sectionLang }), { html: true }) })
     .on("#appGrid", { element: el => el.setInnerContent(apps.map(p => renderCard(p, localeMessages, { basePath: locale === "en" ? "" : `/${locale}` })).join(""), { html: true }) })
     .on("#dirCount", { element: el => el.setInnerContent(count) })
@@ -389,6 +393,38 @@ async function localizedTaskPageUncached(context, locale, taskId) {
   const projects = await localizeCatalogProjects(context.env.DB, rows.results.map(row => JSON.parse(row.data)), locale);
   const view = localizedTaskPageView({ task, localeKey: locale, messages: localized.messages, projects, total, number, pages });
   return htmlResponse(page({ ...view, messages: localized.messages, localeKey: locale, localeInfo: localized.info, localePrefix: `/${locale}` }));
+}
+
+/** /launches/<date>/ and /launches/<date>/<page>/ — every launch from one day. */
+async function launchDayUncached(context, locale) {
+  const date = String(context.params.date || "");
+  const tail = context.params.page;
+  const raw = Array.isArray(tail) ? tail.join("/") : tail || "1";
+  const today = utcToday();
+  if (!isLaunchDate(date) || date > today || !/^\d+$/.test(raw)) return missing(context);
+  const number = Number(raw);
+  const meta = await catalogMeta(context.env.DB).catch(() => null);
+  if (!meta) return context.next();
+  const day = await readLaunchDay(context.env.DB, date, number, { today });
+  const pages = Math.max(1, Math.ceil(day.total / LAUNCH_PAGE_SIZE));
+  if (!day.total || number < 1 || number > pages) return missing(context);
+  const localized = await localeData(context, locale);
+  const projects = locale === "en" ? day.projects : await localizeCatalogProjects(context.env.DB, day.projects, locale);
+  const prefix = locale === "en" ? "" : `/${locale}`;
+  const view = launchDayView({ ...day, date, projects, number, pages, messages: localized.messages, basePath: prefix, lang: localized.info.lang || "en" });
+  return htmlResponse(page({ ...view, messages: localized.messages, localeKey: locale, localeInfo: localized.info, localePrefix: prefix }));
+}
+
+export function launchDay(context, locale = "en") {
+  const pathname = new URL(context.request?.url || "https://jevhunt.com/").pathname;
+  return cachedPage(context, `launch:${locale}:${pathname}`, () => launchDayUncached(context, locale), 300);
+}
+
+/** /launches/ opens the newest day. Every page's menu links here, so with no launches it still lands on the board and its empty state. */
+export async function latestLaunch(context, locale = "en") {
+  const date = await latestLaunchDate(context.env.DB).catch(() => null);
+  const prefix = locale === "en" ? "" : `/${locale}`;
+  return Response.redirect(new URL(date ? `${prefix}/launches/${date}/` : `${prefix}/#launches`, context.request.url).href, 302);
 }
 
 async function localizedCategoriesIndexUncached(context, locale) {

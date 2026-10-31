@@ -7,6 +7,10 @@ import { onRequestGet as localizedProjectRoute } from "../functions/[locale]/pro
 import { onRequestGet as browseRoute } from "../functions/browse/[[page]].js";
 import { onRequestGet as categoryRoute } from "../functions/categories/[category]/[[page]].js";
 import { onRequestGet as alternativesRoute } from "../functions/alternatives/[owner]/[repo]/index.js";
+import { onRequestGet as launchesRoute } from "../functions/launches/index.js";
+import { onRequestGet as localizedLaunchesRoute } from "../functions/[locale]/launches/index.js";
+import { onRequestGet as launchDayRoute } from "../functions/launches/[date]/[[page]].js";
+import { onRequestGet as localizedLaunchDayRoute } from "../functions/[locale]/launches/[date]/[[page]].js";
 import { LOCALES } from "../shared/locales.js";
 import { publicPreview } from "../shared/catalog-data.js";
 import { database } from "./helpers/d1.mjs";
@@ -47,6 +51,14 @@ function fixture(t) {
     if (match) return browseRoute({ ...context, params: { page: match[1] } });
     match = url.pathname.match(/^\/alternatives\/([^/]+)\/([^/]+)\/$/);
     if (match) return alternativesRoute({ ...context, params: { owner: match[1], repo: match[2] } });
+    match = url.pathname.match(/^\/launches\/$/);
+    if (match) return dispatch((await launchesRoute(context)).headers.get("location"));
+    match = url.pathname.match(/^\/([^/]+)\/launches\/$/);
+    if (match) return dispatch((await localizedLaunchesRoute({ ...context, params: { locale: match[1] } })).headers.get("location"));
+    match = url.pathname.match(/^\/launches\/([^/]+)\/$/);
+    if (match) return launchDayRoute({ ...context, params: { date: match[1] } });
+    match = url.pathname.match(/^\/([^/]+)\/launches\/([^/]+)\/$/);
+    if (match) return localizedLaunchDayRoute({ ...context, params: { locale: match[1], date: match[2] } });
     match = url.pathname.match(/^\/categories\/([^/]+)\/(.*?)\/?$/);
     if (match) return categoryRoute({ ...context, params: { category: match[1], page: match[2] } });
     return assets.fetch(url);

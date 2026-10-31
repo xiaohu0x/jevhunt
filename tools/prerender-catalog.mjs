@@ -5,7 +5,8 @@ import { dirname, resolve } from "node:path";
 import { runInNewContext } from "node:vm";
 import { fileURLToPath } from "node:url";
 import { loadProjectContents, localizedProjectPreview } from "./lib/project-content.mjs";
-import { taskCardsHtml, featuredCardsHtml, newListHtml, searchHintsHtml, categoryCardsHtml } from "../shared/catalog-sections.js";
+import { taskCardsHtml, featuredCardsHtml, searchHintsHtml, categoryCardsHtml } from "../shared/catalog-sections.js";
+import { launchBoardFromProjects, launchBoardHtml } from "../shared/catalog-launches.js";
 import { isFeatured, compareFeatured } from "../shared/catalog-featured.js";
 
 export const PRERENDER_COUNT = 20;
@@ -61,10 +62,7 @@ const repoUrl = project =>
 const renderCard = project => projectCard(project, labels);
 
 const featured = [...apps].filter(isFeatured).sort(compareFeatured).slice(0, 6);
-const fresh = [...apps]
-  .filter(project => /^\d{4}-\d{2}-\d{2}$/.test(project.added || ""))
-  .sort((a, b) => (b.added || "").localeCompare(a.added || "") || b.stars - a.stars)
-  .slice(0, 6);
+const launchBoard = launchBoardFromProjects(apps);
 
 const itemList = {
   "@context": "https://schema.org",
@@ -109,7 +107,7 @@ for (const [name, content] of [
   ["task", taskCardsHtml()],
   ["hints", searchHintsHtml("en")],
   ["featured", featuredCardsHtml(featured, labels)],
-  ["new", newListHtml(fresh, labels)],
+  ["launch", launchBoardHtml(launchBoard, labels)],
   ["category", categoryCardsHtml(catalogMeta.categoryCounts || {}, labels)],
 ]) {
   const pattern = new RegExp("(<!-- " + name + "-prerender:start -->)[\\s\\S]*?(<!-- " + name + "-prerender:end -->)");

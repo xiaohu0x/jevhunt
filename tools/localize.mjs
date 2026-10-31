@@ -6,7 +6,8 @@ import { runInNewContext } from "node:vm";
 import { renderCard } from "../shared/catalog-view.js";
 import { loadProjectContents, localizedProjectPreview } from "./lib/project-content.mjs";
 import { buildSummaryOverlay, summaryOverlayScript } from "./lib/static-catalog.mjs";
-import { taskCardsHtml, featuredCardsHtml, newListHtml, searchHintsHtml, categoryCardsHtml } from "../shared/catalog-sections.js";
+import { taskCardsHtml, featuredCardsHtml, searchHintsHtml, categoryCardsHtml } from "../shared/catalog-sections.js";
+import { launchBoardFromProjects, launchBoardHtml, mapLaunchProjects } from "../shared/catalog-launches.js";
 import { isFeatured, compareFeatured } from "../shared/catalog-featured.js";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -184,10 +185,7 @@ function selectCurrentLocale(source, localeKey) {
 const homeCatalog = catalogProjects.map(project => localizedProjectPreview(project, projectContents, "en"));
 const homeCounts = Object.fromEntries([...new Set(homeCatalog.map(project => project.cat))].map(category => [category, homeCatalog.filter(project => project.cat === category).length]));
 const homeFeatured = homeCatalog.filter(isFeatured).sort(compareFeatured).slice(0, 6);
-const homeFresh = homeCatalog
-  .filter(project => /^\d{4}-\d{2}-\d{2}$/.test(project.added || ""))
-  .sort((a, b) => (b.added || "").localeCompare(a.added || "") || b.stars - a.stars)
-  .slice(0, 6);
+const homeLaunches = launchBoardFromProjects(homeCatalog);
 
 function localizeHomeSections(source, localeKey, locale) {
   const basePath = localeKey === defaultLocale ? "" : "/" + localeKey;
@@ -196,7 +194,7 @@ function localizeHomeSections(source, localeKey, locale) {
     task: taskCardsHtml({ localeKey, basePath }),
     hints: searchHintsHtml(localeKey, basePath),
     featured: featuredCardsHtml(homeFeatured.map(localize), locale.messages, { basePath, locale: locale.lang }),
-    new: newListHtml(homeFresh.map(localize), locale.messages, { basePath, locale: localeKey, lang: locale.lang }),
+    launch: launchBoardHtml(mapLaunchProjects(homeLaunches, localize), locale.messages, { basePath, lang: locale.lang }),
     category: categoryCardsHtml(homeCounts, locale.messages, { localePrefix: basePath, lang: locale.lang }),
   };
   let html = source;

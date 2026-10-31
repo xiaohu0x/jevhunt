@@ -10,7 +10,7 @@ import { loadProjectContents } from "./lib/project-content.mjs";
 import { buildStaticCatalog, buildSummaryOverlay, summaryOverlayScript } from "./lib/static-catalog.mjs";
 
 const read = file => readFileSync(`public/${file}`, "utf8");
-async function boot(t, { storageBlocked = false, live = false, locale = "en", query = "", catalogHandler, pagedSeed = false, fastTimeout = false, mobile = false, theme, staticBuild, summaryOverlay } = {}) {
+async function boot(t, { storageBlocked = false, live = false, locale = "en", query = "", catalogHandler, pagedSeed = false, fastTimeout = false, mobile = false, tablet = false, theme, staticBuild, summaryOverlay } = {}) {
   const path = locale === "en" ? "/" : `/${locale}/`;
   const dom = new JSDOM(read(path.slice(1) + "index.html"), { url: "https://jevhunt.com" + path + query, runScripts: "outside-only", pretendToBeVisual: true });
   t.after(() => dom.window.close());
@@ -18,8 +18,9 @@ async function boot(t, { storageBlocked = false, live = false, locale = "en", qu
   Object.assign(window, stateHelpers, localeHelpers, { renderProjectCard });
   const mediaListeners = [];
   const mobileMedia = { matches: mobile, addEventListener: (_event, listener) => mediaListeners.push(listener) };
-  window.matchMedia = query => query === "(max-width: 760px)" ? mobileMedia : { matches: true };
-  const resize = matches => { mobileMedia.matches = matches; mediaListeners.forEach(listener => listener({ matches })); };
+  const compactMedia = { matches: mobile || tablet, addEventListener: (_event, listener) => mediaListeners.push(listener) };
+  window.matchMedia = query => query === "(max-width: 760px)" ? mobileMedia : query === "(max-width: 1180px)" ? compactMedia : { matches: true };
+  const resize = matches => { mobileMedia.matches = matches; compactMedia.matches = matches; mediaListeners.forEach(listener => listener({ matches })); };
   if (fastTimeout) {
     const schedule = window.setTimeout.bind(window);
     window.setTimeout = (callback, delay, ...args) => schedule(callback, delay === 20000 ? 1 : delay, ...args);
@@ -409,6 +410,22 @@ test("submitting the search form executes immediately and cancels the pending de
   assert.ok(scrolls.includes("appGrid"));
   await new Promise(resolve => setTimeout(resolve, 230));
   assert.equal(requests.length, 1, "The canceled input timer must not issue a duplicate search");
+});
+
+test("on a tablet the header folds into the menu while the filters stay open", async t => {
+  const { document, window } = await boot(t, { tablet: true });
+  const facets = document.getElementById("directoryFacets");
+  const toggle = document.getElementById("mobileMenuToggle"), menu = document.getElementById("mobileMenu");
+  assert.equal(facets.hidden, false);
+  assert.equal(menu.hidden, true);
+  assert.equal(toggle.getAttribute("aria-expanded"), "false");
+  toggle.click();
+  assert.equal(menu.hidden, false);
+  assert.equal(facets.hidden, false);
+  document.dispatchEvent(new window.KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+  assert.equal(menu.hidden, true);
+  assert.equal(document.activeElement, toggle);
+  assert.equal(facets.hidden, false);
 });
 
 test("mobile filters and navigation collapse accessibly and stay visible on desktop", async t => {

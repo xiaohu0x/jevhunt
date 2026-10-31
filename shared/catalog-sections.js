@@ -1,17 +1,7 @@
-import { renderCard } from "./catalog-view.js";
 import { TASK_LIST, taskById, taskName, taskBlurb } from "./catalog-tasks.js";
 import CATEGORIES from "../catalog/categories.json" with { type: "json" };
+import { projectTileHtml } from "./catalog-launches.js";
 import { esc, projectPath } from "./render.js";
-
-const RELATION_LABELS = {
-  "jev-app": "Jev application",
-  integration: "Integration",
-  sdk: "SDK / client",
-  "local-alternative": "Local alternative",
-  research: "Research",
-  resource: "Resource / directory",
-  unclassified: "Relationship under review",
-};
 
 const number = lang => new Intl.NumberFormat(lang || "en");
 
@@ -31,17 +21,11 @@ export function searchHintsHtml(localeKey = "en", basePath = "") {
 }
 
 export function featuredCardsHtml(projects, messages = {}, { basePath = "", locale = "en" } = {}) {
-  return projects.map(project => renderCard(project, messages, { basePath, locale })).join("");
-}
-
-export function newListHtml(projects, messages = {}, { basePath = "", locale = "en", lang = "en" } = {}) {
-  const format = new Intl.DateTimeFormat(lang || "en", { dateStyle: "medium", timeZone: "UTC" });
+  const stars = new Intl.NumberFormat(locale, { notation: "compact", maximumFractionDigits: 1 });
   return projects.map(project => {
-    const relationship = RELATION_LABELS[project.relationship] || RELATION_LABELS.unclassified;
-    const label = messages[`relationship.${project.relationship}`] || relationship;
-    const date = project.added || project.pushed || "";
-    const pretty = /^\d{4}-\d{2}-\d{2}$/.test(date) ? format.format(new Date(date + "T12:00:00Z")) : "";
-    return `<li class="new-item"><a class="new-item__name" href="${projectPath(project.repo, basePath)}">${esc(project.name)}</a><span class="new-item__meta">${esc(label)}${project.language ? ` · ${esc(project.language)}` : ""}</span>${pretty ? `<time class="new-item__date" datetime="${esc(date)}">${esc(pretty)}</time>` : ""}</li>`;
+    const count = Number(project.stars) || 0;
+    const label = (messages["apps.starsLabel"] || "{count} GitHub stars").replace("{count}", () => new Intl.NumberFormat(locale).format(count));
+    return `<a class="pick" href="${projectPath(project.repo, basePath)}">${projectTileHtml(project, locale)}<span class="pick__body"><span class="pick__top"><span class="pick__name">${esc(project.name)}</span><span class="pick__stars" aria-label="${esc(label)}"><span aria-hidden="true">★</span> ${esc(stars.format(count))}</span></span><span class="pick__desc">${esc(project.desc || messages["apps.noDescription"] || "No project description available.")}</span></span></a>`;
   }).join("");
 }
 

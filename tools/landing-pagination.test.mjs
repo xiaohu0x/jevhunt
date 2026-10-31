@@ -56,6 +56,16 @@ function setup(t) {
 const schemaGraph = document => JSON.parse(document.querySelector('script[type="application/ld+json"]:not([id])').textContent)["@graph"];
 const seedOf = document => JSON.parse(document.getElementById("liveCatalogSeed").textContent);
 
+test("the landing page fills the launch board from D1 inside the visitor's locale", async t => {
+  const render = setup(t);
+  for (const locale of ["en", "zh-cn", "ru"]) {
+    const { document, path } = await render(locale);
+    assert.equal(document.querySelector("#launchBoard .launch-row__name").getAttribute("href"), `${path}projects/fixture/project-1/`);
+    assert.equal(document.querySelector("#launchBoard .launch-day__num").textContent, "20");
+    assert.equal(document.querySelector("#launchBoard .launch-day__more").getAttribute("href"), `${path}launches/2026-09-20/`);
+  }
+});
+
 test("refreshing page six serves only items 101–120, bottom links and a matching hydration seed", async t => {
   const render = setup(t);
   for (const locale of ["en", "zh-cn", "ru"]) {

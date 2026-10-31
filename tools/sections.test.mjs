@@ -160,7 +160,9 @@ test("shared section views keep crawlable identifiers and canonical paths", () =
 test("the static build publishes the task and category entry points", () => {
   const home = new JSDOM(readFileSync("public/index.html", "utf8")).window.document;
   assert.equal(home.querySelectorAll("#taskGrid .task-card").length, TASK_LIST.length);
-  assert.ok(home.querySelectorAll("#featuredGrid .card").length > 0);
+  assert.ok(home.querySelectorAll("#featuredGrid .pick").length > 0);
+  assert.ok(home.querySelectorAll("#launchBoard .launch-day .launch-row").length > 0);
+  assert.equal(home.querySelector('.nav__links a[data-i18n="nav.launches"]').getAttribute("href"), "launches/");
   assert.equal(home.querySelectorAll("#categoryGrid .category-card").length, 10);
   const categories = new JSDOM(readFileSync("public/categories/index.html", "utf8")).window.document;
   assert.equal(categories.querySelectorAll(".category-block").length, 10);
@@ -266,6 +268,9 @@ test("localized directory pages keep visitors inside their locale", () => {
   assert.ok(home.querySelector("#taskGrid .task-card").getAttribute("href").startsWith("/zh-cn/tasks/"));
   assert.equal(home.querySelector('.nav__links a[data-i18n="nav.tasks"]').getAttribute("href"), "tasks/");
   assert.equal(home.querySelector('.footer__col a[data-i18n="nav.tasks"]').getAttribute("href"), "tasks/");
+  assert.ok(home.querySelector("#launchBoard .launch-row__name").getAttribute("href").startsWith("/zh-cn/projects/"));
+  assert.ok(home.querySelector("#launchBoard a.launch-pulse__day").getAttribute("href").startsWith("/zh-cn/launches/"));
+  assert.equal(home.querySelector('.home-section-link[data-i18n="launch.browse"]').getAttribute("href"), "launches/");
   const recent = home.querySelector('.home-section-link[data-i18n="home.recentlyAdded"]');
   assert.equal(recent.getAttribute("href"), "?sort=added-desc#apps");
   const task = new JSDOM(readFileSync("public/zh-cn/tasks/browser-automation/index.html", "utf8")).window.document;
