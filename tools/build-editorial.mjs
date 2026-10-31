@@ -125,6 +125,12 @@ for (const [localeKey, locale] of Object.entries(i18n.locales)) {
 const sitemap = new JSDOM(readFileSync("public/sitemap.xml", "utf8"), { contentType: "application/xml" });
 const xml = sitemap.window.document;
 const namespace = "http://www.sitemaps.org/schemas/sitemap/0.9";
+// The directory build preserves non-generated URLs from the previous sitemap, so
+// a repeated build must replace editorial URLs instead of appending them again.
+const editorialLocations = new Set(EDITORIAL_ROUTES.map(entry => ORIGIN + entry.path));
+for (const url of [...xml.getElementsByTagName("url")]) {
+  if (editorialLocations.has(url.getElementsByTagName("loc")[0]?.textContent)) url.remove();
+}
 for (const entry of EDITORIAL_ROUTES) {
   const url = xml.createElementNS(namespace, "url");
   const loc = xml.createElementNS(namespace, "loc"); loc.textContent = ORIGIN + entry.path;

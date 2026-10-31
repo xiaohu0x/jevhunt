@@ -102,8 +102,11 @@ The supported locales are English (`en`), Simplified Chinese (`zh-cn`), Traditio
 Project titles lead with the project name and a localized, evidence-based use case.
 Owners appear at the end only when active repository names collide. All 15 locale
 routes use `shared/project-seo.js`; the English static fallback uses the same
-generator. Meta descriptions, the visible introduction and social/schema descriptions
-stay in sync. Original repository descriptions remain labeled as source text.
+generator. Unreviewed English pages extract one conservative sentence from the
+repository description for the title/description; when that is empty, non-English
+or unusable, they use a neutral `Jev Project` label instead of inventing a use case.
+Meta descriptions, the visible introduction and social/schema descriptions stay in
+sync. Original repository descriptions remain labeled as source text.
 
 The wording rules and evidence boundaries are documented in
 [`docs/project-seo-rules.md`](docs/project-seo-rules.md). Reviewed project-specific

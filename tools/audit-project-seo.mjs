@@ -33,7 +33,7 @@ try {
     const copy = PROJECT_SEO_COPY[localeKey];
     if (copy?.topics.length !== TOPIC_KEYS.length || !copy.topics.every(Boolean)) throw new Error(`Incomplete locale: ${localeKey}`);
     const titles = new Set(), descriptions = new Set();
-    const counts = { pages: 0, genericFallbacks: 0, sourceRelationshipConflicts: 0, longTitles: 0, longDescriptions: 0 };
+    const counts = { pages: 0, genericFallbacks: 0, sourceSummaries: 0, neutralFallbacks: 0, sourceRelationshipConflicts: 0, longTitles: 0, longDescriptions: 0 };
     for (const project of catalog.apps) {
       const context = { localeKey, localeInfo, localePrefix: localeKey === "en" ? "" : `/${localeKey}`, duplicateName: duplicateNames.has(projectNameKey(project)), content: projectContents.get(project.repo.toLowerCase()) };
       const seo = projectSeo(project, context);
@@ -47,6 +47,9 @@ try {
       check(description === seo.description && description.length > 0, "Description missing or truncated");
       check(heading === seo.heading && (html.match(/<h1>/g) || []).length === 1, "H1 mismatch");
       check(title.toLowerCase().startsWith(seo.name.toLowerCase()), "Project name is not first");
+      check(!seo.summary || !/ (?:Jev App|Jev Integration|AI Agent Tools|Demos & Examples)$/.test(title), "Generic role retained despite a source summary");
+      check(!seo.descriptionSummary || description.includes(seo.descriptionSummary), "Description omits its source summary");
+      check(!seo.neutral || title.includes(copy.roles.neutral), "Neutral title lacks its neutral label");
       check(!titles.has(title.toLowerCase()), "Duplicate title");
       check(!descriptions.has(description.toLowerCase()), "Duplicate description");
       check(!/\{(?:name|topic|language|code|platform)\}/.test(title + description), "Unexpanded locale placeholder");
@@ -68,7 +71,9 @@ try {
       }
       titles.add(title.toLowerCase()); descriptions.add(description.toLowerCase());
       counts.pages++; summary.renderedPages++;
-      counts.genericFallbacks += seo.basis === "catalog-facts" ? 1 : 0;
+      counts.genericFallbacks += seo.flags.includes("needs-specific-description") ? 1 : 0;
+      counts.sourceSummaries += seo.summary ? 1 : 0;
+      counts.neutralFallbacks += seo.neutral ? 1 : 0;
       counts.sourceRelationshipConflicts += seo.flags.includes("source-relationship-conflict") ? 1 : 0;
       counts.longTitles += seo.flags.includes("long-title") ? 1 : 0;
       counts.longDescriptions += seo.flags.includes("long-description") ? 1 : 0;
@@ -76,7 +81,7 @@ try {
       const oldRelation = messages["relationship." + project.relationship] || RELATION_LABELS[project.relationship] || "Relationship under review";
       const oldCategory = messages["category." + project.cat + ".name"] || CATEGORY_NAMES[CATEGORY_IDS.indexOf(project.cat)] || project.cat;
       const oldDescription = project.desc?.trim() || `${project.name} (${project.repo}) — ${oldRelation}. ${[oldCategory, project.language].filter(Boolean).join(" · ")}.`;
-      const row = { repo: project.repo, locale: localeKey, path, title, description, h1: heading, intent: seo.intent, basis: seo.basis, flags: seo.flags,
+      const row = { repo: project.repo, locale: localeKey, path, title, description, h1: heading, intent: seo.intent, basis: seo.basis, summary: seo.summary, descriptionSummary: seo.descriptionSummary, neutral: seo.neutral, flags: seo.flags,
         before: { title: `${project.repo} — ${oldRelation} | JevHunt`, description: oldDescription.slice(0, 160) } };
       writeSync(stream, JSON.stringify(row) + "\n");
       if (seo.flags.length) writeSync(reviewStream, JSON.stringify(row) + "\n");
