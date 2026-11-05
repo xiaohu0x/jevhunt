@@ -12,7 +12,7 @@ import { rssFeed } from '../shared/rss.js';
 const { apps, catalogMeta: meta, i18n, projectContents } = loadData();
 const write = (path, html) => { const file = 'public' + path; mkdirSync(dirname(file), { recursive: true }); writeFileSync(file, html); };
 const issueUrl = 'https://github.com/xiaohu0x/jevhunt/issues/new?title=Submit%20a%20Jev%20project';
-const redirects = readFileSync('public/_redirects', 'utf8').trim().split('\n').filter(line => line.startsWith('/projects/'));
+const redirects = ['https://www.jevhunt.com/* https://jevhunt.com/:splat 301', ...readFileSync('public/_redirects', 'utf8').trim().split('\n').filter(line => line.startsWith('/projects/'))];
 const fallbackRedirects = [];
 const duplicates = duplicateProjectNames(apps);
 const launches = apps.filter(p => p.cat !== 'lists' && !p.fork && !p.archived && isLaunchDate(p.created) && String(p.desc || '').trim());
