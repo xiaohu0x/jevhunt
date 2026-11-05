@@ -96,14 +96,12 @@ test("trust pages and a security contact are published", () => {
   assert.match(securityTxt, /^Canonical: https:\/\/jevhunt\.com\/\.well-known\/security\.txt/m);
 });
 
-test("the home page explains authentication and sensitive-data boundaries", () => {
-  assert.match(index, /No account needed to browse/);
+test("static submissions do not collect account credentials", () => {
   assert.match(index, /never ask for passwords, API keys or payment/);
-  assert.match(index, /id="subConsent" required/);
-  assert.match(i18n, /Confirm the Terms and Privacy Policy before submitting/);
-  assert.match(i18n, /Continue with Google/);
-  assert.match(main, /t\("form\.consentInvalid"\)/);
-  assert.match(main, /t\("auth\.continue"\)/);
+  assert.doesNotMatch(index, /id="(?:submitForm|subConsent|auth)"/);
+  const dom = new JSDOM(index);
+  assert.match(dom.window.document.querySelector(".static-submit a").href, /^https:\/\/github.com\/xiaohu0x\/jevhunt\/issues\/new/);
+  dom.window.close();
 });
 
 test("security headers constrain executable content and transport", () => {

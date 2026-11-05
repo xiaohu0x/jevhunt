@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-locale="es" data-theme="light">
+<html lang="es" data-locale="es" data-theme="light" data-catalog-mode="static">
 <head>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-7QNDGTH1T4"></script>
@@ -576,7 +576,7 @@
       </label><button class="icon-btn" id="themeBtn" title="Cambiar tema" aria-label="Cambiar tema" data-i18n-title="a11y.theme" data-i18n-aria-label="a11y.theme">
         <svg class="ico-sun" viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="4.2" fill="currentColor"/><g stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 2.5v2.6M12 18.9v2.6M2.5 12h2.6M18.9 12h2.6M5.2 5.2l1.9 1.9M16.9 16.9l1.9 1.9M18.8 5.2l-1.9 1.9M7.1 16.9l-1.9 1.9"/></g></svg>
         <svg class="ico-moon" viewBox="0 0 24 24" width="17" height="17"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z" fill="currentColor"/></svg>
-      </button><div class="auth" id="auth"></div></div>
+      </button></div>
     </div>
     <a class="btn btn--sm btn--primary home-nav__submit" href="#submit" data-i18n="nav.submit">Enviar proyecto</a>
     <button class="icon-btn home-menu-toggle" id="mobileMenuToggle" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="Abrir menú" data-i18n-aria-label="home.menu"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
@@ -912,28 +912,9 @@
         <div class="cta__eyebrow">◢ <span data-i18n="cta.eyebrow">Envíos abiertos</span></div>
         <h2 data-i18n-html="cta.title">¿Has creado algo con Jev?<br />Publícalo en JevHunt.</h2>
         <p data-i18n="cta.lead">Envía un repositorio público de GitHub. Un editor revisará las pruebas y la clasificación antes de la siguiente publicación programada.</p>
-        <div class="sub__signin" id="subSignin" hidden>
-          <span data-i18n-html="cta.signin">Explorar es público y no requiere iniciar sesión. Para enviar un proyecto de GitHub, continúa en la pantalla OAuth oficial de Google. JevHunt solo recibe tu perfil básico y correo, nunca tu contraseña de Google. <a href="/privacy/">Detalles de privacidad</a></span>
-        </div>
 
-        <form class="sub" id="submitForm" hidden novalidate>
-          <div class="sub__row">
-            <input class="sub__field" type="url" id="subUrl" data-i18n-ph="cta.ph" placeholder="https://github.com/you/your-jev-project" pattern="https://github\.com/[^/]+/[^/]+/?" data-i18n-title="form.repoInvalid" title="Introduce una URL de GitHub como https://github.com/owner/repo." required />
-            <input class="sub__field" type="text" id="subName" data-i18n-ph="sub.name" placeholder="Nombre de la app" maxlength="120" required />
-          </div>
-          <div class="sub__row">
-            <select class="sub__field" id="subCat" aria-label="Categoría del proyecto" data-i18n-aria-label="a11y.category" required></select>
-            <textarea class="sub__field" id="subDesc" data-i18n-ph="sub.desc" data-i18n-aria-label="sub.desc" aria-label="¿Qué decisión toma?" placeholder="¿Qué decisión toma?" maxlength="1000" rows="3"></textarea>
-          </div>
-          <label class="sub__consent">
-            <input type="checkbox" id="subConsent" required />
-            <span data-i18n-html="cta.consent">Acepto los <a href="/terms/" target="_blank">Términos</a> y la <a href="/privacy/" target="_blank">Política de privacidad</a>. Confirmo que el envío no contiene phishing, malware, robo de credenciales ni contenido engañoso.</span>
-          </label>
-          <div class="sub__actions">
-            <button class="btn btn--primary" type="submit" id="subBtn" data-i18n="cta.btn">Enviar para revisión</button>
-            <span class="sub__hint" id="formNote" role="status" data-i18n="cta.note">Ideas, demos y experimentos a medio terminar son bienvenidos.</span>
-          </div>
-        </form>
+
+        <p class="static-submit"><a class="btn btn--primary" href="https://github.com/xiaohu0x/jevhunt/issues/new?title=Submit%20a%20Jev%20project" rel="noopener noreferrer">Enviar proyecto · GitHub ↗</a></p>
 
         <div class="sub__list" id="mySubs" hidden></div>
       </div>
@@ -994,10 +975,10 @@
 
 <script src="/assets/js/locales/es.js?v=449abca467"></script>
 <script src="/assets/js/data.js?v=442a3e084a"></script>
-<script src="/assets/js/projects.js?v=a4c5c58266"></script>
+<script src="/assets/js/projects.js?v=dd03f6b2a4"></script>
 <script id="liveCatalogSeed" type="application/json">null</script>
 <script src="/assets/js/analytics.js?v=b3a8b122f8" defer></script>
-<script type="module" src="/assets/js/main.js?v=d9054282af"></script>
+<script type="module" src="/assets/js/main.js?v=d45f2f5a05"></script>
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 </body>

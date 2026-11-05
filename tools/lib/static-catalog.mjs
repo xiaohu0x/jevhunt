@@ -1,3 +1,4 @@
+import { staticProjectPaths } from "../../shared/static-projects.js";
 import { authoredProject, projectContentHash } from "./project-content.mjs";
 import { matchingProjectContent } from "../../shared/project-content.js";
 import { publicPreview } from "../../shared/catalog-data.js";
@@ -20,7 +21,7 @@ export function fullCatalogScript(projects) {
 }
 
 export function buildStaticCatalog(catalog, records) {
-  const apps = catalog.apps.map(project => authoredProject(project, records));
+  const apps = staticProjectPaths(catalog.apps.map(project => authoredProject(project, records)), records);
   const projects = apps.map(publicPreview).sort(byRepo);
   const initial = [...projects].sort((a, b) => b.stars - a.stars || (b.created || "").localeCompare(a.created || "")
     || a.name.localeCompare(b.name, "en", { sensitivity: "base" }) || byRepo(a, b)).slice(0, 20);

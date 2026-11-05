@@ -3,7 +3,14 @@ import { LOCALES } from "./locales.js";
 import { editorialNavigation } from "./editorial-routes.js";
 export const ORIGIN = "https://jevhunt.com";
 export const esc = value => String(value ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
-export const projectPath = (repo, prefix = "") => `${prefix}/projects/` + repo.toLowerCase().split("/").map(encodeURIComponent).join("/") + "/";
+export const projectPath = (project, prefix = "") => {
+  if (typeof project === "object") {
+    if (project.detailLocales && !project.detailLocales.includes(prefix.slice(1) || "en")) prefix = "";
+    if (!prefix && project.detailPath) return project.detailPath;
+  }
+  const repo = typeof project === "string" ? project : project.repo;
+  return `${prefix}/projects/` + repo.toLowerCase().split("/").map(encodeURIComponent).join("/") + "/";
+};
 export const repoUrl = repo => "https://github.com/" + repo.split("/").map(encodeURIComponent).join("/");
 export const alternativesPath = repo => "/alternatives/" + repo.toLowerCase().split("/").map(encodeURIComponent).join("/") + "/";
 export const jsonLd = value => JSON.stringify(value).replace(/</g, "\\u003c");

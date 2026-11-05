@@ -27,7 +27,7 @@ const discoverySources = [
 ];
 const paths = [];
 // Only generated outputs are replaced. Source assets and editorial pages are separate.
-for (const directory of ["projects", "browse", "categories"]) rmSync(`public/${directory}`, { recursive: true, force: true });
+for (const directory of ["projects", "browse", "categories", "tasks", "collections", "alternatives", "compare"]) rmSync(`public/${directory}`, { recursive: true, force: true });
 function write(path, html) {
   const target = "public" + path + "index.html";
   mkdirSync(dirname(target), { recursive: true }); writeFileSync(target, html); paths.push(path);
@@ -59,6 +59,7 @@ function takeRecommendations(candidates, excluded) {
 const urls = new Set(projects.map(p => projectPath(p.repo)));
 const redirects = [];
 for (const p of projects) {
+  if (!p.staticPage) continue;
   const path = projectPath(p.repo);
   const excluded = new Set([p.repo.toLowerCase()]);
   const similar = takeRecommendations([
@@ -66,7 +67,7 @@ for (const p of projects) {
     ...categoryProjects.get(p.cat).slice(0, 13),
   ], excluded);
   const active = takeRecommendations(recentProjects, excluded);
-  write(path, renderProject(p, meta, similar.map(item => localizedProjectPreview(item, projectContents)), active.map(item => localizedProjectPreview(item, projectContents)), messages, { localeInfo: i18n.locales.en, duplicateName: duplicateNames.has(projectNameKey(p)), content: projectContents.get(p.repo.toLowerCase()) }));
+  write(path, renderProject(p, meta, similar.map(item => localizedProjectPreview(item, projectContents)), active.map(item => localizedProjectPreview(item, projectContents)), messages, { localeInfo: i18n.locales.en, duplicateName: duplicateNames.has(projectNameKey(p)), content: projectContents.get(p.repo.toLowerCase()), hasAlternativesPage: projectContents.has(p.repo.toLowerCase()) || isFeatured(p) }));
   if (p.previousRepo && !urls.has(projectPath(p.previousRepo))) redirects.push(`${projectPath(p.previousRepo)} ${path} 301`);
 }
 for (const p of catalog.unavailable || []) {
@@ -90,6 +91,7 @@ for (const project of projects) {
 for (const [localeKey, locale] of Object.entries(i18n.locales)) {
   if (localeKey === "en") continue;
   const prefix = locale.path.replace(/\/$/, "");
+  for (const section of ["tasks", "categories"]) rmSync(`public${prefix}/${section}`, { recursive: true, force: true });
   const messages = locale.messages;
   const writeLocalized = (path, view) => {
     write(path, page({ ...view, messages, localeKey, localeInfo: locale, localePrefix: prefix }));
@@ -99,8 +101,10 @@ for (const [localeKey, locale] of Object.entries(i18n.locales)) {
   for (const task of TASK_LIST) {
     const items = projects.filter(project => taskMatches(task, project));
     const pages = Math.max(1, Math.ceil(items.length / 24));
-    const slice = items.slice(0, 24).map(project => localizedProjectPreview(project, projectContents, localeKey));
-    writeLocalized(`${prefix}/tasks/${task.id}/`, localizedTaskPageView({ task, localeKey, messages, projects: slice, total: items.length, number: 1, pages }));
+    for (let number = 1; number <= 1; number++) {
+      const slice = items.slice((number - 1) * 24, number * 24).map(project => localizedProjectPreview(project, projectContents, localeKey));
+      writeLocalized(`${prefix}/tasks/${task.id}/${number === 1 ? "" : number + "/"}`, localizedTaskPageView({ task, localeKey, messages, projects: slice, total: items.length, number, pages }));
+    }
   }
   writeLocalized(`${prefix}/categories/`, localizedCategoriesIndexView({ localeKey, messages, counts: meta.categoryCounts }));
 }
@@ -108,7 +112,7 @@ for (const [localeKey, locale] of Object.entries(i18n.locales)) {
 for (const collection of COLLECTION_LIST) {
   const items = projects.filter(project => collectionMatches(collection, project));
   const pages = Math.max(1, Math.ceil(items.length / 24));
-  for (let n = 1; n <= Math.min(pages, 3); n++) {
+  for (let n = 1; n <= pages; n++) {
     write(n === 1 ? `/collections/${collection.id}/` : `/collections/${collection.id}/${n}/`, page(collectionPageView({ collection, projects: items.slice((n - 1) * 24, n * 24), total: items.length, number: n, pages })));
   }
 }
@@ -131,7 +135,7 @@ write("/tasks/", page(tasksIndexView({ projectCount: projects.length })));
 for (const task of TASK_LIST) {
   const matched = projects.filter(project => taskMatches(task, project));
   const pages = Math.max(1, Math.ceil(matched.length / 24));
-  for (let n = 1; n <= Math.min(pages, 3); n++) {
+  for (let n = 1; n <= pages; n++) {
     const slice = matched.slice((n - 1) * 24, n * 24).map(item => localizedProjectPreview(item, projectContents));
     write(n === 1 ? `/tasks/${task.id}/` : `/tasks/${task.id}/${n}/`, page(taskPageView({ task, projects: slice, total: matched.length, number: n, pages })));
   }

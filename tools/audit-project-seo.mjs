@@ -1,3 +1,4 @@
+import { staticProjectPaths } from "../shared/static-projects.js";
 import { readFileSync, writeFileSync, mkdirSync, openSync, writeSync, closeSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { parseArgs } from "node:util";
@@ -14,6 +15,7 @@ const { values } = parseArgs({ options: { catalog: { type: "string", default: "p
 const catalog = JSON.parse(readFileSync(values.catalog, "utf8"));
 const projectContents = loadProjectContents();
 catalog.apps = catalog.apps.map(project => authoredProject(project, projectContents));
+const staticRepos = new Set(staticProjectPaths(catalog.apps, projectContents).filter(p => p.staticPage).map(p => p.repo.toLowerCase()));
 const { i18n } = loadData();
 const duplicateNames = duplicateProjectNames(catalog.apps);
 const output = resolve(values.out);
@@ -60,7 +62,7 @@ try {
       for (const expression of [/<meta property="og:description" content="([^"]*)"/, /<meta name="twitter:description" content="([^"]*)"/]) check(extract(html, expression) === description, "Social description differs");
       const graph = JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1])["@graph"];
       check(graph[0].description === description && graph[0].inLanguage === localeInfo.lang, "Structured data differs");
-      if (values.static && localeKey === "en") {
+      if (values.static && localeKey === "en" && staticRepos.has(project.repo.toLowerCase())) {
         const file = "public" + path + "index.html";
         check(existsSync(file), "Static fallback missing");
         if (existsSync(file)) {

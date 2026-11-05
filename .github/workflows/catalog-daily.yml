@@ -1,0 +1,59 @@
+name: Daily static catalog
+on:
+  schedule:
+    - cron: '17 10 * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: jevhunt-static-catalog
+  cancel-in-progress: false
+jobs:
+  refresh:
+    # Standard public-repository runners are free. Stop if visibility changes.
+    if: github.event.repository.private == false && vars.JEVHUNT_DAILY_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Require publishing configuration before consuming the daily slot
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.JEVHUNT_PAGES_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          test -n "$CLOUDFLARE_API_TOKEN"
+          test -n "$CLOUDFLARE_ACCOUNT_ID"
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - run: npm ci --no-audit --no-fund
+      - name: Reserve the daily run before making source requests
+        run: |
+          node tools/sync-daily.mjs --reserve
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add catalog/sync-state.json
+          git commit -m 'chore: reserve daily catalog update [skip ci]'
+          git push
+      - name: Refresh at most 20 projects with at most 100 source requests
+        run: node tools/sync-daily.mjs --run-reserved
+        timeout-minutes: 6
+      - run: npm run build
+      - run: npm test
+      - run: npm run check:static
+      - name: Save the validated snapshot and next cursor
+        run: |
+          git add catalog/sync-state.json public/catalog.json public/catalog-audit.json
+          git commit -m 'chore: update daily static catalog [skip ci]'
+          git push
+      - name: Publish static assets only
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.JEVHUNT_PAGES_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          test -n "$CLOUDFLARE_API_TOKEN"
+          test -n "$CLOUDFLARE_ACCOUNT_ID"
+          node tools/deploy-static.mjs
+      - run: npm run verify:production

@@ -1,3 +1,4 @@
+import { projectShard, PROJECT_SHARDS, STATIC_PROJECT_LIMIT } from "../shared/static-projects.js";
 import assert from "node:assert/strict";
 import test from "node:test";
 import { readFileSync, existsSync } from "node:fs";
@@ -10,14 +11,23 @@ const { apps, i18n, catalogMeta, projectContents } = loadData();
 const duplicateNames = duplicateProjectNames(apps);
 const read = path => readFileSync("public/" + path, "utf8");
 
-test("every indexed repository has a unique local page, safe evidence, and crawlable sitemap entry", () => {
+test("all repositories retain data while priority projects have crawlable static pages", () => {
+  const shards = Array.from({ length: PROJECT_SHARDS }, (_, n) => JSON.parse(read(`assets/project-data/${n}.json`)).projects);
+  assert.equal(shards.flat().length, apps.length);
+  assert.equal(apps.filter(p => p.staticPage).length, STATIC_PROJECT_LIMIT);
   const sitemap = read("sitemap.xml"), repos = new Set(), ids = new Set();
   for (const project of apps) {
     assert.ok(!repos.has(project.repo.toLowerCase()), project.repo); repos.add(project.repo.toLowerCase());
     if (project.id) { assert.ok(!ids.has(project.id), project.repo); ids.add(project.id); }
     const path = projectPath(project.repo);
-    assert.ok(existsSync("public" + path + "index.html"), path);
-    assert.ok(sitemap.includes("https://jevhunt.com" + path), path);
+    if (project.staticPage) {
+      assert.ok(existsSync("public" + path + "index.html"), path);
+      assert.ok(sitemap.includes("https://jevhunt.com" + path), path);
+    } else {
+      assert.equal(project.detailPath, "/project/?repo=" + encodeURIComponent(project.repo.toLowerCase()));
+      assert.ok(!existsSync("public" + path + "index.html"), "Long-tail pages should not consume separate files");
+    }
+    assert.ok(shards[projectShard(project.repo)].some(p => p.repo === project.repo));
     const evidence = new URL(project.evidence);
     assert.equal(evidence.origin, "https://github.com", project.repo);
     if (project.evidenceLevel !== "legacy-unreviewed") assert.match(evidence.pathname, /\/(?:blob|tree)\/[a-f0-9]{40}(?:\/|$)/, project.repo);
@@ -55,7 +65,7 @@ test("release manifest describes the files actually built", () => {
 });
 
 test("static project fallbacks share live SEO metadata and both recommendation sections", t => {
-  const samples = [...new Set([apps[0], apps.find(project => !project.desc), apps.find(project => project.relationship === "resource")].filter(Boolean))];
+  const samples = [...new Set([apps.find(p => p.staticPage), apps.find(project => project.staticPage && !project.desc), apps.find(project => project.staticPage && project.relationship === "resource")].filter(Boolean))];
   for (const project of samples) {
     const path = projectPath(project.repo);
     const built = new JSDOM(read(path.slice(1) + "index.html"), { url: "https://jevhunt.com" + path });
@@ -74,7 +84,7 @@ test("static project fallbacks share live SEO metadata and both recommendation s
     assert.equal(actual.querySelectorAll('script[src*="/assets/js/analytics.js"]').length, 1);
     assert.ok(actual.querySelector("#similar-projects"), path);
     assert.ok(actual.querySelector("#active-projects"), path);
-    const recommendations = [...actual.querySelectorAll(".related .card__name")].map(link => link.pathname);
+    const recommendations = [...actual.querySelectorAll(".related .card__name")].map(link => link.pathname + link.search);
     assert.equal(new Set(recommendations).size, recommendations.length, path);
     assert.ok(recommendations.every(link => link !== path), path);
   }

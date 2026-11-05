@@ -51,3 +51,14 @@ public/assets/locales/
 
 # Local investigation notes and audit deliverables
 /reports/
+
+# Generated static pages and comparison data.
+public/*/projects/
+public/launches/
+public/*/launches/
+public/assets/catalog-compare.json
+public/rss.xml
+
+public/project/
+public/assets/project-data/
+public/assets/js/project-static.js

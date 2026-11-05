@@ -7,7 +7,8 @@ const validDate = value => /^\d{4}-\d{2}-\d{2}$/.test(value || "") && Number.isF
 export function renderProjectCard(project, { messages = {}, basePath = "", locale = "en" } = {}) {
   const text = (key, fallback) => messages[key] || fallback;
   const repo = project.repo || "";
-  const path = `${basePath}/projects/${repo.toLowerCase().split("/").map(encodeURIComponent).join("/")}/`;
+  const detailBase = project.detailLocales && !project.detailLocales.includes(basePath.slice(1) || "en") ? "" : basePath;
+  const path = (!detailBase && project.detailPath) || `${detailBase}/projects/${repo.toLowerCase().split("/").map(encodeURIComponent).join("/")}/`;
   const github = `https://github.com/${repo.split("/").map(encodeURIComponent).join("/")}`;
   const relationship = Object.hasOwn(relations, project.relationship) ? project.relationship : "unclassified";
   const level = Object.hasOwn(evidence, project.evidenceLevel) ? project.evidenceLevel : "legacy-unreviewed";

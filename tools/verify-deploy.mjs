@@ -21,24 +21,21 @@ async function verify() {
       if (!res.ok || fingerprint(await res.text()) !== asset.hash) throw new Error(`Stale or modified asset: ${asset.path}`);
     }));
   }
-  const health = await get("/api/health");
-  const live = await health.json();
-  if (!health.ok || live.mode !== "cloudflare-scheduler" || live.buildId !== expected.buildId || live.projectCount < 100) throw new Error("Database, scheduled worker or catalog health check failed");
-  const catalog = await get("/api/catalog");
+  if (actual.mode !== "static" || actual.runtimeDatabase !== false || actual.runtimeWorker !== false) throw new Error("Release is not static-only");
+  const catalog = await get("/catalog.json");
   const directory = await catalog.json();
-  if (!catalog.ok || directory.apps?.length !== 20 || directory.meta?.mode !== "live-d1") throw new Error("Live catalog API failed");
-  const detail = await get("/projects/" + directory.apps[0].repo.toLowerCase() + "/");
-  if (!detail.ok || !(await detail.text()).includes(directory.apps[0].name)) throw new Error("Live project page failed");
+  if (!catalog.ok || directory.apps?.length !== expected.projectCount) throw new Error("Static catalog failed");
+  const featured = [...directory.apps].sort((a, b) => b.stars - a.stars)[0];
+  const detail = await get("/projects/" + featured.repo.toLowerCase() + "/");
+  if (!detail.ok || !(await detail.text()).includes(featured.name)) throw new Error("Static project page failed");
+  const translated = await get("/zh-cn/projects/tauricresearch/tradingagents/", { redirect: "manual" });
+  if (translated.status !== 200 || !(await translated.text()).includes('lang="zh-CN"')) throw new Error("Translated static page must render at its canonical URL");
   const home = await get("/");
   const html = await home.text();
-  if (!home.ok || !html.includes('id="liveCatalogSeed"') || !html.includes('"mode":"live-d1"')) throw new Error("Server-rendered live catalog failed");
-  const me = await get("/api/me");
-  const identity = await me.json();
-  if (!me.ok || identity.user !== null || !identity.authEnabled) throw new Error("Anonymous authentication check failed or Google OAuth is not configured");
-  const admin = await get("/api/admin/submissions");
-  if (admin.status !== 403) throw new Error("Anonymous moderation access was not denied");
-  const logout = await get("/api/auth/logout", { method: "POST", headers: { Origin: new URL(origin).origin } });
-  if (!logout.ok || !logout.headers.get("set-cookie")?.includes("Max-Age=0")) throw new Error("Logout cookie cleanup failed");
+  if (!home.ok || !html.includes('data-catalog-mode="static"') || /id="(?:auth|submitForm)"/.test(html)) throw new Error("Static homepage failed");
+  for (const path of ["/api/health", "/api/catalog", "/api/me", "/api/admin/submissions"]) {
+    if ((await get(path)).status !== 404) throw new Error("Legacy API is still reachable: " + path);
+  }
   const missing = await get("/this-route-must-not-exist-jevhunt-release-check/");
   if (missing.status !== 404) throw new Error("Unknown paths must return a real 404");
   const sitemapResponse = await get("/sitemap.xml");
@@ -54,11 +51,11 @@ async function verify() {
     const canonical = await fetch("https://www.jevhunt.com/", { redirect: "manual", signal: AbortSignal.timeout(15000) });
     if (![301, 308].includes(canonical.status) || canonical.headers.get("location") !== "https://jevhunt.com/") throw new Error("www must redirect to the canonical origin");
   }
-  return live;
+  return actual;
 }
 let failure;
 for (let attempt = 0; attempt < 8; attempt++) {
-  try { const live = await verify(); console.log(`Verified production build ${expected.buildId}: ${live.projectCount} live projects, ${EDITORIAL_ROUTES.length} editorial routes, sitemap, screenshot, API access control, D1 health and automatic scheduler heartbeat.`); failure = null; break; }
+  try { const live = await verify(); console.log(`Verified ${origin} build ${expected.buildId}: ${live.projectCount} catalog projects, ${EDITORIAL_ROUTES.length} editorial routes, sitemap, screenshot and disabled legacy APIs.`); failure = null; break; }
   catch (error) { failure = error; console.log(`Verification ${attempt + 1}/8: ${error.message}`); if (attempt < 7) await new Promise(resolve => setTimeout(resolve, 5000)); }
 }
 if (failure) throw failure;

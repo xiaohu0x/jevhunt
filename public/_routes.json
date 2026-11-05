@@ -1,15 +1,1 @@
-{
-  "version": 1,
-  "include": ["/*"],
-  "exclude": [
-    "/assets/*",
-    "/examples/*",
-    "/favicon*",
-    "/icon-*",
-    "/apple-touch-icon.png",
-    "/og.png",
-    "/site.webmanifest",
-    "/robots.txt",
-    "/build-info.json"
-  ]
-}
+{"version":1,"include":["/*"],"exclude":["/*"]}

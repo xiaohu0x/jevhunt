@@ -1,5 +1,5 @@
 import { readCatalogState, catalogUrl, matchesProject } from "./catalog-state.js?v=3a1701cd8f";
-import { renderProjectCard } from "./project-card.js?v=775f180c58";
+import { renderProjectCard } from "./project-card.js?v=ab8325305b";
 import { localizeStaticProjects, staticCatalogIndexUrl } from "./catalog-locales.js?v=2b9c2f1347";
 /* ==========================================================================
    JevHunt — interactions
@@ -9,10 +9,11 @@ import { localizeStaticProjects, staticCatalogIndexUrl } from "./catalog-locales
 
   const $  = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+  const staticSite = document.documentElement.dataset.catalogMode === "static";
 
   try {
     const seed = JSON.parse(document.getElementById("liveCatalogSeed")?.textContent || "null");
-    if (seed?.meta?.mode === "live-d1" && Array.isArray(seed.apps)) {
+    if (!staticSite && seed?.meta?.mode === "live-d1" && Array.isArray(seed.apps)) {
       window.JH.apps = seed.apps; window.JH.catalogMeta = seed.meta; window.JH.catalogRemote = true;
       window.JH.catalogPagination = seed.pagination || null;
       window.JH.catalogQuery = seed.query || null;
@@ -1005,6 +1006,7 @@ import { localizeStaticProjects, staticCatalogIndexUrl } from "./catalog-locales
   }
 
   async function initAuth() {
+    if (staticSite) return;
     const host = $("#auth");
     if (!host || location.protocol === "file:") return;
     host.innerHTML = `<span class="auth__signin auth__signin--loading" aria-busy="true">${GOOGLE_G}<span>${escAttr(t("auth.continue"))}</span></span>`;
@@ -1054,7 +1056,7 @@ import { localizeStaticProjects, staticCatalogIndexUrl } from "./catalog-locales
     initSubmit();
     initNav();
     initAuth();
-    setInterval(refreshLiveCatalog, 300000);
+    if (!staticSite) setInterval(refreshLiveCatalog, 300000);
     const year = $("#year");
     if (year) year.textContent = new Date().getFullYear();
 

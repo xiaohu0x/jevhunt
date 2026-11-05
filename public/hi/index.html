@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="hi" data-locale="hi" data-theme="light">
+<html lang="hi" data-locale="hi" data-theme="light" data-catalog-mode="static">
 <head>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-7QNDGTH1T4"></script>
@@ -576,7 +576,7 @@
       </label><button class="icon-btn" id="themeBtn" title="थीम बदलें" aria-label="थीम बदलें" data-i18n-title="a11y.theme" data-i18n-aria-label="a11y.theme">
         <svg class="ico-sun" viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="4.2" fill="currentColor"/><g stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 2.5v2.6M12 18.9v2.6M2.5 12h2.6M18.9 12h2.6M5.2 5.2l1.9 1.9M16.9 16.9l1.9 1.9M18.8 5.2l-1.9 1.9M7.1 16.9l-1.9 1.9"/></g></svg>
         <svg class="ico-moon" viewBox="0 0 24 24" width="17" height="17"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z" fill="currentColor"/></svg>
-      </button><div class="auth" id="auth"></div></div>
+      </button></div>
     </div>
     <a class="btn btn--sm btn--primary home-nav__submit" href="#submit" data-i18n="nav.submit">प्रोजेक्ट भेजें</a>
     <button class="icon-btn home-menu-toggle" id="mobileMenuToggle" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="मेन्यू खोलें" data-i18n-aria-label="home.menu"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
@@ -912,28 +912,9 @@
         <div class="cta__eyebrow">◢ <span data-i18n="cta.eyebrow">प्रोजेक्ट आमंत्रित हैं</span></div>
         <h2 data-i18n-html="cta.title">Jev से कुछ बनाया है?<br />उसे सबके सामने लाएँ।</h2>
         <p data-i18n="cta.lead">सार्वजनिक GitHub रिपॉज़िटरी भेजें। तय प्रकाशन से पहले संपादक स्रोत प्रमाण और श्रेणी की जाँच करते हैं।</p>
-        <div class="sub__signin" id="subSignin" hidden>
-          <span data-i18n-html="cta.signin">देखना सभी के लिए खुला है और साइन इन ज़रूरी नहीं है। GitHub प्रोजेक्ट भेजने के लिए Google के आधिकारिक OAuth पेज से आगे बढ़ें। JevHunt को केवल आपकी मूल प्रोफ़ाइल और ईमेल मिलते हैं, Google पासवर्ड कभी नहीं। <a href="/privacy/">गोपनीयता विवरण</a></span>
-        </div>
 
-        <form class="sub" id="submitForm" hidden novalidate>
-          <div class="sub__row">
-            <input class="sub__field" type="url" id="subUrl" data-i18n-ph="cta.ph" placeholder="https://github.com/you/your-jev-project" pattern="https://github\.com/[^/]+/[^/]+/?" data-i18n-title="form.repoInvalid" title="https://github.com/owner/repo जैसा GitHub रिपॉज़िटरी URL दर्ज करें।" required />
-            <input class="sub__field" type="text" id="subName" data-i18n-ph="sub.name" placeholder="ऐप का नाम" maxlength="120" required />
-          </div>
-          <div class="sub__row">
-            <select class="sub__field" id="subCat" aria-label="प्रोजेक्ट की श्रेणी" data-i18n-aria-label="a11y.category" required></select>
-            <textarea class="sub__field" id="subDesc" data-i18n-ph="sub.desc" data-i18n-aria-label="sub.desc" aria-label="यह कौन-सा निर्णय लेता है?" placeholder="यह कौन-सा निर्णय लेता है?" maxlength="1000" rows="3"></textarea>
-          </div>
-          <label class="sub__consent">
-            <input type="checkbox" id="subConsent" required />
-            <span data-i18n-html="cta.consent">मैं <a href="/terms/" target="_blank">शर्तों</a> और <a href="/privacy/" target="_blank">गोपनीयता नीति</a> से सहमत हूँ। मैं पुष्टि करता/करती हूँ कि इस प्रोजेक्ट में फ़िशिंग, मैलवेयर, लॉगिन जानकारी की चोरी या भ्रामक सामग्री नहीं है।</span>
-          </label>
-          <div class="sub__actions">
-            <button class="btn btn--primary" type="submit" id="subBtn" data-i18n="cta.btn">प्रोजेक्ट भेजें</button>
-            <span class="sub__hint" id="formNote" role="status" data-i18n="cta.note">विचार, डेमो और अधूरे प्रयोग भी स्वागत योग्य हैं।</span>
-          </div>
-        </form>
+
+        <p class="static-submit"><a class="btn btn--primary" href="https://github.com/xiaohu0x/jevhunt/issues/new?title=Submit%20a%20Jev%20project" rel="noopener noreferrer">प्रोजेक्ट भेजें · GitHub ↗</a></p>
 
         <div class="sub__list" id="mySubs" hidden></div>
       </div>
@@ -994,10 +975,10 @@
 
 <script src="/assets/js/locales/hi.js?v=5c52f8c482"></script>
 <script src="/assets/js/data.js?v=442a3e084a"></script>
-<script src="/assets/js/projects.js?v=a4c5c58266"></script>
+<script src="/assets/js/projects.js?v=dd03f6b2a4"></script>
 <script id="liveCatalogSeed" type="application/json">null</script>
 <script src="/assets/js/analytics.js?v=b3a8b122f8" defer></script>
-<script type="module" src="/assets/js/main.js?v=d9054282af"></script>
+<script type="module" src="/assets/js/main.js?v=d45f2f5a05"></script>
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 </body>

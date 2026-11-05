@@ -174,11 +174,12 @@ test("editorial navigation points to the official JEV source", () => {
   assert.doesNotMatch(index, /jevai\.org/i);
 });
 
-test("Google authentication stays visible in every auth state", () => {
-  assert.match(index, /<div class="auth" id="auth"><\/div>/);
-  assert.match(main, /auth__signin auth__signin--loading/);
-  assert.match(main, /auth__signin auth__signin--disabled/);
-  assert.match(main, /href="\/api\/auth\/google\?next=/);
+test("static homepages link to GitHub submissions without a login flow", () => {
+  for (const html of [index, ...localizedPages.map(page => page.html)]) {
+    assert.match(html, /data-catalog-mode="static"/);
+    assert.match(html, /class="static-submit"/);
+    assert.doesNotMatch(html, /id="(?:auth|submitForm|subSignin)"/);
+  }
 });
 
 test("every HTML page loads the configured Google tag exactly once", () => {

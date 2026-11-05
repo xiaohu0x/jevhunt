@@ -16,8 +16,9 @@ export async function mapLimit(values, limit, fn) {
   return result;
 }
 export class GitHub {
-  constructor({ token = githubToken(), cachePath = ".cache/github.json", fetcher = fetch } = {}) {
+  constructor({ token = githubToken(), cachePath = ".cache/github.json", fetcher = fetch, maxRequests = Infinity, minIntervalMs = 0, deadline = Infinity } = {}) {
     this.token = token; this.cachePath = cachePath; this.fetcher = fetcher; this.calls = 0;
+    this.maxRequests = maxRequests; this.minIntervalMs = minIntervalMs; this.deadline = deadline; this.nextRequestAt = 0;
     try { this.cache = JSON.parse(readFileSync(cachePath, "utf8")); } catch { this.cache = {}; }
   }
   save() {
@@ -31,11 +32,17 @@ export class GitHub {
     let last;
     for (let attempt = 0; attempt < 3; attempt++) {
       try {
+        if (this.calls >= this.maxRequests || Date.now() >= this.deadline) throw Object.assign(new Error("Daily sync request/time limit reached"), { permanent: true, budget: true });
+        // Reserve before awaiting: concurrent callers and retries share one cap.
+        this.calls++;
+        const startAt = Math.max(Date.now(), this.nextRequestAt);
+        this.nextRequestAt = startAt + this.minIntervalMs;
+        if (startAt > Date.now()) await pause(startAt - Date.now());
+        if (Date.now() >= this.deadline) throw Object.assign(new Error("Daily sync time limit reached"), { permanent: true, budget: true });
         const headers = { accept: raw ? "text/plain" : "application/vnd.github+json", "user-agent": "JevHunt/0.3" };
         if (new URL(url).hostname === "api.github.com" && this.token) headers.authorization = `Bearer ${this.token}`;
         if (method === "GET" && this.cache[key]?.etag) headers["if-none-match"] = this.cache[key].etag;
         if (body) headers["content-type"] = "application/json";
-        this.calls++;
         const response = await this.fetcher(url, { method, headers, body: body ? JSON.stringify(body) : undefined, signal: AbortSignal.timeout(25_000) });
         if (response.status === 304) return this.cache[key].body;
         if (response.status === 404) return null;
@@ -77,7 +84,7 @@ export class GitHub {
           const errors = (response.errors || []).filter(e => !e.path || e.path[0] === "r" + i);
           output.set(batch[i].toLowerCase(), item || { unavailable: true, reason: errors.some(e => e.type !== "NOT_FOUND") ? "fetch-error" : "not-found" });
         }
-      } catch { for (const repo of batch) output.set(repo.toLowerCase(), { unavailable: true, reason: "fetch-error" }); }
+      } catch (error) { if (error.budget) throw error; for (const repo of batch) output.set(repo.toLowerCase(), { unavailable: true, reason: "fetch-error" }); }
     }
     return output;
   }

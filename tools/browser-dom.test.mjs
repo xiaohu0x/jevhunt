@@ -15,6 +15,7 @@ async function boot(t, { storageBlocked = false, live = false, locale = "en", qu
   const dom = new JSDOM(read(path.slice(1) + "index.html"), { url: "https://jevhunt.com" + path + query, runScripts: "outside-only", pretendToBeVisual: true });
   t.after(() => dom.window.close());
   const { window } = dom;
+  if (live) window.document.documentElement.removeAttribute("data-catalog-mode");
   Object.assign(window, stateHelpers, localeHelpers, { renderProjectCard });
   const mediaListeners = [];
   const mobileMedia = { matches: mobile, addEventListener: (_event, listener) => mediaListeners.push(listener) };
@@ -29,6 +30,7 @@ async function boot(t, { storageBlocked = false, live = false, locale = "en", qu
   const scrolls = [];
   window.Element.prototype.scrollIntoView = function () { scrolls.push(this.id); };
   const requests = [];
+  const networkRequests = [];
   const snapshot = JSON.parse(read("catalog.json"));
   const added = { ...snapshot.apps[0], repo: "live/new-jev-app", name: "runtime-only-project", stars: 1, desc: "A newly indexed project", relationship: "jev-app" };
   function catalogResponse(path) {
@@ -43,6 +45,7 @@ async function boot(t, { storageBlocked = false, live = false, locale = "en", qu
     return Response.json({ meta: { ...snapshot.meta, mode: "live-d1", projectCount: snapshot.apps.length + 1 }, apps: matches.slice((page - 1) * pageSize, page * pageSize), pagination: { page, pageSize, total: matches.length, totalPages, start: matches.length ? (page - 1) * pageSize + 1 : 0, end: Math.min(page * pageSize, matches.length) } });
   }
   window.fetch = async (path, options = {}) => {
+    networkRequests.push(path);
     if (path === "/api/me") return Response.json({ user: null, authEnabled: true });
     if (live && path.startsWith("/api/catalog")) {
       requests.push({ url: path, signal: options.signal });
@@ -69,7 +72,7 @@ async function boot(t, { storageBlocked = false, live = false, locale = "en", qu
   window.eval(script);
   if (window.document.readyState === "loading") await new Promise(resolve => window.document.addEventListener("DOMContentLoaded", resolve, { once: true }));
   await new Promise(resolve => setImmediate(resolve));
-  return { window, document: window.document, loads: () => catalogLoads, requests, scrolls, resize };
+  return { window, document: window.document, loads: () => catalogLoads, requests, networkRequests, scrolls, resize };
 }
 
 test("Chinese static cards and full-index search retain the reviewed summaries after hydration", async t => {
@@ -131,7 +134,7 @@ test("directory initializes with blocked browser storage and only the first page
   assert.match(document.getElementById("directoryPagesBottom").textContent, /Page 1/);
   document.querySelector('#directoryPagesBottom [data-page="2"]').click();
   assert.equal(new URL(window.location.href).searchParams.get("page"), "2");
-  assert.ok(document.querySelector("#auth a[href^='/api/auth/google']"));
+  assert.equal(document.getElementById("auth"), null);
   assert.equal(document.documentElement.dataset.theme, "light");
   document.getElementById("themeBtn").click();
   assert.equal(document.documentElement.dataset.theme, "dark");
@@ -167,8 +170,8 @@ test("new locales initialize and search with translated labels and all 15 langua
     const select = document.getElementById("languageSelect");
     assert.equal(select.options.length, 15, locale);
     assert.equal(select.value, `/${locale}/`, locale);
-    assert.equal(document.querySelector("#auth a").textContent.includes(messages["auth.continue"]), true, locale);
-    assert.equal(document.getElementById("subDesc").getAttribute("aria-label"), messages["sub.desc"], locale);
+    assert.equal(document.getElementById("auth"), null);
+    assert.ok(document.querySelector(".static-submit a").textContent.includes(messages["nav.submit"]), locale);
     assert.match(document.getElementById("catalogUpdated").getAttribute("aria-label"), /UTC/);
     const evidenceLabels = ["official", "documented", "code-reference", "reviewed", "legacy-unreviewed"].map(level => messages["evidence." + level]).filter(Boolean);
     const evidenceLink = document.querySelector("#appGrid .card__site");
@@ -490,4 +493,19 @@ test("the new light default preserves an explicit dark preference on every page"
     dom.window.document.getElementById("pageTheme").click();
     assert.equal(dom.window.document.documentElement.dataset.theme, expected === "dark" ? "light" : "dark");
   }
+});
+
+
+test("static browsing and search make no API calls", async t => {
+  const { window, document, networkRequests, loads } = await boot(t);
+  assert.equal(document.documentElement.dataset.catalogMode, "static");
+  assert.equal(document.getElementById("submitForm"), null);
+  assert.equal(document.getElementById("auth"), null);
+  const input = document.getElementById("dirSearch");
+  input.value = "browser";
+  input.dispatchEvent(new window.Event("input", { bubbles: true }));
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(loads(), 1);
+  assert.deepEqual(networkRequests, []);
+  assert.ok(document.querySelectorAll("#appGrid .card").length > 0);
 });

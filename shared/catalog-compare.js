@@ -22,7 +22,7 @@ const ROWS = [
 ];
 
 export function compareTable(projects, { compact = false } = {}) {
-  const columns = projects.map(project => `<th scope="col"><a href="${projectPath(project.repo)}">${esc(project.name)}</a><span class="compare-table__repo">${esc(project.repo)}</span></th>`).join("");
+  const columns = projects.map(project => `<th scope="col"><a href="${projectPath(project)}">${esc(project.name)}</a><span class="compare-table__repo">${esc(project.repo)}</span></th>`).join("");
   const rows = ROWS.map(([label, value]) => `<tr><th scope="row">${esc(label)}</th>${projects.map(project => `<td>${esc(value(project))}</td>`).join("")}</tr>`).join("");
   const links = `<tr><th scope="row">Links</th>${projects.map(project => `<td><a href="${repoUrl(project.repo)}" target="_blank" rel="ugc nofollow noopener noreferrer">GitHub ↗</a>${project.evidence ? ` · <a href="${esc(project.evidence)}" target="_blank" rel="ugc nofollow noopener noreferrer">Evidence ↗</a>` : ""}</td>`).join("")}</tr>`;
   return `<div class="compare-scroll"><table class="compare-table${compact ? " compare-table--compact" : ""}"><thead><tr><th scope="col">Compared project</th>${columns}</tr></thead><tbody>${rows}${links}</tbody></table></div>`;
@@ -72,7 +72,7 @@ export function alternativesView({ project, alternatives, categoryName }) {
     [`Is ${name} open source?`, project.license ? `${name} is published under ${project.license}. Check the repository for the full terms.` : `${name} does not report a license in its repository metadata; check the repository before reuse.`],
   ];
   const description = `Compare ${name} with ${alternatives.length} similar ${category.toLowerCase()} projects, including evidence, license, language, activity and tasks.`;
-  const body = `<header class="legal__header"><nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">JevHunt</a> / <a href="/categories/${esc(project.cat)}/">${esc(category)}</a> / <a href="${projectPath(project.repo)}">${esc(name)}</a> / Alternatives</nav><h1>${esc(name)} alternatives</h1><p class="legal__summary">${esc(description)}</p><p><a class="btn btn--ghost" href="${projectPath(project.repo)}">← Back to ${esc(name)}</a> <a class="btn btn--ghost" href="/compare/?ids=${encodeURIComponent(tableProjects.slice(0, 3).map(item => item.repo).join(","))}">Compare these three →</a></p></header>${compareTable(tableProjects)}<section class="related" aria-labelledby="alternatives-heading"><h2 id="alternatives-heading">More ${esc(category.toLowerCase())} projects</h2><div class="app-grid">${alternatives.map(item => renderCard(item)).join("")}</div></section><section class="alternatives-faq" aria-labelledby="alternatives-faq-heading"><h2 id="alternatives-faq-heading">Questions about ${esc(name)}</h2>${faq.map(([question, answer]) => `<details><summary>${esc(question)}</summary><p>${esc(answer)}</p></details>`).join("")}</section><p><a href="/methodology/">How we review →</a></p>`;
+  const body = `<header class="legal__header"><nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">JevHunt</a> / <a href="/categories/${esc(project.cat)}/">${esc(category)}</a> / <a href="${projectPath(project)}">${esc(name)}</a> / Alternatives</nav><h1>${esc(name)} alternatives</h1><p class="legal__summary">${esc(description)}</p><p><a class="btn btn--ghost" href="${projectPath(project)}">← Back to ${esc(name)}</a> <a class="btn btn--ghost" href="/compare/?ids=${encodeURIComponent(tableProjects.slice(0, 3).map(item => item.repo).join(","))}">Compare these three →</a></p></header>${compareTable(tableProjects)}<section class="related" aria-labelledby="alternatives-heading"><h2 id="alternatives-heading">More ${esc(category.toLowerCase())} projects</h2><div class="app-grid">${alternatives.map(item => renderCard(item)).join("")}</div></section><section class="alternatives-faq" aria-labelledby="alternatives-faq-heading"><h2 id="alternatives-faq-heading">Questions about ${esc(name)}</h2>${faq.map(([question, answer]) => `<details><summary>${esc(question)}</summary><p>${esc(answer)}</p></details>`).join("")}</section><p><a href="/methodology/">How we review →</a></p>`;
   return {
     title: `${name} alternatives — ${category} for Jev`,
     description,
@@ -82,12 +82,12 @@ export function alternativesView({ project, alternatives, categoryName }) {
       "@context": "https://schema.org",
       "@graph": [
         { "@type": "CollectionPage", "@id": ORIGIN + path + "#alternatives", url: ORIGIN + path, name: `${name} alternatives`, description, inLanguage: "en" },
-        { "@type": "ItemList", inLanguage: "en", numberOfItems: alternatives.length, itemListElement: alternatives.map((item, index) => ({ "@type": "ListItem", position: index + 1, name: item.name, url: ORIGIN + projectPath(item.repo) })) },
+        { "@type": "ItemList", inLanguage: "en", numberOfItems: alternatives.length, itemListElement: alternatives.map((item, index) => ({ "@type": "ListItem", position: index + 1, name: item.name, url: ORIGIN + projectPath(item) })) },
         { "@type": "FAQPage", mainEntity: faq.map(([question, answer]) => ({ "@type": "Question", name: question, acceptedAnswer: { "@type": "Answer", text: answer } })) },
         { "@type": "BreadcrumbList", itemListElement: [
           { "@type": "ListItem", position: 1, name: "JevHunt", item: ORIGIN + "/" },
           { "@type": "ListItem", position: 2, name: category, item: `${ORIGIN}/categories/${project.cat}/` },
-          { "@type": "ListItem", position: 3, name, item: ORIGIN + projectPath(project.repo) },
+          { "@type": "ListItem", position: 3, name, item: ORIGIN + projectPath(project) },
           { "@type": "ListItem", position: 4, name: "Alternatives", item: ORIGIN + path },
         ] },
       ],

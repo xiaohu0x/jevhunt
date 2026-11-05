@@ -4,15 +4,9 @@ compatibility_date = "2026-09-01"
 workers_dev = false
 preview_urls = false
 
-# Each minute advances a small durable batch. New repositories, and those that
-# have reached the launch board's star floor, are searched for hourly; the full
-# scans refresh every six hours; existing evidence is rechecked continuously
-# across the day.
+# Retired: daily updates run on a free GitHub-hosted runner.
 [triggers]
-crons = ["* * * * *"]
-
-[vars]
-VERIFY_BATCH_SIZE = "5"
+crons = []
 
 [[durable_objects.bindings]]
 name = "CLOCK"
@@ -21,12 +15,6 @@ class_name = "CatalogClock"
 [[migrations]]
 tag = "catalog-clock-v1"
 new_sqlite_classes = ["CatalogClock"]
-
-[[d1_databases]]
-binding = "DB"
-database_name = "jevhunt-db"
-database_id = "7775e979-c7fc-4322-a6de-215b0436495a"
-migrations_dir = "../../migrations"
 
 [observability]
 enabled = true

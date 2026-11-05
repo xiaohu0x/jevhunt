@@ -1,17 +1,4 @@
+# Static Pages only. Production has no database or Worker service bindings.
 name = "jevhunt"
-compatibility_date = "2025-01-01"
+compatibility_date = "2026-09-01"
 pages_build_output_dir = "public"
-
-# Public, non-secret config. GOOGLE_CLIENT_SECRET is a Worker secret
-# (set with: npx wrangler pages secret put GOOGLE_CLIENT_SECRET).
-[vars]
-GOOGLE_CLIENT_ID = "549996556432-vdcaf3ais7mig0f84alus4q36qjaosna.apps.googleusercontent.com"
-
-[[d1_databases]]
-binding = "DB"
-database_name = "jevhunt-db"
-database_id = "7775e979-c7fc-4322-a6de-215b0436495a"
-
-[[services]]
-binding = "CATALOG_SYNC"
-service = "jevhunt-catalog-sync"
