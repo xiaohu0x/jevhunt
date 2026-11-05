@@ -15,13 +15,13 @@ npm run check:static
 
 The build uses the committed `public/catalog.json` snapshot and reviewed content in `content/projects/`. It performs no source synchronization. `npm run deploy:check` validates an isolated static upload without publishing.
 
-## Daily updates and manual sync
+## Daily picks and manual sync
 
-`.github/workflows/catalog-daily.yml` runs once a day at 10:17 UTC on the public repository's standard Ubuntu runner. It also supports **Actions → Daily static catalog → Run workflow** for an owner-triggered manual run. Both use the same persisted UTC daily reservation, so a manual run consumes that day's automatic slot. A failed run also consumes its slot. GitHub may delay scheduled runs; the site continues serving its last successful release.
+The homepage selects 1–8 existing projects each UTC day using a deterministic shuffle in the visitor's browser. Everyone sees the same selection for that day and snapshot, across languages and refreshes. One cacheable static JSON file supplies the pool; midnight changes reuse the loaded data. No scheduled job, database query, source synchronization or daily deployment is needed.
 
-The workflow stops when the repository becomes private. It uses no Actions caches or uploaded artifacts. Standard runners for public repositories and static Cloudflare Pages requests are free under the providers' current pricing.
+The section is labelled **Today's picks**. It does not claim projects were created or updated that day. Repository dates, stars and source checks remain those of the saved snapshot. If JavaScript or the static file fails to load, a **Catalog picks** fallback remains available. Archived projects, forks, directories and listings without descriptions are excluded from the daily pool.
 
-Each batch has fixed limits:
+There is no automatic synchronization workflow or publishing secret. The owner can optionally run a manual source update with fixed limits:
 
 - At most 100 outbound source-request attempts, including retries.
 - At most 20 repository checks, including at most 10 new projects.
@@ -39,17 +39,11 @@ npm test
 npm run check:static
 ```
 
-`catalog/sync-state.json` stores the daily attempt, rotating query position and pending candidates. Keep it with the updated catalog when committing. Local attempts are limited by the state in that checkout; use the GitHub workflow when coordinating with automatic updates. No sync is triggered by building or browsing the site.
+`catalog/sync-state.json` stores the attempt date, rotating query position and pending candidates. It allows at most one manual attempt per UTC day in that checkout, including failed attempts. Keep it with the updated catalog when committing. No sync is triggered by building or browsing the site.
 
 ## Static publication
 
-One-time workflow configuration:
-
-- Repository secret `JEVHUNT_PAGES_TOKEN`: a dedicated Cloudflare token with **Cloudflare Pages: Edit**, scoped to the hosting account. Do not use an account-wide administrator credential.
-- Repository variable `CLOUDFLARE_ACCOUNT_ID`: the hosting account ID.
-- Set repository variable `JEVHUNT_DAILY_ENABLED` to `true` only after the publishing credential is configured. Without it, both scheduled and manual workflow jobs are skipped. Missing publishing credentials stop a run before any source requests.
-
-Cloudflare Pages does not support narrowing this permission to one Pages project; the publishing code always targets `jevhunt`. Keep the token in GitHub encrypted secrets, never in this repository.
+Publish manually using your local Cloudflare login:
 
 ```sh
 npm run deploy
@@ -57,7 +51,7 @@ npm run deploy
 
 Deployment builds, tests, checks the free plan limits, and uploads from a temporary directory outside the repository. That directory contains only static assets, so Wrangler cannot discover the legacy `functions/` tree or its bindings. The Pages configuration has no database or service bindings, and `_routes.json` excludes every request from Functions as an additional safeguard.
 
-Publication stops above 5,000 files (one quarter of the free plan limit), 12 MiB per asset, or Pages redirect limits; it never upgrades a plan. If the daily build or publication fails, the previously deployed website remains available.
+Publication stops above 5,000 files (one quarter of the free plan limit), 12 MiB per asset, or Pages redirect limits; it never upgrades a plan. If a build or publication fails, the previously deployed website remains available.
 
 `npm run verify:production` checks the static build identity, assets, catalog, example pages and sitemap. It also verifies that the old API routes are unavailable.
 
@@ -75,7 +69,7 @@ Account-level Workers subscriptions, other projects and domain registration are 
 - Search loads one versioned static catalog index on interaction; query, filters, page and sort persist in the URL.
 - Comparison fetches a static metadata file.
 - Submissions and corrections use GitHub issues. Google sign-in and database-backed submission forms are no longer offered.
-- `/status/` and `/catalog-audit.json` show the snapshot and batch results; a batch timestamp is not a claim that every project was rechecked that day.
+- `/status/` and `/catalog-audit.json` show the snapshot and manual update results; the daily selection date is separate from source-check dates.
 
 ## Content and evidence
 

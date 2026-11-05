@@ -22,6 +22,7 @@ async function verify() {
     }));
   }
   if (actual.mode !== "static" || actual.runtimeDatabase !== false || actual.runtimeWorker !== false) throw new Error("Release is not static-only");
+  if (actual.syncSchedule !== "manual" || actual.dailySelection?.max !== 8) throw new Error("Manual synchronization and daily selection limits must be preserved");
   const catalog = await get("/catalog.json");
   const directory = await catalog.json();
   if (!catalog.ok || directory.apps?.length !== expected.projectCount) throw new Error("Static catalog failed");
@@ -33,6 +34,7 @@ async function verify() {
   const home = await get("/");
   const html = await home.text();
   if (!home.ok || !html.includes('data-catalog-mode="static"') || /id="(?:auth|submitForm)"/.test(html)) throw new Error("Static homepage failed");
+  if (!html.includes('data-daily-source="/assets/daily-picks.json?v=') || !html.includes('data-i18n="daily.lead"')) throw new Error("Static daily selection missing");
   for (const path of ["/api/health", "/api/catalog", "/api/me", "/api/admin/submissions"]) {
     if ((await get(path)).status !== 404) throw new Error("Legacy API is still reachable: " + path);
   }

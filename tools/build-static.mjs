@@ -2,12 +2,14 @@ import { buildSync } from 'esbuild';
 import { projectShard, PROJECT_SHARDS } from '../shared/static-projects.js';
 import { readFileSync, writeFileSync, mkdirSync, rmSync } from 'node:fs';
 import { dirname } from 'node:path';
-import { loadData, page, projectPath } from './lib/site.mjs';
+import { loadData, page, projectPath, esc, hash } from './lib/site.mjs';
 import { renderProject } from '../shared/catalog-view.js';
 import { duplicateProjectNames, projectNameKey } from '../shared/project-seo.js';
 import { localizedProjectPreview } from './lib/project-content.mjs';
 import { launchBoardFromProjects, launchDayView, isLaunchDate, LAUNCH_PAGE_SIZE } from '../shared/catalog-launches.js';
 import { rssFeed } from '../shared/rss.js';
+import { publicPreview } from '../shared/catalog-data.js';
+import { dailyPicksHtml, selectDailyProjects } from '../shared/daily-picks.js';
 
 const { apps, catalogMeta: meta, i18n, projectContents } = loadData();
 const write = (path, html) => { const file = 'public' + path; mkdirSync(dirname(file), { recursive: true }); writeFileSync(file, html); };
@@ -21,6 +23,11 @@ const board = launchBoardFromProjects(apps);
 const pulseDates = board.pulse.map(p => p.date);
 const dates = [...new Set([...launchDates, ...pulseDates])].sort();
 const groups = new Map(dates.map(date => [date, launches.filter(p => p.created === date).sort((a, b) => b.stars - a.stars || a.name.localeCompare(b.name))]));
+const dailyPool = JSON.stringify(apps.map(publicPreview));
+const dailySource = '/assets/daily-picks.json?v=' + hash(dailyPool);
+write('/assets/daily-picks.json', dailyPool);
+buildSync({ entryPoints: ['browser/daily-picks.js'], outfile: 'public/assets/js/daily-picks.js', bundle: true, format: 'esm', platform: 'browser', target: 'es2022', minify: true });
+const fallbackPicks = selectDailyProjects(apps, meta.syncedAt.slice(0, 10));
 
 for (const [localeKey, locale] of Object.entries(i18n.locales)) {
   const prefix = localeKey === 'en' ? '' : '/' + localeKey;
@@ -31,6 +38,11 @@ for (const [localeKey, locale] of Object.entries(i18n.locales)) {
   home = home.replace(/<div class="sub__signin" id="subSignin"[^>]*>[\s\S]*?<\/div>/, '');
   home = home.replace(/<form\b[^>]*id="submitForm"[^>]*>[\s\S]*?<\/form>/, `<p class="static-submit"><a class="btn btn--primary" href="${issueUrl}" rel="noopener noreferrer">${locale.messages['nav.submit']} · GitHub ↗</a></p>`);
   home = home.replace(/<p class="static-submit">[\s\S]*?<\/p>/, `<p class="static-submit"><a class="btn btn--primary" href="${issueUrl}" rel="noopener noreferrer">${locale.messages['nav.submit']} · GitHub ↗</a></p>`);
+  home = home.replace(/<h2 id="launchesTitle"[^>]*>[\s\S]*?<\/h2>/, `<h2 id="launchesTitle" data-i18n="daily.fallbackTitle">${esc(locale.messages['daily.fallbackTitle'])}</h2>`);
+  home = home.replace(/<p class="home-section__lead" data-i18n="(?:launch.lead|daily.lead)">[\s\S]*?<\/p>/, `<p class="home-section__lead" data-i18n="daily.lead">${esc(locale.messages['daily.lead'])}</p>`);
+  home = home.replace(/<div class="launch-board" id="launchBoard"[^>]*>/, `<div class="launch-board" id="launchBoard" data-daily-source="${dailySource}">`);
+  home = home.replace(/(<!-- launch-prerender:start -->)[\s\S]*?(<!-- launch-prerender:end -->)/, (_match, start, end) => start + dailyPicksHtml(fallbackPicks.map(p => localizedProjectPreview(p, projectContents, localeKey)), null, locale.messages, { basePath: prefix, lang: locale.lang }) + end);
+  home = home.replace(/<script[^>]*src="\/assets\/js\/daily-picks\.js[^"]*"[^>]*><\/script>/g, '').replace('</body>', '<script type="module" src="/assets/js/daily-picks.js"></script></body>');
   writeFileSync(indexPath, home.replace(/[ \t]+$/gm, ''));
   if (localeKey !== 'en') {
     rmSync(`public${prefix}/projects`, { recursive: true, force: true });
@@ -81,13 +93,13 @@ let submit = readFileSync('public/submit/index.html', 'utf8');
 submit = submit.replace('href="/#submit"', `href="${issueUrl}"`).replace(/Approved projects appear after the scheduled catalog check, usually within a few hours\./, 'Approved projects appear in a subsequent catalog update.');
 write('/submit/index.html', submit);
 let methodology = readFileSync('public/methodology/index.html', 'utf8');
-methodology = methodology.replace(/<p>A Cloudflare scheduled worker[\s\S]*?<\/p>/, '<p>The catalog is updated in a bounded daily batch. Each run checks a small group of projects; other listings retain their last known information. Failed checks retain the previous data. Editors review corrections and submissions on GitHub.</p>');
+methodology = methodology.replace(/<p>A Cloudflare scheduled worker[\s\S]*?<\/p>/, '<p>Catalog information changes only when an editor runs a manual update. Each project retains its last known information and check date. Today’s picks rotate 1–8 existing projects each day; selection is not a new launch or a new source check. Editors review corrections and submissions on GitHub.</p>');
 write('/methodology/index.html', methodology);
-write('/status/index.html', page({ title: 'Catalog update status', description: 'The last catalog update and daily batch results.', path: '/status/', body: `<h1>Catalog update status</h1><p>Catalog snapshot: <time>${meta.syncedAt}</time></p><p>${apps.length} listed projects. Updates run in daily batches, so individual projects may have older check dates.</p><p><a href="https://github.com/xiaohu0x/jevhunt/actions/workflows/catalog-daily.yml">Daily update history</a> · <a href="/catalog-audit.json">Catalog audit</a></p>` }));
+write('/status/index.html', page({ title: 'Catalog update status', description: 'The latest manual catalog update and daily project selection.', path: '/status/', body: `<h1>Catalog update status</h1><p>Catalog snapshot: <time>${meta.syncedAt}</time></p><p>${apps.length} listed projects. Catalog updates are manual; individual projects retain their stated check dates.</p><p>Today’s picks rotate 1–8 existing projects each day at 00:00 UTC. Selection does not change repository facts or their update dates.</p><p><a href="/catalog-audit.json">Catalog audit</a> · <a href="https://github.com/xiaohu0x/jevhunt/issues">Submissions and corrections</a></p>` }));
 const compare = readFileSync('public/compare/index.html', 'utf8').replace(/<div id="staticComparison"[^>]*><\/div>/g, '').replace(/<script[^>]*src="\/assets\/js\/compare-static\.js[^"]*"[^>]*><\/script>/g, '').replace('</main>', '<div id="staticComparison" aria-live="polite"></div></main>').replace('</body>', '<script type="module" src="/assets/js/compare-static.js"></script></body>');
 write('/compare/index.html', compare);
 const comparison = apps.map(({ repo, name, relationship, evidenceLevel, license, language, stars, pushed, archived, evidence, detailPath }) => ({ repo, name, relationship, evidenceLevel, license, language, stars, pushed, archived, evidence, detailPath }));
 write('/assets/catalog-compare.json', JSON.stringify(comparison));
 const build = JSON.parse(readFileSync('public/build-info.json', 'utf8'));
-write('/build-info.json', JSON.stringify({ ...build, mode: 'static', syncSchedule: 'daily', runtimeDatabase: false, runtimeWorker: false }) + '\n');
+write('/build-info.json', JSON.stringify({ ...build, mode: 'static', syncSchedule: 'manual', dailySelection: { min: 1, max: 8, timeZone: 'UTC', source: 'static-snapshot' }, runtimeDatabase: false, runtimeWorker: false }) + '\n');
 console.log('Built static localized details, launch days, submissions, status and comparison.');

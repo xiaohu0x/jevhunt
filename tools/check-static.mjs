@@ -22,6 +22,8 @@ export function checkStatic(root = 'public') {
   assert.equal(build.mode, 'static');
   assert.equal(build.runtimeDatabase, false);
   assert.equal(build.runtimeWorker, false);
+  assert.equal(build.syncSchedule, 'manual', 'Catalog synchronization must remain manual');
+  assert.deepEqual(build.dailySelection, { min: 1, max: 8, timeZone: 'UTC', source: 'static-snapshot' });
   const redirects = readFileSync(join(root, '_redirects'), 'utf8').split('\n').filter(s => s.trim() && !s.startsWith('#'));
   for (const rule of redirects) {
     const [source, target, code] = rule.split(/\s+/);

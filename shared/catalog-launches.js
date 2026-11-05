@@ -138,15 +138,15 @@ export function evidenceCitation(url) {
   return `${file}${lines} @${commit.slice(0, 7)}`;
 }
 
-export function projectTileHtml(project, lang = "en") {
+export function projectTileHtml(project, lang = "en", showAvatar = true) {
   const repo = String(project.repo || "");
   const initial = Array.from(project.name || repo.split("/").at(-1) || "J")[0].toLocaleUpperCase(lang);
   const owner = repo.split("/")[0].replace(/[^A-Za-z0-9-]/g, "");
   // A background layer over the letter: a failed avatar leaves the letter, not a broken image icon.
-  return `<span class="project-tile" aria-hidden="true">${esc(initial)}${owner ? `<span class="project-tile__image" style="background-image:url('https://github.com/${owner}.png?size=88')"></span>` : ""}</span>`;
+  return `<span class="project-tile" aria-hidden="true">${esc(initial)}${owner && showAvatar ? `<span class="project-tile__image" style="background-image:url('https://github.com/${owner}.png?size=88')"></span>` : ""}</span>`;
 }
 
-export function launchRowHtml(project, position, messages = {}, { basePath = "", lang = "en", showDate = false } = {}) {
+export function launchRowHtml(project, position, messages = {}, { basePath = "", lang = "en", showDate = false, showAvatar = true } = {}) {
   const text = (key, fallback) => messages[key] || fallback;
   const repo = String(project.repo || "");
   const name = project.name || repo.split("/").at(-1);
@@ -166,7 +166,7 @@ export function launchRowHtml(project, position, messages = {}, { basePath = "",
   const verified = isVerified(project)
     ? `<span class="launch-row__verified" role="img" aria-label="${esc(text("home.verified", "Verified"))}" title="${esc(text("apps.verifiedHint", "Documented evidence, a description and a recent catalog check"))}">${CHECK_ICON}</span>`
     : "";
-  return `<li class="launch-row"><span class="launch-row__rank${position === 1 ? " is-first" : ""}">${position}</span>${projectTileHtml(project, lang)}<div class="launch-row__body"><div class="launch-row__title"><a class="launch-row__name" href="${projectPath(repo, basePath)}">${esc(name)}</a>${verified}</div><p class="launch-row__desc">${esc(project.desc)}</p><div class="launch-row__meta">${launched}<span>${esc(text(`relationship.${kind}`, RELATION_LABELS[kind]))}</span>${project.language ? `<span>${esc(project.language)}</span>` : ""}${source}</div></div><a class="launch-row__stars" href="${esc(repoUrl(repo))}" target="_blank" rel="ugc nofollow noopener noreferrer" aria-label="${esc(starLabel)}">${STAR_ICON}<span>${esc(compact)}</span></a></li>`;
+  return `<li class="launch-row"><span class="launch-row__rank${position === 1 ? " is-first" : ""}">${position}</span>${projectTileHtml(project, lang, showAvatar)}<div class="launch-row__body"><div class="launch-row__title"><a class="launch-row__name" href="${esc(projectPath(project, basePath))}">${esc(name)}</a>${verified}</div><p class="launch-row__desc">${esc(project.desc)}</p><div class="launch-row__meta">${launched}<span>${esc(text(`relationship.${kind}`, RELATION_LABELS[kind]))}</span>${project.language ? `<span>${esc(project.language)}</span>` : ""}${source}</div></div><a class="launch-row__stars" href="${esc(repoUrl(repo))}" target="_blank" rel="ugc nofollow noopener noreferrer" aria-label="${esc(starLabel)}">${STAR_ICON}<span>${esc(compact)}</span></a></li>`;
 }
 
 /** One series, so the bars share a neutral fill and the accent only marks the days listed below. */

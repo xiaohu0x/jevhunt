@@ -2,7 +2,7 @@
   "name": "jevhunt",
   "version": "0.3.0",
   "private": true,
-  "description": "JevHunt — a static directory with bounded daily catalog updates",
+  "description": "JevHunt — a static directory with daily picks and manual catalog updates",
   "scripts": {
     "build": "node tools/check-project-content.mjs --ledger-only && node tools/build-project-content.mjs && node tools/build-browser-catalog.mjs && node tools/prerender-catalog.mjs && node tools/localize.mjs && node tools/build-directory.mjs && node tools/build-editorial.mjs && node tools/build-static.mjs && node tools/stamp.mjs && node tools/build-manifest.mjs",
     "catalog:sync": "node tools/sync-daily.mjs",

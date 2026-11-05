@@ -62,3 +62,5 @@ public/rss.xml
 public/project/
 public/assets/project-data/
 public/assets/js/project-static.js
+public/assets/js/daily-picks.js
+public/assets/daily-picks.json
