@@ -26,6 +26,3 @@ jobs:
       - run: npm run test:examples
       - run: npm run check:static
       - run: npm run deploy:check
-
-      - name: Validate retired Worker
-        run: npx wrangler deploy --config workers/catalog-sync/wrangler.toml --dry-run --outdir=.cache/catalog-worker

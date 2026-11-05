@@ -55,11 +55,13 @@ Publication stops above 5,000 files (one quarter of the free plan limit), 12 MiB
 
 `npm run verify:production` checks the static build identity, assets, catalog, example pages and sitemap. It also verifies that the old API routes are unavailable.
 
-The `www.jevhunt.com` canonical redirect belongs in a free Cloudflare redirect rule. Pages `_redirects` supports paths, not domain-level sources. Preview deployments use Cloudflare Access so historical dynamic deployments are not publicly callable.
+The `www.jevhunt.com` canonical redirect belongs in a free Cloudflare redirect rule. Pages `_redirects` supports paths, not domain-level sources. Preview deployment access remains protected by Cloudflare Access.
 
-The old Cloudflare scheduler is retired. `npm run retire:worker` publishes a no-op handler with no Cron or D1 binding, and its preserved Durable Object class cancels legacy alarms. Ordinary website deployment never deploys or starts it. Historical D1 data is retained separately; restoring an old dynamic deployment can still create database reads.
+On 2026-11-05, the unused `jevhunt-db` database, `jevhunt-catalog-sync` Worker, its `CatalogClock` Durable Object namespace, historical Pages deployments and obsolete Pages login secrets were removed. Only the current static Pages deployment and its domain configuration remain for this site. The scheduler's deployment configuration and command were removed from this repository so ordinary maintenance cannot recreate it.
 
-Account-level Workers subscriptions, other projects and domain registration are separate from this site's static hosting. This repository does not cancel shared account subscriptions or delete historical databases.
+Before deletion, the complete D1 database was exported and restored locally: integrity checks passed for all 16 tables and 20,609 catalog entries. This private backup is stored outside the repository; the website's static catalog contains 5,191 projects. Preserve the SQL backup if historical data may be needed. Restoring a dynamic service requires an explicit new deployment and can create usage charges.
+
+Account-level Workers subscriptions, other projects and domain registration are separate from this site's static hosting. They were not changed by this cleanup.
 
 ## Site behavior
 

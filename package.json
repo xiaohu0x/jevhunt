@@ -21,8 +21,7 @@
     "verify:production": "node tools/verify-deploy.mjs https://jevhunt.com",
     "catalog:seed:local": "node tools/seed-catalog.mjs",
     "check:static": "node tools/check-static.mjs",
-    "deploy:check": "node tools/deploy-static.mjs --dry-run",
-    "retire:worker": "wrangler deploy --config workers/catalog-sync/wrangler.toml"
+    "deploy:check": "node tools/deploy-static.mjs --dry-run"
   },
   "devDependencies": {
     "esbuild": "^0.28.1",
