@@ -161,8 +161,9 @@ test("the static build publishes the task and category entry points", () => {
   const home = new JSDOM(readFileSync("public/index.html", "utf8")).window.document;
   assert.equal(home.querySelectorAll("#taskGrid .task-card").length, TASK_LIST.length);
   assert.ok(home.querySelectorAll("#featuredGrid .pick").length > 0);
-  const picks = home.querySelectorAll("#launchBoard .launch-row");
-  assert.ok(picks.length >= 1 && picks.length <= 8);
+  const days = home.querySelectorAll("#launchBoard .launch-day");
+  assert.equal(days.length, 3);
+  for (const day of days) assert.ok(day.querySelectorAll('.launch-row').length >= 1 && day.querySelectorAll('.launch-row').length <= 8);
   assert.equal(home.querySelector('.nav__links a[data-i18n="nav.launches"]').getAttribute("href"), "launches/");
   assert.equal(home.querySelectorAll("#categoryGrid .category-card").length, 10);
   const categories = new JSDOM(readFileSync("public/categories/index.html", "utf8")).window.document;
@@ -272,8 +273,8 @@ test("localized directory pages keep visitors inside their locale", () => {
   for (const link of home.querySelectorAll("#launchBoard .launch-row__name")) {
     assert.match(link.getAttribute("href"), /^\/(?:zh-cn\/projects\/|projects\/|project\/\?repo=)/, "Daily picks use the translated detail when available, otherwise the existing static page");
   }
-  assert.equal(home.querySelector("#launchBoard .launch-pulse"), null, "Daily picks do not present a synthetic launch history");
-  assert.equal(home.querySelector('.home-section-link[data-i18n="launch.browse"]').getAttribute("href"), "launches/");
+  assert.equal(home.querySelectorAll("#launchBoard .launch-pulse__day").length, 30);
+  assert.equal(home.querySelector('.home-section-link[data-i18n="launch.browse"]').getAttribute("href"), "#dailyHistory");
   const recent = home.querySelector('.home-section-link[data-i18n="home.recentlyAdded"]');
   assert.equal(recent.getAttribute("href"), "?sort=added-desc#apps");
   const task = new JSDOM(readFileSync("public/zh-cn/tasks/browser-automation/index.html", "utf8")).window.document;

@@ -17,9 +17,9 @@ The build uses the committed `public/catalog.json` snapshot and reviewed content
 
 ## Daily picks and manual sync
 
-The homepage selects 1–8 existing projects each UTC day using a deterministic shuffle in the visitor's browser. Everyone sees the same selection for that day and snapshot, across languages and refreshes. One cacheable static JSON file supplies the pool; midnight changes reuse the loaded data. No scheduled job, database query, source synchronization or daily deployment is needed.
+The homepage selects 1–8 existing projects each UTC day using a deterministic shuffle in the visitor's browser. Everyone sees the same selection for that day and snapshot, across languages and refreshes. It shows a 30-day chart and date groups for today, yesterday and the day before. Clicking a bar opens that day's selection, with previous/next navigation and a shareable `?pick-day=YYYY-MM-DD` URL. Yesterday's selection stays the same when the calendar advances.
 
-The section is labelled **Today's picks**. It does not claim projects were created or updated that day. Repository dates, stars and source checks remain those of the saved snapshot. If JavaScript or the static file fails to load, a **Catalog picks** fallback remains available. Archived projects, forks, directories and listings without descriptions are excluded from the daily pool.
+The section is labelled **Daily picks**. It does not claim projects were created or updated that day. Repository dates, stars and source checks remain those of the saved snapshot. The initial HTML includes the chart, three dated groups and a small selection seed covering the last 30 days plus the coming week. Those dates work without downloading the full catalog; later dates load one cacheable static JSON pool and reuse it for subsequent navigation and midnight changes. The complete dated layout remains visible if JavaScript or the network fails. Archived projects, forks, directories and listings without descriptions are excluded from the daily pool. No scheduled job, database query, source synchronization or daily deployment is needed.
 
 There is no automatic synchronization workflow or publishing secret. The owner can optionally run a manual source update with fixed limits:
 

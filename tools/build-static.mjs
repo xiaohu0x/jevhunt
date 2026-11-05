@@ -9,7 +9,7 @@ import { localizedProjectPreview } from './lib/project-content.mjs';
 import { launchBoardFromProjects, launchDayView, isLaunchDate, LAUNCH_PAGE_SIZE } from '../shared/catalog-launches.js';
 import { rssFeed } from '../shared/rss.js';
 import { publicPreview } from '../shared/catalog-data.js';
-import { dailyPicksHtml, selectDailyProjects } from '../shared/daily-picks.js';
+import { dailyBoardHtml, dailyHistory, shiftPickDate, utcDay } from '../shared/daily-picks.js';
 
 const { apps, catalogMeta: meta, i18n, projectContents } = loadData();
 const write = (path, html) => { const file = 'public' + path; mkdirSync(dirname(file), { recursive: true }); writeFileSync(file, html); };
@@ -27,7 +27,10 @@ const dailyPool = JSON.stringify(apps.map(publicPreview));
 const dailySource = '/assets/daily-picks.json?v=' + hash(dailyPool);
 write('/assets/daily-picks.json', dailyPool);
 buildSync({ entryPoints: ['browser/daily-picks.js'], outfile: 'public/assets/js/daily-picks.js', bundle: true, format: 'esm', platform: 'browser', target: 'es2022', minify: true });
-const fallbackPicks = selectDailyProjects(apps, meta.syncedAt.slice(0, 10));
+const buildDay = utcDay();
+// Include the coming week so the first render and near-term date changes need
+// no catalog download. Later visits can compute any date from the static pool.
+const seededHistory = dailyHistory(apps, shiftPickDate(buildDay, 7), 37);
 
 for (const [localeKey, locale] of Object.entries(i18n.locales)) {
   const prefix = localeKey === 'en' ? '' : '/' + localeKey;
@@ -38,11 +41,18 @@ for (const [localeKey, locale] of Object.entries(i18n.locales)) {
   home = home.replace(/<div class="sub__signin" id="subSignin"[^>]*>[\s\S]*?<\/div>/, '');
   home = home.replace(/<form\b[^>]*id="submitForm"[^>]*>[\s\S]*?<\/form>/, `<p class="static-submit"><a class="btn btn--primary" href="${issueUrl}" rel="noopener noreferrer">${locale.messages['nav.submit']} · GitHub ↗</a></p>`);
   home = home.replace(/<p class="static-submit">[\s\S]*?<\/p>/, `<p class="static-submit"><a class="btn btn--primary" href="${issueUrl}" rel="noopener noreferrer">${locale.messages['nav.submit']} · GitHub ↗</a></p>`);
-  home = home.replace(/<h2 id="launchesTitle"[^>]*>[\s\S]*?<\/h2>/, `<h2 id="launchesTitle" data-i18n="daily.fallbackTitle">${esc(locale.messages['daily.fallbackTitle'])}</h2>`);
+  home = home.replace(/<h2 id="launchesTitle"[^>]*>[\s\S]*?<\/h2>/, `<h2 id="launchesTitle" data-i18n="daily.title">${esc(locale.messages['daily.title'])}</h2>`);
   home = home.replace(/<p class="home-section__lead" data-i18n="(?:launch.lead|daily.lead)">[\s\S]*?<\/p>/, `<p class="home-section__lead" data-i18n="daily.lead">${esc(locale.messages['daily.lead'])}</p>`);
   home = home.replace(/<div class="launch-board" id="launchBoard"[^>]*>/, `<div class="launch-board" id="launchBoard" data-daily-source="${dailySource}">`);
-  home = home.replace(/(<!-- launch-prerender:start -->)[\s\S]*?(<!-- launch-prerender:end -->)/, (_match, start, end) => start + dailyPicksHtml(fallbackPicks.map(p => localizedProjectPreview(p, projectContents, localeKey)), null, locale.messages, { basePath: prefix, lang: locale.lang }) + end);
-  home = home.replace(/<script[^>]*src="\/assets\/js\/daily-picks\.js[^"]*"[^>]*><\/script>/g, '').replace('</body>', '<script type="module" src="/assets/js/daily-picks.js"></script></body>');
+  const localizedHistory = seededHistory.map(day => ({ ...day, projects: day.projects.map(p => {
+    const localized = localizedProjectPreview(p, projectContents, localeKey);
+    return { ...publicPreview(localized), desc: localized.desc };
+  }) }));
+  home = home.replace(/(<!-- launch-prerender:start -->)[\s\S]*?(<!-- launch-prerender:end -->)/, (_match, start, end) => start + dailyBoardHtml(localizedHistory, locale.messages, { today: buildDay, basePath: prefix, lang: locale.lang, relative: false }) + end);
+  home = home.replace(/<a\b[^>]*data-i18n="launch.browse"[^>]*>/g, tag => tag.replace(/href="[^"]*"/, 'href="#dailyHistory"'));
+  home = home.replace(/<script id="dailySelectionSeed"[^>]*>[\s\S]*?<\/script>/g, '');
+  const seed = `<script id="dailySelectionSeed" type="application/json">${JSON.stringify({ days: localizedHistory }).replace(/</g, '\\u003c')}</script>`;
+  home = home.replace(/<script[^>]*src="\/assets\/js\/daily-picks\.js[^"]*"[^>]*><\/script>/g, '').replace('</body>', seed + '<script type="module" src="/assets/js/daily-picks.js"></script></body>');
   writeFileSync(indexPath, home.replace(/[ \t]+$/gm, ''));
   if (localeKey !== 'en') {
     rmSync(`public${prefix}/projects`, { recursive: true, force: true });

@@ -35,6 +35,10 @@ async function verify() {
   const html = await home.text();
   if (!home.ok || !html.includes('data-catalog-mode="static"') || /id="(?:auth|submitForm)"/.test(html)) throw new Error("Static homepage failed");
   if (!html.includes('data-daily-source="/assets/daily-picks.json?v=') || !html.includes('data-i18n="daily.lead"')) throw new Error("Static daily selection missing");
+  const boardDom = new JSDOM(html);
+  const board = boardDom.window.document.querySelector('#launchBoard');
+  if (board?.querySelectorAll('.launch-pulse__day').length !== 30 || board.querySelectorAll('.launch-day').length !== 3) throw new Error('Daily history must render before JavaScript loads');
+  boardDom.window.close();
   for (const path of ["/api/health", "/api/catalog", "/api/me", "/api/admin/submissions"]) {
     if ((await get(path)).status !== 404) throw new Error("Legacy API is still reachable: " + path);
   }
