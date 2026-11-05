@@ -61,6 +61,8 @@ Publication stops above 5,000 files (one quarter of the free plan limit), 12 MiB
 
 `npm run verify:production` checks the static build identity, assets, catalog, example pages and sitemap. It also verifies that the old API routes are unavailable.
 
+The `www.jevhunt.com` canonical redirect belongs in a free Cloudflare redirect rule. Pages `_redirects` supports paths, not domain-level sources. Preview deployments use Cloudflare Access so historical dynamic deployments are not publicly callable.
+
 The old Cloudflare scheduler is retired. `npm run retire:worker` publishes a no-op handler with no Cron or D1 binding, and its preserved Durable Object class cancels legacy alarms. Ordinary website deployment never deploys or starts it. Historical D1 data is retained separately; restoring an old dynamic deployment can still create database reads.
 
 Account-level Workers subscriptions, other projects and domain registration are separate from this site's static hosting. This repository does not cancel shared account subscriptions or delete historical databases.

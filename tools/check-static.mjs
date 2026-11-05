@@ -25,6 +25,7 @@ export function checkStatic(root = 'public') {
   const redirects = readFileSync(join(root, '_redirects'), 'utf8').split('\n').filter(s => s.trim() && !s.startsWith('#'));
   for (const rule of redirects) {
     const [source, target, code] = rule.split(/\s+/);
+    assert.ok(source.startsWith('/'), 'Pages redirects require path sources; use a Cloudflare redirect rule for host redirects');
     assert.ok(!(code === '200' && target === source + 'index.html'), 'Pages would ignore a self-rewrite: ' + source);
     assert.ok(!(code === '200' && target.endsWith('.html')), 'Rewrite targets must use clean URLs to avoid Pages canonical redirects: ' + source);
   }
